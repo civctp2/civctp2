@@ -9,6 +9,14 @@
       <Configuration>Debug Browse</Configuration>
       <Platform>x64</Platform>
     </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug-SDL|Win32">
+      <Configuration>Debug-SDL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug-SDL|x64">
+      <Configuration>Debug-SDL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
     <ProjectConfiguration Include="DebugNoMem|Win32">
       <Configuration>DebugNoMem</Configuration>
       <Platform>Win32</Platform>
@@ -163,7 +171,17 @@
     <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <PlatformToolset>v141</PlatformToolset>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v141</PlatformToolset>
     <UseOfMfc>false</UseOfMfc>
@@ -251,7 +269,15 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
   <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="PropertySheets">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+    <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
+  </ImportGroup>
+  <ImportGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'" Label="PropertySheets">
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
     <Import Project="$(VCTargetsPath)Microsoft.CPP.UpgradeFromVC60.props" />
   </ImportGroup>
@@ -290,7 +316,20 @@
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+    <OutDir>.\DebugSDL\</OutDir>
+    <IntDir>.\DebugSDL\</IntDir>
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetName>CivCTP_dbg-sdl</TargetName>
+  </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -511,7 +550,112 @@
       <OutputFile>.\Debug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TargetEnvironment>Win32</TargetEnvironment>
+      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\..\SDL\;..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>USE_SDL;_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MinimalRebuild>true</MinimalRebuild>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\DebugSDL/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\DebugSDL/</AssemblerListingLocation>
+      <ObjectFileName>.\DebugSDL/</ObjectFileName>
+      <ProgramDataBaseFileName>.\DebugSDL/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>CivCTP_dbg-sdl.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\DebugSDL/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>CivCTP_dbg-sdl.map</MapFileName>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <TargetMachine>MachineX86</TargetMachine>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\DebugSDL/civctp-sdl.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Midl>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <MkTypLibCompatible>true</MkTypLibCompatible>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <HeaderFileName>
+      </HeaderFileName>
+    </Midl>
+    <ClCompile>
+      <Optimization>Disabled</Optimization>
+      <AdditionalIncludeDirectories>..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
+      <SmallerTypeCheck>false</SmallerTypeCheck>
+      <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
+      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
+      <ObjectFileName>.\Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <WarningLevel>Level3</WarningLevel>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
+      <EnablePREfast>false</EnablePREfast>
+    </ClCompile>
+    <ResourceCompile>
+      <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <Culture>0x0409</Culture>
+    </ResourceCompile>
+    <Link>
+      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <OutputFile>CivCTP_dbg.exe</OutputFile>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <GenerateMapFile>true</GenerateMapFile>
+      <MapFileName>CivCTP_dbg.map</MapFileName>
+      <SubSystem>Windows</SubSystem>
+      <RandomizedBaseAddress>false</RandomizedBaseAddress>
+      <DataExecutionPrevention>
+      </DataExecutionPrevention>
+      <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+    </Link>
+    <Bscmake>
+      <SuppressStartupBanner>true</SuppressStartupBanner>
+      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+    </Bscmake>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
     <Midl>
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
@@ -1472,7 +1616,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ai\personality;..\ctp\ctp2_utils;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -1526,7 +1672,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -1580,7 +1728,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -2839,7 +2989,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -4863,7 +5017,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -5283,7 +5441,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -5339,7 +5501,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -5411,7 +5577,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -5626,7 +5796,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -5648,7 +5820,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -5849,7 +6023,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -6241,7 +6419,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -12459,7 +12641,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -12707,7 +12893,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -12859,7 +13049,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -13456,7 +13650,9 @@ rem                                                if                           
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">Create</PrecompiledHeader>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -13540,7 +13736,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ai\personality;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
@@ -13725,7 +13923,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -13781,7 +13983,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -13837,7 +14043,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -13893,7 +14103,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -13949,7 +14163,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -14005,7 +14223,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -14062,7 +14284,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -14106,7 +14332,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -14162,7 +14392,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -14218,7 +14452,11 @@ rem                                                if                           
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
       </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
+      </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+      </PrecompiledHeader>
+      <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
       </PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
       </PrecompiledHeader>
@@ -15065,7 +15303,9 @@ rem                                                if                           
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <AdditionalIncludeDirectories Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">ctp2_rsrc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
@@ -15096,18 +15336,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;$(ProjectDir)..\gs\newdb\AdvanceBranchRecord.stamp;$(ProjectDir)..\gs\newdb\AgeRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;$(ProjectDir)..\gs\newdb\AdvanceBranchRecord.stamp;$(ProjectDir)..\gs\newdb\AgeRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;$(ProjectDir)..\gs\newdb\AdvanceBranchRecord.stamp;$(ProjectDir)..\gs\newdb\AgeRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;$(ProjectDir)..\gs\newdb\AdvanceBranchRecord.stamp;$(ProjectDir)..\gs\newdb\AgeRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;$(ProjectDir)..\gs\newdb\AdvanceBranchRecord.stamp;$(ProjectDir)..\gs\newdb\AgeRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\AdvanceRecord.stamp;$(ProjectDir)..\gs\newdb\AdvanceBranchRecord.stamp;$(ProjectDir)..\gs\newdb\AgeRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15178,18 +15426,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\BuildingRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15260,18 +15516,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\CitySizeRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15342,18 +15606,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\AgeCityStyleRecord.stamp;$(ProjectDir)..\gs\newdb\CityStyleRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15424,18 +15696,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\CivilisationRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15504,14 +15784,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15566,14 +15852,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\ConstRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15628,14 +15920,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\CultureRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15691,19 +15989,27 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">pummeling DBLexer.l</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">pummeling DBLexer.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">pummeling DBLexer.l</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">pummeling DBLexer.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">pummeling DBLexer.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">pummeling DBLexer.l</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\flex -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\flex -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\flex -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\flex -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\flex -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\flex -i -Pdbl -o$(ProjectDir)..\gs\newdb\lex.dbl.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\lex.dbl.c;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">pummeling DBLexer.l</Message>
@@ -15774,18 +16080,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\DifficultyRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15856,18 +16170,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\DiplomacyRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -15938,18 +16260,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\DiplomacyProposalRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16020,18 +16350,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\DiplomacyThreatRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16102,18 +16440,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\EndGameObjectRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16184,18 +16530,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\FeatRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16266,18 +16620,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\GlobalWarmingRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16348,18 +16710,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\GoalRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16430,18 +16800,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\GovernmentRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16512,18 +16890,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\IconRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16592,14 +16978,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\LeaderRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16654,14 +17046,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\MapRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16718,18 +17116,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\OrderRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16800,18 +17206,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\PersonalityRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16882,18 +17296,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\PollutionRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -16964,18 +17386,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\PopRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17044,14 +17474,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\ReligionRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17108,18 +17544,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\RiskRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17190,18 +17634,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\StrategyRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17272,18 +17724,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\TerrainRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17354,18 +17814,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\TerrainImprovementRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17436,18 +17904,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\UnitRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17516,14 +17992,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\UnitpromotionRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17580,18 +18062,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\dbgen\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\newdb\WonderRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(ProjectDir)..\gs\dbgen\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17661,19 +18151,27 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">snorkeling slic.l</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">snorkeling slic.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">snorkeling slic.l</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">snorkeling slic.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">snorkeling slic.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">snorkeling slic.l</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\flex -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\flex -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\flex -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\flex -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\flex -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\flex -i -o$(ProjectDir)..\gs\slic\lex.yy.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\slic\lex.yy.c;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">snorkeling...</Message>
@@ -17739,19 +18237,27 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">burgling slic.y</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">burgling slic.y</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">burgling slic.y</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">burgling slic.y</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">burgling slic.y</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">burgling slic.y</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\y  ..\\gs\\slic\\slic.y
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\slic\y.tab.c;$(ProjectDir)..\gs\slic\y.tab.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">burgling...</Message>
@@ -17817,19 +18323,27 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">combobulating sliccmd.l</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">combobulating sliccmd.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">combobulating sliccmd.l</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">combobulating sliccmd.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">combobulating sliccmd.l</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">combobulating sliccmd.l</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\flex -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\flex -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\flex -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\flex -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\flex -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\flex -i -Psc -o$(ProjectDir)..\gs\slic\lex.sc.c %(FullPath)
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\slic\lex.sc.c;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">combobulating sliccmd.l</Message>
@@ -17899,19 +18413,27 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">discombobulating sliccmd.y</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">discombobulating sliccmd.y</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">discombobulating sliccmd.y</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">discombobulating sliccmd.y</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">discombobulating sliccmd.y</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">discombobulating sliccmd.y</Message>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\byacc -d -b..\\gs\\slic\\sc  ..\\gs\\slic\\sliccmd.y
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\gs\slic\sc.tab.c;$(ProjectDir)..\gs\slic\sc.tab.h;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">discombobulating sliccmd.y</Message>
@@ -17980,18 +18502,26 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
 </Command>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
       <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">..\ui\ldl\ldl.y;%(AdditionalInputs)</AdditionalInputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\ui\ldl\lex.ldl.c;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(CDKDIR)\flex -i -Pldl -o$(ProjectDir)..\ui\ldl\lex.ldl.c %(FullPath)
@@ -18058,14 +18588,20 @@ rem                                                if                           
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
 </Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
+</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
+</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
 </Command>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
       <Outputs Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">$(ProjectDir)..\ui\ldl\ldl.tab.c;$(ProjectDir)..\ui\ldl\ldl.tab.h;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">$(CDKDIR)\byacc -d -v -b..\\ui\\ldl\\ldl  ..\\ui\\ldl\\ldl.y
