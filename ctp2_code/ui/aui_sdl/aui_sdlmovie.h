@@ -10,7 +10,7 @@
 
 #if defined(__AUI_USE_SDL__)
 
-#include <SDL_events.h>
+#include <SDL2/SDL_events.h>
 
 class VideoState;
 class SDL_Renderer;
