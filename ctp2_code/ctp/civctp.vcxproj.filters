@@ -2453,6 +2453,18 @@
     <ClCompile Include="..\ai\CityManagement\Governor.cpp">
       <Filter>ai\CityManagement</Filter>
     </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlblitter.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlmovie.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlmoviemanager.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ui\aui_sdl\aui_sdlui.cpp">
+      <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c3.h">
@@ -4812,6 +4824,18 @@
     </ClInclude>
     <ClInclude Include="..\ai\CityManagement\Governor.h">
       <Filter>ai\CityManagement</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlblitter.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlmovie.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlmoviemanager.h">
+      <Filter>ui\aui_sdl</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ui\aui_sdl\aui_sdlui.h">
+      <Filter>ui\aui_sdl</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
