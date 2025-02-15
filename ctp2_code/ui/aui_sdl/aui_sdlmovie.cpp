@@ -321,12 +321,12 @@ static int packet_queue_init(PacketQueue *q)
 	q->mutex = SDL_CreateMutex();
 	if (!q->mutex) {
 		av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
-        return AVERROR(ENOMEM);
+		return AVERROR(ENOMEM);
 	}
 	q->cond = SDL_CreateCond();
 	if (!q->cond) {
 		av_log(NULL, AV_LOG_FATAL, "SDL_CreateCond(): %s\n", SDL_GetError());
-        return AVERROR(ENOMEM);
+		return AVERROR(ENOMEM);
 	}
 	q->abort_request = 1;
 	return 0;
@@ -445,7 +445,7 @@ static int decoder_decode_frame(Decoder *d, AVFrame *frame) {
 					case AVMEDIA_TYPE_AUDIO:
 						ret = avcodec_receive_frame(d->avctx, frame);
 						if (ret >= 0) {
-							AVRational tb = (AVRational){1, frame->sample_rate};
+							AVRational tb = {1, frame->sample_rate};
 							if (frame->pts != AV_NOPTS_VALUE)
 								frame->pts = av_rescale_q(frame->pts, d->avctx->pkt_timebase, tb);
 							else if (d->next_pts != AV_NOPTS_VALUE)
@@ -515,18 +515,18 @@ static int frame_queue_init(FrameQueue *f, PacketQueue *pktq, int max_size, int 
 	memset(f, 0, sizeof(FrameQueue));
 	if (!(f->mutex = SDL_CreateMutex())) {
 		av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
-        return AVERROR(ENOMEM);
+		return AVERROR(ENOMEM);
 	}
 	if (!(f->cond = SDL_CreateCond())) {
 		av_log(NULL, AV_LOG_FATAL, "SDL_CreateCond(): %s\n", SDL_GetError());
-        return AVERROR(ENOMEM);
+		return AVERROR(ENOMEM);
 	}
 	f->pktq = pktq;
 	f->max_size = FFMIN(max_size, FRAME_QUEUE_SIZE);
 	f->keep_last = !!keep_last;
 	for (i = 0; i < f->max_size; i++)
 		if (!(f->queue[i].frame = av_frame_alloc()))
-            return AVERROR(ENOMEM);
+			return AVERROR(ENOMEM);
 	return 0;
 }
 
@@ -1241,7 +1241,7 @@ static int audio_thread(void *arg)
 			goto the_end;
 
 		if (got_frame) {
-			tb = (AVRational){1, frame->sample_rate};
+			tb = {1, frame->sample_rate};
 
 			if (!(af = frame_queue_peek_writable(&is->sampq)))
 				goto the_end;
@@ -1249,7 +1249,7 @@ static int audio_thread(void *arg)
 			af->pts = (frame->pts == AV_NOPTS_VALUE) ? NAN : frame->pts * av_q2d(tb);
 			af->pos = frame->pkt_pos;
 			af->serial = is->auddec.pkt_serial;
-			af->duration = av_q2d((AVRational){frame->nb_samples, frame->sample_rate});
+			af->duration = av_q2d({frame->nb_samples, frame->sample_rate});
 
 			av_frame_move_ref(af->frame, frame);
 			frame_queue_push(&is->sampq);
@@ -1292,7 +1292,7 @@ static int video_thread(void *arg)
 		if (!ret)
 			continue;
 
-		duration = (frame_rate.num && frame_rate.den ? av_q2d((AVRational){frame_rate.den, frame_rate.num}) : 0);
+		duration = (frame_rate.num && frame_rate.den ? av_q2d({frame_rate.den, frame_rate.num}) : 0);
 		pts = (frame->pts == AV_NOPTS_VALUE) ? NAN : frame->pts * av_q2d(tb);
 		ret = queue_picture(is, frame, pts, duration, frame->pkt_pos, is->viddec.pkt_serial);
 		av_frame_unref(frame);
@@ -1524,7 +1524,7 @@ static int audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb
 	wanted_spec.freq = wanted_sample_rate;
 	if (wanted_spec.freq <= 0 || wanted_spec.channels <= 0) {
 		av_log(NULL, AV_LOG_ERROR, "Invalid sample rate or channel count!\n");
-        return -1;
+		return -1;
 	}
 	while (next_sample_rate_idx && next_sample_rates[next_sample_rate_idx] >= wanted_spec.freq)
 		next_sample_rate_idx--;
@@ -1588,14 +1588,14 @@ static int stream_component_open(VideoState *is, int stream_index)
 	int ret = 0;
 
 	if (stream_index < 0 || stream_index >= ic->nb_streams)
-        return -1;
+		return -1;
 
 	avctx = avcodec_alloc_context3(NULL);
 	if (!avctx)
-        return AVERROR(ENOMEM);
+		return AVERROR(ENOMEM);
 
 	ret = avcodec_parameters_to_context(avctx, ic->streams[stream_index]->codecpar);
-    if (ret < 0)
+	if (ret < 0)
 		goto fail;
 	avctx->pkt_timebase = ic->streams[stream_index]->time_base;
 
@@ -1627,7 +1627,7 @@ static int stream_component_open(VideoState *is, int stream_index)
 			channel_layout = avctx->channel_layout;
 
 			/* prepare audio output */
-        if ((ret = audio_open(is, channel_layout, nb_channels, sample_rate, &is->audio_tgt)) < 0)
+		if ((ret = audio_open(is, channel_layout, nb_channels, sample_rate, &is->audio_tgt)) < 0)
 				goto fail;
 			is->audio_hw_buf_size = ret;
 			is->audio_src = is->audio_tgt;
@@ -2142,7 +2142,9 @@ BOOL aui_SDLMovie::IsPaused() const {
 #endif // USE_SDL_FFMPEG
 }
 
-bool aui_SDLMovie::HandleMovieEvent(SDL_Event &event) {
+bool aui_SDLMovie::HandleMovieEvent(SDL_Event &event)
+{
+#if defined(USE_SDL_FFMPEG)
 	bool movieFinished = false;
 
 	switch (event.type) {
@@ -2185,15 +2187,25 @@ bool aui_SDLMovie::HandleMovieEvent(SDL_Event &event) {
 			break;
 	}
 	return movieFinished;
+#else
+	return true;
+#endif
 }
 
 
-bool aui_SDLMovie::InsideMovieArea(int x, int y) {
+bool aui_SDLMovie::InsideMovieArea(int x, int y)
+{
+#if defined(USE_SDL_FFMPEG)
 	return (x > m_videoState->xleft && x < (m_videoState->xleft + m_videoState->width)
 		&& y > m_videoState->ytop && y < (m_videoState->ytop + m_videoState->height));
+#else
+	return true;
+#endif
 }
 
-void aui_SDLMovie::GrabLastFrame() {
+void aui_SDLMovie::GrabLastFrame()
+{
+#if defined(USE_SDL_FFMPEG)
 	aui_SDLSurface *sdlSurface = dynamic_cast<aui_SDLSurface *>(GetDestSurface());
 	if (sdlSurface) {
 		// Undo logical size if needed; to grab unscaled pixels
@@ -2224,5 +2236,6 @@ void aui_SDLMovie::GrabLastFrame() {
 			SDL_RenderSetLogicalSize(m_renderer, m_logicalWidth, m_logicalHeight);
 		}
 	}
+#endif
 }
 #endif // defined(__AUI_USE_SDL__)
