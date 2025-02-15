@@ -170,7 +170,9 @@
 #if defined(USE_SDL)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#if defined(__AUI_USE_SDL__)
 #include "aui_sdlkeyboard.h"
+#endif
 #endif
 
 #if defined(_DEBUG)

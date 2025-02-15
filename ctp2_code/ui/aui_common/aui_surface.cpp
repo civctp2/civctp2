@@ -17,7 +17,7 @@
 //
 // Compiler flags
 //
-// USE_SDL
+// __AUI_USE_SDL__
 // __AUI_USE_DIRECTX__
 //
 //----------------------------------------------------------------------------
@@ -38,7 +38,7 @@
 
 
 sint32 aui_Surface::m_surfaceRefCount = 0;
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 SDL_mutex *		aui_Surface::m_cs = 0;
 #else
 CRITICAL_SECTION	aui_Surface::m_cs;
@@ -72,7 +72,7 @@ aui_Surface::aui_Surface(
 	m_saveBuffer = buffer;
 	if (!m_saveBuffer)
 	{
-#ifndef __AUI_USE_SDL__
+#if !defined(__AUI_USE_SDL__)
 
 		if(hdc == NULL)
 			hdc = ::GetDC( g_ui->TheHWND() );
@@ -97,13 +97,13 @@ aui_Surface::aui_Surface(
 		Assert( m_saveBuffer != NULL );
 
 		if (m_saveBuffer)
-        {
-            m_allocated = TRUE;
+		{
+			m_allocated = TRUE;
 			memset( m_saveBuffer, 0x00, m_size );
-        }
-        else
-        {
-            m_allocated = FALSE;
+		}
+		else
+		{
+			m_allocated = FALSE;
 			*retval = AUI_ERRCODE_MEMALLOCFAILED;
 		}
 	}
@@ -148,7 +148,7 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 	m_Bpp = m_bpp >> 3;
 	m_bytewidth = m_width * m_Bpp;
 
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	if (!m_cs)
 	{
 		m_cs = SDL_CreateMutex();
@@ -191,7 +191,7 @@ aui_Surface::~aui_Surface()
 
 	if ( !--m_surfaceRefCount )
 	{
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 		SDL_DestroyMutex(m_cs);
 		m_cs = 0;
 #else
@@ -444,7 +444,7 @@ inline BOOL aui_Surface::IsLocked( LPVOID buffer )
 AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SURFACE_LOCKOP op )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	SDL_mutexP(m_cs);
 #else
 	EnterCriticalSection(&m_cs);
@@ -529,7 +529,7 @@ AUI_ERRCODE aui_Surface::ManipulateLockList( RECT *rect, LPVOID *buffer, AUI_SUR
 		break;
 	}
 
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	SDL_mutexV(m_cs);
 #else
 	LeaveCriticalSection(&m_cs);

@@ -19,7 +19,7 @@
 //
 // _DEBUG
 // Generate debug information.
-// USE_SDL
+// __AUI_USE_SDL__
 // Use SDL API calls
 // WIN32
 // Use MS Windows32 API calls
@@ -50,7 +50,7 @@
 #include <string.h>
 #include <list>
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
@@ -1387,7 +1387,7 @@ public:
 
 
 private:
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 	SDL_Thread *threadHandle;
 	Uint32 threadId;
 #else

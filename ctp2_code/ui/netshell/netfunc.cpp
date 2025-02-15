@@ -19,7 +19,7 @@
 //
 // _DEBUG
 // Generate debug information.
-// USE_SDL
+// __AUI_USE_SDL__
 // Use SDL API calls
 // WIN32
 // Use MS Windows32 API calls
@@ -46,7 +46,7 @@
 #include "debug.h"      	// Os::SetThreadName
 #endif
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
@@ -56,6 +56,13 @@
 #endif
 
 #include <algorithm>
+
+#ifdef __AUI_USE_SDL__
+#if defined(WIN32)
+#define STRING2(x) #x  
+#define STRING(x) STRING2(x) 
+#endif
+#endif
 
 namespace
 {
@@ -129,6 +136,7 @@ typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
 int adialup_is_active(void)
 {
 #ifdef WIN32
+	// Windows modem dialup connection, probably not needed today.
 	HANDLE hlib = LoadLibrary("rasapi32.dll");
 	if (NULL == hlib) {
 		DPRINT(("adialup_is_active: can't load library rasapi32.dll\n"));
@@ -136,9 +144,9 @@ int adialup_is_active(void)
 	}
 
 	pfnRasEnumConnections_t pfnRasEnumConnections =
-        (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
+	    (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
 	pfnRasGetConnectStatus_t pfnRasGetConnectStatus =
-        (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
+	    (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
 
 	if (!pfnRasEnumConnections || !pfnRasGetConnectStatus) {
 		DPRINT(("adialup_is_active: can't get fns from library rasapi32.dll\n"));
@@ -2459,8 +2467,12 @@ NETFunc::STATUS NETFunc::SetTransport(Transport *t) {
 			nextStatus = READY;
 		}
 		cancelDial = 0;
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
+#if !defined(WIN32)
 		threadHandle = SDL_CreateThread(ConnectThread, "Connect-thread", (void *)transport);
+#else
+#pragma message(__FILE__ "(" STRING(__LINE__) "): warning: SDL and multiplayer have not been made compatible")
+#endif
 #else
 		threadHandle = CreateThread(0, 0, ConnectThread, (void *)transport, 0, &threadId);
 #endif
@@ -2902,8 +2914,12 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 	if(result != dp_RES_OK)
 		return ERR;
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
+#if !defined(WIN32)
 	threadHandle = SDL_CreateThread(ReConnectThread, "Reconnect-thread", (void *) &reconnected);
+#else
+#pragma message(__FILE__ "(" STRING(__LINE__) "): warning: SDL and multiplayer have not been made compatible")
+#endif
 #else
 	threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&reconnected, 0, &threadId);
 #endif
@@ -2914,7 +2930,7 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 void NETFunc::ReConnect(void) {
 	if(!reconnected) {
 		reconnected = true;
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 		SDL_WaitThread(threadHandle, NULL);
 #else
 		DWORD dw;
@@ -3269,7 +3285,7 @@ bool NETFunc::Handle(Message *m) {
 void NETFunc::Execute(void) {
 	switch(status) {
 	case CONNECT:
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 		int dw;
 		// This is ugly, but there is no other way in SDL
 		// to determine if a thread is running
@@ -3294,7 +3310,7 @@ void NETFunc::Execute(void) {
 				if(status == PRECONNECT)
 					EnumServers(true);
 			}
-#ifndef USE_SDL
+#ifndef __AUI_USE_SDL__
 		}
 #endif
 		break;
