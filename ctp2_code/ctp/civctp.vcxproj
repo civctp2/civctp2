@@ -302,23 +302,25 @@
     <_ProjectFileVersion>15.0.28127.55</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">
-    <OutDir>.\Test\</OutDir>
-    <IntDir>.\Test\</IntDir>
+    <OutDir>Test\</OutDir>
+    <IntDir>Test\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>CivCTP_test</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>.\Debug\</OutDir>
-    <IntDir>.\Debug\</IntDir>
+    <OutDir>Debug\</OutDir>
+    <IntDir>Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetName>CivCTP_dbg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
-    <OutDir>.\DebugSDL\</OutDir>
-    <IntDir>.\DebugSDL\</IntDir>
+    <OutDir>DebugSDL\</OutDir>
+    <IntDir>DebugSDL\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
@@ -335,11 +337,12 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
-    <OutDir>.\DebugNoMem\</OutDir>
-    <IntDir>.\DebugNoMem\</IntDir>
+    <OutDir>DebugNoMem\</OutDir>
+    <IntDir>DebugNoMem\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetName>CivCTP_dbg_NoMem</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -347,15 +350,17 @@
     <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
-    <OutDir>.\final\</OutDir>
-    <IntDir>.\final\</IntDir>
+    <OutDir>final\</OutDir>
+    <IntDir>final\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>ctp2</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">
-    <OutDir>.\finalSDL\</OutDir>
-    <IntDir>.\finalSDL\</IntDir>
+    <OutDir>finalSDL\</OutDir>
+    <IntDir>finalSDL\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
+    <TargetName>ctp2-sdl</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -364,41 +369,46 @@
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">
-    <OutDir>.\ctp2___W\</OutDir>
-    <IntDir>.\ctp2___W\</IntDir>
+    <OutDir>ctp2___W\</OutDir>
+    <IntDir>ctp2___W\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>CivCTP_ndbg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NDebug|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">
-    <OutDir>.\FinalLog\</OutDir>
-    <IntDir>.\FinalLog\</IntDir>
+    <OutDir>FinalLog\</OutDir>
+    <IntDir>FinalLog\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>ctp2log</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">
-    <OutDir>.\DebugBrowse\</OutDir>
-    <IntDir>.\DebugBrowse\</IntDir>
+    <OutDir>DebugBrowse\</OutDir>
+    <IntDir>DebugBrowse\</IntDir>
     <LinkIncremental>true</LinkIncremental>
+    <TargetName>CivCTP_dbg_browse</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">
     <LinkIncremental>true</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>.\Release\</OutDir>
-    <IntDir>.\Release\</IntDir>
+    <OutDir>Release\</OutDir>
+    <IntDir>Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>ctp2r</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">
-    <OutDir>.\ctp2___Win32_Optimized_Test1\</OutDir>
-    <IntDir>.\ctp2___Win32_Optimized_Test1\</IntDir>
+    <OutDir>ctp2___Win32_Optimized_Test1\</OutDir>
+    <IntDir>ctp2___Win32_Optimized_Test1\</IntDir>
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>ctp2_opt_test</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -894,7 +904,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2-sdl.exe</OutputFile>
+      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -983,7 +993,7 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\final/civctp.pch</PrecompiledHeaderOutputFile>
+      <PrecompiledHeaderOutputFile>.\finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\final/</AssemblerListingLocation>
       <ObjectFileName>.\final/</ObjectFileName>
       <ProgramDataBaseFileName>.\final/</ProgramDataBaseFileName>
@@ -997,7 +1007,7 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2.exe</OutputFile>
+      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
