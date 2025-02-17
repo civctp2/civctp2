@@ -419,7 +419,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Test/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Test/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -432,10 +432,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Test/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Test/</AssemblerListingLocation>
-      <ObjectFileName>.\Test/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Test/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Test/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Test/</AssemblerListingLocation>
+      <ObjectFileName>Test/</ObjectFileName>
+      <ProgramDataBaseFileName>Test/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -450,7 +450,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Test/CivCTP_test.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Test/CivCTP_test.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
@@ -458,7 +458,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Test/civctp.bsc</OutputFile>
+      <OutputFile>Test/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Test|x64'">
@@ -466,7 +466,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Test/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Test/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -479,10 +479,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Test/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Test/</AssemblerListingLocation>
-      <ObjectFileName>.\Test/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Test/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Test/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Test/</AssemblerListingLocation>
+      <ObjectFileName>Test/</ObjectFileName>
+      <ProgramDataBaseFileName>Test/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -497,7 +497,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Test/CivCTP_test.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Test/CivCTP_test.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -505,7 +505,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Test/civctp.bsc</OutputFile>
+      <OutputFile>Test/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -514,7 +514,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -527,10 +527,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <ObjectFileName>Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -546,7 +546,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -557,7 +557,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
@@ -566,7 +566,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -580,10 +580,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\DebugSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\DebugSDL/</AssemblerListingLocation>
-      <ObjectFileName>.\DebugSDL/</ObjectFileName>
-      <ProgramDataBaseFileName>.\DebugSDL/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>DebugSDL/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>DebugSDL/</AssemblerListingLocation>
+      <ObjectFileName>DebugSDL/</ObjectFileName>
+      <ProgramDataBaseFileName>DebugSDL/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -599,7 +599,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\DebugSDL/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>DebugSDL/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg-sdl.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -611,7 +611,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\DebugSDL/civctp-sdl.bsc</OutputFile>
+      <OutputFile>DebugSDL/civctp-sdl.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -619,7 +619,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -632,10 +632,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <ObjectFileName>Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -651,7 +651,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -662,7 +662,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
@@ -670,7 +670,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -683,10 +683,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <ObjectFileName>Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -702,7 +702,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -713,7 +713,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
@@ -722,7 +722,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -736,10 +736,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <ObjectFileName>Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -755,7 +755,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -767,7 +767,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">
@@ -775,7 +775,7 @@
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -788,10 +788,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Debug/</AssemblerListingLocation>
-      <ObjectFileName>.\Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Debug/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
+      <ObjectFileName>Debug/</ObjectFileName>
+      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -807,7 +807,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -818,7 +818,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
@@ -827,7 +827,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\final/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>final/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -840,10 +840,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\final/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\final/</AssemblerListingLocation>
-      <ObjectFileName>.\final/</ObjectFileName>
-      <ProgramDataBaseFileName>.\final/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>final/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>final/</AssemblerListingLocation>
+      <ObjectFileName>final/</ObjectFileName>
+      <ProgramDataBaseFileName>final/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat />
     </ClCompile>
@@ -867,7 +867,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\final/civctp.bsc</OutputFile>
+      <OutputFile>final/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">
@@ -876,7 +876,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\final/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>finalSDL/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -890,10 +890,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\finalSDL/</AssemblerListingLocation>
-      <ObjectFileName>.\finalSDL/</ObjectFileName>
-      <ProgramDataBaseFileName>.\finalSDL/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>finalSDL/</AssemblerListingLocation>
+      <ObjectFileName>finalSDL/</ObjectFileName>
+      <ProgramDataBaseFileName>finalSDL/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -920,7 +920,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\finalSDL/civctp.bsc</OutputFile>
+      <OutputFile>finalSDL/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
@@ -928,7 +928,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\final/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>finalSDL/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -942,10 +942,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\final/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\final/</AssemblerListingLocation>
-      <ObjectFileName>.\final/</ObjectFileName>
-      <ProgramDataBaseFileName>.\final/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>finalSDL/</AssemblerListingLocation>
+      <ObjectFileName>finalSDL/</ObjectFileName>
+      <ProgramDataBaseFileName>finalSDL/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -971,7 +971,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\final/civctp.bsc</OutputFile>
+      <OutputFile>finalSDL/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">
@@ -979,7 +979,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\final/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>finalSDL/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -993,10 +993,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\final/</AssemblerListingLocation>
-      <ObjectFileName>.\final/</ObjectFileName>
-      <ProgramDataBaseFileName>.\final/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>finalSDL/</AssemblerListingLocation>
+      <ObjectFileName>final/</ObjectFileName>
+      <ProgramDataBaseFileName>finalSDL/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -1022,7 +1022,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\final/civctp.bsc</OutputFile>
+      <OutputFile>finalSDL/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">
@@ -1031,7 +1031,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\ctp2___W/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>NDebug/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -1044,8 +1044,8 @@
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
       <PrecompiledHeaderOutputFile>.\ctp2___W/civctp.pch</PrecompiledHeaderOutputFile>
       <AssemblerListingLocation>.\ctp2___W/</AssemblerListingLocation>
-      <ObjectFileName>.\ctp2___W/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ctp2___W/</ProgramDataBaseFileName>
+      <ObjectFileName>NDebug/</ObjectFileName>
+      <ProgramDataBaseFileName>NDebug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -1061,7 +1061,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\ctp2___W/CivCTP_ndbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>NDebug/CivCTP_ndbg.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
@@ -1069,7 +1069,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\ctp2___W/civctp.bsc</OutputFile>
+      <OutputFile>NDebug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='NDebug|x64'">
@@ -1077,7 +1077,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\ctp2___W/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>NDebug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -1088,10 +1088,10 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\ctp2___W/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ctp2___W/</AssemblerListingLocation>
-      <ObjectFileName>.\ctp2___W/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ctp2___W/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>NDebug/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>NDebug/</AssemblerListingLocation>
+      <ObjectFileName>NDebug/</ObjectFileName>
+      <ProgramDataBaseFileName>NDebug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -1107,7 +1107,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\ctp2___W/CivCTP_ndbg.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>NDebug/CivCTP_ndbg.pdb</ProgramDatabaseFile>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
@@ -1115,7 +1115,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\ctp2___W/civctp.bsc</OutputFile>
+      <OutputFile>NDebug/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">
@@ -1124,7 +1124,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\FinalLog/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>FinalLog/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -1137,10 +1137,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\FinalLog/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\FinalLog/</AssemblerListingLocation>
-      <ObjectFileName>.\FinalLog/</ObjectFileName>
-      <ProgramDataBaseFileName>.\FinalLog/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>FinalLog/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>FinalLog/</AssemblerListingLocation>
+      <ObjectFileName>FinalLog/</ObjectFileName>
+      <ProgramDataBaseFileName>FinalLog/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
@@ -1154,7 +1154,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\FinalLog\ctp2log.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>FinalLog\ctp2log.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>ctp2log.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -1164,7 +1164,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\FinalLog/civctp.bsc</OutputFile>
+      <OutputFile>FinalLog/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">
@@ -1172,7 +1172,7 @@
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\FinalLog/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>FinalLog/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -1186,10 +1186,10 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\FinalLog/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\FinalLog/</AssemblerListingLocation>
-      <ObjectFileName>.\FinalLog/</ObjectFileName>
-      <ProgramDataBaseFileName>.\FinalLog/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>FinalLog/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>FinalLog/</AssemblerListingLocation>
+      <ObjectFileName>FinalLog/</ObjectFileName>
+      <ProgramDataBaseFileName>FinalLog/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
@@ -1203,7 +1203,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\FinalLog\ctp2log.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>FinalLog\ctp2log.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>ctp2log.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -1213,7 +1213,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\FinalLog/civctp.bsc</OutputFile>
+      <OutputFile>FinalLog/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">
@@ -1222,7 +1222,7 @@
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -1233,12 +1233,12 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\DebugBrowse/</AssemblerListingLocation>
-      <ObjectFileName>.\DebugBrowse/</ObjectFileName>
-      <ProgramDataBaseFileName>.\DebugBrowse/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>DebugBrowse/</AssemblerListingLocation>
+      <ObjectFileName>DebugBrowse/</ObjectFileName>
+      <ProgramDataBaseFileName>DebugBrowse/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <BrowseInformationFile>.\DebugBrowse/</BrowseInformationFile>
+      <BrowseInformationFile>DebugBrowse/</BrowseInformationFile>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -1253,7 +1253,7 @@
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg_browse.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -1263,7 +1263,7 @@
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
       <Message>Copy for Remote Debugging</Message>
@@ -1277,7 +1277,7 @@ rem                                                if                           
       <PreprocessorDefinitions>_DEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Debug/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Debug/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -1288,12 +1288,12 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\DebugBrowse/</AssemblerListingLocation>
-      <ObjectFileName>.\DebugBrowse/</ObjectFileName>
-      <ProgramDataBaseFileName>.\DebugBrowse/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>DebugBrowse/</AssemblerListingLocation>
+      <ObjectFileName>DebugBrowse/</ObjectFileName>
+      <ProgramDataBaseFileName>DebugBrowse/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <BrowseInformationFile>.\DebugBrowse/</BrowseInformationFile>
+      <BrowseInformationFile>DebugBrowse/</BrowseInformationFile>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -1308,7 +1308,7 @@ rem                                                if                           
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>.\DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
+      <ProgramDatabaseFile>DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
       <MapFileName>CivCTP_dbg_browse.map</MapFileName>
       <SubSystem>Windows</SubSystem>
@@ -1318,7 +1318,7 @@ rem                                                if                           
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Debug/civctp.bsc</OutputFile>
+      <OutputFile>Debug/civctp.bsc</OutputFile>
     </Bscmake>
     <PostBuildEvent>
       <Message>Copy for Remote Debugging</Message>
@@ -1333,7 +1333,7 @@ rem                                                if                           
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\Release/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Release/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -1346,10 +1346,10 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Release/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Release/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <ObjectFileName>Release/</ObjectFileName>
+      <ProgramDataBaseFileName>Release/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -1373,7 +1373,7 @@ rem                                                if                           
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release/civctp.bsc</OutputFile>
+      <OutputFile>Release/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -1381,7 +1381,7 @@ rem                                                if                           
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\Release/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>Release/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -1395,10 +1395,10 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\Release/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\Release/</AssemblerListingLocation>
-      <ObjectFileName>.\Release/</ObjectFileName>
-      <ProgramDataBaseFileName>.\Release/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>Release/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>Release/</AssemblerListingLocation>
+      <ObjectFileName>Release/</ObjectFileName>
+      <ProgramDataBaseFileName>Release/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -1422,7 +1422,7 @@ rem                                                if                           
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\Release/civctp.bsc</OutputFile>
+      <OutputFile>Release/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">
@@ -1431,7 +1431,7 @@ rem                                                if                           
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <TargetEnvironment>Win32</TargetEnvironment>
-      <TypeLibraryName>.\ctp2___Win32_Optimized_Test1/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>ctp2___Win32_Optimized_Test1/civctp.tlb</TypeLibraryName>
       <HeaderFileName />
     </Midl>
     <ClCompile>
@@ -1444,10 +1444,10 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\ctp2___Win32_Optimized_Test1/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ctp2___Win32_Optimized_Test1/</AssemblerListingLocation>
-      <ObjectFileName>.\ctp2___Win32_Optimized_Test1/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ctp2___Win32_Optimized_Test1/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>ctp2___Win32_Optimized_Test1/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>ctp2___Win32_Optimized_Test1/</AssemblerListingLocation>
+      <ObjectFileName>ctp2___Win32_Optimized_Test1/</ObjectFileName>
+      <ProgramDataBaseFileName>ctp2___Win32_Optimized_Test1/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -1472,7 +1472,7 @@ rem                                                if                           
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\ctp2___Win32_Optimized_Test1/civctp.bsc</OutputFile>
+      <OutputFile>ctp2___Win32_Optimized_Test1/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">
@@ -1480,7 +1480,7 @@ rem                                                if                           
       <PreprocessorDefinitions>NDEBUG;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <MkTypLibCompatible>true</MkTypLibCompatible>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <TypeLibraryName>.\ctp2___Win32_Optimized_Test1/civctp.tlb</TypeLibraryName>
+      <TypeLibraryName>ctp2___Win32_Optimized_Test1/civctp.tlb</TypeLibraryName>
       <HeaderFileName>
       </HeaderFileName>
     </Midl>
@@ -1494,10 +1494,10 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>.\ctp2___Win32_Optimized_Test1/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>.\ctp2___Win32_Optimized_Test1/</AssemblerListingLocation>
-      <ObjectFileName>.\ctp2___Win32_Optimized_Test1/</ObjectFileName>
-      <ProgramDataBaseFileName>.\ctp2___Win32_Optimized_Test1/</ProgramDataBaseFileName>
+      <PrecompiledHeaderOutputFile>ctp2___Win32_Optimized_Test1/civctp.pch</PrecompiledHeaderOutputFile>
+      <AssemblerListingLocation>ctp2___Win32_Optimized_Test1/</AssemblerListingLocation>
+      <ObjectFileName>ctp2___Win32_Optimized_Test1/</ObjectFileName>
+      <ProgramDataBaseFileName>ctp2___Win32_Optimized_Test1/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -1522,7 +1522,7 @@ rem                                                if                           
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
-      <OutputFile>.\ctp2___Win32_Optimized_Test1/civctp.bsc</OutputFile>
+      <OutputFile>ctp2___Win32_Optimized_Test1/civctp.bsc</OutputFile>
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
