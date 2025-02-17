@@ -148,14 +148,11 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 	m_Bpp = m_bpp >> 3;
 	m_bytewidth = m_width * m_Bpp;
 
-#if defined(__AUI_USE_SDL__)
-	if (!m_cs)
-	{
-		m_cs = SDL_CreateMutex();
-#else
 	if ( !m_surfaceRefCount++ )
 	{
-
+#if defined(__AUI_USE_SDL__)
+		m_cs = SDL_CreateMutex();
+#else
 		InitializeCriticalSection(&m_cs);
 #endif
 	}
@@ -169,7 +166,6 @@ AUI_ERRCODE aui_Surface::InitCommon( sint32 width, sint32 height, sint32 bpp, BO
 
 	return AUI_ERRCODE_OK;
 }
-
 
 aui_Surface::~aui_Surface()
 {
