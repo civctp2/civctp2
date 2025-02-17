@@ -153,6 +153,7 @@ AUI_ERRCODE aui_Image::LoadFileMapped( sint32 width, sint32 height,
 	return retcode;
 }
 
+// Not called
 AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
