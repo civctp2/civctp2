@@ -427,61 +427,6 @@ AUI_ERRCODE aui_TextBase::DrawThisText(
 		m_textunderline );
 }
 
-
-
-
-uint32 aui_TextBase::FindNextWordBreak
-(
-	MBCHAR const *  text,
-    HDC             hdc,
-    sint32          width
-)
-{
-	Assert(text);
-	if ( !text ) return 0;
-
-	uint32 totalLength = 0;
-	sint32 totalSize = 0;
-
-#ifdef __AUI_USE_DIRECTX__
-	MBCHAR const *  word = text;
-	while (MBCHAR const * token = FindNextToken(word, " \t\n", 1 ))
-	{
-		SIZE wordSize = { 0, 0 };
-		sint32 wordLength = token - word + 1;
-
-		BOOL success = GetTextExtentPoint32( hdc, word, wordLength, &wordSize );
-		Assert( success );
-		if ( !success ) return totalLength + wordLength;
-
-		if ( (totalSize += wordSize.cx) < width )
-			totalLength += wordLength;
-		else
-			return totalLength;
-
-		if ( *token == '\n' )
-			return totalLength;
-
-		word = token + 1;
-	}
-
-	SIZE wordSize = { 0, 0 };
-	sint32 wordLength = strlen( word );
-
-	BOOL success = GetTextExtentPoint32( hdc, word, wordLength, &wordSize );
-	Assert( success );
-	if ( !success ) return totalLength + wordLength;
-
-	if ( (totalSize += wordSize.cx) < width )
-		totalLength += wordLength;
-
-#else
-	// TODO?
-#endif
-	return totalLength;
-}
-
-
 MBCHAR const * aui_TextBase::FindNextToken
 (
 	const MBCHAR *  text,
