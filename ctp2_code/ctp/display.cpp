@@ -6,14 +6,14 @@
 #include "appstrings.h"
 
 #define COMPILE_MULTIMON_STUBS
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 #include <multimon.h>
 #elif defined(__AUI_USE_SDL__)
 #include <SDL2/SDL.h>
 #endif
 
 PointerList<CTPDisplayMode>	*g_displayModes = NULL;
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 PointerList<DisplayDevice>	*g_displayDevices = NULL;
 
 DisplayDevice				g_displayDevice;
@@ -32,7 +32,7 @@ extern BOOL					g_createDirectDrawOnSecondary;
 #include "profileDB.h"
 extern ProfileDB			*g_theProfileDB;
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 BOOL CALLBACK display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 								   LPSTR szDevice, LPVOID lParam, HMONITOR hMonitor)
 {
@@ -116,7 +116,7 @@ HRESULT CALLBACK display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam
 		g_displayModes->AddTail(mode);
 	}
 
-    return S_FALSE;
+	return S_FALSE;
 }
 #endif
 
