@@ -120,12 +120,6 @@ public:
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
 #endif
 
-#if defined(__AUI_USE_SDL__)
-	SDL_mutex *LPCS( void ) const { return m_cs; };
-#else
-	LPCRITICAL_SECTION LPCS( void ) const { return &m_cs; };
-#endif
-
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
 
 	virtual AUI_ERRCODE BlankRGB(const uint8 &red, const uint8 &green, const uint8 &blue);
