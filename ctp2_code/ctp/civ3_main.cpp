@@ -507,7 +507,7 @@ int ui_Initialize(void)
 	Assert(auiErr == AUI_ERRCODE_OK);
 	if ( auiErr != AUI_ERRCODE_OK ) return 14;
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 	while ( ShowCursor( FALSE ) >= 0 )
 	;
 #endif
@@ -939,7 +939,7 @@ static HWND s_taskBar   = NULL;
 
 void main_HideTaskBar(void)
 {
-#ifndef __AUI_USE_SDL__
+#if defined(__AUI_USE_DIRECTX__)
 	if (g_hideTaskBar)
 	{
 		s_taskBar = FindWindow("Shell_TrayWnd", NULL);
@@ -949,12 +949,12 @@ void main_HideTaskBar(void)
 			ShowWindow(s_taskBar, SW_HIDE);
 		}
 	}
-#endif // !__AUI_USE_SDL__
+#endif // __AUI_USE_DIRECTX__
 }
 
 void main_RestoreTaskBar(void)
 {
-#ifndef __AUI_USE_SDL__
+#if defined(__AUI_USE_DIRECTX__)
 	if (s_taskBar)
 	{
 		ShowWindow(s_taskBar, SW_SHOWDEFAULT);
@@ -985,7 +985,7 @@ void AtExitProc(void)
 # endif
 
 	// Destroy the mutex used for the secondary keyboard event queue
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 	SDL_DestroyMutex(g_secondaryKeyboardEventQueueMutex);
 	g_secondaryKeyboardEventQueueMutex = NULL;
 #endif
@@ -1112,15 +1112,17 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
-	if (strstr(szCmdLine, "fullscreen")) {
-        g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
-    }
-	if (strstr(szCmdLine, "hwsurface")) {
-        printf("SDL2 does not support hwsurface option");
+	if (strstr(szCmdLine, "fullscreen"))
+	{
+		g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
 	}
-	if (strstr(szCmdLine, "openglblit")) {
-	    printf("SDL2 uses OpenGL automatically");
-    }
+	if (strstr(szCmdLine, "hwsurface")) {
+		printf("SDL2 does not support hwsurface option");
+	}
+	if (strstr(szCmdLine, "openglblit"))
+	{
+		printf("SDL2 uses OpenGL automatically");
+	}
 #endif
 	
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
@@ -1479,6 +1481,7 @@ int CivMain
 #else	// __GNUC__
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+#if defined(__AUI_USE_DIRECTX__)
 
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
 	if (hwnd) {
@@ -1490,6 +1493,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		return FALSE;
 	}
+#endif
 #endif // __GNUC__
 
 #ifdef WIN32
@@ -1527,7 +1531,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	std::setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 	std::setlocale(LC_NUMERIC, "C");
 
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	if (!main_CheckDirectX()) {
 
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
@@ -1619,10 +1623,11 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
 
-#ifdef __AUI_USE_SDL__
+// ToDo: Move this below into a specialized class like aui_sdlui or aui_directui
+#if defined(__AUI_USE_SDL__)
 	g_secondaryKeyboardEventQueueMutex = SDL_CreateMutex();
 #endif
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	MSG			msg;
 	msg.wParam  = 0;
 #endif
@@ -1632,9 +1637,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		uint32 frameStartTick = GetTickCount();
 		g_civApp->Process();
 
-		//fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
-
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 		SDL_Event event;
 		while (!g_letUIProcess) { // There are breaks, too ;)
 
@@ -1694,7 +1697,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			}
 
 			SDLMessageHandler(event);
-#else // __AUI_USE_SDL__
+#elif defined(__AUI_USE_DIRECTX__)
 
 		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 		{
@@ -1707,13 +1710,16 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
-#endif // __AUI_USE_SDL__
+#else
+#error "Implementation missing for non-SDL and non-DirectX builds"
+// Actually move this into a specialized class like like aui_sdlui or aui_directui
+#endif
 		}
 
 		g_letUIProcess = FALSE;
 	}
 
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 	return 0;
 #else
 	return msg.wParam;
@@ -1729,7 +1735,7 @@ void DoFinalCleanup(int exitCode)
 
 	static bool s_cleaningUpTheApp = false;
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 	ShowWindow(gHwnd, SW_HIDE);
 #endif
 
@@ -1757,7 +1763,7 @@ void DoFinalCleanup(int exitCode)
 
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 int SDLMessageHandler(const SDL_Event &event)
 {
 	// Merge into WndProc with keycode converter and
