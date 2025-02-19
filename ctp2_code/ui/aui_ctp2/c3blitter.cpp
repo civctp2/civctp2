@@ -53,7 +53,7 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
-#ifndef __linux__
+#if !defined(__linux__)
 	if ((flags & k_AUI_BLITTER_FLAG_FAST))
 	{
 
@@ -622,7 +622,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 
 bool C3Blitter::CheckMMXTechnology(void)
 {
-#ifdef __linux__
+#if defined(__linux__)
 	return false;
 #else
     bool retval = true;
@@ -684,7 +684,7 @@ bool C3Blitter::CheckMMXTechnology(void)
 
 void BlockCopy(uint8 *src, uint8 *dest, uint32 len)
 {
-#ifdef __linux__
+#if defined(__linux__)
 	memcpy(dest, src, len);
 #else
 #ifdef _MSC_VER

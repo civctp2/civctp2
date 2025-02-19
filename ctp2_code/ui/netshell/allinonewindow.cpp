@@ -2165,10 +2165,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 													 AUI_BUTTON_ACTION_EXECUTE,
 													 0 );
 					} else {
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 						PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
 #endif
-				    }
+					}
 				}
 			}
 		}
@@ -2528,7 +2528,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 			g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 			w->Update();
 		} else {
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
 #endif
 		}
@@ -2552,10 +2552,10 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 				AUI_BUTTON_ACTION_EXECUTE,
 				0 );
 		} else {
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
 #endif
-	}
+		}
 	}
 
 	if(joinedgame && g_netfunc->GetStatus() == NETFunc::OK) {
@@ -4095,6 +4095,8 @@ void AllinoneWindow::CancelButtonAction::Execute(
 			g_gamesetup.SetSize( k_NS_MAX_HUMANS );
 
 			/// @todo Use Os::Sleep
+			// Find the right include for that and also place
+			//Os::Sleep(k_PACKET_DELAY);
 #ifdef WIN32
 			Sleep(k_PACKET_DELAY);
 #else
@@ -4108,7 +4110,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 		g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 		w->Update();
 	} else {
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 		PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
 #endif
 }
