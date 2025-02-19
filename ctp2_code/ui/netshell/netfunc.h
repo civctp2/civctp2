@@ -58,10 +58,14 @@
 #if defined(WIN32)
 #include <windows.h>
 #define NETFUNC_CALLBACK_RESULT(a_Type) a_Type __stdcall
+#else
+#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
+#endif
+
+#if !defined(__AUI_USE_SDL__)
 #define NETFUNC_CONNECT_RESULT          DWORD WINAPI
 #define NETFUNC_CONNECT_PARAMETER       LPVOID
 #else
-#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
 #define NETFUNC_CONNECT_RESULT          int
 #define NETFUNC_CONNECT_PARAMETER       void *
 #endif
