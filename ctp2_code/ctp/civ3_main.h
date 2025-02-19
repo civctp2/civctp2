@@ -59,8 +59,6 @@ void sprite_Cleanup(void);
 int tile_Initialize(BOOL isRestoring);
 void tile_Cleanup(void);
 
-int WINAPI main_filehelper_GetOS(void);
-
 int main_Restart();
 int main_RestoreGame(const MBCHAR *filename);
 

@@ -1162,19 +1162,6 @@ void ParseCommandLine(PSTR szCmdLine)
 }
 
 #ifdef WIN32
-int WINAPI main_filehelper_GetOS(void)
-{
-	OSVERSIONINFO osvi;
-
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-
-	GetVersionEx( &osvi );
-
-	return osvi.dwPlatformId;
-}
-#endif // WIN32
-
-#ifdef WIN32
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -2041,11 +2028,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		ui_HandleMouseWheel((sint16)HIWORD(wParam));
 		break;
 	}
-#ifdef WIN32
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-#endif
 }
-#endif// else: Compilation error
+#else
+#error "No code for something else than DirectX or SDL"
+#endif
 
 void DisplayFrame(aui_Surface *surf)
 {
@@ -2078,7 +2065,7 @@ BOOL ExitGame(void)
 	quit.quit.type = SDL_QUIT;
 	int e = SDL_PushEvent(&quit);
 	return (e != 0);
-#elif defined(WIN32)
+#elif defined(__AUI_USE_DIRECTX__)
 	return PostMessage(gHwnd, WM_CLOSE, 0, 0);
 #else
 	return TRUE;
