@@ -2463,11 +2463,7 @@ NETFunc::STATUS NETFunc::SetTransport(Transport *t) {
 		}
 		cancelDial = 0;
 #ifdef __AUI_USE_SDL__
-#if !defined(WIN32)
 		threadHandle = SDL_CreateThread(ConnectThread, "Connect-thread", (void *)transport);
-#else
-#pragma message(__FILE__ "(" STRING(__LINE__) "): warning: SDL and multiplayer have not been made compatible")
-#endif
 #else
 		threadHandle = CreateThread(0, 0, ConnectThread, (void *)transport, 0, &threadId);
 #endif
