@@ -156,7 +156,6 @@
 
 #if !defined(__GNUC__) // TODO: replacement needed (wine doesnt have these headers...)
 #include "directvideo.h"
-#include "videoutils.h"
 #endif
 
 #ifdef LINUX

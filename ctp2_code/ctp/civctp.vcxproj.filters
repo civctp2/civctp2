@@ -236,9 +236,6 @@
     <ClCompile Include="ctp2_utils\c3cmdline.cpp">
       <Filter>CTP\ctp2_utils</Filter>
     </ClCompile>
-    <ClCompile Include="ctp2_utils\c3cpu.cpp">
-      <Filter>CTP\ctp2_utils</Filter>
-    </ClCompile>
     <ClCompile Include="ctp2_utils\c3debug.cpp">
       <Filter>CTP\ctp2_utils</Filter>
     </ClCompile>
@@ -255,9 +252,6 @@
       <Filter>CTP\ctp2_utils</Filter>
     </ClCompile>
     <ClCompile Include="ctp2_utils\ctpregistry.cpp">
-      <Filter>CTP\ctp2_utils</Filter>
-    </ClCompile>
-    <ClCompile Include="ctp2_utils\ddhelp.cpp">
       <Filter>CTP\ctp2_utils</Filter>
     </ClCompile>
     <ClCompile Include="ctp2_utils\netconsole.cpp">
@@ -429,9 +423,6 @@
       <Filter>gfx\gfx_utils</Filter>
     </ClCompile>
     <ClCompile Include="..\gfx\gfx_utils\tiffutils.cpp">
-      <Filter>gfx\gfx_utils</Filter>
-    </ClCompile>
-    <ClCompile Include="..\gfx\gfx_utils\videoutils.cpp">
       <Filter>gfx\gfx_utils</Filter>
     </ClCompile>
     <ClCompile Include="..\gfx\layers\citylayer.cpp">
@@ -1466,9 +1457,6 @@
     <ClCompile Include="..\ui\aui_utils\textutils.cpp">
       <Filter>ui\aui_utils</Filter>
     </ClCompile>
-    <ClCompile Include="..\ui\aui_utils\vidplay.cpp">
-      <Filter>ui\aui_utils</Filter>
-    </ClCompile>
     <ClCompile Include="..\ui\aui_directx\aui_directaudiomanager.cpp">
       <Filter>ui\aui_directx</Filter>
     </ClCompile>
@@ -2497,9 +2485,6 @@
     <ClInclude Include="ctp2_utils\c3cmdline.h">
       <Filter>CTP\ctp2_utils</Filter>
     </ClInclude>
-    <ClInclude Include="ctp2_utils\c3cpu.h">
-      <Filter>CTP\ctp2_utils</Filter>
-    </ClInclude>
     <ClInclude Include="ctp2_utils\c3debug.h">
       <Filter>CTP\ctp2_utils</Filter>
     </ClInclude>
@@ -2516,9 +2501,6 @@
       <Filter>CTP\ctp2_utils</Filter>
     </ClInclude>
     <ClInclude Include="ctp2_utils\ctpregistry.h">
-      <Filter>CTP\ctp2_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="ctp2_utils\ddhelp.h">
       <Filter>CTP\ctp2_utils</Filter>
     </ClInclude>
     <ClInclude Include="ctp2_utils\minmax.h">
@@ -2690,9 +2672,6 @@
       <Filter>gfx\gfx_utils</Filter>
     </ClInclude>
     <ClInclude Include="..\gfx\gfx_utils\tiffutils.h">
-      <Filter>gfx\gfx_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\gfx\gfx_utils\videoutils.h">
       <Filter>gfx\gfx_utils</Filter>
     </ClInclude>
     <ClInclude Include="..\gfx\layers\citylayer.h">
@@ -3827,9 +3806,6 @@
       <Filter>ui\aui_utils</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\aui_utils\textutils.h">
-      <Filter>ui\aui_utils</Filter>
-    </ClInclude>
-    <ClInclude Include="..\ui\aui_utils\vidplay.h">
       <Filter>ui\aui_utils</Filter>
     </ClInclude>
     <ClInclude Include="..\ui\aui_directx\aui_directaudiomanager.h">

@@ -2094,22 +2094,6 @@ rem                                                if                           
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
     </ClCompile>
-    <ClCompile Include="..\gfx\gfx_utils\videoutils.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
-    </ClCompile>
     <ClCompile Include="..\gfx\layers\citylayer.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
@@ -10644,22 +10628,6 @@ rem                                                if                           
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
     </ClCompile>
-    <ClCompile Include="..\ui\aui_utils\vidplay.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
-    </ClCompile>
     <ClCompile Include="..\ui\interface\agesscreen.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
@@ -13766,22 +13734,6 @@ rem                                                if                           
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
     </ClCompile>
-    <ClCompile Include="ctp2_utils\c3cpu.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
-    </ClCompile>
     <ClCompile Include="ctp2_utils\c3debug.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
@@ -13863,22 +13815,6 @@ rem                                                if                           
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
     </ClCompile>
     <ClCompile Include="ctp2_utils\ctpregistry.cpp">
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">MaxSpeed</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Disabled</Optimization>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'">Size</FavorSizeOrSpeed>
-      <FavorSizeOrSpeed Condition="'$(Configuration)|$(Platform)'=='Optimized Test|x64'">Size</FavorSizeOrSpeed>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|Win32'">Disabled</Optimization>
-      <Optimization Condition="'$(Configuration)|$(Platform)'=='Test|x64'">Disabled</Optimization>
-    </ClCompile>
-    <ClCompile Include="ctp2_utils\ddhelp.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">MaxSpeed</Optimization>
@@ -14556,7 +14492,6 @@ rem                                                if                           
     <ClInclude Include="..\gfx\gfx_utils\rimutils.h" />
     <ClInclude Include="..\gfx\gfx_utils\targautils.h" />
     <ClInclude Include="..\gfx\gfx_utils\tiffutils.h" />
-    <ClInclude Include="..\gfx\gfx_utils\videoutils.h" />
     <ClInclude Include="..\gfx\layers\citylayer.h" />
     <ClInclude Include="..\gfx\spritesys\Action.h" />
     <ClInclude Include="..\gfx\spritesys\Actor.h" />
@@ -15100,7 +15035,6 @@ rem                                                if                           
     <ClInclude Include="..\ui\aui_sdl\aui_sdlui.h" />
     <ClInclude Include="..\ui\aui_utils\primitives.h" />
     <ClInclude Include="..\ui\aui_utils\textutils.h" />
-    <ClInclude Include="..\ui\aui_utils\vidplay.h" />
     <ClInclude Include="..\ui\freetype\freetype.h" />
     <ClInclude Include="..\ui\freetype\fterrid.h" />
     <ClInclude Include="..\ui\freetype\ftnameid.h" />
@@ -15282,14 +15216,12 @@ rem                                                if                           
     <ClInclude Include="ctp2_utils\AvlTree.h" />
     <ClInclude Include="ctp2_utils\BitMask.h" />
     <ClInclude Include="ctp2_utils\c3cmdline.h" />
-    <ClInclude Include="ctp2_utils\c3cpu.h" />
     <ClInclude Include="ctp2_utils\c3debug.h" />
     <ClInclude Include="ctp2_utils\c3debugstl.h" />
     <ClInclude Include="ctp2_utils\c3errors.h" />
     <ClInclude Include="ctp2_utils\c3files.h" />
     <ClInclude Include="ctp2_utils\cheatkey.h" />
     <ClInclude Include="ctp2_utils\ctpregistry.h" />
-    <ClInclude Include="ctp2_utils\ddhelp.h" />
     <ClInclude Include="ctp2_utils\minmax.h" />
     <ClInclude Include="ctp2_utils\netconsole.h" />
     <ClInclude Include="ctp2_utils\PointerList.h" />
