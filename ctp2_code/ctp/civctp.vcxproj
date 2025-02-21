@@ -335,6 +335,7 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <TargetName>CivCTP_dbg-sdl</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
     <OutDir>DebugNoMem\</OutDir>
@@ -367,6 +368,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <TargetName>ctp2-sdl</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">
     <OutDir>ctp2___W\</OutDir>
@@ -594,7 +596,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;..\libs\zlib\zlib.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;wsock32.lib;winmm.lib;amstrmid.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>CivCTP_dbg-sdl.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
@@ -903,7 +905,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\win\lib\anet2.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;..\libs\zlib\zlib.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
