@@ -19,7 +19,7 @@
 //
 // _DEBUG
 // Generate debug information.
-// USE_SDL
+// __AUI_USE_SDL__
 // Use SDL API calls
 // WIN32
 // Use MS Windows32 API calls
@@ -46,16 +46,23 @@
 #include "debug.h"      	// Os::SetThreadName
 #endif
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(__AUI_USE_SDL__)
 #include <ras.h>
 #endif
 
 #include <algorithm>
+
+#ifdef __AUI_USE_SDL__
+#if defined(WIN32)
+#define STRING2(x) #x  
+#define STRING(x) STRING2(x) 
+#endif
+#endif
 
 namespace
 {
@@ -80,7 +87,7 @@ namespace Os
 
 int adialup_autodial_enabled(void)
 {
-#ifdef WIN32
+#if defined(WIN32) && !defined(__AUI_USE_SDL__)
 	HKEY hKey;
 	unsigned long werr = RegOpenKeyEx(HKEY_CURRENT_USER,
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
@@ -121,14 +128,15 @@ int adialup_autodial_enabled(void)
 
 #define adialup_MAXCONNS 10
 
-#ifdef WIN32
+#if defined(WIN32) && !defined(__AUI_USE_SDL__)
 typedef DWORD (APIENTRY *pfnRasEnumConnections_t)(LPRASCONN, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
 #endif
 
 int adialup_is_active(void)
 {
-#ifdef WIN32
+#if defined(WIN32) && !defined(__AUI_USE_SDL__)
+	// Windows modem dialup connection, probably not needed today.
 	HANDLE hlib = LoadLibrary("rasapi32.dll");
 	if (NULL == hlib) {
 		DPRINT(("adialup_is_active: can't load library rasapi32.dll\n"));
@@ -136,9 +144,9 @@ int adialup_is_active(void)
 	}
 
 	pfnRasEnumConnections_t pfnRasEnumConnections =
-        (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
+	    (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
 	pfnRasGetConnectStatus_t pfnRasGetConnectStatus =
-        (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
+	    (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
 
 	if (!pfnRasEnumConnections || !pfnRasGetConnectStatus) {
 		DPRINT(("adialup_is_active: can't get fns from library rasapi32.dll\n"));
@@ -180,9 +188,6 @@ int adialup_is_active(void)
 	return FALSE;
 }
 
-
-
-
 int adialup_willdial(void)
 {
 	return adialup_autodial_enabled() && !adialup_is_active();
@@ -213,11 +218,10 @@ void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 	va_end(al);
 }
 
-
-char *NETFunc::StringDup(char *s) {
-    return (s) ? strcpy(new char[strlen(s) + 1], s) : NULL;
+char *NETFunc::StringDup(char *s)
+{
+	return (s) ? strcpy(new char[strlen(s) + 1], s) : NULL;
 }
-
 
 NETFunc::Timer::Timer(void)
 :
@@ -227,7 +231,8 @@ NETFunc::Timer::Timer(void)
 {
 }
 
-void NETFunc::Timer::Start(int d) {
+void NETFunc::Timer::Start(int d)
+{
 	start = GetTickCount();
 	finish = start + d;
 	done = false;
@@ -235,9 +240,8 @@ void NETFunc::Timer::Start(int d) {
 
 bool NETFunc::Timer::Finished(void)
 {
-    return done || (GetTickCount() >= finish);
+	return done || (GetTickCount() >= finish);
 }
-
 
 NETFunc::MessageHandler::MessageHandler(void) {
 	if(hCount < nf_MAX_HANDLERS)
@@ -269,7 +273,6 @@ bool NETFunc::MessageHandler::HandleAll(Message *m) {
 
 NETFunc::MessageHandler *NETFunc::MessageHandler::hList[] = {0};
 int NETFunc::MessageHandler::hCount = 0;
-
 
 NETFunc::Message::Message(CODE c, void *p, size_t s) {
 	newbody = true;
@@ -2459,7 +2462,7 @@ NETFunc::STATUS NETFunc::SetTransport(Transport *t) {
 			nextStatus = READY;
 		}
 		cancelDial = 0;
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 		threadHandle = SDL_CreateThread(ConnectThread, "Connect-thread", (void *)transport);
 #else
 		threadHandle = CreateThread(0, 0, ConnectThread, (void *)transport, 0, &threadId);
@@ -2902,7 +2905,7 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 	if(result != dp_RES_OK)
 		return ERR;
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 	threadHandle = SDL_CreateThread(ReConnectThread, "Reconnect-thread", (void *) &reconnected);
 #else
 	threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&reconnected, 0, &threadId);
@@ -2914,7 +2917,7 @@ NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 void NETFunc::ReConnect(void) {
 	if(!reconnected) {
 		reconnected = true;
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 		SDL_WaitThread(threadHandle, NULL);
 #else
 		DWORD dw;
@@ -3269,7 +3272,7 @@ bool NETFunc::Handle(Message *m) {
 void NETFunc::Execute(void) {
 	switch(status) {
 	case CONNECT:
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 		int dw;
 		// This is ugly, but there is no other way in SDL
 		// to determine if a thread is running
@@ -3294,7 +3297,7 @@ void NETFunc::Execute(void) {
 				if(status == PRECONNECT)
 					EnumServers(true);
 			}
-#ifndef USE_SDL
+#ifndef __AUI_USE_SDL__
 		}
 #endif
 		break;

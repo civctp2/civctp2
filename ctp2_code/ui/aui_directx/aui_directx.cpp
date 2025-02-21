@@ -2,8 +2,6 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
-#include <ddraw.h>
-
 #include "aui_ui.h"
 #include "aui_uniqueid.h"
 

@@ -38,10 +38,13 @@
 
 #if defined(WIN32)
 #include <windows.h>    // BOOL, LPSTR, GUID, HMONITOR, RECT, etc.
-#include <ddraw.h>      // LPDDSURFACEDESC, etc.
 #else
 #include "windows.h"
 #endif // WIN32
+
+#if defined(__AUI_USE_DIRECTX__)
+#include <ddraw.h>      // LPDDSURFACEDESC, etc.
+#endif
 
 struct DisplayDevice {
 	LPSTR		szName;
@@ -57,13 +60,13 @@ struct CTPDisplayMode {
 	sint32		height;
 };
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 BOOL CALLBACK		display_FindDeviceCallbackEx(GUID* lpGUID, LPSTR szName,
 								   LPSTR szDevice, LPVOID lParam, HMONITOR hMonitor);
 #endif
 BOOL				display_EnumerateDisplayDevices(void);
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 HRESULT CALLBACK	display_DisplayModeCallback(LPDDSURFACEDESC pdds, LPVOID lParam);
 #endif
 void				display_EnumerateDisplayModes(void);

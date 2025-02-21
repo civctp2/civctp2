@@ -19,7 +19,7 @@
 //
 // _DEBUG
 // Generate debug information.
-// USE_SDL
+// __AUI_USE_SDL__
 // Use SDL API calls
 // WIN32
 // Use MS Windows32 API calls
@@ -50,7 +50,7 @@
 #include <string.h>
 #include <list>
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
@@ -58,10 +58,14 @@
 #if defined(WIN32)
 #include <windows.h>
 #define NETFUNC_CALLBACK_RESULT(a_Type) a_Type __stdcall
+#else
+#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
+#endif
+
+#if !defined(__AUI_USE_SDL__)
 #define NETFUNC_CONNECT_RESULT          DWORD WINAPI
 #define NETFUNC_CONNECT_PARAMETER       LPVOID
 #else
-#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
 #define NETFUNC_CONNECT_RESULT          int
 #define NETFUNC_CONNECT_PARAMETER       void *
 #endif
@@ -1387,7 +1391,7 @@ public:
 
 
 private:
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 	SDL_Thread *threadHandle;
 	Uint32 threadId;
 #else

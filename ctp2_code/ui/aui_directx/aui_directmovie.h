@@ -5,6 +5,8 @@
 
 #include "aui_movie.h"
 
+#include <amstream.h>
+
 class aui_DirectSurface;
 
 class aui_DirectMovie : public aui_Movie

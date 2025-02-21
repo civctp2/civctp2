@@ -11,11 +11,11 @@
 #if defined(__AUI_USE_SDL__)
 
 #include "aui_sdlmovie.h"
-#include <SDL_render.h>
+#include <SDL2/SDL_render.h>
 
 class aui_SDLMovieManager : public aui_MovieManager {
 public:
-	aui_SDLMovieManager(SDL_Renderer *sdlRenderer, SDL_Texture *background, const int windowWidth,
+	aui_SDLMovieManager(SDL_Renderer *renderer, SDL_Texture *background, const int windowWidth,
 			const int windowHeight);
 	virtual ~aui_SDLMovieManager();
 

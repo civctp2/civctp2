@@ -5427,15 +5427,8 @@ bool CityData::BuildWonder(sint32 type)
 	Assert(CanBuildWonder(type));
 	if(!CanBuildWonder(type))
 	{
-#ifdef _DEBUG
-		char error_msg[300];
+		DPRINTF(k_DBG_GAMESTATE, ("Cannot build wonder: %d\n", g_theWonderDB->Get(type)->GetNameText()));
 
-		sprintf(error_msg, "Cannot build wonder %d",
-		    type);
-#ifdef WIN32
-		_RPT0(_CRT_WARN, error_msg);
-#endif
-#endif
 		return false;
 	}
 

@@ -1245,20 +1245,21 @@ bool CivApp::InitializeAppDB(void)
 
 sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
-#ifdef WIN32
-    // COM needed for DirectX/Movies
+#if defined(__AUI_USE_DIRECTX__)
+	// COM needed for DirectX/Movies
 	CoInitialize(NULL);
 #endif
 #ifdef __AUI_USE_SDL__
-        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTS) & ~SDL_INIT_AUDIO; //why no audio?
+	Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTS) & ~SDL_INIT_AUDIO; //why no audio?
 #if defined(_DEBUG) || defined(DEBUG)
-        flags |= SDL_INIT_NOPARACHUTE;
+	flags |= SDL_INIT_NOPARACHUTE;
 #endif// _DEBUG || DEBUG
-        int rc = SDL_Init(flags);
-        if (rc != 0) {
-                fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
-                return -1;
-        }
+	int rc = SDL_Init(flags);
+	if (rc != 0)
+	{
+		fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
+		return -1;
+	}
 #endif
 
 	Splash::Initialize();
@@ -1530,7 +1531,7 @@ void CivApp::CleanupApp(void)
 		CivPaths_CleanupCivPaths();
 		SlicSegment::Cleanup();
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 		// COM needed for DirectX Moviestuff
 		CoUninitialize();
 #endif

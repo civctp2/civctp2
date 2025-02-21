@@ -157,7 +157,7 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 {
 	AUI_ERRCODE retcode = AUI_ERRCODE_OK;
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 	uint8 *filebits = g_ui->TheMemMap()->GetFileBits( filename );
 	Assert( filebits != NULL );
 	if ( !filebits ) return AUI_ERRCODE_HACK;
@@ -320,40 +320,47 @@ AUI_ERRCODE aui_BmpImageFormat::Load(MBCHAR const * filename, aui_Image *image )
 	SDL_Surface *surf = NULL;
 	SDL_PixelFormat fmt = { 0 };
 
-        fprintf(stderr, "%s L%d: image %s!\n", __FILE__, __LINE__, filename);
-        if (g_ui->Primary()->BitsPerPixel() != 16)
-            fprintf(stderr, "%s L%d: bpp %d", __FILE__, __LINE__,  g_ui->Primary()->BitsPerPixel());
-        if (bmp->format->Gmask >> bmp->format->Gshift == 0x3F)
-            fprintf(stderr, "%s L%d: 565 image!\n", __FILE__, __LINE__);
-        if (bmp->format->Gmask >> bmp->format->Gshift == 0x1F)
-            fprintf(stderr, "%s L%d: 555 image!\n", __FILE__, __LINE__);
-	if (NULL == surf) {
-        SDL_PixelFormat *format = SDL_AllocFormat(aui_SDLSurface::TransformSurfacePixelFormatToSDL(g_ui->PixelFormat()));
-        surf = SDL_ConvertSurface(bmp, format, 0);
-        SDL_FreeFormat(format);
-    }
+	fprintf(stderr, "%s L%d: image %s!\n", __FILE__, __LINE__, filename);
+	if (g_ui->Primary()->BitsPerPixel() != 16)
+		fprintf(stderr, "%s L%d: bpp %d", __FILE__, __LINE__,  g_ui->Primary()->BitsPerPixel());
+	if (bmp->format->Gmask >> bmp->format->Gshift == 0x3F)
+		fprintf(stderr, "%s L%d: 565 image!\n", __FILE__, __LINE__);
+	if (bmp->format->Gmask >> bmp->format->Gshift == 0x1F)
+		fprintf(stderr, "%s L%d: 555 image!\n", __FILE__, __LINE__);
+	if (NULL == surf)
+	{
+		SDL_PixelFormat *format = SDL_AllocFormat(aui_SDLSurface::TransformSurfacePixelFormatToSDL(g_ui->PixelFormat()));
+		surf = SDL_ConvertSurface(bmp, format, 0);
+		SDL_FreeFormat(format);
+	}
 	SDL_FreeSurface(bmp);
 	if (NULL == surf)
 		return AUI_ERRCODE_LOADFAILED;
 	//surface = image->TheSurface();
 	//image->AttachSurface(surf);
-        //The new surface should be assinged to the image-surfec but how???
-        //conversion needed from SDL_Surface to aui_Surface
-        //also using SDL_BlitSurface might be good in case surf 565 and img 555
-        /* //this part doesn't create a visible effect:
-        AUI_ERRCODE *retval;
 
-        if (m_surface) {
-            delete m_surface;
-            }
+	//The new surface should be assinged to the image-surfec but how???
+	//conversion needed from SDL_Surface to aui_Surface
+	//also using SDL_BlitSurface might be good in case surf 565 and img 555
 
-        m_surface = new aui_Surface(retval, s->w, s->h, s->format->BitsPerPixel, s->pitch, (uint8 *) s->pixels);
-        Assert( AUI_SUCCESS(*retval) );
-        if ( !AUI_SUCCESS(*retval) ) return;
-        */
+	/* //this part doesn't create a visible effect:
+	AUI_ERRCODE *retval;
 
-        if (image->TheSurface()) {
-	} else {
+	if (m_surface)
+	{
+		delete m_surface;
+	}
+
+	m_surface = new aui_Surface(retval, s->w, s->h, s->format->BitsPerPixel, s->pitch, (uint8 *) s->pixels);
+	Assert( AUI_SUCCESS(*retval) );
+	if ( !AUI_SUCCESS(*retval) ) return;
+	*/
+
+	if (image->TheSurface())
+	{
+	}
+	else
+	{
 	}
 	return retcode;
 #else

@@ -99,8 +99,6 @@
 
 #include <tchar.h>
 
-#include <ddraw.h>
-#include <dinput.h>
 #else
 #include "windows.h" // Defines HAVE_CONFIG_H, HAVE_INTTYPES_H and HAVE_STDINT_H
 #endif // WIN32

@@ -330,17 +330,24 @@ AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {
 	Assert(m_SDLRenderer);
 	int errcode;
 	errcode= SDL_UpdateTexture(m_SDLTexture, NULL, m_primary->Buffer(), m_primary->Pitch());
+#if !defined(WIN32)
+	// VS claims std::cerr is not there even so the right file is included
 	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+#endif
 	errcode= SDL_RenderClear(m_SDLRenderer);
+#if !defined(WIN32)
 	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+#endif
 	errcode= SDL_RenderCopy(m_SDLRenderer, m_SDLTexture, NULL, NULL);
+#if !defined(WIN32)
 	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+#endif
 	SDL_RenderPresent(m_SDLRenderer);
 
 	if (errcode < 0)
-	  return AUI_ERRCODE_SURFACEFAILURE;
+		return AUI_ERRCODE_SURFACEFAILURE;
 	else
-	  return AUI_ERRCODE_OK;
+		return AUI_ERRCODE_OK;
 }
 
 #endif  // __AUI_USE_SDL__

@@ -51,7 +51,7 @@
 #include "ldl_data.hpp"
 #include "ldl_file.hpp"
 
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 #include <SDL2/SDL.h>
 #endif
 

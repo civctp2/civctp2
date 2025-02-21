@@ -157,8 +157,6 @@ public:
 
 protected:
 
-	static uint32 FindNextWordBreak(
-		const MBCHAR *text, HDC hdc, sint32 width );
 	static const MBCHAR * FindNextToken
 	(
 		const MBCHAR *  text,

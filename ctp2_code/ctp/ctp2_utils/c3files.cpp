@@ -21,6 +21,9 @@
 // WIN32
 // - Generates windows specific code.
 //
+// USE_SDL
+// - Use SDL for sound and cdrom (originally, now disabled)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

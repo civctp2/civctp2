@@ -57,6 +57,10 @@ extern PlayListDB	*g_thePlayListDB;
 
 SoundManager		*g_soundManager     = NULL;
 
+#ifndef __linux__
+#define CI_FixName(a) a
+#endif
+
 namespace
 {
     uint32 const    k_CHECK_MUSIC_PERIOD = 4000;     // [ms]
@@ -206,7 +210,7 @@ void SoundManager::InitRedbook()
 #if defined(USE_SDL)
 	// check if Ogg Tracks are present first
 	if( !m_useOggTracks) {
-		if(CI_FileExists("music/Track02.ogg")) {
+		if(c3files_PathIsValid("music/Track02.ogg")) {
 			m_useOggTracks = true;
 			printf("Detected Ogg Music track\n");
 		}
@@ -853,7 +857,7 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 			do {
 				numTracks++;
 				sprintf(buf, "music/Track%02d.ogg", numTracks);
-			} while(CI_FileExists(buf));
+			} while(c3files_PathIsValid(buf));
 			m_numTracks = numTracks-1; // start at 2
 		}
 		// setting up

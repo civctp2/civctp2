@@ -20,6 +20,10 @@
 //
 // you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
 //
+// USE_SDL
+// - Compile with sdl support instead of mss (define: civsound.h)
+//
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

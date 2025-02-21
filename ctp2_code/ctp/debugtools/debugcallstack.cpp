@@ -88,8 +88,13 @@ BOOL CALLBACK   Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID
 
 int             Debug_FunctionNameOpenFromPDB(void);
 
+// @ToDo: Get a method to get the name of the executable and derive from that the map file
 #ifdef _DEBUG
+#ifdef USE_SDL
+#define k_MAP_FILE "civctp_dbg-sdl.map"
+#else
 #define k_MAP_FILE "civctp_dbg.map"
+#endif
 #else
 #ifndef _BFR_
 #define k_MAP_FILE "civctp_rel.map"
@@ -97,7 +102,11 @@ int             Debug_FunctionNameOpenFromPDB(void);
 #if defined(USE_LOGGING)
 #define k_MAP_FILE "ctp2log.map"
 #else
+#ifdef USE_SDL
+#define k_MAP_FILE "ctp2-sdl.map"
+#else
 #define k_MAP_FILE "ctp2.map"
+#endif
 #endif
 #endif
 #endif

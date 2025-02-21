@@ -83,8 +83,8 @@ AUI_ERRCODE aui_Cursor::LoadEmpty( sint32 width, sint32 height, sint32 bpp )
 	m_surface = aui_Factory::new_Surface(errcode, width, height);
 
 	Assert( AUI_NEWOK(m_surface, errcode) );
-#ifdef __linux__
+
 	m_surface->SetChromaKey(0,0,0);
-#endif
+
 	return errcode;
 }

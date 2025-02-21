@@ -284,7 +284,7 @@ sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 	if (n <= 0)
 		return 0;
 	strncpy(text, m_Text, n-1);
-	text[n] = '\0';
+	text[n-1] = '\0';
 	return strlen(text);
 #endif
 }

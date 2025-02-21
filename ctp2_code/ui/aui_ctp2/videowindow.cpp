@@ -76,10 +76,10 @@ AUI_ERRCODE VideoWindow::InitCommon( void )
 
 AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
 {
+#ifdef __AUI_USE_DIRECTX__
 	HRESULT			hr;
 	AUI_ERRCODE		errcode;
 
-#ifdef __AUI_USE_DIRECTX__
 	m_video = new DirectVideo();
 	if (m_video == NULL) return AUI_ERRCODE_MEMALLOCFAILED;
 

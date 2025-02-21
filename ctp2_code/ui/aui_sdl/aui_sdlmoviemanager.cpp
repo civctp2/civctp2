@@ -6,7 +6,7 @@
 #include "aui_sdlmovie.h"
 
 #if defined(USE_SDL_FFMPEG)
-#include <SDL_mutex.h>
+#include <SDL2/SDL_mutex.h>
 extern "C" {
 	#include <libavformat/avformat.h>
 }

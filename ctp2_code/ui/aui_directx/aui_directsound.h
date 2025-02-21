@@ -5,10 +5,7 @@
 
 #include "aui_sound.h"
 
-
-
-
-
+#include <dsound.h>
 
 class aui_DirectSound : public aui_Sound
 {
