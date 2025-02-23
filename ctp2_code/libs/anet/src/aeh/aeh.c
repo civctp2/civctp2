@@ -544,6 +544,7 @@ static int aeh_setStackandModInfo(aeh_t *aeh)
 /* get stack trace and modules involved in crash */
 static int aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
 {
+#if defined(_X86_)
 	unsigned base_pointer;   /* base of stack frame pointer */
 	unsigned frame_limit;    /* limit of this stack frame (actually start of next frame) */
 	unsigned caller;         /* address of statement to return to */
@@ -620,10 +621,12 @@ static int aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
 		aeh->stk = buffer;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	return aeh_setStackandModInfo(aeh); /* get the real addr offset and index */
+#endif
 }
 
 void getExceptionInstruction(long segreg, long pinstr, unsigned char *instr)
 {
+#if defined(_X86_)
 	__asm {
 		push gs
 		push edi
@@ -638,6 +641,7 @@ void getExceptionInstruction(long segreg, long pinstr, unsigned char *instr)
 		pop edi
 		pop gs
 	}
+#endif
 }
 
 /*--------------------------------------------------------------------------
@@ -690,7 +694,7 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 	}
 	bPrevExc++;
 
-#ifdef _WIN32
+#if defined(_WIN32) && defined(_X86_)
 	/* find loaded module addresses and do stack trace */
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (ep) {

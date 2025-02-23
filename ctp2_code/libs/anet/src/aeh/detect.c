@@ -30,7 +30,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
 //Most reliable routine to find description of Video Card from Registry
 //	Does NOT check for or check info from DirectX!
 //Bonus: It's not recursive
-	HKEY hKey1, hKey2, hSubKey1, hSubKey2;
+	HKEY hKey1, hKey2, hSubKey1, hSubKey2 = NULL;
 	int i, returnVal, found_it;
 	DWORD valueSize, valueType, value;
    char keyName[128];

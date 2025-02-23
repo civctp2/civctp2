@@ -5006,8 +5006,8 @@ dpHandleJoinSession(
 	dp_result_t err;
 	char hostbuf[dpio_MAXLEN_RELIABLE];
 	size_t hostlen;
-	dp_sessionContext_t **spp;
-	dp_sessionContext_t *sp;
+	dp_sessionContext_t **spp = NULL;
+	dp_sessionContext_t *sp = NULL;
 	dp_session_t sess;
 	int hops;
 
