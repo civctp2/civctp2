@@ -43,7 +43,7 @@
 #include <algorithm>
 
 #if defined(_DEBUG)
-#include "debug.h"      	// Os::SetThreadName
+#include "debug.h"           // Os::SetThreadName
 #endif
 
 #ifdef __AUI_USE_SDL__
@@ -51,18 +51,11 @@
 #include <SDL2/SDL_thread.h>
 #endif
 
-#if defined(WIN32) && !defined(__AUI_USE_SDL__)
+#if defined(WIN32)
 #include <ras.h>
 #endif
 
 #include <algorithm>
-
-#ifdef __AUI_USE_SDL__
-#if defined(WIN32)
-#define STRING2(x) #x  
-#define STRING(x) STRING2(x) 
-#endif
-#endif
 
 namespace
 {
@@ -87,7 +80,7 @@ namespace Os
 
 int adialup_autodial_enabled(void)
 {
-#if defined(WIN32) && !defined(__AUI_USE_SDL__)
+#if defined(WIN32)
 	HKEY hKey;
 	unsigned long werr = RegOpenKeyEx(HKEY_CURRENT_USER,
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
@@ -128,14 +121,14 @@ int adialup_autodial_enabled(void)
 
 #define adialup_MAXCONNS 10
 
-#if defined(WIN32) && !defined(__AUI_USE_SDL__)
+#if defined(WIN32)
 typedef DWORD (APIENTRY *pfnRasEnumConnections_t)(LPRASCONN, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
 #endif
 
 int adialup_is_active(void)
 {
-#if defined(WIN32) && !defined(__AUI_USE_SDL__)
+#if defined(WIN32)
 	// Windows modem dialup connection, probably not needed today.
 	HANDLE hlib = LoadLibrary("rasapi32.dll");
 	if (NULL == hlib) {
@@ -461,23 +454,6 @@ NETFunc::STATUS NETFunc::EnumPlayers(bool b, KeyStruct *k) {
 	return dpRequestObjectDeltas(dp, b, &key.buf[0], key.len) == dp_RES_OK ? OK : ERR;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 NETFunc::Server::Server(void) {
 	memset(&server, 0, sizeof(dp_serverInfo_t));
 }
@@ -587,14 +563,6 @@ NETFunc::ContactList::ContactList(void) {
 NETFunc::ContactList::~ContactList(void) {
 }
 
-
-
-
-
-
-
-
-
 NETFunc::Port::Port(commPortName_t *p, int b, char *i) {
 	port = *p;
 	baud	= b;
@@ -671,40 +639,6 @@ NETFUNC_CONNECT_RESULT NETFunc::ReConnectThread(NETFUNC_CONNECT_PARAMETER r)
 
     return Os::ExitThread(0);
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 NETFunc::Transport::Transport(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k)
 :
