@@ -1160,9 +1160,10 @@ void ParseCommandLine(PSTR szCmdLine)
 	}
 }
 
-#ifdef WIN32
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
+#if defined(_MSC_VER)
+#if defined(_X86_)
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
 	MBCHAR * s;
@@ -1217,11 +1218,11 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 		}
 	}
 
-	return EXCEPTION_EXECUTE_HANDLER;
-
 #endif // _DEBUG
+#endif // _X86_
+	return EXCEPTION_EXECUTE_HANDLER;
+#endif // _MSC_VER
 }
-#endif // WIN32
 
 #ifdef __AUI_USE_DIRECTX__
 BOOL main_CheckDirectX(void)
