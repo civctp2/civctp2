@@ -339,7 +339,7 @@ BOOL CALLBACK Debug_EnumSymbolsCallback
 	return TRUE;
 }
 
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 #if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
 BOOL CALLBACK Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext)
 #else
@@ -491,11 +491,11 @@ void DebugCallStack_DumpAddress (LogClass log_class, size_t address)
 void DebugCallStack_Dump (LogClass log_class)
 {
 // Disabled for anything else than WIN32, because the assembler code does not seem to be save
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 	size_t base_pointer;
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 	__asm mov base_pointer, ebp;
-#else // if GCC 64 bit
+#elif !defined(_MSC_VER) // if GCC 64 bit
 	__asm("\t movq %%rbp,%0" : "=r"(base_pointer));
 #endif // WIN32
 
@@ -507,7 +507,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 {
 // Disabled for anything than WIN32, because the code segfaults, which can only be catched on Windows.
 // Beside that, this is not a good design anyway.
-#if defined(WIN32)
+#if defined(_MSC_VER) && defined(_X86_)
 	size_t frame_limit;
 	size_t frame_pointer;
 	size_t caller;
@@ -624,9 +624,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 
 void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 {
-#if !defined(WIN32)
-	backtrace((void**)call_stack, number);
-#else
+#if defined(_MSC_VER) && defined(_X86_)
 	size_t base_pointer;
 	size_t caller;
 	int finished;
@@ -703,6 +701,10 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 
 		index ++;
 	}
+#elif defined(_MSC_VER)
+	// Add warning
+#else
+	backtrace((void**)call_stack, number);
 #endif
 }
 
@@ -857,7 +859,7 @@ char * c3debug_StackTrace(void)
 	return s_stackTraceString;
 }
 
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 {
 	if(!function_name_open)

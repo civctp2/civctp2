@@ -3157,7 +3157,7 @@ void TiledMap::DrawTransitionTile(aui_Surface *surface, const MapPoint &pos, sin
 
 			if (transDataPtr)
 			{
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_X86_)
 				_asm {
 					mov edx, endX
 					mov edi, pDestPixel
@@ -3232,12 +3232,12 @@ L1:
 					srcPixel = *dataPtr++;
 					if (srcPixel < k_NUM_TRANSITIONS)
 					{
-                        Pixel16 * &  tI = tileData[srcPixel];
+						Pixel16 * &  tI = tileData[srcPixel];
 
-			            if (tI)
-				        {
-					        srcPixel = *tI++;
-				        }
+						if (tI)
+						{
+							srcPixel = *tI++;
+						}
 						else
 						{
 							srcPixel = DEFAULT_PIXEL[srcPixel];
@@ -3249,11 +3249,6 @@ L1:
 			pDestPixel += (surfPitch>>1);
 		}
 	}
-
-
-
-
-
 }
 
 void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &pos, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight)

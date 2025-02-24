@@ -72,7 +72,7 @@ namespace
 size_t ComputeHashIndex(MBCHAR const * id)
 {
 		unsigned short hash;
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 		__asm
 		{
           push eax              ; save registers
