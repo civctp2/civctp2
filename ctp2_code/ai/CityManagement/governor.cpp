@@ -225,7 +225,7 @@ void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 
 	for (size_t i = old_size; i < static_cast<size_t>(newMaxPlayerId); ++i)
 	{
-		s_theGovernors[i].SetPlayerId(i);
+		s_theGovernors[i].SetPlayerId(static_cast<PLAYER_INDEX>(i));
 	}
 }
 

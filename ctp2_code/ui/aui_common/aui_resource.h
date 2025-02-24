@@ -216,7 +216,7 @@ template<class T>
 AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 {
 	ListPos position = m_pathList->GetHeadPosition();
-	for ( sint32 i = m_pathList->L(); i; i-- )
+	for ( size_t i = m_pathList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 
@@ -319,7 +319,7 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
 		ListPos position = m_pathList->GetHeadPosition();
 		if ( position )
 		{
-			for ( sint32 i = m_pathList->L(); i; i-- )
+			for ( size_t i = m_pathList->L(); i; i-- )
 			{
 				const MBCHAR *path = m_pathList->GetNext( position );
 				sprintf( fullPath, "%s%s%s", path, FILE_SEP, name );

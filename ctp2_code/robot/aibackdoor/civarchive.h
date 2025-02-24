@@ -186,7 +186,7 @@ public:
 		}
 		void PutMBCHAR(const MBCHAR *val) {
 			if(val){
-				uint32 len = strlen(val) + 1;
+				uint32 len = static_cast<uint32>(strlen(val) + 1); // Must be unit32
 				PutUINT32(len);
 				Store((uint8 *)val, len * sizeof(MBCHAR));
 			}
@@ -292,10 +292,10 @@ public:
       INTERFACE_RESULT_TYPE(BOOL) IsStoring(void) { return m_bIsStoring; };
 
 		void StoreArray( sint8 * dataarray, size_t size ) {
-			Store((uint8 *)dataarray, size);
+			Store((uint8 *)dataarray, static_cast<uint32>(size));
 		}
 		void StoreArray( uint8 * dataarray, size_t size ) {
-			Store((uint8 *)dataarray, size);
+			Store((uint8 *)dataarray, static_cast<uint32>(size));
 		}
 		void StoreArray( sint16 * dataarray, size_t size ) {
 			for ( int i=0; i<(int)size; ++i )
@@ -330,10 +330,10 @@ public:
 				PutDoubleString(dataarray[i]);
 		}
 		void LoadArray( sint8 * dataarray, size_t size ) {
-			Load( (uint8 *)dataarray, size );
+			Load( (uint8 *)dataarray, static_cast<uint32>(size));
 		}
 		void LoadArray( uint8 * dataarray, size_t size ) {
-			Load( (uint8 *)dataarray, size );
+			Load( (uint8 *)dataarray, static_cast<uint32>(size));
 		}
 		void LoadArray( sint16 * dataarray, size_t size ) {
 			for ( int i=0; i<(int)size; ++i )
