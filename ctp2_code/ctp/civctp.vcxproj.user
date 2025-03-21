@@ -17,7 +17,6 @@
     <LocalDebuggerCommandArguments />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
-    <LocalDebuggerCommand>CivCTP_dbg-sdl.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
     <LocalDebuggerCommandArguments />
   </PropertyGroup>

@@ -93,7 +93,7 @@
   <PropertyGroup Label="Globals">
     <ProjectName>ctp2</ProjectName>
     <ProjectGuid>{0F07D21E-8E78-4D73-9166-A749CACC3942}</ProjectGuid>
-    <WindowsTargetPlatformVersion>10.0.17763.0</WindowsTargetPlatformVersion>
+    <WindowsTargetPlatformVersion>10.0.22621.0</WindowsTargetPlatformVersion>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Optimized Test|Win32'" Label="Configuration">
@@ -335,7 +335,8 @@
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <TargetName>CivCTP_dbg-sdl</TargetName>
+    <TargetName>$(ProjectName)-sdl-dbg</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
     <OutDir>DebugNoMem\</OutDir>
@@ -678,17 +679,13 @@
     </Midl>
     <ClCompile>
       <Optimization>Disabled</Optimization>
-      <AdditionalIncludeDirectories>..\..\SDL\;..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff\;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\..\SDL\;..\os\include;..\os\common;..\os\win32;..\ctp\ctp2_utils\;..\ctp\ctp2_rsrc\;..\ctp\debugtools;..\libs\freetype\lib;..\libs\freetype\utils\;..\libs\freetype\win32\;..\libs\freetype\utils;..\libs\freetype\win32;..\ui\interface;..\ui\netshell;..\robot\utility;..\robot\pathing;..\robot\aibackdoor;..\libs\freetype\;..\gfx\spritesys\;..\gfx\tilesys\;..\gfx\gfx_utils\;..\gs\database;..\gs\fileio\;..\gs\gameobj\;..\gs\utility\;..\gs\world\;..\net\io\;..\net\general\;..\ui\aui_utils\;..\ui\aui_sdl\;..\ui\aui_directx\;..\ui\aui_ctp2\;..\ui\aui_common\;..\libs\tiff-4.7.0\Windows;..\libs\tiff-4.7.0\libtiff;..\libs\anet\h\;..\mm\;..\robotcom\backdoor;..\gs\slic;..\gfx\layers;..\mapgen;..\ui\freetype;..\sound;..\GameWatch\gamewatch;..\GameWatch\gwciv;..\libs\miles;..\ctp\fingerprint;..\libs\zlib;..\ui\slic_debug;..\gs\outcom;..\ctp\;..\ui\aui_common;..\ui\ldl;..\gs\events;..\gs\newdb;..\ai\diplomacy;..\ai;..\ai\mapanalysis;..\ai\strategy\scheduler;..\ai\strategy\agents;..\ai\strategy\goals;..\ai\strategy\squads;..\ai\citymanagement;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>USE_SDL;_PLAYTEST;_DEBUG;_AI_BACKDOOR;WIN32;_WINDOWS;_DEBUGTOOLS;_DEBUG_MEMORY;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <BasicRuntimeChecks>EnableFastChecks</BasicRuntimeChecks>
       <SmallerTypeCheck>false</SmallerTypeCheck>
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
-      <ObjectFileName>Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -699,19 +696,17 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\x64\Debug\anet2d.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\x64\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\x64\ZlibDllDebug\zlibwapi.lib;..\..\SDL\lib\x64\SDL2.lib;..\..\SDL\lib\x64\SDL2main.lib;..\..\SDL\lib\x64\SDL2_mixer.lib;..\..\SDL\lib\x64\SDL2_image.lib;wsock32.lib;winmm.lib;amstrmid.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg.exe</OutputFile>
+      <AdditionalDependencies>..\libs\anet\x64\Debug\anet2d.lib;..\libs\tiff-4.7.0\x64\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\x64\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\x64\ZlibDllDebug\zlibwapi.lib;..\..\SDL\lib\x64\SDL2.lib;..\..\SDL\lib\x64\SDL2main.lib;..\..\SDL\lib\x64\SDL2_mixer.lib;..\..\SDL\lib\x64\SDL2_image.lib;wsock32.lib;winmm.lib;amstrmid.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg.map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
