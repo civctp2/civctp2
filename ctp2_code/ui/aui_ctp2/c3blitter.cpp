@@ -53,28 +53,28 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
-#if !defined(__linux__)
+#if defined(_MSC_VER) && defined(_X86_) // Fast blitters rely on VS x86 assembler code
 	if ((flags & k_AUI_BLITTER_FLAG_FAST))
 	{
 
 #if defined(_TRY_ALL_BLITTERS)
-	    static int  which_blit  = 0;
+		static int  which_blit  = 0;
 
-  	   	switch(which_blit)
-  	   	{
+		switch(which_blit)
+		{
 			case 0:_Blt16To16Fast = &C3Blitter::Blt16To16Fast   ; break;
 			case 1:_Blt16To16Fast = &C3Blitter::Blt16To16FastFPU; break;
 			case 2:_Blt16To16Fast = &C3Blitter::Blt16To16FastMMX; break;
-  	   	}
+		}
 
-	   	which_blit ++;
+		which_blit ++;
 
 		if(which_blit>2)
-		   which_blit = 0;
-		   
+			which_blit = 0;
 #endif
-	   return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
-	} else
+		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
+	}
+	else
 #endif
 	{
 		if (g_useDDBlit)
@@ -134,7 +134,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
 	uint16 *        destBuf         = (uint16 *)destSurf->Buffer();
-    bool            wasDestLocked   = destBuf != NULL;
+	bool            wasDestLocked   = destBuf != NULL;
 
 	if (wasDestLocked)
 	{
@@ -151,9 +151,9 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 	{
 		uint16 *    origDestBuf     = destBuf;
 		uint16 *    srcBuf          = (uint16 *)srcSurf->Buffer();
-        bool        wasSrcLocked    = srcBuf != NULL;
+		bool        wasSrcLocked    = srcBuf != NULL;
 
-        if (wasSrcLocked)
+		if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -182,10 +182,10 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 #if defined(_MSC_VER) && defined(_X86_)
 					__asm {
 							mov		ecx, scanWidth
-				  			mov		esi, srcBuf
-				  			mov     edx, ecx
-				  			shr     ecx, 3
-				  			mov		edi, destBuf
+							mov		esi, srcBuf
+							mov     edx, ecx
+							shr     ecx, 3
+							mov		edi, destBuf
 							test	ecx, ecx
 							jz		L3
 L0:
@@ -249,7 +249,6 @@ L2:
 			}
 			else
 			{
-
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
