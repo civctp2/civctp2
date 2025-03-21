@@ -1003,7 +1003,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\x64\Release\anet2.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\x64\Release\freetype.lib;..\libs\zlib\zlib.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\x64\ZlibDllRelease\zlibwapi.lib;..\..\SDL\lib\x64\SDL2.lib;..\..\SDL\lib\x64\SDL2main.lib;..\..\SDL\lib\x64\SDL2_mixer.lib;..\..\SDL\lib\x64\SDL2_image.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\x64\Release\anet2.lib;..\libs\tiff-4.7.0\x64\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\x64\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\x64\Release\zlibwapi.lib;..\..\SDL\lib\x64\SDL2.lib;..\..\SDL\lib\x64\SDL2main.lib;..\..\SDL\lib\x64\SDL2_mixer.lib;..\..\SDL\lib\x64\SDL2_image.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
