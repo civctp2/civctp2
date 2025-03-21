@@ -369,7 +369,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>ctp2-sdl</TargetName>
+    <TargetName>$(ProjectName)-sdl</TargetName>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='NDebug|Win32'">
     <OutDir>ctp2___W\</OutDir>
@@ -707,6 +708,7 @@
       </DataExecutionPrevention>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -990,10 +992,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>finalSDL/</AssemblerListingLocation>
-      <ObjectFileName>final/</ObjectFileName>
-      <ProgramDataBaseFileName>finalSDL/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -1004,14 +1002,12 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Release\anet2.lib;..\libs\tiff-4.7.0\x64\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\x64\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\x64\Release\zlibwapi.lib;..\..\SDL\lib\x64\SDL2.lib;..\..\SDL\lib\x64\SDL2main.lib;..\..\SDL\lib\x64\SDL2_mixer.lib;..\..\SDL\lib\x64\SDL2_image.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AssemblyDebug>
       </AssemblyDebug>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>ctp2.map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
