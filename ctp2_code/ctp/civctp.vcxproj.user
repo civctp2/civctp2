@@ -59,11 +59,11 @@
     <LocalDebuggerCommand>CivCTP_dbg_browse.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final with Logging|Win32'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">
     <LocalDebuggerCommand>ctp2log.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
-  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final with Logging|x64'">
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">
     <LocalDebuggerCommand>ctp2log.exe</LocalDebuggerCommand>
     <DebuggerFlavor>WindowsLocalDebugger</DebuggerFlavor>
   </PropertyGroup>
