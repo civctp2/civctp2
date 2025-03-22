@@ -224,25 +224,25 @@
     <_ProjectFileVersion>15.0.28127.55</_ProjectFileVersion>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>Debug\</OutDir>
-    <IntDir>Debug\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <TargetName>CivCTP_dbg</TargetName>
+    <TargetName>$(ProjectName)-dbg</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">
-    <OutDir>DebugSDL\</OutDir>
-    <IntDir>DebugSDL\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <TargetName>CivCTP_dbg-sdl</TargetName>
+    <TargetName>$(ProjectName)-sdl-dbg</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)-dbg</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -252,33 +252,32 @@
     <OutDir>$(SolutionDir)$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|Win32'">
-    <OutDir>DebugNoMem\</OutDir>
-    <IntDir>DebugNoMem\</IntDir>
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
-    <TargetName>CivCTP_dbg_NoMem</TargetName>
+    <TargetName>$(ProjectName)-dbg-noMem</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='DebugNoMem|x64'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
     <RunCodeAnalysis>false</RunCodeAnalysis>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)-dbg-noMem</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
-    <OutDir>final\</OutDir>
-    <IntDir>final\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>ctp2</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">
-    <OutDir>finalSDL\</OutDir>
-    <IntDir>finalSDL\</IntDir>
     <LinkIncremental>false</LinkIncremental>
     <LibraryPath>$(VC_LibraryPath_x86);$(WindowsSDK_LibraryPath_x86);$(NETFXKitsDir)Lib\um\x86</LibraryPath>
-    <TargetName>ctp2-sdl</TargetName>
+    <TargetName>$(ProjectName)-sdl</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">
     <LinkIncremental>false</LinkIncremental>
@@ -286,31 +285,34 @@
     <OutDir>$(SolutionDir)$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">
-    <OutDir>FinalLog\</OutDir>
-    <IntDir>FinalLog\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>ctp2log</TargetName>
+    <TargetName>$(ProjectName)-log</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)-log</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Browse|Win32'">
-    <OutDir>DebugBrowse\</OutDir>
-    <IntDir>DebugBrowse\</IntDir>
     <LinkIncremental>true</LinkIncremental>
-    <TargetName>CivCTP_dbg_browse</TargetName>
+    <TargetName>$(ProjectName)-dbg-browse</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug Browse|x64'">
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)-dbg-browse</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>Release\</OutDir>
-    <IntDir>Release\</IntDir>
     <LinkIncremental>false</LinkIncremental>
-    <TargetName>ctp2r</TargetName>
+    <TargetName>$(ProjectName)r</TargetName>
+    <OutDir>$(SolutionDir)</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(SolutionDir)$(Platform)\</OutDir>
+    <TargetName>$(ProjectName)r</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
@@ -331,10 +333,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
-      <ObjectFileName>Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -346,18 +344,18 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Debug\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -384,10 +382,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>DebugSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>DebugSDL/</AssemblerListingLocation>
-      <ObjectFileName>DebugSDL/</ObjectFileName>
-      <ProgramDataBaseFileName>DebugSDL/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -399,19 +393,19 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Debug\anet2d.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Debug\freetype.lib;..\libs\zlib\zlib.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;wsock32.lib;winmm.lib;amstrmid.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg-sdl.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>DebugSDL/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg-sdl.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -436,10 +430,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
-      <ObjectFileName>Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -451,18 +441,18 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Debug\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -509,6 +499,7 @@
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
       <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -535,10 +526,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
-      <ObjectFileName>Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -550,19 +537,19 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Debug\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg_NoMem.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -587,10 +574,6 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Debug/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Debug/</AssemblerListingLocation>
-      <ObjectFileName>Debug/</ObjectFileName>
-      <ProgramDataBaseFileName>Debug/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -602,18 +585,18 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Debug\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg_NoMem.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>Debug/CivCTP_dbg.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <ImageHasSafeExceptionHandlers>false</ImageHasSafeExceptionHandlers>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -639,10 +622,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>final/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>final/</AssemblerListingLocation>
-      <ObjectFileName>final/</ObjectFileName>
-      <ProgramDataBaseFileName>final/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat />
     </ClCompile>
@@ -652,17 +631,18 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Release\anet2.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AssemblyDebug />
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>ctp2.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -689,10 +669,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>finalSDL/</AssemblerListingLocation>
-      <ObjectFileName>finalSDL/</ObjectFileName>
-      <ProgramDataBaseFileName>finalSDL/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -703,19 +679,20 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Release\anet2.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Release\freetype.lib;..\libs\zlib\zlib.lib;..\..\SDL\lib\x86\SDL2.lib;..\..\SDL\lib\x86\SDL2main.lib;..\..\SDL\lib\x86\SDL2_mixer.lib;..\..\SDL\lib\x86\SDL2_image.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>$(TargetName)$(TargetExt)</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AssemblyDebug>
       </AssemblyDebug>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>ctp2-sdl.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -741,10 +718,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>finalSDL/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>finalSDL/</AssemblerListingLocation>
-      <ObjectFileName>finalSDL/</ObjectFileName>
-      <ProgramDataBaseFileName>finalSDL/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>
       </DebugInformationFormat>
@@ -755,18 +728,19 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Release\anet2.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
       <AssemblyDebug>
       </AssemblyDebug>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>ctp2.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -812,6 +786,9 @@
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -837,10 +814,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>FinalLog/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>FinalLog/</AssemblerListingLocation>
-      <ObjectFileName>FinalLog/</ObjectFileName>
-      <ProgramDataBaseFileName>FinalLog/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
@@ -850,17 +823,17 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Logging\anet2l.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2log.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>FinalLog\ctp2log.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>ctp2log.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -886,10 +859,6 @@
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>FinalLog/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>FinalLog/</AssemblerListingLocation>
-      <ObjectFileName>FinalLog/</ObjectFileName>
-      <ProgramDataBaseFileName>FinalLog/</ProgramDataBaseFileName>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
     </ClCompile>
@@ -899,17 +868,17 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Logging\anet2l.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2log.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>FinalLog\ctp2log.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>ctp2log.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -933,12 +902,7 @@
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>DebugBrowse/</AssemblerListingLocation>
-      <ObjectFileName>DebugBrowse/</ObjectFileName>
-      <ProgramDataBaseFileName>DebugBrowse/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <BrowseInformationFile>DebugBrowse/</BrowseInformationFile>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>EditAndContinue</DebugInformationFormat>
@@ -949,17 +913,17 @@
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Debug\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg_browse.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg_browse.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -988,12 +952,7 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDebugDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>DebugBrowse/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>DebugBrowse/</AssemblerListingLocation>
-      <ObjectFileName>DebugBrowse/</ObjectFileName>
-      <ProgramDataBaseFileName>DebugBrowse/</ProgramDataBaseFileName>
       <BrowseInformation>true</BrowseInformation>
-      <BrowseInformationFile>DebugBrowse/</BrowseInformationFile>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>ProgramDatabase</DebugInformationFormat>
@@ -1004,17 +963,17 @@ rem                                                if                           
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Debug\anet2d.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Debug\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>CivCTP_dbg_browse.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <ProgramDatabaseFile>DebugBrowse/CivCTP_dbg_browse.pdb</ProgramDatabaseFile>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>CivCTP_dbg_browse.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -1046,10 +1005,6 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Release/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Release/</AssemblerListingLocation>
-      <ObjectFileName>Release/</ObjectFileName>
-      <ProgramDataBaseFileName>Release/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -1060,16 +1015,17 @@ rem                                                if                           
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\Win32\Release\anet2.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2r.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>civctp_rel.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention />
       <TargetMachine>MachineX86</TargetMachine>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
@@ -1095,10 +1051,6 @@ rem                                                if                           
       <RuntimeLibrary>MultiThreadedDLL</RuntimeLibrary>
       <PrecompiledHeader>Use</PrecompiledHeader>
       <PrecompiledHeaderFile>c3.h</PrecompiledHeaderFile>
-      <PrecompiledHeaderOutputFile>Release/civctp.pch</PrecompiledHeaderOutputFile>
-      <AssemblerListingLocation>Release/</AssemblerListingLocation>
-      <ObjectFileName>Release/</ObjectFileName>
-      <ProgramDataBaseFileName>Release/</ProgramDataBaseFileName>
       <WarningLevel>Level3</WarningLevel>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <DebugInformationFormat>OldStyle</DebugInformationFormat>
@@ -1109,16 +1061,17 @@ rem                                                if                           
     </ResourceCompile>
     <Link>
       <AdditionalDependencies>..\libs\anet\x64\Release\anet2.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
-      <OutputFile>ctp2r.exe</OutputFile>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <GenerateMapFile>true</GenerateMapFile>
-      <MapFileName>civctp_rel.map</MapFileName>
+      <MapFileName>$(OutDir)$(TargetName).map</MapFileName>
       <SubSystem>Windows</SubSystem>
       <RandomizedBaseAddress>false</RandomizedBaseAddress>
       <DataExecutionPrevention>
       </DataExecutionPrevention>
+      <ProgramDatabaseFile>$(IntDir)$(TargetName).pdb</ProgramDatabaseFile>
+      <ProfileGuidedDatabase>$(IntDir)$(TargetName).pgd</ProfileGuidedDatabase>
     </Link>
     <Bscmake>
       <SuppressStartupBanner>true</SuppressStartupBanner>
