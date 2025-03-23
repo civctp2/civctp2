@@ -180,10 +180,17 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
 	g_ui->AddWin( m_hwnd );
 
+#if defined(_WIN64)
 	if ( !m_windowProc )
-		m_windowProc = (WNDPROC)GetWindowLong( m_hwnd, GWL_WNDPROC );
+		m_windowProc = (WNDPROC)GetWindowLongPtr( m_hwnd, GWLP_WNDPROC );
 
-	SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)TextFieldWindowProc );
+	SetWindowLongPtr( m_hwnd, GWLP_WNDPROC, (LONG)TextFieldWindowProc );
+#else
+	if (!m_windowProc)
+		m_windowProc = (WNDPROC)GetWindowLong(m_hwnd, GWL_WNDPROC);
+
+	SetWindowLong(m_hwnd, GWL_WNDPROC, (LONG)TextFieldWindowProc);
+#endif
 
 	UpdateWindow( m_hwnd );
 
@@ -261,7 +268,11 @@ aui_TextField::~aui_TextField()
 	}
 
 	if ( m_winRefCount == 1 && m_windowProc )
-		SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)m_windowProc );
+#if defined(_WIN64)
+		SetWindowLongPtr(m_hwnd, GWLP_WNDPROC, (LONG)m_windowProc);
+#else
+		SetWindowLong(m_hwnd, GWL_WNDPROC, (LONG)m_windowProc);
+#endif
 
 	g_ui->RemoveWin(m_hwnd);
 #else
@@ -653,11 +664,15 @@ LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LP
 		return 0;
 	}
 
-	LRESULT lr = CallWindowProc(
+#if defined(_WIN64)
+	return CallWindowProc(
+		(__int64(__stdcall *)(HWND, unsigned int, unsigned __int64, __int64))aui_TextField::m_windowProc,
+		hwnd, message, wParam, lParam);
+#else
+	return CallWindowProc(
 		(long(__stdcall *)(HWND, unsigned int, unsigned int, long))aui_TextField::m_windowProc,
 		hwnd, message, wParam, lParam );
-
-	return lr;
+#endif
 }
 
 // Font enumeration proc
