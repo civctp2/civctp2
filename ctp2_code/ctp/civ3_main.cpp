@@ -1228,7 +1228,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 BOOL main_CheckDirectX(void)
 {
 	BOOL found = FALSE;
-
+#if defined(_X86_)
 	HANDLE dll = LoadLibrary( "dll" FILE_SEP "util" FILE_SEP "dxver" );
 	if ( dll ) {
 
@@ -1248,6 +1248,9 @@ BOOL main_CheckDirectX(void)
 	} else {
 		c3errors_FatalDialog("DLL", "Cannot find dxver.dll");
 	}
+#else
+	found = TRUE;
+#endif
 
 	return found;
 }

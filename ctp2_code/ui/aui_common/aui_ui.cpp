@@ -230,6 +230,7 @@ AUI_ERRCODE aui_UI::InitCommon(
 
 	m_dxver = 0;
 #ifdef __AUI_USE_DIRECTX__
+#if defined(_X86_)
 	HANDLE dll = LoadLibrary( "dll\\util\\dxver" );
 	if ( dll )
 	{
@@ -254,6 +255,9 @@ AUI_ERRCODE aui_UI::InitCommon(
 
 		FreeLibrary( (HINSTANCE)dll );
 	}
+#else
+	m_dxver = 0x500;
+#endif
 #endif
 
 	return AUI_ERRCODE_OK;
