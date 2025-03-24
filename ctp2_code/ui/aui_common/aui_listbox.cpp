@@ -1194,7 +1194,7 @@ AUI_ERRCODE aui_ListBox::DragSelect(sint32 relativeY)
 		if ( itemIndex >= m_numRows ) itemIndex = m_numRows - 1;
 	}
 
-	if (GetItemByIndex(itemIndex)->IsDisabled()) {
+	if (itemIndex < 0 || GetItemByIndex(itemIndex)->IsDisabled()) {
 		return AUI_ERRCODE_OK;
 	}
 
