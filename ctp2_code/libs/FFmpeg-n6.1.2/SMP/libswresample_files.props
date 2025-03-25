@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include=".\libswresample.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\libswresample\swresampleres.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='ReleaseWinRT'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='DebugWinRT'">true</ExcludedFromBuild>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <NASM Include="..\libswresample\x86\audio_convert.asm" />
+    <NASM Include="..\libswresample\x86\rematrix.asm" />
+    <NASM Include="..\libswresample\x86\resample.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libswresample\audioconvert.c" />
+    <ClCompile Include="..\libswresample\dither.c" />
+    <ClCompile Include="..\libswresample\options.c" />
+    <ClCompile Include="..\libswresample\resample_dsp.c" />
+    <ClCompile Include="..\libswresample\swresample.c" />
+    <ClCompile Include="..\libswresample\swresample_frame.c" />
+    <ClCompile Include="..\libswresample\version.c" />
+    <ClCompile Include="..\libswresample\x86\audio_convert_init.c" />
+    <ClCompile Include="..\libswresample\x86\rematrix_init.c" />
+    <ClCompile Include="..\libswresample\x86\resample_init.c" />
+    <ClCompile Include="..\libswresample\rematrix.c">
+      <ObjectFileName>$(IntDir)\libswresample_rematrix.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libswresample\resample.c">
+      <ObjectFileName>$(IntDir)\libswresample_resample.obj</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libswresample\log2_tab.c">
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='ReleaseWinRT'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='DebugWinRT'">true</ExcludedFromBuild>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libswresample\swresample.h" />
+    <ClInclude Include="..\libswresample\version.h" />
+    <ClInclude Include="..\libswresample\version_major.h" />
+  </ItemGroup>
+</Project>

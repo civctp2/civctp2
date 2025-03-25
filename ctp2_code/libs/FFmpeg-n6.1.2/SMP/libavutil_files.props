@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include=".\libavutil.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\libavutil\avutilres.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='ReleaseWinRT'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='DebugWinRT'">true</ExcludedFromBuild>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <NASM Include="..\libavutil\x86\cpuid.asm" />
+    <NASM Include="..\libavutil\x86\emms.asm" />
+    <NASM Include="..\libavutil\x86\fixed_dsp.asm" />
+    <NASM Include="..\libavutil\x86\float_dsp.asm" />
+    <NASM Include="..\libavutil\x86\imgutils.asm" />
+    <NASM Include="..\libavutil\x86\lls.asm" />
+    <NASM Include="..\libavutil\x86\tx_float.asm" />
+    <NASM Include="..\libavutil\x86\pixelutils.asm" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libavutil\adler32.c" />
+    <ClCompile Include="..\libavutil\aes.c" />
+    <ClCompile Include="..\libavutil\aes_ctr.c" />
+    <ClCompile Include="..\libavutil\ambient_viewing_environment.c" />
+    <ClCompile Include="..\libavutil\audio_fifo.c" />
+    <ClCompile Include="..\libavutil\avstring.c" />
+    <ClCompile Include="..\libavutil\avsscanf.c" />
+    <ClCompile Include="..\libavutil\base64.c" />
+    <ClCompile Include="..\libavutil\blowfish.c" />
+    <ClCompile Include="..\libavutil\bprint.c" />
+    <ClCompile Include="..\libavutil\buffer.c" />
+    <ClCompile Include="..\libavutil\cast5.c" />
+    <ClCompile Include="..\libavutil\camellia.c" />
+    <ClCompile Include="..\libavutil\channel_layout.c" />
+    <ClCompile Include="..\libavutil\cpu.c" />
+    <ClCompile Include="..\libavutil\crc.c" />
+    <ClCompile Include="..\libavutil\csp.c" />
+    <ClCompile Include="..\libavutil\des.c" />
+    <ClCompile Include="..\libavutil\detection_bbox.c" />
+    <ClCompile Include="..\libavutil\dict.c" />
+    <ClCompile Include="..\libavutil\display.c" />
+    <ClCompile Include="..\libavutil\dovi_meta.c" />
+    <ClCompile Include="..\libavutil\downmix_info.c" />
+    <ClCompile Include="..\libavutil\encryption_info.c" />
+    <ClCompile Include="..\libavutil\error.c" />
+    <ClCompile Include="..\libavutil\eval.c" />
+    <ClCompile Include="..\libavutil\executor.c" />
+    <ClCompile Include="..\libavutil\fifo.c" />
+    <ClCompile Include="..\libavutil\file.c" />
+    <ClCompile Include="..\libavutil\file_open.c" />
+    <ClCompile Include="..\libavutil\frame.c" />
+    <ClCompile Include="..\libavutil\hash.c" />
+    <ClCompile Include="..\libavutil\hdr_dynamic_metadata.c" />
+    <ClCompile Include="..\libavutil\hdr_dynamic_vivid_metadata.c" />
+    <ClCompile Include="..\libavutil\hmac.c" />
+    <ClCompile Include="..\libavutil\hwcontext.c" />
+    <ClCompile Include="..\libavutil\integer.c" />
+    <ClCompile Include="..\libavutil\intmath.c" />
+    <ClCompile Include="..\libavutil\lfg.c" />
+    <ClCompile Include="..\libavutil\log.c" />
+    <ClCompile Include="..\libavutil\log2_tab.c" />
+    <ClCompile Include="..\libavutil\lzo.c" />
+    <ClCompile Include="..\libavutil\mathematics.c" />
+    <ClCompile Include="..\libavutil\mastering_display_metadata.c" />
+    <ClCompile Include="..\libavutil\md5.c" />
+    <ClCompile Include="..\libavutil\mem.c" />
+    <ClCompile Include="..\libavutil\murmur3.c" />
+    <ClCompile Include="..\libavutil\opt.c" />
+    <ClCompile Include="..\libavutil\parseutils.c" />
+    <ClCompile Include="..\libavutil\pixdesc.c" />
+    <ClCompile Include="..\libavutil\random_seed.c" />
+    <ClCompile Include="..\libavutil\rational.c" />
+    <ClCompile Include="..\libavutil\reverse.c" />
+    <ClCompile Include="..\libavutil\rc4.c" />
+    <ClCompile Include="..\libavutil\ripemd.c" />
+    <ClCompile Include="..\libavutil\samplefmt.c" />
+    <ClCompile Include="..\libavutil\sha.c" />
+    <ClCompile Include="..\libavutil\sha512.c" />
+    <ClCompile Include="..\libavutil\slicethread.c" />
+    <ClCompile Include="..\libavutil\spherical.c" />
+    <ClCompile Include="..\libavutil\stereo3d.c" />
+    <ClCompile Include="..\libavutil\threadmessage.c" />
+    <ClCompile Include="..\libavutil\time.c" />
+    <ClCompile Include="..\libavutil\timecode.c" />
+    <ClCompile Include="..\libavutil\tree.c" />
+    <ClCompile Include="..\libavutil\twofish.c" />
+    <ClCompile Include="..\libavutil\utils.c" />
+    <ClCompile Include="..\libavutil\xga_font_data.c" />
+    <ClCompile Include="..\libavutil\xtea.c" />
+    <ClCompile Include="..\libavutil\tea.c" />
+    <ClCompile Include="..\libavutil\tx.c" />
+    <ClCompile Include="..\libavutil\tx_double.c" />
+    <ClCompile Include="..\libavutil\tx_int32.c" />
+    <ClCompile Include="..\libavutil\uuid.c" />
+    <ClCompile Include="..\libavutil\version.c" />
+    <ClCompile Include="..\libavutil\video_enc_params.c" />
+    <ClCompile Include="..\libavutil\video_hint.c" />
+    <ClCompile Include="..\libavutil\film_grain_params.c" />
+    <ClCompile Include="..\libavutil\hwcontext_stub.c" />
+    <ClCompile Include="..\compat\msvcrt\snprintf.c" />
+    <ClCompile Include="..\compat\strtod.c" />
+    <ClCompile Include="..\compat\getopt.c" />
+    <ClCompile Include="..\libavutil\x86\fixed_dsp_init.c" />
+    <ClCompile Include="..\libavutil\x86\float_dsp_init.c" />
+    <ClCompile Include="..\libavutil\x86\imgutils_init.c" />
+    <ClCompile Include="..\libavutil\x86\lls_init.c" />
+    <ClCompile Include="..\libavutil\x86\tx_float_init.c" />
+    <ClCompile Include="..\libavutil\x86\pixelutils_init.c" />
+    <ClCompile Include="libavutil\hwcontext_d3d11va_wrap.c" />
+    <ClCompile Include="libavutil\hwcontext_dxva2_wrap.c" />
+    <ClCompile Include="..\libavutil\float_dsp.c">
+      <ObjectFileName>$(IntDir)\libavutil_float_dsp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libavutil\fixed_dsp.c">
+      <ObjectFileName>$(IntDir)\libavutil_fixed_dsp.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libavutil\imgutils.c">
+      <ObjectFileName>$(IntDir)\libavutil_imgutils.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libavutil\lls.c">
+      <ObjectFileName>$(IntDir)\libavutil_lls.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libavutil\pixelutils.c">
+      <ObjectFileName>$(IntDir)\libavutil_pixelutils.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libavutil\tx_float.c">
+      <ObjectFileName>$(IntDir)\libavutil_tx_float.obj</ObjectFileName>
+    </ClCompile>
+    <ClCompile Include="..\libavutil\x86\cpu.c">
+      <ObjectFileName>$(IntDir)\libavutil_x86_cpu.obj</ObjectFileName>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libavutil\adler32.h" />
+    <ClInclude Include="..\libavutil\aes.h" />
+    <ClInclude Include="..\libavutil\aes_ctr.h" />
+    <ClInclude Include="..\libavutil\ambient_viewing_environment.h" />
+    <ClInclude Include="..\libavutil\attributes.h" />
+    <ClInclude Include="..\libavutil\audio_fifo.h" />
+    <ClInclude Include="..\libavutil\avassert.h" />
+    <ClInclude Include="..\libavutil\avstring.h" />
+    <ClInclude Include="..\libavutil\avutil.h" />
+    <ClInclude Include="..\libavutil\base64.h" />
+    <ClInclude Include="..\libavutil\blowfish.h" />
+    <ClInclude Include="..\libavutil\bprint.h" />
+    <ClInclude Include="..\libavutil\bswap.h" />
+    <ClInclude Include="..\libavutil\buffer.h" />
+    <ClInclude Include="..\libavutil\cast5.h" />
+    <ClInclude Include="..\libavutil\camellia.h" />
+    <ClInclude Include="..\libavutil\channel_layout.h" />
+    <ClInclude Include="..\libavutil\common.h" />
+    <ClInclude Include="..\libavutil\cpu.h" />
+    <ClInclude Include="..\libavutil\crc.h" />
+    <ClInclude Include="..\libavutil\csp.h" />
+    <ClInclude Include="..\libavutil\des.h" />
+    <ClInclude Include="..\libavutil\detection_bbox.h" />
+    <ClInclude Include="..\libavutil\dict.h" />
+    <ClInclude Include="..\libavutil\display.h" />
+    <ClInclude Include="..\libavutil\dovi_meta.h" />
+    <ClInclude Include="..\libavutil\downmix_info.h" />
+    <ClInclude Include="..\libavutil\encryption_info.h" />
+    <ClInclude Include="..\libavutil\error.h" />
+    <ClInclude Include="..\libavutil\eval.h" />
+    <ClInclude Include="..\libavutil\executor.h" />
+    <ClInclude Include="..\libavutil\fifo.h" />
+    <ClInclude Include="..\libavutil\file.h" />
+    <ClInclude Include="..\libavutil\frame.h" />
+    <ClInclude Include="..\libavutil\hash.h" />
+    <ClInclude Include="..\libavutil\hdr_dynamic_metadata.h" />
+    <ClInclude Include="..\libavutil\hdr_dynamic_vivid_metadata.h" />
+    <ClInclude Include="..\libavutil\hmac.h" />
+    <ClInclude Include="..\libavutil\hwcontext.h" />
+    <ClInclude Include="..\libavutil\hwcontext_cuda.h" />
+    <ClInclude Include="..\libavutil\hwcontext_d3d11va.h" />
+    <ClInclude Include="..\libavutil\hwcontext_drm.h" />
+    <ClInclude Include="..\libavutil\hwcontext_dxva2.h" />
+    <ClInclude Include="..\libavutil\hwcontext_qsv.h" />
+    <ClInclude Include="..\libavutil\hwcontext_mediacodec.h" />
+    <ClInclude Include="..\libavutil\hwcontext_opencl.h" />
+    <ClInclude Include="..\libavutil\hwcontext_vaapi.h" />
+    <ClInclude Include="..\libavutil\hwcontext_videotoolbox.h" />
+    <ClInclude Include="..\libavutil\hwcontext_vdpau.h" />
+    <ClInclude Include="..\libavutil\hwcontext_vulkan.h" />
+    <ClInclude Include="..\libavutil\imgutils.h" />
+    <ClInclude Include="..\libavutil\intfloat.h" />
+    <ClInclude Include="..\libavutil\intreadwrite.h" />
+    <ClInclude Include="..\libavutil\lfg.h" />
+    <ClInclude Include="..\libavutil\log.h" />
+    <ClInclude Include="..\libavutil\lzo.h" />
+    <ClInclude Include="..\libavutil\macros.h" />
+    <ClInclude Include="..\libavutil\mathematics.h" />
+    <ClInclude Include="..\libavutil\mastering_display_metadata.h" />
+    <ClInclude Include="..\libavutil\md5.h" />
+    <ClInclude Include="..\libavutil\mem.h" />
+    <ClInclude Include="..\libavutil\motion_vector.h" />
+    <ClInclude Include="..\libavutil\murmur3.h" />
+    <ClInclude Include="..\libavutil\opt.h" />
+    <ClInclude Include="..\libavutil\parseutils.h" />
+    <ClInclude Include="..\libavutil\pixdesc.h" />
+    <ClInclude Include="..\libavutil\pixelutils.h" />
+    <ClInclude Include="..\libavutil\pixfmt.h" />
+    <ClInclude Include="..\libavutil\random_seed.h" />
+    <ClInclude Include="..\libavutil\rc4.h" />
+    <ClInclude Include="..\libavutil\rational.h" />
+    <ClInclude Include="..\libavutil\replaygain.h" />
+    <ClInclude Include="..\libavutil\ripemd.h" />
+    <ClInclude Include="..\libavutil\samplefmt.h" />
+    <ClInclude Include="..\libavutil\sha.h" />
+    <ClInclude Include="..\libavutil\sha512.h" />
+    <ClInclude Include="..\libavutil\spherical.h" />
+    <ClInclude Include="..\libavutil\stereo3d.h" />
+    <ClInclude Include="..\libavutil\threadmessage.h" />
+    <ClInclude Include="..\libavutil\time.h" />
+    <ClInclude Include="..\libavutil\timecode.h" />
+    <ClInclude Include="..\libavutil\timestamp.h" />
+    <ClInclude Include="..\libavutil\tree.h" />
+    <ClInclude Include="..\libavutil\twofish.h" />
+    <ClInclude Include="..\libavutil\uuid.h" />
+    <ClInclude Include="..\libavutil\version.h" />
+    <ClInclude Include="..\libavutil\video_enc_params.h" />
+    <ClInclude Include="..\libavutil\xtea.h" />
+    <ClInclude Include="..\libavutil\tea.h" />
+    <ClInclude Include="..\libavutil\tx.h" />
+    <ClInclude Include="..\libavutil\film_grain_params.h" />
+    <ClInclude Include="..\libavutil\video_hint.h" />
+    <ClInclude Include="..\libavutil\avconfig.h" />
+    <ClInclude Include="libavutil\ffversion.h" />
+  </ItemGroup>
+</Project>
