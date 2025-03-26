@@ -1580,7 +1580,6 @@ static int stream_component_open(VideoState *is, int stream_index)
 {
 	AVFormatContext *ic = is->ic;
 	AVCodecContext *avctx;
-	AVCodec *codec;
 	AVDictionary *opts = NULL;
 	AVDictionaryEntry *t = NULL;
 	int sample_rate, nb_channels;
@@ -1599,7 +1598,7 @@ static int stream_component_open(VideoState *is, int stream_index)
 		goto fail;
 	avctx->pkt_timebase = ic->streams[stream_index]->time_base;
 
-	codec = avcodec_find_decoder(avctx->codec_id);
+	const AVCodec* codec = avcodec_find_decoder(avctx->codec_id);
 
 	if (!codec) {
         av_log(NULL, AV_LOG_WARNING,
