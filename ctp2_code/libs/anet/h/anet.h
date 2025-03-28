@@ -1640,12 +1640,14 @@ DP_API dp_result_t DP_APIX dpEnumTransports(
 	dpEnumTransportCallback_t cb,
 	void *context);
 
+#if defined(_WIN32) && (!defined(_M_ARM) && !defined(_M_ARM64))
 /*----------------------------------------------------------------------
  Enumerate applications installed on this machine.
  Callback is called once for each application found.
  Callback ends when dpEnumApp() exits.
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnumApp(dp_t *dp, dpEnumAppCallback_t cb, void *context);
+#endif
 
 #ifdef dp_ANET2
 /*----------------------------------------------------------------------
@@ -1718,7 +1720,7 @@ DP_API void DP_APIX dpExitFromApp(int status);
 #endif
 
 #ifdef dp_ANET2
-#ifdef _WIN32
+#if defined(_WIN32) && (!defined(_M_ARM) && !defined(_M_ARM64))
 /*--------------------------------------------------------------------------
  Records crash info to logfile. Designed to be called from an exception handler.
  For Win32, pException is the LPEXCEPTION_POINTERS structure returned

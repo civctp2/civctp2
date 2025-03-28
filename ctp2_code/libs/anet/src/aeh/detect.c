@@ -18,7 +18,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 /* Finds display, 3D system info; slightly modifed from code by Ben Siron */
-#ifdef WIN32
+#if defined(_WIN32) && (!defined(_M_ARM) && !defined(_M_ARM64))
 
 #include <stdio.h>
 #include <windows.h>
