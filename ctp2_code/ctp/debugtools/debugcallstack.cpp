@@ -88,34 +88,13 @@ BOOL CALLBACK   Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID
 
 int             Debug_FunctionNameOpenFromPDB(void);
 
-// @ToDo: Get a method to get the name of the executable and derive from that the map file
-#ifdef _DEBUG
-#ifdef USE_SDL
-#define k_MAP_FILE "civctp_dbg-sdl.map"
-#else
-#define k_MAP_FILE "civctp_dbg.map"
-#endif
-#else
-#ifndef _BFR_
-#define k_MAP_FILE "civctp_rel.map"
-#else
-#if defined(USE_LOGGING)
-#define k_MAP_FILE "ctp2log.map"
-#else
-#ifdef USE_SDL
-#define k_MAP_FILE "ctp2-sdl.map"
-#else
 #define k_MAP_FILE "ctp2.map"
-#endif
-#endif
-#endif
-#endif
 
 #else // WIN32
 #define k_MAP_FILE "ctp2linux.map"
 #endif // WIN32
 
-#if defined(WIN32)
+#if defined(WIN32) && defined(_X86_)
 #define DEBUG_CODE_LIMIT 0x80000000
 #else
 #define DEBUG_CODE_LIMIT 0x8000000000000000
@@ -130,8 +109,26 @@ static MBCHAR s_stackTraceString[k_STACK_TRACE_LEN];
 
 void DebugCallStack_Open (void)
 {
+#if defined(WIN32)
+	TCHAR exepath[MAX_PATH + 1];
+	if (GetModuleFileName(0, exepath, MAX_PATH + 1) > 0)
+	{
+		char* name_map = strdup(exepath);
+		char *p = strrchr(name_map, '.');
+		if (p)
+		{
+			strcpy(p, ".map"); // Change to map file
+			Debug_FunctionNameOpen(name_map);
+		}
+		else
+			Debug_FunctionNameOpen(k_MAP_FILE);
+	}
+	else
+		Debug_FunctionNameOpen(k_MAP_FILE);
 
-	Debug_FunctionNameOpen (k_MAP_FILE);
+#else
+	Debug_FunctionNameOpen(k_MAP_FILE);
+#endif
 }
 
 void DebugCallStack_Close (void)
@@ -429,7 +426,7 @@ const char *Debug_FunctionNameGet (size_t address)
 	}
 }
 
-const char *Debug_FunctionNameAndOffsetGet (size_t address, int *offset)
+const char *Debug_FunctionNameAndOffsetGet (size_t address, size_t *offset)
 {
 	FUNCTION_ADDRESS *pointer;
 	*offset = 0;
@@ -481,7 +478,7 @@ unsigned char Debug_NumToChar (unsigned char byte)
 void DebugCallStack_DumpAddress (LogClass log_class, size_t address)
 {
 	const char	*caller_name;
-	int		offset;
+	size_t		offset;
 
 	caller_name = Debug_FunctionNameAndOffsetGet (address, &offset);
 
@@ -719,7 +716,7 @@ void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number)
 	{
 		caller = call_stack[index];
 
-		int offset;
+		size_t offset;
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
@@ -760,7 +757,7 @@ void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int num
 	{
 		caller = call_stack[index];
 
-		int offset;
+		size_t offset;
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
@@ -805,7 +802,7 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, size_t *call_stack, int 
 	char cpyBuff[8196];
 
 	caller = call_stack[index];
-	int offset;
+	size_t offset;
 	caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 	sprintf(buff, "[%s]", caller_name);
 	index++;
@@ -813,7 +810,7 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, size_t *call_stack, int 
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
-		int offset;
+		size_t offset;
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
 		strcpy(cpyBuff, buff);
@@ -844,7 +841,7 @@ char * c3debug_StackTrace(void)
 	{
 		caller = callstack_function[index];
 
-		int offset;
+		size_t offset;
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
@@ -885,10 +882,9 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 	{
 		caller = callstack_function[index];
 
-		int offset;
-
 		if(function_name_open)
 		{
+			size_t offset;
 			caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
 			sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
@@ -919,7 +915,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 	char line[1024];
 	const char *caller_name;
 
-	int offset;
+	size_t offset;
 
 	MBCHAR function_name[_MAX_PATH];
 	s_stackTraceString[0] = 0;
@@ -1013,7 +1009,7 @@ void cDebugCallStackSet::Add()
 void cDebugCallStackSet::Dump(const char *filename)
 {
 	const char *caller_name;
-	int offset;
+	size_t offset;
 
 	qsort(m_stacks,m_numStacks,m_blockSize*sizeof(size_t),qsortDebugCallStack);
 
@@ -1021,7 +1017,7 @@ void cDebugCallStackSet::Dump(const char *filename)
 
 	caller_name = Debug_FunctionNameAndOffsetGet(m_caller,&offset);
 
-	int totalCalls = 0;
+	size_t totalCalls = 0;
 	int i;
 	for (i=0;i<m_numStacks;++i)
 	{
@@ -1032,7 +1028,7 @@ void cDebugCallStackSet::Dump(const char *filename)
 
 	for (i=0;i<m_numStacks;++i)
 	{
-		int called = m_stacks[m_blockSize*i];
+		size_t called = m_stacks[m_blockSize*i];
 		float perCalled = (float)(100 * called)/(float)totalCalls;
 		fprintf(fp,"\nnum times called: %d, %.2f percent\n",called,perCalled);
 		int j;
