@@ -439,6 +439,9 @@ void spnewgametribescreen_addTribeNoDuplicate(sint32 tribe)
 
 void spnewgametribescreen_addTribe(sint32 tribe)
 {
+	if (tribe < 0)
+		return;
+
 #if defined(USE_SHOW_BARBARIANS) || defined(USE_SELECT_BARBARIANS)
 	// Always create a list item
 #else
