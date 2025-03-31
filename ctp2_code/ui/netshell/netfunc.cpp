@@ -3210,16 +3210,21 @@ void NETFunc::Execute(void) {
 		int dw;
 		// This is ugly, but there is no other way in SDL
 		// to determine if a thread is running
+		// SDL3 has a better function for that
 		SDL_WaitThread(threadHandle, &dw);
+
+			threadHandle = NULL;
+			if (dw > 0) {
 #else
 		DWORD dw;
 
 		GetExitCodeThread(threadHandle, &dw);
 		if(dw != STILL_ACTIVE) {
 			CloseHandle(threadHandle);
+
+			threadHandle = NULL;
+			if (dw) {
 #endif
-			threadHandle = 0;
-			if(dw) {
 				status = START;
 
 				PushMessage(new Message(Message::NETWORKERR));
