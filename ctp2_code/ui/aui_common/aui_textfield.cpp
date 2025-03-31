@@ -127,7 +127,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	m_isFileName = isfilename;
 	m_maxFieldLen = maxFieldLen;
 	m_passwordReady = passwordReady;
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	m_textHeight = 0;
 	m_hfont = NULL;
 	m_holdfont = NULL;
@@ -138,15 +138,15 @@ AUI_ERRCODE aui_TextField::InitCommon(
 #endif
 
 	if (font) strcpy(m_desiredFont, font);
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	else strcpy(m_desiredFont, "\0");
 #else
 	else strcpy(m_desiredFont, "times.ttf");
 #endif
 
+#if defined(__AUI_USE_DIRECTX__)
 	if ( !m_registered ) return AUI_ERRCODE_INVALIDPARAM;
 
-#ifdef __AUI_USE_DIRECTX__
 	uint32 style = WS_CHILD;
 	if ( m_multiLine )
 	{
@@ -436,6 +436,7 @@ void aui_TextField::HitEnter() // Is this ; intended?
 			0 );
 }
 
+#if defined(__AUI_USE_DIRECTX__)
 BOOL aui_TextField::IsFileName( HWND hwnd )
 {
 	aui_TextField *textfield = (aui_TextField *)GetWinFromHWND( hwnd );
@@ -453,6 +454,7 @@ sint32 aui_TextField::GetMaxFieldLen( HWND hwnd )
 
 	return textfield->GetMaxFieldLen();
 }
+#endif // __AUI_USE_DIRECTX__
 
 AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {

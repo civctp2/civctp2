@@ -121,13 +121,12 @@ public:
 	static WNDPROC	m_windowProc;
 #ifdef __AUI_USE_DIRECTX__
 	static void HitEnter( HWND hwnd );
+	static BOOL IsFileName(HWND hwnd);
+	static sint32 GetMaxFieldLen(HWND hwnd);
 #else
 	void HitEnter();
 	virtual bool HandleKey(uint32 wParam);
 #endif
-	static BOOL IsFileName( HWND hwnd );
-	static sint32 GetMaxFieldLen( HWND hwnd );
-
 
 	void SetSelection(sint32 start, sint32 end);
 	void GetSelection(sint32 *start, sint32 *end);

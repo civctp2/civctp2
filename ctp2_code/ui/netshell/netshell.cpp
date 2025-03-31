@@ -116,7 +116,7 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 			g_netshell->GotoScreen( SCREEN_ALLINONE );
 			w->Update();
 		} else {
-#ifdef WIN32
+#if defined(__AUI_USE_SDL__)
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
 #endif
 		}
