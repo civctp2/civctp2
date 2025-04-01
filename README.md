@@ -109,7 +109,22 @@ The executables these configurations generate are in [your source path]/ctp2_cod
 
 CTP2 can directly be run from Visual Studio, to do so press F5 if you want to run it on the debugger, which will be slow and does not make sense for a Final version. To run without debugging, press Ctrl F5. If necessary, CTP2 will be built, first. Some of the map plugins may fail to build the first time in a clean project. Just try compile those again.
 
-## Building on Linux
+## Building on Linux...
+
+**Using flatpak**
+
+Flatpak should streamline the process, as the libraries are managed by the manifest, and the commands are the same on all distros.
+
+To rehearse:
+
+1. Clone this repository and unzip it
+2. Paste the CD/GoG game data over the unziped directory, _without replacing_ the downloaded repo files
+3. Run `flatpak install org.flatpak.Builder org.freedesktop.Sdk/x86_64/24.08 org.freedesktop.Platform/x86_64/23.08` to satisfy the dependencies.
+4. Run `flatpak run org.flatpak.Builder --install --user --force-clean "build/" "net.apolyton.civctp2.yaml"`. This will take a while to compile everything.
+5. Finally, `flatpak run net.apolyton.civctp2` will run the game!
+
+
+**Using the autogen as-is**
 
 You will probably need GCC 5.x or later to build. The code doesn't seem to build on GCC 4.8.
 
