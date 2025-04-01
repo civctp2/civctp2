@@ -1,0 +1,73 @@
+app-id: net.apolyton.civctp2
+runtime: org.freedesktop.Platform
+runtime-version: '23.08'
+sdk: org.freedesktop.Sdk
+command: run-ctp
+finish-args:
+  - --share=ipc
+  - --socket=wayland
+  - --socket=fallback-x11
+  - --socket=pulseaudio
+  - --share=network
+
+modules:
+  - name: byacc
+    buildsystem: autotools
+    config-opts:
+      - --prefix=/app
+    sources:
+      - type: git
+        url: https://github.com/grandseiken/byacc.git
+    build-commands:
+      - ./configure --prefix=/app
+      - make
+      - make install
+      - mv /app/bin/yacc /app/bin/byacc
+    build-options:
+        env:
+            PATH: /app/bin:/usr/bin:/bin
+  - name: flex
+    buildsystem: autotools
+    sources:
+      - type: archive
+        url: https://github.com/westes/flex/releases/download/v2.6.4/flex-2.6.4.tar.gz
+        sha256: e87aae032bf07c26f85ac0ed3250998c37621d95f8bd748b31f15b33c45ee995
+    build-commands:
+      - ./configure --prefix=/app
+      - make
+      - make install
+  - name: civctp2
+    buildsystem: autotools
+    sources:
+      - type: dir
+        path: ./
+    build-options:
+      cflags: "-O3 -fuse-ld=gold"
+      cxxflags: "-fpermissive -O3 -fuse-ld=gold"
+    config-opts:
+      - --enable-silent-rules
+  - name: game-data
+    buildsystem: simple
+    sources:
+      - type: dir
+        path: ./
+    build-commands:
+      - echo "Running additional setup..."
+      - echo "Copying game data to app"
+      # Copy game data to app
+      - mkdir /app/game && cp -r ctp2_code ctp2_data ctp2_program help Scenarios Advance-Graph ModTools /app/game/
+      # Copy music and saves to game directory
+      - cp -r build/files/game/ctp2_program/ctp/music build/files/game/ctp2_code/ctp/
+      - cp -r build/files/game/ctp2_program/ctp/save build/files/game/ctp2_code/ctp/
+
+      # Copy executable to game directory
+      - cp /app/bin/ctp2 /app/game/ctp2_code/ctp/
+      # Copy missing libraries
+      - mkdir /app/game/ctp2_code/ctp/dll/map/ && cp /app/lib/ctp2/*.so /app/game/ctp2_code/ctp/dll/map/
+  - name: runner
+    buildsystem: simple
+    build-commands:
+      - install -Dm755 flatpak-runner.sh /app/bin/run-ctp
+    sources:
+      - type: file
+        path: tools/flatpak-runner.sh
