@@ -1,4 +1,4 @@
 #!/bin/sh
 cd /app/game/ctp2_code/ctp/
-./ctp2
+./ctp2 -fullscreen
 
