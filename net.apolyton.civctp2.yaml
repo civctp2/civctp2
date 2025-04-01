@@ -57,8 +57,8 @@ modules:
       # Copy game data to app
       - mkdir /app/game && cp -r ctp2_code ctp2_data ctp2_program help Scenarios Advance-Graph ModTools /app/game/
       # Copy music and saves to game directory
-      - cp -r /app/game/ctp2_program/ctp/music build/files/game/ctp2_code/ctp/
-      - cp -r /app/game/ctp2_program/ctp/save build/files/game/ctp2_code/ctp/
+      - cp -r /app/game/ctp2_program/ctp/music /app/game/ctp2_code/ctp/
+      - cp -r /app/game/ctp2_program/ctp/save /app/game/ctp2_code/ctp/
 
       # Copy executable to game directory
       - cp /app/bin/ctp2 /app/game/ctp2_code/ctp/
