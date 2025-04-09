@@ -2104,12 +2104,12 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 		city->ChangeSpecialists(POP_MERCHANT, count);
 #else
 		tmp_city.CollectResourcesFinally();
-		tmp_city.CollectOtherTrade(TRUE);
+		tmp_city.CollectOtherGold(TRUE);
 		prev_result = tmp_city.GetGrossCityGold();
 
 		tmp_city.ChangeSpecialists(POP_MERCHANT, count);
 		tmp_city.CollectResourcesFinally();
-		tmp_city.CollectOtherTrade(TRUE);
+		tmp_city.CollectOtherGold(TRUE);
 
 		if(tmp_city.GetGrossCityGold() > prev_result)
 		{

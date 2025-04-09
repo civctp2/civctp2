@@ -5125,7 +5125,7 @@ bool CityData::BeginTurn()
 
 	SplitScience(false);
 
-	CollectOtherTrade(false);
+	CollectOtherGold(false);
 //	DoSupport(false); // Check
 #endif
 
@@ -9705,7 +9705,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, s
 // Remark(s)  : Use this method if you want to change the gold production.
 //
 //----------------------------------------------------------------------------
-void CityData::CollectOtherTrade(const bool projectedOnly)
+void CityData::CollectOtherGold(const bool projectedOnly)
 {
 	ProcessGold(m_net_gold);
 	CalcGoldLoss(projectedOnly, m_net_gold, m_convertedGold, m_gold_lost_to_crime);
@@ -11298,7 +11298,7 @@ void CityData::ProcessAllResources()
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for paying scince   = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
-	CollectOtherTrade(true);
+	CollectOtherGold(true);
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for other trade     = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 

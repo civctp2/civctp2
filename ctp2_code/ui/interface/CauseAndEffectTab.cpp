@@ -894,7 +894,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		// Science and savings lost to crime
 		sint32 commerceScieCrime = cityData->GetScienceCrime();
-		sint32 commerceGoldCrime = cityData->GetTradeCrime();
+		sint32 commerceGoldCrime = cityData->GetGoldCrime();
 
 		////////////////////////////////////
 		// TOTALS:
