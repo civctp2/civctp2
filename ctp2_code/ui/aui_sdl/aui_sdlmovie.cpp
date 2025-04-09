@@ -1579,7 +1579,7 @@ static int audio_open(void *opaque, int64_t wanted_channel_layout, int wanted_nb
 static int stream_component_open(VideoState *is, int stream_index)
 {
 	AVFormatContext *ic = is->ic;
-	AVCodecContext *avctx;
+	AVCodecContext *avctx = NULL;
 	AVDictionary *opts = NULL;
 	AVDictionaryEntry *t = NULL;
 	int sample_rate, nb_channels;
@@ -1597,13 +1597,13 @@ static int stream_component_open(VideoState *is, int stream_index)
 	if (ret < 0)
 		goto fail;
 	avctx->pkt_timebase = ic->streams[stream_index]->time_base;
-
+	{
 	const AVCodec* codec = avcodec_find_decoder(avctx->codec_id);
 
 	if (!codec) {
-        av_log(NULL, AV_LOG_WARNING,
-                                      "No codec could be found with id %d\n", avctx->codec_id);
-        ret = AVERROR(EINVAL);
+		av_log(NULL, AV_LOG_WARNING,
+		             "No codec could be found with id %d\n", avctx->codec_id);
+		ret = AVERROR(EINVAL);
 		goto fail;
 	}
 
@@ -1665,7 +1665,7 @@ static int stream_component_open(VideoState *is, int stream_index)
 			break;
 	}
 	goto out;
-
+	}
 fail:
 	avcodec_free_context(&avctx);
 out:
