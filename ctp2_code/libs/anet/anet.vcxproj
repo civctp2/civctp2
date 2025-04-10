@@ -245,8 +245,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -266,8 +267,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS;</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -287,8 +289,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -308,8 +311,9 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>_DEBUG;DEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -331,8 +335,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -358,8 +363,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\src\aeh;.\demo\utils;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -384,8 +390,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -410,8 +417,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -436,8 +444,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\demo\utils;.\src\aeh;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -462,8 +471,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\src\aeh;.\demo\utils;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -488,8 +498,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\src\aeh;.\demo\utils;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -514,8 +525,9 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;_MBCS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <PreprocessorDefinitions>NDEBUG;DPRNT;WIN32;_WIN32;_WINDOWS;DP_DLL;dp_ANET2;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH;_MBCS</PreprocessorDefinitions>
       <AdditionalIncludeDirectories>.\h;.\src\aeh;.\demo\utils;.\src\score;.\src\win\h;.\src\win\stub</AdditionalIncludeDirectories>
+      <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
