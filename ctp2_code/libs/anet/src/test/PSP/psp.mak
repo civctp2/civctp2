@@ -75,7 +75,7 @@ CLEAN :
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /FR /YX /c
 CPP_PROJ=/nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D\
- "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /FR"$(INTDIR)/"\
+ "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/"\
  /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\PSPr/
 CPP_SBRS=.\PSPr/
@@ -146,7 +146,7 @@ CLEAN :
 # ADD CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DPRNT" /Fr /YX /c
 CPP_PROJ=/nologo /MDd /W4 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D\
- "DPRNT" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/"\
+ "DPRNT" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/"\
  /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\PSPd/
 CPP_SBRS=.\PSPd/
@@ -218,7 +218,7 @@ CLEAN :
 # ADD CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DPRNT" /D "DP_DLL" /Fr /YX /c
 CPP_PROJ=/nologo /MDd /W4 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D\
- "DPRNT" /D "DP_DLL" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/"\
+ "DPRNT" /D "DP_DLL" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/"\
  /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\PSPdd/
 CPP_SBRS=.\PSPdd/
@@ -286,7 +286,7 @@ CLEAN :
 # ADD BASE CPP /nologo /MLd /W3 /GX /O2 /I "..\..\..\h" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /FR /YX /c
 CPP_PROJ=/nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D\
- "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /FR"$(INTDIR)/"\
+ "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/"\
  /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\PSPdr/
 CPP_SBRS=.\PSPdr/
@@ -358,7 +358,7 @@ CLEAN :
 # ADD CPP /nologo /MDd /W4 /Gm /GX /Zi /Od /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "DPRNT" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /D "dp_ANET2" /Fr /YX /c
 CPP_PROJ=/nologo /MDd /W4 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "DPRNT" /D "WIN32" /D "_WIN32" /D\
- "_CONSOLE" /D "DP_DLL" /D "dp_ANET2" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX\
+ "_CONSOLE" /D "DP_DLL" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX\
  /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\PSP2dd/
 CPP_SBRS=.\PSP2dd/
@@ -426,7 +426,7 @@ CLEAN :
 # ADD BASE CPP /nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /FR /YX /c
 # ADD CPP /nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /D "dp_ANET2" /FR /YX /c
 CPP_PROJ=/nologo /MD /W4 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D\
- "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /D "dp_ANET2"\
+ "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "DP_DLL" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" \
  /FR"$(INTDIR)/" /Fp"$(INTDIR)/psp.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\PSP2dr/
 CPP_SBRS=.\PSP2dr/

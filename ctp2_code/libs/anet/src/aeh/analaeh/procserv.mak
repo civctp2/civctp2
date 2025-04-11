@@ -73,7 +73,7 @@ CLEAN :
 # SUBTRACT CPP /WX
 CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /I\
  ".." /I "..\..\dp" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_WINDOWS" /D\
- "dp_ANET2" /D "NO_NETWORK" /Fp"$(INTDIR)/procserv.pch" /YX /Fo"$(INTDIR)/" /c 
+ "dp_ANET2" /D "NO_NETWORK" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/procserv.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\procserv/
 CPP_SBRS=.\.
 # ADD BASE RSC /l 0x409 /d "NDEBUG"
@@ -154,7 +154,7 @@ CLEAN :
 # SUBTRACT CPP /WX
 CPP_PROJ=/nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /I ".." /I "..\..\dp" /D "_DEBUG" /D "WIN32" /D\
- "_CONSOLE" /D "_WINDOWS" /D "dp_ANET2" /D "NO_NETWORK" /FR"$(INTDIR)/"\
+ "_CONSOLE" /D "_WINDOWS" /D "dp_ANET2" /D "NO_NETWORK" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/"\
  /Fp"$(INTDIR)/procserv.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\procservd/
 CPP_SBRS=.\procservd/

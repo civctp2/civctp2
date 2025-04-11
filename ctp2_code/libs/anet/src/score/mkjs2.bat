@@ -16,7 +16,7 @@ if errorlevel 1 goto bad
 
 set OLDINC=%INCLUDE%
 set INCLUDE=%INCLUDE%;d:\jdk\include;d:\jdk\include\win32;..\..\..\h;..\..\dp;..\..\..\demo\utils;..
-cl /D_DEBUG /D_WIN32 /DWIN32 /W3 /Zi jscore2.c ..\scorerep.c ..\sq.c ..\wmq.c ..\wmqfile.c ..\..\dp\assoctab.c ..\..\dp\dynatab.c ..\..\..\demo\utils\win32dirent.c ..\..\..\demo\utils\win32direntry.c ..\..\..\win\lib\anet2d.lib d:\jdk\lib\javai.lib /LD /Fejscore2.dll
+cl /D_DEBUG /D_WIN32 /DWIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /W3 /Zi jscore2.c ..\scorerep.c ..\sq.c ..\wmq.c ..\wmqfile.c ..\..\dp\assoctab.c ..\..\dp\dynatab.c ..\..\..\demo\utils\win32dirent.c ..\..\..\demo\utils\win32direntry.c ..\..\..\win\lib\anet2d.lib d:\jdk\lib\javai.lib /LD /Fejscore2.dll
 set INCLUDE=%OLDINC%
 if errorlevel 1 goto bad
 

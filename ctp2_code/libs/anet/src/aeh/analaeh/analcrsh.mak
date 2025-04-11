@@ -72,7 +72,7 @@ CLEAN :
 # ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /I ".." /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_WINDOWS" /D "dp_ANET2" /YX /c
 # SUBTRACT CPP /WX
 CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /I\
- ".." /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_WINDOWS" /D "dp_ANET2"\
+ ".." /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_WINDOWS" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /Fp"$(INTDIR)/analcrsh.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\analcrsh/
 CPP_SBRS=.\.
@@ -154,7 +154,7 @@ CLEAN :
 # SUBTRACT CPP /WX
 CPP_PROJ=/nologo /Zp8 /MDd /W3 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /I ".." /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D\
- "_WINDOWS" /D "dp_ANET2" /FR"$(INTDIR)/" /Fp"$(INTDIR)/analcrsh.pch" /YX\
+ "_WINDOWS" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/" /Fp"$(INTDIR)/analcrsh.pch" /YX\
  /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\analcrshd/
 CPP_SBRS=.\analcrshd/

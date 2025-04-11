@@ -12,7 +12,7 @@ rem /MDd = use MSVCRTD.DLL standard C library (because that's what anet2d uses)
 rem /Zi  = insert symbolic debugging info
 
 del testd.exe
-cl /D DOSWIN32 /D WIN32 /I ..\..\h test.c ..\..\win\lib\anet2d.lib /Fm /Oy- /Ox /W3 /WX /MDd /Zi /Fetestd.exe
+cl /D DOSWIN32 /D WIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /I ..\..\h test.c ..\..\win\lib\anet2d.lib /Fm /Oy- /Ox /W3 /WX /MDd /Zi /Fetestd.exe
 if errorlevel 1 goto bad
 if not exist testd.exe goto bad
 

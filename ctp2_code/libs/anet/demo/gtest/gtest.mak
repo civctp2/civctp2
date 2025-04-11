@@ -81,7 +81,7 @@ CLEAN :
 # SUBTRACT CPP /Fr
 CPP_PROJ=/nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\..\h" /I "..\utils" /D\
  "_DEBUG" /D "DPRNT" /D "DP_DLL" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D\
- "dp_ANET2" /Fp"$(INTDIR)/gtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/gtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\gtest2dd/
 CPP_SBRS=.\.
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -147,7 +147,7 @@ CLEAN :
 # ADD BASE CPP /nologo /MD /W3 /GX /O2 /Oy- /I "..\..\h" /I "..\utils" /D "NDEBUG" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /MD /W3 /GX /O2 /Oy- /I "..\..\h" /I "..\utils" /D "NDEBUG" /D "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /YX /c
 CPP_PROJ=/nologo /MD /W3 /GX /O2 /Oy- /I "..\..\h" /I "..\utils" /D "NDEBUG" /D\
- "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /Fp"$(INTDIR)/gtest.pch" /YX\
+ "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/gtest.pch" /YX\
  /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\gtest2r/
 CPP_SBRS=.\.
@@ -219,7 +219,7 @@ CLEAN :
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\..\h" /I "..\utils" /D "_DEBUG" /D "DPRNT" /D "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /YX /c
 # SUBTRACT CPP /Fr
 CPP_PROJ=/nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\..\h" /I "..\utils" /D\
- "_DEBUG" /D "DPRNT" /D "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE"\
+ "_DEBUG" /D "DPRNT" /D "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /Fp"$(INTDIR)/gtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\gtest2d/
 CPP_SBRS=.\.
@@ -290,7 +290,7 @@ CLEAN :
 # ADD CPP /nologo /MD /W3 /Gm /GX /Zi /O2 /Oy- /I "..\..\h" /I "..\utils" /D "_DEBUG" /D "DPRNT" /D "DP_DLL" /D "dp_ANET2" /D "WIN32" /D "_WIN32" /D "_CONSOLE" /YX /c
 CPP_PROJ=/nologo /MD /W3 /Gm /GX /Zi /O2 /Oy- /I "..\..\h" /I "..\utils" /D\
  "_DEBUG" /D "DPRNT" /D "DP_DLL" /D "dp_ANET2" /D "WIN32" /D "_WIN32" /D\
- "_CONSOLE" /Fp"$(INTDIR)/gtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "_CONSOLE" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/gtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\gtest2dr/
 CPP_SBRS=.\.
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -594,7 +594,7 @@ DEP_CPP_ECLOC=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\demo\utils\dpcrc32.c
+SOURCE=..\utils\dpcrc32.c
 DEP_CPP_DPCRC=\
 	"..\utils\dpcrc32.h"\
 	
