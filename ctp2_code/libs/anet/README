@@ -26,3 +26,8 @@ and interoperates properly between big- and little-endian machines.
 
 For a packing list and links to documentation, see index.html.
 
+## Building on Windows with nmake
+
+To use nmake go to the Developer Command Prompt from your Visual Studio installation and then go to ..\anet\src and run there build.bat. The output files will be in ..\anet\win\.
+
+
