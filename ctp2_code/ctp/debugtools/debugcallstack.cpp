@@ -77,19 +77,7 @@ void Debug_FunctionNameClose (void);
 const char *Debug_FunctionNameGet (size_t address);
 
 #ifdef WIN32
-
-#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
-BOOL CALLBACK   Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
-BOOL CALLBACK   Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext);
-#else
-BOOL CALLBACK   Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
-BOOL CALLBACK   Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext);
-#endif
-
-int             Debug_FunctionNameOpenFromPDB(void);
-
 #define k_MAP_FILE "ctp2.map"
-
 #else // WIN32
 #define k_MAP_FILE "ctp2linux.map"
 #endif // WIN32
@@ -318,45 +306,6 @@ int Debug_FunctionNameOpen (char *map_file_name)
 
 static HANDLE	hProc,
 				hThread;
-
-BOOL CALLBACK Debug_EnumSymbolsCallback
-(
-#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
-    LPCSTR symbolName,
-#else
-    LPSTR symbolName,
-#endif
-    ULONG symbolAddress,
-    ULONG symbolSize,
-    PVOID userContext
-)
-{
-	Debug_AddFunction ((char *)symbolName, (size_t)symbolAddress);
-
-	return TRUE;
-}
-
-#if defined(_MSC_VER) && defined(_X86_)
-#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
-BOOL CALLBACK Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext)
-#else
-BOOL CALLBACK Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext)
-#endif
-{
-#ifndef _BFR_
-	// Seems that SysEnumerateSymbols changed??? // Seems to be fine
-	if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
-		int err = GetLastError();
-		LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
-
-		return FALSE;
-	}
-#endif
-
-	return TRUE;
-}
-
-#endif // WIN32
 
 void Debug_FunctionNameClose (void)
 {
