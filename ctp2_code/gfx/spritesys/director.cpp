@@ -819,7 +819,15 @@ public:
 		DirectorImpl::Instance()->AddStandbyActor(moveActor);
 	}
 	virtual ~DQActionTeleport() {
+		moveActor->PositionActor(endPos);
+
+		for (int i = 0; i < numberOfMoveActors; i++)
+		{
+			moveActors[i]->PositionActor(endPos);
+		}
+
 		DirectorImpl::Instance()->RemoveStandbyActor(moveActor);
+		delete[] moveActors;
 	}
 	virtual DQACTION_TYPE GetType() { return DQACTION_TELEPORT; }
 
