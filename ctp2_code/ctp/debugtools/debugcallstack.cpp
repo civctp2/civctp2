@@ -286,7 +286,7 @@ int Debug_FunctionNameOpen (char *map_file_name)
 		if ((buffer[0] == ' ') &&
 		    (buffer[1] == '0') &&
 		    (buffer[5] == ':') &&
-		    (sscanf (buffer, "%x:%x %s %x", &crap, &crap, name, &address) == 4))
+		    (sscanf (buffer, "%x:%x %s %zx", &crap, &crap, name, &address) == 4))
 #else
 		if(sscanf (buffer, "%zx %s %[^\n]", &address, symbol, name) == 3)
 #endif
@@ -633,7 +633,14 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 		index ++;
 	}
 #elif defined(_MSC_VER)
-	// Add warning
+	HANDLE process = GetCurrentProcess();
+	SymInitialize(process, NULL, TRUE);
+
+	size_t cap = CaptureStackBackTrace(0, number, (void**)call_stack, NULL);
+	for (size_t i = cap; i < number; i++)
+	{
+		call_stack[i] = 0;
+	}
 #else
 	backtrace((void**)call_stack, number);
 #endif
@@ -643,9 +650,8 @@ void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number)
 {
 	size_t caller;
 	const char *caller_name;
-	int index;
 
-	index = 0;
+	size_t index = 0;
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
@@ -682,11 +688,10 @@ void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int num
 {
 	size_t caller;
 	const char *caller_name;
-	int index;
 
 	char allocator_name[1024];
 
-	index = 0;
+	size_t index = 0;
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
@@ -700,7 +705,7 @@ void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int num
 			strcpy(allocator_name, caller_name);
 		}
 
-		fprintf(file, "0x%08x [%s+0x%x] / ", caller, caller_name, offset);
+		fprintf(file, "0x%08zx [%s+0x%zx] / ", caller, caller_name, offset);
 
 		index ++;
 	}
@@ -779,7 +784,7 @@ char * c3debug_StackTrace(void)
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
-		sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
+		sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 
 		if (strlen(s_stackTraceString) + strlen(function_name) < k_STACK_TRACE_LEN - 1 )
 			strcat(s_stackTraceString, function_name);
@@ -856,11 +861,11 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 	while(!feof(f))
 	{
 		if(fgets(line, 1024, f)) {
-			if(sscanf(line, "  0x%08x", &caller) == 1)
+			if(sscanf(line, "  0x%08zx", &caller) == 1)
 			{
 				caller_name = Debug_FunctionNameAndOffsetGet(caller, &offset);
 
-				sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
+				sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 
 				if (strlen(s_stackTraceString) + strlen(function_name) < k_STACK_TRACE_LEN - 1 )
 					strcat(s_stackTraceString, function_name);
@@ -958,13 +963,13 @@ void cDebugCallStackSet::Dump(const char *filename)
 		totalCalls += m_stacks[m_blockSize*i];
 	}
 
-	fprintf(fp,"callstack dump for function:\n%s\ncalled %d times\n",caller_name,totalCalls);
+	fprintf(fp,"callstack dump for function:\n%s\ncalled %zu times\n",caller_name,totalCalls);
 
 	for (i=0;i<m_numStacks;++i)
 	{
 		size_t called = m_stacks[m_blockSize*i];
 		float perCalled = (float)(100 * called)/(float)totalCalls;
-		fprintf(fp,"\nnum times called: %d, %.2f percent\n",called,perCalled);
+		fprintf(fp,"\nnum times called: %zu, %.2f percent\n",called,perCalled);
 		int j;
 		for (j=0;j<m_depth;++j)
 		{
