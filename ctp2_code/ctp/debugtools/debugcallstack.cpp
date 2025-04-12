@@ -53,6 +53,8 @@
 #endif
 #include <string.h>
 #include <stdio.h>
+#include <vector>
+#include <algorithm>
 #ifdef WIN32
 #include <imagehlp.h>
 #endif
@@ -71,10 +73,12 @@
 
 static bool debug_dump_whole_stack = false;
 
-void Debug_FunctionNameInit (void);
+void Debug_FunctionNameFindAddresses(FILE *fp);
 int Debug_FunctionNameOpen (char *map_file_name);
 void Debug_FunctionNameClose (void);
 const char *Debug_FunctionNameGet (size_t address);
+void Debug_MakeRoom(size_t capacity);
+void Debug_SortFunctions();
 
 #ifdef WIN32
 #define k_MAP_FILE "ctp2.map"
@@ -145,37 +149,32 @@ static int function_name_open = 0;
 
 typedef struct tagFUNCTION_ADDRESS
 {
-	struct tagFUNCTION_ADDRESS * next;
 	size_t address;
 	char *name;
 } FUNCTION_ADDRESS;
 
-static FUNCTION_ADDRESS *fa_first = NULL;
+static std::vector<FUNCTION_ADDRESS> functionAdresses;
 
-void *Debug_GetFAFirst(void)
-{
-	return (void *)fa_first;
+// Comparator function
+bool funcComparator(FUNCTION_ADDRESS a, FUNCTION_ADDRESS b) {
+	return a.address > b.address;
 }
 
-void Debug_SetFAFirst(void *ptr)
+void Debug_MakeRoom(size_t capacity)
 {
-	fa_first = (FUNCTION_ADDRESS *)ptr;
-	function_name_open = TRUE;
+	functionAdresses.reserve(capacity);
+}
+
+void Debug_SortFunctions()
+{
+	std::stable_sort(functionAdresses.begin(), functionAdresses.end(), funcComparator);
 }
 
 void Debug_AddFunction (const char *name, size_t address)
 {
-	FUNCTION_ADDRESS *new_function = NULL;
-	FUNCTION_ADDRESS *pointer = NULL;
-	FUNCTION_ADDRESS *last = NULL;
+	FUNCTION_ADDRESS new_function;
 
-	new_function = (FUNCTION_ADDRESS *) malloc (sizeof (FUNCTION_ADDRESS));
-	if (!new_function)
-	{
-		LOG ((LOG_FATAL, "Out of Memory"));
-	}
-
-	new_function->address = address;
+	new_function.address = address;
 
 	if (name[0] == '?')
 	{
@@ -183,51 +182,49 @@ void Debug_AddFunction (const char *name, size_t address)
 		char buff[BUFFER_SIZE];
 		if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
 		{
-			new_function->name = strdup(buff);
+			new_function.name = strdup(buff);
 		}
 		else
 #endif
 		{
-			new_function->name = strdup(name);
+			new_function.name = strdup(name);
 		}
 	}
 	else if (name[0] == '_')
 	{
-		new_function->name = strdup (name + 1);
+		new_function.name = strdup (name + 1);
 	}
 	else
 	{
-		new_function->name = strdup (name);
+		new_function.name = strdup (name);
 	}
 
-	if (fa_first == NULL)
-	{
-		new_function->next = NULL;
-		fa_first = new_function;
-		return;
-	}
-
-	if (address >= fa_first->address)
-	{
-		new_function->next = fa_first;
-		fa_first = new_function;
-		return;
-	}
-
-	pointer = fa_first;
-	while ((pointer) && (address < pointer->address))
-	{
-		last = pointer;
-		pointer = pointer->next;
-	}
-
-	new_function->next = last->next;
-	last->next = new_function;
+	functionAdresses.push_back(new_function);
 }
 
-void Debug_FunctionNameInit (void)
+void Debug_FunctionNameFindAddresses(FILE *fp)
 {
-	fa_first = NULL;
+#if defined(WIN32)
+	char buffer[BUFFER_SIZE];
+	char name[BUFFER_SIZE];
+
+	int done = 0;
+	while (!done)
+	{
+		fgets(buffer, BUFFER_SIZE, fp);
+
+		if (feof(fp))
+			done = 1;
+
+		if (sscanf(buffer, "%s", name) == 1)
+		{
+			if (strcmp(name, "Address") == 0)
+				done = 1;
+		}
+	}
+
+	fgets(buffer, BUFFER_SIZE, fp);
+#endif
 }
 
 int Debug_FunctionNameOpen (char *map_file_name)
@@ -256,24 +253,29 @@ int Debug_FunctionNameOpen (char *map_file_name)
 #endif
 	}
 
-#if defined(WIN32)
+	Debug_FunctionNameFindAddresses(fp);
+
+	// First count how many etries we have
+	// So that we can allocate memory in one go
 	done = 0;
+	size_t numEntries = 0;
 	while (!done)
 	{
-		fgets (buffer, BUFFER_SIZE, fp);
+		fgets(buffer, BUFFER_SIZE, fp);
 
-		if (feof (fp))
+		if (feof(fp))
 			done = 1;
 
-		if (sscanf (buffer, "%s", name) == 1)
-		{
-			if (strcmp (name, "Address") == 0)
-				done = 1;
-		}
+		numEntries++;
 	}
+	fclose(fp);
 
-	fgets (buffer, BUFFER_SIZE, fp);
-#endif
+	// Preallocate the memory to store the functions
+	// This way it is faster
+	Debug_MakeRoom(numEntries);
+
+	fp = fopen(map_file_name, "rt");
+	Debug_FunctionNameFindAddresses(fp);
 
 	done = 0;
 	while (!done)
@@ -298,6 +300,7 @@ int Debug_FunctionNameOpen (char *map_file_name)
 
 	fclose (fp);
 
+	Debug_SortFunctions();
 	function_name_open = 1;
 	return (1);
 
@@ -309,29 +312,22 @@ static HANDLE	hProc,
 
 void Debug_FunctionNameClose (void)
 {
-	FUNCTION_ADDRESS *pointer = fa_first;
-	FUNCTION_ADDRESS *next;
 #ifdef GENERATE_ADDRESS_LOG
-	FILE *fh;
-#endif
-
-#ifdef GENERATE_ADDRESS_LOG
-	fh = fopen("address.log","w");
+	FILE *fh = fopen("address.log","w");
 #endif
 
 	function_name_open = 0;
 
-	while (pointer)
+	for (auto func : functionAdresses)
 	{
 #ifdef GENERATE_ADDRESS_LOG
-		fprintf(fh,"%08X %s\n",pointer->address,pointer->name);
+		fprintf(fh, "%08X %s\n", func.address, func->name);
 #endif
-
-		next = pointer->next;
-		free (pointer->name);
-		free (pointer);
-		pointer = next;
+		free(func.name);
 	}
+
+	functionAdresses.clear();
+	functionAdresses.shrink_to_fit();
 
 #ifdef GENERATE_ADDRESS_LOG
 	fclose (fh);
@@ -340,8 +336,6 @@ void Debug_FunctionNameClose (void)
 
 const char *Debug_FunctionNameGet (size_t address)
 {
-	FUNCTION_ADDRESS *pointer;
-
 #ifdef __linux__
 	Dl_info info;
 	if(dladdr((void*)address, &info) != 0)
@@ -361,14 +355,10 @@ const char *Debug_FunctionNameGet (size_t address)
 	}
 	else
 	{
-		pointer = fa_first;
-
-		while (pointer)
+		for (auto func : functionAdresses)
 		{
-			if (address >= pointer->address)
-				return (pointer->name);
-
-			pointer = pointer->next;
+			if (address >= func.address)
+				return (func.name);
 		}
 
 		return (unknown);
@@ -377,7 +367,6 @@ const char *Debug_FunctionNameGet (size_t address)
 
 const char *Debug_FunctionNameAndOffsetGet (size_t address, size_t *offset)
 {
-	FUNCTION_ADDRESS *pointer;
 	*offset = 0;
 
 #ifdef __linux__
@@ -399,17 +388,13 @@ const char *Debug_FunctionNameAndOffsetGet (size_t address, size_t *offset)
 	}
 	else
 	{
-		pointer = fa_first;
-
-		while (pointer)
+		for (auto func : functionAdresses)
 		{
-			if (address >= pointer->address)
+			if (address >= func.address)
 			{
-				*offset = address - pointer->address;
-				return (pointer->name);
+				*offset = address - func.address;
+				return (func.name);
 			}
-
-			pointer = pointer->next;
 		}
 
 		return (unknown);

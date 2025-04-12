@@ -52,9 +52,6 @@ void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number);
 void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int number, FILE *file);
 void DebugCallStack_ShowToAltFile  (LogClass log_class, size_t *call_stack, int number, FILE *file);
 
-void *Debug_GetFAFirst(void);
-void Debug_SetFAFirst(void *ptr);
-
 #ifdef __cplusplus
 class cDebugCallStackSet
 {
