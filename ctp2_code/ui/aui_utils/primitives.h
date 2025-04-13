@@ -101,6 +101,12 @@ inline aui_BitmapFont * getBitmapFont()
 
 	return font;
 }
+
+inline void freeBitmapFont(aui_BitmapFont * font)
+{
+	g_c3ui->UnloadBitmapFont(font);
+}
+
 #endif
 
 PRIMITIVES_ERRCODE	primitives_FrameRect16(aui_Surface *pSurface,RECT *pRect,Pixel16 color);

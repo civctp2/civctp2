@@ -791,6 +791,8 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 		RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
 		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
 		font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
+
+		freeBitmapFont(font);
 	}
 #endif // __AUI_USE_DIRECTX__
 
@@ -856,6 +858,8 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	{
 		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
 		font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
+
+		freeBitmapFont(font);
 	}
 #endif // __AUI_USE_DIRECTX__
 
@@ -928,6 +932,8 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 			font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
 			y += font->GetLineSkip();
 		}
+
+		freeBitmapFont(font);
 	}
 #endif
 
@@ -1186,6 +1192,8 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	{
 		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
 		font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
+
+		freeBitmapFont(font);
 	}
 #endif // __AUI_USE_DIRECTX__
 
@@ -1273,6 +1281,8 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 			font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
 			y += font->GetLineSkip();
 		}
+
+		freeBitmapFont(font);
 	}
 #endif // __AUI_USE_DIRECTX__
 
