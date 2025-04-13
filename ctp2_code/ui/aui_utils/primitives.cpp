@@ -788,7 +788,7 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 
 	if(font)
 	{
-		RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT rect = {x, static_cast<sint32>(y - 0.5 * font->GetLineSkip()), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
 		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
 		font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
 
