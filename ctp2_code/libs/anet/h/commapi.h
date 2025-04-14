@@ -958,7 +958,7 @@ typedef int
 (*COMMSETPARAM)(
 	commSetParamReq_t *		req,		/* Request (or NULL) */
 	commSetParamResp_t *	resp		/* Response (or NULL) */
-	COMM_3RDPARAM)				 		/* comm context pointer */
+	COMM_3RDPARAM)						/* comm context pointer */
 ;
 extern COMMSETPARAM commSetParam;
 #else
@@ -966,7 +966,7 @@ DLLEXPORT int cdecl
 commSetParam(
 	commSetParamReq_t *		req,		/* Request (or NULL) */
 	commSetParamResp_t *	resp		/* Response (or NULL) */
-	COMM_3RDPARAM)				 		/* comm context pointer */
+	COMM_3RDPARAM)						/* comm context pointer */
 ;
 #endif
 

@@ -54,7 +54,6 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 
 	case 1:
 		if (dp->myplayers) {
-			dpid_t id;
 			int i;
 
 			DPRINT(("dpShutdown: deleting my players.\n"));
@@ -62,7 +61,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 				err = dpDestroyPlayer(dp, (dpid_t)(i + dp->firstId));
 			dp->quitDeadline = dp->now + (ECLOCKS_PER_SEC * timeout)/1000;
 		}
-	    dp->quitState++;
+		dp->quitState++;
 		break;
 
 	case 2:
