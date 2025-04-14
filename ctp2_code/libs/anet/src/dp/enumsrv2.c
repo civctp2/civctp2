@@ -255,21 +255,25 @@ typedef struct {
 
 /* Default bootstrap server list */
 static myhostname_t default_bootstrap[] = {
-	{"192.215.160.71",  "us1.alink.activision.com"},
-	{"192.215.160.72",  "us2.alink.activision.com"},
-	{"194.131.8.12",    "uk1.activision.co.uk"},
+	{"52.116.46.118",  "911.alink.bz911.net"},
+	{"54.244.133.27",  "alink.iondriver.com"},
+	{"50.250.167.13",  "play.interstate76.com"},
 
-	/*{"203.35.167.100",  "australia1.activision.com"},*/
-	/*{"207.82.192.39",   "california12.activision.com"},*/
-	/*{"209.1.100.223", "california4.activision.com"},*/
-	/*{"207.82.192.20", "california11.activision.com"},*/
-	/*{"207.137.137.137",	"a10.thenet.com"},*/
-	/*{"204.119.24.237", 	"i76.polar.net"},*/
-	/*{"204.92.55.47",	"i76.ican.net" },*/
-	/*{"206.41.128.205",	"ags.ionet.net"},*/
-	/*{"207.170.70.21", 	"activision.fc.net"},*/
-	/*{"194.198.184.222",	"stockholm.alink.fragzone.se"},*/
-	/*{"203.12.160.64",	"activision.tpgi.com.au"},*/
+/*	Old servers */
+/*	{"192.215.160.71",  "us1.alink.activision.com"},*/
+/*	{"192.215.160.72",  "us2.alink.activision.com"},*/
+/*	{"194.131.8.12",    "uk1.activision.co.uk"},*/
+/*	{"203.35.167.100",  "australia1.activision.com"},*/
+/*	{"207.82.192.39",   "california12.activision.com"},*/
+/*	{"209.1.100.223", "california4.activision.com"},*/
+/*	{"207.82.192.20", "california11.activision.com"},*/
+/*	{"207.137.137.137",	"a10.thenet.com"},*/
+/*	{"204.119.24.237", 	"i76.polar.net"},*/
+/*	{"204.92.55.47",	"i76.ican.net" },*/
+/*	{"206.41.128.205",	"ags.ionet.net"},*/
+/*	{"207.170.70.21", 	"activision.fc.net"},*/
+/*	{"194.198.184.222",	"stockholm.alink.fragzone.se"},*/
+/*	{"203.12.160.64",	"activision.tpgi.com.au"},*/
 	{NULL,NULL},		/* for overwriting with server name from ini file */
 	{NULL,NULL},		/* This one terminates the list. */
 };
