@@ -552,7 +552,7 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 		case DATUM_STRING:
 			if (m_hasValue)
 			{
-				fprintf(outfile, "    m_%s = new char[%d];\n", m_bitPairDatum->m_name, strlen(val.textValue) + 1);
+				fprintf(outfile, "    m_%s = new char[%zu];\n", m_bitPairDatum->m_name, strlen(val.textValue) + 1);
 				fprintf(outfile, "    strcpy(m_%s, \"%s\");\n", m_bitPairDatum->m_name, val.textValue);
 			}
 			else
@@ -655,7 +655,7 @@ void Datum::ExportInitialization(FILE *outfile)
 			case DATUM_STRING:
 				if (m_hasValue)
 				{
-					fprintf(outfile, "    m_%s = new char[%d];\n", m_name, strlen(val.textValue) + 1);
+					fprintf(outfile, "    m_%s = new char[%zu];\n", m_name, strlen(val.textValue) + 1);
 					fprintf(outfile, "    strcpy(m_%s, \"%s\");\n", m_name, val.textValue);
 				}
 				else

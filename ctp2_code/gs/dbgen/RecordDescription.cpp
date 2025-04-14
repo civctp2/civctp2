@@ -170,7 +170,7 @@ void RecordDescription::ExportHeader(FILE *outfile)
 	}
 
     // Tokens and flags
-	fprintf(outfile, "\n#define k_Num_%sRecord_Tokens %d\n\n", m_name, tokenCount);
+	fprintf(outfile, "\n#define k_Num_%sRecord_Tokens %zu\n\n", m_name, tokenCount);
 	ExportBits(outfile);
 	ExportRanges(outfile);
 
