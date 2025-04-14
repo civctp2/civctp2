@@ -371,7 +371,7 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	MSG msg;
 #if defined(_WIN64)
 	m_windowProc = (WNDPROC)GetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC );
-	SetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC, (LONG)OnScreenMovieWindowProc );
+	SetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC, (LONG_PTR)OnScreenMovieWindowProc );
 #else
 	m_windowProc = (WNDPROC)GetWindowLong(g_ui->TheHWND(), GWL_WNDPROC);
 	SetWindowLong(g_ui->TheHWND(), GWL_WNDPROC, (LONG)OnScreenMovieWindowProc);
@@ -410,7 +410,7 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	m_onScreenMovie = NULL;
 
 #if defined(_WIN64)
-	SetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC, (LONG)m_windowProc );
+	SetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC, (LONG_PTR)m_windowProc );
 #else
 	SetWindowLong(g_ui->TheHWND(), GWL_WNDPROC, (LONG)m_windowProc);
 #endif

@@ -542,7 +542,7 @@ void SpriteEditWindow::LoadSprite(char *name)
 
 		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, strupr(tbuffer));
 		sint16 id = -1;
-		sscanf(strupr(tbuffer), "GG%d.TXT", &id);
+		sscanf(strupr(tbuffer), "GG%hd.TXT", &id);
 		fprintf(stderr, "%s L%d: id= %d!\n", __FILE__, __LINE__, id);
 		m_currentSprite->Parse(id, GROUPTYPE_GROUP); // GROUPTYPE is not used
 	}
