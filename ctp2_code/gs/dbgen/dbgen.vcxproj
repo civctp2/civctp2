@@ -140,10 +140,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">
     <TargetName>ctpdbd</TargetName>
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">
     <TargetName>ctpdbd</TargetName>
     <LinkIncremental>true</LinkIncremental>
+    <OutDir>$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">
     <OutDir>$(Platform)\</OutDir>
@@ -159,10 +161,12 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">
     <TargetName>ctpdb</TargetName>
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(Platform)\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">
     <TargetName>ctpdb</TargetName>
     <LinkIncremental>false</LinkIncremental>
+    <OutDir>$(Platform)\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <Midl>
