@@ -17529,14 +17529,14 @@
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17545,10 +17545,10 @@
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17565,14 +17565,14 @@
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
@@ -17581,10 +17581,10 @@
 </Command>
       <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)
 </Command>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
-      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)..\gs\newdb\$(Platform)\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)..\gs\newdb\ConceptRecord.stamp;%(Outputs)</Outputs>
       <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">%(Filename)%(Extension)</Message>
       <Message Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">%(Filename)%(Extension)</Message>
