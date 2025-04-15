@@ -553,7 +553,7 @@ BOOL ProfileDB::Parse(FILE *file)
 		if(fgets(line, k_MAX_NAME_LEN, file) == NULL)
 			return TRUE;
 		linenum++;
-		sint32 len = strlen(line);
+		size_t len = strlen(line);
 
 		while(len > 0 && isspace(line[len - 1])) {
 			line[len - 1] = 0;

@@ -637,7 +637,7 @@ void TiledMap::CopyMixDirtyRects(aui_DirtyList *dest)
 	dest->Flush();
 
 	ListPos	position = m_oldMixDirtyList->GetHeadPosition();;
-	sint32	i;
+	size_t	i;
 	for (i = m_oldMixDirtyList->L(); i > 0; --i)
 	{
 		dest->AddRect(m_oldMixDirtyList->GetNext(position));
@@ -678,7 +678,7 @@ void TiledMap::RestoreMixFromMap(aui_Surface *destSurf)
 
 	ListPos position = m_oldMixDirtyList->GetHeadPosition();
 
-	for (sint32 i = m_oldMixDirtyList->L(); i > 0; --i)
+	for (size_t i = m_oldMixDirtyList->L(); i > 0; --i)
 	{
 		RECT * rect = m_oldMixDirtyList->GetNext(position);
 		g_c3ui->TheBlitter()->Blt(destSurf, rect->left, rect->top, m_surface, rect, k_AUI_BLITTER_FLAG_COPY);
@@ -783,7 +783,7 @@ void TiledMap::OffsetMixDirtyRects(sint32 deltaX, sint32 deltaY)
 #else
 	ListPos position = m_oldMixDirtyList->GetHeadPosition();
 
-	for (sint32 i = m_oldMixDirtyList->L(); i > 0; --i)
+	for (size_t i = m_oldMixDirtyList->L(); i > 0; --i)
 	{
 		RECT * rect = m_oldMixDirtyList->GetNext(position);
 
@@ -877,7 +877,7 @@ void TiledMap::UpdateMixFromMap(aui_Surface *mixSurf)
 
 	ListPos position = m_mapDirtyList->GetHeadPosition();
 
-	for (sint32 i = m_mapDirtyList->L(); i > 0; --i)
+	for (size_t i = m_mapDirtyList->L(); i > 0; --i)
 	{
 		RECT * rect = m_mapDirtyList->GetNext(position);
 		g_c3ui->TheBlitter()->Blt(mixSurf, rect->left, rect->top, m_surface, rect, k_AUI_BLITTER_FLAG_COPY);
@@ -3259,8 +3259,8 @@ void TiledMap::ScrollPixels(sint32 deltaX, sint32 deltaY, aui_Surface *surf)
 			srcPtr =	(uint32 *)(buffer + (w - dx) * 2 - 4);
 			destPtr =	(uint32 *)(buffer + w * 2 - 4);
 
-			Assert((unsigned)srcPtr >=(unsigned)buffer);
-			Assert((unsigned)destPtr>=(unsigned)buffer);
+			Assert((size_t)srcPtr >=(size_t)buffer);
+			Assert((size_t)destPtr>=(size_t)buffer);
 
 			slop = (pitch>>2) + copyWidth;
 

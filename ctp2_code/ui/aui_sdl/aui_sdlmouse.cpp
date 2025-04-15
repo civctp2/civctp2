@@ -206,7 +206,7 @@ AUI_ERRCODE	aui_SDLMouse::BltWindowToPrimary(aui_Window *window)
 	aui_DirtyList *windowDirtyList = window->GetDirtyList();
 
 	ListPos position = windowDirtyList->GetHeadPosition();
-	for (sint32 j = windowDirtyList->L(); j; j--)
+	for (size_t j = windowDirtyList->L(); j; j--)
 	{
 		RECT *windowDirtyRect = windowDirtyList->GetNext(position);
 
@@ -254,7 +254,7 @@ AUI_ERRCODE	aui_SDLMouse::BltDirtyRectInfoToPrimary()
 	}
 
 	ListPos position = driList->GetHeadPosition();
-	for (sint32 j = driList->L(); j; j--)
+	for (size_t j = driList->L(); j; j--)
 	{
 		aui_UI::DirtyRectInfo *dri = driList->GetNext(position);
 
@@ -311,7 +311,7 @@ AUI_ERRCODE	aui_SDLMouse::BltBackgroundColorToPrimary(COLORREF color, aui_DirtyL
 	if (g_civApp->IsInBackground()) return AUI_ERRCODE_OK;
 
 	ListPos position = colorAreas->GetHeadPosition();
-	for (sint32 j = colorAreas->L(); j; j--)
+	for (size_t j = colorAreas->L(); j; j--)
 	{
 		RECT *screenDirtyRect = colorAreas->GetNext(position);
 		AUI_ERRCODE errcode = g_ui->ColorBltToSecondary(screenDirtyRect, color,0);
@@ -330,7 +330,7 @@ AUI_ERRCODE	aui_SDLMouse::BltBackgroundImageToPrimary(aui_Image *image, RECT *im
 	if (g_civApp->IsInBackground()) return AUI_ERRCODE_OK;
 
 	ListPos position = imageAreas->GetHeadPosition();
-	for ( sint32 j = imageAreas->L(); j; j-- )
+	for ( size_t j = imageAreas->L(); j; j-- )
 	{
 		RECT *screenDirtyRect = imageAreas->GetNext(position);
 		AUI_ERRCODE errcode = g_ui->BltToSecondary(
