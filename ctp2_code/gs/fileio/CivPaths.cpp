@@ -83,52 +83,52 @@ void CivPaths_CleanupCivPaths()
 }
 
 CivPaths::CivPaths(AUI_ERRCODE &errcode)
-:
-    m_hdPath                (new MBCHAR[_MAX_PATH]),
+	:
+	m_hdPath(new MBCHAR[_MAX_PATH]),
 #if !defined(USE_SDL)
-    m_cdPath                (new MBCHAR[_MAX_PATH]),
+	m_cdPath(new MBCHAR[_MAX_PATH]),
 #endif
-    m_defaultPath           (new MBCHAR[_MAX_PATH]),
-    m_localizedPath         (new MBCHAR[_MAX_PATH]),
-    m_dataPath              (new MBCHAR[_MAX_PATH]),
-    m_extraDataPaths        (),
-    m_scenariosPath         (new MBCHAR[_MAX_PATH]),
-    m_savePath              (new MBCHAR[_MAX_PATH]),
-    m_saveGamePath          (new MBCHAR[_MAX_PATH]),
-    m_saveQueuePath         (new MBCHAR[_MAX_PATH]),
-    m_saveMPPath            (new MBCHAR[_MAX_PATH]),
-    m_saveSCENPath          (new MBCHAR[_MAX_PATH]),
-    m_saveMapPath           (new MBCHAR[_MAX_PATH]),
-    m_saveClipsPath         (new MBCHAR[_MAX_PATH]),
-    m_curScenarioPath       (NULL),
-    m_curScenarioPackPath   (NULL)
+	m_defaultPath(new MBCHAR[_MAX_PATH]),
+	m_localizedPath(new MBCHAR[_MAX_PATH]),
+	m_dataPath(new MBCHAR[_MAX_PATH]),
+	m_extraDataPaths(),
+	m_scenariosPath(new MBCHAR[_MAX_PATH]),
+	m_savePath(new MBCHAR[_MAX_PATH]),
+	m_saveGamePath(new MBCHAR[_MAX_PATH]),
+	m_saveQueuePath(new MBCHAR[_MAX_PATH]),
+	m_saveMPPath(new MBCHAR[_MAX_PATH]),
+	m_saveSCENPath(new MBCHAR[_MAX_PATH]),
+	m_saveMapPath(new MBCHAR[_MAX_PATH]),
+	m_saveClipsPath(new MBCHAR[_MAX_PATH]),
+	m_curScenarioPath(NULL),
+	m_curScenarioPackPath(NULL)
 {
 	std::fill(m_desktopPath, m_desktopPath + _MAX_PATH, 0);
 
 	FILE *  fin = fopen(FILE_CIVPATHS_TXT, "r");
-	if(!fin)
+	if (!fin)
 	{
 		const char *ctphome = c3files_GetCTPHomeDir();
-		if(ctphome)
+		if (ctphome)
 		{
-			char tempname[MAX_PATH] = {0};
+			char tempname[MAX_PATH] = { 0 };
 			snprintf(tempname, MAX_PATH, "%s" FILE_SEP "%s",
-					 ctphome, FILE_CIVPATHS_TXT);
+				ctphome, FILE_CIVPATHS_TXT);
 			fin = fopen(tempname, "r");
 		}
 	}
 #ifdef LINUX
-	if(!fin)
+	if (!fin)
 	{
 		fin = fopen(PACKAGE_DATADIR FILE_SEP FILE_CIVPATHS_TXT, "r");
 	}
-	if(!fin)
+	if (!fin)
 	{
 		fin = fopen(PACKAGE_SYSCONFDIR FILE_SEP FILE_CIVPATHS_TXT, "r");
 	}
 #endif
 	Assert(fin);
-	if(!fin)
+	if (!fin)
 	{
 		errcode = AUI_ERRCODE_LOADFAILED;
 		return;
@@ -169,7 +169,11 @@ CivPaths::CivPaths(AUI_ERRCODE &errcode)
 	ReplaceFileSeperator(m_saveMapPath);
 	ReplaceFileSeperator(m_saveClipsPath);
 
-	for (size_t dir = 0; dir < C3DIR_MAX; ++dir)
+	m_assetPaths[C3DIR_BASE] = new MBCHAR[2];
+	m_assetPaths[C3DIR_BASE][0] = '.';
+	m_assetPaths[C3DIR_BASE][1] = '\0';
+
+	for (size_t dir = 1; dir < C3DIR_MAX; ++dir)
 	{
 		m_assetPaths[dir] = new MBCHAR[_MAX_PATH];
 		fscanf (fin, "%s", m_assetPaths[dir]);
@@ -515,7 +519,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 	    ((dir == C3DIR_PATTERNS) ||
 	     (dir == C3DIR_PICTURES)))
 	{
-		uint32 len = strlen(filename);
+		size_t len = strlen(filename);
 
 		if (len > 3)
 		{
