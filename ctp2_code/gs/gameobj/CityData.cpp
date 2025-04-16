@@ -935,10 +935,10 @@ void CityData::Serialize(CivArchive &archive)
 	m_sellingResources.Serialize(archive);
 	m_happy->Serialize(archive);
 
-	sint32 len;
+	sint32 len; // Must be sint32, otherwise it breaks the savegame format
 	if(archive.IsStoring())
 	{
-		len = strlen(m_name) + 1;
+		len = static_cast<sint32>(strlen(m_name) + 1);
 		archive << len;
 		archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
 
@@ -2296,8 +2296,8 @@ double CityData::ProjectMilitaryContribution()
 sint32 CityData::ComputeMaterialsPaid(double percent_terrain)
 {
 	return(m_contribute_materials ? (static_cast<sint32>(
-		(static_cast<double>(m_net_production) *
-		percent_terrain) + 0.000001)) : 0);
+	              (static_cast<double>(m_net_production) *
+	               percent_terrain) + 0.000001)) : 0);
 }
 
 void CityData::PayFederalProduction (double percent_military,
@@ -2335,8 +2335,10 @@ void CityData::PayFederalProductionAbs (sint32 mil_paid,
 {
 
 #ifdef _DEBUG
-	if(0 < mil_paid) {
-		if (!m_contribute_military) {
+	if(0 < mil_paid)
+	{
+		if (!m_contribute_military)
+		{
 			Assert(0);
 			return;
 		}
