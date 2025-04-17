@@ -10,6 +10,10 @@ Please try to comply with following guidelines:
 
 If you want to add your changes to the repository, please create a pull request. You can already create a pull request, when you are still working on it. In this case, start the title of your pull request with WIP (Work In progress) and remove the WIP lable when you think your done. This way, people know that there is somebody working on that issue. And they can also give you some tips. However, we work on this project in our free time and people might only be available on the weekend. Therefore, when a pull requests reaches non WIP status, the maintainer will give at least 2 weeks time before merging, so that everybody has a hance to look it. This time can be shortened before an upcoming release, to incooperate last minute bug fixes and readme updates.
 
+## Naming style
+
+Names of functions, structs, classes, and variables are camel cased. Variables start with a small letter. Member variables are prefixed with m_, static member variables are prefixed with s_, and global variables are prefixed with g_, local variables have no prefix. Enums are all caps. This is inherited from Activion for the main project and the other CTP2 related projects.
+
 ## Tabs and Spaces
 
 Most employees at Activision used tabs for indention and a tab was 4 space wide. And so, most of the code is written in this way in the CTP2 project, the map plugins and Anet library. Code from 3rd party libraries and automatically generated files may not adhere to this. Please, set up your editor accordingly and enable display of white space.
