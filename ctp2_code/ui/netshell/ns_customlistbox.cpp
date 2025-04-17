@@ -696,7 +696,7 @@ ns_HPlayerItem *ns_GPlayerListBox::FindHPlayerItem( NETFunc::Player *player )
 
 	ListPos position =
 		m_hplayerlistbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		item = (ns_HPlayerItem *)
 			m_hplayerlistbox->GetPane()->ChildList()->GetNext( position );
@@ -764,7 +764,7 @@ void ns_GPlayerListBox::UpdateHPlayerItem(
 template<>
 AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 	ns_Item<NETFunc::Player, ns_Player> *item,
-	sint32 i )
+	size_t i )
 {
 
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
@@ -958,7 +958,7 @@ ns_HPlayerItem *ns_AIPlayerListBox::FindHPlayerItem( nf_AIPlayer *player )
 
 	ListPos position =
 		m_hplayerlistbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		item = (ns_HPlayerItem *)
 			m_hplayerlistbox->GetPane()->ChildList()->GetNext( position );

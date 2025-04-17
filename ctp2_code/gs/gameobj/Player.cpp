@@ -861,7 +861,7 @@ void Player::Serialize(CivArchive &archive)
 
 	if(archive.IsStoring()) {
 		sint32 l;
-		l = m_email ? strlen(m_email) : 0;
+		l = m_email ? static_cast<sint32>(strlen(m_email)) : 0;
 		archive << l;
 		if(m_email) {
 			archive.Store((uint8*)m_email, l);
@@ -2828,7 +2828,7 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 
 	for(size_t t = 0; t < max_eval; ++t)
 	{
-		sint32 rand = g_rand->Next(max_eval - t);
+		sint32 rand = g_rand->Next(static_cast<sint32>(max_eval - t));
 		city.m_id = cityDistQueue[rand].m_city;
 
 		if(city.m_id != (0))

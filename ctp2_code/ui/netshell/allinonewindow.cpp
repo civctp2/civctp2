@@ -769,8 +769,8 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 
 AllinoneWindow::~AllinoneWindow()
 {
-    allocated::clear(g_rulesWindow);
-    allocated::clear(g_exclusionsWindow);
+	allocated::clear(g_rulesWindow);
+	allocated::clear(g_exclusionsWindow);
 
 	sint32 numActions = sizeof( m_dbActionArray ) / sizeof( aui_Action *);
 	sint32 i;
@@ -791,11 +791,11 @@ AllinoneWindow::~AllinoneWindow()
 		listbox->RemoveItem( item->Id() );
 
 		ListPos pos = item->ChildList()->GetHeadPosition();
-		for ( sint32 j = item->ChildList()->L(); j; j-- )
+		for ( size_t j = item->ChildList()->L(); j; j-- )
 		{
 			aui_Item *subitem = (aui_Item *)item->ChildList()->GetNext( pos );
 
-            delete subitem->GetAction();
+			delete subitem->GetAction();
 			delete subitem;
 		}
 
@@ -811,7 +811,7 @@ AllinoneWindow::~AllinoneWindow()
 		listbox->RemoveItem( item->Id() );
 
 		ListPos pos = item->ChildList()->GetHeadPosition();
-		for ( sint32 j = item->ChildList()->L(); j; j-- )
+		for ( size_t j = item->ChildList()->L(); j; j-- )
 		{
 			aui_Item *subitem = (aui_Item *)item->ChildList()->GetNext( pos );
 
@@ -831,7 +831,7 @@ AllinoneWindow::~AllinoneWindow()
 		listbox->RemoveItem( item->Id() );
 
 		ListPos pos = item->ChildList()->GetHeadPosition();
-		for ( sint32 j = item->ChildList()->L(); j; j-- )
+		for ( size_t j = item->ChildList()->L(); j; j-- )
 		{
 			aui_Item *subitem = (aui_Item *)item->ChildList()->GetNext( pos );
 
@@ -862,10 +862,10 @@ AllinoneWindow::~AllinoneWindow()
 	custommapscreen_Cleanup();
 	spnewgamediffscreen_Cleanup();
 
-    if (this == g_allinoneWindow)
-    {
-	    g_allinoneWindow = NULL;
-    }
+	if (this == g_allinoneWindow)
+	{
+		g_allinoneWindow = NULL;
+	}
 }
 
 
@@ -883,7 +883,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 {
 	if ( m_createdExclusions )
 	{
-		sint32			i;
+		size_t			i;
 		aui_ListBox *	listbox = (aui_ListBox *)m_controls[CONTROL_UNITSLISTBOX];
 
 		for (i = listbox->NumItems(); i; i-- )
@@ -892,7 +892,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			listbox->RemoveItem( item->Id() );
 
 			ListPos pos = item->ChildList()->GetHeadPosition();
-			for ( sint32 j = item->ChildList()->L(); j; j-- )
+			for ( size_t j = item->ChildList()->L(); j; j-- )
 			{
 				aui_Item *subitem =
 					(aui_Item *)item->ChildList()->GetNext( pos );
@@ -913,7 +913,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			listbox->RemoveItem( item->Id() );
 
 			ListPos pos = item->ChildList()->GetHeadPosition();
-			for ( sint32 j = item->ChildList()->L(); j; j-- )
+			for ( size_t j = item->ChildList()->L(); j; j-- )
 			{
 				aui_Item *subitem =
 					(aui_Item *)item->ChildList()->GetNext( pos );
@@ -934,7 +934,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			listbox->RemoveItem( item->Id() );
 
 			ListPos pos = item->ChildList()->GetHeadPosition();
-			for ( sint32 j = item->ChildList()->L(); j; j-- )
+			for ( size_t j = item->ChildList()->L(); j; j-- )
 			{
 				aui_Item *subitem =
 					(aui_Item *)item->ChildList()->GetNext( pos );
@@ -1019,7 +1019,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	unitList.GetAt( pos )->AddChild( item );
 	pos = unitList.GetHeadPosition();
-	for ( i = unitList.L(); i; i-- )
+	for ( size_t j = unitList.L(); j; j-- )
 		listbox->AddItem( (aui_Item *)unitList.GetNext( pos ) );
 
 
@@ -1077,7 +1077,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	improvementList.GetAt( pos )->AddChild( item );
 	pos = improvementList.GetHeadPosition();
-	for ( i = improvementList.L(); i; i-- )
+	for ( size_t j = improvementList.L(); j; j-- )
 		listbox->AddItem( (aui_Item *)improvementList.GetNext( pos ) );
 
 
@@ -1135,7 +1135,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	wonderList.GetAt( pos )->AddChild( item );
 	pos = wonderList.GetHeadPosition();
-	for ( i = wonderList.L(); i; i-- )
+	for ( size_t j = wonderList.L(); j; j-- )
 		listbox->AddItem( (aui_Item *)wonderList.GetNext( pos ) );
 
 	m_createdExclusions = true;
@@ -1156,7 +1156,7 @@ void AllinoneWindow::SetMode( Mode m )
 {
 
 	aui_Control *pane;
-	sint32 i;
+	size_t i;
 	ListPos pos;
 
 
@@ -1297,7 +1297,7 @@ ns_HPlayerItem *AllinoneWindow::GetHPlayerFromId( dpid_t id )
 		m_controls[ CONTROL_HPLAYERSLISTBOX ];
 
 	ListPos pos = hplistbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = hplistbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = hplistbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		ns_HPlayerItem *hplayer = (ns_HPlayerItem *)hplistbox->GetPane()->
 			ChildList()->GetNext( pos );
@@ -1317,7 +1317,7 @@ NETFunc::Player *AllinoneWindow::GetPlayerFromKey( uint16 key )
 		m_controls[ CONTROL_GPLAYERSLISTBOX ];
 
 	ListPos pos = listbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = listbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = listbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		NETFunc::Player *player = (NETFunc::Player *)
 			((ns_Item<NETFunc::Player, ns_Player> *)
@@ -1338,7 +1338,7 @@ nf_AIPlayer *AllinoneWindow::GetAIPlayerFromKey( uint16 key )
 		m_controls[ CONTROL_AIPLAYERSLISTBOX ];
 
 	ListPos pos = listbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = listbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = listbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		nf_AIPlayer *player = (nf_AIPlayer *)
 			((ns_Item<nf_AIPlayer, ns_AIPlayer> *)
@@ -2205,7 +2205,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		*(NETFunc::Session *)&g_gamesetup = *(NETFunc::Session *)&g_netfunc->gameSetup;
 		AllinoneWindow_SetupGameForLaunch();
 
-		for ( sint32 child = g_ui->ChildList()->L(); child; child-- )
+		for ( size_t child = g_ui->ChildList()->L(); child; child-- )
 			g_ui->RemoveChild( g_ui->ChildList()->GetHead()->Id() );
 		g_netshell->Leave(k_NS_FLAGS_LAUNCH | k_NS_FLAGS_DESTROYNETSHELL, TRUE);
 	}
@@ -2709,7 +2709,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		*(NETFunc::Session *)&g_gamesetup = *(NETFunc::Session *)&g_netfunc->gameSetup;
 		AllinoneWindow_SetupGameForLaunch();
 
-		for ( sint32 child = g_ui->ChildList()->L(); child; child-- )
+		for ( size_t child = g_ui->ChildList()->L(); child; child-- )
 			g_ui->RemoveChild( g_ui->ChildList()->GetHead()->Id() );
 		g_netshell->Leave(k_NS_FLAGS_LAUNCH | k_NS_FLAGS_DESTROYNETSHELL, TRUE);
 	}
@@ -3115,7 +3115,7 @@ void AllinoneWindow::UpdateAIPlayerSetup( nf_AIPlayer *aiplayer )
 
 void AllinoneWindow::ReallyUpdateAIPlayerSetup( void )
 {
-	for ( sint32 i = m_aiplayerList->L(); i; i-- )
+	for ( size_t i = m_aiplayerList->L(); i; i-- )
 	{
 		nf_AIPlayer *aiplayer = m_aiplayerList->RemoveHead();
 		aiplayer->Pack();
@@ -3139,7 +3139,6 @@ void AllinoneWindow::DeleteAIPlayer( nf_AIPlayer *player )
 
 sint32 AllinoneWindow::CurNumHumanPlayers( void )
 {
-
 	return g_netfunc->players.size();
 }
 
@@ -3337,9 +3336,9 @@ void AllinoneWindow::PlayersListBoxAction::Execute(
 		FindControl(AllinoneWindow::CONTROL_CHATBOX);
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	sint32 i;
+	size_t i;
 	for ( i = justDeselectedList.L(); i; i-- )
-    {
+	{
 		sint32 index = justDeselectedList.GetNext( position );
 		ns_HPlayerItem *item = (ns_HPlayerItem *)listbox->GetItemByIndex(index);
 		if ( !item->IsAI() )
@@ -3354,7 +3353,7 @@ void AllinoneWindow::PlayersListBoxAction::Execute(
 
 	position = justSelectedList.GetHeadPosition();
 	for ( i = justSelectedList.L(); i; i-- )
-    {
+	{
 		sint32 index = justSelectedList.GetNext( position );
 		ns_HPlayerItem *item = (ns_HPlayerItem *)listbox->GetItemByIndex(index);
 		if (item->IsAI())
@@ -3369,7 +3368,7 @@ void AllinoneWindow::PlayersListBoxAction::Execute(
 	}
 
 	if (!chatbox->GetPlayer() || chatbox->GetPlayer()->IsMe())
-    {
+	{
 		aui_Switch * s = (aui_Switch *) w->FindControl( w->CONTROL_PPTSWITCH );
 		s->SetState(k_PPT_PUBLIC);
 	}
@@ -4173,7 +4172,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			strcat( moreinfo, ", " );
 		}
 	}
-	sint32 len = strlen( moreinfo );
+	size_t len = strlen( moreinfo );
 	if ( len > 2 )
 	{
 		static ns_String excludedUnitInfo( "strings.excludedunitinfo" );

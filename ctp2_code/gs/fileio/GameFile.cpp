@@ -207,7 +207,7 @@ static uint32 CompressData(uint8 *inbuf, size_t insize,
 
 	*outbuf = new uint8[tsize];
 
-	int err = compress2(*outbuf, &tsize, inbuf, insize, Z_DEFAULT_COMPRESSION);
+	int err = compress2(*outbuf, &tsize, inbuf, static_cast<uLong>(insize), Z_DEFAULT_COMPRESSION);
 	*outsize = tsize;
 
 	return (err == Z_OK);
@@ -425,7 +425,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 
 	MBCHAR	sHeader[_MAX_PATH];
 	strcpy(sHeader, k_GAME_MAGIC_VALUE);
-	uint32 n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpSave);
+	size_t n = c3files_fwrite(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpSave);
 	if (n!=sizeof(k_GAME_MAGIC_VALUE))
 	{
 		c3files_fclose(fpSave);
@@ -539,7 +539,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 	g_theProgressWindow->StartCountingTo( 20 );
 
 	MBCHAR sHeader[_MAX_PATH];
-	uint32 n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpLoad);
+	size_t n = c3files_fread(sHeader, sizeof(uint8), sizeof(k_GAME_MAGIC_VALUE), fpLoad);
 	Assert(n==sizeof(k_GAME_MAGIC_VALUE));
 	if (n!=sizeof(k_GAME_MAGIC_VALUE))
 	{
@@ -860,9 +860,7 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 {
-	sint32		n;
-
-	n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
+	size_t n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)
 	{
 		return false;
@@ -1092,7 +1090,7 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 {
 
-	sint32 n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
+	size_t n = c3files_fread(info->gameName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)
 	{
 		return false;
@@ -1259,9 +1257,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	MBCHAR		*functionName = "GameFile::SaveExtendedGameInfo";
 	MBCHAR		*errorString = "Unable to write save file.";
 
-	sint32		n;
-
-	n = c3files_fwrite(info->gameName, sizeof(MBCHAR), _MAX_PATH, saveFile);
+	size_t n = c3files_fwrite(info->gameName, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)
 	{
 		c3errors_FatalDialog(functionName, errorString);
@@ -2167,9 +2163,7 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 
 bool GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 {
-	sint32		n;
-
-	n = c3files_fread(info->gameMapName, sizeof(uint8), _MAX_PATH, saveFile);
+	size_t n = c3files_fread(info->gameMapName, sizeof(uint8), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)
 	{
 		c3files_fclose(saveFile);
@@ -2216,9 +2210,7 @@ void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 	MBCHAR const functionName[] = "GameMapFile::SaveExtendedGameMapInfo";
 	MBCHAR const errorString[]  = "Unable to write savemap file.";
 
-	sint32		n;
-
-	n = c3files_fwrite(info->gameMapName, sizeof(MBCHAR), _MAX_PATH, saveFile);
+	size_t n = c3files_fwrite(info->gameMapName, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)
 	{
 		c3errors_FatalDialog(functionName, errorString);
@@ -2277,7 +2269,7 @@ bool GameMapFile::ValidateGameMapFile(MBCHAR const * path, SaveMapInfo *info)
 		return false;
 
 	MBCHAR  header[_MAX_PATH];
-	sint32	n = c3files_fread(header, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), saveFile);
+	size_t  n = c3files_fread(header, sizeof(uint8), sizeof(k_GAMEMAP_MAGIC_VALUE), saveFile);
 	if (n!=sizeof(k_GAMEMAP_MAGIC_VALUE)) {
 		c3files_fclose(saveFile);
 		return false;
