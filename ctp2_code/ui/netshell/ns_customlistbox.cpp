@@ -161,12 +161,12 @@ ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 EmailTransport::EmailTransport()
 {
 	ns_String s( "strings.email" );
-	strcpy( description.name, s.GetString() );
+	strcpy( m_description.name, s.GetString() );
 }
 HotseatTransport::HotseatTransport()
 {
 	ns_String s( "strings.hotseat" );
-	strcpy( description.name, s.GetString() );
+	strcpy( m_description.name, s.GetString() );
 }
 
 ns_TransportListBox::ns_TransportListBox (
@@ -178,7 +178,7 @@ ns_TransportListBox::ns_TransportListBox (
 	retval, id, ldlBlock, ActionFunc, cookie )
 {
 
-	NETFunc::TransportList *l = &(g_netfunc->transportList);
+	NETFunc::TransportList *l = &(g_netfunc->m_transportList);
 	NETFunc::TransportList::iterator i;
 	for(i = l->begin(); i != l->end(); i++) {
 
@@ -634,7 +634,7 @@ void ns_GPlayerListBox::Delete( NETFunc::Player *player )
 	{
 		BOOL success = g_allinoneWindow->AssignTribe(
 			0,
-			*(uint16 *)player->GetKey()->buf,
+			*(uint16 *)player->GetKey()->m_buf,
 			FALSE,
 			FALSE,
 			TRUE );
@@ -899,7 +899,7 @@ void ns_AIPlayerListBox::Delete( nf_AIPlayer *player )
 	{
 		BOOL success = g_allinoneWindow->AssignTribe(
 			0,
-			*(uint16 *)player->GetKey()->buf,
+			*(uint16 *)player->GetKey()->m_buf,
 			TRUE,
 			FALSE,
 			TRUE );

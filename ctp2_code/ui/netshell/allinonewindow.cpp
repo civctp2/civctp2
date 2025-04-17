@@ -1324,7 +1324,7 @@ NETFunc::Player *AllinoneWindow::GetPlayerFromKey( uint16 key )
 			 listbox->GetPane()->ChildList()->GetNext( pos ))->
 			GetNetShellObject()->GetNETFuncObject();
 
-		if ( *(uint16 *)player->GetKey()->buf == key )
+		if ( *(uint16 *)player->GetKey()->m_buf == key )
 			return player;
 	}
 
@@ -1345,7 +1345,7 @@ nf_AIPlayer *AllinoneWindow::GetAIPlayerFromKey( uint16 key )
 			 listbox->GetPane()->ChildList()->GetNext( pos ))->
 			GetNetShellObject()->GetNETFuncObject();
 
-		if ( *(uint16 *)player->GetKey()->buf == key )
+		if ( *(uint16 *)player->GetKey()->m_buf == key )
 			return player;
 	}
 
@@ -1602,7 +1602,7 @@ BOOL AllinoneWindow::AssignTribe(
 		if ( !isAI )
 		{
 
-			if ( *(uint16 *)g_playersetup.GetKey()->buf == key )
+			if ( *(uint16 *)g_playersetup.GetKey()->m_buf == key )
 			{
 				g_playersetup.SetTribe( index );
 				UpdatePlayerSetup();
@@ -1920,7 +1920,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 				BOOL success = AssignTribe(
 					tribeToGet,
-					*(uint16 *)aiplayer.GetKey()->buf,
+					*(uint16 *)aiplayer.GetKey()->m_buf,
 					TRUE,
 					isFemale,
 					FALSE );
@@ -1934,7 +1934,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 
 				BOOL success = AssignTribe(
 					0,
-					*(uint16 *)aiplayer.GetKey()->buf,
+					*(uint16 *)aiplayer.GetKey()->m_buf,
 					TRUE,
 					FALSE,
 					TRUE );
@@ -1946,7 +1946,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 				Assert( hplayer != NULL );
 				if ( hplayer )
 				{
-					uint16 key = *(uint16 *)hplayer->GetPlayer()->GetKey()->buf;
+					uint16 key = *(uint16 *)hplayer->GetPlayer()->GetKey()->m_buf;
 
 					sint32 index = *(sint32 *)m->GetBody();
 
@@ -2130,7 +2130,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 					if(m_civGuids[i].guid == *g_network.GetGuid()) {
 						success = AssignTribe(
 							m_civGuids[i].civIndex + 1,
-							*(uint16 *)g_playersetup.GetKey()->buf,
+							*(uint16 *)g_playersetup.GetKey()->m_buf,
 							FALSE,
 							FALSE,
 							FALSE );
@@ -2177,7 +2177,7 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		{
 			success = AssignTribe(
 				FindTribe( 0, FALSE ),
-				*(uint16 *)g_playersetup.GetKey()->buf,
+				*(uint16 *)g_playersetup.GetKey()->m_buf,
 				FALSE,
 				FALSE,
 				FALSE );
@@ -2690,11 +2690,11 @@ AUI_ERRCODE AllinoneWindow::Idle( void )
 		default: Assert( FALSE ); break;
 		}
 
-		if ( !FindTribe( *(uint16 *)g_playersetup.GetKey()->buf, FALSE ) )
+		if ( !FindTribe( *(uint16 *)g_playersetup.GetKey()->m_buf, FALSE ) )
 		{
 			BOOL success = AssignTribe(
 				FindTribe( 0, FALSE ),
-				*(uint16 *)g_playersetup.GetKey()->buf,
+				*(uint16 *)g_playersetup.GetKey()->m_buf,
 				FALSE,
 				FALSE,
 				FALSE );
@@ -2839,7 +2839,7 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 		for ( sint32 i = 0; i < k_NS_MAX_PLAYERS; i++ )
 		{
 			if ( !tribeSlots[ i ].isAI )
-			if ( tribeSlots[ i ].key == *(uint16 *)g_playersetup.GetKey()->buf )
+			if ( tribeSlots[ i ].key == *(uint16 *)g_playersetup.GetKey()->m_buf )
 			{
 				if ( g_playersetup.GetTribe() != tribeSlots[ i ].tribe )
 				{
@@ -3227,12 +3227,12 @@ void AllinoneWindow::AddAIPlayer( sint32 curCount )
 	{
 		firstTime = false;
 		memset( &key, 0, sizeof( NETFunc::KeyStruct ) );
-		key.len = 1;
+		key.m_len = 1;
 	}
 
-	if( key.buf[ key.len - 1 ] == (char) 255u )
-		key.len++;
-	key.buf[ key.len - 1 ]++;
+	if( key.m_buf[ key.m_len - 1 ] == (char) 255u )
+		key.m_len++;
+	key.m_buf[ key.m_len - 1 ]++;
 
 	nf_AIPlayer *aiplayer = new nf_AIPlayer;
 	aiplayer->SetKey( &key );
@@ -4065,7 +4065,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 
 			w->AssignTribe(
 				0,
-				*(uint16 *)g_netfunc->GetPlayer()->GetKey()->buf,
+				*(uint16 *)g_netfunc->GetPlayer()->GetKey()->m_buf,
 				FALSE,
 				FALSE,
 				TRUE );
@@ -4081,7 +4081,7 @@ void AllinoneWindow::CancelButtonAction::Execute(
 				{
 					w->AssignTribe(
 						0,
-						*(uint16 *)aiplayer->GetKey()->buf,
+						*(uint16 *)aiplayer->GetKey()->m_buf,
 						TRUE,
 						FALSE,
 						TRUE );
@@ -5322,8 +5322,8 @@ void AllinoneTribeCallback(
 	if ( !item->GetPlayer() && !item->GetAIPlayer() ) return;
 
 	uint16 key = item->IsAI() ?
-		key = *(uint16 *)item->GetAIPlayer()->GetKey()->buf :
-		key = *(uint16 *)item->GetPlayer()->GetKey()->buf;
+		key = *(uint16 *)item->GetAIPlayer()->GetKey()->m_buf :
+		key = *(uint16 *)item->GetPlayer()->GetKey()->m_buf;
 
 
 	if ( g_netfunc->IsHost() && index == 0 )

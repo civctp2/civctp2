@@ -54,7 +54,7 @@ nf_PlayerSetup::nf_PlayerSetup(void):NETFunc::PlayerSetup() {
 }
 
 void nf_PlayerSetup::SetKey(NETFunc::KeyStruct *k) {
-	memcpy(&key, k, sizeof(NETFunc::KeyStruct));
+	memcpy(&m_key, k, sizeof(NETFunc::KeyStruct));
 }
 
 void nf_PlayerSetup::Pack()

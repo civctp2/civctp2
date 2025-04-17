@@ -586,8 +586,8 @@ CivApp::CivApp()
 void CivApp::InitializeAppUI(void)
 {
 	// Set CTP2 specific data for the Anet library (multiplayer only)
-	NETFunc::GameType	= GAMEID;				// CTP2 game id for Anet
-	NETFunc::DllPath	= "dll" FILE_SEP "net";	// Anet DLLs are in dll\net (relative to executable)
+	NETFunc::s_GameType	= GAMEID;				// CTP2 game id for Anet
+	NETFunc::s_DllPath	= "dll" FILE_SEP "net";	// Anet DLLs are in dll\net (relative to executable)
 
 	if (g_useIntroMovie && !g_no_shell)
 	{

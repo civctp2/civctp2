@@ -526,7 +526,7 @@ ActivNetIO::Idle()
 			if(buf[0] == nf_PACKET_INITIALBYTE || buf[0] == dp_PACKET_INITIALBYTE) {
 				dp_playerId_t pd;
 				pd.id = m_pid;
-				NETFunc::player.Set(&pd);
+				NETFunc::s_player.Set(&pd);
 				NETFunc::Message msg(buf, size, idFrom, false);
 				if(m_isHost) {
 					g_gamesetup.Handle(m_dp, &msg);

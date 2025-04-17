@@ -121,7 +121,7 @@ void nf_GameSetup::Init( void ) {
 }
 
 void nf_GameSetup::SetKey(NETFunc::KeyStruct *k) {
-	memcpy(&key, k, sizeof(NETFunc::KeyStruct));
+	memcpy(&m_key, k, sizeof(NETFunc::KeyStruct));
 }
 
 void nf_GameSetup::Pack()
@@ -183,7 +183,7 @@ void nf_GameSetup::Unpack()
 {
 	GameSetup::Unpack();
 
-	if(size < 1)
+	if(m_size < 1)
 		return;
 
 	Pop( m_playstyle );

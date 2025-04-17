@@ -498,13 +498,13 @@ AUI_ERRCODE LobbyWindow::Idle( void )
 
 		((aui_Static *)m_controls[CONTROL_CURRENTLOBBYTEXTFIELD])->
 			SetText(g_netfunc->GetSession()->GetName());
-		if ( strlen( NETFunc::servername ) )
+		if ( strlen( NETFunc::s_servername ) )
 		{
 
 			aui_Control *item = m_controls[ CONTROL_CURRENTSERVERTEXTFIELD ];
 
 			MBCHAR servern[ 100 + 1 ];
-			strncpy( servern, NETFunc::servername, 100 );
+			strncpy( servern, NETFunc::s_servername, 100 );
 
 			if ( !item->GetTextFont() ) item->TextReloadFont();
 
