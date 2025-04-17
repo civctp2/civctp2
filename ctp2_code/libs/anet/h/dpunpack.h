@@ -23,6 +23,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Use this at the end of .h files or after defining network structures.
 
  $Log: dpunpack.h $
+ Revision 1.3  2025/04/07 23:51:34  Martin Gühmann
+ Make unpacking work in Visual Studio x64 builds
  Revision 1.2  1997/06/01 00:00:31  dkegel
  Fixed typo in Mac pragma
  Revision 1.1  1997/05/31 22:40:56  dkegel
@@ -37,8 +39,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma options align=reset
 
-#elif defined(_M_IX86)      /* Visual C */
+_MSC_VER
+#elif defined(_MSC_VER)      /* Visual C */
 
 #pragma pack(pop)
+
+#else
+
+#error "Unpacking not defined for this compiler"
 
 #endif

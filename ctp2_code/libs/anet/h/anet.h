@@ -156,8 +156,10 @@ extern "C" {
 #pragma pack(1)
 #elif defined(__MWERKS__)   /* Codewarrior */
 #pragma options align=packed
-#elif defined(_M_IX86)      /* Visual C */
+#elif defined(_MSC_VER)      /* Visual C */
 #pragma pack(push, 1)
+#else
+#error "Packing not defined for this compiler"
 #endif
 
 /*  Things that should be variable, but are fixed for now. */
@@ -723,8 +725,10 @@ typedef struct {
 #pragma pack()
 #elif defined(__MWERKS__)   /* Codewarrior */
 #pragma options align=reset
-#elif defined(_M_IX86)      /* Visual C */
+#elif defined(_MSC_VER)     /* Visual C */
 #pragma pack(pop)
+#else
+#error "Unpacking not defined for this compiler"
 #endif
 
 #endif
