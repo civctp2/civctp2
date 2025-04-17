@@ -51,7 +51,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #else
 
-#error "Packing not defined for this compiler"
+// Visual Sudio should just ignore this, but it doesn't for wipx, winits, and wudplan. Anet is fine.
+//#error "Packing not defined for this compiler"
 
 #endif
 

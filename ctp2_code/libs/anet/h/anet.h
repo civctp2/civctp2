@@ -160,6 +160,9 @@ extern "C" {
 #pragma pack(push, 1)
 #else
 #error "Packing not defined for this compiler"
+
+// There more in dpunpack.h, dppackn.h, and dpack1.h.
+// Visual Sudio should just ignore these there, but it doesn't for wipx, winits, and wudplan. Anet here is fine.
 #endif
 
 /*  Things that should be variable, but are fixed for now. */

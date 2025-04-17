@@ -46,6 +46,7 @@ _MSC_VER
 
 #else
 
-#error "Unpacking not defined for this compiler"
+// Visual Sudio should just ignore this, but it doesn't for wipx, winits, and wudplan. Anet is fine.
+//#error "Packing not defined for this compiler"
 
 #endif
