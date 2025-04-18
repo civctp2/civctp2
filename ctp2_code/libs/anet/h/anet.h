@@ -156,7 +156,9 @@ extern "C" {
 #pragma pack(1)
 #elif defined(__MWERKS__)   /* Codewarrior */
 #pragma options align=packed
-#elif defined(_MSC_VER)      /* Visual C */
+#elif defined(__GNUC__)     /* GNU C */
+#pragma pack(push, 1)
+#elif defined(_MSC_VER)     /* Visual C */
 #pragma pack(push, 1)
 #else
 #error "Packing not defined for this compiler"
@@ -728,6 +730,8 @@ typedef struct {
 #pragma pack()
 #elif defined(__MWERKS__)   /* Codewarrior */
 #pragma options align=reset
+#elif defined(__GNUC__)     /* GNU C */
+#pragma pack(pop)
 #elif defined(_MSC_VER)     /* Visual C */
 #pragma pack(pop)
 #else

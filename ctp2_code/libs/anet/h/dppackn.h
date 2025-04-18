@@ -41,7 +41,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma options align=native
 
-#elif defined(_MSC_VER)      /* Visual C */
+#elif defined(__GNUC__)     /* GNU C */
+
+#pragma pack(push)
+
+#elif defined(_MSC_VER)     /* Visual C*/
 
 #pragma pack(push)
 
