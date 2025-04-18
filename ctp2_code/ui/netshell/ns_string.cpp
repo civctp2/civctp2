@@ -13,7 +13,7 @@ ns_String::ns_String( char *ldlBlock )
 :
     m_string    (NULL)
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return;
 
@@ -28,7 +28,7 @@ ns_String::ns_String( char *ldlBlock )
 	}
 
 	m_string = new char[strlen(string) + 1];
-    strcpy(m_string, string);
+	strcpy(m_string, string);
 }
 
 ns_String::~ns_String( void )
