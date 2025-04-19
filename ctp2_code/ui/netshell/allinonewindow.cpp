@@ -738,6 +738,12 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 
 AllinoneWindow::~AllinoneWindow()
 {
+	if (s_dbw)
+	{
+		DialogBoxWindow::PopDown(s_dbw);
+		s_dbw = NULL;
+	}
+
 	allocated::clear(g_rulesWindow);
 	allocated::clear(g_exclusionsWindow);
 
