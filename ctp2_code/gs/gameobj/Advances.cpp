@@ -93,7 +93,7 @@ namespace
 Advances::Advances(size_t a_Count)
 :
     m_owner                                 (PLAYER_UNASSIGNED),
-    m_size                                  (a_Count),
+    m_size                                  (static_cast<sint32>(a_Count)),
     m_researching                           (-1),
     m_age                                   (0),
     m_theLastAdvanceEnabledThisManyAdvances (0),

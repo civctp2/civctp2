@@ -307,7 +307,7 @@ Network::Network() :
 			fclose(guidFile);
 		}
 	} else {
-		sint32 r = fread(&m_guid, 1, sizeof(m_guid), guidFile);
+		size_t r = fread(&m_guid, 1, sizeof(m_guid), guidFile);
 		Assert(r == sizeof(m_guid));
 		fclose(guidFile);
 	}

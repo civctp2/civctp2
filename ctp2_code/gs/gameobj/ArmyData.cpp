@@ -505,7 +505,7 @@ void ArmyData::Serialize(CivArchive &archive)
             walk.Next();
         }
 
-        sint32 len = m_name ? strlen(m_name) : 0;
+        sint32 len = m_name ? static_cast<sint32>(strlen(m_name)) : 0;
         archive << len;
         if(len > 0) {
             archive.Store((uint8*)m_name, len);

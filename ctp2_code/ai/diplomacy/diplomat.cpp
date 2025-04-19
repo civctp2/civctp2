@@ -4174,7 +4174,6 @@ bool Diplomat::ComputeEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai
 		{
 			if (!DesireWarWith(foreignerId))
 			{
-
 				if (AgreementMatrix::s_agreements.HasAgreement(m_playerId,
 					foreignerId,
 					PROPOSAL_TREATY_CEASEFIRE))
