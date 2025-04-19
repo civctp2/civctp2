@@ -83,7 +83,7 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 	if (aui_Control * bg = g_netshell->m_bg)
 	{
 		aui_Image * image    = g_ui->LoadImage(bg->GetImage()->GetFilename());
-		aui_Image *	oldImage = g_ui->SetBackgroundImage
+		aui_Image * oldImage = g_ui->SetBackgroundImage
 		    (image,
 		     (g_ui->Width() - image->TheSurface()->Width()) / 2,
 		     (g_ui->Height() - image->TheSurface()->Height()) / 2

@@ -18,8 +18,10 @@ sint32 aui_SDL::m_SDLRefCount = 0;
 //                                     input language or keyboard layout change.
 //                                */
 
-int FilterEvents(void* userData, SDL_Event *event) {
-	switch(event->type) {
+int FilterEvents(void* userData, SDL_Event *event)
+{
+	switch(event->type)
+	{
 		// Quit event
 		case SDL_QUIT:
 		// Keyboard events
