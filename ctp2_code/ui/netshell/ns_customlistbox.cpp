@@ -798,7 +798,7 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 		case ns_Accessor<NETFunc::Player>::INT:
 			item->SetTextBold(netShellObject->IsMine());
 			MBCHAR text[40];
-			sprintf(text, "%d", reinterpret_cast<sint32 const *>(dataPtr));
+			sprintf(text, "%d", *reinterpret_cast<sint32 const *>(dataPtr));
 			return item->SetText(text);
 /*			return item->SetText
 				(itoa(* reinterpret_cast<sint32 const *>(dataPtr), scratch, 10));*/
