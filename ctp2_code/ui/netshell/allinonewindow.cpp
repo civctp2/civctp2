@@ -2907,6 +2907,7 @@ void AllinoneWindow::AddAIPlayer( sint32 curCount )
 	aiplayer->Pack();
 
 	g_netfunc->InsertAIPlayer( aiplayer );
+	delete aiplayer;
 
 	m_shouldAddAIPlayer--;
 }
@@ -3234,7 +3235,7 @@ void AllinoneWindow::OKButtonAction::Execute(
 #endif // USE_SDL
 	if (g_netfunc->IsHost() && !legalGame )
 	{
-		static ns_String donthavecd( "strings.system.donthavecd" );
+		ns_String donthavecd( "strings.system.donthavecd" );
 		g_netfunc->PushChatMessage( donthavecd.GetString() );
 		return;
 	}
@@ -3369,7 +3370,7 @@ void AllinoneWindow::OKButtonAction::Execute(
 	}
 #endif
 
-	static ns_String readytolaunch( "strings.system.readytolaunch" );
+	ns_String readytolaunch( "strings.system.readytolaunch" );
 	g_netfunc->PushChatMessage( readytolaunch.GetString() );
 }
 
@@ -3604,7 +3605,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 
 	memset( info, 0, sizeof( info ) );
 
-	static ns_String customRules( "strings.customrules" );
+	ns_String customRules( "strings.customrules" );
 	strncat( info, customRules.GetString(), biglen );
 	strncat( info, "\n", biglen );
 
@@ -3621,7 +3622,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	size_t len = strlen( moreinfo );
 	if ( len > 2 )
 	{
-		static ns_String excludedUnitInfo( "strings.excludedunitinfo" );
+		ns_String excludedUnitInfo( "strings.excludedunitinfo" );
 
 		strncpy( temp, excludedUnitInfo.GetString(), biglen );
 
@@ -3645,7 +3646,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	len = strlen( moreinfo );
 	if ( len > 2 )
 	{
-		static ns_String excludedImprovementInfo(
+		ns_String excludedImprovementInfo(
 			"strings.excludedimprovementinfo" );
 
 		strncpy( temp, excludedImprovementInfo.GetString(), biglen );
@@ -3670,7 +3671,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	len = strlen( moreinfo );
 	if ( len > 2 )
 	{
-		static ns_String excludedWonderInfo( "strings.excludedwonderinfo" );
+		ns_String excludedWonderInfo( "strings.excludedwonderinfo" );
 
 		strncpy( temp, excludedWonderInfo.GetString(), biglen );
 
@@ -3685,7 +3686,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	aui_Switch *sw = (aui_Switch *)m_controls[ CONTROL_DYNAMICJOINSWITCH ];
 	if ( sw->GetState() )
 	{
-		static ns_String dynamicJoin( "strings.dynamicjoin" );
+		ns_String dynamicJoin( "strings.dynamicjoin" );
 		strncat( info, dynamicJoin.GetString(), biglen );
 		strncat( info, "\n", biglen );
 		displayedSomething = true;
@@ -3694,7 +3695,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	sw = (aui_Switch *)m_controls[ CONTROL_HANDICAPPINGSWITCH ];
 	if ( sw->GetState() )
 	{
-		static ns_String handicapping( "strings.handicapping" );
+		ns_String handicapping( "strings.handicapping" );
 		strncat( info, handicapping.GetString(), biglen );
 		strncat( info, "\n", biglen );
 		displayedSomething = true;
@@ -3705,7 +3706,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		if ( r->GetValue() > r->GetMinimum() )
 		{
 			{
-				static ns_String goldInfo( "strings.goldinfo" );
+				ns_String goldInfo( "strings.goldinfo" );
 				sprintf(
 					temp,
 					"%s%d",
@@ -3721,7 +3722,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		if ( r->GetValue() > r->GetMinimum() )
 		{
 			{
-				static ns_String pwInfo( "strings.pwinfo" );
+				ns_String pwInfo( "strings.pwinfo" );
 				sprintf(
 					temp,
 					"%s%d",
@@ -3738,7 +3739,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	sw = (aui_Switch *)m_controls[ CONTROL_BLOODLUSTSWITCH ];
 	if ( sw->GetState() )
 	{
-		static ns_String bloodlust( "strings.bloodlust" );
+		ns_String bloodlust( "strings.bloodlust" );
 		strncat( info, bloodlust.GetString(), biglen );
 		strncat( info, "\n", biglen );
 		displayedSomething = true;
@@ -3747,7 +3748,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	sw = (aui_Switch *)m_controls[ CONTROL_POLLUTIONSWITCH ];
 	if ( !sw->GetState() )
 	{
-		static ns_String pollution( "strings.pollution" );
+		ns_String pollution( "strings.pollution" );
 		strncat( info, pollution.GetString(), biglen );
 		strncat( info, "\n", biglen );
 		displayedSomething = true;
@@ -3757,8 +3758,8 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		displayedSomething = true;
 		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-		static ns_String mapsize( "strings.mapsize" );
-		static aui_StringTable mapsizestrings( &errcode, "strings.mapsizestrings" );
+		ns_String mapsize( "strings.mapsize" );
+		aui_StringTable mapsizestrings( &errcode, "strings.mapsizestrings" );
 		sprintf(
 			temp,
 			"%s: %s\n",
@@ -3766,7 +3767,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			mapsizestrings.GetString( g_gamesetup.GetMapSize() ) );
 		strncat( info, temp, biglen );
 
-		static ns_String worldtype1( "strings.worldtype1" );
+		ns_String worldtype1( "strings.worldtype1" );
 		sprintf(
 			temp,
 			"%s%d\n",
@@ -3774,7 +3775,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_gamesetup.GetWorldType1() );
 		strncat( info, temp, biglen );
 
-		static ns_String worldtype2( "strings.worldtype2" );
+		ns_String worldtype2( "strings.worldtype2" );
 		sprintf(
 			temp,
 			"%s%d\n",
@@ -3782,7 +3783,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_gamesetup.GetWorldType2() );
 		strncat( info, temp, biglen );
 
-		static ns_String worldtype3( "strings.worldtype3" );
+		ns_String worldtype3( "strings.worldtype3" );
 		sprintf(
 			temp,
 			"%s%d\n",
@@ -3790,7 +3791,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_gamesetup.GetWorldType3() );
 		strncat( info, temp, biglen );
 
-		static ns_String worldtype4( "strings.worldtype4" );
+		ns_String worldtype4( "strings.worldtype4" );
 		sprintf(
 			temp,
 			"%s%d\n",
@@ -3798,7 +3799,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_gamesetup.GetWorldType4() );
 		strncat( info, temp, biglen );
 
-		static ns_String worldtype5( "strings.worldtype5" );
+		ns_String worldtype5( "strings.worldtype5" );
 		sprintf(
 			temp,
 			"%s%d\n",
@@ -3806,7 +3807,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_gamesetup.GetWorldType5() );
 		strncat( info, temp, biglen );
 
-		static ns_String worldtype6( "strings.worldtype6" );
+		ns_String worldtype6( "strings.worldtype6" );
 		sprintf(
 			temp,
 			"%s%d\n",
@@ -3814,8 +3815,8 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_gamesetup.GetWorldType6() );
 		strncat( info, temp, biglen );
 
-		static ns_String worldshape( "strings.worldshape" );
-		static aui_StringTable worldshapestrings( &errcode, "strings.worldshapestrings" );
+		ns_String worldshape( "strings.worldshape" );
+		aui_StringTable worldshapestrings( &errcode, "strings.worldshapestrings" );
 		sprintf(
 			temp,
 			"%s: %s\n",
@@ -3823,8 +3824,8 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			worldshapestrings.GetString( g_gamesetup.GetWorldShape() ) );
 		strncat( info, temp, biglen );
 
-		static ns_String difficulty1( "strings.difficulty1" );
-		static aui_StringTable difficulty1strings( &errcode, "strings.difficulty1strings" );
+		ns_String difficulty1( "strings.difficulty1" );
+		aui_StringTable difficulty1strings( &errcode, "strings.difficulty1strings" );
 		sprintf(
 			temp,
 			"%s: %s\n",
@@ -3832,8 +3833,8 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			difficulty1strings.GetString( g_gamesetup.GetDifficulty1() ) );
 		strncat( info, temp, biglen );
 
-		static ns_String difficulty2( "strings.difficulty2" );
-		static aui_StringTable difficulty2strings( &errcode, "strings.difficulty2strings" );
+		ns_String difficulty2( "strings.difficulty2" );
+		aui_StringTable difficulty2strings( &errcode, "strings.difficulty2strings" );
 		sprintf(
 			temp,
 			"%s: %s\n",
@@ -3841,7 +3842,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			difficulty2strings.GetString( g_gamesetup.GetDifficulty2() ) );
 		strncat( info, temp, biglen );
 
-		static ns_String startage( "strings.startage" );
+		ns_String startage( "strings.startage" );
 		sprintf(
 			temp,
 			"%s %s\n",
@@ -3849,7 +3850,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			g_theAgeDB->Get(g_gamesetup.GetStartAge())->GetNameText());
 		strncat( info, temp, biglen );
 
-		static ns_String endage( "strings.endage" );
+		ns_String endage( "strings.endage" );
 
 		sprintf(
 			temp,
@@ -3861,7 +3862,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 
 	if ( !displayedSomething )
 	{
-		static ns_String defaultGameSetup( "strings.defaultgamesetup" );
+		ns_String defaultGameSetup( "strings.defaultgamesetup" );
 		strncat( info, defaultGameSetup.GetString(), biglen );
 		strncat( info, "\n", biglen );
 	}
@@ -3871,7 +3872,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		moreinfo[ len - 2 ] = '\0';
 	}
 
-	static aui_TextBase textStyle( "styles.system", (const MBCHAR *)NULL );
+	aui_TextBase textStyle( "styles.system", (const MBCHAR *)NULL );
 	((ns_ChatBox *)m_controls[ CONTROL_CHATBOX ])->
 		AppendText( info, textStyle.GetTextColor(), FALSE, FALSE );
 }

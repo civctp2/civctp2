@@ -70,12 +70,15 @@ ns_HPlayerItem::ns_HPlayerItem(
 
 ns_HPlayerItem::~ns_HPlayerItem()
 {
-	if (m_civpointsButton)
-		delete m_civpointsButton;
-
-	if (m_pwpointsButton)
-		delete m_pwpointsButton;
-
+//	delete m_launchedItem;
+//	delete m_nameItem;
+//	delete m_pingItem;
+//	delete m_tribeItem;
+	delete m_tribeButton;
+//	delete m_civpointsItem;
+	delete m_civpointsButton;
+//	delete m_pwpointsItem;
+	delete m_pwpointsButton;
 }
 
 AUI_ERRCODE ns_HPlayerItem::InitCommonLdl(
