@@ -332,12 +332,15 @@ AUI_ERRCODE	aui_SDLMouse::BltBackgroundImageToPrimary(aui_Image *image, RECT *im
 	ListPos position = imageAreas->GetHeadPosition();
 	for ( size_t j = imageAreas->L(); j; j-- )
 	{
-		RECT *screenDirtyRect = imageAreas->GetNext(position);
+		RECT*         rectPtr = imageAreas->GetNext(position);
+		RECT  screenDirtyRect = *rectPtr;
+		OffsetRect(&screenDirtyRect, -imageRect->left, -imageRect->top);
+
 		AUI_ERRCODE errcode = g_ui->BltToSecondary(
-			screenDirtyRect->left,
-			screenDirtyRect->top,
+			rectPtr->left,
+			rectPtr->top,
 			image->TheSurface(),
-			screenDirtyRect,
+			&screenDirtyRect,
 			k_AUI_BLITTER_FLAG_COPY);
 
 		Assert(errcode == AUI_ERRCODE_OK);
