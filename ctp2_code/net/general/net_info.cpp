@@ -500,7 +500,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			double s;
 			s = (double)m_data2 / 100000.;
 			Assert(0.0 <= s);
-            Assert(s <= 1.0);
+			Assert(s <= 1.0);
 			if(g_player[m_data])
 				g_player[m_data]->m_tax_rate->SetTaxRates(s, m_data);
 			DPRINTF(k_DBG_NET, ("Set taxes for player %d to %lf\n", m_data, s));
@@ -1623,7 +1623,7 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			}
 			MainControlPanel::SelectedCity();
 			if (static_cast<sint32>(m_data) == g_network.GetPlayerIndex())
-            {
+			{
 				network_VerifyGameData();
 			}
 			break;
@@ -1674,14 +1674,14 @@ NetInfo::Unpacketize(uint16 id, uint8* buf, uint16 size)
 			DPRINTF(k_DBG_NET, ("Server says ungrouping of Army %lx done (owner=%d)\n", m_data, m_data2));
 
 			if (static_cast<PLAYER_INDEX>(m_data2) == g_selected_item->GetVisiblePlayer())
-            {
-			    Army army(m_data);
+			{
+				Army army(m_data);
 				if (army.IsValid())
-                {
+				{
 					ArmyManagerWindow::NotifyRemoteGroupComplete(army);
 				}
-                else
-                {
+				else
+				{
 					ArmyManagerWindow::NotifySelection();
 				}
 			}
