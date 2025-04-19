@@ -45,8 +45,6 @@ public:
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
 	SDL_Surface*    DDS( void ) const { return m_lpdds; }
-	BOOL                            IsDCGot( void ) const { return m_dcIsGot
-; }
 
 	virtual BOOL IsOK( void ) const;
 	virtual AUI_ERRCODE Blank(const uint32 &color);

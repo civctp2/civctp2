@@ -148,10 +148,12 @@ protected:
 	sint32	m_size;
 	uint8	*m_buffer;
 
+#if defined(__AUI_USE_DIRECTX__)
 	HDC		m_hdc;
 	bool	m_dcIsGot;
 	HBITMAP	m_hbitmap;
 	HBITMAP	m_holdbitmap;
+#endif
 
 	AUI_SURFACE_PIXELFORMAT m_pixelFormat;
 	uint32	m_chromaKey;
