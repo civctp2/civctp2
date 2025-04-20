@@ -117,14 +117,6 @@
 #include <stdarg.h>
 #include <time.h>
 
-#if defined(__GNUC__)
-//#define _MAX_PATH PATH_MAX
-// Needs to be 260 otherwise you cannot load savegames from Windows.
-// Maybe this screws up something else.
-#define _MAX_PATH   260 // max. length of full pathname
-
-#endif // __GNUC__
-
 #if defined(__cplusplus)
 #include "c3debug.h"
 #include "c3errors.h"
