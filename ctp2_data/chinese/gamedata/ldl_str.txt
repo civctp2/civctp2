@@ -3113,6 +3113,7 @@ str_profile_OneCityChallenge                    "一城挑战"                      
 str_profile_CityCaptureOptions                  "征服城市选项"                          # Captured city options
 str_profile_DebugCityAstar                      "调试路径点"
 str_profile_NewCombat                           "新战斗"
+str_profile_WindowedMode                        "Windowed Mode"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"音乐选项"
@@ -3140,6 +3141,8 @@ str_ldl_SmoothBorders_On			"平滑图标边缘"
 str_ldl_SmoothBorders_Off			"锐化像素边缘"
 str_ldl_Good_Animations_Off			"高质量动画关"
 str_ldl_Good_Animations_On			"高质量动画开"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
 
 str_tbl_ldl_CityCaptureOptions_On		"征服城市选项 - 开"
 str_tbl_ldl_CityCaptureOptions_Off		"征服城市选项 - 关"

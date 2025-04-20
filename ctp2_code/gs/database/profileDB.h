@@ -402,14 +402,16 @@ private:
     sint32 m_newcombat;
     /// Enable no goody huts
     sint32 m_noGoodyHuts;
-	/// Enable random map settings (wet/dry, warm/cold etc.)
+    /// Enable random map settings (wet/dry, warm/cold etc.)
     sint32 m_randomCustomMap;
-	/// Starting age in single player only
+    /// Starting age in single player only
     sint32 m_spStartingAge;
-	/// Ending age in single player only
+    /// Ending age in single player only
     sint32 m_spEndingAge;
     /// Show what a city is producing under it's name
     sint32 m_showCityProduction;
+    /// Swtich between windowed and fullscreen mode
+    sint32 m_windowedMode;
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
@@ -609,6 +611,8 @@ public:
     void SetSPStartingAge(sint32 x)                     { m_spStartingAge = x; }
     void SetSPEndingAge(sint32 x)                       { m_spEndingAge = x; }
     void SetShowCityProduction(BOOL on)                 { m_showCityProduction = on; }
+
+    void SetWindowedMode(BOOL val)                      { m_windowedMode = val; }
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
 
@@ -864,6 +868,7 @@ public:
     sint32  GetSPEndingAge() const              { return m_spEndingAge; }
     BOOL    IsShowCityProduction()              { return m_showCityProduction; }
 
+    BOOL    IsWindowedMode() const              { return m_windowedMode; }
 };
 
 extern ProfileDB *g_theProfileDB;

@@ -3138,54 +3138,6 @@ str_ldl_RemoveAll "全て削除 >>"
 str_ldl_CantDisbandCitySize		"都市の大きさが3を超えている場合､都市の解散はできません｡"
 str_ldl_CantDisbandLastCity		"最後の都市は解散できません｡"
 
-# プロフィールのストリング（高度なオプションのリスト）
-str_profile_UnitAnim 				"ユニット アニメーションの表示"
-str_profile_GoodAnim 				"交易品アニメーションの表示"
-str_profile_TradeAnim 				"貿易ルート アニメーションの表示"
-str_profile_WonderMovies 			"七不思議のムービーの表示"
-str_profile_EnemyMoves 				"敵国の動きの表示"
-str_profile_RevoltWarning 			"<OBS>"
-str_profile_EnemyIntrude 			"<OBS>"
-str_profile_UnitLostWarning 			"<OBS>"
-str_profile_TradeLostWarning 			"<OBS>"
-str_profile_CityLostWarning 			"<OBS>"
-str_profile_AutoCenter 				"ｱｸﾃｨﾌﾞなﾕﾆｯﾄ､都市を中心に表示"
-str_profile_AutoSave 				"自動セーブの使用"
-str_profile_AutoGroup 				"<OBS>"
-str_profile_AutoDeselect 			"ユニットの自動的な選択解除"
-str_profile_AutoSelectNext 			"次のユニットの自動選択"
-str_profile_AutoSelectFirstUnit 		"次に利用可能なユニットの自動選択"
-str_profile_AutoTurnCycle 			"ターンの自動巡回"
-str_profile_ShowZoomedCombat 			"戦闘画面の表示"
-str_profile_UseFingerPrinting 			"<OBS>"
-str_profile_UseRedbookAudio 			"CDオーディオのプレイ"
-str_profile_TryWindowsResolution 		"<OBS>"
-str_profile_ScreenResWidth 			"<OBS>"
-str_profile_ScreenResHeight 			"<OBS>"
-str_profile_ZoomedCombatAlways 			"全ての戦闘を戦闘画面で表示する"
-str_profile_AttackEveryone 			"<OBS>"
-str_profile_NonRandomCivs 			"<OBS>"
-str_profile_AutoEndMultiple 			"複数ターンの自動巡回"
-str_profile_UnitCompleteMessages 		"ユニットの生産完了メッセージの表示"
-str_profile_NonContinuousUnitCompleteMessages 	"連続的なﾕﾆｯﾄ生産完了ﾒｯｾｰｼﾞの表示"
-str_profile_ShowCityNames 			"都市名の表示"
-str_profile_ShowTradeRoutes 			"貿易ルートの表示"
-str_profile_UnitSpeed 				"ユニットアニメーションの速度"
-str_profile_MouseSpeed 				"マウスの感度"
-str_profile_LeftHandedMouse 			"左ききマウスの使用"
-str_profile_CityBuiltMessage 			"<OBS>"
-str_profile_UseAttackMessages 			"<OBS>"
-str_profile_MoveHoldTime 			"<OBS>"
-str_profile_BattleSpeed 			"戦闘画面の戦闘速度"
-str_profile_ScrollDelay 			"ﾏｳｽ ｽｸﾛｰﾙの遅延（10ths/秒）"
-str_profile_AutoSwitchTabs 			"コントロールパネル タブの自動切替"
-str_profile_AutoRenameCities 			"建設時に都市名の変更を許す"
-str_profile_AutoOpenCityWindow 			"都市建設時に生産管理画面を表示する"
-str_profile_ShowEnemyHealth 			"敵ユニットの耐久力を表示する"
-str_profile_ShowCityInfluence 			"都市の影響範囲の表示"
-str_profile_ShowPoliticalBorders 		"国境の表示"
-
-
 ############################################################################
 #                 Here after,   Added by altered source project            #
 ############################################################################
@@ -3216,38 +3168,87 @@ str_ldl_Disclaimer1 "THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
 str_ldl_Disclaimer2 "This version of Call To Power 2 was developed at http://apolyton.net"
 str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
+# プロフィールのストリング（高度なオプションのリスト）
+str_profile_UnitAnim                            "ユニット アニメーションの表示"
+str_profile_GoodAnim                            "交易品アニメーションの表示"
+str_profile_TradeAnim                           "貿易ルート アニメーションの表示"
+str_profile_WonderMovies                        "七不思議のムービーの表示"
+str_profile_EnemyMoves                          "敵国の動きの表示"
+str_profile_RevoltWarning                       "<OBS>"
+str_profile_EnemyIntrude                        "<OBS>"
+str_profile_UnitLostWarning                     "<OBS>"
+str_profile_TradeLostWarning                    "<OBS>"
+str_profile_CityLostWarning                     "<OBS>"
+str_profile_AutoCenter                          "ｱｸﾃｨﾌﾞなﾕﾆｯﾄ､都市を中心に表示"
+str_profile_AutoSave                            "自動セーブの使用"
+str_profile_AutoGroup                           "<OBS>"
+str_profile_AutoDeselect                        "ユニットの自動的な選択解除"
+str_profile_AutoSelectNext                      "次のユニットの自動選択"
+str_profile_AutoSelectFirstUnit                 "次に利用可能なユニットの自動選択"
+str_profile_AutoTurnCycle                       "ターンの自動巡回"
+str_profile_ShowZoomedCombat                    "戦闘画面の表示"
+str_profile_UseFingerPrinting                   "<OBS>"
+str_profile_UseRedbookAudio                     "CDオーディオのプレイ"
+str_profile_TryWindowsResolution                "<OBS>"
+str_profile_ScreenResWidth                      "<OBS>"
+str_profile_ScreenResHeight                     "<OBS>"
+str_profile_ZoomedCombatAlways                  "全ての戦闘を戦闘画面で表示する"
+str_profile_AttackEveryone                      "<OBS>"
+str_profile_NonRandomCivs                       "<OBS>"
+str_profile_AutoEndMultiple                     "複数ターンの自動巡回"
+str_profile_UnitCompleteMessages                "ユニットの生産完了メッセージの表示"
+str_profile_NonContinuousUnitCompleteMessages   "連続的なﾕﾆｯﾄ生産完了ﾒｯｾｰｼﾞの表示"
+str_profile_ShowCityNames                       "都市名の表示"
+str_profile_ShowTradeRoutes                     "貿易ルートの表示"
+str_profile_UnitSpeed                           "ユニットアニメーションの速度"
+str_profile_MouseSpeed                          "マウスの感度"
+str_profile_LeftHandedMouse                     "左ききマウスの使用"
+str_profile_CityBuiltMessage                    "<OBS>"
+str_profile_UseAttackMessages                   "<OBS>"
+str_profile_MoveHoldTime                        "<OBS>"
+str_profile_BattleSpeed                         "戦闘画面の戦闘速度"
+str_profile_ScrollDelay                         "ﾏｳｽ ｽｸﾛｰﾙの遅延（10ths/秒）"
+str_profile_AutoSwitchTabs                      "コントロールパネル タブの自動切替"
+str_profile_AutoRenameCities                    "建設時に都市名の変更を許す"
+str_profile_AutoOpenCityWindow                  "都市建設時に生産管理画面を表示する"
+str_profile_ShowEnemyHealth                     "敵ユニットの耐久力を表示する"
+str_profile_ShowCityInfluence                   "都市の影響範囲の表示"
+str_profile_ShowPoliticalBorders                "国境の表示"
+str_profile_EndTurnSound                        "End Turn Sound"
 str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
 str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
 str_profile_RecentAtTop                         "Put New Messages At Top"
 str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
+str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
 str_profile_RunInBackground                     "Allow end turn in background"
 str_profile_Upgrade                             "Unit upgrading"
 str_profile_SmoothBorders                       "Smooth empire borders"
-str_profile_CivFlags                       	"Show Civilization Unit flags"
-str_profile_NoAIProductionDeficit 		"AI No Production Deficit"	
-str_profile_NoAIGoldDeficit			"No negative Gold for AI Cities"					# AI cities don't go negative in gold
-str_profile_AICityDefenderBonus 		"AI City Defense bonus"					# AI population adds to city defenses
-str_profile_BarbarianCities			"Entrenched Barbarians settle cities"					# Entrenched barbarians create a city
-str_profile_SectarianHappiness 			"Conflicting citystyle unhappiness"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_profile_RevoltCasualties 			"Revolting Cities lose Population"					# Revolting city loses 1/3 of population
-str_profile_RevoltInsurgents 			"Revolting cities create barbarians"					# Revolting city creates barbarians
-str_profile_BarbarianCamps			"Entrenched Barbarians create Tile Imps"		# Entrenched barbarians create an imp
-str_profile_BarbarianSpawnsBarbarian 		"Entrenched Barbarians spawn Barbarians"			# Entrenched barbs create more barbs
-str_profile_AINoSinking 			"AI ships don't sink"							# AI ships don't sink
-str_profile_AINoCityLimit 			"AI No City LImit"						# AI not affected by city limit
-str_profile_GoldPerUnitSupport 			"1 Gold Per Unit Cost"					# all pay thins int times unit support calculation
-str_profile_GoldPerCity 			"2 Gold Per City x City Limit"						# everyone pays gold amount per city
-str_profile_AINoShieldHunger 			"AI doesn't pay Shield Hunger"					# AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger			"AI doesn't pay Unit Gold"						# AI doesnt pay unit gold hunger
-str_profile_AIFreeUpgrade 			"AI Free Upgrades"						# AI doesn't pay goldfor upgrades
-str_profile_AIMilitiaUnit 			"AI Free Militia Unit"						#If city is empty at turn start AI gets cheapest unit
-str_profile_OneCityChallenge 			"One City Challenge"						#If city is empty at turn start AI gets cheapest unit
-str_profile_CityCaptureOptions 			"City Capture Options"						#If city is empty at turn start AI gets cheapest unit
+str_profile_CivFlags                            "Show Civilization Unit flags"
+str_profile_NoAIProductionDeficit               "AI No Production Deficit"
+str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI City Defense Bonus"                         # AI population adds to city defenses
+str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Revolting cities create barbarians"            # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
+str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
+str_profile_DebugCityAstar                      "Debug road build path"
 str_profile_NewCombat                           "New Combat"
-
+str_profile_WindowedMode                        "Window Mode"
 
 ### Great Libary Strings ###
 
@@ -3303,6 +3304,9 @@ str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
 # Custom map window (wet/dry etc.)
 str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
 str_tbl_ldl_RandomCustomMap_On			"Random Settings"
+
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
 
 str_ldl_Army_Names_Off			"Army Names Off"
 str_ldl_Army_Names_On			"Army Names On"

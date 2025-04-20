@@ -3113,6 +3113,7 @@ str_profile_OneCityChallenge                    "Eine-Stadt-Herausforderung"    
 str_profile_CityCaptureOptions                  "Stadteroberungsoptionen"                       # Captured city options
 str_profile_DebugCityAstar                      "Straßenbaupfad debuggen"
 str_profile_NewCombat                           "Neues Kampfsystem"
+str_profile_WindowedMode                        "Fenstermode"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Musikeinstellungen"
@@ -3140,6 +3141,8 @@ str_ldl_SmoothBorders_On			"Reichsgrenzen glätten"
 str_ldl_SmoothBorders_Off			"Standardreichsgrenzen"
 str_ldl_Good_Animations_Off			"Güter-Animationen Aus"
 str_ldl_Good_Animations_On			"Güter-Animationen An"
+str_ldl_Windowed_Mode_Off			"Spiele im Vollbildmodus"
+str_ldl_Windowed_Mode_On			"Spiele im Festermodus"
 
 str_tbl_ldl_CityCaptureOptions_On		"Stadteroberungsoptionen"
 str_tbl_ldl_CityCaptureOptions_Off		"Keine Stadteroberungsoptionen"

@@ -263,6 +263,7 @@ ProfileDB::ProfileDB()
     m_spStartingAge                     (0),
     m_spEndingAge                       (-1),
     m_showCityProduction                (TRUE),
+    m_windowedMode                      (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -465,8 +466,15 @@ ProfileDB::ProfileDB()
 	Var("NoGoodyHuts"                , PV_BOOL  , &m_noGoodyHuts                , NULL, false);
 	Var("RandomCustomMap"            , PV_BOOL  , &m_randomCustomMap            , NULL, false);
 	Var("SPStartingAge"              , PV_NUM   , &m_spStartingAge              , NULL, false);
-	Var("SPEndingAge"				 , PV_NUM   , &m_spEndingAge                , NULL, false);
+	Var("SPEndingAge"                , PV_NUM   , &m_spEndingAge                , NULL, false);
 	Var("ShowCityProduction"         , PV_BOOL  , &m_showCityProduction         , NULL, false);
+
+#ifdef __AUI_USE_SDL__
+	// Only show with SDL, otherwise unknown how to do window mode
+	Var("WindowedMode"               , PV_BOOL  , &m_windowedMode               , NULL);
+#else
+	Var("WindowedMode"               , PV_BOOL  , &m_windowedMode               , NULL, false);
+#endif
 }
 
 void ProfileDB::DefaultSettings(void)

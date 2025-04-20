@@ -3113,6 +3113,7 @@ str_profile_OneCityChallenge                    "Défi une ville"                
 str_profile_CityCaptureOptions                  "Options de capture des villes"                 # Captured city options
 str_profile_DebugCityAstar                      "Débogage du tracé du réseau routier"
 str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"0ptions Musique"
@@ -3140,6 +3141,8 @@ str_ldl_SmoothBorders_On			"Icones de frontières lissés"
 str_ldl_SmoothBorders_Off			"Pixels fins pour Frontières"
 str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
 
 str_tbl_ldl_CityCaptureOptions_On		"Options de capture des villes"
 str_tbl_ldl_CityCaptureOptions_Off		"Pas d'options de capture des villes"

@@ -270,8 +270,6 @@ BOOL g_runInBackground = FALSE;
 BOOL g_runSpriteEditor = FALSE;
 BOOL g_eventLog = FALSE;
 
-uint32 g_SDL_flags = 0;
-
 BOOL g_use_profile_process = FALSE;
 
 BOOL g_createDirectDrawOnSecondary = FALSE;
@@ -1111,10 +1109,6 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
-	if (strstr(szCmdLine, "fullscreen"))
-	{
-		g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
-	}
 	if (strstr(szCmdLine, "hwsurface")) {
 		printf("SDL2 does not support hwsurface option");
 	}
@@ -1703,7 +1697,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			}
 #else
 #error "Implementation missing for non-SDL and non-DirectX builds"
-// Actually move this into a specialized class like like aui_sdlui or aui_directui
+// Actually move this into a specialized class like aui_sdlui or aui_directui
 #endif
 		}
 

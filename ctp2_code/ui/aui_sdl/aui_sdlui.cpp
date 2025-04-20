@@ -33,6 +33,8 @@
 
 #ifdef __AUI_USE_SDL__
 
+#include "aui_sdlui.h"
+
 #include "civ3_main.h"
 
 #include "aui_mouse.h"
@@ -41,23 +43,18 @@
 #include "aui_sdlsurface.h"
 #include "aui_sdlmouse.h"
 #include "aui_sdlmoviemanager.h"
-
-#include "aui_sdlui.h"
-
-extern BOOL			g_exclusiveMode;
-
 #include "civapp.h"
-extern CivApp		*g_civApp;
+#include "profileDB.h"                  // g_theProfileDB
 
-#include "display.h"
+extern BOOL                 g_exclusiveMode;
+extern CivApp*              g_civApp;
+extern ProfileDB*           g_theProfileDB;
 
-extern BOOL					g_createDirectDrawOnSecondary;
-extern sint32				g_ScreenWidth;
-extern sint32				g_ScreenHeight;
-extern DisplayDevice		g_displayDevice;
+extern BOOL                 g_createDirectDrawOnSecondary;
+extern sint32               g_ScreenWidth;
+extern sint32               g_ScreenHeight;
 
-extern uint32 g_SDL_flags; //See ctp2_code/ctp/civ3_main.cpp
-extern sint32 g_is565Format;
+extern sint32               g_is565Format;
 
 aui_SDLUI::aui_SDLUI
 (
@@ -124,8 +121,12 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
 	m_pixelFormat = aui_Surface::TransformBppToSurfacePixelFormat(m_bpp);
+
+	uint32 sdl_flags = g_theProfileDB->IsWindowedMode() ? SDL_WINDOW_ALLOW_HIGHDPI : SDL_WINDOW_FULLSCREEN_DESKTOP;
+
 	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		m_width, m_height, g_SDL_flags);
+	                               m_width, m_height, sdl_flags);
+
 	if (!m_SDLWindow) {
 		c3errors_FatalDialog("aui_SDLUI", "SDL window creation failed:\n%s\n", SDL_GetError());
 	}
