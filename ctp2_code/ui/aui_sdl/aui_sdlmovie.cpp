@@ -671,7 +671,7 @@ static void calculate_display_rect(SDL_Rect *rect,
 	if (pic_sar.num == 0)
 		aspect_ratio = 0;
 	else
-		aspect_ratio = av_q2d(pic_sar);
+		aspect_ratio = static_cast<float>(av_q2d(pic_sar));
 
 	if (aspect_ratio <= 0.0)
 		aspect_ratio = 1.0;
@@ -804,7 +804,7 @@ static void stream_component_close(VideoState *is, int stream_index)
 	AVFormatContext *ic = is->ic;
 	AVCodecParameters *codecpar;
 
-	if (stream_index < 0 || stream_index >= ic->nb_streams)
+	if (stream_index < 0 || stream_index >= static_cast<int>(ic->nb_streams))
 		return;
 	codecpar = ic->streams[stream_index]->codecpar;
 
@@ -1088,8 +1088,6 @@ static void video_refresh(void *opaque, double *remaining_time)
 {
 	VideoState *is = (VideoState*) opaque;
 	double time;
-
-	Frame *sp, *sp2;
 
 	if (!is->paused && get_master_sync_type(is) == AV_SYNC_EXTERNAL_CLOCK && is->realtime)
 		check_external_clock_speed(is);
@@ -1469,7 +1467,7 @@ static void sdl_audio_callback(void *opaque, Uint8 *stream, int len)
 	int64_t audio_callback_time = av_gettime_relative();
 
 	while (len > 0) {
-		if (is->audio_buf_index >= is->audio_buf_size) {
+		if (is->audio_buf_index >= static_cast<int>(is->audio_buf_size)) {
 			audio_size = audio_decode_frame(is);
 			if (audio_size < 0) {
 				/* if error, just output silence */
@@ -1586,7 +1584,7 @@ static int stream_component_open(VideoState *is, int stream_index)
 	int64_t channel_layout;
 	int ret = 0;
 
-	if (stream_index < 0 || stream_index >= ic->nb_streams)
+	if (stream_index < 0 || stream_index >= static_cast<int>(ic->nb_streams))
 		return -1;
 
 	avctx = avcodec_alloc_context3(NULL);
@@ -1718,11 +1716,10 @@ static int read_thread(void *arg)
 {
 	VideoState *is = (VideoState*)arg;
 	AVFormatContext *ic = NULL;
-	int err, i, ret;
+	int err, ret;
 	int st_index[AVMEDIA_TYPE_NB];
 	AVPacket pkt1, *pkt = &pkt1;
 	int64_t stream_start_time;
-	AVDictionaryEntry *t;
 	SDL_mutex *wait_mutex = SDL_CreateMutex();
 	int scan_all_pmts_set = 0;
 	int64_t pkt_ts;
@@ -1940,7 +1937,7 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 			cursor_hidden = 1;
 		}
 		if (remaining_time > 0.0)
-			av_usleep((int64_t)(remaining_time * 1000000.0));
+			av_usleep((unsigned int)(remaining_time * 1000000.0));
 		remaining_time = REFRESH_RATE;
 		if (!is->paused || is->force_refresh)
 			video_refresh(is, &remaining_time);
@@ -2169,7 +2166,7 @@ bool aui_SDLMovie::HandleMovieEvent(SDL_Event &event)
 				SDL_ShowCursor(1);
 				cursor_hidden = 0;
 			} else {
-				if ((event.motion.type & SDL_BUTTON_LMASK != 0) &&
+				if (((event.motion.type & SDL_BUTTON_LMASK) != 0) &&
 					(is_full_screen || InsideMovieArea(event.button.x, event.button.y))) {
 					movieFinished = true;
 				}
