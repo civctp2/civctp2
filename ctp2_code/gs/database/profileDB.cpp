@@ -433,7 +433,7 @@ ProfileDB::ProfileDB()
 	Var("RuleSets"                   , PV_STRING, NULL, m_ruleSets                    , false);
 	Var("CityClick"                  , PV_BOOL  , &m_cityClick                  , NULL, false);
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL  , &m_endTurnWithEmptyBuildQueues, NULL, false);
-	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL, false);
+	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL);
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
 #if defined(_DEBUG)

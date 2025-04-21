@@ -584,6 +584,7 @@ public:
     void SetDisplayPolitical(BOOL on)                   { m_displayPolitical = on;}
     void SetDisplayCapitols(BOOL on)                    { m_displayCapitols = on;}
     void SetDisplayRelations(BOOL on)                   { m_displayRelations = on;}
+    void SetRunInBackground(BOOL on)                    { m_runInBackground = on;}
     void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; }
     void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; }
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
@@ -838,6 +839,7 @@ public:
     double PercentContinent()                   { return m_continent; }
     double PercentHomogenous()                  { return m_homogenous; }
     sint32 PercentRichness()                    { return m_richness; }
+    BOOL    IsRunInBackground()                 { return m_runInBackground; }
     BOOL    IsSmoothBorders()                   { return m_smoothBorders; } //emod3
     BOOL    GetShowArmyNames()                  { return m_showArmyNames; } //emod3
     BOOL    IsCityCaptureOptions()              { return m_cityCaptureOptions; } //emod3

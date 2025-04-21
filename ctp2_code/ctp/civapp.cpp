@@ -2331,21 +2331,10 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 	static uint32	lastTicks       = curTicks;
 
 	if (g_c3ui->TheMouse()) {
-		if (g_c3ui->TheMouse()->IsSuspended() )
+		if (g_c3ui->TheMouse()->IsSuspended() && IsInBackground())
 		{
 			used_milliseconds = Os::GetTicks() - start_time_ms;
 
-			if(g_runInBackground
-			|| g_theProfileDB->GetValueByName("RunInBackground")
-			){
-				if (m_gameLoaded)
-				{
-					if (g_director)
-					{
-						g_director->Process();
-					}
-				}
-			}
 			return 0;
 		}
 
@@ -2409,8 +2398,7 @@ sint32 CivApp::ProcessAI()
 
 	if (g_c3ui->TheMouse()) {
 		if( g_c3ui->TheMouse()->IsSuspended()
-		&& !g_runInBackground
-		&& !g_theProfileDB->GetValueByName("RunInBackground")
+		&& IsInBackground()
 		){
 			return 0;
 		}
@@ -2431,7 +2419,7 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 
 	if (g_c3ui->TheMouse())
 	{
-		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground && !g_theProfileDB->GetValueByName("RunInBackground"))
+		if (g_c3ui->TheMouse()->IsSuspended() && IsInBackground())
 		{
 			// Probably there was something here.
 		}
@@ -2521,8 +2509,7 @@ sint32 CivApp::Process(void)
 		}
 	}
 
-	// Sleep problem if the game is supposed to run in background
-	if (m_inBackground)
+	if (IsInBackground())
 	{
 		Os::Sleep(50);
 		return 0;

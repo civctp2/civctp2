@@ -332,6 +332,7 @@ AUI_ERRCODE aui_Mouse::End( void )
 
 AUI_ERRCODE aui_Mouse::Suspend( BOOL eraseCursor )
 {
+	// That is never true
 	if ( m_suspendCount )
 	{
 		m_suspendCount++;

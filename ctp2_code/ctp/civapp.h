@@ -58,7 +58,10 @@ class CivApp;
 #include "aui_ldl.h"
 #include "aui_action.h"     // aui_Action
 #include "ctp2_inttypes.h"  // sint32, uint32
+#include "profileDB.h"      // g_theProfileDB
+
 class CivArchive;
+extern BOOL g_runInBackground;
 
 //----------------------------------------------------------------------------
 //
@@ -94,7 +97,7 @@ public:
 
 	bool		IsInBackground(void) const
 	{
-		return m_inBackground;
+		return m_inBackground && !g_theProfileDB->IsRunInBackground() && !g_runInBackground;
 	};
 
 	bool		IsKeyboardScrolling(void) const
