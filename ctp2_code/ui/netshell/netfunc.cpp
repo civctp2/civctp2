@@ -3042,13 +3042,13 @@ bool NETFunc::Handle(Message *m) {
 				Player t = Player(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
 				if(p->flags & dp_OBJECTDELTA_FLAG_INOPENSESS) {
 					if(p->status == dp_RES_DELETED || p->status == dp_RES_CREATED) {
-						gameSetup.SetGroups(players.size() + (m_aiPlayers ? m_aiPlayers->size() : 0));
+						gameSetup.SetGroups(static_cast<char>(players.size() + (m_aiPlayers ? m_aiPlayers->size() : 0)));
 						SetGameSetupSession(&gameSetup);
 					}
 				}
 			}
 		} else if(m->GetCode() == Message::ADDAIPLAYER || m->GetCode() == Message::CHGAIPLAYER || m->GetCode() == Message::DELAIPLAYER) {
-			gameSetup.SetGroups(players.size() + (m_aiPlayers ? m_aiPlayers->size() : 0));
+			gameSetup.SetGroups(static_cast<char>(players.size() + (m_aiPlayers ? m_aiPlayers->size() : 0)));
 			SetGameSetupSession(&gameSetup);
 		}
 

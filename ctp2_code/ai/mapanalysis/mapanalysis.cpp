@@ -79,8 +79,6 @@ void MapAnalysis::Resize
     const sint16 & resolution
 )
 {
-	sint32 old_size = m_threatGrid.size();
-
 	m_threatGrid        .resize(maxPlayerId);
 	m_attackGrid        .resize(maxPlayerId);
 	m_defenseGrid       .resize(maxPlayerId);
