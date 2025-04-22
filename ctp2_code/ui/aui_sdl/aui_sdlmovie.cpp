@@ -1931,16 +1931,21 @@ fail:
 static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
 	double remaining_time = 0.0;
 	SDL_PumpEvents();
-	while (!SDL_PeepEvents(event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT)) {
-	if (is_full_screen && !cursor_hidden && av_gettime_relative() - cursor_last_shown > CURSOR_HIDE_DELAY) {
+	while (!SDL_PeepEvents(event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_LASTEVENT))
+	{
+		if (is_full_screen && !cursor_hidden && av_gettime_relative() - cursor_last_shown > CURSOR_HIDE_DELAY)
+		{
 			SDL_ShowCursor(0);
 			cursor_hidden = 1;
 		}
+
 		if (remaining_time > 0.0)
 			av_usleep((unsigned int)(remaining_time * 1000000.0));
+
 		remaining_time = REFRESH_RATE;
 		if (!is->paused || is->force_refresh)
 			video_refresh(is, &remaining_time);
+
 		SDL_PumpEvents();
 	}
 }
@@ -1974,7 +1979,8 @@ aui_SDLMovie::~aui_SDLMovie() {
 }
 
 void aui_SDLMovie::SetContext(SDL_Renderer *renderer, SDL_Texture *background, const int windowWidth,
-		const int windowHeight) {
+		const int windowHeight)
+{
 	Assert(renderer);
 	Assert(background);
 	m_renderer = renderer;
@@ -1983,24 +1989,28 @@ void aui_SDLMovie::SetContext(SDL_Renderer *renderer, SDL_Texture *background, c
 	m_windowHeight = windowHeight;
 }
 
-AUI_ERRCODE aui_SDLMovie::Load() {
+AUI_ERRCODE aui_SDLMovie::Load()
+{
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_SDLMovie::Unload() {
+AUI_ERRCODE aui_SDLMovie::Unload()
+{
 	return Close();
 }
 
-AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
-
+AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect)
+{
 #if defined(USE_SDL_FFMPEG)
-	if (!m_renderer || (!(flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) && !m_background)) {
+	if (!m_renderer || (!(flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) && !m_background))
+	{
 		return AUI_ERRCODE_MOVIEFAILED;
 	}
 
 	static SDL_RendererInfo renderer_info = {0};
 	SDL_GetRendererInfo(m_renderer, &renderer_info);
-	if (!renderer_info.num_texture_formats) {
+	if (!renderer_info.num_texture_formats)
+	{
 		av_log(NULL, AV_LOG_FATAL, "Failed to create window or renderer: %s", SDL_GetError());
 		Close();
 		return AUI_ERRCODE_MOVIEFAILED;
@@ -2014,11 +2024,14 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 
 	is_full_screen = m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN;
 	SDL_RenderGetLogicalSize(renderer, &m_logicalWidth, &m_logicalHeight);
-	if (is_full_screen) {
+	if (is_full_screen)
+	{
 		screen_width = m_windowWidth;
 		screen_height = m_windowHeight;
 		SDL_RenderSetLogicalSize(renderer, m_windowWidth, m_windowHeight);
-	} else {
+	}
+	else
+	{
 		screen_width = rect->right - rect->left;
 		screen_height = rect->bottom - rect->top;
 		background = m_background;
@@ -2026,7 +2039,8 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 
 	// Adjust volume range ctp2 [0..10] -> ffmpeg [0..100]
 	m_videoState = stream_open(m_filename, g_theProfileDB->GetSFXVolume() * 10);
-	if (m_videoState && !(m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)) {
+	if (m_videoState && !(m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN))
+	{
 		m_videoState->xleft = rect->left;
 		m_videoState->ytop = rect->top;
 	}
@@ -2036,20 +2050,23 @@ AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect) {
 #endif // USE_SDL_FFMPEG
 }
 
-AUI_ERRCODE aui_SDLMovie::Close() {
-
+AUI_ERRCODE aui_SDLMovie::Close()
+{
 #if defined(USE_SDL_FFMPEG)
 	SDL_ShowCursor(SDL_ENABLE);
-	if (m_videoState) {
+	if (m_videoState)
+	{
 		Stop();
-		if (m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD) {
+		if (m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD)
+		{
 			GrabLastFrame();
 		}
 		stream_close(m_videoState);
 		m_videoState = NULL;
 	}
 
-	if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) {
+	if (m_flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN)
+	{
 		SDL_RenderSetLogicalSize(m_renderer, m_logicalWidth, m_logicalHeight);
 	}
 	renderer = NULL;
@@ -2060,8 +2077,8 @@ AUI_ERRCODE aui_SDLMovie::Close() {
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_SDLMovie::Play() {
-
+AUI_ERRCODE aui_SDLMovie::Play()
+{
 #if defined(USE_SDL_FFMPEG)
 	if (m_videoState) {
 		m_videoState->read_tid = SDL_CreateThread(read_thread, "read_thread", m_videoState);
@@ -2075,34 +2092,38 @@ AUI_ERRCODE aui_SDLMovie::Play() {
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_SDLMovie::Stop() {
+AUI_ERRCODE aui_SDLMovie::Stop()
+{
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_SDLMovie::Pause() {
-
+AUI_ERRCODE aui_SDLMovie::Pause()
+{
 #if defined(USE_SDL_FFMPEG)
-	if (m_videoState && !m_videoState->paused) {
+	if (m_videoState && !m_videoState->paused)
+	{
 		toggle_pause(m_videoState);
 	}
 #endif // USE_SDL_FFMPEG
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_SDLMovie::Resume() {
-
+AUI_ERRCODE aui_SDLMovie::Resume()
+{
 #if defined(USE_SDL_FFMPEG)
-	if (m_videoState && m_videoState->paused) {
+	if (m_videoState && m_videoState->paused)
+	{
 		toggle_pause(m_videoState);
 	}
 #endif // USE_SDL_FFMPEG
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE aui_SDLMovie::Process() {
-
+AUI_ERRCODE aui_SDLMovie::Process()
+{
 #if defined(USE_SDL_FFMPEG)
-	if (m_videoState) {
+	if (m_videoState)
+	{
 		/* handle an event sent by the GUI */
 		SDL_Event event;
 
@@ -2117,11 +2138,13 @@ AUI_ERRCODE aui_SDLMovie::Process() {
 	return AUI_ERRCODE_OK;
 }
 
-BOOL aui_SDLMovie::IsOpen() const {
+BOOL aui_SDLMovie::IsOpen() const
+{
 	return m_videoState != NULL || m_isFinished;
 }
 
-BOOL aui_SDLMovie::IsPlaying() const {
+BOOL aui_SDLMovie::IsPlaying() const
+{
 #if defined(USE_SDL_FFMPEG)
 	return m_videoState && m_videoState->read_tid;
 #else // USE_SDL_FFMPEG
@@ -2129,8 +2152,8 @@ BOOL aui_SDLMovie::IsPlaying() const {
 #endif // USE_SDL_FFMPEG
 }
 
-BOOL aui_SDLMovie::IsPaused() const {
-
+BOOL aui_SDLMovie::IsPaused() const
+{
 #if defined(USE_SDL_FFMPEG)
 	return m_videoState && m_videoState->paused;
 #else // USE_SDL_FFMPEG
@@ -2203,15 +2226,18 @@ void aui_SDLMovie::GrabLastFrame()
 {
 #if defined(USE_SDL_FFMPEG)
 	aui_SDLSurface *sdlSurface = dynamic_cast<aui_SDLSurface *>(GetDestSurface());
-	if (sdlSurface) {
+	if (sdlSurface)
+	{
 		// Undo logical size if needed; to grab unscaled pixels
-		if (m_windowWidth != m_logicalWidth) {
+		if (m_windowWidth != m_logicalWidth)
+		{
 			SDL_RenderSetLogicalSize(m_renderer, m_windowWidth, m_windowHeight);
 		}
 
 		SDL_Surface *surface = sdlSurface->GetSDLSurface();
 		SDL_Texture *backgroundTexture = SDL_CreateTextureFromSurface(m_renderer, surface);
-		if (backgroundTexture) {
+		if (backgroundTexture)
+		{
 			SDL_RenderClear(m_renderer);
 
 			SDL_Rect surfaceRect = { 0, 0, surface->w, surface->h };
@@ -2228,7 +2254,8 @@ void aui_SDLMovie::GrabLastFrame()
 		}
 
 		// Reset logical size if needed
-		if (m_windowWidth != m_logicalWidth) {
+		if (m_windowWidth != m_logicalWidth)
+		{
 			SDL_RenderSetLogicalSize(m_renderer, m_logicalWidth, m_logicalHeight);
 		}
 	}
