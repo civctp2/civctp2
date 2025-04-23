@@ -31,8 +31,8 @@
 // - Enable logging facilities - even when not using the debug build.
 //
 // _BFR_
-// - Force CD checking when set (build final release).
-// - If not defined it enables some more loogs.
+// - Originally, force CD checking when set (build final release).
+// - If not defined it enables some more logs.
 //
 //----------------------------------------------------------------------------
 //
@@ -153,6 +153,9 @@
 #include "workwin.h"
 #include "workwindow.h"
 #include "World.h"                      // g_theWorld
+
+#include <codecvt>
+//#include <locale>
 
 #if !defined(__GNUC__) // TODO: replacement needed (wine doesnt have these headers...)
 #include "directvideo.h"
@@ -1753,7 +1756,7 @@ void DoFinalCleanup(int exitCode)
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
 #if defined(__AUI_USE_SDL__)
-int SDLMessageHandler(const SDL_Event &event)
+int SDLMessageHandler(SDL_Event &event)
 {
 	// Merge into WndProc with keycode converter and
 	// unchanged ui_HandleKeypress(wParam, lParam)
@@ -1790,7 +1793,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_TAB, '\t' + 128);
 			SDLKCONV(SDLK_RETURN, VK_RETURN); // set to VK_RETURN to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
-			SDLKCONV(SDLK_SPACE, ' ');
+/*			SDLKCONV(SDLK_SPACE, ' ');
 			SDLKCONV(SDLK_EXCLAIM, '!');
 			SDLKCONV(SDLK_QUOTEDBL, '"');
 			SDLKCONVSHIFT(SDLK_HASH, '#', '~');
@@ -1891,7 +1894,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFTCTRL(SDLK_w, 'w', 'W', 'w'-'a'+1);
 			SDLKCONVSHIFTCTRL(SDLK_x, 'x', 'X', 'x'-'a'+1);
 			SDLKCONVSHIFTCTRL(SDLK_y, 'y', 'Y', 'y'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z'-'a'+1);
+			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z'-'a'+1);*/
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
 #undef SDLKCONVSHIFTCTRL
@@ -1903,7 +1906,37 @@ int SDLMessageHandler(const SDL_Event &event)
 			}
 			break;
 		} // end of case SDL_KEYDOWN
-	case SDL_QUIT:
+	case SDL_WINDOWEVENT:
+
+		switch (event.window.event)
+		{
+		case SDL_WINDOWEVENT_RESIZED:
+			break;
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+		{
+			g_c3ui->ChangeSize(event.window.data1, event.window.data2);
+			break;
+		}
+		case SDL_WINDOWEVENT_MAXIMIZED:
+			break;
+		case SDL_WINDOWEVENT_RESTORED:
+			break;
+		case SDL_WINDOWEVENT_MOVED:
+			break;
+		default:
+			break;
+		}
+
+		break;
+	case SDL_TEXTINPUT:
+	{
+		std::string source(event.text.text);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		std::wstring wide_str = converter.from_bytes(source);
+
+		ui_HandleKeypress(wide_str.c_str()[0], 0);
+	}
+	break;	case SDL_QUIT:
 		gDone = TRUE;
 
 		DoFinalCleanup();

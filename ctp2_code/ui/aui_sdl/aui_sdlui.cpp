@@ -121,10 +121,14 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 
 	m_pixelFormat = aui_Surface::TransformBppToSurfacePixelFormat(m_bpp);
 
-	uint32 sdl_flags = g_theProfileDB->IsWindowedMode() ? SDL_WINDOW_ALLOW_HIGHDPI : SDL_WINDOW_FULLSCREEN_DESKTOP;
+	// Windows are right now not resizable, the content is also be shrunken, which should not happen.
+	uint32 sdl_flags = g_theProfileDB->IsWindowedMode() ? SDL_WINDOW_ALLOW_HIGHDPI /*| SDL_WINDOW_RESIZABLE*/ : SDL_WINDOW_FULLSCREEN_DESKTOP;
 
 	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 	                               m_width, m_height, sdl_flags);
+
+	if (g_theProfileDB->IsWindowedMode())
+		SDL_SetWindowMinimumSize(m_SDLWindow, 800, 600); // These numbers should be constants.
 
 	if (!m_SDLWindow)
 	{
@@ -367,4 +371,33 @@ AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void )
 		return AUI_ERRCODE_OK;
 }
 
+AUI_ERRCODE aui_SDLUI::ChangeSize(sint32 width, sint32 height)
+{
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+
+	// Something needs to be done here so that the screen content is not shrunken.
+/*
+	m_width  = width;
+	m_height = height;
+
+	g_ScreenWidth  = width;
+	g_ScreenHeight = height;
+
+	delete m_primary;
+	m_primary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, TRUE);
+	Assert(AUI_NEWOK(m_primary, errcode));
+	if (!AUI_NEWOK(m_primary, errcode)) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	delete m_secondary;
+	m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
+		Assert(AUI_NEWOK(m_secondary, errcode));
+		if (!AUI_NEWOK(m_secondary, errcode)) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	m_pixelFormat = m_primary->PixelFormat();
+*/
+	Invalidate(NULL);
+
+	return AUI_ERRCODE_OK;
+}
 #endif  // __AUI_USE_SDL__
+
