@@ -1157,8 +1157,6 @@ void ParseCommandLine(PSTR szCmdLine)
 #if defined(_MSC_VER)
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
-// ToDo: Check whether this is really only 32 bit code
-#if defined(_X86_)
 #if defined(_DEBUG) || defined(USE_LOGGING)
 
 	MBCHAR * s;
@@ -1214,7 +1212,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 	}
 
 #endif // _DEBUG
-#endif // _X86_
+
 	return EXCEPTION_EXECUTE_HANDLER;
 }
 #endif // _MSC_VER

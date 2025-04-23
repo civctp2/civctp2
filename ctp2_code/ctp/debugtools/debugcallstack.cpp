@@ -651,7 +651,7 @@ void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number)
 	size_t caller;
 	const char *caller_name;
 
-	size_t index = 0;
+	int index = 0;
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
@@ -691,7 +691,7 @@ void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int num
 
 	char allocator_name[1024];
 
-	size_t index = 0;
+	int index = 0;
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
@@ -795,7 +795,7 @@ char * c3debug_StackTrace(void)
 	return s_stackTraceString;
 }
 
-#if defined(_MSC_VER) && defined(_X86_)
+#if defined(_MSC_VER)
 char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 {
 	if(!function_name_open)
@@ -810,9 +810,15 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 
 	size_t callstack_function[k_CALL_STACK_SIZE];
 
+#if defined(_X86_)
 	callstack_function[0] = exception->ContextRecord->Eip;
 
 	DebugCallStack_Save(&callstack_function[1], k_CALL_STACK_SIZE - 1, exception->ContextRecord->Ebp);
+#else
+	callstack_function[0] = NULL;
+
+	DebugCallStack_Save(&callstack_function[1], k_CALL_STACK_SIZE - 1, 0);
+#endif
 
 	s_stackTraceString[0] = 0;
 
@@ -826,11 +832,11 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 			size_t offset;
 			caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
-			sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
+			sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 		}
 		else
 		{
-			sprintf(function_name, "  0x%08x\n", caller);
+			sprintf(function_name, "  0x%08zx\n", caller);
 		}
 
 		if (strlen(s_stackTraceString) + strlen(function_name) < k_STACK_TRACE_LEN - 1 )

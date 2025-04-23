@@ -246,7 +246,7 @@ void c3debug_SetDebugMask(int mask, int set)
 	}
 }
 
-#if defined(_MSC_VER) && defined(_X86_)
+#if defined(_MSC_VER)
 static LONG _cdecl c3debug_CivExceptionHandler (LPEXCEPTION_POINTERS exception_pointers)
 {
 	MBCHAR *s;
