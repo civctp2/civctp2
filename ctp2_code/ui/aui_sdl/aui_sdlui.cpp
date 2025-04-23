@@ -73,7 +73,6 @@ aui_SDLUI::aui_SDLUI
     m_SDLRenderer       (0),
     m_SDLTexture        (0)
 {
-
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -127,26 +126,33 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 	                               m_width, m_height, sdl_flags);
 
-	if (!m_SDLWindow) {
+	if (!m_SDLWindow)
+	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL window creation failed:\n%s\n", SDL_GetError());
 	}
+
 	m_SDLRenderer = SDL_CreateRenderer(m_SDLWindow, -1, 0);
-	if (!m_SDLRenderer) {
+	if (!m_SDLRenderer)
+	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL renderer creation failed:\n%s\n", SDL_GetError());
 	}
+
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	SDL_RenderSetLogicalSize(m_SDLRenderer, m_width, m_height);
 	m_SDLTexture = SDL_CreateTexture(m_SDLRenderer, aui_SDLSurface::TransformSurfacePixelFormatToSDL(m_pixelFormat),
 		SDL_TEXTUREACCESS_STREAMING, m_width, m_height);
-	if (!m_SDLTexture) {
+
+	if (!m_SDLTexture)
+	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL texture creation failed:\n%s\n", SDL_GetError());
- 	}
+	}
 
 	m_primary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, TRUE);
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	if(!m_secondary) {
+	if(!m_secondary)
+	{
 		m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
 		Assert( AUI_NEWOK(m_secondary,errcode) );
 		if ( !AUI_NEWOK(m_secondary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -232,13 +238,18 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
 
-	if (m_mouse) {
-		if (g_exclusiveMode) {
+	if (m_mouse)
+	{
+		if (g_exclusiveMode)
+		{
 			TearDownMouse();
-		} else {
+		}
+		else
+		{
 			main_RestoreTaskBar();
 
-			if (!m_mouse->IsSuspended()) {
+			if (!m_mouse->IsSuspended())
+			{
 				m_mouse->Suspend(FALSE);
 				m_mouse->Unacquire();
 			}
@@ -283,9 +294,12 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	while ( ShowCursor( FALSE ) >= 0 )
 		;
 
-	if (g_exclusiveMode) {
+	if (g_exclusiveMode)
+	{
 		RestoreMouse();
-	} else {
+	}
+	else
+	{
 		if ( m_minimize || m_exclusiveMode )
 		{
 			POINT point;
@@ -315,7 +329,8 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	return FlushDirtyList();
 }
 
-aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
+aui_MovieManager* aui_SDLUI::CreateMovieManager( void )
+{
 	Assert(m_SDLWindow);
 	Assert(m_SDLRenderer);
 	Assert(m_SDLTexture);
@@ -325,7 +340,8 @@ aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
 	return new aui_SDLMovieManager(m_SDLRenderer, m_SDLTexture, windowWidth, windowHeight);
 }
 
-AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {
+AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void )
+{
 	Assert(m_primary);
 	Assert(m_SDLTexture);
 	Assert(m_SDLRenderer);

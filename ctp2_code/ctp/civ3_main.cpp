@@ -1622,8 +1622,8 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 #if defined(__AUI_USE_SDL__)
 		SDL_Event event;
-		while (!g_letUIProcess) { // There are breaks, too ;)
-
+		while (!g_letUIProcess) // There are breaks, too ;)
+		{
 			static const int FRAMES_PER_SECOND = 30;
 			static const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
 			const int frameTicksLeft = frameStartTick + TICKS_PER_FRAME - GetTickCount();
@@ -1637,8 +1637,11 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				}
 			}
 
+			// If you want to handle more events then update FilterEvents in aui_sdl.cpp
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION-1);
-			if (0 > n) {
+
+			if (0 > n)
+			{
 				fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 				break;
 			}
@@ -1646,12 +1649,15 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			if (0 == n)
 			{
 				n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_MOUSEWHEEL+1, SDL_LASTEVENT);
-				if (0 > n) {
+
+				if (0 > n)
+				{
 					fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 					break;
 				}
 
-				if (0 == n) {
+				if (0 == n)
+				{
 					// other events are handled in other threads
 					// or no more events
 					break;
@@ -1893,7 +1899,7 @@ int SDLMessageHandler(const SDL_Event &event)
 				break;
 			} // end of switch (key)
 			if (wp != '\0') {
-			  ui_HandleKeypress(wp, 0); 
+				ui_HandleKeypress(wp, 0);
 			}
 			break;
 		} // end of case SDL_KEYDOWN
@@ -1903,7 +1909,7 @@ int SDLMessageHandler(const SDL_Event &event)
 		DoFinalCleanup();
 
 		return 0;
-// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
+	// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
 	}
 
 	//lynx: in the code without SDL the event (if not processed up to here) is passed to the OS handler with DefWindowProc()
