@@ -524,21 +524,29 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		}
 	}
 #elif defined(__AUI_USE_SDL__)
-	// @ToDo: Implement blink
 	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
-	// fill background
+
+	// Fill background
 	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
 	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, 0xff, 0xff, 0xff));
 
+	// Draw string
 	m_Font->DrawString(surface, &rect, &rect, m_Text,
 	                   k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
 	                   RGB(20,20,20), 0);
+
+	// Calculate caret position
 	char save = m_Text[m_selStart];
 	m_Text[m_selStart] = '\0';
 	int offset = m_Font->GetStringWidth(m_Text);
 	m_Text[m_selStart] = save;
-	SDL_Rect r2 = { rect.left+offset-1, rect.top+2, 2, rect.bottom-rect.top-4 };
-	SDL_FillRect(SDLsurf, &r2, 0);
+
+	// Draw blinking caret
+	if (m_blink && GetKeyboardFocus() == this)
+	{
+		SDL_Rect r2 = { rect.left + offset - 1, rect.top + 2, 2, rect.bottom - rect.top - 4 };
+		SDL_FillRect(SDLsurf, &r2, 0);
+	}
 #endif
 
 	if ( surface == m_window->TheSurface() )
