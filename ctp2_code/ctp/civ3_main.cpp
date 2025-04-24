@@ -1786,6 +1786,7 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_TAB, '\t' + 128);
 			SDLKCONV(SDLK_RETURN, VK_RETURN); // set to VK_RETURN to hit escape rules in aui_textfield.cpp
+			SDLKCONV(SDLK_KP_ENTER, VK_RETURN);
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
 			SDLKCONV(SDLK_UP, SDLK_UP + 256);
 			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
