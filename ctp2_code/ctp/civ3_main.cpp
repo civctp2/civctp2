@@ -154,8 +154,9 @@
 #include "workwindow.h"
 #include "World.h"                      // g_theWorld
 
+#if defined(__AUI_USE_SDL__)
 #include <codecvt>
-//#include <locale>
+#endif
 
 #if !defined(__GNUC__) // TODO: replacement needed (wine doesnt have these headers...)
 #include "directvideo.h"
@@ -1756,7 +1757,7 @@ void DoFinalCleanup(int exitCode)
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
 #if defined(__AUI_USE_SDL__)
-int SDLMessageHandler(SDL_Event &event)
+int SDLMessageHandler(const SDL_Event &event)
 {
 	// Merge into WndProc with keycode converter and
 	// unchanged ui_HandleKeypress(wParam, lParam)
@@ -1782,45 +1783,10 @@ int SDLMessageHandler(SDL_Event &event)
 			case (sdl_name): \
 				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
 				break;
-// For the purposes of this macro, shift is ignored when ctrl is pressed
-#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
-			case (sdl_name): \
-				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
-						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
-					); \
-				break;
 			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_TAB, '\t' + 128);
 			SDLKCONV(SDLK_RETURN, VK_RETURN); // set to VK_RETURN to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
-/*			SDLKCONV(SDLK_SPACE, ' ');
-			SDLKCONV(SDLK_EXCLAIM, '!');
-			SDLKCONV(SDLK_QUOTEDBL, '"');
-			SDLKCONVSHIFT(SDLK_HASH, '#', '~');
-			SDLKCONV(SDLK_DOLLAR, '$');
-			SDLKCONV(SDLK_AMPERSAND, '&');
-			SDLKCONVSHIFT(SDLK_QUOTE, '\'', '@');
-			SDLKCONV(SDLK_LEFTPAREN, '(');
-			SDLKCONV(SDLK_RIGHTPAREN, ')');
-			SDLKCONV(SDLK_ASTERISK, '*');
-			SDLKCONV(SDLK_PLUS, '+');
-			SDLKCONVSHIFT(SDLK_COMMA, ',', '<');
-			SDLKCONVSHIFT(SDLK_MINUS, '-', '_');
-			SDLKCONVSHIFT(SDLK_PERIOD, '.', '>');
-			SDLKCONVSHIFT(SDLK_SLASH, '/', '?');
-			SDLKCONV(SDLK_COLON, ':');
-			SDLKCONVSHIFT(SDLK_SEMICOLON, ';', ':');
-			SDLKCONV(SDLK_LESS, '<');
-			SDLKCONVSHIFT(SDLK_EQUALS, '=', '+');
-			SDLKCONV(SDLK_GREATER, '>');
-			SDLKCONV(SDLK_QUESTION, '?');
-			SDLKCONV(SDLK_AT, '@');
-			SDLKCONVSHIFT(SDLK_LEFTBRACKET, '[', '{');
-			SDLKCONVSHIFT(SDLK_RIGHTBRACKET, ']', '}');
-			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
-			SDLKCONV(SDLK_CARET, '^');
-			SDLKCONV(SDLK_UNDERSCORE, '_');
-			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
 			SDLKCONV(SDLK_UP, SDLK_UP + 256);
 			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
 			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
@@ -1839,65 +1805,13 @@ int SDLMessageHandler(SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
 			// Given the bizarre choices for F11 and F12, I am reluctant to
 			// extrapolate to F15
-			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
-			//SDLKCONVSHIFT(SDLK_F14, '' + 128, '\0');
-			//SDLKCONVSHIFT(SDLK_F15, '' + 128, '\0');
-			SDLKCONV(SDLK_KP_0, '0');
-			SDLKCONV(SDLK_KP_1, '1');
-			SDLKCONV(SDLK_KP_2, '2');
-			SDLKCONV(SDLK_KP_3, '3');
-			SDLKCONV(SDLK_KP_4, '4');
-			SDLKCONV(SDLK_KP_5, '5');
-			SDLKCONV(SDLK_KP_6, '6');
-			SDLKCONV(SDLK_KP_7, '7');
-			SDLKCONV(SDLK_KP_8, '8');
-			SDLKCONV(SDLK_KP_9, '9');
-			SDLKCONV(SDLK_KP_PERIOD, '.');
-			SDLKCONV(SDLK_KP_DIVIDE, '/');
-			SDLKCONV(SDLK_KP_MULTIPLY, '*');
-			SDLKCONV(SDLK_KP_MINUS, '-');
-			SDLKCONV(SDLK_KP_PLUS, '+');
-			SDLKCONV(SDLK_KP_ENTER, '\r' + 128);
-			SDLKCONV(SDLK_KP_EQUALS, '=');
-			SDLKCONVSHIFT(SDLK_1, '1', '!');
-			SDLKCONVSHIFT(SDLK_2, '2', '"');
-			SDLKCONVSHIFT(SDLK_3, '3', '£');
-			SDLKCONVSHIFT(SDLK_4, '4', '$');
-			SDLKCONVSHIFT(SDLK_5, '5', '%');
-			SDLKCONVSHIFT(SDLK_6, '6', '^');
-			SDLKCONVSHIFT(SDLK_7, '7', '/');
-			SDLKCONVSHIFT(SDLK_8, '8', '*');
-			SDLKCONVSHIFT(SDLK_9, '9', '(');
-			SDLKCONVSHIFT(SDLK_0, '0', ')');
-			SDLKCONVSHIFTCTRL(SDLK_a, 'a', 'A', 'a'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_b, 'b', 'B', 'b'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_c, 'c', 'C', 'c'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_d, 'd', 'D', 'd'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_e, 'e', 'E', 'e'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_f, 'f', 'F', 'f'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_g, 'g', 'G', 'g'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_h, 'h', 'H', 'h'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_i, 'i', 'I', 'i'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_j, 'j', 'J', 'j'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_k, 'k', 'K', 'k'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_l, 'l', 'L', 'l'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_m, 'm', 'M', 'm'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_n, 'n', 'N', 'n'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_o, 'o', 'O', 'o'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_p, 'p', 'P', 'p'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_q, 'q', 'Q', 'q'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_r, 'r', 'R', 'r'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_s, 's', 'S', 's'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_t, 't', 'T', 't'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_u, 'u', 'U', 'u'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_v, 'v', 'V', 'v'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_w, 'w', 'W', 'w'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_x, 'x', 'X', 'x'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_y, 'y', 'Y', 'y'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z'-'a'+1);*/
+			// What is the problem just look where they are on an American keyboard
+			// is just the question whether they mean anything
+			SDLKCONVSHIFT(SDLK_F13, '#' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F14, '$' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F15, '%' + 128, '\0');
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
-#undef SDLKCONVSHIFTCTRL
 			default:
 				break;
 			} // end of switch (key)
@@ -1935,8 +1849,10 @@ int SDLMessageHandler(SDL_Event &event)
 		std::wstring wide_str = converter.from_bytes(source);
 
 		ui_HandleKeypress(wide_str.c_str()[0], 0);
+
+		break;
 	}
-	break;	case SDL_QUIT:
+	case SDL_QUIT:
 		gDone = TRUE;
 
 		DoFinalCleanup();

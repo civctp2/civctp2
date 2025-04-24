@@ -13,9 +13,10 @@
 
 #include "ldl_data.hpp"
 
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 #include "aui_sdlsurface.h"
 #include <string>
+#include <codecvt>
 #endif
 
 WNDPROC aui_TextField::m_windowProc = NULL;
@@ -371,17 +372,18 @@ sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
 #if 0 // not doing anything
 	if (m_maxFieldLen != prevMaxFieldLen)
 	{
-
-	}
-#ifndef __AUI_USE_DIRECTX__ // Merged in from Linux branch but I leave it as it was for Windows, see above
-	char* newText = new char[maxFieldLen + 1];
-	strncpy(newText, m_Text, maxFieldLen);
-	newText[maxFieldLen] = '\0';
-	delete[] m_Text;
-	m_Text = newText;
+#ifndef __AUI_USE_DIRECTX__
+		// Merged in from Linux branch but I leave it as it was for Windows, see above
+		// In fact that is very wired as this is not used
+		char* newText = new char[maxFieldLen + 1];
+		strncpy(newText, m_Text, maxFieldLen);
+		newText[maxFieldLen] = '\0';
+		delete[] m_Text;
+		m_Text = newText;
 #else
-	fprintf(stderr, "%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
+		fprintf(stderr, "%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
 #endif
+	}
 #endif
 
 	return prevMaxFieldLen;
@@ -522,6 +524,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		}
 	}
 #elif defined(__AUI_USE_SDL__)
+	// @ToDo: Implement blink
 	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
 	// fill background
 	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
@@ -753,8 +756,20 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				// Don't let any more characters in if you're at the max.
 				if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
 
+#if 0
+				// Attempt to put unicode characters in, but does not work
+				// Maybe the whole thing has to be converted
+				std::string source(m_Text); // char array to c++ string
+				std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+				std::wstring wide_str = converter.from_bytes(source);
+
+				wide_str += static_cast<wchar_t>(wParam); // Append wide char to wide string
+				std::string str = converter.to_bytes(wide_str);
+#else
 				std::string str(m_Text); // char array to c++ string
-				str += static_cast<char>(wParam); // append char to string
+				str += static_cast<char>(wParam); // Append wide char to wide string
+#endif
+
 				SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 				g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
 				break;

@@ -127,13 +127,13 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
 	                               m_width, m_height, sdl_flags);
 
-	if (g_theProfileDB->IsWindowedMode())
-		SDL_SetWindowMinimumSize(m_SDLWindow, 800, 600); // These numbers should be constants.
-
 	if (!m_SDLWindow)
 	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL window creation failed:\n%s\n", SDL_GetError());
 	}
+
+	if (g_theProfileDB->IsWindowedMode())
+		SDL_SetWindowMinimumSize(m_SDLWindow, 800, 600); // These numbers should be constants.
 
 	m_SDLRenderer = SDL_CreateRenderer(m_SDLWindow, -1, 0);
 	if (!m_SDLRenderer)

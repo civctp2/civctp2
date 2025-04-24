@@ -549,10 +549,10 @@ aui_Control *aui_Control::SetMouseOwnership( void )
 AUI_ERRCODE aui_Control::ReleaseMouseOwnership( void )
 {
 	if (GetMouseOwnership() != this)
-	    return AUI_ERRCODE_NOCONTROL;
+		return AUI_ERRCODE_NOCONTROL;
 
 	s_whichOwnsMouse = NULL;
-    return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -570,28 +570,28 @@ aui_Control *aui_Control::SetKeyboardFocus( void )
 	return prevFocus;
 }
 
-#ifndef WIN32
+#if defined(__AUI_USE_SDL__)
 extern class aui_Win* g_winFocus;
 #endif
 
 AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 {
 	if (GetKeyboardFocus() != this)
-	    return AUI_ERRCODE_NOCONTROL;
+		return AUI_ERRCODE_NOCONTROL;
 
 	s_whichHasFocus = NULL;
-    m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
+	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
 
-    if (g_ui)
-    {
-#ifdef WIN32
-	    SetFocus(g_ui->TheHWND());
+	if (g_ui)
+	{
+#if !defined(__AUI_USE_SDL__)
+		SetFocus(g_ui->TheHWND());
 #else
-        g_winFocus = 0;
+		g_winFocus = 0;
 #endif
-    }
+	}
 
-    return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 
 
