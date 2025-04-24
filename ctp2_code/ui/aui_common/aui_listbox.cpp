@@ -2038,7 +2038,8 @@ bool aui_ListBox::HandleKey(uint32 wParam)
 			}
 		}
 	}
-	return false;
+
+	return aui_Control::HandleKey(wParam);
 }
 
 void aui_ListBox::SetKeyboardActionControl(aui_Control *control)

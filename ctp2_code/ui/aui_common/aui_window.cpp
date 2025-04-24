@@ -139,17 +139,18 @@ AUI_ERRCODE aui_Window::CreateSurface( void )
 
 aui_Window::~aui_Window()
 {
-    if (g_c3ui)
-    {
-        g_c3ui->RemoveWindow(Id());
-    }
+	if (g_c3ui)
+	{
+		g_c3ui->RemoveWindow(Id());
+	}
 
-    delete m_surface;
-    delete m_dirtyList;
-    delete m_grabRegion;
-    free(m_stencil);
-    delete m_focusControl;
-    delete m_focusList;
+	delete m_surface;
+	delete m_dirtyList;
+	delete m_grabRegion;
+	free(m_stencil);
+	// Just a pointer not created here directly
+	// delete m_focusControl;
+	delete m_focusList;
 }
 
 AUI_ERRCODE aui_Window::Move( sint32 x, sint32 y )
