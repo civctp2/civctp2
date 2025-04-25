@@ -1619,7 +1619,7 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		} else {
 
 			if(!m_forceSelect) {
-				for(size_t i = m_selectedList->L() - 1; i >= 0; i--) {
+				for(size_t i = m_selectedList->L(); i; i--) {
 					DeselectItem(m_selectedList->GetAtIndex(0));
 				}
 			}
