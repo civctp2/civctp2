@@ -1435,7 +1435,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 	MBCHAR name[k_SCENARIO_NAME_MAX];
 	memset(name, 0, k_SCENARIO_NAME_MAX);
 
-	if(strlen(g_scenarioName) > 0) // Problem in Multiplayer
+	if(strlen(g_scenarioName) > 0)
 	{
 		strcpy(name, g_scenarioName);
 	}
@@ -1526,16 +1526,20 @@ void GameFile::SetProfileFromExtendedInfo(SaveInfo *info)
 
 	if(g_saveFileVersion >= 42)
 	{
-		if(!info->isScenario)
+		memset(g_scenarioName, 0, k_SCENARIO_NAME_MAX);
+
+		if (!info->isScenario)
 		{// exclude starting new scenarios
 			if (info->scenarioName != NULL && strlen(info->scenarioName) > 0)
 			{//same as in beginloadprocess
-				strcpy(g_scenarioName,info->scenarioName);
+				strcpy(g_scenarioName, info->scenarioName);
 			}
 		}
+
 		g_isScenario = info->isScenario;
 		g_startInfoType = info->startInfoType;
-	} else
+	}
+	else
 	{
 		g_isScenario = FALSE;
 		g_startInfoType = STARTINFOTYPE_NONE;

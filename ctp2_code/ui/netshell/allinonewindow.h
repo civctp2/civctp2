@@ -28,7 +28,22 @@ extern AllinoneWindow *g_allinoneWindow;
 
 #include "StartingPosition.h"
 
-struct ns_ScenarioInfo {
+struct ns_ScenarioInfo
+{
+	ns_ScenarioInfo()
+	:
+	    isScenario          (0),
+	    m_numStartPositions (0),
+	    m_startInfoType     (0),
+	    m_haveSavedGame     (0)
+	{
+		std::fill(m_fileName,     m_fileName     + _MAX_PATH,          '\0');
+		std::fill(m_gameName,     m_gameName     + _MAX_PATH,          '\0');
+		std::fill(m_civs,         m_civs         + k_MAX_START_POINTS,   0 );
+		std::fill(m_legalCivs,    m_legalCivs    + k_MAX_PLAYERS,        0 );
+		std::fill(m_scenarioName, m_scenarioName + _MAX_PATH,          '\0');
+	}
+
 	uint8 isScenario;
 	MBCHAR m_fileName[_MAX_PATH];
 	MBCHAR m_gameName[_MAX_PATH];
@@ -38,7 +53,6 @@ struct ns_ScenarioInfo {
 	uint8 m_haveSavedGame;
 	sint32 m_legalCivs[k_MAX_PLAYERS];
 	MBCHAR m_scenarioName[_MAX_PATH];
-
 };
 
 class AllinoneWindow : public ns_Window
