@@ -220,6 +220,8 @@ void NetCellList::Packetize(uint8* buf, uint16& size)
 				return;
 			}
 		}
+
+		m_y = 0;
 	}
 }
 
@@ -314,8 +316,6 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				cell->m_objects->Insert(id);
 			}
 
-			cell->CalcTerrainMoveCost();
-
 			DPRINTF(k_DBG_NET, ("Map pos: (%3d, %3d), Current cell: %3zu, Terrain type: %3d, Owner: %3d, City ID: %8u, Flags: %8d, Jabba type: %3d, Jabba value: %3d, Object count: %3d \n",
 				x,
 				y,
@@ -327,6 +327,8 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				cell->m_jabba ? cell->m_jabba->m_typeValue : 0,
 				cell->m_jabba ? cell->m_jabba->m_value : 0,
 				numObjects));
+
+			cell->CalcTerrainMoveCost();
 
 			if (g_theWorld->GetTileInfo(mp))
 			{
