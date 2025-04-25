@@ -263,7 +263,7 @@ AUI_ERRCODE aui_Window::AddChild( aui_Region *child )
 AUI_ERRCODE aui_Window::RemoveChild( uint32 controlId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
@@ -689,7 +689,7 @@ void aui_Window::SetStencilFromImage(const MBCHAR *imageFileName)
 void aui_Window::AddFocusControl(aui_Control *control)
 {
 	ListPos position = m_focusList->GetHeadPosition();
-	for(sint32 i = m_focusList->L(); i; i--) {
+	for(size_t i = m_focusList->L(); i; i--) {
 		aui_Control *c = (aui_Control *)m_focusList->GetNext(position);
 		if(control->KeyboardFocusIndex() < c->KeyboardFocusIndex()) {
 			m_focusList->InsertBefore(position, control);
@@ -713,7 +713,7 @@ aui_Control *aui_Window::NextFocusControl()
 		return NULL;
 
 	ListPos position = m_focusList->GetHeadPosition();
-	sint32 i;
+	size_t i;
 	for ( i = m_focusList->L(); i; i-- )	{
 		aui_Control *control = (aui_Control *)m_focusList->GetNext( position );
 		if((!m_focusControl || next) && !control->IsHidden() && !control->IsDisabled()) {
@@ -767,7 +767,7 @@ bool aui_Window::HandleKey(uint32 wParam)
 			else
 			{
 				ListPos position = m_childList->GetHeadPosition();
-				for ( sint32 i = m_childList->L(); i; i-- )	{
+				for ( size_t i = m_childList->L(); i; i-- )	{
 					aui_Control *control = (aui_Control *)m_childList->GetNext( position );
 
 					if(control->HandleKey(wParam))

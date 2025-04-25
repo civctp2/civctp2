@@ -517,7 +517,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
-					for ( sint32 i = m_hyperStaticList->L()-1; i; i-- )
+					for ( size_t i = m_hyperStaticList->L()-1; i; i-- )
 						m_hyperStaticList->GetNext( pos )->Offset( 0, -topY );
 
 					m_virtualHeight -= topY;
@@ -553,7 +553,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void c3_HyperTextBox::RemoveHyperLinks( void )
 {
-	for (sint32 i = m_hyperLinkList->L(); i; --i)
+	for (size_t i = m_hyperLinkList->L(); i; --i)
 	{
 		delete m_hyperLinkList->RemoveTail();
 	}

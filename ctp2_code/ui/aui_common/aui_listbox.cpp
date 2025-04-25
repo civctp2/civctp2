@@ -242,7 +242,7 @@ AUI_ERRCODE aui_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	AddChild( m_header );
 
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
 			m_header->ChildList()->GetNext( position )->Width() );
 
@@ -369,7 +369,7 @@ AUI_ERRCODE aui_ListBox::Draw(
 
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
-		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
+		for ( size_t i = m_visualSelectedList->L(); i; i-- )
 		{
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
@@ -397,13 +397,13 @@ AUI_ERRCODE aui_ListBox::Draw(
 BOOL aui_ListBox::IsItem( aui_Region *region )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Region *item = m_pane->ChildList()->GetNext( position );
 		if ( item == region ) return TRUE;
 
 		ListPos childPos = item->ChildList()->GetHeadPosition();
-		for ( sint32 j = item->ChildList()->L(); j; j-- )
+		for ( size_t j = item->ChildList()->L(); j; j-- )
 		{
 			aui_Region *childItem = item->ChildList()->GetNext( childPos );
 			if ( childItem == region ) return TRUE;
@@ -486,7 +486,7 @@ AUI_ERRCODE aui_ListBox::AddItem( aui_Item *item )
 		item->Resize( m_itemWidth, item->Height() );
 
 		ListPos position = item->ChildList()->GetHeadPosition();
-		for ( sint32 i = item->ChildList()->L(); i; i-- )
+		for ( size_t i = item->ChildList()->L(); i; i-- )
 		{
 			aui_Region *child = item->ChildList()->GetNext( position );
 			child->Resize( m_itemWidth, child->Height() );
@@ -498,7 +498,7 @@ AUI_ERRCODE aui_ListBox::AddItem( aui_Item *item )
 		item->Resize( item->Width(), m_itemHeight );
 
 		ListPos position = item->ChildList()->GetHeadPosition();
-		for ( sint32 i = item->ChildList()->L(); i; i-- )
+		for ( size_t i = item->ChildList()->L(); i; i-- )
 		{
 			aui_Region *child = item->ChildList()->GetNext( position );
 			child->Resize( child->Width(), m_itemHeight );
@@ -531,7 +531,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 		item->Resize( m_itemWidth, item->Height() );
 
 		ListPos position = item->ChildList()->GetHeadPosition();
-		for ( sint32 i = item->ChildList()->L(); i; i-- )
+		for ( size_t i = item->ChildList()->L(); i; i-- )
 		{
 			aui_Region *child = item->ChildList()->GetNext( position );
 			child->Resize( m_itemWidth, child->Height() );
@@ -543,7 +543,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 		item->Resize( item->Width(), m_itemHeight );
 
 		ListPos position = item->ChildList()->GetHeadPosition();
-		for ( sint32 i = item->ChildList()->L(); i; i-- )
+		for ( size_t i = item->ChildList()->L(); i; i-- )
 		{
 			aui_Region *child = item->ChildList()->GetNext( position );
 			child->Resize( child->Width(), m_itemHeight );
@@ -554,7 +554,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 		SelectItem( (sint32)0, 1 );
 
 	ListPos position = m_selectedList->GetHeadPosition();
-	sint32	i;
+	size_t i;
 	for ( i = m_selectedList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
@@ -596,7 +596,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = 0; i < (sint32)m_pane->ChildList()->L(); i++ )
+	for ( size_t i = 0; i < (sint32)m_pane->ChildList()->L(); i++ )
 	{
 		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
@@ -610,7 +610,7 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 				m_selectedList->DeleteAt( selectedPosition );
 
 			selectedPosition = m_selectedList->GetHeadPosition();
-			for ( sint32 j = m_selectedList->L(); j; j-- )
+			for ( size_t j = m_selectedList->L(); j; j-- )
 			{
 				ListPos prevSelectedPosition = selectedPosition;
 				sint32 index = m_selectedList->GetNext( selectedPosition );
@@ -622,7 +622,7 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 			&&   !m_selectedList->L()
 			&&   m_pane->ChildList()->L() )
 			{
-				if ( i < (sint32)m_pane->ChildList()->L() )
+				if ( i < m_pane->ChildList()->L() )
 					m_selectedList->AddHead( i );
 				else
 					m_selectedList->AddHead( i ? i - 1 : 0 );
@@ -652,7 +652,7 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 
 void aui_ListBox::RemoveItems( BOOL destroy, BOOL destroyAction )
 {
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetHead();
 		RemoveItem( item->Id() );
@@ -705,7 +705,7 @@ AUI_ERRCODE aui_ListBox::RemoveHeaderSwitch( uint32 switchId )
 
 	ListPos widthPosition = m_widthList->GetHeadPosition();
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 	{
 		ListPos prevWidthPosition = widthPosition;
 		m_widthList->GetNext( widthPosition );
@@ -787,19 +787,19 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 
 	sint32 i;
 	for(
-		i = m_numColumns - m_widthList->L();
+		i = m_numColumns - static_cast<sint32>(m_widthList->L());
 		i > 0 && (width += m_maxItemWidth) <= m_width;
 		i-- )
 			count++;
 
 	ListPos position = m_widthList->GetTailPosition();
 	for(
-		sint32 j = m_widthList->L();
+		size_t j = m_widthList->L();
 		j && (width += m_widthList->GetPrev( position )) <= m_width;
 		j-- )
 			count++;
 
-	sint32 columns = m_numColumns ? m_numColumns : m_widthList->L();
+	sint32 columns = m_numColumns ? m_numColumns : static_cast<sint32>(m_widthList->L());
 	if ( !columns ) columns = count;
 
 	return columns - count;
@@ -823,7 +823,7 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		if ( item->Height() > m_maxItemHeight )
 			m_maxItemHeight = item->Height();
 
-		sint32 j = item->ChildList()->L();
+		size_t j = item->ChildList()->L();
 		if ( j + 1 > m_numColumns ) m_numColumns = j + 1;
 
 		ListPos subPosition = item->ChildList()->GetHeadPosition();
@@ -1166,7 +1166,7 @@ void aui_ListBox::WhatsChanged(
 	}
 
 	position = m_selectedListLastTime->GetHeadPosition();
-	for ( sint32 j = m_selectedListLastTime->L(); j; j-- )
+	for ( size_t j = m_selectedListLastTime->L(); j; j-- )
 	{
 		sint32 itemIndex = m_selectedListLastTime->GetNext( position );
 		if ( !m_selectedList->Find( itemIndex ) )
@@ -1397,7 +1397,7 @@ void aui_ListBox::PreChildrenCallback( aui_MouseEvent *mouseData )
 		m_absorbed = TRUE;
 
 		ListPos position = m_pane->ChildList()->GetHeadPosition();
-		for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+		for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 		{
 			aui_Item *item =
 				(aui_Item *)m_pane->ChildList()->GetNext( position );
@@ -1427,7 +1427,7 @@ void aui_ListBox::PostChildrenCallback( aui_MouseEvent *mouseData )
 		m_absorbed = FALSE;
 
 		ListPos position = m_pane->ChildList()->GetHeadPosition();
-		for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+		for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 		{
 			aui_Item *item =
 				(aui_Item *)m_pane->ChildList()->GetNext( position );
@@ -1619,7 +1619,7 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		} else {
 
 			if(!m_forceSelect) {
-				for(sint32 i = m_selectedList->L() - 1; i >= 0; i--) {
+				for(size_t i = m_selectedList->L() - 1; i >= 0; i--) {
 					DeselectItem(m_selectedList->GetAtIndex(0));
 				}
 			}

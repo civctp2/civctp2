@@ -156,7 +156,7 @@ c3_ListBox::~c3_ListBox()
 		ms_mouseFocusListBox = NULL;
 	}
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item * item = (aui_Item *) m_pane->ChildList()->GetNext(position);
 		delete item;
@@ -233,7 +233,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader(const MBCHAR *ldlBlock )
 	AddChild( m_header );
 
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
 			m_header->ChildList()->GetNext( position )->Width() );
 
@@ -241,7 +241,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader(const MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -315,7 +315,7 @@ AUI_ERRCODE c3_ListBox::CreateRangersAndHeader(const MBCHAR *ldlBlock )
 void c3_ListBox::Clear(void)
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		RemoveItem(item->Id());
@@ -399,7 +399,7 @@ AUI_ERRCODE c3_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
 	if ( m_absorbEvents ) {
-		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
+		for ( size_t i = m_visualSelectedList->L(); i; i-- )
 		{
 
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );

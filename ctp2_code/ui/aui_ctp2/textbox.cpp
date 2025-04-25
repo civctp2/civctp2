@@ -204,7 +204,7 @@ AUI_ERRCODE TextBox::CreateRangers(const MBCHAR *ldlBlock )
 	AddChild( m_header );
 
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
 			m_header->ChildList()->GetNext( position )->Width() );
 

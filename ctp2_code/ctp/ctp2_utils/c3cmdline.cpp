@@ -6407,21 +6407,21 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				l++;
 			}
 		}
-    } else if (m_display_mem) {
+	} else if (m_display_mem) {
 #ifdef _DEBUG_MEMORY
 
 		l=0;
-		sprintf (buf, "EXE total bytes: %d", DebugMemory_GetTotalFromEXE());
+		sprintf (buf, "EXE total bytes: %zu", DebugMemory_GetTotalFromEXE());
 		primitives_DrawText(surf, k_LEFT_EDGE,
 			k_TOP_EDGE + l * k_TEXT_SPACING, (MBCHAR *)buf, 0, 0);
 
 		l++;
-		sprintf (buf, "DLL total bytes: %d", DebugMemory_GetTotalFromDLL());
+		sprintf (buf, "DLL total bytes: %zu", DebugMemory_GetTotalFromDLL());
 		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 
 		l++;
-		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
+		sprintf (buf, "Combined total : %zu", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
 		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 #elif defined(_DEBUG) && defined(WIN32)

@@ -169,7 +169,7 @@ AUI_ERRCODE C3ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
 	if ( m_absorbEvents ) {
-		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
+		for ( size_t i = m_visualSelectedList->L(); i; i-- )
 		{
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )

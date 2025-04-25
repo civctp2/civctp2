@@ -436,7 +436,7 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 	{
 		if ( !GetChild( child->Id() ) )
 		{
-			sint32 j;
+			size_t j;
 			for ( j = m_childList->L(); j; j-- )
 			{
 				ListPos curPosition = position;
@@ -473,7 +473,7 @@ AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Window *window = (aui_Window *)m_childList->GetNext( position );
@@ -482,12 +482,12 @@ AUI_ERRCODE aui_UI::RemoveChild( uint32 windowId )
 
 			window->DeleteSurfaceIfDynamic();
 
-  			aui_Control *focus = aui_Control::GetKeyboardFocus();
-  			if ( focus && window->GetChild( focus->Id() ) )
-  			{
-  				focus->ReleaseKeyboardFocus();
-  				focus->ReleaseMouseOwnership();
-  			}
+			aui_Control *focus = aui_Control::GetKeyboardFocus();
+			if ( focus && window->GetChild( focus->Id() ) )
+			{
+				focus->ReleaseKeyboardFocus();
+				focus->ReleaseMouseOwnership();
+			}
 
 			window->Reset();
 
@@ -572,7 +572,7 @@ aui_Window *aui_UI::BringWindowToTop( aui_Window *window )
 	m_childListChanged = TRUE;
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 j = m_childList->L(); j; j-- )
+	for ( size_t j = m_childList->L(); j; j-- )
 	{
 		ListPos curPosition = position;
 
@@ -618,7 +618,7 @@ AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 	if ( !recurse )
 	{
 		ListPos position = m_childList->GetTailPosition();
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Region *window = m_childList->GetPrev( position );
 			window->Idle();
@@ -629,7 +629,7 @@ AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 
 
 			ListPos childPosition = window->ChildList()->GetHeadPosition();
-			for ( sint32 j = window->ChildList()->L(); j; j-- )
+			for ( size_t j = window->ChildList()->L(); j; j-- )
 				Idle( window->ChildList()->GetNext( childPosition ) );
 
 			if ( m_childListChanged )
@@ -645,7 +645,7 @@ AUI_ERRCODE aui_UI::Idle( aui_Region *recurse )
 		recurse->Idle();
 
 		ListPos childPosition = recurse->ChildList()->GetHeadPosition();
-		for ( sint32 j = recurse->ChildList()->L(); j; j-- )
+		for ( size_t j = recurse->ChildList()->L(); j; j-- )
 			Idle( recurse->ChildList()->GetNext( childPosition ) );
 	}
 
@@ -675,7 +675,7 @@ AUI_ERRCODE aui_UI::FlushDirtyList( void )
 	m_dirtyList->Flush();
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Window *window = (aui_Window *)m_childList->GetNext( position );
 		window->GetDirtyList()->Flush();
@@ -687,7 +687,7 @@ AUI_ERRCODE aui_UI::FlushDirtyList( void )
 AUI_ERRCODE aui_UI::ShowWindow( uint32 windowId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Window *window = (aui_Window *)m_childList->GetNext( position );
 		if ( window->Id() == windowId )
@@ -704,7 +704,7 @@ AUI_ERRCODE aui_UI::ShowWindow( uint32 windowId )
 AUI_ERRCODE aui_UI::HideWindow( uint32 windowId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Window *window = (aui_Window *)m_childList->GetNext( position );
 		if ( window->Id() == windowId )
@@ -741,7 +741,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 		if ( m_imageAreas ) m_imageAreas->Flush();
 
 		ListPos position = m_dirtyList->GetHeadPosition();
-		sint32 i;
+		size_t i;
 		for ( i = m_dirtyList->L(); i; i-- )
 		{
 			RECT *dirtyRect = m_dirtyList->GetNext( position );
@@ -787,7 +787,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 
 	ListPos position = m_childList->GetTailPosition();
 	const ListPos tailPosition = position;
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		window = (aui_Window *)m_childList->GetPrev( position );
 
@@ -806,7 +806,7 @@ AUI_ERRCODE aui_UI::ClipAndConsolidate(void)
 			windowStencil = window->GetStencil();
 
 			ListPos dirtyPosition = m_dirtyList->GetHeadPosition();
-			sint32 j;
+			size_t j;
 			for ( j = m_dirtyList->L(); j; j-- )
 			{
 				RECT *rect = m_dirtyList->GetNext( dirtyPosition );
@@ -992,7 +992,7 @@ AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 
 	bool equals = false;
 	ListPos position = m_dirtyRectInfoList->GetHeadPosition();
-	for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- )
+	for ( size_t i = m_dirtyRectInfoList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		DirtyRectInfo *dri = m_dirtyRectInfoList->GetNext( position );
@@ -1037,7 +1037,7 @@ AUI_ERRCODE aui_UI::InsertDirtyRectInfo( RECT *rect, aui_Window *window )
 
 void aui_UI::FlushDirtyRectInfoList( void )
 {
-	for ( sint32 i = m_dirtyRectInfoList->L(); i; i-- )
+	for ( size_t i = m_dirtyRectInfoList->L(); i; i-- )
 		m_dirtyRectInfoMemory->Delete( m_dirtyRectInfoList->RemoveHead() );
 }
 
@@ -1367,7 +1367,7 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 		SetWhichSeesMouse( NULL );
 
 		ListPos position = m_childList->GetHeadPosition();
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Window *window = (aui_Window *)m_childList->GetNext( position );
 
@@ -1388,7 +1388,7 @@ AUI_ERRCODE aui_UI::HandleMouseEvents(
 					m_childListChanged = FALSE;
 
 					position = m_childList->GetHeadPosition();
-					for ( i = m_childList->L(); i; i-- )
+					for ( i = m_childList->L(); i; i-- ) // That's a bit wired, but doesn't seem to make any problems
 					{
 						window = (aui_Window *)m_childList->GetNext( position );
 						if ( !window->IsHidden() && window->Type() != AUI_WINDOW_TYPE_TIP )
@@ -1841,7 +1841,7 @@ AUI_ERRCODE aui_UI::Process( void )
 
 void aui_UI::HandleActions( void )
 {
-	for ( sint32 i = m_actionList->L(); i && m_actionList->L(); i-- )
+	for ( size_t i = m_actionList->L(); i && m_actionList->L(); i-- )
 	{
 		aui_Action *action = m_actionList->RemoveHead();
 		action->Execute( NULL, 0, 0 );
@@ -1859,7 +1859,7 @@ void aui_UI::AddAction( aui_Action *action )
 
 void aui_UI::HandleDestructiveActions( void )
 {
-	for ( sint32 i = m_destructiveActionList->L(); i; i-- )
+	for ( size_t i = m_destructiveActionList->L(); i; i-- )
 	{
 		aui_Action *action = m_destructiveActionList->RemoveHead();
 		action->Execute( NULL, 0, 0 );

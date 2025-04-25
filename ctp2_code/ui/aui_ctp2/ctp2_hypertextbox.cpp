@@ -629,7 +629,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void ctp2_HyperTextBox::RemoveHyperLinks( void )
 {
-	for (sint32 i = m_hyperLinkList->L(); i; --i)
+	for (size_t i = m_hyperLinkList->L(); i; --i)
 	{
 		delete m_hyperLinkList->RemoveTail();
 	}

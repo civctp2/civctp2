@@ -295,7 +295,7 @@ AUI_ERRCODE aui_Control::SetParentWindow( aui_Window *window )
 	ListPos position = m_childList->GetHeadPosition();
 	if ( position )
 	{
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Control *subControl =
 				(aui_Control *)m_childList->GetNext( position );
@@ -365,7 +365,7 @@ AUI_ERRCODE aui_Control::InsertChild( aui_Region *child, sint32 index )
 AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
@@ -1696,7 +1696,7 @@ bool aui_Control::HandleKey(uint32 wParam)
 	}
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
 

@@ -148,7 +148,7 @@ ctp2_ListBox::~ctp2_ListBox()
 	}
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext(position);
 		delete item;
@@ -226,7 +226,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	AddChild( m_header );
 
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
 			m_header->ChildList()->GetNext( position )->Width() );
 
@@ -310,7 +310,7 @@ void ctp2_ListBox::Clear(void)
 	BuildListStart(); // Do not sort anything in the list while we are clearing it
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 
@@ -394,7 +394,7 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
-		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
+		for ( size_t i = m_visualSelectedList->L(); i; i-- )
 		{
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
