@@ -302,8 +302,9 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				Assert(pos == len);
 				return;
 			}
-			m_y = 0;
 		}
+
+		m_y = 0;
 	}
 }
 
