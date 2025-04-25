@@ -224,6 +224,11 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 #else
 	MapPoint  mapsize = *g_theWorld->GetSize();
 #endif
+	// The map is put into chunks, m_x and m_y are 
+	// the start coordinates of each chunk.
+	// Each chunk has 37 Cells.
+	// Once the inner loop is complete, m_y
+	// must be set to 0.
 	for (sint32 x = m_x; x < mapsize.x; x++)
 	{
 		for (sint32 y = m_y; y < mapsize.y; y++)
@@ -297,6 +302,7 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				Assert(pos == len);
 				return;
 			}
+			m_y = 0;
 		}
 	}
 }

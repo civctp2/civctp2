@@ -40,12 +40,6 @@
 #ifndef __CELL_H__
 #define __CELL_H__ 1
 
-class Cell;
-
-
-
-
-
 #define k_MASK_ENV_ROAD         0x00000003
 #define k_SHIFT_ENV_ROAD        0
 
