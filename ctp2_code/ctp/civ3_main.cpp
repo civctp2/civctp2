@@ -1783,10 +1783,17 @@ int SDLMessageHandler(const SDL_Event &event)
 			case (sdl_name): \
 				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
 				break;
+				// For the purposes of this macro, shift is ignored when ctrl is pressed
+#define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
+			case (sdl_name): \
+				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
+						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
+					); \
+				break;
 			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_TAB, '\t' + 128);
-			SDLKCONV(SDLK_RETURN, VK_RETURN); // set to VK_RETURN to hit escape rules in aui_textfield.cpp
-			SDLKCONV(SDLK_KP_ENTER, VK_RETURN);
+			SDLKCONV(SDLK_RETURN, VK_RETURN + 128);
+			SDLKCONV(SDLK_KP_ENTER, VK_RETURN + 128);
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
 			SDLKCONV(SDLK_UP, SDLK_UP + 256);
 			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
@@ -1811,8 +1818,35 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_F13, '#' + 128, '\0');
 			SDLKCONVSHIFT(SDLK_F14, '$' + 128, '\0');
 			SDLKCONVSHIFT(SDLK_F15, '%' + 128, '\0');
+			SDLKCONVSHIFTCTRL(SDLK_a, 'a', 'A', 'a' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_b, 'b', 'B', 'b' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_c, 'c', 'C', 'c' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_d, 'd', 'D', 'd' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_e, 'e', 'E', 'e' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_f, 'f', 'F', 'f' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_g, 'g', 'G', 'g' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_h, 'h', 'H', 'h' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_i, 'i', 'I', 'i' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_j, 'j', 'J', 'j' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_k, 'k', 'K', 'k' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_l, 'l', 'L', 'l' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_m, 'm', 'M', 'm' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_n, 'n', 'N', 'n' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_o, 'o', 'O', 'o' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_p, 'p', 'P', 'p' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_q, 'q', 'Q', 'q' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_r, 'r', 'R', 'r' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_s, 's', 'S', 's' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_t, 't', 'T', 't' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_u, 'u', 'U', 'u' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_v, 'v', 'V', 'v' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_w, 'w', 'W', 'w' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_x, 'x', 'X', 'x' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_y, 'y', 'Y', 'y' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z' - 'a' + 1);
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
+#undef SDLKCONVSHIFTCTRL
 			default:
 				break;
 			} // end of switch (key)

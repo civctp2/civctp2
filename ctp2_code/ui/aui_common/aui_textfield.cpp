@@ -229,7 +229,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 		strncpy(m_Text, text, m_maxFieldLen);
 
 	// select nothing, move insertion point to end
-	m_selStart = m_selEnd = strlen(m_Text);
+	m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
 
 	// This supposed to set the font size as far as I understand it. However,
 	// it doesn't do it without SetPointSize. At least it fixes an assert.
@@ -297,7 +297,7 @@ sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 		return 0;
 	strncpy(text, m_Text, n-1);
 	text[n-1] = '\0';
-	return strlen(text);
+	return static_cast<sint32>(strlen(text));
 #endif
 }
 
@@ -315,7 +315,7 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 	strncpy(m_Text, text, m_maxFieldLen);
 
 	// select nothing, move insertion point to end
-	m_selStart = m_selEnd = strlen(m_Text);
+	m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
 
 	if ( GetKeyboardFocus() == this ) g_winFocus = this;
 
@@ -739,7 +739,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 		{
 			// Have to handle the enter key here so that buffered input will
 			// be handled correctly with the Windows message queue.
-			case VK_RETURN:
+			case VK_RETURN + 128: // Set to VK_RETURN + 128 to hit escape rules in keymap
 				aui_TextField::HitEnter();
 				break;
 			// No tags allowed, they are for "tabbing focus" between controls.
