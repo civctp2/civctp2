@@ -495,15 +495,19 @@ void dp_assertValidSessionContexts(dp_t* d)
 void dp_assertValid(dp_t* d)
 {
 	assert(d != NULL);
-	dptab_assertValid(d->dt);
-	dpio_assertValid(d->dpio);
-	dp_assertValidSessionContexts(d);
-	assert(d->quitState >= 0 && d->quitState < 10);
+	if (d != NULL)
+	{
+		dptab_assertValid(d->dt);
+		dpio_assertValid(d->dpio);
+		dp_assertValidSessionContexts(d);
+		assert(d->quitState >= 0 && d->quitState < 10);
 
-	/* Protect against access by multiple threads. */
+		/* Protect against access by multiple threads. */
 #ifdef _WIN32
-	assert(d->threadId == GetCurrentThreadId());
+		assert(d->threadId == GetCurrentThreadId());
 #endif
+	}
+
 	ASSERTMEM();
 }
 
@@ -9268,13 +9272,15 @@ DP_API dp_result_t dpReceive(
 	size_t orig_size;
 
 	dp_assertValid(dp);
-	assert((dp->hosts == NULL) ||
-		(dptab_getTableContext(dp->hosts, dp_hosts_cb) != NULL));
 
 	if (dp == NULL) {
 		DPRINT(("bug: dp NULL\n"));
 		return dp_RES_BUG;
 	}
+
+	assert((dp->hosts == NULL) ||
+		(dptab_getTableContext(dp->hosts, dp_hosts_cb) != NULL));
+
 	ptimer_Enter(PTIMER_ECLOCK, "eclock timer");
 	new_now = eclock();
 	ptimer_Exit(PTIMER_ECLOCK, 0);
