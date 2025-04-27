@@ -301,7 +301,7 @@ sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
 #endif
 }
 
-BOOL aui_TextField::SetFieldText( const MBCHAR *text )
+BOOL aui_TextField::SetFieldText(const MBCHAR *text, sint32 caretPos)
 {
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
@@ -314,8 +314,15 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
 
-	// select nothing, move insertion point to end
-	m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
+	if (caretPos < 0 || caretPos > static_cast<sint32>(strlen(m_Text)))
+	{
+		// select nothing, move insertion point to end
+		m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
+	}
+	else
+	{
+		m_selStart = m_selEnd = caretPos;
+	}
 
 	if ( GetKeyboardFocus() == this ) g_winFocus = this;
 
@@ -536,6 +543,7 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	                   RGB(20,20,20), 0);
 
 	// Calculate caret position
+	// ToDo: Implement multiline
 	char save = m_Text[m_selStart];
 	m_Text[m_selStart] = '\0';
 	int offset = m_Font->GetStringWidth(m_Text);
@@ -749,11 +757,73 @@ bool aui_TextField::HandleKey(uint32 wParam)
 			case VK_BACK:
 			{
 				std::string str(m_Text); // char array to c++ string
-				if( str.length() > 0 )
-					str.pop_back(); //lop off character
-					SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
-					break;
+				if (m_selStart == m_selEnd)
+				{
+					if (str.length() > 0 && m_selStart > 0)
+					{
+						if (str.length() <= m_selStart)
+						{
+							str.pop_back(); //lop off character
+							SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+						}
+						else
+						{
+							m_selStart--;
+							m_selEnd--;
+							str.erase(m_selStart, 1);
+							SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+						}
+					}
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					str.erase(m_selStart, m_selEnd - m_selStart);
+					SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selEnd = m_selStart;
+				}
+				else
+				{
+					Assert(0);
+				}
+				break;
 			}
+			case SDLK_DELETE:
+			{
+				std::string str(m_Text); // char array to c++ string
+				if (m_selStart == m_selEnd)
+				{
+					if (str.length() > 0 && m_selStart < str.length())
+					{
+						str.erase(m_selStart, 1);
+						SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					}
+				}
+				else if (m_selEnd > m_selStart)
+				{
+					str.erase(m_selStart, m_selEnd - m_selStart);
+					SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selEnd = m_selStart;
+				}
+				else
+				{
+					Assert(0);
+				}
+				break;
+			}
+			case SDLK_UP    + 256:
+		//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 256:
+		//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 256:
+				if(m_selStart > 0) m_selStart--;
+				if(m_selEnd   > 0) m_selEnd--;
+				break;
+			case SDLK_RIGHT + 256:
+				if(strlen(m_Text) > m_selStart) m_selStart++;
+				if(strlen(m_Text) > m_selEnd)   m_selEnd++;
+				break;
 			case ' ':
 			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);
 			default:
@@ -775,10 +845,18 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				std::string str = converter.to_bytes(wide_str);
 #else
 				std::string str(m_Text); // char array to c++ string
-				str += static_cast<char>(wParam); // Append wide char to wide string
-#endif
 
-				SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+				if (m_selEnd > m_selStart)
+				{
+					str.erase(m_selStart, m_selEnd - m_selStart);
+					m_selEnd = m_selStart;
+				}
+
+				str.insert(m_selStart, 1, static_cast<char>(wParam));
+				m_selStart++;
+				m_selEnd++;
+#endif
+				SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 				g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
 				break;
 			}

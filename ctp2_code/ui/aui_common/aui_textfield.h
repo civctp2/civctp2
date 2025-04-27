@@ -93,8 +93,8 @@ protected:
 		BOOL passwordReady = FALSE);
 
 public:
-	sint32	GetFieldText( MBCHAR *text, sint32 maxCount );
-	BOOL	SetFieldText( const MBCHAR *text );
+	sint32	GetFieldText(MBCHAR *text, sint32 maxCount);
+	BOOL	SetFieldText(const MBCHAR *text, sint32 caretPos = -1);
 
 #ifdef __AUI_USE_DIRECTX__
 	BOOL	IsMultiLine( void ) const { return m_multiLine; }

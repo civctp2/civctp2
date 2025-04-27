@@ -1786,8 +1786,7 @@ int SDLMessageHandler(const SDL_Event &event)
 				// For the purposes of this macro, shift is ignored when ctrl is pressed
 #define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
 			case (sdl_name): \
-				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
-						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
+				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : '\0' \
 					); \
 				break;
 			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
@@ -1799,6 +1798,8 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
 			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
 			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+			SDLKCONV(SDLK_DELETE, SDLK_DELETE);
+			SDLKCONV(SDLK_KP_PERIOD, SDLK_DELETE);
 			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
 			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
 			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
