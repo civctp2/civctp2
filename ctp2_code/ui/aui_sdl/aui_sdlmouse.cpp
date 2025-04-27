@@ -17,23 +17,24 @@
 
 extern CivApp           *g_civApp;
 
-uint32 HandleMouseAnimation(uint32 interval, void *param) {
+uint32 HandleMouseAnimation(uint32 interval, void *param)
+{
 	aui_SDLMouse *mouse = (aui_SDLMouse*) param;
 	mouse->HandleAnim();
 	return interval;
 }
 
 aui_SDLMouse::aui_SDLMouse(
-   AUI_ERRCODE *retval,
-   const MBCHAR *ldlBlock,
-   BOOL useExclusiveMode)
-   :
-   aui_Input(),
-   aui_Mouse(retval, ldlBlock),
-   aui_SDLInput(retval, useExclusiveMode),
-   m_currentCursor(NULL),
-   m_animationTimer(0),
-   m_lastFrameTick(0)
+    AUI_ERRCODE *retval,
+    const MBCHAR *ldlBlock,
+    BOOL useExclusiveMode)
+    :
+    aui_Input(),
+    aui_Mouse(retval, ldlBlock),
+    aui_SDLInput(retval, useExclusiveMode),
+    m_currentCursor(NULL),
+    m_animationTimer(0),
+    m_lastFrameTick(0)
 {
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
@@ -46,7 +47,8 @@ aui_SDLMouse::aui_SDLMouse(
 
 aui_SDLMouse::~aui_SDLMouse()
 {
-	if (m_animationTimer) {
+	if (m_animationTimer)
+	{
 		SDL_RemoveTimer(m_animationTimer);
 		m_animationTimer = 0;
 	}
@@ -74,21 +76,25 @@ void HandleMouseWheel(sint16 delta)
 		}
 	}
 	else { // handl mouse wheel for other element than scroll boxes, e.g. scroll map
- 	}
+	}
 }
 
-AUI_ERRCODE aui_SDLMouse::HandleAnim() {
+AUI_ERRCODE aui_SDLMouse::HandleAnim()
+{
 	Assert(m_lastIndex > m_firstIndex);
 	Assert(m_curCursor >= m_cursors + m_firstIndex);
 
-	if (m_curCursor++ >= m_cursors + m_lastIndex) {
+	if (m_curCursor++ >= m_cursors + m_lastIndex)
+	{
 		m_curCursor = m_cursors + m_firstIndex;
 	}
+
 	ActivateCursor(*m_curCursor);
 	return AUI_ERRCODE_HANDLED;
 }
 
-sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
+sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add)
+{
 	Assert(!add);
 
 	SDL_PumpEvents();
@@ -102,10 +108,13 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 	}
 
 	int numberEvents = 0;
-	for (int i = 0; i < numberSDLEvents; i++) {
+	for (int i = 0; i < numberSDLEvents; i++)
+	{
 		aui_MouseEvent *event = data + numberEvents;
-		switch (sdlEvents[i].type) {
-			case SDL_MOUSEMOTION: {
+		switch (sdlEvents[i].type)
+		{
+			case SDL_MOUSEMOTION:
+			{
 				SDL_MouseMotionEvent *motionEvent = &(sdlEvents[i].motion);
 				event->time = motionEvent->timestamp;
 				event->position.x = motionEvent->x;
@@ -116,23 +125,33 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 				break;
 			}
 			case SDL_MOUSEBUTTONDOWN:
-			case SDL_MOUSEBUTTONUP: {
+			case SDL_MOUSEBUTTONUP:
+			{
 				SDL_MouseButtonEvent *buttonEvent = &(sdlEvents[i].button);
 				event->time = buttonEvent->timestamp;
 				event->position.x = buttonEvent->x;
 				event->position.y = buttonEvent->y;
-				if (buttonEvent->button == SDL_BUTTON_LEFT) {
+
+				if (buttonEvent->button == SDL_BUTTON_LEFT)
+				{
 					event->lbutton = (buttonEvent->state == SDL_PRESSED);
-				} else if (buttonEvent->button == SDL_BUTTON_RIGHT) {
+				}
+				else if (buttonEvent->button == SDL_BUTTON_RIGHT)
+				{
 					event->rbutton = (buttonEvent->state == SDL_PRESSED);
 				}
+
 				numberEvents++;
 				break;
 			}
-			case SDL_MOUSEWHEEL: {
-				if (sdlEvents[i].wheel.y > 0) {
+			case SDL_MOUSEWHEEL:
+			{
+				if (sdlEvents[i].wheel.y > 0)
+				{
 					HandleMouseWheel((sint16) 1);
-				} else if (sdlEvents[i].wheel.y < 0) {
+				}
+				else if (sdlEvents[i].wheel.y < 0)
+				{
 					HandleMouseWheel((sint16) -1);
 				}
 				break;
@@ -144,52 +163,66 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add) {
 	}
 
 	uint32 currentFrameTick = SDL_GetTicks();
-	if (numberEvents) {
+	if (numberEvents)
+	{
 		m_lastFrameTick = currentFrameTick;
 		m_data = data[numberEvents - 1];
-	} else {
+	}
+	else
+	{
 		// generate at least a single event every x ticks to force a redraw
 		const int FRAMES_PER_SECOND = 60;
 		const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
-		if (currentFrameTick > m_lastFrameTick + TICKS_PER_FRAME) {
+
+		if (currentFrameTick > m_lastFrameTick + TICKS_PER_FRAME)
+		{
 			m_lastFrameTick = currentFrameTick;
 			data[0] = m_data;
 			data[0].time = currentFrameTick;
 			numberEvents = 1;
 		}
 	}
+
 	return numberEvents;
 }
 
-void aui_SDLMouse::SetAnimIndexes(sint32 firstIndex, sint32 lastIndex) {
+void aui_SDLMouse::SetAnimIndexes(sint32 firstIndex, sint32 lastIndex)
+{
 	if (firstIndex == m_firstIndex && lastIndex == m_lastIndex)
 		return;
 
-	if (m_animationTimer) {
+	if (m_animationTimer)
+	{
 		SDL_RemoveTimer(m_animationTimer);
 		m_animationTimer = 0;
 	}
 	aui_Mouse::SetAnimIndexes(firstIndex, lastIndex);
-	if (firstIndex != lastIndex) {
+	if (firstIndex != lastIndex)
+	{
 		m_animationTimer = SDL_AddTimer(m_animDelay, HandleMouseAnimation, this);
 	}
 }
 
 void aui_SDLMouse::ActivateCursor(aui_Cursor *cursor)
 {
-	if (cursor != m_currentCursor) {
+	if (cursor != m_currentCursor)
+	{
 		aui_Surface *cursorSurface = cursor->TheSurface();
 		aui_SDLSurface *sdlCursorSurface = dynamic_cast<aui_SDLSurface *>(cursorSurface);
-		if (sdlCursorSurface != NULL) {
+		if (sdlCursorSurface != NULL)
+		{
 			POINT hotspot;
 			cursor->GetHotspot(hotspot);
 			SDL_Cursor *sdlCursor = SDL_CreateColorCursor(sdlCursorSurface->GetSDLSurface(), hotspot.x, hotspot.y);
-			if (sdlCursor != NULL) {
+			if (sdlCursor != NULL)
+			{
 				SDL_Cursor *currentSDLCursor = SDL_GetCursor();
 				SDL_SetCursor(sdlCursor);
-				if (currentSDLCursor) {
+				if (currentSDLCursor)
+				{
 					SDL_FreeCursor(currentSDLCursor);
 				}
+
 				m_currentCursor = cursor;
 			}
 		}
