@@ -2368,10 +2368,8 @@ Network::ProcessNewPlayer(uint16 id)
 	}
 }
 
-void Network::AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv)
+void Network::AddChatText(MBCHAR *str, uint8 from, BOOL priv)
 {
-
-
 	if(!priv)
 		sprintf(m_chatStr, "[%s] ",
 				((from == 0) ? g_theStringDB->GetNameStr("NETWORK_SENDER_SYSTEM") :
@@ -2401,7 +2399,7 @@ void Network::AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv)
 	m_chatList->AddLine((sint32)from, m_chatStr);
 }
 
-void Network::SendChatText(MBCHAR *str, sint32 len)
+void Network::SendChatText(MBCHAR *str, size_t len)
 {
 	if(str[0] == '/') {
 		if(stricmp(str, "/rules") == 0) {
@@ -2499,9 +2497,9 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 	}
 
 
-	AddChatText(str, len, static_cast<uint8>(g_selected_item->GetVisiblePlayer()), FALSE);
+	AddChatText(str, static_cast<uint8>(g_selected_item->GetVisiblePlayer()), FALSE);
 
-	NetChat *chatPacket = new NetChat(m_chatMask, str, (sint16)len);
+	NetChat *chatPacket = new NetChat(m_chatMask, str, len);
 	chatPacket->AddRef();
 	if (IsActive()) {
 #if 0
@@ -2524,7 +2522,7 @@ void Network::SendChatText(MBCHAR *str, sint32 len)
 		} else {
 			QueuePacket(m_hostId, chatPacket);
 		}
-    }
+	}
 	chatPacket->Release();
 }
 
@@ -3612,7 +3610,7 @@ void Network::SendJoinedMessage(MBCHAR *name, sint32 player)
 
 		MBCHAR interp[k_MAX_NAME_LEN];
 		stringutils_Interpret(g_theStringDB->GetNameStr("NETWORK_PLAYER_JOINED"), *so, interp);
-		AddChatText(interp, strlen(interp), 0, FALSE);
+		AddChatText(interp, 0, FALSE);
 
 		g_slicEngine->Execute(so);
 
@@ -3646,7 +3644,7 @@ void Network::SendLeftMessage(const MBCHAR *name, sint32 player)
 
 		MBCHAR interp[k_MAX_NAME_LEN];
 		stringutils_Interpret(g_theStringDB->GetNameStr("NETWORK_PLAYER_LEFT"), *so, interp);
-		AddChatText(interp, strlen(interp), 0, FALSE);
+		AddChatText(interp, 0, FALSE);
 
 		g_slicEngine->Execute(so);
 	}
@@ -3671,7 +3669,7 @@ void Network::SendNewHostMessage(MBCHAR *name, sint32 player)
 
 		MBCHAR interp[k_MAX_NAME_LEN];
 		stringutils_Interpret(g_theStringDB->GetNameStr("NETWORK_YOU_ARE_NOW_HOST"), *so, interp);
-		AddChatText(interp, strlen(interp), 0, FALSE);
+		AddChatText(interp, 0, FALSE);
 
 		g_slicEngine->Execute(so);
 	}

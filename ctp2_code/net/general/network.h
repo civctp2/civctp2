@@ -321,9 +321,9 @@ public:
 	void HandleObjectACK(uint32 id);
 	void HandleObjectNAK(uint32 myId, uint32 realId);
 	void CheckReceivedObject(uint32 id);
-	void AddChatText(MBCHAR *str, sint32 len, uint8 from, BOOL priv);
+	void AddChatText(MBCHAR *str, uint8 from, BOOL priv);
 	void SetChatMask(uint32 mask) { m_chatMask = mask; }
-	void SendChatText(MBCHAR *str, sint32 len);
+	void SendChatText(MBCHAR *str, size_t len);
 
 	void AddCivilization(sint32 index, PLAYER_TYPE pt, sint32 civ);
 

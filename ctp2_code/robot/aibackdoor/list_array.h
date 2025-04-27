@@ -57,7 +57,7 @@ public:
 
 	LIST_DATA_TYPE Return_Data_By_Number
 	(
-		int n
+		size_t n
 	) const
 	{
 		return data_list[n];
@@ -154,7 +154,7 @@ int list_array<LIST_DATA_TYPE>::Append_Data
 
 			if (extra_chunks >= 1)
 			{
-				chunks = needed_chunks;
+				chunks = static_cast<int>(needed_chunks);
 				data_list.reserve(data_list.capacity() + (chunk_size * extra_chunks));
 			}
 		}
@@ -162,7 +162,7 @@ int list_array<LIST_DATA_TYPE>::Append_Data
 
 	data_list.push_back(the_data);
 
-	return data_list.size() - 1;
+	return static_cast<int>(data_list.size() - 1);
 }
 
 template <typename LIST_DATA_TYPE>

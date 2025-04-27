@@ -2060,7 +2060,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	strncpy(tempStr, message.GetText(), k_MAX_MSG_LEN-1);
 
 	MBCHAR *begin,*end;
-	sint32 length;
+	size_t length;
 	while(strchr(tempStr,'<'))
 	{
 		begin=strchr(tempStr,'<');

@@ -308,7 +308,7 @@ sint32 victorywin_AddWonders(const MBCHAR *windowBlock )
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	int i = 0;
+	size_t i = 0;
 
 	s_wonderIcons = new ctp2_Static *[k_VICWIN_WONDERICON_MAX];
 
