@@ -1613,6 +1613,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 // ToDo: Move this below into a specialized class like aui_sdlui or aui_directui
 #if defined(__AUI_USE_SDL__)
 	g_secondaryKeyboardEventQueueMutex = SDL_CreateMutex();
+	SDL_AddEventWatch(SDLMessageHandler, NULL);
 #endif
 #if defined(__AUI_USE_DIRECTX__)
 	MSG			msg;
@@ -1689,7 +1690,6 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				}
 			}
 
-			SDLMessageHandler(event);
 #elif defined(__AUI_USE_DIRECTX__)
 
 		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
@@ -1757,22 +1757,22 @@ void DoFinalCleanup(int exitCode)
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
 #if defined(__AUI_USE_SDL__)
-int SDLMessageHandler(const SDL_Event &event)
+int SDLMessageHandler(void* userdata, SDL_Event* event)
 {
 	// Merge into WndProc with keycode converter and
 	// unchanged ui_HandleKeypress(wParam, lParam)
 
 	static bool swallowNextChar = false;
 
-	switch(event.type)
+	switch(event->type)
 	{
 	case SDL_KEYDOWN:
 		{
 			// TODO: Determine what the 'swallowNextChar' variable
 			// is for, and, if necessary, implement appropriate
 			// code in the SDL sections to perform the same function.
-			SDL_Keycode key = event.key.keysym.sym;
-			Uint16 mod = event.key.keysym.mod;
+			SDL_Keycode key = event->key.keysym.sym;
+			Uint16 mod = event->key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
 #define SDLKCONV(sdl_name, char) \
@@ -1858,13 +1858,13 @@ int SDLMessageHandler(const SDL_Event &event)
 		} // end of case SDL_KEYDOWN
 	case SDL_WINDOWEVENT:
 
-		switch (event.window.event)
+		switch (event->window.event)
 		{
 		case SDL_WINDOWEVENT_RESIZED:
 			break;
 		case SDL_WINDOWEVENT_SIZE_CHANGED:
 		{
-			g_c3ui->ChangeSize(event.window.data1, event.window.data2);
+			g_c3ui->ChangeSize(event->window.data1, event->window.data2);
 			break;
 		}
 		case SDL_WINDOWEVENT_MAXIMIZED:
@@ -1880,7 +1880,7 @@ int SDLMessageHandler(const SDL_Event &event)
 		break;
 	case SDL_TEXTINPUT:
 	{
-		std::string source(event.text.text);
+		std::string source(event->text.text);
 		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
 		std::wstring wide_str = converter.from_bytes(source);
 

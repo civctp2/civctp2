@@ -74,7 +74,7 @@ void DoFinalCleanup(int exitCode = -1);
 BOOL ExitGame(void);
 
 #ifdef __AUI_USE_SDL__
-int SDLMessageHandler(const SDL_Event &event);
+int SDLMessageHandler(void* userdata, SDL_Event* event);
 #endif
 
 #endif
