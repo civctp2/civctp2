@@ -286,6 +286,12 @@ ProfileDB::ProfileDB()
 		m_map_settings[map_pass]        = NULL;
 	};
 
+#if defined(_DEBUG)
+	const bool isDebug = true;
+#else
+	const bool isDebug = false;
+#endif
+
 	Var("NumPlayers"                 , PV_NUM   , &m_nPlayers                   , NULL, false);
 	Var("AiOn"                       , PV_BOOL  , &m_ai_on                      , NULL, false);
 	Var("UseNiceStart"               , PV_BOOL  , &m_use_nice_start             , NULL, false);
@@ -386,7 +392,7 @@ ProfileDB::ProfileDB()
 
 	Var("UnitSpeed"                  , PV_NUM   , &m_unitSpeed                  , NULL, false);
 	Var("MouseSpeed"                 , PV_NUM   , &m_mouseSpeed                 , NULL, false);
-	Var("LeftHandedMouse"            , PV_BOOL  , &m_leftHandedMouse            , NULL, false);
+	Var("LeftHandedMouse"            , PV_BOOL  , &m_leftHandedMouse            , NULL);
 
 	Var("CityBuiltMessage"           , PV_BOOL  , &m_cityBuiltMessage           , NULL, false);
 	Var("UseAttackMessages"          , PV_BOOL  , &m_useAttackMessages          , NULL, false);
@@ -436,12 +442,8 @@ ProfileDB::ProfileDB()
 	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL);
 	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
 	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
-#if defined(_DEBUG)
 	/// @todo Move this to the scenario editor
-	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
-#else
-	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, false);
-#endif
+	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, isDebug);
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL, false);
 	// emod new profile flags // Please make sure that only those show up which are used.
 	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL, false);
@@ -458,7 +460,7 @@ ProfileDB::ProfileDB()
 	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
 	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
 	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);
-	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, false);
+	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, isDebug);
 	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false);
 	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
