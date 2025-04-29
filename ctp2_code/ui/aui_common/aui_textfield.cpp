@@ -761,7 +761,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				{
 					if (str.length() > 0 && m_selStart > 0)
 					{
-						if (str.length() <= m_selStart)
+						if (str.length() <= static_cast<size_t>(m_selStart))
 						{
 							str.pop_back(); //lop off character
 							SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
@@ -792,7 +792,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				std::string str(m_Text); // char array to c++ string
 				if (m_selStart == m_selEnd)
 				{
-					if (str.length() > 0 && m_selStart < str.length())
+					if (str.length() > 0 && static_cast<size_t>(m_selStart) < str.length())
 					{
 						str.erase(m_selStart, 1);
 						SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
@@ -821,8 +821,8 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				if(m_selEnd   > 0) m_selEnd--;
 				break;
 			case SDLK_RIGHT + 256:
-				if(strlen(m_Text) > m_selStart) m_selStart++;
-				if(strlen(m_Text) > m_selEnd)   m_selEnd++;
+				if(strlen(m_Text) > static_cast<size_t>(m_selStart)) m_selStart++;
+				if(strlen(m_Text) > static_cast<size_t>(m_selEnd))   m_selEnd++;
 				break;
 			case ' ':
 			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);

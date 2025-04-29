@@ -56,9 +56,6 @@ aui_DirectKeyboard::aui_DirectKeyboard(AUI_ERRCODE *retval)
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-
-
 AUI_ERRCODE aui_DirectKeyboard::CreateDirectKeyboard( void )
 {
 	HRESULT hr;
@@ -95,9 +92,6 @@ AUI_ERRCODE aui_DirectKeyboard::CreateDirectKeyboard( void )
 
 	return AUI_ERRCODE_OK;
 }
-
-
-
 
 AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 {
@@ -206,7 +200,7 @@ AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 		}
 
 		uint8 const l_DownMask  = static_cast<uint8>(ptrOd->dwData & 0x0080);
-        m_data.down                     = l_DownMask;
+		m_data.down                     = l_DownMask;
 		m_keyboardState[ptrOd->dwOfs]   = l_DownMask;
 		m_data.key                      = ptrOd->dwOfs;
 	}

@@ -773,7 +773,7 @@ bool ui_CheckForScroll(void)
 		if (smoothY < -vscroll)
 			smoothY = -vscroll;
 
-		if (g_smoothScroll)
+		if (g_smoothScroll) // This is some unfinished work, but would be nice to get it working
 			g_tiledMap->ScrollMapSmooth(smoothX, smoothY);
 		else {
 			if ((s_scrollcurtick - s_lastscrolltick) > k_TICKS_PER_SCROLL) {
@@ -1886,6 +1886,18 @@ int SDLMessageHandler(void* userdata, SDL_Event* event)
 
 		ui_HandleKeypress(wide_str.c_str()[0], 0);
 
+		break;
+	}
+	case SDL_MOUSEWHEEL:
+	{
+		if (event->wheel.y > 0)
+		{
+			ui_HandleMouseWheel((sint16)1);
+		}
+		else if (event->wheel.y < 0)
+		{
+			ui_HandleMouseWheel((sint16)-1);
+		}
 		break;
 	}
 	case SDL_QUIT:

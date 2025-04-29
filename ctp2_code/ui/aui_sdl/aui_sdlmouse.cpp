@@ -15,12 +15,17 @@
 
 #include "profileDB.h"
 
-extern CivApp           *g_civApp;
+extern CivApp*           g_civApp;
+sint32                   aui_Mouse::m_mouseRefCount = 0;
+SDL_mutex*               aui_SDLMouse::s_cs          = NULL;
+
+int SDLMouseMessageHandler(void* userdata, SDL_Event* event);
 
 uint32 HandleMouseAnimation(uint32 interval, void *param)
 {
 	aui_SDLMouse *mouse = (aui_SDLMouse*) param;
 	mouse->HandleAnim();
+
 	return interval;
 }
 
@@ -29,12 +34,12 @@ aui_SDLMouse::aui_SDLMouse(
     const MBCHAR *ldlBlock,
     BOOL useExclusiveMode)
     :
-    aui_Input(),
-    aui_Mouse(retval, ldlBlock),
-    aui_SDLInput(retval, useExclusiveMode),
-    m_currentCursor(NULL),
-    m_animationTimer(0),
-    m_lastFrameTick(0)
+    aui_Input            (),
+    aui_Mouse            (retval, ldlBlock),
+    aui_SDLInput         (retval, useExclusiveMode),
+    m_currentCursor      (NULL),
+    m_animationTimer     (0),
+    m_lastFrameTick      (0)
 {
 	Assert(AUI_SUCCESS(*retval));
 	if (!AUI_SUCCESS(*retval)) return;
@@ -43,40 +48,32 @@ aui_SDLMouse::aui_SDLMouse(
 	SDL_GetMouseState(&x, &y);
 	m_data.position.x = x;
 	m_data.position.y = y;
+
+	if (!m_mouseRefCount++)
+	{
+		s_cs = SDL_CreateMutex();
+	}
+
+	SDL_AddEventWatch(SDLMouseMessageHandler, this);
 }
 
 aui_SDLMouse::~aui_SDLMouse()
 {
+	SDL_DelEventWatch(SDLMouseMessageHandler, this);
+
 	if (m_animationTimer)
 	{
 		SDL_RemoveTimer(m_animationTimer);
 		m_animationTimer = 0;
 	}
-	End();
-}
 
-void HandleMouseWheel(sint16 delta)
-{
-	if (!g_civApp) return;
-
-	aui_Ranger *box2 = aui_Ranger::GetMouseFocusRanger();
-	if (box2 != NULL)
+	if (!--m_mouseRefCount)
 	{
-		if (delta)
-		{
-			if (delta < 0)
-			{
-				box2->ForceScroll(0, 1);
-			}
-			else
-			{
-				box2->ForceScroll(0, -1);
-			}
-			return;
-		}
+		SDL_DestroyMutex(s_cs);
+		s_cs = NULL;
 	}
-	else { // handl mouse wheel for other element than scroll boxes, e.g. scroll map
-	}
+
+	End();
 }
 
 AUI_ERRCODE aui_SDLMouse::HandleAnim()
@@ -93,80 +90,140 @@ AUI_ERRCODE aui_SDLMouse::HandleAnim()
 	return AUI_ERRCODE_HANDLED;
 }
 
+int SDLMouseMessageHandler(void* userdata, SDL_Event* event)
+{
+	aui_SDLMouse* mouse = static_cast<aui_SDLMouse*>(userdata);
+	switch (event->type)
+	{
+		case SDL_MOUSEMOTION:
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+			mouse->GetInput(event);
+			mouse->ManipulateInputs(mouse->GetLatestMouseEvent(), TRUE);
+			break;
+		default:
+			break;
+	}
+	return 0;
+}
+
+void aui_SDLMouse::GetInput(SDL_Event* event)
+{
+	switch (event->type)
+	{
+		case SDL_MOUSEMOTION:
+		{
+			m_data.time = event->motion.timestamp;
+			m_data.position.x = event->motion.x;
+			m_data.position.y = event->motion.y;
+			m_data.lbutton = ((event->motion.state & SDL_BUTTON_LMASK) != 0);
+			m_data.rbutton = ((event->motion.state & SDL_BUTTON_RMASK) != 0);
+			m_data.mbutton = ((event->motion.state & SDL_BUTTON_MMASK) != 0);
+			m_data.tbutton = ((event->motion.state & SDL_BUTTON_X1MASK) != 0);
+			m_data.ubutton = ((event->motion.state & SDL_BUTTON_X2MASK) != 0);
+
+			break;
+		}
+		case SDL_MOUSEBUTTONDOWN:
+		case SDL_MOUSEBUTTONUP:
+		{
+			m_data.time = event->button.timestamp;
+			m_data.position.x = event->button.x;
+			m_data.position.y = event->button.y;
+
+			switch(event->button.button)
+			{
+				case SDL_BUTTON_LEFT:
+					if (g_theProfileDB && g_theProfileDB->GetLeftHandedMouse())
+					{
+						// Left handed mouse so reverse the button
+						m_data.rbutton = (event->button.state == SDL_PRESSED);
+					}
+					else
+					{
+						m_data.lbutton = (event->button.state == SDL_PRESSED);
+					}
+					break;
+				case SDL_BUTTON_RIGHT:
+					if (g_theProfileDB && g_theProfileDB->GetLeftHandedMouse())
+					{
+						// Left handed mouse so reverse the button
+						m_data.lbutton = (event->button.state == SDL_PRESSED);
+					}
+					else
+					{
+						m_data.rbutton = (event->button.state == SDL_PRESSED);
+					}
+					break;
+				case SDL_BUTTON_MIDDLE:
+					m_data.mbutton = (event->button.state == SDL_PRESSED);
+				case SDL_BUTTON_X1:
+					m_data.tbutton = (event->button.state == SDL_PRESSED);
+				case SDL_BUTTON_X2:
+					m_data.ubutton = (event->button.state == SDL_PRESSED);
+				default:
+					break;
+			}
+
+			break;
+		}
+		default:
+			break;
+	}
+}
+
 sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add)
 {
-	Assert(!add);
+	sint32 numManipulated = 0;
 
+	static sint32 index = 0;
+	// We have to pump event, otherwise we get into endless mouse scroll
 	SDL_PumpEvents();
 
-	SDL_Event sdlEvents[k_MOUSE_MAXINPUT];
-	// check for mouse events
-	int numberSDLEvents = SDL_PeepEvents(sdlEvents, k_MOUSE_MAXINPUT, SDL_GETEVENT, SDL_MOUSEMOTION, SDL_MOUSEWHEEL);
-	if (0 > numberSDLEvents) {
-		// fprintf(stderr, "%s L%d: Mouse PeepEvents failed: %s\n", __FILE__, __LINE__, SDL_GetError());
-		return 0;
-	}
+	SDL_mutexP(s_cs);
 
-	int numberEvents = 0;
-	for (int i = 0; i < numberSDLEvents; i++)
+	if (add)
 	{
-		aui_MouseEvent *event = data + numberEvents;
-		switch (sdlEvents[i].type)
+		if (index <= k_MOUSE_MAXINPUT)
 		{
-			case SDL_MOUSEMOTION:
+			if (index > 1)
 			{
-				SDL_MouseMotionEvent *motionEvent = &(sdlEvents[i].motion);
-				event->time = motionEvent->timestamp;
-				event->position.x = motionEvent->x;
-				event->position.y = motionEvent->y;
-				event->lbutton = ((motionEvent->state & SDL_BUTTON_LMASK) != 0);
-				event->rbutton = ((motionEvent->state & SDL_BUTTON_RMASK) != 0);
-				numberEvents++;
-				break;
+				aui_MouseEvent *event = m_inputs + index - 2;
+				if (event->position.x == data->position.x
+					&&   event->position.y == data->position.y
+					&&   event->lbutton == data->lbutton
+					&&   event->rbutton == data->rbutton)
+				{
+					event++;
+					if (event->position.x == data->position.x
+						&&   event->position.y == data->position.y
+						&&   event->lbutton == data->lbutton
+						&&   event->rbutton == data->rbutton)
+						index--;
+				}
 			}
-			case SDL_MOUSEBUTTONDOWN:
-			case SDL_MOUSEBUTTONUP:
-			{
-				SDL_MouseButtonEvent *buttonEvent = &(sdlEvents[i].button);
-				event->time = buttonEvent->timestamp;
-				event->position.x = buttonEvent->x;
-				event->position.y = buttonEvent->y;
 
-				if (buttonEvent->button == SDL_BUTTON_LEFT)
-				{
-					event->lbutton = (buttonEvent->state == SDL_PRESSED);
-				}
-				else if (buttonEvent->button == SDL_BUTTON_RIGHT)
-				{
-					event->rbutton = (buttonEvent->state == SDL_PRESSED);
-				}
-
-				numberEvents++;
-				break;
-			}
-			case SDL_MOUSEWHEEL:
+			if (index < k_MOUSE_MAXINPUT)
 			{
-				if (sdlEvents[i].wheel.y > 0)
-				{
-					HandleMouseWheel((sint16) 1);
-				}
-				else if (sdlEvents[i].wheel.y < 0)
-				{
-					HandleMouseWheel((sint16) -1);
-				}
-				break;
+				memcpy(m_inputs + index, data, sizeof(aui_MouseEvent));
+				numManipulated = 1;
+				index++;
 			}
-			default:
-				printf("event not handled: %d\n", sdlEvents[i].type);
-				break;
 		}
+	}
+	else
+	{
+		if (index)
+			memcpy(data, m_inputs, index * sizeof(aui_MouseEvent));
+
+		numManipulated = index;
+		index = 0;
 	}
 
 	uint32 currentFrameTick = SDL_GetTicks();
-	if (numberEvents)
+	if (numManipulated > 0)
 	{
 		m_lastFrameTick = currentFrameTick;
-		m_data = data[numberEvents - 1];
 	}
 	else
 	{
@@ -179,11 +236,13 @@ sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add)
 			m_lastFrameTick = currentFrameTick;
 			data[0] = m_data;
 			data[0].time = currentFrameTick;
-			numberEvents = 1;
+			numManipulated = 1;
 		}
 	}
 
-	return numberEvents;
+	SDL_mutexV(s_cs);
+
+	return numManipulated;
 }
 
 void aui_SDLMouse::SetAnimIndexes(sint32 firstIndex, sint32 lastIndex)
