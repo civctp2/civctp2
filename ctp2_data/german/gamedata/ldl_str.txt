@@ -3113,7 +3113,7 @@ str_profile_OneCityChallenge                    "Eine-Stadt-Herausforderung"    
 str_profile_CityCaptureOptions                  "Stadteroberungsoptionen"                       # Captured city options
 str_profile_DebugCityAstar                      "Straﬂenbaupfad debuggen"
 str_profile_NewCombat                           "Neues Kampfsystem"
-str_profile_WindowedMode                        "Fenstermode"
+str_profile_WindowedMode                        "Fenstermodus"
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options			"Musikeinstellungen"
