@@ -152,6 +152,11 @@ WAR_OVER				"Les {player[0].civ_name_plural} ne sont plus en guerre avec les {pl
 
 ## Trade Messages ##
 TRADE_PIRATED				"{player[0].sir_cap}, notre route commerciale allant de {city[0].name} à {city[1].name} a été piratée par les {player[1].civ_name_plural]."
+TRADE_PIRATE_BONUS			"The trade route carrying {good[0].name} from {city[0].name} to {city[1].name} has been pirated by the {player[0].civ_name_plural} and {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold was lost."
+TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carrying {good[0].name} from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
+TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
+TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
+SENDER_CREATED_TRADE_ROUTE			"{player[0].leader_name} has created a trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, bringing {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, les {player[1].civ_name_plural} font peser un embargo sur notre commerce. Toutes les routes commerciales à destination de leur territoire ayant été rompues, toutes nos caravanes sont définitivement perdues."
 TRADE_ROUTES_BROKEN_BY_WAR		"Mauvaise nouvelle, {player[0].sir}. A cause du conflit avec les {player[1].civ_name_plural}, toutes nos routes commerciales à destination des villes des {player[1].civ_name_plural} ont été rompues. Toutes les caravanes affectées à ces routes sont définitivement perdues."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} a annulé la route commerciale permettant de transporter {good[0].name#SOME} de {city[0].name} à {city[1].name}."
@@ -377,6 +382,7 @@ IMMUNE_TO_PLAGUE_VICTIM			"{city[0].name} est protégée des effets dévastateurs d
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY				"Nous avons réussi à réformer la ville de {city[0].name}. Ses citoyens ne sont plus sous le joug étranger."
+REFORM_CITY_VICTIM			"The citizens of the formerly converted city of {city[0].name} are no longer under our influence. They used to pay {gold[0].value} gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##

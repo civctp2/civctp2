@@ -423,7 +423,6 @@ SUE_FAILED_ATTACKER			"Il nostro avvocato non è riuscito a denunciare {unitrecor
 SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop in {gold[0].value} turn(s). The franchise is worth {gold[1].value} gold."
 SUE_FRANCHISE_FAILED_VICTIM		"Nonostante l'accanimento di un avvocato straniero, la nostra filiale di {city[0].name} resta operativa."
 SUE_FRANCHISE_COMPLETE_ATTACKER		"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business in {gold[0].value} turn(s)."
-#"è riuscito a denunciare la filiale straniera nella nostra città di {city[0].name}, costringendola a chiudere."
 SUE_FRANCHISE_FAILED_ATTACKER		"Anche se il nostro avvocato ha fatto il possibile, la filiale straniera presso {city[0].name} continua a privare i nostri cittadini del loro denaro."
 
 ## Hold Reception ##
