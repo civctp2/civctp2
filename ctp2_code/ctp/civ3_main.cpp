@@ -627,28 +627,28 @@ bool ui_CheckForScroll(void)
 	if (g_civApp->IsKeyboardScrolling() &&
 		(!g_c3ui->TopWindow() || !g_c3ui->TopWindow()->GetFocusControl()))
 	{
-		switch (g_civApp->GetKeyboardScrollingKey())
+		switch(g_civApp->GetKeyboardScrollingKey())
 		{
-		case AUI_KEYBOARD_KEY_UPARROW:
-			deltaX = 0;
-			deltaY = -1;
-			scrolled = true;
-			break;
-		case AUI_KEYBOARD_KEY_LEFTARROW:
-			deltaX = -1;
-			deltaY = 0;
-			scrolled = true;
-			break;
-		case AUI_KEYBOARD_KEY_RIGHTARROW:
-			deltaX = 1;
-			deltaY = 0;
-			scrolled = true;
-			break;
-		case AUI_KEYBOARD_KEY_DOWNARROW:
-			deltaX = 0;
-			deltaY = 1;
-			scrolled = true;
-			break;
+			case AUI_KEYBOARD_KEY_UPARROW:
+				deltaX = 0;
+				deltaY = -1;
+				scrolled = true;
+				break;
+			case AUI_KEYBOARD_KEY_LEFTARROW:
+				deltaX = -1;
+				deltaY = 0;
+				scrolled = true;
+				break;
+			case AUI_KEYBOARD_KEY_RIGHTARROW:
+				deltaX = 1;
+				deltaY = 0;
+				scrolled = true;
+				break;
+			case AUI_KEYBOARD_KEY_DOWNARROW:
+				deltaX = 0;
+				deltaY = 1;
+				scrolled = true;
+				break;
 		}
 
 		if (scrolled)

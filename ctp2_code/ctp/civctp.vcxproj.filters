@@ -4943,4 +4943,7 @@
       <Filter>ui\ldl</Filter>
     </CustomBuild>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\.clang-format" />
+  </ItemGroup>
 </Project>
