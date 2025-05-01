@@ -289,6 +289,7 @@ public:
 	void InsertDBImprovement(sint32 dbType);
 	void RemoveDBImprovement(sint32 dbType);
 	sint32 GetNumDBImprovements() const;
+	sint32 GetNumPillagableTerrainImprovements() const;
 	sint32 GetDBImprovement(sint32 index) const;
 	bool HasTerrainImprovementOrInFuture(sint32 type) const;
 

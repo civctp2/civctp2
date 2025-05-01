@@ -1108,6 +1108,9 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 				if (cell->GetNumDBImprovements() <= 0)
 					continue;
 
+				if (cell->GetNumPillagableTerrainImprovements() <= 0)
+					continue;
+
 				if (cell->CanEnter(army->GetMovementType()))
 				{
 					sint32 tmp_squared_dist = MapPoint::GetSquaredDistance(it.Pos(), army->RetPos());
