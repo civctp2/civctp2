@@ -117,7 +117,12 @@ public:
 	void        ResetExtraDataPaths(void);
 	void        ReplaceFileSeperator(MBCHAR* path);
 
-protected:
+	void SetLocalizedPathFromProfileOrDB();
+
+private:
+
+	void SetLocalizedPath(const MBCHAR *path);
+	bool CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const;
 
 	MBCHAR *    MakeAssetPath
 	(

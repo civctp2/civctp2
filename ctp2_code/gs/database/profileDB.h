@@ -210,6 +210,7 @@ private:
     sint32		m_civIndex;
 
     MBCHAR	m_gameName[_MAX_PATH];
+    MBCHAR	m_LanguageDirectory[_MAX_PATH];
     MBCHAR	m_leaderName[k_MAX_NAME_LEN];
     MBCHAR	m_civName[k_MAX_NAME_LEN];
     MBCHAR	m_saveNote[_MAX_PATH];
@@ -458,6 +459,7 @@ public:
     void SetSaveNote(MBCHAR const * note)               { strcpy(m_saveNote, note); }
     void SetIsSaved(BOOL isSaved)                       { m_isSaved = isSaved; }
     void SetGameName(MBCHAR const * name)               { strcpy(m_gameName, name); }
+    void SetLanguageDirectory(MBCHAR const * lanDir)    { strcpy(m_LanguageDirectory, lanDir); }
 
     void SetCivIndex(sint32 civ)                        { m_civIndex = civ; }
     void SetPlayerIndex(PLAYER_INDEX index)             { m_playerNumber = index; }
@@ -626,6 +628,7 @@ public:
     MBCHAR      *GetSaveNote()                  { return m_saveNote; }
     BOOL        IsSaved() const                 { return m_isSaved; }
     MBCHAR      *GetGameName()                  { return m_gameName; }
+    MBCHAR      *GetLanguageDirectory()         { return m_LanguageDirectory; }
     sint32      GetCivIndex() const             { return m_civIndex; }
 
     PLAYER_INDEX    GetPlayerIndex() const      { return m_playerNumber; }

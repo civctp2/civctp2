@@ -216,6 +216,9 @@
       <UniqueIdentifier>{87bd7afa-98a5-45d7-99d2-9171a27596bd}</UniqueIdentifier>
       <Extensions>*.cpp *.h</Extensions>
     </Filter>
+    <Filter Include="TextDBFiles">
+      <UniqueIdentifier>{c561ebcf-67f8-4694-a8d2-b4a6ed608afe}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="c3.cpp">
@@ -2452,6 +2455,9 @@
     </ClCompile>
     <ClCompile Include="..\ui\aui_sdl\aui_sdlui.cpp">
       <Filter>ui\aui_sdl</Filter>
+    </ClCompile>
+    <ClCompile Include="..\gs\newdb\LanguageRecord.cpp">
+      <Filter>gs\newdb</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -4813,6 +4819,9 @@
     <ClInclude Include="..\ui\aui_sdl\aui_sdlui.h">
       <Filter>ui\aui_sdl</Filter>
     </ClInclude>
+    <ClInclude Include="..\gs\newdb\LanguageRecord.h">
+      <Filter>gs\newdb</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ctp2_rsrc\civ3.rc">
@@ -4942,8 +4951,14 @@
     <CustomBuild Include="..\ui\ldl\ldl.y">
       <Filter>ui\ldl</Filter>
     </CustomBuild>
+    <CustomBuild Include="..\gs\newdb\Language.cdb" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\ctp2_data\default\gamedata\Language.txt">
+      <Filter>TextDBFiles</Filter>
+    </Text>
   </ItemGroup>
 </Project>

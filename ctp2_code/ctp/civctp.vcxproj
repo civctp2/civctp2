@@ -489,7 +489,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;..\libs\miles\mss32.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;..\libs\miles\mss32.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -586,7 +586,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -633,7 +633,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -680,7 +680,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Debug\anet2d.lib;..\libs\tiff-4.7.0\$(Platform)\Debug\tiffd.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Debug\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Debug\zlibwapid.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -867,7 +867,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;..\libs\miles\mss32.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;..\libs\miles\mss32.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -964,7 +964,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;imagehlp.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -1012,7 +1012,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;imagehlp.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -1060,7 +1060,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;imagehlp.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>false</GenerateDebugInformation>
@@ -1251,7 +1251,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;..\libs\miles\mss32.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;..\libs\miles\mss32.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1296,7 +1296,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;imagehlp.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1341,7 +1341,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;imagehlp.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1386,7 +1386,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;imagehlp.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Logging\anet2l.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;..\libs\tiff\libtiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\Release\freetype.lib;vfw32.lib;..\libs\miles\mss32.lib;..\libs\zlib\zlib.lib;wsock32.lib;imagehlp.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1432,7 +1432,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;..\libs\miles\mss32.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;..\libs\miles\mss32.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1478,7 +1478,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1524,7 +1524,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -1570,7 +1570,7 @@
       <Culture>0x0409</Culture>
     </ResourceCompile>
     <Link>
-      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>..\libs\anet\anet\$(Platform)\Release\anet2.lib;..\libs\tiff-4.7.0\$(Platform)\Release\tiff.lib;..\libs\freetype-1.3.1\lib\arch\win32\$(Platform)\Release\freetype.lib;..\libs\zlib-1.3.1\contrib\vstudio\vc\$(Platform)\Release\zlibwapi.lib;imagehlp.lib;amstrmid.lib;quartz.lib;winmm.lib;dxguid.lib;ddraw.lib;dinput8.lib;dsound.lib;vfw32.lib;wsock32.lib;Muiload.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <SuppressStartupBanner>true</SuppressStartupBanner>
       <IgnoreSpecificDefaultLibraries>libcd.lib;libc.lib;libcmtd.lib;libcmt.lib;%(IgnoreSpecificDefaultLibraries)</IgnoreSpecificDefaultLibraries>
       <GenerateDebugInformation>true</GenerateDebugInformation>
@@ -5481,6 +5481,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Disabled</Optimization>
     </ClCompile>
+    <ClCompile Include="..\gs\newdb\LanguageRecord.cpp" />
     <ClCompile Include="..\gs\newdb\LeaderRecord.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">MaxSpeed</Optimization>
@@ -16352,6 +16353,7 @@
     <ClInclude Include="..\gs\newdb\GovernmentRecord.h" />
     <ClInclude Include="..\gs\newdb\IconRecord.h" />
     <ClInclude Include="..\gs\newdb\ImprovementListRecord.h" />
+    <ClInclude Include="..\gs\newdb\LanguageRecord.h" />
     <ClInclude Include="..\gs\newdb\LeaderRecord.h" />
     <ClInclude Include="..\gs\newdb\MapIconRecord.h" />
     <ClInclude Include="..\gs\newdb\MapRecord.h" />
@@ -21316,6 +21318,108 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\.clang-format" />
+    <CustomBuild Include="..\gs\newdb\Language.cdb">
+      <FileType>Document</FileType>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Logging|ARM64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final|x64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">%(Filename)%(Extension)</Message>
+      <Message Condition="'$(Configuration)|$(Platform)'=='Release|x64'">%(Filename)%(Extension)</Message>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Outputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\gs\newdb\LanguageRecord.stamp;%(Outputs)</Outputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Debug-SDL|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdbd.exe;%(AdditionalInputs)</AdditionalInputs>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Logging|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <Command Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe $(ProjectDir)..\gs\newdb &lt; %(FullPath)</Command>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Logging|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Final-SDL|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+      <AdditionalInputs Condition="'$(Configuration)|$(Platform)'=='Release|x64'">$(ProjectDir)..\gs\dbgen\$(Platform)\ctpdb.exe;%(AdditionalInputs)</AdditionalInputs>
+    </CustomBuild>
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\ctp2_data\default\gamedata\Language.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

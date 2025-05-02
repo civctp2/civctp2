@@ -725,6 +725,7 @@ template class CTPDatabase<WonderMovieRecord>;
 template class CTPDatabase<BuildingRecord>;
 
 #ifndef __TILETOOL__
+// The tiletool code is way incomplete, not even enough to reconstruct it
 
 #include "UnitRecord.h" // 11
 template class CTPDatabase<UnitRecord>;
@@ -824,4 +825,7 @@ template class CTPDatabase<ConceptRecord>;
 
 #include "ConstRecord.h" // 43
 template class CTPDatabase<ConstRecord>;
+
+#include "LanguageRecord.h" // 44
+template class CTPDatabase<LanguageRecord>;
 #endif // __TILETOOL__

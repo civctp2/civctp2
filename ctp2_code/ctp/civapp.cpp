@@ -191,6 +191,7 @@
 #include "keymap.h"
 #include "keypress.h"
 #include "km_screen.h"
+#include "LanguageRecord.h"
 #include "loadsavewindow.h"
 #include "MainControlPanel.h"
 #include "MapIconRecord.h"
@@ -1149,6 +1150,7 @@ bool CivApp::InitializeAppDB(void)
 	if(!g_theRiskDB->ResolveReferences())               return false;
 	if(!g_theDifficultyDB->ResolveReferences())         return false;
 	if(!g_theGlobalWarmingDB->ResolveReferences())      return false;
+	if(!g_theLanguageDB->ResolveReferences())           return false; // Initialized in CivPaths_InitCivPaths, since we already need it there
 
 	g_theProgressWindow->StartCountingTo( 510 );
 
@@ -1264,13 +1266,13 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	Splash::Initialize();
 
-	CivPaths_InitCivPaths();
-
 	g_theProfileDB = new ProfileDB;
-	if (!g_theProfileDB->Init(FALSE)) {
+	if (!g_theProfileDB->Init(FALSE))
+	{
 		c3errors_FatalDialog("CivApp", "Unable to init the ProfileDB.");
-		return -1;
 	}
+
+	CivPaths_InitCivPaths();
 
 	g_logCrashes = g_theProfileDB->GetEnableLogs();
 

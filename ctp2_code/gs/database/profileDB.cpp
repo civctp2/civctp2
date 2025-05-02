@@ -279,6 +279,7 @@ ProfileDB::ProfileDB()
 	m_saveNote[0]           = 0;
 	m_ruleSets[0]           = 0;
 	m_gameWatchDirectory[0] = 0;
+	m_LanguageDirectory[0]  = 0;
 
 	for (size_t map_pass = 0; map_pass < k_NUM_MAP_PASSES; ++map_pass)
 	{
@@ -319,13 +320,14 @@ ProfileDB::ProfileDB()
 	Var("CityLostWarning"            , PV_BOOL  , &m_cityLostWarning            , NULL, false);
 	Var("AutoCenter"                 , PV_BOOL  , &m_autocenter                 , NULL, false);
 	Var("FullScreenMovies"           , PV_BOOL  , &m_fullScreenMovies           , NULL, false);
-	Var("AutoSave"                   , PV_BOOL  , &m_autoSave					, NULL, false);
+	Var("AutoSave"                   , PV_BOOL  , &m_autoSave                   , NULL, false);
 	Var("PlayerNumber"               , PV_NUM   , (sint32 *)&m_playerNumber     , NULL, false);
 
 	Var("CivIndex"                   , PV_NUM   , (sint32 *)&m_civIndex         , NULL, false);
 
 	Var("GameName"                   , PV_STRING, NULL, (char *)m_gameName            , false);
 	Var("LeaderName"                 , PV_STRING, NULL, (char*)m_leaderName           , false);
+	Var("LanguageDirectory"          , PV_STRING, NULL, (char*)m_LanguageDirectory    , false);
 	Var("CivName"                    , PV_STRING, NULL, (char*)m_civName              , false);
 	Var("SaveNote"                   , PV_STRING, NULL, (char*)m_saveNote             , false);
 	Var("Gender"                     , PV_NUM   , (sint32 *)&m_gender           , NULL, false);

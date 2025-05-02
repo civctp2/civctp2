@@ -35,6 +35,11 @@
 #include "c3.h"
 #include "c3files.h"
 #include "CivPaths.h"
+#include "profileDB.h"        // g_theProfileDB
+#include "LanguageRecord.h"
+#if defined(__AUI_USE_SDL__)
+#include "SDL_locale.h"
+#endif
 
 #ifdef WIN32
 #include <shlobj.h>
@@ -53,10 +58,15 @@ extern ProjectFile *g_ImageMapPF;
 
 #define FILE_CIVPATHS_TXT "civpaths.txt"
 
+#if defined(__AUI_USE_DIRECTX__)
+#include "muiload.h"
+#endif
+
 void CivPaths_InitCivPaths()
 {
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 
+	// Now let's get the paths, so that we know were the language database is.
 	delete g_civPaths;
 	g_civPaths = new CivPaths(err);
 
@@ -74,12 +84,25 @@ void CivPaths_InitCivPaths()
 			c3errors_FatalDialog("CivPaths", "Unable to setup CTP2 paths.");
 		}
 	}
+
+	// Get the Language DB up
+	g_theLanguageDB = new CTPDatabase<LanguageRecord>;
+	if (!g_theLanguageDB->Parse(C3DIR_GAMEDATA, "Language.txt"))
+	{
+		c3errors_FatalDialog("CivApp", "Unable to init the LanguageDB.");
+	}
+
+	// Get the language directory from the user profile, or if it is not
+	// saved there, get it from the operating system. Or use the default entry
+	// in the langauage database. If this does not exsist, just stay with the 
+	// value from civpath.txt.
+	g_civPaths->SetLocalizedPathFromProfileOrDB();
 }
 
 void CivPaths_CleanupCivPaths()
 {
-	delete g_civPaths;
-	g_civPaths = NULL;
+	allocated::clear(g_civPaths);
+	allocated::clear(g_theLanguageDB);
 }
 
 CivPaths::CivPaths(AUI_ERRCODE &errcode)
@@ -840,4 +863,119 @@ void CivPaths::ResetExtraDataPaths(void)
 		delete [] const_cast<MBCHAR *>(*p);
 	}
 	m_extraDataPaths.clear();
+
+}
+
+void CivPaths::SetLocalizedPathFromProfileOrDB()
+{
+	Assert(g_theProfileDB);
+
+	// If we have a value in userprofile.txt
+	const MBCHAR* LanguageDir = g_theProfileDB ? g_theProfileDB->GetLanguageDirectory() : "";
+	if(LanguageDir[0] != '\0')
+	{
+		SetLocalizedPath(LanguageDir);
+	}
+	else
+	{
+#if defined(__AUI_USE_SDL__)
+		SDL_Locale* locales = SDL_GetPreferredLocales();
+
+		if(locales != NULL)
+		{
+			// Get the language that matches the IsoCode
+			for(size_t j = 0; locales[j].language != NULL; j++)
+			{
+				for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+				{
+					const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+					if(lanRec->GetDisabled())
+						continue;
+
+					if(strcmp(lanRec->GetIsoCode(), locales[j].language) == 0)
+					{
+						SetLocalizedPath(lanRec->GetDirectory());
+						SDL_free(locales);
+						return;
+					}
+				}
+			}
+		}
+
+		SDL_free(locales);
+
+#elif defined(__AUI_USE_DIRECTX__)
+		ULONG size = 0;
+
+		GetUILanguageFallbackList(NULL, 0, &size);
+
+		wchar_t* buffer = new wchar_t[size];
+		GetUILanguageFallbackList(buffer, size, NULL);
+
+		// Get the language that matches the IsoCode
+		while(buffer[0] != L'\0')
+		{
+			for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+			{
+				const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+				if(lanRec->GetDisabled())
+					continue;
+
+				if(CompareLocals(lanRec->GetIsoCode(), buffer))
+				{
+					SetLocalizedPath(lanRec->GetDirectory());
+					return;
+				}
+			}
+
+			while(true)
+			{
+				buffer++;
+				if(buffer[0] == L'\0')
+				{
+					buffer++;
+					break;
+				}
+			}
+		}
+#else
+#error No locale detection defined for non DX / non SDL builds
+#endif
+
+		// Get default Language from database
+		for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+		{
+			const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+			if(lanRec->GetDisabled())
+				continue;
+
+			if(lanRec->GetDefault())
+			{
+				SetLocalizedPath(lanRec->GetDirectory());
+				return;
+			}
+		}
+	}
+}
+
+void CivPaths::SetLocalizedPath(const MBCHAR *path)
+{
+	sprintf(m_localizedPath, "%s", path);
+	ReplaceFileSeperator(m_localizedPath);
+}
+
+bool CivPaths::CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const
+{
+	for(size_t i = 0; locale1[i] != '\0'; ++i)
+	{
+		if(locale1[i] != static_cast<MBCHAR>(locale2[i]))
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

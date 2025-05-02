@@ -106,6 +106,9 @@ ctp2_code/gs/newdb/IconRecord.stamp
 ctp2_code/gs/newdb/ImprovementListRecord.cpp
 ctp2_code/gs/newdb/ImprovementListRecord.h
 ctp2_code/gs/newdb/ImprovementListRecord.stamp
+ctp2_code/gs/newdb/LanguageRecord.cpp
+ctp2_code/gs/newdb/LanguageRecord.h
+ctp2_code/gs/newdb/LanguageRecord.stamp
 ctp2_code/gs/newdb/LeaderRecord.cpp
 ctp2_code/gs/newdb/LeaderRecord.h
 ctp2_code/gs/newdb/LeaderRecord.stamp
