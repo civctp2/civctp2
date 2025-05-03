@@ -949,12 +949,12 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 	MBCHAR buf[_MAX_PATH];
 
 	if(archive.IsStoring())
-    {
+	{
 		archive.PutUINT8(static_cast<uint8>(GetSerializeType()));
 		archive.PutUINT8(static_cast<uint8>(m_type));
 
 		switch(GetType())
-        {
+		{
 			case SLIC_SYM_IVAR:
 #ifdef SLIC_DOUBLES
 			case SLIC_SYM_DVAR:
@@ -969,16 +969,16 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				break;
 
 			case SLIC_SYM_FUNC:
-                {
-                    size_t len = (m_val.m_function_object)
-                                 ? strlen(m_val.m_function_object->GetName())
-                                 : 0;
-    			    archive << static_cast<uint16>(len);
-                    if (len > 0)
-                    {
-					    archive.Store((uint8*)m_val.m_function_object->GetName(), len);
-				    }
-                }
+				{
+					uint16 len = (m_val.m_function_object)
+					             ?  static_cast<uint16>(strlen(m_val.m_function_object->GetName()))
+					             : 0;
+					archive << len;
+					if (len > 0)
+					{
+						archive.Store((uint8*)m_val.m_function_object->GetName(), len);
+					}
+				}
 				break;
 
 			case SLIC_SYM_REGION:
@@ -987,15 +987,15 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				break;
 
 			case SLIC_SYM_STRING:
-                {
-                    size_t  len =
-                        (m_val.m_hard_string) ? strlen(m_val.m_hard_string) : 0;
-				    archive << static_cast<uint16>(len);
-				    if (len > 0)
-                    {
-					    archive.Store((uint8*)m_val.m_hard_string, len);
-                    }
-                }
+				{
+					uint16 len =
+					    (m_val.m_hard_string) ?  static_cast<uint16>(strlen(m_val.m_hard_string)) : 0;
+					archive << len;
+					if (len > 0)
+					{
+						archive.Store((uint8*)m_val.m_hard_string, len);
+					}
+				}
 				break;
 
 			case SLIC_SYM_ARRAY:
@@ -1015,15 +1015,15 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 
 			case SLIC_SYM_UFUNC:
 			case SLIC_SYM_ID:
-                {
-                    size_t  len =
-                        (m_val.m_segment) ? strlen(m_val.m_segment->GetName()) : 0;
-				    archive << static_cast<uint16>(len);
-				    if (len > 0)
-                    {
-					    archive.Store((uint8*)m_val.m_segment->GetName(), len);
-				    }
-                }
+				{
+					uint16 len =
+					    (m_val.m_segment) ?  static_cast<uint16>(strlen(m_val.m_segment->GetName())) : 0;
+					archive << len;
+					if (len > 0)
+					{
+						archive.Store((uint8*)m_val.m_segment->GetName(), len);
+					}
+				}
 				break;
 
 			case SLIC_SYM_POP:
@@ -1035,13 +1035,13 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				break;
 		}
 	}
-    else
-    {
-        uint16  len;
+	else
+	{
+		uint16  len;
 
 		m_type = (SLIC_SYM)archive.GetUINT8();
 		switch (GetType() == SLIC_SYM_UNDEFINED ? m_type : GetType())
-        {
+		{
 			case SLIC_SYM_IVAR:
 #ifdef SLIC_DOUBLES
 			case SLIC_SYM_DVAR:
@@ -1055,7 +1055,7 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				archive.Load((uint8*)&m_val, sizeof(m_val));
 				break;
 
-            case SLIC_SYM_FUNC:
+			case SLIC_SYM_FUNC:
 				archive >> len;
 				if(len > 0) {
 					archive.Load((uint8*)buf, len);

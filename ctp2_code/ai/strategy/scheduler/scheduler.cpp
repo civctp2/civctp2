@@ -499,7 +499,7 @@ void Scheduler::Sort_Goals()
 	time_t t1 = GetTickCount();
 
 #if defined(_DEBUG)
-	sint32 size = m_goals.size();
+	size_t size = m_goals.size();
 #endif // _DEBUG
 
 	m_goals.sort(std::greater<Goal_ptr>());
@@ -629,8 +629,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 	sint32 count = 0;
 #endif
 
-	sint32 committed_agents = 0;
-	sint32 total_agents     = m_agents.size();
+	size_t committed_agents = 0;
+	size_t total_agents     = m_agents.size();
 
 #if defined(_DEBUG)
 	int loopCount = 0;
@@ -881,8 +881,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 	}
 
 #if defined(_DEBUG)
-	sint32 committed_agents_test = 0;
-      loopCount = 0;
+	size_t committed_agents_test = 0;
+	loopCount = 0;
 	for
 	(
 	    Goal_List::iterator goal_iter2  = m_goals.begin();
@@ -2253,7 +2253,7 @@ void Scheduler::PrintAllGoals() const
 	   )
 	{
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1,
-		                           ("%s: %d\n", g_theGoalDB->GetNameStr(goal_type), m_goals_of_type[goal_type].size()));
+		                           ("%s: %zu\n", g_theGoalDB->GetNameStr(goal_type), m_goals_of_type[goal_type].size()));
 	}
 
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, -1, -1, ("\n"));

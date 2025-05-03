@@ -75,17 +75,17 @@ SlicNamedSymbol::~SlicNamedSymbol()
 void SlicNamedSymbol::Serialize(CivArchive &archive)
 {
 	if (archive.IsStoring())
-    {
+	{
 		archive.StoreChunk((uint8*)&m_index, (uint8*)&m_fromFile + sizeof(m_fromFile));
-        size_t  len = strlen(m_name);
-		archive << static_cast<uint16>(len);
+		uint16 len = static_cast<uint16>(strlen(m_name));
+		archive << len;
 		archive.Store((uint8*)m_name, len);
 	}
-    else
-    {
+	else
+	{
 		archive.LoadChunk((uint8*)&m_index, (uint8*)&m_fromFile + sizeof(m_fromFile));
-        uint16 len;
-        archive >> len;
+		uint16 len;
+		archive >> len;
 		m_name = new char[len + 1];
 		archive.Load((uint8*)m_name, len);
 		m_name[len] = 0;
@@ -94,15 +94,15 @@ void SlicNamedSymbol::Serialize(CivArchive &archive)
 
 void SlicNamedSymbol::Init(const char *name)
 {
-    if (name)
-    {
-	    m_name = new char[strlen(name) + 1];
-	    strcpy(m_name, name);
-    }
-    else
-    {
-        m_name = NULL;
-    }
+	if (name)
+	{
+		m_name = new char[strlen(name) + 1];
+		strcpy(m_name, name);
+	}
+	else
+	{
+		m_name = NULL;
+	}
 
 	m_fromFile = k_GENERATED_BY_EXECUTABLE;
 }

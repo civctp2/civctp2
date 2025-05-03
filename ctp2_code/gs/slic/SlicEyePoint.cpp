@@ -115,7 +115,7 @@ void SlicEyePoint::Serialize(CivArchive &archive)
 	sint32 l;
 	if(archive.IsStoring()) {
 		if(m_name) {
-			l = strlen(m_name) + 1;
+			l = static_cast<sint32>(strlen(m_name) + 1);
 			archive << l;
 			archive.Store((uint8*)m_name, l);
 		} else {
@@ -124,7 +124,7 @@ void SlicEyePoint::Serialize(CivArchive &archive)
 		}
 
 		if(m_segment) {
-			l = strlen(m_segment->GetName()) + 1;
+			l = static_cast<sint32>(strlen(m_segment->GetName()) + 1);
 			archive << l;
 			archive.Store((uint8*)m_segment->GetName(), l);
 		} else {

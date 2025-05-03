@@ -127,12 +127,12 @@ public:
 		return m_records[index];
 	}
 
-	T *Access(sint32 index);
-	T *Access(sint32 index, sint32 govIndex);
-	const T *Get(sint32 index, sint32 govIndex);
+	T *Access(size_t index);
+	T *Access(size_t index, sint32 govIndex);
+	const T *Get(size_t index, sint32 govIndex);
 
-	sint32 GetName(sint32 index);
-	const char * GetNameStr(sint32 index);
+	sint32 GetName(size_t index);
+	const char * GetNameStr(size_t index);
 	void Add(T *obj);
 	sint32 NumRecords() const
 	{

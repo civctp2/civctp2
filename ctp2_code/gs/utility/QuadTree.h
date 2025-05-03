@@ -548,7 +548,7 @@ QuadTreeNode<T>::RemoveAt(const MapPoint &point, T &removedObj)
 		removedObj = m_array[0];
 
 		for (size_t i = m_array.Num(); i > 0; --i)
-        {
+		{
 			m_array.DelIndex(i - 1);
 		}
 

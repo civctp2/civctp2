@@ -372,7 +372,7 @@ void MessageData::Serialize(CivArchive &archive)
 		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_caption)+sizeof(m_caption));
 
 		if(m_text) {
-			count = strlen(m_text) + 1;
+			count = static_cast<sint32>(strlen(m_text) + 1);
 			archive << count;
 			archive.Store((uint8*)m_text, count * sizeof(MBCHAR));
 		} else {
@@ -381,7 +381,7 @@ void MessageData::Serialize(CivArchive &archive)
 		}
 
 		if(m_title) {
-			count = strlen(m_title) + 1;
+			count = static_cast<sint32>(strlen(m_title) + 1);
 		} else {
 			count = 0;
 		}

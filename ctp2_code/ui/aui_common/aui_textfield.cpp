@@ -185,7 +185,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	if ( !m_windowProc )
 		m_windowProc = (WNDPROC)GetWindowLongPtr( m_hwnd, GWLP_WNDPROC );
 
-	SetWindowLongPtr( m_hwnd, GWLP_WNDPROC, (LONG)TextFieldWindowProc );
+	SetWindowLongPtr( m_hwnd, GWLP_WNDPROC, (LONG_PTR)TextFieldWindowProc );
 #else
 	if (!m_windowProc)
 		m_windowProc = (WNDPROC)GetWindowLong(m_hwnd, GWL_WNDPROC);
@@ -270,7 +270,7 @@ aui_TextField::~aui_TextField()
 
 	if ( m_winRefCount == 1 && m_windowProc )
 #if defined(_WIN64)
-		SetWindowLongPtr(m_hwnd, GWLP_WNDPROC, (LONG)m_windowProc);
+		SetWindowLongPtr(m_hwnd, GWLP_WNDPROC, (LONG_PTR)m_windowProc);
 #else
 		SetWindowLong(m_hwnd, GWL_WNDPROC, (LONG)m_windowProc);
 #endif

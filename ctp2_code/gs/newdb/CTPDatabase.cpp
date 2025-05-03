@@ -221,7 +221,7 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 /// \param  govIndex    Government index
 /// \remarks When \a govIndex is not found in the government specific overrides,
 ///          the generic entry is returned.
-template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
+template <class T> T * CTPDatabase<T>::Access(size_t index, sint32 govIndex)
 {
 	// Check validity of index
 	T * nonSpecific = Access(index);
@@ -245,7 +245,7 @@ template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 	return nonSpecific;
 }
 
-template <class T> const T * CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
+template <class T> const T * CTPDatabase<T>::Get(size_t index,sint32 govIndex)
 {
 	return const_cast<const T *>(Access(index, govIndex));
 }
@@ -296,7 +296,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 		if ((mainRecord >= 0) && (validIndex > 0))
 		{
 			// Add the new object to the list of modified records.
-			sint32 const	newIndex	= m_modifiedRecords.size();
+			size_t const	newIndex	= m_modifiedRecords.size();
 			obj->SetIndex(newIndex);
 			m_modifiedRecords.push_back(obj);
 
@@ -339,7 +339,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 	}
 }
 
-template <class T> T *CTPDatabase<T>::Access(sint32 index)
+template <class T> T *CTPDatabase<T>::Access(size_t index)
 {
 	Assert(index >= 0);
 	Assert(index < m_numRecords);
@@ -352,7 +352,7 @@ template <class T> T *CTPDatabase<T>::Access(sint32 index)
 	return m_records[index];
 }
 
-template <class T> sint32 CTPDatabase<T>::GetName(sint32 index)
+template <class T> sint32 CTPDatabase<T>::GetName(size_t index)
 {
 	Assert(index >= 0);
 	Assert(index < m_numRecords);
@@ -362,7 +362,7 @@ template <class T> sint32 CTPDatabase<T>::GetName(sint32 index)
 	return m_records[index]->m_name;
 }
 
-template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
+template <class T> const char *CTPDatabase<T>::GetNameStr(size_t index)
 {
 	Assert(index >= 0);
 	Assert(index < m_numRecords);

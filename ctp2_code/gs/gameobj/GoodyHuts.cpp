@@ -350,11 +350,11 @@ GOODY GoodyHut::ChooseType(PLAYER_INDEX const & owner)
 
 		case GOODY_SETTLER:
 		{
-			for (size_t i = 0; i < static_cast<size_t>(g_theUnitDB->NumRecords()); ++i)
+			for (sint32 i = 0; i < g_theUnitDB->NumRecords(); ++i)
 			{
 				if (g_theUnitDB->Get(i, g_player[owner]->GetGovernmentType())->GetSettleLand())
 				{
-					m_value = i;
+					m_value = static_cast<uint32>(i);
 					return GOODY_UNIT;
 				}
 			}
