@@ -341,22 +341,6 @@ void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 da
 
 		return;
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	if (!g_launchIntoCheatMode) {
 		optionsscreen_removeMyWindow(action);
 
@@ -369,7 +353,15 @@ void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 da
 		ScenarioEditor::Display();
 	}
 }
+
 void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	open_KeyMappingScreen();
+}
+
+void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
