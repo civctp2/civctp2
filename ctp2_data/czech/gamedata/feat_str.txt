@@ -1,0 +1,82 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains feat messages (English)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the feat message strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - None
+#
+#----------------------------------------------------------------------------
+
+## FEATS OF WONDER STRINGS
+
+FEAT_ACCOMPISHED_TITLE		"FEAT OF WONDER"
+
+## ADVANCE-RELATED FEATS
+FEAT_GOT_CONCRETE		"Congratulations!  You are the first nation to discover Concrete!  Concrete's ease of use and lower cost make it an ideal building material.  For the next {FeatDB(Value[0]).Duration} turns, you will get a +{FeatDB(Value[0]).EffectIncreaseProduction}% increase to your production output!"  
+FEAT_GOT_GUNPOWDER		"Congratulations!  You are the first to discover Gunpowder.  This is a significant advance in the realm of weaponry, and other nations will be hard-pressed to defend against you.  For the next {FeatDB(Value[0]).Duration} turns, the city walls of other nations' cities will be less effective in defending against your units."
+FEAT_GOT_MASS_PRODUCTION	"Congratulations!  You are the first nation to discover Mass Production.  Your manufacturing operations now can take advantage of assembly lines, conveyor belts and specialized labor forces.  For the next {FeatDB(Value[0]).Duration} turns, you will get a +{FeatDB(Value[0]).EffectIncreaseProduction}% increase to your production output!"
+FEAT_GOT_COMPUTER		"Congratulations!  You are the first nation to discover the Computer advance.  Your research facilities can now crunch bigger numbers, perform more experiments and work more efficiently.  For the next {FeatDB(Value[0]).Duration} turns, you will get a +{FeatDB(Value[0]).EffectIncreaseScience}% increase to your science output!"  
+FEAT_GOT_ROBOTICS		"Congratulations!  You are the first nation to discover Robotics.  Owing to the increase in efficiency and productivity that non-human workers bring, for the next {FeatDB(Value[0]).Duration} turns you will get a +{FeatDB(Value[0]).EffectIncreaseProduction}% increase to your production output!"  
+FEAT_GOT_LIFE_EXTENSION		"Congratulations!  You are the first nation to discover Life Extension.  Now your people can achieve virtual immortality by exchanging their aged, decrepit bodies for newer, healthier ones!  For the next {FeatDB(Value[0]).Duration} turns, your nation will receive a +{FeatDB(Value[0]).EffectIncreaseHappiness} happiness bonus."  
+FEAT_GOT_METALLURGY	"We have unravelled the secrets of Metallurgy! Unfortunately, older gunpowder weapons have been distributed to less advanced civilizations"
+
+## CONSTRUCTION-RELATED FEATS
+
+FEAT_BUILT_THEATERS		"You have built many Theaters across your empire, and the plays and dramas of your people are gaining worldwide recognition.  For the next {FeatDB(Value[0]).Duration} turns, your nation will receive a +{FeatDB(Value[0]).EffectIncreaseHappiness} happiness bonus to reflect their pride in their cultural legacy."
+FEAT_BUILT_BROKERAGES		"You have built many Brokerages, solidifying your position as a worldwide economic force.  Traders, merchants and bankers the world over regard your nation with esteem and admiration.  Your nation will receive a +{FeatDB(Value[0]).EffectIncreaseCommerce} Gold bonus for the next {FeatDB(Value[0]).Duration} turns."
+FEAT_BUILT_INTERNET		"You have built Computer Centers in several of your cities, linking military facilities, universities and private research centers in a high-speed, nationwide network of supercomputers.  For the next {FeatDB(Value[0]).Duration} turns, your science output will increase by +{FeatDB(Value[0]).EffectIncreaseScience}."
+FEAT_BUILT_SYNDICATE		"You have built several Television Improvements, creating the first network television syndicate.  People now rely on television as their prime source of information and entertainment.  Your nation will receive a +{FeatDB(Value[0]).EffectIncreaseHappiness} happiness bonus for the next {FeatDB(Value[0]).Duration} turns."  
+FEAT_BUILT_ORBITAL_LABS		"You have created a network of Orbital Laboratories, and created a world-class scientific research collective.  Because of your wise stewardship of your nation's science programs, your nation will receive a +{FeatDB(Value[0]).EffectIncreaseScience} science bonus for the next {FeatDB(Value[0]).Duration} turns."  
+
+## ACTION-RELATED FEATS
+FEAT_SAILED_AROUND_THE_WORLD	"You have succeeding in sailing around the world!  Your well-travelled navy know the seas well and have accurately charted many waterways.  As a result, all of your naval units get a +{FeatDB(Value[0]).EffectBoatMovement/100} movement for the next {FeatDB(Value[0]).Duration} turns."  
+FEAT_CONQUERED_BY_FORCE		"You are a conquerer!  Through military prowess, grit and determination you have conquered a mighty nation!"  
+FEAT_RECAPTURED_CITY		"You have recaptured a city once part of your empire!  By reclaiming what once was yours, you have lifted the spirits of your people and given them hope in the face of foreign aggression.  There will be a +{FeatDB(Value[0]).EffectIncreaseHappiness} Happiness increase throughout your empire for the next {FeatDB(Value[0]).Duration} turns. "  
+
+#RELIGION FEATS
+FEAT_GOT_JUDAISM	"Moses had lead God's chosen people on a exodus to find a holy land!"  
+FEAT_GOT_CHRISTIANITY	"Disciples of a martyr called Jesus Christ have begun preaching a gospel!"  
+FEAT_GOT_ISLAM		"Muhammed has begun teaching the word of Allah!"  
+FEAT_GOT_HINDU		"Hinduism has grown rapidly among your people and is reaching the far corners of the planet!"  
+FEAT_GOT_BUDDHA		"The wisdom of Buddha has spread throughout beyond your empire!"
+FEAT_GOT_EGYPT		"You are seen as a living god!  This is part of the Apolyton Edition example of how religion can be added to the game. No bonuses will be given by the wonder, but the wonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+FEAT_GOT_ZOROASTER	"Zoroaster is preaching in our lands! This is part ofthe Apolyton Edition example of how religion can be added to the game. No bonuses will be given by the wonder, but the wonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+FEAT_GOT_EGYPT2		"The first civilization that builds the Pharoah shrine wonder will be seen as a living god!  This is part ofthe Apolyton Edition sample of how religion can be added to the game. No bonuses will be given to wonder. But thewonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+FEAT_GOT_ZOROASTER2	"The first civilization that builds the Zoroaster shrine wonder will be seen as a living god!  This is part ofthe Apolyton Edition sample of how religion can be added to the game. No bonuses will be given to wonder. But thewonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
+
+
+

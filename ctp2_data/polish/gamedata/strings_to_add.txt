@@ -1,0 +1,115 @@
+#### Please add to info_str.txt ####
+
+
+
+### New Strings ###
+ECOPACT_BROKEN_BY_3RD 			"{player[0].sir_cap}, the {player[0].civ_name_plural} have violated their Pollution Pact with the {player[1].civ_name_plural}."
+ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}, we have received word that the {player[1].civ_name_plural} have broken their alliance with the {player[2].civ_name_plural}."
+MILITARY_PACT_BROKEN_BY_AI 		"{player[0].sir_cap}, the {player[1].civ_name_plural} have violated their agreement to provide military support for us in our time of need."
+MILITARY_PACT_BROKEN_BY_3RD 		"{player[0}.sir_cap}, {player[1].country_name} has reneged on their Military Pact with the {player[2].civ_name_plural}."
+ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name} has a message for us, {player[0].sir}:  Due to external forces and extenuating circumstances, {player[2].country_name} can no longer honor its agreements with you.  Consider all Pacts, Treaties and Agreements with us null and void."
+IA_CITY_WILL_STARVE_INITIAL_WARNING 	"{player[0].sir_cap}, the city of {city[0].name} is not producing enough food to support its population.  They will soon be tapping their food stores in order to survive."
+IA_CITY_WILL_STARVE_FOOD_STORES_LOW 	"{player[0].sir_cap}, {city[0].name} has nearly depleted their stored food.  If the citizens do not start producing more food, they will soon starve."
+CRISIS_CITY_IS_NANO_INFECTED 		"{player[0].sir_cap}, {city[0].name} has been infected by a biological warfare agent.  We should shut down the trade routes, so that other cities do not become infected."
+NANITE_CLEANSE_COMPLETE_VICTIM 		"Dreadful news, {player[0].sir}.  A foreign Eco-Ranger has completely obliterated {city[0].name} with a devastating Nanite Cleansing attack."
+NANITE_CLEANSE_FAILED_VICTIM 		"{player[0].sir_cap}, we have managed to avert an atrocity!  Our city, {city[0].name}, successfully prevented a foreign Eco-Ranger from unleashing a Nanite Cleansing attack."
+NANITE_CLEANSE_COMPLETE_ATTACK 		"Victory, glorious victory!  Our Eco-Ranger has succeeded in leveling the city of {city[0].name} with a Nanite Cleansing attack.  Nature has been restored to its rightful place in that part of the world."
+NANITE_CLEANSE_FAILED_ATTACK 		"Our Eco-Ranger has failed to unleash a Nanite Cleansing attack on the city of {city[0].name}."
+CITY_NEW_OWNER 				"The {player[0].civ_name_plural} have captured the {player[1].civ_name_singular} city of {city[0].name}."
+FAITH_HEAL_VICTIM 			"Citizens in {city[0].name} have succumbed to foreign religious persuasion, emptying their pockets for televangelists at a faith healing event."
+FAITH_HEAL_ATTACKER 			"One of our televangelists put on a faith healing event in the {player[0].civ_name_singular} city of {city[0].name}.  The event was quite profitable."
+INJUNCTION_COMPLETE_ATTACK 		"Our lawyers have enjoined the city of {city[0].name}, forcing them to halt production."
+NUKE_COMPLETE_AGRESSOR 			"A {unitrecord[0].name} successfully planted a nuke in the enemy city of {city[0].name}.  The damage was considerable."
+FORBIDDEN_CITY_PEACE                    "You have built the Forbidden City."
+CIV_STATUS_DISABLED  			"You need to build a city before you can access this screen."
+SCIENCE_STATUS_DISABLED  		"You need to build a city before you can access this screen."
+CITY_STATUS_DISABLED   			"You need to build a city before you can access this screen."
+DIPLOMACY_STATUS_DISABLED  		"You must contact another empire before you can access this screen."
+UNIT_STATUS_DISABLED  			"You need to have units to access this screen."
+TRADE_STATUS_DISABLED  			"You need to build a city before you can access this screen."
+DIP_OFFER_ADVANCE_NONE 			"There are no advances to offer."
+
+ADVERTISE_COMPLETE_ATTACKER		"Our advertising campaign has been successful.  We are now generating profits in the foreign city of {city[0].name}."
+
+CONDUCTHIT_COMPLETE_VICTIM 		"A prominent public figure has been assassinated in the city of {city[0].name}.  The assassin was a foreign Eco-terrorist, apparently disgusted with our nation's environmental policies.  Our people are outraged, afraid and deeply unhappy."
+CONDUCTHIT_FAILED_VICTIM		"We stopped a foreign Eco-Terrorist from conducting a hit on a public figure in {city[0].name}."
+CONDUCTHIT_COMPLETE_ATTACKER		"One of our Eco-Terrorists has successfully conducted a hit on a public figure in the city of {city[0].name}.  The people are fortunately directing all of their anger at their own leaders for their lack of preparedness."
+CONDUCTHIT_FAILED_ATTACK		"A troubling setback, {player[0].sir}.  Our Eco-Terrorist was intercepted before he could conduct a hit on the city of {city[0].name}."
+
+INDULGENCE_COMPLETE_VICTIM 		"A foreign Cleric has successfully siphoned money from the guilt-ridden citizens of {city[0].name} by selling indulgences."
+INDULGENCE_FAILED_VICTIM 		"The people of {city[0].name} have resisted attempts by a foreign Cleric attempting to sell indulgences."
+INDULGENCE_COMPLETE_ATTACKER 		"Our holy war is becoming profitable.  Our Cleric has brought in some gold by selling indulgences to the wretched sinners of {city[0].name}."
+INDULGENCE_FAILED_ATTACKER 		"Our Cleric has failed in his attempt to sell indulgences in the foreign city of {city[0].name}."
+
+SOOTHSAY_COMPLETE_VICTIM 		"A foreign {unitrecord[0].name} has succeeded in Soothsaying in our city of {city[0].name}.  The citizens are now unhappy, convinced of the bleakness of their future."
+SOOTHSAY_FAILED_VICTIM 			"We caught a foreign {unitrecord[0].name} attempting to Soothsay in {city[0].name}.  We have dealt with the interloper."
+SOOTHSAY_COMPLETE_ATTACKER 		"Our {unitrecord[0].name} has reduced the Happiness in the foreign city of {city[0].name} by Soothsaying."
+SOOTHSAY_FAILED_ATTACKER 		"Our {unitrecord[0].name} tried to Soothsay in the city of {city[0].name}.  He failed and has been captured."
+
+SUE_COMPLETE_VICTIM 			"We have suffered a legal setback.  A foreign lawyer has successfully sued our one of our {unitrecord[0].name} units."
+SUE_FAILED_VICTIM 			"A foreign lawyer has tried in vain to sue one of our {unitrecord[0].name} units.  Justice, however, has prevailed."
+SUE_COMPLETE_ATTACKER 			"Our lawyers have successfully litigated the destruction of a foreign {unitrecord[0].name}."
+SUE_FAILED_ATTACKER 			"Our lawyer has failed in its attempt to sue a foreign {unitrecord[0].name}."
+
+SUE_FRANCHISE_COMPLETE_VICTIM 		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop."
+SUE_FRANCHISE_FAILED_VICTIM 		"Despite the best efforts of a foreign lawyer, our franchise in the city of {city[0].name} remains in business."
+SUE_FRANCHISE_COMPLETE_ATTACKER 	"A lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business."
+SUE_FRANCHISE_FAILED_ATTACKER 		"Though our lawyer fought valiantly, the foreign franchise in {city[0].name} remains to drain even more money from our citizens."
+
+PARTY_COMPLETE_VICTIM 			"A {player[0].civ_name_singular} {unitrecord[0].name} has held a formal reception in our city of {city[0].name}.  The entertainment was first rate, the food was excellent and everyone had a wonderful evening.  Many of our officials were quite taken with the {player[0].civ_name_plural}, and feel that we should make every effort to set aside our differences and foster a sense of partnership with them."
+PARTY_COMPLETE_ATTACKER 		"Our {unitrecord[0].name} held a reception in the foreign city of {city[0].name}.  The event, attended by {player[0].civ_name_singular} dignitaries and government officials, went quite well.  We should expect that the {player[0].civ_name_plural} will be more willing to work with us in the future."
+
+## Gaia Controller Endgame ##
+GC_DISCOVERED_SOLARIS_PROJECT_US 	"Excellent news, {player[0].sir}!!  We have successfully completed the Solaris Project!  We may now begin work on the Gaia Controller."
+GC_DISCOVERED_SOLARIS_PROJECT_THEM 	"News from abroad confirms that {player[0].country_name} has completed the Solaris Project Wonder.  There is no question that they are preparing to begin work on the Gaia Controller.  We should shift our focus to build the Gaia controller ourselves.  We cannot let them beat us to it!!"
+GC_MUST_DISCOVER_GAIA_CONTROLLER 	"Most disturbing news, {player[0].sir}.  The {player[1].civ_name_plural} have completed the Solaris Project Wonder.  We need to move in the direction of discovering the secrets of the Gaia Controller advance so that we can begin work on it ourselves.  We cannot allow anyone else to wield the power that the Gaia Controller brings!!  Time is of the essence!!"
+GC_MIN_CORES_REACHED_US 		"We are laying the groundwork for the completion of the Gaia Controller.  We have built the minimum number of Controller Cores needed."
+GC_MIN_CORES_REACHED_THEM 		"The {player[0].civ_name_plural} have reached a milestone in the construction of their Gaia Controller.  They have built the minimum number of Controller Cores necessary."
+GC_MIN_SATS_REACHED_US 			"We are well on our way towards the completion of the Gaia Controller, {player[0].sir}.  We have built the minimum amount of Gaia Satellites necessary.  Though not necessary, additional satellites will only augment the Gaia Controller's area of influence and increase our chances of success."
+GC_MAX_SATS_REACHED 			"{player[0].sir_cap} we have built the maximum amount of Gaia Satellites.  Any more will have no additional effect on the operation of our Gaia Controller."
+GC_MIN_SATS_REACHED_THEM 		"Reports confirm that the {player[0].civ_name_plural} have built the minimum number of Satellites needed for their Gaia Controller.  They are making progress."
+GC_MIN_OBELISKS_REACHED_US 		"We have succeeded in building the minimum number of Obelisks needed for the Gaia Controller.  We are one step closer to realizing this wonderful creation!"
+GC_MIN_OBELISKS_REACHED_THEM 		"{player[0].sir_cap}, the {player[1].civ_name_plural} have managed to build the minimum number of Obelisks for their Gaia Controller.  Although it is unclear whether they are progressing at a faster rate than we are, one thing is clear:  we have no time to lose."
+GC_READY_TO_ACTIVATE_US 		"{player[0].sir_cap}, we are about to make history.  We have constructed all of the necessary elements of the Gaia Controller!!  All systems are go.  We are ready to activate it at any time."
+GC_READY_TO_ACTIVATE_THEM 		"{player[0].sir_cap}, the {player[1].civ_name_plural} have built a Gaia Controller.  They are sure to activate it at any moment.  We may have to take drastic measures to prevent them from succeeding."
+GC_HALFWAY_TO_WIN_US 			"{player[0].sir_cap}, our Gaia Controller is halfway through the activation process!  Soon we will rule the world!"
+GC_HALFWAY_TO_WIN_THEM 			"{player[0].sir_cap}, the {player[1].civ_name_singular} Gaia Controller will soon be fully operational.  {player[1].country_name} will soon have control over the whole world.  We cannot let this happen!!"
+GC_OBELISKS_DESTROYED 			"Dire and disturbing news, {player[0].sir}.  Foreign saboteurs have destroyed one of Gaia Controller Obelisks.  Our activation sequence had to be abandoned.  We must rebuild the Gaia Controller at once!!"
+GC_CORES_DESTROYED 			"The recent attack on {city[0].name} has destroyed a Controller Core vital to the operation of our Gaia Controller.  We must rebuild the Gaia Controller and protect it against any future attacks."
+GC_COMPLETED_FIRST_CORE_THEM 		"The {player[0].civ_name_plural} are making progress on their Gaia Controller.  They have completed their first Controller Core."
+GC_COMPLETED_FIRST_SAT_THEM 		"The {player[0].civ_name_plural} have completed their first Gaia Satellite."
+GC_COMPLETED_FIRST_OBELISK_THEM 	"{player[0].country_name} has built their first Obelisk."
+GC_ENEMY_ACTIVATION_STOPPED_BY_US 	"{player[0].sir_cap}, we have delivered a critical blow to the {player[1].civ_name_singular} Gaia Controller, forcing them to abandon the activation sequence.  We should capitalize on this opportunity."
+GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"We just received word that the {player[0].civ_name_plural} have abruptly halted the activation sequence of their Gaia Controller.  Although it is unclear who is responsible, we suspect a rival nation has destroyed one or more of the necessary elements."
+
+58UnitObsoleteCivwide                   UNIT_OBSOLETE_CIVWIDE                   "The discovery of {advance[0].name} has rendered the following units obsolete."
+362IAOneOrMoreUnitsWillCrash            ONE_OR_MORE_UNITS_WILL_CRASH            "Your {unit[0].name} will run out of fuel if it does not end its turn in a city or an airbase."
+18IASellImprovement                     IA_SELL_IMPROVEMENT                     "Selling this city's {building[0].name} will net you {gold[0].value} gold.  Are you sure?"
+029NoMaint                              NO_MAINT                                "The {building[0].name} in {city[0].name} has been sold.  We lack the funds to maintain it."
+10IABreakTreaty                         IA_BREAK_TREATY                         "If we violate our treaty with the {player[1].civ_name_plural}, we will not only make them angry, we will also run the risk of losing regard with the leaders of the world.  Are you sure you want to do this, {player[0].sir}?"
+11IABreakCeaseFire                      IA_BREAK_CEASE_FIRE                     "{player[0].sir_cap}, are you certain that you wish to break our peace treaty with the {player[1].civ_name_plural}?"
+25IABreakEcopact                        IA_BREAK_ECOPACT                        "{player[0].sir_cap}, our cities are producing far too much pollution. Soon we will violate the terms of our pollution pact with the {player[1].civ_name_plural}."
+31CrisisCitiesInRevolt                  CRISIS_CITIES_IN_REVOLT                 "{player[0].sir_cap}, we have dire news from the city of {city[0].name}.  The citizens are fed up with your rule, and have revolted."
+045TradePirated                         TRADE_PIRATED                           "{player[0].sir_cap}, our trade route from {city[0].name} to {city[1].name} has been pirated by the {player[1].civ_name_plural]."
+002BrokeTreaty                          BROKE_TREATY                            "The {player[0].civ_name_plural} have broken a treaty with the {player[1].civ_name_plural}."
+005EcopactBroken                        ECOPACT_BROKEN                          "The {player[0].civ_name_plural} have violated the pollution pact they signed with us.  Their cities are destroying the earth with pollution!"
+007AllianceBroken                       ALLIANCE_BROKEN                         "The nefarious {player[1].civ_name_plural} have attacked us, in clear violation of our established alliance!!"
+39CitiesInefficient                     CITY_INEFFICIENCY                       "The people of {city[0].name} are building items that can no longer be built. We must issue them new orders."
+033BarbarianWarning                     BARBARIAN_WARNING                       "Barbarians have been spotted near the city of {city[0].name}."
+266CityDestroyedByWar                   CITY_DESTROYED_BY_WAR                   "{city[0].name} has been annihilated by enemy forces.  None of the citizens survived the siege."
+209UprisingFailedAttacker               UPRISING_FAILED_ATTACKER                "Our abolitionist has failed to aid a slave uprising in {city[0].name}."
+210UprisingFailedVictim                 UPRISING_FAILED_VICTIM                  "Vigilant and loyal forces managed to thwart a foreign abolitionist attempting to aid a slave uprising in {city[0].name}."
+19IACertainRevolution                   IA_CERTAIN_REVOLUTION                   "{player[0].sir_cap}, our people are on the brink of revolution.  If you end your turn now, you may things will take a turn for the worse.  Are you sure you want to end you turn without taking care of this situation?" 
+37IACannotCaptureCity                   IA_CANNOT_CAPTURE_CITY                  "Only military land units with an attack capability greater than zero can capture an enemy city."
+45IATerraformDeadTile                   IA_TERRAFORM_DEAD_TILE                  "You must first discover the conservation advance before you can terraform dead tiles."
+74EndOfGameOutOfTime                    END_OF_GAME_OUT_OF_TIME                 "The year is 2300AD, there is no more time.  If you continue, no score will be kept."
+48WorldPollutionSpaceLaunch             WORLD_POLLUTION_SPACE_LAUNCH            "Our satellites have detected rising atmospheric pollution caused by space launches."
+149PartyCompleteVictim                  PARTY_COMPLETE_VICTIM                   "[player.1.civ_name_singular] Diplomats have thrown an extravagant party for our government officials. Our people will protest more strongly if we go to war with these cunning showmen."
+
+
+### Changed Strings
+## add {city[0].name}
+IA_SETTLING_TOO_CLOSE   		"We cannot build a new city within the city limits of {city[0].name}. Therefore, we should find a location more conducive to expansion."
+
+## others ##
+UNIT_DISBANDED_ON_GOV_CHANGE can we have the unitname in there?

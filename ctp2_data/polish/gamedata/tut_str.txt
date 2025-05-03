@@ -1,0 +1,650 @@
+BUTTON_GREAT_LIBRARY "Great Library" 
+
+BUTTON_TRADE "TRADE" 
+
+BUTTON_CIV "CIV" 
+
+BUTTON_CITY "CITY"  
+
+BUTTON_SCIENCE "SCIENCE" 
+
+BUTTON_UNITS "UNITS" 
+
+BUTTON_DIPLOMACY "DIPLOMACY" 
+
+BUTTON_REFORM "Reform" 
+
+BUTTON_NEXT_MESSAGE "Next Message"
+
+BUTTON_BYE "Bye!"
+
+BUTTON_END_TUTORIAL "End Tutorial"
+
+BUTTON_LOAD "Load"
+
+TITLE_SCIENCE_RATE_TOO_HIGH "Science Tax is Too High!"
+TUT16A_SCIENCE_RATE_TOO_HIGH "Your science tax is very high.  If you choose to keep this tax rate, you may get advances more quickly, but you may find that you are accumulating very little gold in savings and you may not be able to pay your citizens' wages."
+
+TITLE_BUILD_BUILDING "[city.1.name] is Building an Improvement!"
+TITLE_BUILD_CAPITOL "[city.1.name] is Building the Capitol"
+TUT30_BUILD_CAPITOL "You are building a Capitol in [city.1.name]. You may only have one Capitol in your Civilization, so if you complete it, the previous capitol will be sold.  Make sure that you want to move your capitol to [city.1.name], otherwise you might want to build something else."
+
+TITLE_CHANGE_GOVT1 "Changing Governments"
+TUT78_CHANGE_GOVT1 "Changing Governments is very risky, but sometimes necessary.  Changing governments improves many of the global conditions in your Civilization, but you also have to enter into a brief period of Anarchy (up to 4 turns), during which all production stops and cities do not grow."
+
+TITLE_CHANGE_GOVT2 "Changing Governments, cont'd"
+TUT79_CHANGE_GOVT2 "You will have to change your Civilization's settings in the Civ tab to meet their minimum expectations [the red dot indicates their expectation].  You can make them happy again by moving the Workday, Wages and Rations sliders until their Happiness is green again."
+
+TITLE_CHANGE_GOVT3 "Compare Governments"
+TUT80_CHANGE_GOVT3 "Compare governments by opening the CIV screen (click the 'CIV' button below) and then clicking the 'Change' button.  If you have discovered the advance for a new government type, it will appear in the 'Governments' list box."
+
+TITLE_ANARCHY1 "Anarchy!"
+TUT80A_ANARCHY1  "While the current government is being dissolved, your Civilization falls into Anarchy, a period of political disorder.  Your Civilization will experience no growth and will not gain science during this time.  You are particularly vulnerable right now, so you may want to defend your cities even more closely."
+
+TITLE_ANARCHY2 "End of Anarchy!"
+TUT80B_ANARCHY2 "The new government has taken control, and the citizens of your Civilization have accepted the change. However, they now have new expectations of you. The Workday, Wages, and Rations settings have been changed to meet their expectations. Click the 'CIV' button to see the new settings."
+
+TITLE_GOT_ADVANCE "You Discovered an Advance!"
+TUT138_GOT_ADVANCE "Scientific research has resulted in the discovery of [advance.name]. The screen shows what you can research next. Select what you want to research, then click 'OK' to continue."
+
+TITLE_TRADE_ROUTE_NO_PROFIT "No Profit trading [good.1.name]!"
+TUT142A_TRADE_ROUTE_NO_PROFIT "You are trading [good.1.name] between your cities [city.1.name] and [city.2.name] for a total profit of  [gold.amount].  You might want to rethink this trade route, because it isn't making any gold.  You can review your trade routes by clicking the 'Review Trade' button on the TRADE screen."
+
+TITLE_TRADE_ROUTE2 "Now Trading [good.1.name] with [player.2.civ_name_plural]"
+TUT143_TRADE_ROUTE2 "The [player.2.civ_name_plural] have agreed to your offer to buy their [good.1.name], so they are sending the [good.1.name] from [city.1.name] to your city [city.2.name].  You are making a profit of [gold.1.amount]."
+
+TITLE_TRADE_ROUTE3 "Now Trading [good.1.name] with [player.2.civ_name_plural]"
+TUT144_TRADE_ROUTE3 "You are now sending [good.1.name] from [city.1.name] to the [player.2.civ_name_singular] city [city.2.name] and are making a profit of [gold.amount] gold.  You can review your trade routes by clicking the 'Review Trade' button on the TRADE screen."
+
+TITLE_PILLAGED "Enemy [unit.1.name] is Pillaging!"
+TUT145_PILLAGED "A [player.1.civ_name_singular] [unit.1.name] is pillaging near your city.  You must stop him before he causes irreparable damage. If your armies are prepared to uphold your word, send a diplomatic demand to [player.1.leader_name] to leave your lands!"
+
+TITLE_PIRATED "You Have Been Pirated By Enemy [unit.1.name]!"
+TUT146_PIRATED "The trade route carrying [good.1] between [city.1] and [city.2] has been pirated by the [player.3.civ_name_singular] [unit.1.name].  Review your Trade to see how the Civilization has been affected.  If your military can back you up, send a diplomatic demand that the [player.3.civ_name_plural] stop pirating your trade routes!"
+
+TITLE_RUSH_BUY "Rush Buy"
+TUT147_RUSH_BUY "You have enough gold in savings to Rush Buy the item being built in [city.1.name].  If you want to complete the item on the next turn, you can click the 'Rush Buy' button on the Production tab or on the CITY screen."
+
+TITLE_RUSH_BUY2 "Compare Rush Buy to Savings"
+TUT147B_RUSH_BUY2 "You can check if you can rush buy an item by comparing how much gold you have in savings [located below the Turn and PW boxes near the Mini map] to the amount that it will cost to Rush Buy [the box above the RUSH BUY button on the Production tab]." 
+
+TITLE_UNHAPPY_CITY "[city.1.name] is Unhappy!"
+TUT148A_UNHAPPY_CITY_SMALL "You should see if you can make the citizens of [city.1.name] happy again by changing the Civilization settings.  Click the 'CIV' button to open the Civ screen and change the settings until [city.1.name] is happy again."
+
+TITLE_UNHAPPY_CITY2 "Making [city.1.name] Happy Again"
+TUT148B_UNHAPPY_CITY_LARGE "Since you have a relatively large population in [city.1.name], you can order some of its citizens to become Entertainers.  Each Entertainer makes one unhappy citizen happy again.  Select [city.1.name] and open the Labor tab.  Change the number of Entertainers using the arrows.  Make sure that you still have enough Workers to support all of the citizens of the city."
+
+TUT148C_UNHAPPY_CITY_RELIGION "The citizens of [city.1.name] are unhappy.  Since you have knowledge of Religion, you can build a Temple to increase the city's happiness.  If you have already built a Temple, you may want to go to the CIV screen to modify the Civilization's settings to make [city.1.name] happy again."
+
+TUT148D_UNHAPPY_CITY_PERSPECTIVE "The citizens of [city.1.name] are unhappy.  Since you have knowledge of Perspective, you can build a Cathedral to increase the city's happiness.  If you have already built a Cathedral, you may want to go to the CIV screen to modify the Civilization's settings to make [city.1.name] happy again."
+
+TUT148E_UNHAPPY_CITY_SMALL_ANCIENT "The citizens of [city.1.name] are unhappy.  Since your city is small, you may increase happiness by exerting martial law on the city - station a military unit inside the city, like a Warrior.  You can also change your CIV settings to increase your people's happiness."
+
+TITLE_FOG1 "Shroud"
+TUT154_FOG1 "You have clicked on the black part of the map, an area you have not yet explored called the Shroud.  When your units explore this area, it will become revealed and you will be able to see the surrounding terrain."      
+
+TITLE_OUT_OF_GAS "[unit.1.name] Crashes - Out of Fuel!"
+TUT156_OUT_OF_GAS "Your [unit.1.name] crashed because it ran out of fuel.  You need to refuel your aircraft at Airports or Airbases.  Build an Airport inside a city, or build an Airbase outside a city using your Public Works."
+
+TITLE_NO_SUPPORT "[unit.1.name] Dies Due to Lack of Military Support"
+TUT157_NO_SUPPORT "Your [unit.1.name] died because you did not have enough production to support the military costs.  Before building too many military units, you should make sure that you have enough production to support them.  Look at the UNITS screen to see how much production is going towards military support."
+
+TITLE_RANDOM_DEATH "Random Death"
+TUT158_RANDOM_DEATH "Your [unit.1.name] fell prey to hordes of carnivorous Lemurs."
+
+TITLE_HIGH_CITY_POLLUTION "High City Pollution!"
+TUT159_HIGH_CITY_POLLUTION "Your city [city.1.name] is a gross polluter, and is causing the destruction of ecosystems in your territory.  You should try to reduce the pollution in [city.1.name] by building pollution-reducing Improvements."
+
+TITLE_CITY_POLLUTION "City Pollution!"
+TUT160_CITY_POLLUTION "Your city [city.1.name] is now polluting the environment. You may want to keep an eye out for danger signs, such as ecosystem death [i.e. entire tiles dying out and turning black]."
+  
+TITLE_SLOW_SCIENCE1 "Not Enough Science"
+TUT164A_SLOW_SCIENCE "You might want to speed up your civilization's scientific progress.  You can increase the rate at which you get science by selecting a city, then selecting the 'MAX' tab, and clicking the 'Max Science' button."
+
+TITLE_SLOW_SCIENCE2 "Increase Science!"
+TUT164B_SLOW_SCIENCE2 "Try increasing the science tax.  If it is already maximized, move workers around so that they are collecting more gold.  If they're already on tiles with goods, try decreasing the Wages that you pay your people [make sure you increase Workday or Rations to balance it out]."  
+
+TITLE_SLOW_CITIES "Not Enough Cities"
+TUT165_SLOW_CITIES "In this day and age, you ought to think about building more cities.  You should build more Settlers who can build new cities.  Cities increase the size of your civilization, and allow you to build more items more quickly."  
+
+TITLE_ZOC "Zone of Control"
+TUT168_ZOC "Your unit can't move past this enemy unit because he controls all of the tiles immediately around him - this concept is called Zone of Control (ZOC). Since your unit is in the enemy's ZOC, you will have to move around the enemy unit's Zone to get past him."      
+
+TITLE_SLOW_CITY "Not Many Cities"
+TUT180_SLOW_CITY "You ought to think about building more cities to increase the size and strength of your empire.  Build Settlers to build more cities, or send armies out to capture some."
+
+TITLE_SLOW_SCIENCE "Not Much Science"
+TUT185_SLOW_SCIENCE "You might think about increasing your Science."
+
+TITLE_CITY_TAKEN "[city.1.name] Has Been Captured!"
+TUT190_CITY_TAKEN "The [player.1.civ_name_plural] have taken [city.1.name] by force!  Increase your defenses in other cities so that they will not share [city.1.name]'s fate!"
+
+TITLE_CITY_CAPTURED "You Have Captured [city.1.name]!"
+TUT191_CITY_CAPTURED "Through ruthless endeavour, you have captured [city.1.name] from the [player.1.civ_name_plural].  Make sure you protect it from angry, vengeful enemies."
+
+TITLE_CITY_CONVERTED "[city.1.name] Has Been Converted!"
+TUT193_CITY_CONVERTED "Your city [city.1.name] has fallen prey to promises of salvation and is sending gold in the form of Tithes to a foreign civilization.  You can end the tithes by ordering a Military Unit to Reform the city.  You should also worry about protecting your other cities from a similar fate."  
+
+TITLE_REFORM_CITY "How To Reform a Converted City"
+TUT194_REFORM_CITY "Place any of your military units next to the Converted city.  Select the unit, click the 'Reform City' button on the Units tab, then click on the Converted city."
+
+TITLE_I_CONVERT "You Have Converted [city.1.name]!"
+TUT195_I_CONVERT "You have successfully Converted the [player.1.civ_name_singular] [city.1.name] to your faith.  They are sending you gold in the form of tithes to support your church.  Send the [unit.1.name] to other cities and share your faith with them too.  More converts means more gold for the church!"
+
+TITLE_TERRORIST "Terrorist Attack!"
+TUT196_TERRORIST "Someone is attempting a terrorist attack on your city [city.1.name]!  The nature of the act is unclear, but you can be sure that it is something nasty!  Increase your defenses!"
+
+TITLE_ENSLAVED "[player.1.civ_name_singular] Citizen Enslaved!"
+TUT197_ENSLAVED "One of your loyal citizens of [city.1.name] has been enslaved!  Build a City Wall to prevent further enslavement!  Increase city defenses!"
+
+TITLE_I_ENSLAVE "You are a Slave Master"
+TUT198_I_ENSLAVE "You have enslaved a citizen of [city.1.name]. The new slave is working in the fields.  Send the Slaver to other cities and recruit some more, but don't make the City suspicious!"
+
+TITLE_CANT_SETTLE_NOW "Can't Build a City Now"
+TUT203_CANT_SETTLE_NOW "The settler can't build a city right now because his movement points have been exhausted.  End this turn and build a city on the next turn.  Hit <c:180,0,0>'N'<e> or click the <c:180,0,0>'END'<e> button to end the turn."
+
+TITLE_VICTORY_ENSLAVEMENT "Victory Enslavement"
+TUT205_VICTORY_ENSLAVEMENT "When your troops went to battle, a Slaver was included in the army.  Because your army was victorious, the Slaver took one of the [player.2.civ_name_singular) survivors as a slave.  This is known as Victory Enslavement.  This will only happen when a victorious army has a Slaver in it, and there is only a chance that this will happen at any given time."
+
+TITLE_PLAYER_SETTLER_ENSLAVED "Your Settler Was Enslaved!"
+TUT206_PLAYER_SETTLER_ENSLAVED "Your Settler has been dragged away by an enemy Slaver, and has been forced to become a slave in a foreign city. You can't save him now, but you can prevent it from happening to other Settlers by having them travel with a military companion.  Place a military unit on the same tile as a Settler, then click the 'Lock' icon on the Units tab so they can travel together."
+
+TITLE_ENSLAVED_SETTLER "You Enslaved a Settler!"
+TUT207_ENSLAVED_SETTLER "Your Slaver has enslaved a [player.2.civ_name_singular] Settler.  The Slaver can enslave any foreign Settler that he sees, in addition to performing Slave Raid attacks on foreign cities."
+  
+################
+##NEW TUTORIAL##
+################
+
+TITLE_WELCOME_CTP "Welcome to Civilization: Call to Power"
+TUT500_WELCOME_CTP "The goal of the game is to make your Civilization the most powerful. To do this, you must explore the world, build cities and meet your neighbors."
+
+TITLE_THE_TUTORIAL "The Tutorial"
+TUT500A_THE_TUTORIAL "Messages will pop up and instruct you as you progress. If you wish to review past messages, click on the <c:180,0,0>'Review Tutorial Messages'<e> button at the top of the screen. To exit the Tutorial, click 'Review Tutorial Messages' to open the message list, then click the <c:180,0,0>'End Tutorial'<e> button found on the message list."
+
+TITLE_MAP_SCROLL "Messages Blocking Your View?"
+TUT500B_MAP_SCROLL "Move your mouse cursor to any of the <c:180,0,0>far edges of the screen<e> to move the view in that direction. To re-center on the explored region, click on the <c:0,180,0>colored area<e> within the black part of the mini-map, located in the lower left corner of your screen."
+
+TITLE_GOAL_1 "Goal 1: Build a City"
+TUT501_GOAL_1 "Your first mission is to build a city. Move your Settler to where you want to build. <c:0,180,0>The best places to build cities are on rivers, especially on grassland.<e> Hit the <c:180,0,0>'N'<e> key to end the turn when the settler can't move anymore, or click 'Next Message' to learn how to build a city."
+
+TITLE_THIS_IS_SETTLER "Tutorial Level 1"
+TUT502_THIS_IS_SETTLER "You are now beginning Level 1 of the Tutorial. Here you will learn the basics of moving units and building. We'll begin with the settler."
+
+TITLE_SELECT_SETTLER "Selected Settler"
+TUT502A_SELECT_SETTLER "The game begins with the settler unit <c:0,180,0>selected<e>. He has a <c:0,180,0>green box<e> and a <c:0,180,0>green grid<e> around him. To <c:180,0,0>DESELECT<e> him, <c:180,0,0>RIGHT<e>-click the map. To <c:0,180,0>SELECT<e> the settler, <c:0,180,0>LEFT<e>-click the settler."
+
+TITLE_MOVE_YOUR_SETTLER "Move your Settler"
+TUT503_MOVE_YOUR_SETTLER "With the settler <c:0,180,0>selected<e>, move your cursor slightly away from the selected settler. If you see a <c:0,180,0>green<e> line, you can move your Settler there. <c:180,0,0>LEFT<e>-click on the destination."
+
+TITLE_CANT_MOVE_MORE "Ending the Turn"
+TUT503A_CANT_MOVE_MORE "Moving the settler exhausts his movement points. You won't be able to move him further or build a city on this turn.  Hit the <c:180,0,0>'N'<e> key or click the <c:180,0,0>'END'<e> button, located on the lower right corner of the screen, to end the turn."
+
+TITLE_ON_RIVER "On a River..."
+TUT503B_ON_RIVER "All units can move faster along tiles with rivers than on the same tiles without rivers. The settler can move 2 river tiles in one turn, whereas he can only move 1 non-river tile per turn. Rivers are usually the best places to build a city."
+
+TUT503C_RIVER_2 "You don't have to move the settler further if you want to build a city where he is now.  End the turn by hitting the <c:180,0,0>'N'<e> key, and build a city at the beginning of the next turn."
+
+TITLE_HOW_TO_BUILD_CITY "How to Build a City"
+TUT504_HOW_TO_BUILD_CITY "With the settler <c:0,180,0>selected<e>, hit the <c:0,180,0>'B'<e> key for 'Build City', or click the shovel icon located on the Units tab below." 
+				
+TITLE_GOAL_1_ACCOMPLISHED "Goal 1 Accomplished! City Built"
+TUT505_GOAL_1_ACCOMPLISHED "The settler has disappeared, and is now living in your first City, [city.1.name]. The city can be ordered to build new units for exploration, and new settlers to build more cities."
+
+TITLE_GOAL_2 "Goal 2: Build a Unit"
+TUT506_GOAL_2 "When the city is selected, it will have a <c:180,0,0>red<e> box around it. With the city selected, click on the <c:0,180,0>'PRODUCTION'<e> tab below, then click on the <c:0,180,0>'BUILD'<e> button. Scroll down to the <c:180,0,0>Warrior<e>, and select it by clicking the word.  Click <c:0,180,0>'BUILD'<e> again."
+
+TITLE_TURNS_TO_COMPLETE "Turns to Completion"
+TUT507_TURNS_TO_COMPLETE "On the Production tab, below the picture of the Warrior, you can see how many turns it will take to complete. Hit <c:180,0,0>'N'<e> to end the turn. Keep hitting <c:180,0,0>'N'<e> until it is built."
+
+TITLE_KEEP_HITTING_N "Keep Hitting 'N'!"
+TUT507A_KEEP_HITTING_N " Hit the <c:180,0,0>'N'<e> key to end the turn.  Keep hitting <c:180,0,0>'N'<e> until the item is built. Monitor the city's progress by <c:180,0,0>LEFT<e>-clicking the city, then clicking the Production tab. Look at the colored bar and the number of turns remaining, located below the picture of the item you are building."
+
+TITLE_BUILD_PROGRESS "Building Progress"
+TUT508_BUILD_PROGRESS "Keep hitting the <c:180,0,0>'N'<e> key (or clicking the 'END' button, located on the lower right corner of the screen) until the City is done building. Monitor the progress by selecting the city, then clicking the Production tab. Look at the colored bar and the number of turns remaining, located below the picture of the item you are building."
+
+TITLE_GOAL_2_ACCOMPLISHED "Goal 2 Accomplished! Unit Built!"
+TUT509_GOAL_2_ACCOMPLISHED "The Warrior is complete. You can use this unit to explore the map."
+
+TITLE_EXPLORE_THE_MAP "Explore the Map"
+TUT510_EXPLORE_THE_MAP "Look at the lower right side of your screen. Click on the <c:0,180,0>green<e> man button. When the unit's <c:0,0,180>colored shield<e> is flashing, the unit is selected. Move the cursor away from the unit. When the unit is selected, the line extending from the unit should be <c:0,180,0>green<e>. You can move your unit by <c:180,0,0>LEFT<e>-clicking on the destination." 
+
+TITLE_GOAL_3 "Goal 3: Improve your City"
+TUT511_GOAL_3  "Build the Granary Improvement to help your city grow. Select the city by <c:180,0,0>LEFT<e>-clicking it. Click the <c:0,180,0>'BUILD'<e> Button on the <c:0,180,0>'PRODUCTION'<e> tab below. Scroll down the list and click on the word <c:180,0,0>'Granary'<e>. Click the <c:0,180,0>'BUILD'<e> button."
+
+TITLE_CONTINUE_EXPLORING "Continue Exploring"
+TUT512_CONTINUE_EXPLORING "It will take a while to build the <c:0,180,0>Granary<e>, so in the meantime, use the Warrior to continue exploring the map. Hit <c:180,0,0>'N'<e> to end the turn. Remember, <c:180,0,0>LEFT<e>-click to select the unit and <c:180,0,0>LEFT<e>-click to move it." 
+
+TUT512A_CONTINUE_EXPLORING "It will take a while to build the <c:0,180,0>Settler<e>, so in the meantime, use the Warrior to continue exploring the map. Hit <c:180,0,0>'N'<e> to end the turn. Remember, <c:180,0,0>LEFT<e>-click to select the unit and <c:180,0,0>LEFT<e>-click to move it."
+
+TITLE_CANT_GO_ON "Can't Continue Yet"
+TUT513_CANT_GO_ON "The 'Next Message' button won't work until you accomplish the instruction below."
+
+TITLE_INTERIM "As the City Builds..."
+TUT513A_INTERIM_SCIENCE "Researching science is a critical part of the game.  You need to advance your sciences to be able to build new units, improvements and wonders.  You may get a message which lets you know that you have discovered an advance."
+
+TUT513B_INTERIM_TURNS "After hitting <c:180,0,0>'N'<e>, you will see the year box change colors.  The different colors correspond to each of the other civilizations as they take their turns moving units and building items in their cities."
+
+TUT513C_INTERIM_X "You can minimize a message by clicking the <c:180,0,0>--<e> in the upper right corner of the message.  To reopen the message, click the <c:0,80,180>?<e> on the left side of the screen."
+
+TUT513D_INTERIM_Y "When your city builds a settler, you will see the population (the number located below the city's name) decrease by one. One of the city's workers becomes the settler."
+
+TUT513E_INTERIM_Z "Each unit has a <c:0,0,180>colored shield<e> that tells you what civilization it belongs to. Your units have blue shields.  Cities have their name and population in the color of the civilization they belong to."
+
+TUT513F_CHECK_PROGRESS "Select the city by <c:180,0,0>LEFT<e>-clicking it.  Click the <c:0,180,0>'PRODUCTION<e> tab, and look at the colored bar below the picture of the item the city is building.  The number of turns appears to the right of the colored progress bar."
+
+TITLE_GOAL_3_ACCOMPLISHED "Goal 3 Accomplished! Granary Built"
+TUT514_GOAL_3_ACCOMPLISHED "The Granary will help your City grow by increasing stored food."
+
+TITLE_GOAL_4 "Goal 4: Build a Second City"
+TUT515_GOAL_4 "You can make your civilization stronger by building more cities. Select the city. Go to the <c:0,180,0>PRODUCTION<e> tab, then click the <c:0,180,0>'BUILD'<e> button.  Select the <c:180,0,0>Settler<e> unit by clicking on the word. Click <c:0,180,0>'BUILD'<e> to begin building the settler."
+
+TITLE_SETTLER_BUILT "Settler Built"
+TUT516_SETTLER_BUILT "Click the <c:0,180,0>green<e> man button until the Settler is selected - the settler's <c:0,0,180>shield<e> is flashing.  If you see a <c:0,180,0>green<e> line coming from the settler, <c:180,0,0>LEFT<e>-click the destination tile to move the Settler out of the city."
+
+TITLE_FIND_G_SPOT "Find a Good Spot for a City" 
+TUT518_FIND_G_SPOT "On the map you see different Terrain. Look for grasslands, rivers and forests that are near special resources like Tobacco, Pearls, or Alligators. These offer the best resources to cities."
+
+TITLE_REMEMBER_N "Remember: Hit 'B' to Build"
+TUT518A_REMEMBER_N "If your settler can't move any more, hit the <c:180,0,0>'N'<e> key to end your turn. Hit the <c:0,180,0>'B'<e> key when you want the settler to build a city."
+
+TITLE_GOOD_PLACES_TO_SETTLE "Good Places to Build Cities"
+TUT518B_GOOD_PLACES_TO_SETTLE "Still looking? Look for rivers, forests, and grasslands. Remember to hit <c:180,0,0>'N'<e> to end the turn. At the beginning of the next turn, select the settler and hit <c:0,180,0>'B'<e> to build a city."
+
+TITLE_BUILD_SECOND_CITY "Goal 4 cont'd: Build a Second City"
+TUT519_BUILD_SECOND_CITY "Select the settler and look at the <c:0,180,0>green<e> grid surrounding him. This displays the squares or 'tiles' that will belong to the city. Hit <c:180,0,0>'N'<e> to end the turn if the settler can't move anymore. Hit <c:0,180,0>'B'<e> for 'Build City', or click the shovel icon on the Units tab, at the beginning of the turn."
+
+TITLE_LEVEL_2 "Tutorial Level 2"
+TUT519A_LEVEL_2 "Congratulations!  You are now ready to move on to <c:180,0,0>Level 2<e> of the Tutorial."
+
+TITLE_SAVE "Save Your Progress!"
+TUT519B_SAVE "If you want to save your game, hit <c:180,0,0>'ESC'<e> to access the Options menu, and click 'Save Game'."
+
+TITLE_GOAL_4_ACCOMPLISHED "Goal 4 Accomplished! Second City Built"
+TUT520_GOAL_4_ACCOMPLISHED "You need to protect your city. Select the city, then click the <c:0,180,0>'BUILD'<e> button on the Production tab below and select the <c:180,0,0>Phalanx<e> Unit. Click <c:0,180,0>'BUILD'<e> again." 
+
+TITLE_2_GOAL_1 "Goal 1: Concepts of Management"
+TUT521_2_GOAL_1 "You have learned the basics of building units and improvements, moving your units and building cities. You must learn how to rule your empire."
+
+TITLE_RESOURCES "Resources: Food, Production, Gold"
+TUT522_RESOURCES "This game is about managing resources.  Food is necessary to increase the size of your cities. Production is necessary to build things. Gold is used for funding science."
+
+TITLE_GET_RESOURCES "How to Get Resources"
+TUT523_GET_RESOURCES "You get resources when Workers work on the tiles within your city radius. The city houses one permanent resident, who works the tile under the City, and one Worker, which you can move to a specific tile or order to become a Specialist." 
+
+TITLE_WORK_VIEW "The Work View"
+TUT524_WORK_VIEW "<c:180,0,0>LEFT<e>-click the City to select it, then <c:0,180,0>RIGHT<e>-click the city. You can move the Work View by clicking the top edge, and holding the mouse button down as you move the mouse."
+
+TITLE_WORK_VIEW_ICONS "Work View Icons"
+TUT524A_WORK_VIEW_ICONS "You should see a Worker near the city, busy working on a tile. Next to the worker, there are three icons. The loaf of bread represents food. The gear represents production. The coin represents gold. The number inside each shows how much the worker is collecting from that tile."
+
+TITLE_MOVING_WORKERS "Moving Workers in the Work View"
+TUT525_MOVING_WORKERS "To move a worker, <c:180,0,0>LEFT<e>-click on the worker, then <c:180,0,0>LEFT<e>-click on a different tile. Look at the numbers in the icons to see if that tile is better or worse. Close the Work View by clicking on the 'x' in the upper right corner." 
+
+TITLE_GET_FOOD_PRODUCTION "Get Food and Production"
+TUT526_GET_FOOD_PRODUCTION "It is important to get food so that the cities grow and production so they can build."
+
+TITLE_RULING "Ruling your Civilization"
+TUT527_RULING "There are two sets of rules in the game: global rules and local rules. Global rules apply to your entire Civilization - every city is affected. Local rules apply to individual cities only."
+
+TITLE_MAINTAIN_HAPPY "Maintain Happiness in your Empire"
+TUT528_MAINTAIN_HAPPY "A critical challenge of the game is maintaining your people's productivity while keeping them happy."
+
+TITLE_GLOBAL_RULES "Global Rules"
+TUT529_GLOBAL_RULES "The three things that most impact on your people's happiness, are how much they work (Workday),
+how much they eat (Rations) and how much they are paid (Wages)." 
+
+TITLE_OPEN_CIV_TAB "Open the Civ Tab"
+TUT530_OPEN_CIV_TAB "<c:180,0,0>LEFT<e>-click the city to select it. Click on the <c:180,0,0>'Civ'<e> tab below."
+
+TITLE_THE_CIV_TAB "The Civ Tab: Changing Global Rules"
+TUT531_THE_CIV_TAB "This is where you set your global rules. Moving the sliders on the Workday, Wages and Rations bars to changes how many hours your people work, how much they are paid and how much they eat."
+
+TITLE_HAPPINESS_IS "Happiness = Food, Money, Leisure"
+TUT532_HAPPINESS_IS "If you work your people too hard, or feed or pay them too little, their happiness will fall. Look at the <c:0,200,0>Happiness Status Bar<e> on the Civ tab to measure your people's happiness."
+
+TITLE_UNHAPPINESS_IS "Unhappiness = Riots and Revolution"
+TUT533_UNHAPPINESS_IS "If unhappy, cities may Riot or Revolt. This will hurt your Civilization's growth. Look at the <c:180,0,0>'RIOT'<e> and <c:180,0,0>'REV'<e> boxes on the Civ tab to see the number of cities that are in danger - 0's indicate a happy civilization."
+
+TITLE_RESEARCH_SCIENCE "Science: The Path to Advancement"
+TUT534_RESEARCH_SCIENCE "Researching Science is critical to all progress. It is the only way to get new Units, Improvements and Wonders. Science costs gold." 
+
+TITLE_SETTING_SCIENCE "Setting the Science Tax"
+TUT535_SETTING_SCIENCE "Look under 'SCIENCE' on the Civ tab.  Click on the '+ and '-' to increase and decrease the Science tax. There is a maximum tax rate, depending on your government. Most of the time, you'll want to have the Science tax at the maximum rate."
+
+TITLE_PUBLIC_WORKS "Public Works"
+TUT536_PUBLIC_WORKS "Public Works represents the production set aside to build farms, mines and roads [also known as Tile Improvements]. These increase the resources collected from tiles and help Units move. Acquiring Public Works costs Production."
+
+TITLE_SETTING_PUBLIC_WORKS "Setting Public Works"
+TUT537_SETTING_PUBLIC_WORKS "Look at the box on the Civ tab under <c:180,0,0>'PW'<e>. This displays the percentage of your Civilization's Production that goes towards Public Works."
+
+TITLE_2_GOAL_2 "Goal 2: Build a Farm or Road"
+TUT538_2_GOAL_2 "Set the PW on the Civ tab to <c:0,180,0>70%<e> using the '+' button. Now <c:0,180,0>70%<e> of your production each turn will go to Public Works. <c:180,0,0>WARNING<e>: Normally you should set your PW to a maximum of <c:180,0,0>30%<e>. Higher than <c:180,0,0>30%<e> makes cities build very slowly."
+
+TITLE_GETTING_PUBLIC_WORKS "Getting PW Takes Time"
+TUT539_GETTING_PUBLIC_WORKS "Cycle through turns until you have accumulated <c:0,180,0>200<e> Public Works. You can see how much Public Works you have by looking at the box below the year."
+
+TITLE_DECREASE_PW "Turn Public Works Down"
+TUT539A_DECREASE_PW "<c:180,0,0>LEFT<e>-click the city. Click on the Civ tab. Set PW on the Civ tab to <c:180,0,0>20%<e>. Your cities will be able to build quickly again because most of the production is going towards items built in the cities."
+
+TITLE_USING_PW "Use your Public Works"
+TUT540_USING_PW "Click the hammer button. Click on the farm or road. <c:180,0,0>Farms must be placed on grassland or plains tiles adjacent to water.<e> Place roads so that they connect to the city. The cursor turns <c:0,180,0>green<e> where you can build the improvement and <c:180,0,0>red<e> where you can't. If the cursor is <c:0,180,0>green<e>, click on the destination tile."
+
+TITLE_GOAL_FARM "2 Turns to Build Farms"
+TUT542_GOAL_FARM "Click the hammer button again to close the Tile Improvements. It will take <c:180,0,0>2<e> turns for the farm to be built.  Hit the <c:180,0,0>'N'<e> key to end the turn."
+
+TITLE_GOAL_ROAD "2 Turns to Build Roads"
+TUT543_GOAL_ROAD "Click the hammer button again to close the Tile Improvements. It will take <c:180,0,0>2<e> turns for the road to be built.  Hit the <c:180,0,0>'N'<e> key to end the turn."
+
+TITLE_MINE "Building a Mine"
+TUT543A_MINE "If you made a mistake, you may want to restart the Tutorial. Sorry!"
+
+TITLE_2_GOAL_2_ACCOMPLISHED_FARM "Goal 2 Accomplished: Farm Built!"
+TUT544_2_GOAL_2_ACCOMPLISHED_FARM "<c:180,0,0>LEFT<e>-click on the city, then <c:0,180,0>RIGHT<e>-click it to bring up the Work View. If there is no worker on the farm already, <c:180,0,0>LEFT<e>-click on the worker then <c:180,0,0>LEFT<e>-click on the tile with the farm. Move the Work View by clicking the top edge, and holding the mouse button as you move the mouse." 
+
+TITLE_2_GOAL_2_ACCOMPLISHED_ROAD "Goal 2 Accomplished: Road Built!"
+TUT545_2_GOAL_2_ACCOMPLISHED_ROAD "Your road is complete.  You can connect more roads to ones you have already built."
+
+TITLE_OPEN_WORK_VIEW_2 "Put Workers on Farms" # not used anymore
+TUT546_OPEN_WORK_VIEW_2 "<c:180,0,0>LEFT<e>-click on the city, then <c:0,180,0>RIGHT<e>-click it to bring up the Work View. If there is no worker on the farm already, <c:180,0,0>LEFT<e>-click on the worker then <c:180,0,0>LEFT<e>-click on the tile with the farm. The Work View is draggable."
+
+TITLE_WAIT_FOR_PW "Accumulating PW"
+TUT549_WAIT_FOR_PW "You'll have to wait a while to accumulate enough Public Works to build a Tile Improvement. Continue exploring the map.  Hit the <c:180,0,0>'N'<e> key to end the turn.  <c:180,0,0>LEFT<e>-click to select a unit.  <c:180,0,0>LEFT<e>-click to move."
+
+TITLE_DUMBASS "DUMBASS"
+TUT550_DUMBASS "<c:180,0,0>DUMBASS<e>"
+
+TITLE_DESELECT "Deselecting Units"
+TUT550A_DESELECT "If you have selected a unit and wish to select something else, you must first deselect your unit. Do this by <c:0,180,0>RIGHT<e>-clicking anywhere on the map."
+
+TITLE_LEVEL_3 "Tutorial Level 3"
+TUT551_LEVEL_3 "Now that you have learned about broad concepts, you are ready to learn about making contact with other Civilizations. In this level, you will learn about diplomacy and combat."
+
+TITLE_CIV_INTERACTION "Civilization Interactions"
+TUT552_CIV_INTERACTION "An important part of the game is interacting with other Civilizations. This may consist of diplomatic relations - such as establishing alliances. It may also consist of warfare."
+
+TITLE_3_GOAL_1 "Goal 1: Find Another Civ"
+TUT553_3_GOAL_1 "A foreign <c:180,0,0>Warrior<e> is approaching your city, [city.1.name]. The foreign Warrior has a shield that is <c:220,96,0>not blue<e>. Explore the area around [city.1.name] until you find him. Move one of your units right next to the foreign Warrior. Hit <c:180,0,0>'N'<e> if your unit can't move anymore."
+
+TITLE_MOUNTAIN_WARRIOR "Warrior is on Mountain!"
+TUT553A_MOUNTAIN_WARRIOR "The foreign <c:180,0,0>Warrior<e> is on a mountain.  Use a Warrior or Phalanx unit to seek him out. Mounted units cannot cross mountains."
+
+TITLE_BE_PATIENT_3 "Be Patient"
+TUT554_BE_PATIENT_3 "It may take a while to find your neighbors. A Mounted Archer makes an excellent scout. However, note that he cannot cross mountains. Don't forget to hit '<c:180,0,0>N<e>' when you can't move the unit anymore."
+
+TITLE_BUILD_UNITS "Build Units in Your Cities"
+TUT555_BUILD_UNITS "As you explore, do not forget to continue building Units in your cities. If necessary, review the old messages for instruction by clicking 'Review Tutorial Messages.'"
+
+TITLE_3_GOAL_1_ACCOMPLISHED "Goal 1 Accomplished! Contact Made"
+TUT556_3_GOAL_1_ACCOMPLISHED "You have met your first neighbor. For now, be friendly. Don't attack the enemy Warrior by moving onto his tile.  Yet."
+
+#TITLE_DIPLOMACY_MESSAGE_SYS "Diplomacy Message System"
+#TUT557_DIPLOMACY_MESSAGE_SYS "Move a unit next to the foreign unit."
+
+TITLE_GREETINGS "Greetings!"
+TUT558_GREETINGS "When you first make contact with another Civilization, you will always get a greeting. A small box with a scroll icon will appear on the left-side of the screen." 
+
+TITLE_OPEN_GREETINGS "Open Diplomacy Message"
+TUT559_OPEN_GREETINGS "Click on the scroll icon. This will automatically open the diplomacy message. After you open the message, press <c:180,0,0>'ACCEPT'<e> to show that you support a friendly relationship."
+
+TITLE_COVER_YOUR_BACK "Cover Your Back"
+TUT560_COVER_YOUR_BACK "Be careful. Although you are now on friendly terms with your neighbor, this could change at any time."
+
+TITLE_NO_STACKED_BATTLE "Single Unit Combat"
+TUT560A_NO_STACKED_BATTLE "The Battleview only displays combat for armies.  You may want to attack using an army next time."
+
+TITLE_3_GOAL_2 "Goal 2: Make an Army"
+TUT561_3_GOAL_2 "Multiple units in one army are the strongest in battle. A <c:180,0,0>Warrior<e> and an <c:180,0,0>Archer<e> have appeared next to [city.1.name]. Click the <c:0,180,0>eyeball<e> on this message to center on the new units."
+
+TITLE_MAKING_ARMY "Making an Army"
+TUT562_MAKING_ARMY "Move the Warrior and Archer units onto the same tile. <c:180,0,0>LEFT<e>-click the unit to select it. <c:180,0,0>LEFT<e>-click to move it. When they are on the same tile, one of them will be on 'top' of the stack, and the <c:0,0,180>shield<e> will have a <c:0,0,180>2<e> on it. " 
+
+TITLE_KEEP_MOVING "Keep Moving"
+TUT563_KEEP_MOVING "Keep moving the Warrior and Archer units until they occupy the same tile."
+
+TITLE_LOCK_DISPLAY "Units Tab Army Display"
+TUT564_LOCK_DISPLAY "<c:180,0,0>LEFT<e>-click on the <c:180,0,0>2 or more units which you moved to the same tile<e>. Look at the Units tab. Notice that the pictures of each unit appear in the small boxes on the left. One of the unit pictures has a <c:180,0,0>red border<e> around it. This means that only this single unit is selected."
+
+TITLE_LOCK_STACK "Lock Army From Units Tab"
+TUT565_LOCK_STACK "If you have <c:0,0,180>2<e> or more units on the same tile, you should see the number of units on the <c:0,0,180>shield<e>. One of the units will appear on 'top' of the others. Select the unit on 'top' then click on the <c:0,180,0>lock<e> button to lock the units into a single army." 
+
+TITLE_STACK_HERALD "Army's Shield"
+TUT566_STACK_HERALD "The units are now locked into an army. You can only see the unit that is on 'top' of the army, but all of the units are present on the same tile. You can stack up to 9 units into a single army."
+
+TITLE_MOVE_STACK "Move the Army"
+TUT567_MOVE_STACK "<c:180,0,0>LEFT<e>-click on the army. <c:180,0,0>LEFT<e>-click on the destination tile. Hit the <c:180,0,0>'N'<e> key if the units can't move."
+
+TITLE_ATTACK_NEIGHBOUR "Goal 3: Attack your Neighbor"
+TUT568_ATTACK_NEIGHBOUR "Attack the enemy Warrior near [city.1.name]. <c:180,0,0>LEFT<e>-click your stack, then <c:180,0,0>LEFT<e>-click on the target unit. Hit the <c:180,0,0>'N'<e> key if the units can't move."
+
+#TITLE_FORTIFICATION "Fortification"
+#TUT569_FORTIFICATION "The foreign unit may be surrounded by a small wall. This means that he is Fortified. He has temporarily created a structure for protection. This gives him a defensive bonus and makes him harder to beat."
+
+#TITLE_ATTACK "Attack!"
+#TUT570_ATTACK "Attack the unit. <c:180,0,0>LEFT<e>-click your stack, then <c:180,0,0>LEFT<e>-click on the target unit."
+
+TITLE_BATTLE_VIEW "The Battleview"
+TUT571_BATTLE_VIEW "The Battleview displays combat. The terrain displayed in the Battleview reflects the actual terrain that you are fighting on. Your attackers appear on the left and the enemy on the right."
+
+TITLE_DEFENSIVE_BONUS "Defensive Bonuses"
+TUT572_DEFENSIVE_BONUS "On the top right, defensive bonuses are listed.  If the defender is in a city, is fortified or is on a mountain or hill, he receives a defensive bonus that aids him in combat."
+
+TITLE_MIXED_FORCES "Mixed Forces"
+TUT573_MIXED_FORCES "Armies are most effective when they have a combination of good defensive units like Warriors, good attackers like Samurai, and ranged units such as Archers." 
+
+TITLE_CLOSE_BATTLE_VIEW "Close the Battleview"
+TUT574_CLOSE_BATTLE_VIEW "Close the Battleview by clicking on the <c:0,180,0>'X'<e>."
+
+TITLE_MAKE_PEACE "Try to Make Peace"
+TUT575_MAKE_PEACE "Now that you have tasted battle, try to end the war through the use of diplomacy."
+
+TITLE_OPEN_DIPLOMACY "Opening Diplomacy Screen"
+TUT576_OPEN_DIPLOMACY "Click on the <c:180,0,0>Screens<e> panel on the right. Click again on the <c:0,180,0>Diplomacy<e> panel." 
+
+#TITLE_THE_DIPLOMACY_SCREEN "The Diplomacy Screen"
+#TUT577_THE_DIPLOMACY_SCREEN "This is the Diplomacy Screen through which you can engage in many forms of diplomatic action."
+
+TITLE_3_GOAL_3 "Goal 3: Peace Treaty" 
+TUT578_3_GOAL_3 "<c:180,0,0>Click on the name of the Civilization<e>, then click on the 'Send Emissary' button."
+
+TITLE_UNIT_DESELECTED "Unit is Deselected!"
+TUT579_UNIT_DESELECTED "Right-clicking deselects a selected unit or city. A selected unit has a <c:0,180,0>green<e> box around it if it can still move, or a <c:180,0,0>red<e> box if it is done moving for that turn. A selected city will always have a <c:18,0,0>red<e> box."
+
+TITLE_PSEUDO_GREETINGS "Greetings!"
+TUT580_PSEUDO_GREETINGS "We extend our greetings to you and wish you happiness!"
+
+TITLE_SEND_EMISSARY "Make a Peace Treaty" 
+TUT581_SEND_EMISSARY "Click on the name of the Civilization, then click on the <c:180,0,0>'Send Emissary'<e> button."
+
+TITLE_GREET_EMISSARY "Emissary Summoned"
+TUT582_GREET_EMISSARY "The foreign emissary has arrived.  The foreign leader's message appears above the emissary's picture. Click <c:180,0,0>'Next'<e>."
+
+TITLE_MAKE_REQUEST "Make A Request"
+TUT583_MAKE_REQUEST "In the Request Screen, you can see your options. Click on the <c:180,0,0>'Suggest a Treaty'<e> button."
+
+TITLE_PEACE_TREATY "Peace Treaty"
+TUT584_PEACE_TREATY "There are 3 kinds of treaties. Click on <c:180,0,0>'Peace Treaty'<e>."
+
+TITLE_CEASE_BUTTON "Cease Fire"
+TUT584A_CEASE_BUTTON "Click <c:180,0,0>'Send'<e>. Review the message above the 'Send' button."
+
+TITLE_RESPONSE "Response"
+TUT585_RESPONSE "The foreign emissary returns, and the enemy leader has rejected the Peace Treaty. Click <c:180,0,0>'No'<e> to end diplomatic negotiations." 
+
+TITLE_3_GOAL_3_ACCOMPLISHED "Goal 3 Accomplished! Diplomacy!"
+TUT586_3_GOAL_3_ACCOMPLISHED "Congratulations!  Now you are ready to move on to Tutorial Level 4."
+
+TITLE_LEVEL_4 "Level 4: Trade = Gold"
+TUT587_LEVEL_4 "In this level you will learn how to trade goods to increase your gold and hence, science, in your empire."
+
+TITLE_GOODS "Goods"
+TUT588_GOODS "Trading goods generates gold. On the map, you can see the goods such as Alligator, Beaver, Pearls, or Poppies." 
+
+TITLE_4_GOAL_1 "Goal 1: Build a Monopoly"
+TUT589_4_GOAL_1 "The trade goal of each city is to create a monopoly of one good. The more goods that you have in your monopoly the more gold you will make. The maximum number of goods in a monopoly is 4."
+
+TITLE_LOOK_FOR_CITIES "Look at Cities with Goods"
+TUT590_LOOK_FOR_CITIES "Notice that 2 new cities have appeared on your map, [city.1.name] and [city.2.name]. Both have Beavers next to them. Click the <c:0,180,0>eyeball<e> on this message to center on [city.1.name]."
+
+TITLE_MOVE_TO_GOOD_1 "Move [city.1.name] Worker to Good"
+TUT591_MOVE_TO_GOOD_1 "<c:180,0,0>LEFT<e>-click [city.1.name] and then <c:0,180,0>RIGHT<e>-click it. Place a worker on the tile with the Beaver by <c:180,0,0>LEFT<e>-clicking on the worker and then <c:180,0,0>LEFT<e>-clicking on the tile with the Beaver."
+
+TITLE_MOVE_TO_GOOD_2 "Move [city.2.name] Worker to Good" 
+TUT592_MOVE_TO_GOOD_2 "Move the worker in [city.2.name] onto the tile with the beaver so that both cities will be collecting the <c:180,0,0>same good<e>."
+
+TITLE_CARAVANS "Caravans"
+TUT595_CARAVANS "In order to engage in trade, you must have Caravans to carry the goods between cities. When you have discovered the Trade advance, you can build them in your cities. You can't move them the way that other units are moved - they move when a trade route is created." 
+
+TITLE_FREE_CARAVAN "One Free Caravan"
+TUT596_FREE_CARAVAN "In the Tutorial, you get one free Caravan. You can't see it on the map because Caravans are not visible.  When you open the Trade screen in the next instruction, you'll see the number of available Caravans displayed in the Trade screen next to the picture of the camel."
+
+TITLE_CREATE_MONOPOLY "Begin a Monopoly"
+TUT593_CREATE_MONOPOLY "Since you have more than one Beaver in your empire, you can begin a monopoly in [city.1.name]. Begin by clicking on the <c:180,0,0>'SCREENS'<e> button, then click on the <c:0,180,0>'TRADE'<e> button." 
+
+TITLE_THE_TRADE_SCREEN "The Trade Screen"
+TUT594_THE_TRADE_SCREEN "You can send goods domestically and buy and sell goods on the foreign market. Click on the <c:180,0,0>'SEND'<e> button."
+
+TITLE_SELECT_BEAVER "Select Beaver"
+TUT595_SELECT_BEAVER "Here you see all the goods that you have in your empire.  Look at the number of Beavers. Select the Beaver, then click <c:0,180,0>'Next'<e>."
+
+TITLE_PICK_DESTINATION "Pick a Destination City"
+TUT596_PICK_DESTINATION "Look at the PROFIT column. Sending the good to [city.2.name] will generate the most gold. Click <c:180,0,0>'Send'<e> to create a trade route between [city.2.name] and [city.1.name]" 
+
+TITLE_4_GOAL_1_ACCOMPLISHED"Goal 1 Accomplished! Monopoly!"
+TUT597_4_GOAL_1_ACCOMPLISHED "Congratulations! Your trade route has been created and you are making a profit of [gold.amount]. Notice that a <c:0,0,200>blue<e> line connects the cities: goods travel along these lines. <c:180,0,0>Warning<e>: enemies can pirate trade routes!"
+
+TITLE_LEVEL_5 "Level 5: Managing your Cities"
+TUT598_LEVEL_5 "Now that your empire is well under way, it is important to learn how to manage your cities individually. In order to boost your Civilization, you need to maximize city resources."
+
+TITLE_5_GOAL_1 "Goal 1: City Science"
+TUT599_5_GOAL_1 "There are many strategies that can be used to play the game. One way is to maximize science. This gives you a technological edge over the other Civilizations."
+
+TITLE_MAX_TAB "The Max Tab"
+TUT600_MAX_TAB "<c:180,0,0>LEFT<e>-click on a city, then select the 'Max' tab. The buttons under <c:180,0,0>'MAXIMIZE CITY'<e> allow you to automatically rearrange your workers on their tiles so as to maximize the specified resource."
+
+TITLE_MAXIMIZE_SCIENCE "Maximize Science"
+TUT601_MAXIMIZE_SCIENCE "<c:180,0,0>LEFT<e>-click the city, then <c:0,180,0>RIGHT<e>-click on the city to bring up the Work View. Click on the 'Maximize City' <c:180,0,0>SCI<e> button - the workers may move to other tiles that contribute the most to science, if they aren't already on them." 
+
+TITLE_5_GOAL_1_ACCOMPLISHED "Goal 1 Accomplished! Science!"
+TUT602_5_GOAL_1_ACCOMPLISHED "Science has been maximized! This city's top priority is now gaining science." 
+
+TITLE_SPECIALISTS "Specialists"
+TUT603_SPECIALISTS "Besides having workers who work on tiles, cities also have Specialists who can boost a particular resource, such as happiness, gold, science or production." 
+
+TITLE_SPECIALIST_WARNING "Specialist Warning!"
+TUT604_SPECIALIST_WARNING "<c:180,0,0>Warning<e>: In general, wait to order Specialists until your city is a minimum size of <c:180,0,0>8<e>."
+
+TITLE_LABOR_TAB "The Labor Tab"
+TUT605_LABOR_TAB "LEFT-click on [city.1.name] or click the <c:0,180,0>eyeball<e> on this message, then click on the <c:180,0,0>Labor<e> tab. Workers and Slaves are displayed on the left panel. You can hire Specialists in the right panel."
+
+TITLE_ENTERTAINER "Entertainer"
+TUT606_ENTERTAINER "Create an Entertainer by clicking on the <c:0,180,0>right<e> arrow. Entertainers each increase the city's happiness by 1."
+
+TITLE_SCIENTIST "Scientist"
+TUT607_SCIENTIST "Create a Scientist by clicking on the <c:0,180,0>right<e> arrow. Scientists each increase the city's science by 10."
+
+TITLE_BUILD_QUEUE "Build Queues"
+TUT608_BUILD_QUEUE "Creating Specialists is one way to micromanage your cities. Another helpful way to manage your cities, is to create a list of items that you want the city to build. The city will then execute these orders automatically. These lists are called Build Queues."
+
+TITLE_5_GOAL_2 "Goal 2: Create a Build Queue"
+TUT609_5_GOAL_2 "In the first part of the Tutorial, you built a Warrior, a Granary, and a Settler.  You can place these items into a new city's Build Queue, or select other items that you have not yet built."
+
+TITLE_QUEUE_HELP "Making A Build Queue"
+TUT610_QUEUE_HELP "Select the city. Go to the <c:0,180,0>'PRODUCTION'<e> tab. Click on the <c:180,0,0>'QUEUE'<e> button. "  
+
+TITLE_ADD_ITEMS_TO_QUEUE "Adding Items To Queue"
+TUT610A_ADD_ITEMS_TO_QUEUE "Items that can be built are on the left. The Build Queue is created on the right. Select items to build from the left list and then click on the <c:180,0,0>arrow<e> under 'Add' to add them to the Build Queue."
+
+TITLE_5_GOAL_2_ACCOMPLISHED "Goal 2 Accomplished! Queue!"  
+TUT611_5_GOAL_2_ACCOMPLISHED "You can create build queues in each of your cities. When the city completes the first item, it automatically moves on and begins building the next item."
+
+TITLE_5_GOAL_3 "Goal 3: City Status Screen"
+TUT612_5_GOAL_3 "You can also issue build orders here. Click on the <c:180,0,0>'Screens'<e> button to activate the panel, then click on the <c:180,0,0>City<e> button."
+
+TITLE_CITY_STATUS "City Status Screen" 
+TUT613_CITY_STATUS "A list of all your cities is displayed. You see what they are currently producing and how many turns are remaining until completion."
+
+TITLE_ORDER_2_CITIES "Order 2 Cities to Build"
+TUT615_ORDER_2_CITIES "Select 2 cities by clicking on one city and holding the <c:180,0,0>'Ctrl'<e> key while clicking the second. Select an item from the BUILD list, then click <c:0,180,0>'Build'<e>."
+
+TITLE_CITIES_NOT_BUILDING "Cities Aren't Building!"
+TUT615A_CITIES_NOT_BUILDING "You haven't ordered your cities to build anything.  You can always order them separately through the Production tab or through the City Status screen at any time."	
+
+TITLE_5_GOAL_3_ACCOMPLISHED "Goal 3 Accomplished! Cities Building!"
+TUT616_5_GOAL_3_ACCOMPLISHED "Both of the cities that you selected are building the same item.  You can also use the City Status Screen to make build queues for your cities."
+
+TITLE_DEFENDING_CITIES "Defending Cities"
+TUT617_DEFENDING_CITIES "Generally, it is good to keep units inside your cities for defense. To make these units stronger, you need to fortify them." 
+
+TITLE_5_GOAL_4 "Goal 4: Fortify your Units"
+TUT618_5_GOAL_4 "It will take 2 turns for the unit to fortify. Fortification gives your units a defensive bonus and makes them harder for enemies to beat. Select a military unit (like a Warrior) and then hit the <c:180,0,0>'F'<e> key, or click the brick wall icon on the Units tab." 
+
+TITLE_FORTIFY_IN_FIELD "Fortify Order Issued!"
+TUT619_FORTIFY_IN_FIELD "In 2 turns, when the unit you just ordered has fortified, it will have a little wall around it.  Be careful when attacking units that are fortified!  You can fortify units inside cities to protect them, or at strategic chokepoints."
+
+TITLE_LEVEL_5_COMPLETE "Level 5 Complete!"
+TUT620_LEVEL_5_COMPLETE "Congratulations! You now know how to make specialists, build queues and how to examine the inner workings of the city."
+
+TITLE_LEVEL_6 "Level 6: Expand and Win"
+TUT621_LEVEL_6 "Now that you know the basics of managing your cities, you will want to expand your empire - either through conquest or expanded settlements - to ultimately win the game."
+
+TITLE_VICTORY_CONDITIONS "Victory Conditions"
+TUT622_VICTORY_CONDITIONS "There are three ways to win the game: 1) Destroy all other Civilizations, 2) Be the first to synthesize alien life, or 3) Reach the year 3000AD with the highest score."
+
+TITLE_DIFFERENT_STRATEGIES "Different Strategies"
+TUT623_DIFFERENT_STRATEGIES "There are many strategies to play the game. You may want to engage in hostile war or nurture peaceful scientific growth. The choice is up to you."
+
+TITLE_EXPLORE_THE_WORLD "Explore the World"
+TUT624_EXPLORE_THE_WORLD "Regardless of how you choose to win, you need to explore the world. One way to do this is to build a boat, load it with units, then unload them elsewhere."
+
+TITLE_FREE_BOAT "Free Boat!"
+TUT625_FREE_BOAT "[city.1.name] is next to the Coast. It's your lucky day. You have been given a free Trireme and a free Mounted Archer to put on it. Click the <c:0,180,0>eyeball<e> on this message to center on the Mounted Archer."
+ 
+TUT626_FREE_BOAT_AND_CITY "You have been given a free coastal city, [city.1.name]. It's your lucky day. You have also been given a free Trireme.  Click on the <c:0,180,0>eyeball<e> in this message."
+
+TITLE_LOADING_UNITS "Loading Units"
+TUT627_LOADING_UNITS "To load the boat, <c:180,0,0>LEFT<e>-click to select the unit and <c:180,0,0>LEFT<e>-click on the boat to move them onto it. When they occupy the same spot as the boat, they will automatically board."
+
+TITLE_MOVING_THE_BOAT "Moving a Boat"
+TUT628A_MOVING_THE_BOAT "You can move the Trireme by <c:180,0,0>LEFT<e>-clicking to select it, then <c:180,0,0>LEFT<e>-clicking the destination."
+
+TITLE_6_GOAL_1 "Goal 1: Unload All the Units"
+TUT628_6_GOAL_1 "Hit the <c:180,0,0>'N'<e> key to end the turn. <c:180,0,0>Make sure the Trireme is right next to land.<e>  <c:180,0,0>LEFT<e>-click the boat. Click on the <c:180,0,0>'Cargo'<e> button that appears in the icons on the right side of the unit's tab, then click on the land tile next to the boat."
+
+TITLE_6_GOAL_1_ACCOMPLISHED "Goal 1 Accomplished! Unloaded!"
+TUT629_6_GOAL_1_ACCOMPLISHED "You are now proficient in loading and unloading boats. Select your boat and sail it off into the great beyond."
+
+TITLE_END_OF_TUTORIAL "Great Job! End of Tutorial!"
+TUT631_END_OF_TUTORIAL "Congratulations! If you're reading this now, you have successfully completed the entire Tutorial! You can continue this game if you like, or you can quit and start a regular game.  Thanks for playing!"
+
+#TITLE_SPECIAL_UNITS "Special Units"
+#TUT630_SPECIAL_UNITS "Besides exploring and engaging in combat, you may want to use special units who can do actions which #weaken the enemy but which fall short of actual warfare.  An example of a special unit is a Slaver."
+
+TITLE_DUMBASS_SORT_BUTTONS "Sort Buttons"
+TUT631_DUMBASS_SORT_BUTTONS "You have clicked a 'sort' button.  These buttons sort your build options by type - units, improvements, or wonders. For example, if you want to build a unit, click the unit sort button to see a list of units only."
+
+TITLE_ALERT_SAVE "ALERT_SAVE"
+TUT632_ALERT_SAVE "When a level is completed, the Tutorial game is saved. At the end of levels 3-6, a number will appear on the left side of the screen. You can return to a previous level and play it again by clicking on the number that corresponds to the level you want to replay."
+
+TUT632_ALERT_SAVE_NEW "The tutorial will autosave when you complete each level.  You can replay a level by clicking the number icon that appears on the left side of the screen after you complete a level. To replay Level 1, restart the Tutorial."  
+
+TITLE_LEVEL_2 "Level 2"
+TUT633_LEVEL_2 "Would you like to replay Level 2 of the Tutorial? Level 2 covers resources, Public Works, and Global Civilization Rules."
+
+TITLE_LEVEL_3 "Level 3"
+TUT634_LEVEL_3 "Would you like to replay Level 3 of the Tutorial?  Level 3 covers diplomacy and combat."
+
+TITLE_LEVEL_4 "Level 4"
+TUT635_LEVEL_4 "Would you like to replay Level 4 of the Tutorial?  Level 4 covers trade and gold."
+
+TITLE_LEVEL_5 "Level 5"
+TUT636_LEVEL_5 "Would you like to replay Level 5 of the Tutorial?  Level 5 covers city management, specialists, and fortification."
+
+TITLE_LEVEL_6 "Level 6"
+TUT637_LEVEL_6 "Would you like to replay Level 6 of the Tutorial?  Level 6 covers loading and unloading transports."
+
+TITLE_ALERT_QUEUE "ALERT_QUEUE"
+TUT638_ALERT_QUEUE "The tutorial will cover the use of the queue button shortly.  Please click the 'Build' button to return to the build list."
+
+TITLE_RIGHT_CLICK "Use Left-Click!"
+TUT639_RIGHT_CLICK "The Tutorial was designed only for the <c:0,180,0>LEFT<e>-click option. To continue the Tutorial, return the option to <c:0,180,0>LEFT<e>-Click option. If you choose to use the <c:180,0,0>RIGHT<e>-click option, click the 'End Tutorial' button on this message to exit the Tutorial."
