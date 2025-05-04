@@ -142,7 +142,7 @@ OptionsWindow {
 
 		int		ypix		290
 
-		string	text	"str_ldl_LABGUAGE"
+		string	text	"str_ldl_LANGUAGE"
 	}
 
 	GameHeader:CTP2_STANDARD_FONT {
@@ -160,7 +160,6 @@ OptionsWindow {
 
 		string	text	"str_ldl_Game_Header"
 
-#		string	pattern	"error.tga"
 		string	pattern	"uptg20e.tga"
 	}
 

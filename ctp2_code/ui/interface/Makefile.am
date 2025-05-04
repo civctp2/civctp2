@@ -64,6 +64,7 @@ libuiinterface_la_SOURCES = \
 	IntroMovieWin.cpp \
 	IntroMovieWindow.cpp \
 	km_screen.cpp \
+	LanguageScreen.cpp \
 	loadsavemapscreen.cpp \
 	loadsavemapwindow.cpp \
 	loadsavescreen.cpp \

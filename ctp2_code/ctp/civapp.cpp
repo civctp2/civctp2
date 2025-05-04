@@ -192,6 +192,7 @@
 #include "keypress.h"
 #include "km_screen.h"
 #include "LanguageRecord.h"
+#include "LanguageScreen.h"
 #include "loadsavewindow.h"
 #include "MainControlPanel.h"
 #include "MapIconRecord.h"
@@ -1429,6 +1430,7 @@ void CivApp::CleanupAppUI(void)
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
 	musicscreen_Cleanup();
+	LanguageScreen::Cleanup();
 	StatusBar::CleanUp();
 	loadsavescreen_Cleanup();
 	graphicsresscreen_Cleanup();

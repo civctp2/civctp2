@@ -12684,6 +12684,7 @@
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|ARM64'">Disabled</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Release|ARM'">Disabled</Optimization>
     </ClCompile>
+    <ClCompile Include="..\ui\interface\LanguageScreen.cpp" />
     <ClCompile Include="..\ui\interface\loadsavemapscreen.cpp">
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Logging|Win32'">MaxSpeed</Optimization>
       <Optimization Condition="'$(Configuration)|$(Platform)'=='Logging|x64'">MaxSpeed</Optimization>
@@ -16768,6 +16769,7 @@
     <ClInclude Include="..\Ui\interface\IntroMovieWin.h" />
     <ClInclude Include="..\Ui\interface\IntroMovieWindow.h" />
     <ClInclude Include="..\ui\interface\km_screen.h" />
+    <ClInclude Include="..\ui\interface\LanguageScreen.h" />
     <ClInclude Include="..\ui\interface\loadsavemapwindow.h" />
     <ClInclude Include="..\ui\interface\loadsavewindow.h" />
     <ClInclude Include="..\ui\interface\MainControlPanel.h" />
@@ -21376,6 +21378,7 @@
     <None Include="..\..\ctp2_data\default\uidata\layouts\intelligence.ldl" />
     <None Include="..\..\ctp2_data\default\uidata\layouts\intromovie.ldl" />
     <None Include="..\..\ctp2_data\default\uidata\layouts\km_screen.ldl" />
+    <None Include="..\..\ctp2_data\default\uidata\layouts\LanguageScreen.ldl" />
     <None Include="..\..\ctp2_data\default\uidata\layouts\loadsave.ldl" />
     <None Include="..\..\ctp2_data\default\uidata\layouts\messagebox.ldl" />
     <None Include="..\..\ctp2_data\default\uidata\layouts\musicscreen.ldl" />

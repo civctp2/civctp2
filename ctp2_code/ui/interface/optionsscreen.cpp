@@ -196,7 +196,7 @@ AUI_ERRCODE optionsscreen_Initialize( void )
 
 	strcpy(windowBlock, "OptionsWindow");
 
-	g_optionsWindow= new OptionsWindow(&errcode, aui_UniqueId(), windowBlock, 16,AUI_WINDOW_TYPE_FLOATING,false );
+	g_optionsWindow = new OptionsWindow(&errcode, aui_UniqueId(), windowBlock, 16,AUI_WINDOW_TYPE_FLOATING,false );
 	Assert( AUI_NEWOK(g_optionsWindow, errcode) );
 	if ( !AUI_NEWOK(g_optionsWindow, errcode) ) return errcode;
 
@@ -365,5 +365,5 @@ void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 dat
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	open_KeyMappingScreen();
+	open_LanguageScreen();
 }

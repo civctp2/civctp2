@@ -2501,6 +2501,9 @@
     <ClCompile Include="..\gs\newdb\LanguageRecord.cpp">
       <Filter>gs\newdb</Filter>
     </ClCompile>
+    <ClCompile Include="..\ui\interface\LanguageScreen.cpp">
+      <Filter>ui\interface\Etc</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="c3.h">
@@ -4864,6 +4867,9 @@
     <ClInclude Include="..\gs\newdb\LanguageRecord.h">
       <Filter>gs\newdb</Filter>
     </ClInclude>
+    <ClInclude Include="..\ui\interface\LanguageScreen.h">
+      <Filter>ui\interface\Etc</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="ctp2_rsrc\civ3.rc">
@@ -5306,6 +5312,9 @@
       <Filter>Text Files\UI Data</Filter>
     </None>
     <None Include="..\..\ctp2_data\default\uidata\layouts\wondermovie.ldl">
+      <Filter>Text Files\UI Data</Filter>
+    </None>
+    <None Include="..\..\ctp2_data\default\uidata\layouts\LanguageScreen.ldl">
       <Filter>Text Files\UI Data</Filter>
     </None>
   </ItemGroup>

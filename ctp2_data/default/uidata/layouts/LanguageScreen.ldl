@@ -1,0 +1,86 @@
+#	musicscreen.ldl
+
+#template MS_BUTTON:CTP2_STANDARD_FONT{
+#	bool	shadowfont	true
+#	string	image0	"error.tga"
+#	string	image1	"error.tga"
+#	int	widthpix	123
+#	int	heightpix	21
+#	int	bevelwidth	0
+#	string	imagebltflag	"chromakey"
+#}
+
+
+# EAS011599 - added this for use w/ switches that shouldn't be checkboxes.
+#template MS_TOGGLESWITCH:CTP2_STANDARD_FONT {
+
+#	string	image0	"error.tga"
+#	string	image1	"error.tga"
+#	string	disabledimage0	"error.tga"
+#	string	disabledimage1	"error.tga"
+
+
+# for now, put the toggle button art here
+# for now, put the toggle button art here#
+#	string	image0	"upba2317.tga"
+#	string	image1	"upba2318.tga"
+#	string	disabledimage0	"upba2323.tga"
+#	string	disabledimage1	"upba2324.tga"
+
+#	string	xanchor		"center"
+
+#	int	widthpix	146
+
+#	int	heightpix	24
+
+#}
+
+
+LanguageScreen {
+#	string	pattern	"error.tga"
+	string	pattern	"uptg20e.tga"
+
+	int widthpix  720
+	int heightpix 475
+
+	string	xanchor		"center"
+	string	yanchor		"center"
+	Name:CTP_GREY_TITLE_FONT {
+		string	parent	"c3_PopupTitle"
+		string xanchor "center"
+		int	ypix	22
+		int widthpct 50
+		int heightpix 20
+		string	text	"str_ldl_CAPS_LANGUAGE"
+	}
+
+	LanguageBox:CTP2_LISTBOX {
+		int xpix      48
+		int ypix      75
+		int widthpix  274
+		int heightpix 270
+
+		int focusindex 1
+	}
+
+	LanguageDescription : CTP2_TEXT_BOX {
+		int	xpix	362
+		int	ypix	75
+		int	widthpix	274
+		int	heightpix	270
+		int	bevelwidth	0
+	}
+
+	SelectTrackButton:SP_BUTTON_SMALL {
+		bool	shadowfont	false
+		int	ypix	395
+
+		int	widthpix	300
+		int	heightpix	24
+
+		string	xanchor "center"
+		string	text	"str_ldl_Use_OS_Language"
+	}
+}
+
+$

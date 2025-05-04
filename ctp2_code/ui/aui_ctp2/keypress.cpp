@@ -807,6 +807,10 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		open_KeyMappingScreen();
 		break;
 
+	case KEY_FUNCTION_LANGUAGE_OPTIONS:
+		open_LanguageScreen();
+		break;
+
 	case KEY_FUNCTION_KEYBOARD_SELECT_UNIT:
 		g_selected_item->KeyboardSelectFirstUnit();
 		move = FALSE;
