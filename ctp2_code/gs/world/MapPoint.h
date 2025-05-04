@@ -239,7 +239,7 @@ private:
 class SquareIterator
 {
 public:
-	SquareIterator(MapPoint const & center, sint32 size);
+	SquareIterator(MapPoint const & center, size_t size);
 
 	void            Start();
 	void            Next();
@@ -262,8 +262,8 @@ protected:
 class RadiusIterator : public SquareIterator
 {
 public:
-	RadiusIterator(MapPoint const & center, sint32 size);
-	RadiusIterator(MapPoint const & center, sint32 size, double squaredSize);
+	RadiusIterator(MapPoint const & center, size_t size);
+	RadiusIterator(MapPoint const & center, size_t size, double squaredSize);
 
 protected:
 	double          m_squaredRadius;
@@ -274,8 +274,8 @@ protected:
 class CircleIterator : public RadiusIterator
 {
 public:
-	CircleIterator(MapPoint const & center, sint32 outerSize, sint32 innerSize);
-	CircleIterator(MapPoint const & center, sint32 outerSize, double squaredOuterSize, sint32 innerSize);
+	CircleIterator(MapPoint const & center, size_t outerSize, size_t innerSize);
+	CircleIterator(MapPoint const & center, size_t outerSize, double squaredOuterSize, size_t innerSize);
 
 protected:
 	double          m_innerSquaredRadius;

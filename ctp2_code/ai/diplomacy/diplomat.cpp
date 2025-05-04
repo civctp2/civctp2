@@ -215,7 +215,7 @@ Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId)
 	return s_theDiplomats[playerId];
 }
 
-bool Diplomat::HasDiplomat(const PLAYER_INDEX & playerId)
+bool Diplomat::HasDiplomat(const size_t & playerId)
 {
 	return (playerId >= 0
 	&&      static_cast<size_t>(playerId) < s_theDiplomats.size()

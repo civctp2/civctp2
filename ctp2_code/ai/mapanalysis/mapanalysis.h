@@ -67,7 +67,7 @@ public:
 	void ResizeContinents();
 
 	void BeginTurn();
-	void RecalcCityRanks(sint32 player);
+	void RecalcCityRanks(size_t player);
 
 	//     The enemy grids
 	sint32    GetEnemyGrid        (const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const;
@@ -235,13 +235,13 @@ public:
 
 	void Cleanup();
 
-	void CalcEmpireCenter(const PLAYER_INDEX playerId);
+	void CalcEmpireCenter(const size_t playerId);
 
 private:
 	static MapAnalysis s_mapAnalysis;
 
-	void AddPiracyIncome( const PLAYER_INDEX playerId,
-	                      const PLAYER_INDEX victimId,
+	void AddPiracyIncome( const size_t playerId,
+	                      const size_t victimId,
 	                      const sint16 route_value );
 
 	void ComputeHandicapRatios();

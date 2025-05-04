@@ -91,25 +91,25 @@ public:
         m_owner             (static_cast<uint8>(city.GetOwner()))
     {
 		strncpy(m_name, city.GetName(), k_MAPFILE_NAME_LEN);
-    }
+	}
 
 	void Serialize(CivArchive &archive)
-    {
+	{
 		uint32 len;
 
 		if (archive.IsStoring())
-        {
+		{
 			archive << m_size;
 			archive << m_improvements;
 			archive << m_wonders;
 			archive << m_owner;
 
-			len = strlen(m_name) + 1;
+			len = static_cast<uint32>(strlen(m_name) + 1);
 			archive << len;
 			archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
 		}
-        else
-        {
+		else
+		{
 			archive >> m_size;
 			archive >> m_improvements;
 			archive >> m_wonders;
@@ -208,7 +208,7 @@ bool MapFile::SaveTerrain(FILE *outfile)
     size_t const  xSize = g_theWorld->GetXWidth();
     size_t const  ySize = g_theWorld->GetYHeight();
 
-    m_chunk.m_size      = (xSize * ySize) + sizeof(uint16) * 2;
+    m_chunk.m_size      = static_cast<uint32>((xSize * ySize) + sizeof(uint16) * 2);
     m_chunk.m_id        = k_TERRAIN_HEADER;
 
     uint8 * terrain     = new uint8[xSize * ySize];
@@ -698,10 +698,10 @@ bool MapFile::SaveCivilizations(FILE *outfile)
 
 bool MapFile::LoadMap(FILE *infile)
 {
-    while (!feof(infile))
-    {
+	while (!feof(infile))
+	{
 		uint32 chunkId;
-		sint32 r = fread(&chunkId, 1, sizeof(chunkId), infile);
+		size_t r = fread(&chunkId, 1, sizeof(chunkId), infile);
 		if(r != sizeof(chunkId))
 			return feof(infile) ? true : false;
 

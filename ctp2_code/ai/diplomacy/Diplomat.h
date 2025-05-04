@@ -97,7 +97,7 @@ public:
 	static sint32 s_proposalTypeToElemIndex[PROPOSAL_MAX];
 
 	static Diplomat & GetDiplomat(const PLAYER_INDEX & playerId);
-	static bool HasDiplomat(const PLAYER_INDEX & playerId);
+	static bool HasDiplomat(const size_t & playerId);
 
 	static void ResizeAll(const PLAYER_INDEX & newMaxPlayers);
 
