@@ -658,15 +658,20 @@ template <class T> bool CTPDatabase<T>::GetNamedItemID(sint32 index, sint32 &nam
 	return true;
 }
 
-template <class T> bool CTPDatabase<T>::ResolveReferences()
+template <class T> void CTPDatabase<T>::ResolveReferences()
 {
-	bool success = true;
-	sint32 i;
-	for(i = 0; i < m_numRecords; i++) {
+	for(sint32 i = 0; i < m_numRecords; i++)
+	{
 		m_records[i]->ResolveDBReferences();
 	}
+}
 
-	return success;
+template <class T> void CTPDatabase<T>::UpdateStrings()
+{
+	for(sint32 i = 0; i < m_numRecords; i++)
+	{
+		m_records[i]->UpdateDBStrings();
+	}
 }
 
 template <class T> sint32 CTPDatabase<T>::FindTypeIndex(const char *str) const

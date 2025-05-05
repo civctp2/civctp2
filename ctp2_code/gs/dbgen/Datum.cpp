@@ -1083,6 +1083,16 @@ void Datum::ExportResolver(FILE  *outfile)
 	}
 }
 
+void Datum::StringUpdater(FILE  *outfile)
+{
+	if(m_type == DATUM_STRINGID)
+	{
+	}
+	else if(m_type == DATUM_BIT_PAIR && m_bitPairDatum->m_type == DATUM_STRINGID)
+	{
+	}
+}
+
 void Datum::ExportMerge(FILE *outfile, char *recordName)
 {
 	if (m_maxSize > 0) {

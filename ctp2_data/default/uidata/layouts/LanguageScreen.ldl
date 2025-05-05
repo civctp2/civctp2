@@ -1,43 +1,20 @@
-#	musicscreen.ldl
+#	LanguageScreen.ldl
 
-#template MS_BUTTON:CTP2_STANDARD_FONT{
-#	bool	shadowfont	true
-#	string	image0	"error.tga"
-#	string	image1	"error.tga"
-#	int	widthpix	123
-#	int	heightpix	21
-#	int	bevelwidth	0
-#	string	imagebltflag	"chromakey"
-#}
-
-
-# EAS011599 - added this for use w/ switches that shouldn't be checkboxes.
-#template MS_TOGGLESWITCH:CTP2_STANDARD_FONT {
-
-#	string	image0	"error.tga"
-#	string	image1	"error.tga"
-#	string	disabledimage0	"error.tga"
-#	string	disabledimage1	"error.tga"
-
-
-# for now, put the toggle button art here
-# for now, put the toggle button art here#
-#	string	image0	"upba2317.tga"
-#	string	image1	"upba2318.tga"
-#	string	disabledimage0	"upba2323.tga"
-#	string	disabledimage1	"upba2324.tga"
-
-#	string	xanchor		"center"
-
-#	int	widthpix	146
-
-#	int	heightpix	24
-
-#}
-
+LanguageItem:CTP2_LIST_ITEM {
+	int widthpix 190
+	int heightpix 30
+	label:CTP2_HEADER_FONT {
+		int fontsize				14
+		string objecttype "ctp2_Static"
+		string just "left"
+		bool vertcenter true
+		int xpix 10
+		int widthpix 115
+		int heightpix 30
+	}
+}
 
 LanguageScreen {
-#	string	pattern	"error.tga"
 	string	pattern	"uptg20e.tga"
 
 	int widthpix  720

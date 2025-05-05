@@ -95,6 +95,7 @@ public:
 	void ExportOtherRecordIncludes(FILE *outfile);
 	void ExportMemberClassDataCode(FILE *outfile);
 	void ExportResolver(FILE *outfile);
+	void ExportStringUpdater(FILE *outfile);
 	void SetParseNum(sint32 parseNum);
 	void SetPreBody(bool preBody);
 

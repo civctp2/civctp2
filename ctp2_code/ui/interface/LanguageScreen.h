@@ -42,6 +42,7 @@
 
 class aui_Control;
 class ctp2_ListBox;
+class ctp2_ListItem;
 class ctp2_Button;
 class ctp2_HyperTextBox;
 
@@ -67,8 +68,10 @@ public:
 
 	static void AcceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static sint32 CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 
 private:
+
 	static LanguageScreen* s_languageScreen;
 
 	ctp2_ListBox*          m_LanguageListBox;

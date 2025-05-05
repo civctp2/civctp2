@@ -730,6 +730,9 @@ bool CivApp::InitializeAppDB(void)
 		return false;
 	}
 
+	// And now have the entries in the Language DB connected to the String DB
+	g_theLanguageDB->UpdateStrings();
+
 	// Has to be done after the initialization of the string database
 	g_theProgressWindow->StartCountingTo(10, g_theStringDB->GetNameStr("LOADING"));
 
@@ -821,7 +824,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 120 );
 
 	if (!g_theAdvanceDB->Parse(C3DIR_GAMEDATA, g_advancedb_filename))
-    {
+	{
 		return false;
 	}
 
@@ -1107,51 +1110,51 @@ bool CivApp::InitializeAppDB(void)
 
 	g_exclusions = new Exclusions();
 
-	if(!g_theUnitDB->ResolveReferences())               return false;
-	if(!g_theAdvanceDB->ResolveReferences())            return false;
-	if(!g_theIconDB->ResolveReferences())               return false;
-	if(!g_theConstDB->ResolveReferences())              return false;
-	if(!g_theSpriteDB->ResolveReferences())             return false;
-	if(!g_theSoundDB->ResolveReferences())              return false;
-	if(!g_theSpecialEffectDB->ResolveReferences())      return false;
-	if(!g_theSpecialAttackInfoDB->ResolveReferences())  return false;
-	if(!g_theGovernmentDB->ResolveReferences())         return false;
-	if(!g_theAdvanceBranchDB->ResolveReferences())      return false;
-	if(!g_theAgeDB->ResolveReferences())                return false;
-	if(!g_theTerrainDB->ResolveReferences())            return false;
-	if(!g_theResourceDB->ResolveReferences())           return false;
-	if(!g_theTerrainImprovementDB->ResolveReferences()) return false;
-	if(!g_theMapDB->ResolveReferences())                return false;
-	if(!g_theOrderDB->ResolveReferences())              return false;
-	if(!g_theMapIconDB->ResolveReferences())            return false;
-	if(!g_theCitySizeDB->ResolveReferences())           return false;
-	if(!g_thePopDB->ResolveReferences())                return false;
-	if(!g_theBuildingDB->ResolveReferences())           return false;
-	if(!g_thePollutionDB->ResolveReferences())          return false;
-	if(!g_theCityStyleDB->ResolveReferences())          return false;
-	if(!g_theAgeCityStyleDB->ResolveReferences())       return false;
-	if(!g_theGoalDB->ResolveReferences())               return false;
-	if(!g_thePersonalityDB->ResolveReferences())        return false;
-	if(!g_theUnitBuildListDB->ResolveReferences())      return false;
-	if(!g_theWonderBuildListDB->ResolveReferences())    return false;
-	if(!g_theBuildingBuildListDB->ResolveReferences())  return false;
-	if(!g_theConceptDB->ResolveReferences())            return false;
-	if(!g_theImprovementListDB->ResolveReferences())    return false;
-	if(!g_theStrategyDB->ResolveReferences())           return false;
-	if(!g_theBuildListSequenceDB->ResolveReferences())  return false;
-	if(!g_theDiplomacyDB->ResolveReferences())          return false;
-	if(!g_theDiplomacyProposalDB->ResolveReferences())  return false;
-	if(!g_theDiplomacyThreatDB->ResolveReferences())    return false;
-	if(!g_theAdvanceListDB->ResolveReferences())        return false;
-	if(!g_theCivilisationDB->ResolveReferences())       return false;
-	if(!g_theWonderDB->ResolveReferences())             return false;
-	if(!g_theWonderMovieDB->ResolveReferences())        return false;
-	if(!g_theFeatDB->ResolveReferences())               return false;
-	if(!g_theEndGameObjectDB->ResolveReferences())      return false;
-	if(!g_theRiskDB->ResolveReferences())               return false;
-	if(!g_theDifficultyDB->ResolveReferences())         return false;
-	if(!g_theGlobalWarmingDB->ResolveReferences())      return false;
-	if(!g_theLanguageDB->ResolveReferences())           return false; // Initialized in CivPaths_InitCivPaths, since we already need it there
+	g_theUnitDB->ResolveReferences();
+	g_theAdvanceDB->ResolveReferences();
+	g_theIconDB->ResolveReferences();
+	g_theConstDB->ResolveReferences();
+	g_theSpriteDB->ResolveReferences();
+	g_theSoundDB->ResolveReferences();
+	g_theSpecialEffectDB->ResolveReferences();
+	g_theSpecialAttackInfoDB->ResolveReferences();
+	g_theGovernmentDB->ResolveReferences();
+	g_theAdvanceBranchDB->ResolveReferences();
+	g_theAgeDB->ResolveReferences();
+	g_theTerrainDB->ResolveReferences();
+	g_theResourceDB->ResolveReferences();
+	g_theTerrainImprovementDB->ResolveReferences();
+	g_theMapDB->ResolveReferences();
+	g_theOrderDB->ResolveReferences();
+	g_theMapIconDB->ResolveReferences();
+	g_theCitySizeDB->ResolveReferences();
+	g_thePopDB->ResolveReferences();
+	g_theBuildingDB->ResolveReferences();
+	g_thePollutionDB->ResolveReferences();
+	g_theCityStyleDB->ResolveReferences();
+	g_theAgeCityStyleDB->ResolveReferences();
+	g_theGoalDB->ResolveReferences();
+	g_thePersonalityDB->ResolveReferences();
+	g_theUnitBuildListDB->ResolveReferences();
+	g_theWonderBuildListDB->ResolveReferences();
+	g_theBuildingBuildListDB->ResolveReferences();
+	g_theConceptDB->ResolveReferences();
+	g_theImprovementListDB->ResolveReferences();
+	g_theStrategyDB->ResolveReferences();
+	g_theBuildListSequenceDB->ResolveReferences();
+	g_theDiplomacyDB->ResolveReferences();
+	g_theDiplomacyProposalDB->ResolveReferences();
+	g_theDiplomacyThreatDB->ResolveReferences();
+	g_theAdvanceListDB->ResolveReferences();
+	g_theCivilisationDB->ResolveReferences();
+	g_theWonderDB->ResolveReferences();
+	g_theWonderMovieDB->ResolveReferences();
+	g_theFeatDB->ResolveReferences();
+	g_theEndGameObjectDB->ResolveReferences();
+	g_theRiskDB->ResolveReferences();
+	g_theDifficultyDB->ResolveReferences();
+	g_theGlobalWarmingDB->ResolveReferences();
+	g_theLanguageDB->ResolveReferences();
 
 	g_theProgressWindow->StartCountingTo( 510 );
 

@@ -31,21 +31,6 @@
 #include "c3.h"
 #include "LanguageScreen.h"
 
-/*#include "aui_stringtable.h"
-#include "c3_button.h"
-#include "c3_checkbox.h"
-#include "c3_dropdown.h"
-#include "c3_listitem.h"
-#include "c3_popupwindow.h"
-#include "c3_static.h"
-#include "c3_switch.h"
-#include "c3slider.h"
-#include "c3window.h"
-
-#include "musictrackscreen.h"
-#include "profileDB.h"          // g_theProfileDB
-//#include "soundmanager.h"       // g_soundManager*/
-
 #include "c3ui.h"
 #include "Globals.h"            // allocated::clear
 #include "keypress.h"
@@ -56,6 +41,9 @@
 #include "ctp2_listbox.h"
 #include "ctp2_button.h"
 #include "ctp2_hypertextbox.h"
+#include "ctp2_Static.h"
+
+#include "LanguageRecord.h"
 
 LanguageScreen* LanguageScreen::s_languageScreen = NULL;
 extern C3UI *   g_c3ui;
@@ -71,6 +59,30 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	Assert(m_LanguageListBox);
 
 	m_LanguageListBox->SortByColumn(0, true);
+
+	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); ++i)
+	{
+		const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+		if(lanRec->GetHidden())
+			continue;
+
+		ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot("LanguageItem");
+		Assert(item);
+		if(!item)
+			return;
+
+		item->SetUserData((void *)i);
+
+		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
+		Assert(text);
+		if(!text)
+			return;
+
+		text->SetText(lanRec->GetNameText());
+		item->SetCompareCallback(LanguageScreen::CompareItems);
+		m_LanguageListBox->AddItem(item);
+	}
 
 	m_languageDescription = new ctp2_HyperTextBox(errcode, aui_UniqueId(), "LanguageScreen.LanguageDescription");
 
@@ -133,6 +145,14 @@ void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 dat
 
 void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
+}
+
+sint32 LanguageScreen::CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
+{
+	ctp2_Static *text1 = (ctp2_Static *)item1->GetChildByIndex(0);
+	ctp2_Static *text2 = (ctp2_Static *)item2->GetChildByIndex(0);
+
+	return _stricoll(text1->GetText(), text2->GetText());
 }
 
 /*

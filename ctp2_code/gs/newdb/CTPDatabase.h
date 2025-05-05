@@ -149,7 +149,8 @@ public:
 	bool GetCurrentRecordFromLexer(DBLexer *lex, sint32 &index);
 	bool ParseRecordInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
 	bool ParseRecordInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
-	bool ResolveReferences();
+	void ResolveReferences();
+	void UpdateStrings();
 };
 
 #endif

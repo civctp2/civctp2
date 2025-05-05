@@ -1,3 +1,50 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains the records localized names (English)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized names of the database records.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added CityMod2 age concept strings.
+# - Added new age strings.
+# - Added new city style strings.
+# - Moved build list sequence strings from ldl_str.txt and add_str.txt.
+#   - Mar. 7th 2005 Martin Gühmann 
+# - Moved risk strings from junk_str.txt. (Aug 31st 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
 
 #### ADVANCE STRINGS ####
 ADVANCE_TOOLMAKING				"Výroba Nástroju"
@@ -141,36 +188,36 @@ WONDER_THE_EDEN_PROJECT				"The Eden Project"
 WONDER_THE_SOLARIS_PROJECT			"The Solaris Project"
 WONDER_ZERO_CRIME_BILL				"Zero Crime Bill"
 
-WONDER_PYRAMIDS_ARTICLE				"the"
-WONDER_RAMAYANA_ARTICLE				"the"
-WONDER_GREAT_WALL_ARTICLE			"the"
+WONDER_PYRAMIDS_ARTICLE				""
+WONDER_RAMAYANA_ARTICLE				""
+WONDER_GREAT_WALL_ARTICLE			""
 WONDER_THE_APPIAN_WAY_ARTICLE			""
-WONDER_CHICHEN_ITZA_ARTICLE			"the"
-WONDER_CENTRAL_MATTER_DECOMPILER_ARTICLE	"the"
-WONDER_THE_FORBIDDEN_CITY_ARTICLE		"the"
+WONDER_CHICHEN_ITZA_ARTICLE			""
+WONDER_CENTRAL_MATTER_DECOMPILER_ARTICLE	""
+WONDER_THE_FORBIDDEN_CITY_ARTICLE		""
 WONDER_ARISTOTLES_LYCEUM_ARTICLE		""
-WONDER_HAGIA_SOPHIA_ARTICLE			"the"
+WONDER_HAGIA_SOPHIA_ARTICLE			""
 WONDER_GUTTENBERGS_BIBLE_ARTICLE		""
-WONDER_EAST_INDIA_COMPANY_ARTICLE		"the"
+WONDER_EAST_INDIA_COMPANY_ARTICLE		""
 WONDER_GALILEOS_TELESCOPE_ARTICLE		""
-WONDER_EMANCIPATION_PROCLAMATION_ARTICLE	"the"
+WONDER_EMANCIPATION_PROCLAMATION_ARTICLE	""
 WONDER_PENICILLIN_ARTICLE			""
-WONDER_LONDON_EXCHANGE_ARTICLE			"the"
-WONDER_EMPIRE_STATE_BUILDING_ARTICLE		"the"
+WONDER_LONDON_EXCHANGE_ARTICLE			""
+WONDER_EMPIRE_STATE_BUILDING_ARTICLE		""
 WONDER_HOLLYWOOD_ARTICLE			""
-WONDER_INTERNET_ARTICLE				"the"
+WONDER_INTERNET_ARTICLE				""
 WONDER_THE_AGENCY_ARTICLE			""
 WONDER_GLOBESAT_ARTICLE				""
-WONDER_FIELD_DYNAMICS_LABORATORY_ARTICLE	"the"
-WONDER_DATA_HAVEN_ARTICLE			"the"
-WONDER_GENOME_PROJECT_ARTICLE			"the"
-WONDER_GLOBAL_SURVEILLANCE_CENTER_ARTICLE	"the"
-WONDER_NANITE_DEFUSER_ARTICLE			"the"
-WONDER_NATIONAL_SHIELD_ARTICLE			"the"
-WONDER_EGALITARIAN_ACT_ARTICLE			"the"
+WONDER_FIELD_DYNAMICS_LABORATORY_ARTICLE	""
+WONDER_DATA_HAVEN_ARTICLE			""
+WONDER_GENOME_PROJECT_ARTICLE			""
+WONDER_GLOBAL_SURVEILLANCE_CENTER_ARTICLE	""
+WONDER_NANITE_DEFUSER_ARTICLE			""
+WONDER_NATIONAL_SHIELD_ARTICLE			""
+WONDER_EGALITARIAN_ACT_ARTICLE			""
 WONDER_THE_EDEN_PROJECT_ARTICLE			""
 WONDER_THE_SOLARIS_PROJECT_ARTICLE		""
-WONDER_ZERO_CRIME_BILL_ARTICLE			"the"
+WONDER_ZERO_CRIME_BILL_ARTICLE			""
 
 
 #### Units STRINGS ####
@@ -248,7 +295,14 @@ UNIT_DREADNAUGHT				"Dreadnaught"
 UNIT_CITY					"City"
 UNIT_OCEAN_CITY					"Sea Colony"
 UNIT_SPACE_CITY					"Space Colony"
-
+UNIT_ELEPHANT_WARRIOR				"Elephant Warrior"
+UNIT_SCOUT					"Scout"
+UNIT_LEGION					"Legion"
+UNIT_GUERRILLA					"Guerrilla"
+UNIT_SWORDSMAN					"Swordsman"
+UNIT_PIRATE_SHIP				"Pirate Ship"
+UNIT_TRADER					"Trader"
+UNIT_LONGBOWMAN 				"Longbowman"
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarchie"
@@ -354,11 +408,11 @@ TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE		"Rubies"
 TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO		"Diamonds"
 TERRAIN_MOUNTAIN_GOOD_ONE			"Tea"
 TERRAIN_MOUNTAIN_GOOD_TWO			"Emeralds"
-TERRAIN_DESERT_GOOD_TWO				"Oil"
 TERRAIN_DESERT_GOOD_ONE				"Glass"
+TERRAIN_DESERT_GOOD_TWO				"Oil"
 TERRAIN_FOREST_GOOD_ONE				"Hardwood"
 TERRAIN_FOREST_GOOD_TWO				"Bear"
-#TERRAIN_GLACIER_GOOD_ONE			"Walrus"
+TERRAIN_GLACIER_GOOD_ONE			"Walrus"
 TERRAIN_GRASSLAND_GOOD_ONE			"Cotton"
 TERRAIN_GRASSLAND_GOOD_TWO			"Tobacco"
 TERRAIN_HILL_GOOD_ONE				"Coffee"
@@ -373,12 +427,60 @@ TERRAIN_WATER_SHALLOW_GOOD_ONE			"Crab"
 TERRAIN_WATER_SHALLOW_GOOD_TWO			"Pearls"
 TERRAIN_WATER_DEEP_GOOD_ONE			"Whale"
 TERRAIN_WATER_DEEP_GOOD_TWO			"Giant Squid"
-#TERRAIN_WATER_BEACH_GOOD_ONE			"Crab"
-#TERRAIN_WATER_BEACH_GOOD_TWO			"Pearls"
-#TERRAIN_WATER_SHELF_GOOD_ONE			"Crab"
-#TERRAIN_WATER_SHELF_GOOD_TWO			"Pearls"
+TERRAIN_WATER_BEACH_GOOD_ONE			"Crab"
+TERRAIN_WATER_BEACH_GOOD_TWO			"Pearls"
+TERRAIN_WATER_SHELF_GOOD_ONE			"Crab"
+TERRAIN_WATER_SHELF_GOOD_TWO			"Pearls"
 TERRAIN_DUMMY_GOOD				"Dumb Good"
 
+###Added for goodmod###   fix walrus, too many (actual these aren't used)
+
+TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE		"Bauxite"
+TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR		"Emeralds"
+TERRAIN_MOUNTAIN_GOOD_THREE			"Coal"
+TERRAIN_MOUNTAIN_GOOD_FOUR			"Gold"
+TERRAIN_DESERT_GOOD_THREE			"Dates"
+TERRAIN_DESERT_GOOD_FOUR			"Camels"
+TERRAIN_FOREST_GOOD_THREE			"Mushrooms"
+TERRAIN_FOREST_GOOD_FOUR			"Beavers"
+TERRAIN_GLACIER_GOOD_TWO			"Walrus"
+TERRAIN_GLACIER_GOOD_THREE			"Seal"
+TERRAIN_GLACIER_GOOD_FOUR			"Walrus"
+TERRAIN_GRASSLAND_GOOD_THREE			"Potatoes"
+TERRAIN_GRASSLAND_GOOD_FOUR			"Poppies"
+TERRAIN_HILL_GOOD_THREE				"Uranium"
+TERRAIN_HILL_GOOD_FOUR				"Olives"
+TERRAIN_JUNGLE_GOOD_THREE			"Bananas"
+TERRAIN_JUNGLE_GOOD_FOUR			"Sugar"
+TERRAIN_PLAINS_GOOD_THREE			"Wheat"
+TERRAIN_PLAINS_GOOD_FOUR			"Buffalo"
+TERRAIN_SWAMP_GOOD_TWO				"Rice"
+TERRAIN_SWAMP_GOOD_THREE			"Chilli"
+TERRAIN_SWAMP_GOOD_FOUR				"Peat"
+TERRAIN_TUNDRA_GOOD_TWO				"Oil"
+TERRAIN_TUNDRA_GOOD_THREE			"Caribou"
+TERRAIN_TUNDRA_GOOD_FOUR			"Caribou"
+TERRAIN_WATER_SHALLOW_GOOD_THREE		"Fish"
+TERRAIN_WATER_SHALLOW_GOOD_FOUR			"Lobster"
+TERRAIN_WATER_DEEP_GOOD_THREE			"Tuna"
+TERRAIN_WATER_DEEP_GOOD_FOUR			"Giant Squid"
+TERRAIN_WATER_BEACH_GOOD_THREE			"Dye"
+TERRAIN_WATER_BEACH_GOOD_FOUR			"Pearls"
+TERRAIN_WATER_SHELF_GOOD_THREE			"Crabs"
+TERRAIN_WATER_SHELF_GOOD_FOUR			"Turtle"
+#TERRAIN_DUMMY_GOOD				"Dumb Good"
+TERRAIN_BROWN_HILL_GOOD_ONE			"Copper"
+TERRAIN_BROWN_HILL_GOOD_TWO			"Silver"
+TERRAIN_BROWN_HILL_GOOD_THREE			"Camels"
+TERRAIN_BROWN_HILL_GOOD_FOUR			"Camels"
+TERRAIN_BROWN_MOUNTAIN_GOOD_ONE			"Iron Ore"
+TERRAIN_BROWN_MOUNTAIN_GOOD_TWO			"Silver"
+TERRAIN_BROWN_MOUNTAIN_GOOD_THREE		"Iron Ore"
+TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR		"Silver"
+TERRAIN_WHITE_HILL_GOOD_ONE			"Sapphires"
+TERRAIN_WHITE_HILL_GOOD_TWO			"Emeralds"
+TERRAIN_WHITE_HILL_GOOD_THREE			"Sapphires"
+TERRAIN_WHITE_HILL_GOOD_FOUR			"Emeralds"
 
 #### CONCEPT STRINGS ####
 #CONCEPT_DIAMONDS				"Diamanty"
@@ -434,7 +536,9 @@ CONCEPT_ATROCITY				"Atrocity"
 CONCEPT_BARBARIANS				"Barbarians"
 CONCEPT_CAPITALIZATION				"Capitalization"
 CONCEPT_CITY					"City"
+CONCEPT_CLASSIC_AGE				"Classical Age"
 CONCEPT_COMMERCE				"Commerce"
+CONCEPT_COMPUTER_AGE				"Information Age"
 CONCEPT_CRIME					"Crime"
 CONCEPT_DEFENSE					"Defense"
 CONCEPT_DIAMOND_AGE				"Diamond Age"
@@ -444,6 +548,7 @@ CONCEPT_EMBARGO					"Embargo"
 CONCEPT_EMPIRE_SIZE				"Empire Size"
 CONCEPT_FOOD					"Food"
 CONCEPT_FUEL					"Fuel"
+CONCEPT_FUTURE_AGE				"The Future"
 CONCEPT_GENETIC_AGE				"Genetic Age"
 CONCEPT_GOLD					"Gold"
 CONCEPT_GOODS					"Goods"
@@ -451,8 +556,10 @@ CONCEPT_GOVERNMENTS				"Government"
 CONCEPT_GROWTH					"Growth"
 CONCEPT_HAPPINESS				"Happiness"
 CONCEPT_IMPROVEMENTS				"Improvements"
+CONCEPT_INDUSTRIAL_AGE				"Industrial Age"
 CONCEPT_INFRASTRUCTURE				"Infrastructure"
 CONCEPT_MAINTENANCE_COST			"Maintenance Cost"
+CONCEPT_MEDIEVAL_AGE				"Medieval Period"
 CONCEPT_MILITARY_READINESS			"Military Readiness"
 CONCEPT_MODERN_AGE				"Modern	Age"
 CONCEPT_OFFER					"Offer"
@@ -491,8 +598,8 @@ CONCEPT_VETERANS				"Veterans"
 CONCEPT_VICTORY_CONDITIONS			"Victory - General"
 CONCEPT_VICTORY_CONQUEST			"Victory - Bloodlust"
 CONCEPT_VICTORY_DIPLOMATIC			"Victory - Diplomatic"
-CONCEPT_VICTORY_PTS_AT_2300			"Victory - 2300	AD"
-CONCEPT_VICTORY_SCIENCE				"Victory - Gaia	Controller"
+CONCEPT_VICTORY_PTS_AT_2300			"Victory - 2300 AD"
+CONCEPT_VICTORY_SCIENCE				"Victory - Gaia Controller"
 CONCEPT_VISION					"Vision"
 CONCEPT_WAGES					"Wages"
 CONCEPT_WONDERS					"Wonders"
@@ -580,14 +687,14 @@ ORDER_ATTACK					"Assault"
 ORDER_BIO_INFECT				"Infect City"
 ORDER_BOARD_TRANSPORT				"Load"
 ORDER_BOMBARD					"Bombard"
+ORDER_CLEAR_TARGET				"Clear Target"
 ORDER_CONVERT					"Convert City"
 ORDER_CREATE_PARK				"Nanite Cleansing"
-ORDER_CLEAR_TARGET				"Clear Target"
 ORDER_DISBAND_ARMY				"Disband Unit"
 ORDER_ESTABLISH_EMBASSY				"Establish Embassy"
 ORDER_EXPEL					"Expel Unit"
-ORDER_FORTIFY					"Fortify"
 ORDER_FAITH_HEALING				"Faith Healing"
+ORDER_FORTIFY					"Fortify"
 ORDER_FRANCHISE					"Franchise"
 ORDER_INCITE_REVOLUTION				"Incite Revolution"
 ORDER_INCITE_UPRISING				"Aid Uprising"
@@ -605,6 +712,7 @@ ORDER_RANGED_ATTACK				"Ranged Attack"
 ORDER_REFORM					"Reform City"
 ORDER_REFUEL					"Refuel"
 ORDER_SETTLE					"Settle"
+ORDER_SETTLE_IN_CITY				"Settle in City"
 ORDER_SLAVE_RAID				"Capture Slaves"
 ORDER_SLEEP					"Sentinel"
 ORDER_SOOTHSAY					"Soothsay"
@@ -615,6 +723,7 @@ ORDER_TARGET					"Target Nuke"
 ORDER_THROW_PARTY				"Hold Reception"
 ORDER_UNDERGROUND_RAILWAY			"Free Slave"
 ORDER_UNLOAD					"Unload"
+ORDER_UPGRADE					"Upgrade"
 
 PERSONALITY_KAHN_DESCRIPTION			"Villainous, Bloodthirsty Murderer"
 PERSONALITY_GHANDI_DESCRIPTION			"Diplomacy-minded Peacemaker"
@@ -625,3 +734,82 @@ PERSONALITY_MEDICI_DESCRIPTION			"Shrewd International Trader"
 PERSONALITY_TELLER_DESCRIPTION			"Ideologically Aggressive Academic"
 PERSONALITY_STRANGELOVE_DESCRIPTION		"Evil Genius"
 PERSONALITY_CALLENBACH_DESCRIPTION		"Populist Zealot"
+
+### Age Strings ###
+
+AGE_ONE						"Ancient"
+AGE_TWO						"Classic"
+AGE_THREE					"Middle Ages"
+AGE_FOUR					"Renaissance"
+AGE_FIVE					"Industrial"
+AGE_SIX						"Modern"
+AGE_SEVEN					"Information Age"
+AGE_EIGHT					"Genetic"
+AGE_NINE					"Diamond"
+AGE_TEN						"Future"
+
+### City Style Strings ###
+
+CITY_STYLE_ROMAN				"Roman Style"
+CITY_STYLE_ARAB					"Arabian Style"
+CITY_STYLE_ASIAN				"Asian Style"
+CITY_STYLE_AMERICAN				"American Style"
+CITY_STYLE_CASTLE				"Castle Style"
+CITY_STYLE_EGYPTAIN				"Egyptian Style"
+CITY_STYLE_PALACE				"Palace Style"
+
+### Build Sequences from ldl_str.txt ###
+
+BUILD_LIST_SEQUENCE_PRODUCTION			"Production"
+BUILD_LIST_SEQUENCE_GROWTH			"Growth"
+BUILD_LIST_SEQUENCE_OFFENSE			"Offense"
+BUILD_LIST_SEQUENCE_DEFENSE			"Defense"
+BUILD_LIST_SEQUENCE_SCIENCE			"Science"
+BUILD_LIST_SEQUENCE_GOLD			"Gold"
+BUILD_LIST_SEQUENCE_WONDERS			"Wonders"
+BUILD_LIST_SEQUENCE_HAPPINESS			"Happiness"
+BUILD_LIST_SEQUENCE_DEFAULT			"Default"
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"Wonders (Sci.)"
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"Wonders (Mil.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"Wonders (Econ.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"Wonders (Ecot.)"
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
+BUILD_LIST_SEQUENCE_BARBARIAN			"Units"
+BUILD_LIST_SEQUENCE_SMALL_CITIES		"Small Cities"
+BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE		"Maxiumum Sized Cities"
+BUILD_LIST_SEQUENCE_DIRTY_CITIES		"Pollution"
+
+##Risk strings moved from junk_str.txt ##
+RISK_NO_DANGER_HERE				"No Danger Here"
+RISK_VILLAGES_ONLY				"Ruins Only"
+RISK_BORING_HORDES				"Bandits"
+RISK_DECENT_HORDES				"Raiders"
+RISK_RAGING_HORDES				"Marauders"
+
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"Chieftain"
+DIFFICULTY_1					"Warlord"
+DIFFICULTY_2					"Prince"
+DIFFICULTY_3					"King"
+DIFFICULTY_4					"Emperor"
+DIFFICULTY_5					"Deity"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"Settler"
+DIFFICULTY_CHIEFTAIN			"Chieftain"
+DIFFICULTY_WARLORD				"Warlord"
+DIFFICULTY_PRINCE				"Prince"
+DIFFICULTY_KING					"King"
+DIFFICULTY_EMPEROR				"Emperor"
+DIFFICULTY_DEITY				"Deity"
+
+## Language strings ##
+LANGUAGE_CHINESE				"Èínština"
+LANGUAGE_CZECH					"Èeský"
+LANGUAGE_ENGLISH				"Anglický"
+LANGUAGE_FRENCH					"Francouzština"
+LANGUAGE_GERMAN					"Nìmèina"
+LANGUAGE_ITALIAN				"Italština"
+LANGUAGE_JAPANESE				"Japonština"
+LANGUAGE_POLISH					"Polština"
+LANGUAGE_SPANISH				"Španìlština"

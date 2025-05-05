@@ -1,3 +1,50 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains the records localized names (Polish)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized names of the database records.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added CityMod2 age concept strings.
+# - Added new age strings.
+# - Added new city style strings.
+# - Moved build list sequence strings from ldl_str.txt and add_str.txt.
+#   - Mar. 7th 2005 Martin Gühmann 
+# - Moved risk strings from junk_str.txt. (Aug 31st 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
 
 #### ADVANCE STRINGS ####
 ADVANCE_TOOLMAKING				"Wyrob narzedzi"
@@ -248,7 +295,14 @@ UNIT_DREADNAUGHT				"Podmorski niszczyciel"
 UNIT_CITY					"Miasto"
 UNIT_OCEAN_CITY					"Kolonia morska"
 UNIT_SPACE_CITY					"Kolonia kosmiczna"
-
+UNIT_ELEPHANT_WARRIOR				"Elephant Warrior"
+UNIT_SCOUT					"Scout"
+UNIT_LEGION					"Legion"
+UNIT_GUERRILLA					"Guerrilla"
+UNIT_SWORDSMAN					"Swordsman"
+UNIT_PIRATE_SHIP				"Pirate Ship"
+UNIT_TRADER					"Trader"
+UNIT_LONGBOWMAN 				"Longbowman"
 
 #### governs STRINGS ####
 GOVERNMENT_ANARCHY				"Anarchia"
@@ -358,7 +412,7 @@ TERRAIN_DESERT_GOOD_TWO				"Ropa naftowa"
 TERRAIN_DESERT_GOOD_ONE				"Szklo"
 TERRAIN_FOREST_GOOD_ONE				"Drewno"
 TERRAIN_FOREST_GOOD_TWO				"Niedzwiedzie"
-#TERRAIN_GLACIER_GOOD_ONE			"Walrus"
+TERRAIN_GLACIER_GOOD_ONE			"Walrus"
 TERRAIN_GRASSLAND_GOOD_ONE			"Bawelna"
 TERRAIN_GRASSLAND_GOOD_TWO			"Tyton"
 TERRAIN_HILL_GOOD_ONE				"Kawa"
@@ -373,12 +427,60 @@ TERRAIN_WATER_SHALLOW_GOOD_ONE			"Kraby"
 TERRAIN_WATER_SHALLOW_GOOD_TWO			"Perly"
 TERRAIN_WATER_DEEP_GOOD_ONE			"Wieloryby"
 TERRAIN_WATER_DEEP_GOOD_TWO			"Kalamarnice"
-#TERRAIN_WATER_BEACH_GOOD_ONE			"Kraby"
-#TERRAIN_WATER_BEACH_GOOD_TWO			"Perly"
-#TERRAIN_WATER_SHELF_GOOD_ONE			"Kraby"
-#TERRAIN_WATER_SHELF_GOOD_TWO			"Perly"
+TERRAIN_WATER_BEACH_GOOD_ONE			"Kraby"
+TERRAIN_WATER_BEACH_GOOD_TWO			"Perly"
+TERRAIN_WATER_SHELF_GOOD_ONE			"Kraby"
+TERRAIN_WATER_SHELF_GOOD_TWO			"Perly"
 TERRAIN_DUMMY_GOOD				"Dumb Good"
 
+###Added for goodmod###   fix walrus, too many (actual these aren't used)
+
+TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE		"Bauxite"
+TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR		"Emeralds"
+TERRAIN_MOUNTAIN_GOOD_THREE			"Coal"
+TERRAIN_MOUNTAIN_GOOD_FOUR			"Gold"
+TERRAIN_DESERT_GOOD_THREE			"Dates"
+TERRAIN_DESERT_GOOD_FOUR			"Camels"
+TERRAIN_FOREST_GOOD_THREE			"Mushrooms"
+TERRAIN_FOREST_GOOD_FOUR			"Beavers"
+TERRAIN_GLACIER_GOOD_TWO			"Walrus"
+TERRAIN_GLACIER_GOOD_THREE			"Seal"
+TERRAIN_GLACIER_GOOD_FOUR			"Walrus"
+TERRAIN_GRASSLAND_GOOD_THREE			"Potatoes"
+TERRAIN_GRASSLAND_GOOD_FOUR			"Poppies"
+TERRAIN_HILL_GOOD_THREE				"Uranium"
+TERRAIN_HILL_GOOD_FOUR				"Olives"
+TERRAIN_JUNGLE_GOOD_THREE			"Bananas"
+TERRAIN_JUNGLE_GOOD_FOUR			"Sugar"
+TERRAIN_PLAINS_GOOD_THREE			"Wheat"
+TERRAIN_PLAINS_GOOD_FOUR			"Buffalo"
+TERRAIN_SWAMP_GOOD_TWO				"Rice"
+TERRAIN_SWAMP_GOOD_THREE			"Chilli"
+TERRAIN_SWAMP_GOOD_FOUR				"Peat"
+TERRAIN_TUNDRA_GOOD_TWO				"Oil"
+TERRAIN_TUNDRA_GOOD_THREE			"Caribou"
+TERRAIN_TUNDRA_GOOD_FOUR			"Caribou"
+TERRAIN_WATER_SHALLOW_GOOD_THREE		"Fish"
+TERRAIN_WATER_SHALLOW_GOOD_FOUR			"Lobster"
+TERRAIN_WATER_DEEP_GOOD_THREE			"Tuna"
+TERRAIN_WATER_DEEP_GOOD_FOUR			"Giant Squid"
+TERRAIN_WATER_BEACH_GOOD_THREE			"Dye"
+TERRAIN_WATER_BEACH_GOOD_FOUR			"Pearls"
+TERRAIN_WATER_SHELF_GOOD_THREE			"Crabs"
+TERRAIN_WATER_SHELF_GOOD_FOUR			"Turtle"
+#TERRAIN_DUMMY_GOOD				"Dumb Good"
+TERRAIN_BROWN_HILL_GOOD_ONE			"Copper"
+TERRAIN_BROWN_HILL_GOOD_TWO			"Silver"
+TERRAIN_BROWN_HILL_GOOD_THREE			"Camels"
+TERRAIN_BROWN_HILL_GOOD_FOUR			"Camels"
+TERRAIN_BROWN_MOUNTAIN_GOOD_ONE			"Iron Ore"
+TERRAIN_BROWN_MOUNTAIN_GOOD_TWO			"Silver"
+TERRAIN_BROWN_MOUNTAIN_GOOD_THREE		"Iron Ore"
+TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR		"Silver"
+TERRAIN_WHITE_HILL_GOOD_ONE			"Sapphires"
+TERRAIN_WHITE_HILL_GOOD_TWO			"Emeralds"
+TERRAIN_WHITE_HILL_GOOD_THREE			"Sapphires"
+TERRAIN_WHITE_HILL_GOOD_FOUR			"Emeralds"
 
 #### CONCEPT STRINGS ####
 #CONCEPT_DIAMONDS				"Diamonds"
@@ -434,7 +536,9 @@ CONCEPT_ATROCITY				"Atrocity"
 CONCEPT_BARBARIANS				"Barbarians"
 CONCEPT_CAPITALIZATION				"Capitalization"
 CONCEPT_CITY					"City"
+CONCEPT_CLASSIC_AGE				"Classical Age"
 CONCEPT_COMMERCE				"Commerce"
+CONCEPT_COMPUTER_AGE				"Information Age"
 CONCEPT_CRIME					"Crime"
 CONCEPT_DEFENSE					"Defense"
 CONCEPT_DIAMOND_AGE				"Diamond Age"
@@ -444,6 +548,7 @@ CONCEPT_EMBARGO					"Embargo"
 CONCEPT_EMPIRE_SIZE				"Empire Size"
 CONCEPT_FOOD					"Food"
 CONCEPT_FUEL					"Fuel"
+CONCEPT_FUTURE_AGE				"The Future"
 CONCEPT_GENETIC_AGE				"Genetic Age"
 CONCEPT_GOLD					"Gold"
 CONCEPT_GOODS					"Goods"
@@ -451,8 +556,10 @@ CONCEPT_GOVERNMENTS				"Government"
 CONCEPT_GROWTH					"Growth"
 CONCEPT_HAPPINESS				"Happiness"
 CONCEPT_IMPROVEMENTS				"Improvements"
+CONCEPT_INDUSTRIAL_AGE				"Industrial Age"
 CONCEPT_INFRASTRUCTURE				"Infrastructure"
 CONCEPT_MAINTENANCE_COST			"Maintenance Cost"
+CONCEPT_MEDIEVAL_AGE				"Medieval Period"
 CONCEPT_MILITARY_READINESS			"Military Readiness"
 CONCEPT_MODERN_AGE				"Modern	Age"
 CONCEPT_OFFER					"Offer"
@@ -491,8 +598,8 @@ CONCEPT_VETERANS				"Veterans"
 CONCEPT_VICTORY_CONDITIONS			"Victory - General"
 CONCEPT_VICTORY_CONQUEST			"Victory - Bloodlust"
 CONCEPT_VICTORY_DIPLOMATIC			"Victory - Diplomatic"
-CONCEPT_VICTORY_PTS_AT_2300			"Victory - 2300	AD"
-CONCEPT_VICTORY_SCIENCE				"Victory - Gaia	Controller"
+CONCEPT_VICTORY_PTS_AT_2300			"Victory - 2300 AD"
+CONCEPT_VICTORY_SCIENCE				"Victory - Gaia Controller"
 CONCEPT_VISION					"Vision"
 CONCEPT_WAGES					"Wages"
 CONCEPT_WONDERS					"Wonders"
@@ -605,6 +712,7 @@ ORDER_RANGED_ATTACK				"Atak z dystansu"
 ORDER_REFORM					"Reformowanie miasta"
 ORDER_REFUEL					"Dotankowanie paliwa"
 ORDER_SETTLE					"Budowa miasta"
+ORDER_SETTLE_IN_CITY				"Settle in City"
 ORDER_SLAVE_RAID				"Chwytanie niewolnikow"
 ORDER_SLEEP					"Warta"
 ORDER_SOOTHSAY					"Gloszenie apokalipsy"
@@ -615,6 +723,7 @@ ORDER_TARGET					"Podlozenie ladunku jadrowego"
 ORDER_THROW_PARTY				"Zlozenie wizyty"
 ORDER_UNDERGROUND_RAILWAY			"Uwolnienie niewolnikow"
 ORDER_UNLOAD					"Rozladowanie"
+ORDER_UPGRADE					"Upgrade"
 
 PERSONALITY_KAHN_DESCRIPTION			"Villainous, Bloodthirsty Murderer"
 PERSONALITY_GHANDI_DESCRIPTION			"Diplomacy-minded Peacemaker"
@@ -625,3 +734,82 @@ PERSONALITY_MEDICI_DESCRIPTION			"Shrewd International Trader"
 PERSONALITY_TELLER_DESCRIPTION			"Ideologically Aggressive Academic"
 PERSONALITY_STRANGELOVE_DESCRIPTION		"Evil Genius"
 PERSONALITY_CALLENBACH_DESCRIPTION		"Populist Zealot"
+
+### Age Strings ###
+
+AGE_ONE						"Ancient"
+AGE_TWO						"Classic"
+AGE_THREE					"Middle Ages"
+AGE_FOUR					"Renaissance"
+AGE_FIVE					"Industrial"
+AGE_SIX						"Modern"
+AGE_SEVEN					"Information Age"
+AGE_EIGHT					"Genetic"
+AGE_NINE					"Diamond"
+AGE_TEN						"Future"
+
+### City Style Strings ###
+
+CITY_STYLE_ROMAN				"Roman Style"
+CITY_STYLE_ARAB					"Arabian Style"
+CITY_STYLE_ASIAN				"Asian Style"
+CITY_STYLE_AMERICAN				"American Style"
+CITY_STYLE_CASTLE				"Castle Style"
+CITY_STYLE_EGYPTAIN				"Egyptian Style"
+CITY_STYLE_PALACE				"Palace Style"
+
+### Build Sequences from ldl_str.txt ###
+
+BUILD_LIST_SEQUENCE_PRODUCTION			"Production"
+BUILD_LIST_SEQUENCE_GROWTH			"Growth"
+BUILD_LIST_SEQUENCE_OFFENSE			"Offense"
+BUILD_LIST_SEQUENCE_DEFENSE			"Defense"
+BUILD_LIST_SEQUENCE_SCIENCE			"Science"
+BUILD_LIST_SEQUENCE_GOLD			"Gold"
+BUILD_LIST_SEQUENCE_WONDERS			"Wonders"
+BUILD_LIST_SEQUENCE_HAPPINESS			"Happiness"
+BUILD_LIST_SEQUENCE_DEFAULT			"Default"
+BUILD_LIST_SEQUENCE_WONDERS_SCIENTIST		"Wonders (Sci.)"
+BUILD_LIST_SEQUENCE_WONDERS_MILITARIST		"Wonders (Mil.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECONOMIC		"Wonders (Econ.)"
+BUILD_LIST_SEQUENCE_WONDERS_ECOTOPIAN		"Wonders (Ecot.)"
+BUILD_LIST_SEQUENCE_WONDERS_DIPLOMATIC		"Wonders (Dipl.)"
+BUILD_LIST_SEQUENCE_BARBARIAN			"Units"
+BUILD_LIST_SEQUENCE_SMALL_CITIES		"Small Cities"
+BUILD_LIST_SEQUENCE_CITIES_AT_MAX_SIZE		"Maxiumum Sized Cities"
+BUILD_LIST_SEQUENCE_DIRTY_CITIES		"Pollution"
+
+##Risk strings moved from junk_str.txt ##
+RISK_NO_DANGER_HERE				"No Danger Here"
+RISK_VILLAGES_ONLY				"Ruins Only"
+RISK_BORING_HORDES				"Bandits"
+RISK_DECENT_HORDES				"Raiders"
+RISK_RAGING_HORDES				"Marauders"
+
+## Generic difficulty strings for compatibility reasons ##
+DIFFICULTY_0					"Chieftain"
+DIFFICULTY_1					"Warlord"
+DIFFICULTY_2					"Prince"
+DIFFICULTY_3					"King"
+DIFFICULTY_4					"Emperor"
+DIFFICULTY_5					"Deity"
+
+## Civlike difficulty strings ##
+DIFFICULTY_SETTLER				"Settler"
+DIFFICULTY_CHIEFTAIN			"Chieftain"
+DIFFICULTY_WARLORD				"Warlord"
+DIFFICULTY_PRINCE				"Prince"
+DIFFICULTY_KING					"King"
+DIFFICULTY_EMPEROR				"Emperor"
+DIFFICULTY_DEITY				"Deity"
+
+## Language strings ##
+LANGUAGE_CHINESE				"Chiñski"
+LANGUAGE_CZECH					"Czeski"
+LANGUAGE_ENGLISH				"Angielski"
+LANGUAGE_FRENCH					"Francuski"
+LANGUAGE_GERMAN					"Niemiecki"
+LANGUAGE_ITALIAN				"W³oski"
+LANGUAGE_JAPANESE				"Japoñski"
+LANGUAGE_POLISH					"Polski"
+LANGUAGE_SPANISH				"Hiszpañski"

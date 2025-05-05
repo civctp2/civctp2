@@ -58,7 +58,7 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElement
 			memcpy(*array, oldArray, (*numElements) * sizeof(sint32));
 			delete [] oldArray;
 		} else {
-            delete [] *array;
+			delete [] *array;
 			*array = new sint32[1];
 		}
 		(*array)[*numElements] = value;
@@ -83,7 +83,7 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double **array, sint32 *numEleme
 			memcpy(*array, oldArray, (*numElements) * sizeof(double));
 			delete [] oldArray;
 		} else {
-            delete [] *array;
+			delete [] *array;
 			*array = new double[1];
 		}
 		(*array)[*numElements] = value;
@@ -109,7 +109,7 @@ bool CTPRecord::ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElement
 			memcpy(*array, oldArray, (*numElements) * sizeof(char *));
 			delete [] oldArray;
 		} else {
-            delete [] *array;
+			delete [] *array;
 			*array = new char *[1];
 		}
 		(*array)[*numElements] = new char[strlen(value) + 1];
@@ -136,7 +136,7 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numEl
 			memcpy(*array, oldArray, (*numElements) * sizeof(sint32));
 			delete [] oldArray;
 		} else {
-            delete [] *array;
+			delete [] *array;
 			*array = new sint32[1];
 		}
 		sint32 id;
@@ -243,23 +243,38 @@ bool CTPRecord::ParseStringIdInArray(DBLexer *lex, sint32 *array, sint32 *numEle
 
 void CTPRecord::SetTextName(const char *text)
 {
+	if (text)
+	{
+		m_name      = INDEX_INVALID;
+		delete [] m_textName;
+		m_textName  = new char[strlen(text) + 1];
+		strcpy(m_textName, text);
+	}
+	else
+	{
+		delete [] m_textName;
+		m_textName = NULL;
+	}
+}
+
+void CTPRecord::SetTextID(const char *text)
+{
 	Assert(text);
 	if (text)
-    {
-	    m_name      = INDEX_INVALID;
-        delete [] m_textName;
-	    m_textName  = new char[strlen(text) + 1];
-	    strcpy(m_textName, text);
-    }
+	{
+		delete [] this->m_textID;
+		m_textID  = new char[strlen(text) + 1];
+		strcpy(m_textID, text);
+	}
 }
 
 const char *CTPRecord::GetIDText() const
 {
 	Assert(m_name >= 0);
-    return (m_name >= 0) ? g_theStringDB->GetIdStr(m_name) : "NO_ID";
+	return (m_name >= 0) ? g_theStringDB->GetIdStr(m_name) : "NO_ID";
 }
 
 const char *CTPRecord::GetNameText() const
 {
-    return (m_textName) ? m_textName : g_theStringDB->GetNameStr(m_name);
+	return (m_textName) ? m_textName : g_theStringDB->GetNameStr(m_name);
 }

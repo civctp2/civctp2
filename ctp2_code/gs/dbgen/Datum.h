@@ -119,12 +119,13 @@ public:
 	void ExportBitPairDirectParse(FILE *outfile, char *recordName);
 
 	void ExportResolver(FILE *outfile);
+	void StringUpdater(FILE  *outfile);
 	void ExportMerge(FILE *outfile, char *recordName);
 
 private:
-    char const *    BitPairTypeString(void);
-    char const *    ReturnTypeString(void);
-    char const *    VarTypeString(void);
+	char const *    BitPairTypeString(void);
+	char const *    ReturnTypeString(void);
+	char const *    VarTypeString(void);
 };
 
 #endif
