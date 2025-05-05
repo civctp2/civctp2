@@ -222,44 +222,44 @@
     <Filter Include="Text Files\AI Data">
       <UniqueIdentifier>{13d57c24-2459-4d3d-b38d-99f81e3034d7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Game Data">
-      <UniqueIdentifier>{32ec2c89-1b6c-4988-ac7b-50a41d889a67}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Text Files\UI Data">
       <UniqueIdentifier>{913f7f1f-618a-47ac-8abc-c82e0051d4f9}</UniqueIdentifier>
     </Filter>
     <Filter Include="Text Files\Slic">
       <UniqueIdentifier>{02bdfa68-c1eb-4f77-a152-5c8de9bac9e3}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data">
+    <Filter Include="Text Files\Game Data">
       <UniqueIdentifier>{480710e8-ac10-45ae-8722-37fbebf293ba}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\English">
+    <Filter Include="Text Files\Game Data\English">
       <UniqueIdentifier>{dc9f5052-6293-4c5a-bfef-a298f53b3683}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\German">
+    <Filter Include="Text Files\Game Data\German">
       <UniqueIdentifier>{a494e399-ce1c-42fa-a5b4-7444d0d7f29e}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\Spanish">
+    <Filter Include="Text Files\Game Data\Spanish">
       <UniqueIdentifier>{b9f66979-7067-4909-b347-70712b4d5e7f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\Polish">
+    <Filter Include="Text Files\Game Data\Polish">
       <UniqueIdentifier>{26708582-496f-4a64-b1ad-38526f72c63f}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\Japanese">
+    <Filter Include="Text Files\Game Data\Japanese">
       <UniqueIdentifier>{0eed9c3f-4d4a-48c6-a006-6979a072c6f7}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\Chinese">
+    <Filter Include="Text Files\Game Data\Chinese">
       <UniqueIdentifier>{0b69df81-ecc0-44c4-a17e-bcbcb4c33264}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\Czech">
+    <Filter Include="Text Files\Game Data\Czech">
       <UniqueIdentifier>{65ab82ce-8ffe-4bc0-ae93-11fece0d3021}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\French">
+    <Filter Include="Text Files\Game Data\French">
       <UniqueIdentifier>{122957e5-358d-411b-89e9-91ca2ef4be5d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Text Files\Localized Data\Italian">
+    <Filter Include="Text Files\Game Data\Italian">
       <UniqueIdentifier>{5f5649fe-e4be-4f43-9128-4cb0cab87e46}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Text Files\Game Data\Default">
+      <UniqueIdentifier>{6f00a23c-e0ae-4c4a-bfc6-ca3c4ae8516e}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -5319,216 +5319,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\ctp2_data\default\gamedata\Advance.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\advanceicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\age.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\agecitystyle.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\branchID.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\buildings.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\cityid.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citysize0.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citysize1.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citysize2.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citysize3.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citysize4.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citysize5.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\citystyle.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\civilisation.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Colors00.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\colors01.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\colors02.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\colors03.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Colors04.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Colors05.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\concept.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\concepticon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Const.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\DiffDB.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\endgame.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\endgameicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\EndGameObjects.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\feat.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\gamefile.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\goods.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\goodsicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\goodsID.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\govern.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\governicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\gw.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\hscore.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Improve.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\improveicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Language.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\map.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\messageicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\newsprite.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\order.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Orders.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\ozone.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\playlist.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\pollution.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Pop.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\profile.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\ProjectileEndID.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\ProjectileID.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\risks.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\sounds.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\specattack.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\speceffectid.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\spriteID.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\terrain.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\terrainicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\throne.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\tileimp.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\tileimpicon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\uniticon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Units.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Units_historic.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Units_release.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\victorymovie.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\Wonder.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\wondericon.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
-    <Text Include="..\..\ctp2_data\default\gamedata\wondermovie.txt">
-      <Filter>Text Files\Game Data</Filter>
-    </Text>
     <Text Include="..\..\ctp2_data\default\aidata\AdvanceLists.txt">
       <Filter>Text Files\AI Data</Filter>
     </Text>
@@ -5572,502 +5362,712 @@
       <Filter>Text Files\AI Data</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\chinese\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\Chinese</Filter>
+      <Filter>Text Files\Game Data\Chinese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\czech\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\Czech</Filter>
+      <Filter>Text Files\Game Data\Czech</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\english\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\English</Filter>
+      <Filter>Text Files\Game Data\English</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\Info_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\str_loc.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\french\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\French</Filter>
+      <Filter>Text Files\Game Data\French</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\str_loc.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\german\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\German</Filter>
+      <Filter>Text Files\Game Data\German</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\japanese\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\Japanese</Filter>
+      <Filter>Text Files\Game Data\Japanese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\japanese\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\Japanese</Filter>
+      <Filter>Text Files\Game Data\Japanese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\japanese\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\Japanese</Filter>
+      <Filter>Text Files\Game Data\Japanese</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\str_loc.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\italian\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\Italian</Filter>
+      <Filter>Text Files\Game Data\Italian</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\polish\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\Polish</Filter>
+      <Filter>Text Files\Game Data\Polish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\add_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\cht_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\civ_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\cut_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\dip_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\dip2_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\err_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\exp_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\feat_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\gl_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\Great_Library.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\info_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\junk_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\ldl_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\scen_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\Strings.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\strings_to_add.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\tips_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\tut_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
     </Text>
     <Text Include="..\..\ctp2_data\spanish\gamedata\tut2_str.txt">
-      <Filter>Text Files\Localized Data\Spanish</Filter>
+      <Filter>Text Files\Game Data\Spanish</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Advance.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\advanceicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\age.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\agecitystyle.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\branchID.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\buildings.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\cityid.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citysize0.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citysize1.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citysize2.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citysize3.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citysize4.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citysize5.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\citystyle.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\civilisation.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Colors00.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\colors01.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\colors02.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\colors03.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Colors04.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Colors05.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\concept.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\concepticon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Const.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\DiffDB.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\endgame.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\endgameicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\EndGameObjects.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\feat.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\gamefile.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\goods.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\goodsicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\goodsID.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\govern.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\governicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\gw.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\hscore.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Improve.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\improveicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Language.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\map.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\messageicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\newsprite.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\order.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Orders.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\ozone.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\playlist.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\pollution.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Pop.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\profile.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\ProjectileEndID.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\ProjectileID.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\risks.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\sounds.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\specattack.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\speceffectid.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\spriteID.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\terrain.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\terrainicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\throne.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\tileimp.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\tileimpicon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\uniticon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Units.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Units_historic.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Units_release.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\victorymovie.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\Wonder.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\wondericon.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\gamedata\wondermovie.txt">
+      <Filter>Text Files\Game Data\Default</Filter>
     </Text>
   </ItemGroup>
 </Project>
