@@ -1,46 +1,100 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains main info meassage strings in Polish
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized strings for the messages including buttons.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved TREATY_TO_EXPIRE message string from dip2_str.txt, was moved from
+#   cut_str.txt and updated by PFT before. - Mar. 25th 2005 Martin Gühmann
+# - Moved and updated the rest of the diplomacy messages from cut_str.txt 
+#   for later reimplementation. - Mar. 25th 2005 Martin Gühmann
+# - Merged in trust loss strings from add_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
 #### General Message Strings ####
 
 ## Instant Action Messages ##
-IA_BREAK_TREATY     			"Jesli zlamiemy traktat ktory podpisalismy z nacja {player[1].civ_name_plural}, nie tylko ich rozzloscimy ale stracimy tez szacynek najpotezniejszego panstwa swiata.  Czy jestes pewien, ze chcesz to zrobic, {player[0].sir}?"
-IA_BREAK_CEASE_FIRE 			"{player[0].sir_cap}, czy jestes pewien ,ze chcesz zerwac traktat pokojowy jaki podpisalismy z nacja {player[1].civ_name_plural}?"
-IA_BREAK_NO_PIRACY  			"{player[0].sir_cap}, czy nasi ludzie ma pewno maja rozpoczac grabienie tego szlaku handlowego?  Zgodzilismy sie przeciesz respektowac ich szlaki."
-IA_AUTO_UNLOAD 				"Czy chcesz przeprowadzic w tym miejscu desant naszych zolnierzy, {player[0].sir}?"
-IA_ENTERING_LANDS   			"{player[0].sir_cap}, czy jestes pewien, ze nasze wojska maja przekroczyc granice panstwa {player[1].civ_name_plural}?"
-IA_OUT_OF_FUEL 				"Jesli rozkazesz Swoim samolotom dalej leciec, skonczy sie im paliwo i rozbija sie. Czy jestes pewien, ze chcesz je zniszczyc, {player[0].sir}?"
-IA_BREAK_ECOPACT    			"{player[0].sir_cap}, Nasze miasta produkuja zbyt duzo zanieczyszczen. Moze sie to przyczynic do naruszenia paktu ekologicznego jaki podpisalimy z nacja {player[1].civ_name_plural}."
-IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, zgodzilismy sie szanowac granice {player[1].civ_name_plural}.  Czy chcesz pogorszycz stosunki dyplomatycze z tym panstwem, wprowadzajac Swoje jednostki na ich terytorium?"
-IA_PILLAGE_OWN_LAND 			"Do powstania ulepszenia znajdujacego sie na tym segmencie przyczynili sie nasi ludzie. Czy chcesz zniszczyc owoce ich cierzkiej pracy?"
-IA_SELL_IMPROVEMENT 			"Sprzedanie z tego miasta ulepszenia o nazwie {building[0].name} przyniesie ci zysk w wysokosci {gold[0].value} sztuk zlota.  Czy jestes pewien ze chcesz je sprzedac?"
-IA_FREE_SLAVES 				"Czy chcesz wypuscic niewolnikow pracujacych w miescie {city[0].name}? "
-IA_POLLUTION_ENDS_GOVERNMENT  		"Ludzie nie mogac dluzej zniesc klamstw i obludy panujacego w naszym rzadzie, sila doprowadzili do jego obalenia. Teraz w Naszym kraju panuje anarchia."
-IA_MAX_CITIES_REACHED  			"Osiagnales maksymalna ilosc miast mozliwych do utrzymania w tym ustroju.  Jesli bedziesz dalej powiekszal swoje imperium, uczynisz swoich obywateli nieszczesliwych.  Byc moze powinienes rozwazyc zmiane ustroju?"
-IA_SETTLING_TOO_CLOSE    		"Nie mozesz zbudowac nowego miasta w obszarze juz istniejacego. Powinnismy poszukac nowej lokacji dla przyszlego miasta, takiej ktora pozwoli na jego swobodny rozwoj."
-IA_CITY_WILL_STARVE_INITIAL_WARNING 	"{player[0].sir_cap}, miasto {city[0].name} produkuje zbyt malo zywnosci aby wyzywic swoich mieszkancow.  Ludzie niedlugo zaczna korzystac z zapasow zywnosci aby uchronic sie przed glodem."
-IA_CITY_WILL_STARVE_FOOD_STORES_LOW 	"{player[0].sir_cap}, miasto {city[0].name} prawie calkowicie wyczerpalo swoje zapasy zywnosci.  Jesli mieszkancy nie beda produkowac wiecej zywnosci niedlugo moga zaczac glodowac."
-IA_CITY_WILL_STARVE   			"W miescie {city[0].name} zabraklo zywnosci.  Jesli zakonczysz tura mieszkancy zaczna przymierac glodem. Czy chcesz teraz zakonczyc ture?"
-IA_CANNOT_CAPTURE_CITY   		"Tylko jednostki ladowe posiadajace mozliwosc ataku moga przejac wrogie miasto."
-IA_CAPITOL_WARNING  			"Palac reprezentuje siedzibe naszego rzadu. Nie mozesz posiadac wiecej niz jednego palacu na raz. Kiedy nowy palac zostanie ukonczony, stary znajdujacy sie w miescie {city[0].name} bedzie sprzedany a siedziba naszego rzadu zostanie przeniesiona do miasta {city[1].name}."
-IA_PILLAGE_SUICIDE  			"Jednostka zostala zniszczona kiedy spladrowano droge na nieprzekraczalnym terenie."
-IA_TERRAFORM_DEAD_TILE 			"Wpierw musisz odkryc ochrone przyrody zanim bedziesz mogl przeksztalcac martwe segmenty."
-IA_CERTAIN_REVOLUTION    		"{player[0].sir_cap}, nasz narod jest na krawedzi rewolucji.  Jesli zakonczysz teraz ture sprawy moga przybrac jeszcze powazniejszy obrot.  Czy jestes pewien, ze chcesz zakonczyc ture bez podjecia jakich kolwiek krokow w celu zmiany tej sytuacji?" 
-IA_CANNOT_AFFORD_MAINTENANCE  		"{player[0].sir}, nie jestesmy w stanie dluzej utrzymywac wszystkich ulepszen miast i segmentow. Niedlugo nasz skarbiec zacznie swiecic pustkami.  Jesli zakonczysz teraz ture, bedziemy zmuszeni do sprzedania ulepszen w celu pokrycia strat. Czy napewno chcesz teraz zakonczyc ture?" 
-IA_CANNOT_AFFORD_SUPPORT  		"{player[0].sir}, nie jestesmy w stanie dluzej utrzymywac wszystkich jednostek wojskowych. Jesli zakonczysz teraz ture, bedziemy zmuszeni do rozwiazania jednostek. Czy napewno chcesz teraz zakonczyc ture?"
-IA_WAR_DISCONTENT_RISING 		"{player[0].sir_cap}, poniewaz zbyt duzo jednostek wojskowych znajduje sie z dala od swoich rodzimych miast ludzie czuja sie nieszczesliwi.  Moze powinienes rozwazyc rozwiazanie paru jednostek?"
+IA_BREAK_TREATY				"Jesli zlamiemy traktat ktory podpisalismy z nacja {player[1].civ_name_plural}, nie tylko ich rozzloscimy ale stracimy tez szacynek najpotezniejszego panstwa swiata.  Czy jestes pewien, ze chcesz to zrobic, {player[0].sir}?"
+IA_BREAK_CEASE_FIRE			"{player[0].sir_cap}, czy jestes pewien ,ze chcesz zerwac traktat pokojowy jaki podpisalismy z nacja {player[1].civ_name_plural}?"
+IA_BREAK_NO_PIRACY			"{player[0].sir_cap}, czy nasi ludzie ma pewno maja rozpoczac grabienie tego szlaku handlowego?  Zgodzilismy sie przeciesz respektowac ich szlaki."
+IA_AUTO_UNLOAD				"Czy chcesz przeprowadzic w tym miejscu desant naszych zolnierzy, {player[0].sir}?"
+IA_ENTERING_LANDS			"{player[0].sir_cap}, czy jestes pewien, ze nasze wojska maja przekroczyc granice panstwa {player[1].civ_name_plural}?"
+IA_OUT_OF_FUEL				"Jesli rozkazesz Swoim samolotom dalej leciec, skonczy sie im paliwo i rozbija sie. Czy jestes pewien, ze chcesz je zniszczyc, {player[0].sir}?"
+IA_BREAK_ECOPACT			"{player[0].sir_cap}, Nasze miasta produkuja zbyt duzo zanieczyszczen. Moze sie to przyczynic do naruszenia paktu ekologicznego jaki podpisalimy z nacja {player[1].civ_name_plural}."
+IA_BREAK_LEAVE_OUR_LANDS		"{player[0].sir_cap}, zgodzilismy sie szanowac granice {player[1].civ_name_plural}.  Czy chcesz pogorszycz stosunki dyplomatycze z tym panstwem, wprowadzajac Swoje jednostki na ich terytorium?"
+IA_PILLAGE_OWN_LAND			"Do powstania ulepszenia znajdujacego sie na tym segmencie przyczynili sie nasi ludzie. Czy chcesz zniszczyc owoce ich cierzkiej pracy?"
+IA_SELL_IMPROVEMENT			"Sprzedanie z tego miasta ulepszenia o nazwie {building[0].name} przyniesie ci zysk w wysokosci {gold[0].value} sztuk zlota.  Czy jestes pewien ze chcesz je sprzedac?"
+IA_FREE_SLAVES				"Czy chcesz wypuscic niewolnikow pracujacych w miescie {city[0].name}? "
+IA_POLLUTION_ENDS_GOVERNMENT		"Ludzie nie mogac dluzej zniesc klamstw i obludy panujacego w naszym rzadzie, sila doprowadzili do jego obalenia. Teraz w Naszym kraju panuje anarchia."
+IA_MAX_CITIES_REACHED			"Osiagnales maksymalna ilosc miast mozliwych do utrzymania w tym ustroju.  Jesli bedziesz dalej powiekszal swoje imperium, uczynisz swoich obywateli nieszczesliwych.  Byc moze powinienes rozwazyc zmiane ustroju?"
+IA_SETTLING_TOO_CLOSE			"Nie mozesz zbudowac nowego miasta w obszarze juz istniejacego. Powinnismy poszukac nowej lokacji dla przyszlego miasta, takiej ktora pozwoli na jego swobodny rozwoj."
+IA_CITY_WILL_STARVE_INITIAL_WARNING	"{player[0].sir_cap}, miasto {city[0].name} produkuje zbyt malo zywnosci aby wyzywic swoich mieszkancow.  Ludzie niedlugo zaczna korzystac z zapasow zywnosci aby uchronic sie przed glodem."
+IA_CITY_WILL_STARVE_FOOD_STORES_LOW	"{player[0].sir_cap}, miasto {city[0].name} prawie calkowicie wyczerpalo swoje zapasy zywnosci.  Jesli mieszkancy nie beda produkowac wiecej zywnosci niedlugo moga zaczac glodowac."
+IA_CITY_WILL_STARVE			"W miescie {city[0].name} zabraklo zywnosci.  Jesli zakonczysz tura mieszkancy zaczna przymierac glodem. Czy chcesz teraz zakonczyc ture?"
+IA_CANNOT_CAPTURE_CITY		"Tylko jednostki ladowe posiadajace mozliwosc ataku moga przejac wrogie miasto."
+IA_CAPITOL_WARNING			"Palac reprezentuje siedzibe naszego rzadu. Nie mozesz posiadac wiecej niz jednego palacu na raz. Kiedy nowy palac zostanie ukonczony, stary znajdujacy sie w miescie {city[0].name} bedzie sprzedany a siedziba naszego rzadu zostanie przeniesiona do miasta {city[1].name}."
+IA_PILLAGE_SUICIDE			"Jednostka zostala zniszczona kiedy spladrowano droge na nieprzekraczalnym terenie."
+IA_TERRAFORM_DEAD_TILE			"Wpierw musisz odkryc ochrone przyrody zanim bedziesz mogl przeksztalcac martwe segmenty."
+IA_CERTAIN_REVOLUTION		"{player[0].sir_cap}, nasz narod jest na krawedzi rewolucji.  Jesli zakonczysz teraz ture sprawy moga przybrac jeszcze powazniejszy obrot.  Czy jestes pewien, ze chcesz zakonczyc ture bez podjecia jakich kolwiek krokow w celu zmiany tej sytuacji?" 
+IA_CANNOT_AFFORD_MAINTENANCE		"{player[0].sir}, nie jestesmy w stanie dluzej utrzymywac wszystkich ulepszen miast i segmentow. Niedlugo nasz skarbiec zacznie swiecic pustkami.  Jesli zakonczysz teraz ture, bedziemy zmuszeni do sprzedania ulepszen w celu pokrycia strat. Czy napewno chcesz teraz zakonczyc ture?" 
+IA_CANNOT_AFFORD_SUPPORT		"{player[0].sir}, nie jestesmy w stanie dluzej utrzymywac wszystkich jednostek wojskowych. Jesli zakonczysz teraz ture, bedziemy zmuszeni do rozwiazania jednostek. Czy napewno chcesz teraz zakonczyc ture?"
+IA_WAR_DISCONTENT_RISING		"{player[0].sir_cap}, poniewaz zbyt duzo jednostek wojskowych znajduje sie z dala od swoich rodzimych miast ludzie czuja sie nieszczesliwi.  Moze powinienes rozwazyc rozwiazanie paru jednostek?"
 
 
 ## Diplomacy Messages ##
-BROKE_TREATY 				"{player[0].civ_name_singular} zerwali traktat z nacja {player[1].civ_name_plural}."
-NO_PIRACY_BROKEN 			"{player[0].civ_name_singular} zostali przylapani na pladrowaniu naszych szlakow handlowych."
-ECOPACT_BROKEN 				"{player[0].civ_name_singular} naruszyli pakt ekologicznty ktory z nami podpisali.  Ich miasta zatruwaja caly swiat!"
-ECOPACT_BROKEN_BY_YOU 			"{player[0].sir_cap}, zalamalismy pakt ekologiczny ktory podpisalismy z nacja {player[1].civ_name_plural}.  Oni nie sa z tego zadowoleni!"
-ECOPACT_BROKEN_BY_3RD 			"{player[0].sir_cap}, {player[0].civ_name_plural} zlamali pakt ekologiczny  ktory podpisali z nacja {player[1].civ_name_plural}."
-MILITARY_PACT_BROKEN_BY_YOU 		"{player[0].sir_cap}, nie wysylajac swoich wojsk na pomoc nacji {player[1].civ_name_plural}, naruszylismy pakt wojskowy ktory z nimi podisalismy.  {player[1].civ_name_singular} czuja sie oszukani."
-MILITARY_PACT_BROKEN_BY_AI 		"{player[0].sir_cap}, {player[1].civ_name_plural} nie dotrzymali zalozen paktu wojskowego ktory z nami podpisali, nie udzielili nam pomocy wojskowej w chwili gdy byla nam potrzebna."
+BROKE_TREATY				"{player[0].civ_name_singular} zerwali traktat z nacja {player[1].civ_name_plural}."
+NO_PIRACY_BROKEN			"{player[0].civ_name_singular} zostali przylapani na pladrowaniu naszych szlakow handlowych."
+ECOPACT_BROKEN				"{player[0].civ_name_singular} naruszyli pakt ekologicznty ktory z nami podpisali.  Ich miasta zatruwaja caly swiat!"
+ECOPACT_BROKEN_BY_YOU			"{player[0].sir_cap}, zalamalismy pakt ekologiczny ktory podpisalismy z nacja {player[1].civ_name_plural}.  Oni nie sa z tego zadowoleni!"
+ECOPACT_BROKEN_BY_3RD			"{player[0].sir_cap}, {player[0].civ_name_plural} zlamali pakt ekologiczny  ktory podpisali z nacja {player[1].civ_name_plural}."
+MILITARY_PACT_BROKEN_BY_YOU		"{player[0].sir_cap}, nie wysylajac swoich wojsk na pomoc nacji {player[1].civ_name_plural}, naruszylismy pakt wojskowy ktory z nimi podisalismy.  {player[1].civ_name_singular} czuja sie oszukani."
+MILITARY_PACT_BROKEN_BY_AI		"{player[0].sir_cap}, {player[1].civ_name_plural} nie dotrzymali zalozen paktu wojskowego ktory z nami podpisali, nie udzielili nam pomocy wojskowej w chwili gdy byla nam potrzebna."
 MILITARY_PACT_BROKEN_BY_3RD 		"{player[0}.sir_cap}, {player[1].country_name} zlamala pakt wojskowy ktory podpisala z nacja {player[2].civ_name_plural}."
 ALLIANCE_BROKEN 			"Dwulicowi {player[1].civ_name_singular} zaatakowali Nas, mimo sojuszu jaki byl zawarty miedzy nam!!"
 ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, zlamalismy sojusz jaki zawarlismy z nacja {player[1].civ_name_plural}.  {player[1].civ_name_singular} stracili do nas zaufanie!"
 ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}, wiesci donosza, ze {player[1].civ_name_singular} zerwali sojusz z nacja {player[2].civ_name_plural}."
-ALL_AGREEMENTS_BROKEN_BY_AI 		"{player[1].leader_name} ma dla nas wiadomosc, {player[0].sir}:  Due to external forces and extenuating circumstances, {player[2].country_name} can no longer honor its agreements with you.  Consider all Pacts, Treaties and Agreements with us null and void."
+ALL_AGREEMENTS_BROKEN_BY_AI		"{player[1].leader_name} ma dla nas wiadomosc, {player[0].sir}:  Due to external forces and extenuating circumstances, {player[2].country_name} can no longer honor its agreements with you.  Consider all Pacts, Treaties and Agreements with us null and void."
+YOU_BROKE_ALLIANCE			"You have broken an alliance with the {player[0].civ_name_plura}]."
+YOU_BROKE_CEASE_FIRE			"You have broken a peace treaty with the {player[0].civ_name_plural}."
+CANT_ATTACK_ALLIES			"You have an alliance with the {player[0].civ_name_plural}, you cannot attack them without first breaking the alliance. Do you wish to break the alliance now?"
+CANT_ATTACK_ALLIES_CAN_EXPEL		"Do you wish to break your treaty with the {player[0].civ_name_plural}? You may expel the units without breaking the treaty."
+CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0].civ_name_plural}. Are you sure you wish to continue?"
+CANT_ATTACK_TEAMMATES			"{player[0].leader_name} is your teammate, you cannot attack him."
+
 
 ## Empire & City Related ##
 UNIT_COMPLETED 				"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}."
@@ -151,6 +205,7 @@ UNIT_OBSOLETE_CIVWIDE 			"Odkrycie wynalazku o nazwie {advance[0].name} spowodow
 NO_SUPPORT 				"Jednostki zostaly rozwiazane z powodu braku srodkow na utrzymanie."
 ONE_OR_MORE_UNITS_WILL_CRASH 		"Twoja jednostka {unit[1].name} rozbije sie jesli nie zakonczy tury w miescie lub w bazie lotniczej."
 UNIT_EXPELLED 				"{player[0].civ_name_singular} usuneli niektore z naszych jednostek ze swojego panstwa."
+AT_LEAST_ONE_COULDNT_BE_EXPELLED	"The {player[0].civ_name_plural} were not able to find accomodations for all their armies in our territory. They pledge to remove their units as soon as possible."
 
 ## Warfare ##
 CITIES_CAPTURED_VICTIM 			"Miasto {city[0].name} zostalo przejete przez wrogie sily zbrojne!"
@@ -163,11 +218,16 @@ ADVANCE_FROM_CAPTURING_CITY 		"Dzieki zdobyciu miasta {city[0].name}, uzyskales 
 UNIT_VETERAN 				"Za walecznosc, twoja jednostka {unit[0].name} uzyskala status weteranow."
 
 ## Age Change Messages ##
-AGE_ONE_ENTERED 			"Nasze imperium zaczyna sie rozwijac.  Rozpoczyna siê dla nas Starozytnosc."
-AGE_TWO_ENTERED 			"Nasze imperium przezywa rozkwit kulturalny i naukowy.  Rozpoczyna siê dla nas Renesans."
-AGE_THREE_ENTERED 			"Potega Naszego imperium staje sie coraz wieksza.  Rozpoczyna siê dla nas Epoka Nowozytna."
-AGE_FOUR_ENTERED 			"Tajemnica zycia zostala przed nami odslonieta, teraz stoim u progu nowej epoki naukowej.  Rozpoczyna siê dla nas Epoka Genetyczna."
-AGE_FIVE_ENTERED 			"Coraz szybciej zblizamy sie do szczytu ludzkich osiagniec naukowych.  Rozpoczyna siê dla nas Epoka Diamentowa."
+AGE_ONE_ENTERED				"Nasze imperium zaczyna sie rozwijac.  Rozpoczyna siê dla nas Starozytnosc."
+AGE_TWO_ENTERED				"First written sources replace the verbal excessive quantity: We have entered the Classical Age."
+AGE_THREE_ENTERED			"On the ruins of ancient Rome, our nation continues to grow: We have entered the Middle Ages."
+AGE_FOUR_ENTERED			"Nasze imperium przezywa rozkwit kulturalny i naukowy.  Rozpoczyna siê dla nas Renesans."
+AGE_FIVE_ENTERED			"Our empire expects an era of exponential growth and enormous productivity, owing to the industrial revolution. We have entered the Industrial Age. " 
+AGE_SIX_ENTERED				"Potega Naszego imperium staje sie coraz wieksza.  Rozpoczyna siê dla nas Epoka Nowozytna."
+AGE_SEVEN_ENTERED			"Through the computer the mysteries of science are within our reach, and the people of our nation push away the boundaries of communication: We have entered the Information Age." 
+AGE_EIGHT_ENTERED 			"Tajemnica zycia zostala przed nami odslonieta, teraz stoim u progu nowej epoki naukowej.  Rozpoczyna siê dla nas Epoka Genetyczna."
+AGE_NINE_ENTERED 			"Coraz szybciej zblizamy sie do szczytu ludzkich osiagniec naukowych.  Rozpoczyna siê dla nas Epoka Diamentowa."
+AGE_TEN_ENTERED				"The study of all technologies is final: Our empire awaits an unknown Future..."
 
 ##                 ##
 ## Special Actions ##
@@ -351,13 +411,13 @@ PARTY_COMPLETE_ATTACKER 		"Nasz {unitrecord[0].name} zlozyl wizyte w miescie {ci
 
 ##Disabled Screen Buttons##
 
-CIV_STATUS_DISABLED  			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
-SCIENCE_STATUS_DISABLED  		"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
-CITY_STATUS_DISABLED   			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
-DIPLOMACY_STATUS_DISABLED  		"Wpierw musisz poznac inne imperium aby uzyskac dostep do tego ekranu."
-UNIT_STATUS_DISABLED  			"Musisz posiadac jednostki aby uzyskac dostep do tego ekranu."
-TRADE_STATUS_DISABLED  			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
-DIP_OFFER_ADVANCE_NONE 			"Brak wynalazkow do zaoferowania."
+CIV_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
+SCIENCE_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
+CITY_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
+DIPLOMACY_STATUS_DISABLED		"Wpierw musisz poznac inne imperium aby uzyskac dostep do tego ekranu."
+UNIT_STATUS_DISABLED			"Musisz posiadac jednostki aby uzyskac dostep do tego ekranu."
+TRADE_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
+DIP_OFFER_ADVANCE_NONE			"Brak wynalazkow do zaoferowania."
 
 ## Gaia Controller Endgame ##
 GC_DISCOVERED_SOLARIS_PROJECT_US 	"Excellent news, {player[0].sir}!!  We have successfully completed the Solaris Project!  We may now begin work on the Gaia Controller."
@@ -385,7 +445,60 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"We just received word that the {player[0].
 ### Multiplayer ###
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
-NEXT_HOT_SEAT_PLAYER 			"{player[0].leader_name} of the {player[0].civ_name_plural}, it is now your turn."
-#NEXT_EMAIL_PLAYER 			"Please mail the saved game on your desktop to {player[0].leader_name} ({string[0].name}) of the {player[0].civ_name_plural}."
-HOTSEAT_CITY_ATTACKED 			"The {player[0].civ_name_plural} attacked {city[0].name} with a {unit[0].name}."
-HOTSEAT_ARMY_ATTACKED 			"The {player[0].civ_name_plural} attacked your {unit[1].name} with a {unit[0].name}"
+#NETWORK_PLAYER_LEFT "[action.1.name] has left the game.  A computer player will take control of the exiting player's empire."
+#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the [player.1.civ_name_plural]"
+#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the [player.1.civ_name_plural], but that empire originally belonged to someone else.  Do you wish to eject them?"
+#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
+#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
+#NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
+#NETWORK_WAITING_ON_PLAYERS "Waiting on players"
+#NETWORK_WAITING_FOR_DATA "Waiting for data"
+#NETWORK_RESYNCING "Resynchronizing"
+NETWORK_PLAYER_STATUS_HUMAN "Local"
+NETWORK_PLAYER_STATUS_CONNECTED "Connected"
+NETWORK_PLAYER_STATUS_AI_OPEN "AI (Open)"
+NETWORK_PLAYER_STATUS_AI_CLOSED "AI (Closed)"NEXT_EMAIL_PLAYER			"Please mail the saved game on your desktop to {player[0].leader_name} ({action[0].name}) of the {player[0].civ_name_plural}."
+NEXT_HOT_SEAT_PLAYER			"{player[0].leader_name} of the {player[0].civ_name_plural}, it is now your turn."
+HOTSEAT_CITY_ATTACKED			"The {player[0].civ_name_plural} attacked {city[0].name} with a {unit[0].name}."
+HOTSEAT_ARMY_ATTACKED			"The {player[0].civ_name_plural} attacked your {unit[1].name} with a {unit[0].name}"
+HOTSEAT_HUMAN				"Human"
+HOTSEAT_AI				"Computer"
+
+###############
+##           ##
+##  Buttons  ##
+##           ##
+###############
+
+# Common buttons
+BUTTON_ACCEPT       "Accept"
+BUTTON_CANCEL       "Anuluj"
+BUTTON_CLOSE        "Zamknij"
+BUTTON_GOAL         "Cel"
+BUTTON_LIBRARY      "Library"
+BUTTON_MAYBE        "Maybe"
+BUTTON_YES          "Tak"
+BUTTON_NO           "Nie"
+BUTTON_OK           "Ok"
+BUTTON_RANDOM       "Random"
+BUTTON_READY        "Ready"
+BUTTON_REJECT       "Reject"
+BUTTON_RESEARCH     "Research"
+BUTTON_SET_PRICE    "Set Price"
+BUTTON_STEAL_THIS          "<- Steal This"
+BUTTON_EXPEL "Eksmisja"
+
+# Network buttons
+BUTTON_EJECT				"Eject"
+BUTTON_LET_THEM_STAY			"Let Them Stay"
+
+# Buttons for quitting the game
+BUTTON_CONTINUE "Continue"
+BUTTON_END_GAME "End Game"
+BUTTON_QUIT_GAME "Quit Game"
+
+# Some odd buttons, are those actually used?
+ACCEPT					"Accept"
+REJECT					"Reject"
+YES					"Tak"
+NO					"Nie"

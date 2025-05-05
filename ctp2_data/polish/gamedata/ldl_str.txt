@@ -1,16 +1,64 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (English)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the main strings.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
+# - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
+# - Added strings for political map - 6-Jul-2009 EPW
+# - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
+# -Added strings for view capital buttons - 4-Jan-EPW
+# -Added string for relationships 7-Jan-EPW
+#----------------------------------------------------------------------------
+
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"You are already offering that good. Replace old offer?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, [player.1.leader_name] has completed the Alien Life Project."
+ENDGAME_WON_OTHER				"All Civilizations will now bow to a new master, {player[0].leader_name} has completed the Alien Life Project."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	","
-
-###Strings Moved Over from Junk###
-
-CAPITALIZATION 	"Kapitalizacja "
-INFRASTRUCTURE 	"Infrastruktura "
 
 #Age Names#	
 AGE_NAME_ANCIENT	"Ancient"
@@ -19,10 +67,13 @@ AGE_NAME_MODERN		"Modern"
 AGE_NAME_GENETIC	"Genetic"
 AGE_NAME_DIAMOND	"Diamond"
 
-YOU_BROKE_ALLIANCE "You have broken an alliance with the [player.1.civ_name_plural]."
-YOU_BROKE_CEASE_FIRE "You have broken a peace treaty with the [player.1.civ_name_plural]."
+###Strings Moved Over from Junk###
+
+CAPITALIZATION					"Kapitalizacja "
+INFRASTRUCTURE					"Infrastruktura "
+BUILDINGNONE					"Empty"
+
 DIPxxx3_AGREEMENT_END_POLLUTION "Eco Pact"
-CANT_ATTACK_ALLIES "You have an alliance with the [player.1.civ_name_plural], you cannot attack them without first breaking the alliance.  Do you wish to break the alliance now?"
 X_LAB "X-lab"
 GENE_SEQUENCER "Gene Sequencer"
 
@@ -41,7 +92,6 @@ str_ldl_CANCEL_OFFER_CAPS	"CANCEL OFFER"
 str_ldl_No_item_selected_in_list	"No item selected in the list!"
 str_ldl_Foreign_Attitude	"Foreign Attitude"
 str_ldl_Local	"Local"
-str_ldl_Neutral	"Neutral"
 str_ldl_mp_dbase_out_of_synch	"Database is out of synch. Returning to Lobby"
 
 ##This is the latest batch from Add_str.txt 02-26-99##
@@ -53,10 +103,6 @@ str_ldl_nodialup		"You need to dialup, to use internet"
 str_ldl_connectionerr	"Network connection error"
 str_ldl_Enemy_Moves_Off		"Pokazywanie Ruchow Przeciwnika Wyl."
 str_ldl_Enemy_Moves_On		"Pokazywanie Ruchow Przeciwnika Wl."
-NETWORK_PLAYER_STATUS_HUMAN "Local"
-NETWORK_PLAYER_STATUS_CONNECTED "Connected"
-NETWORK_PLAYER_STATUS_AI_OPEN "AI (Open)"
-NETWORK_PLAYER_STATUS_AI_CLOSED "AI (Closed)"
 KEY_NAME_TAB "Tab"
 KEY_NAME_ENTER "Enter"
 KEY_NAME_SPACE "Space"
@@ -70,7 +116,6 @@ str_tbl_ldl_Close_Message "Zamknij Wiadomosc"
 str_tbl_ldl_Yes "Tak"
 str_tbl_ldl_No  "Nie"
 str_tbl_ldl_Quit "Wyjscie"
-
 
 
 str_tbl_ldl_Next_Round "Nastepna Tura"
@@ -96,25 +141,18 @@ str_tbl_ldl_Save_World "Szybkie Zapisanie"
 str_tbl_ldl_Load_World "Szybkie Wczytanie"
 
 
-
-SAVE_OVERWRITE	"Zamierzasz zapisac gre na istniejacym juz pliku.\nCzy chcesz kontynuowac?"
+SAVE_OVERWRITE					"Zamierzasz zapisac gre na istniejacym juz pliku.\nCzy chcesz kontynuowac?"
 
 str_ldl_Expectations	"Expectations"
 
 POLLUTION_HEAVY	"Heavy"
 POLLUTION_MODERATE	"Moderate"
 POLLUTION_LIGHT	"Light"
-POLLUTION_NONE	"Brak"
+POLLUTION_NONE					"Brak"
 POLLUTION_TOXIC	"Toxic"
 
 str_ldl_Total_City_Pollution	"Total City Pollution"
 str_ldl_Pollution_Level	"Pollution Level"
-
-
-
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the [player.1.civ_name_plural].  Are you sure you wish to continue?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "The [player.1.civ_name_plural] were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
-
 
 str_ldl_RES_CHANGE_BUTTON	"Rozdzielczosc Ekranu"
 str_ldl_RES_TITLE			"Rozdzielczosc Ekranu"
@@ -147,13 +185,11 @@ str_ldl_NonPolluter	"Non-polluter"
 str_ldl_PRODUCTIONTURN	"PRODUCTION/TURN:"
 
 
-str_ldl_Turns	"Tur"
+str_ldl_Turns					"Tur"
 
-DELETE_QUEUE	"Czy jestes pewien, ze chcesz usunac ta kolejke budowy?"
-str_tbl_ldl_Ongoing	"Ongoing"
-BUTTON_CONTINUE "Continue"
-BUTTON_END_GAME "End Game"
-LOADING	"Wczytywanie..."
+DELETE_QUEUE					"Czy jestes pewien, ze chcesz usunac ta kolejke budowy?"
+str_tbl_ldl_Ongoing				"Ongoing"
+LOADING						"Wczytywanie..."
 
 str_ldl_Server_Name_COLON "Server Name:"
 
@@ -194,9 +230,6 @@ str_ldl_AFB_ECD		"ECD's (Built/Next Stage/Final):"
 str_ldl_AFB_FIELD		"Fields (Built/Next Stage/Final):"
 str_ldl_AFB_CHANCE	"Chance of Failure:"
 
-
-BUTTON_EXPEL "Eksmisja"
-
 ## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title			"Monuments"
 str_ldl_Monument_Upgrade_Available	"Select a monument to upgrade."
@@ -213,7 +246,7 @@ str_tbl_ldl_FOOD_COLON	"FOOD:"
 str_tbl_ldl_PROD_COLON	"PROD:"
 str_tbl_ldl_GOLD_COLON	"GOLD:"
 
-str_ldl_Message	"Wiadomosc"
+str_ldl_Message					"Wiadomosc"
 ##
 
 ## rsh012199 - added for instant action popups
@@ -225,10 +258,6 @@ str_ldl_CAPS_EXPEL "EXPEL"
 str_ldl_CAPS_CANCEL_MOVE "CANCEL MOVE"
 str_ldl_END_TUTORIAL "END TUTORIAL"
 
-
-CANT_ATTACK_ALLIES_CAN_EXPEL "Do you wish to break your treaty with the [player.1.civ_name_plural]?  You may expel the units without breaking the treaty."
-
-
 str_tbl_ldl_You_Need_Embassy_To_Demand	"You need to have an embassy to demand advances."
 str_tbl_ldl_GIFT_MAP	"GIFT MAP"
 
@@ -238,10 +267,6 @@ str_tbl_ldl_FAIR		"BAD"
 str_tbl_ldl_AVERAGE		"AVERAGE"
 str_tbl_ldl_GOOD		"GOOD"
 str_tbl_ldl_EXCELLENT	"EXCELLENT"
-##
-
-## rsh011899 - added for civ status screen
-str_ldl_CAPS_GOVERNMENT	"GOVERNMENT"
 ##
 
 str_ldl_POPSCIENCE "Gold converted to Science"
@@ -265,6 +290,7 @@ str_ldl_Config_Header "KONFIGURACJA"
 str_ldl_Game_Header "GRA"
 str_ldl_Map_Header "MAPA"
 str_ldl_QUITTOSHELL "WYJSCIE"
+
 str_ldl_Tutorial_Advice_Off "Porady Samouczka Wyl."
 str_ldl_Tutorial_Advice_On "Porady Samouczka Wl."
 str_ldl_Right_Click_Move "Right Click On"
@@ -375,53 +401,6 @@ str_ldl_AdvisorTurn "Turn"
 #Rename City
 #Delete
 
-#### TILE IMPROVEMENT DESCRIPTIONS #######
-DESCRIPTION_TILEIMP_FARMS	"Farms.  Cost 200 PW."
-DESCRIPTION_TILEIMP_ADVANCED_FARMS	"Advanced Farms.  Cost 500 PW."
-DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"Hydroponic Farms. Cost 1400 PW."
-DESCRIPTION_TILEIMP_MINES	"Mines. Minimum Cost 300 PW."
-DESCRIPTION_TILEIMP_ADVANCED_MINES	"Advanced Mines. Minimum Cost 800 PW."
-DESCRIPTION_TILEIMP_MEGA_MINES	"Mega Mines. Minimum Cost 1600 PW."
-DESCRIPTION_TILEIMP_UNDERSEA_MINES	"Undersea Mines. Minimum Cost 400 PW."
-DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"Advanced Undersea Mines. Minimum Cost 1000 PW."
-DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"Mega Undersea Mines. Minimum Cost 2200 PW."
-DESCRIPTION_TILEIMP_NETS	"Nets. Minimum Cost 200 PW."
-DESCRIPTION_TILEIMP_FISHERIES	"Fisheries. Minimum Cost 500 PW."
-DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"Automated Fisheries. Minimum Cost 1400 PW."
-DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"Assembly Bays.  Cost 600 PW."
-DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"Advanced Assembly Bays.  Cost 1400 PW."
-DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"Mega Assembly Bays.  Cost 2200 PW."
-DESCRIPTION_TILEIMP_FOOD_PODS	"Food Pods.  Cost 600 PW."
-DESCRIPTION_TILEIMP_FOOD_MODULES	"Food Modules.  Cost 1400 PW."
-DESCRIPTION_TILEIMP_FOOD_TANKS	"Food Tanks.  Cost 2200 PW."
-DESCRIPTION_TILEIMP_RUINS	"Ruins"
-DESCRIPTION_TILEIMP_ROAD	"Roads.  Minimum Cost 60 PW."
-DESCRIPTION_TILEIMP_RAILROAD	"Railroads.  Minimum Cost 120 PW."
-DESCRIPTION_TILEIMP_MAGLEV	"MagLevs.  Minimum Cost 240 PW."
-DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"Undersea Tunnels.  Minimum Cost 1200 PW."
-
-
-#### installation DESCRIPTIONS ####
-DESCRIPTION_INSTALLATION_LISTENING_POSTS	"Listening Post.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_RADAR_STATIONS	"Radar Station.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_AIR_BASES	"Airbase.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_FORTIFICATIONS	"Fortification.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_SONAR_BUOYS	"Sonar Buoy.  Cost 150 PW."
-
-#### terrain transform DESCRIPTIONS	"####"
-DESCRIPTION_DESERTS	"Desert"
-DESCRIPTION_FORESTS	"Forest"
-DESCRIPTION_GLACIERS	"Glacier"
-DESCRIPTION_GRASSLAND	"Grassland"
-DESCRIPTION_HILLS	"Hill"
-DESCRIPTION_RAINFOREST	"Jungle"
-DESCRIPTION_ALPINE	"Mountain"
-DESCRIPTION_SAVANNAH	"Plains"
-DESCRIPTION_SWAMPS	"Swamps"
-DESCRIPTION_TUNDRA	"Tundra"
-
-
-
 ###Keeper Stuff###
 
 ## KEEPER STUFF 1 ##
@@ -469,8 +448,6 @@ str_ldl_Civ_Score		"Punktacja"
 str_ldl_Year_Founded_COLON	"Year Founded:"
 str_ldl_Turns_to_Next_Disaster	"Turns to Next Disaster"
 
-
-
 str_ldl_CAPS_MAKE_QUEUE	"MAKE QUEUE"
 str_ldl_CAPS_LOAD_QUEUE "LOAD QUEUE"
 str_ldl_CAPS_DELETE_QUEUE "DELETE QUEUE"
@@ -488,22 +465,6 @@ str_ldl_CAPS_FOREIGN	"FOREIGN"
 
 str_ldl_NEXT	"NEXT"
 
-# Age Names
-AGE_NAME_ANCIENT  "Ancient Age"
-AGE_NAME_RENAISS  "Renaissance Age"
-AGE_NAME_MODERN   "Modern Age"
-AGE_NAME_GENETIC  "Genetic Age"
-AGE_NAME_DIAMOND  "Diamond Age"
-
-
-
-
-
-
-
-
-
-
 # strings for victory window
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"YOUR SCORE IS:"
 str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"YOUR NAME WILL GO DOWN IN THE ANNALS OF HISTORY AS"
@@ -511,6 +472,7 @@ str_ldl_POPULATION_COLON	"POPULATION:"
 str_ldl_CIV_SCORE			"SCORE"
 str_ldl_POWER_GRAPH			"POWER GRAPH"
 str_ldl_DEFEAT				"DEFEAT"
+
 str_ldl_THE_DESTITUTE			"THE DESTITUTE"
 str_ldl_THE_SQUIRREL_HEARTED	"THE SQUIRREL HEARTED"
 str_ldl_THE_RED_FACED			"THE RED FACED"
@@ -537,44 +499,6 @@ str_tbl_ldl_Destination			"Destination"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
 
-
-##Network Game Messages##
-
-#NETWORK_PLAYER_LEFT "[action.1.name] has left the game.  A computer player will take control of the exiting player's empire."
-#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the [player.1.civ_name_plural]"
-#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the [player.1.civ_name_plural], but that empire originally belonged to someone else.  Do you wish to eject them?"
-#BUTTON_EJECT "Eject"
-#BUTTON_LET_THEM_STAY "Let Them Stay"
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
-#NETWORK_WAITING_ON_PLAYERS "Waiting on players"
-#NETWORK_WAITING_FOR_DATA "Waiting for data"
-#NETWORK_RESYNCING "Resynchronizing"
-
-
-# Button label strings
-BUTTON_ACCEPT       "Accept"
-BUTTON_CANCEL       "Anuluj"
-BUTTON_CLOSE        "Zamknij"
-BUTTON_GOAL         "Cel"
-BUTTON_LIBRARY      "Library"
-BUTTON_MAYBE        "Maybe"
-BUTTON_NO           "Nie"
-BUTTON_OK           "Ok"
-BUTTON_RANDOM       "Random"
-BUTTON_READY        "Ready"
-BUTTON_REJECT       "Reject"
-BUTTON_RESEARCH     "Research"
-BUTTON_SET_PRICE    "Set Price"
-BUTTON_STEAL_THIS          "<- Steal This"
-BUTTON_YES          "Tak"
-ACCEPT  "Accept"
-REJECT  "Reject"
-YES		"Tak"
-NO 		"Nie"
 str_ldl_Abort	"Abort"
 str_ldl_Open	"Open"
 str_ldl_Close	"Zamknij"
@@ -638,6 +562,7 @@ str_ldl_Buy_Now	"Buy Now"
 str_ldl_BY_YOU	"BY YOU"
 str_ldl_Cancel	"Anuluj"
 str_ldl_Cancel_Route	"Cancel Route"
+
 str_ldl_CAPS_ACTION	"AKCJA"
 str_ldl_CAPS_ADVANCE	"ADVANCE"
 str_ldl_CAPS_ADVANCES	"WYNALAZKI"
@@ -666,7 +591,7 @@ str_ldl_CAPS_GOLD	"GOLD"
 str_ldl_CAPS_GOLD_COLON	"GOLD:"
 str_ldl_CAPS_GOODS	"TOWARY"
 # Spacing changed - updated string in add_ldl
-# str_ldl_CAPS_GREAT_LIBRARY	"WIELKA BIBLIOTEKA"
+# 
 str_ldl_CAPS_HAPPINESS	"ZADOWOLENIE"
 str_ldl_CAPS_HAPPY	"HAPPY"
 str_ldl_CAPS_HEALTH	"HEALTH"
@@ -1507,7 +1432,32 @@ str_tbl_ldl_Random_Order_On	"Losowe Wybier. Wl"
 str_tbl_ldl_Random_Order_Off  "Losowe Wybier. Wyl"
 str_ldl_Fuel_COLON  "Fuel:"
 
+### New World Shape Strings ###
 
+str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
+str_ldl_North_and_South_edges_of_the_map_connect	"North and South edges of the map connect."
+str_ldl_Uranus_World					"Uranus World"
+str_tbl_ldl_Uranus_World				"Uranus World"
+
+### New Single Player Game Player Screen Strings ###
+
+str_ldl_SPNGPS_NumPlayerSpinner			"Number of players"
+str_ldl_SPNGPS_MaxPlayerSpinner			"Maximum number of players"
+str_ldl_SPNGPS_PlayerSpinner			"Start player"
+
+str_ldl_SPNGPS_NumPlayerText			"Sets the number of players in the new game."
+str_ldl_SPNGPS_MaxPlayerText			"Sets the maximum number of civilizations that can be in the game at the same time."
+str_ldl_SPNGPS_PlayerText			"Sets the start player. Determines the civ color."
+
+### Added Disclaimer Strings ###
+
+str_ldl_Disclaimer1				"THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
+str_ldl_Disclaimer2				"This version of Call To Power 2 was developed at http://apolyton.net"
+str_ldl_Disclaimer3				"Contact the authors at ctp2source@apolyton.net"
+
+### Version String ###
+
+str_ldl_version					"2004-07-26"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -1537,7 +1487,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES "{player[0].leader_name} is your teammate, you cannot attack him."
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -1552,8 +1501,6 @@ str_tbl_ldl_upk108.tga	"upk108.tga"
 str_tbl_ldl_upk109.tga	"upk109.tga"
 str_tbl_ldl_upk110.tga	"upk110.tga"
 str_tbl_ldl_upk111.tga	"upk111.tga"
-
-
 
 
 # Junk 1 #
@@ -1608,52 +1555,10 @@ str_ldl_Current_Setting	"Current Setting"
 str_ldl_Current_Supply	"Current Supply"
 str_ldl_demand_a_map	"You will demand a map of uncharted lands"
 str_ldl_Deplorable	"Deplorable"
-str_ldl_DESCRIPTION_INSTALLATION_X_RAY_MINES	"DESCRIPTION_INSTALLATION_X_RAY_MINES"
 str_ldl_Debug_version	"Debug version won't be here in final release."
 str_ldl_Defense_COLON	"Defense:"
 str_ldl_d	"d"
-str_ldl_DESCRIPTION_ALPINE	"DESCRIPTION_ALPINE"
 str_ldl_Description_COLON	"Description:"
-str_ldl_DESCRIPTION_DESERTS	"DESCRIPTION_DESERTS"
-str_ldl_DESCRIPTION_FORESTS	"DESCRIPTION_FORESTS"
-str_ldl_DESCRIPTION_GLACIERS	"DESCRIPTION_GLACIERS"
-str_ldl_DESCRIPTION_GRASSLAND	"DESCRIPTION_GRASSLAND"
-str_ldl_DESCRIPTION_HILLS	"DESCRIPTION_HILLS"
-str_ldl_DESCRIPTION_INSTALLATION_AIR_BASES	"DESCRIPTION_INSTALLATION_AIR_BASES"
-str_ldl_DESCRIPTION_INSTALLATION_DRYDOCK	"DESCRIPTION_INSTALLATION_DRYDOCK"
-str_ldl_DESCRIPTION_INSTALLATION_FORTIFICATIONS	"DESCRIPTION_INSTALLATION_FORTIFICATIONS"
-str_ldl_DESCRIPTION_INSTALLATION_LAND_MINES	"DESCRIPTION_INSTALLATION_LAND_MINES"
-str_ldl_DESCRIPTION_INSTALLATION_LISTENING_POSTS	"DESCRIPTION_INSTALLATION_LISTENING_POSTS"
-str_ldl_DESCRIPTION_INSTALLATION_MAGNETIC_MINES	"DESCRIPTION_INSTALLATION_MAGNETIC_MINES"
-str_ldl_DESCRIPTION_INSTALLATION_RADAR_STATIONS	"DESCRIPTION_INSTALLATION_RADAR_STATIONS"
-str_ldl_DESCRIPTION_INSTALLATION_SONAR_BUOYS	"DESCRIPTION_INSTALLATION_SONAR_BUOYS"
-str_ldl_DESCRIPTION_INSTALLATION_SPACEDOCK	"DESCRIPTION_INSTALLATION_SPACEDOCK"
-str_ldl_DESCRIPTION_RAINFOREST	"DESCRIPTION_RAINFOREST"
-str_ldl_DESCRIPTION_SAVANNAH	"DESCRIPTION_SAVANNAH"
-str_ldl_DESCRIPTION_SWAMPS	"DESCRIPTION_SWAMPS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_FARMS	"DESCRIPTION_TILEIMP_ADVANCED_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_MINES	"DESCRIPTION_TILEIMP_ADVANCED_MINES"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES"
-str_ldl_DESCRIPTION_TILEIMP_FARMS	"DESCRIPTION_TILEIMP_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_FISHERIES	"DESCRIPTION_TILEIMP_FISHERIES"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_MODULES	"DESCRIPTION_TILEIMP_FOOD_MODULES"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_PODS	"DESCRIPTION_TILEIMP_FOOD_PODS"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_TANKS	"DESCRIPTION_TILEIMP_FOOD_TANKS"
-str_ldl_DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"DESCRIPTION_TILEIMP_HYDROPONIC_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_MAGLEV	"DESCRIPTION_TILEIMP_MAGLEV"
-str_ldl_DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY"
-str_ldl_DESCRIPTION_TILEIMP_MEGA_MINES	"DESCRIPTION_TILEIMP_MEGA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_MINES	"DESCRIPTION_TILEIMP_MINES"
-str_ldl_DESCRIPTION_TILEIMP_NETS	"DESCRIPTION_TILEIMP_NETS"
-str_ldl_DESCRIPTION_TILEIMP_RAILROAD	"DESCRIPTION_TILEIMP_RAILROAD"
-str_ldl_DESCRIPTION_TILEIMP_ROAD	"DESCRIPTION_TILEIMP_ROAD"
-str_ldl_DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"DESCRIPTION_TILEIMP_ROBOTIC_DOCKS"
-str_ldl_DESCRIPTION_TILEIMP_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL"
-str_ldl_DESCRIPTION_TUNDRA	"DESCRIPTION_TUNDRA"
 str_ldl_DF	"DF"
 str_ldl_DISCONTENT	"DISCONTENT"
 str_ldl_Dumb	"Dumb"
@@ -2085,24 +1990,6 @@ str_SprEd_Loop " Loop"
 str_SprEd_FacingPlus " Facing +"
 str_SprEd_FacingMinus " Facing -"
 
-# MDS 091300
-# Added for Scenario Editor buttons
-#
-str_tbl_ldl_XWrap		"XWrap"
-str_tbl_ldl_YWrap		"YWrap"
-str_tbl_ldl_Cut			"Cut Selected Region"
-str_tbl_ldl_Copy		"Copy Selected Region"
-str_tbl_ldl_Paste		"Paste Region"
-str_tbl_ldl_SmallBrush	"Small Brush"
-str_tbl_ldl_MedBrush	"Medium Brush"
-str_tbl_ldl_LargeBrush	"Large Brush"
-str_tbl_ldl_SaveClip	"Save Clip"
-str_tbl_ldl_LoadClip	"Load Clip"
-str_tbl_ldl_Explore		"Set Map Explored"
-str_tbl_ldl_Unexplore	"Set Map Unexplored"
-str_tbl_ldl_Fog			"Toggle Fog of War"
-
-
 
 
 ################################
@@ -2257,6 +2144,8 @@ str_ldl_ShowQueue     			"Show Queue"
 str_ldl_EditQueue 			"Budowa"
 str_ldl_HideQueue 			"Hide Queue"
 
+str_ldl_OptimizeSpecialists			"Optimize Specialists"
+
 str_ldl_Costs 				"Costs"
 str_ldl_Gives 				"Gives"
 str_ldl_YouHave 			"You Have"
@@ -2267,6 +2156,11 @@ str_ldl_Sell 				"Sprzedaj"
 str_ldl_Population 			"Pop:"
 str_ldl_Growth 				"Growth:"
 str_ldl_CityList 			"City List"
+
+str_ldl_ConversionLoss				"Conversion Loss"
+str_ldl_FranchiseLoss				"Franchise Loss"
+
+str_ldl_GrowthTurns				"Growth Turns"
 
 str_ldl_DipProposalsReceived 		"Proposals Received"
 str_ldl_DipProposalsMade     		"Proposals Sent"
@@ -2389,6 +2283,11 @@ str_ldl_SingleUnits 			"Inne jednostki"
 str_ldl_ArmyCount 			"W armi: %d"
 str_ldl_Armies 				"Armie"
 
+
+##
+## Scenario Editor strings
+##
+
 str_ldl_ScenYear 			"Rok"
 str_ldl_NumPlayers 			"# Players"
 
@@ -2426,6 +2325,29 @@ str_ldl_FileName 			"Plik:"
 
 str_ldl_Leader 				"Imie przywodcy: "
 str_ldl_CityName 			"Nazwa miasta: "
+
+
+# MDS 091300
+# Added for Scenario Editor buttons
+#
+str_tbl_ldl_XWrap		"XWrap"
+str_tbl_ldl_YWrap		"YWrap"
+str_tbl_ldl_Cut			"Cut Selected Region"
+str_tbl_ldl_Copy		"Copy Selected Region"
+str_tbl_ldl_Paste		"Paste Region"
+str_tbl_ldl_SmallBrush	"Small Brush"
+str_tbl_ldl_MedBrush	"Medium Brush"
+str_tbl_ldl_LargeBrush	"Large Brush"
+str_tbl_ldl_SaveClip	"Save Clip"
+str_tbl_ldl_LoadClip	"Load Clip"
+str_tbl_ldl_Explore		"Set Map Explored"
+str_tbl_ldl_Unexplore	"Set Map Unexplored"
+str_tbl_ldl_Fog			"Toggle Fog of War"
+
+
+##
+## Order Strings
+##
 
 str_ldl_order_attack 			"Atak"
 str_ldl_order_move 			"Ruch"
@@ -2599,6 +2521,23 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"Utrz. ulepszen:"
 str_ldl_DD_SCIENCE_LABEL			"Nauka:"
 str_ldl_DD_SAVINGS_LABEL			"Zysk:"
 str_ldl_DD_DETAILS					"Szczegoly"
+str_ldl_DD_OPTIMIZE_SLIDERS			"Optimize Sliders"
+str_ldl_DD_TERRAIN_LABEL			"Terrain:"
+str_ldl_DD_TCOMMERCE_LABEL			"Commerce:"
+str_ldl_DD_BUILDINGS_LABEL			"Buildings:"
+str_ldl_DD_FARMERS_LABEL			"Farmers:"
+str_ldl_DD_LABORERS_LABEL			"Laborers:"
+str_ldl_DD_GOVERNMENT_LABEL			"Government:"
+str_ldl_DD_WAGES_EFFECT_LABEL			"Worker Wages:"
+str_ldl_DD_SCIENTISTS_LABEL			"Scientists:"
+str_ldl_DD_MERCHANTS_LABEL			"Merchants:"
+str_ldl_DD_FEATS_AND_WONDERS_LABEL		"Feats & Wonders:"
+str_ldl_DD_TRADE_LABEL				"Trade:"
+str_ldl_DD_CONVERSIONS_LABEL			"Conversions:"
+str_ldl_DD_UNIT_SUPPORT_LABEL			"Unit Support:"
+str_ldl_DD_ENEMY_LABEL				"Enemy:"
+str_ldl_DD_SCIENCE_TITLE			"SCIENCE"
+str_ldl_DD_GOLD_TITLE				"GOLD"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT				"Bierzacy ustroj"
 str_ldl_DD_GOV_COMPARE				"Porownaj z:"
@@ -2797,23 +2736,32 @@ str_tbl_ldl_InProgress			"Game in progress:"
 str_tbl_ldl_Defeat				"Defeat:"
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY	"WIELKA BIBLIOTEKA"
 str_ldl_GreatLibraryGoalSetTo "Cel ustawiony na: %s"
 str_ldl_SEARCH_WORD "Szukaj:"
 str_ldl_TECH_TREE "Drzew. Technologiczne"
 str_ldl_SET_GOAL	"Ustaw cel"
-
-
+str_ldl_SORT_BY_AGE				"Sort by Age"
 
 
 # Ranking Tab
-str_ldl_RANKING_MILITARY "Wojskowy"
-str_ldl_RANKING_ECONOMIC "Ekonomiczny"
-str_ldl_RANKING_SCIENTIFIC "Naukowy"
-str_ldl_RANKING_OVERALL "Caloksztalt"
-str_ldl_INFO_RANKING_TAB "Ranking"
-str_ldl_RANKING_RANK "Ranking:"
-str_ldl_LINE_BUTTON "Wykres-liniowy"
-str_ldl_ZEROSUM_BUTTON "Wykres-warstwowy"
+str_ldl_RANKING_MILITARY			"Military"
+str_ldl_RANKING_ECONOMIC			"Economic"
+str_ldl_RANKING_SCIENTIFIC			"Scientific"
+str_ldl_RANKING_OVERALL				"Overall"
+str_ldl_RANKING_POLLUTION			"Pollution"
+str_ldl_RANKING_TRADE				"Trade"
+str_ldl_RANKING_GOLD				"Gold"
+str_ldl_RANKING_CITIES				"Cities"
+str_ldl_RANKING_POPULATION			"Population"
+str_ldl_RANKING_AREA				"Area"
+str_ldl_RANKING_UNITS				"Units"
+str_ldl_RANKING_BUILDINGS			"Buildings"
+str_ldl_RANKING_WONDERS				"Wonders"
+str_ldl_RANKING_RANK				"Rank:"
+str_ldl_INFO_RANKING_TAB			"Ranking"
+str_ldl_LINE_BUTTON					"Wykres-liniowy"
+str_ldl_ZEROSUM_BUTTON				"Wykres-warstwowy"
 
 # Timeline Tab
 str_ldl_INFO_TIMELINE_TAB "Timeline"
@@ -2842,6 +2790,7 @@ str_ldl_DipDetails_LeaderPersonality	"Osobowosc przywodcy: {player[0].leaderpero
 str_ldl_DipDetails_EmbassyMsg			"* Aby zobaczyc szczegolowe informacje musisz zalozyc ambasade."
 str_ldl_DipDetails_NoEmbassy			"<Brak ambasady>"
 
+# Tile improvent panel
 str_ldl_ImproveLand "Ladowe"
 str_ldl_ImproveOcean "Morskie"
 str_ldl_ImproveSpecial "Specialne"
@@ -2852,10 +2801,13 @@ str_ldl_ImproveTerraformOcean "Przeksztalcenia Oceanu"
 str_ldl_RADAR_MAP_UNITS		"Units"
 str_ldl_RADAR_MAP_CITIES	"Miasta"
 str_ldl_RADAR_MAP_BORDERS	"Borders"
+str_ldl_RADAR_MAP_POLITICAL			"Political"
+str_ldl_RADAR_MAP_CAPITOLS			"Capitols"
+str_ldl_RADAR_MAP_RELATIONSHIPS		"Relationships"
 
 str_ldl_BV_RETREAT "Odwrot"
 
-ADVANCE_NO_SPECIFIC_ADVANCES "Umozliwia badania nad nowymi wynalazkami"
+ADVANCE_NO_SPECIFIC_ADVANCES			"Umozliwia badania nad nowymi wynalazkami"
 
 str_ldl_PollutionList_Population "Zanieczyszczenia komunalne"
 str_ldl_PollutionList_Production "Zanieczyszczenia przemyslowe"
@@ -2878,11 +2830,9 @@ TRADE_ROUTE_RESET 			"Trade route reset!"
 
 VICTORY_ENSLAVEMENT_CITY 		"Your {unit[0].name} has captured a new slave and sent it to {city[0].name}."
 
-HOTSEAT_HUMAN "Human"
-HOTSEAT_AI "Computer"
+
 
 SHOW_ME "Show me"
-BUTTON_QUIT_GAME "Quit Game"
 
 TEST_BEGIN_TURN "myValue's value is {myValue}"
 TEST_UNIT_KILLED "A {unit[0].name} was killed"
@@ -3138,3 +3088,132 @@ str_profile_AutoOpenCityWindow 			"Okno zarzadcy budowy podczas tworzenia miasta
 str_profile_ShowEnemyHealth 			"Stan zdrowia jednostek przeciwnika"
 str_profile_ShowCityInfluence 			"Obszar wplywu miast"
 str_profile_ShowPoliticalBorders 		"Granice panstw"
+str_profile_EndTurnSound                        "End Turn Sound"
+str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
+str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
+str_profile_ShowOrderUnion                      "Show All Army Orders" 
+str_profile_RecentAtTop                         "Put New Messages At Top"
+str_profile_CityClick                           "Select City Instead Of Army"
+str_profile_DebugSlic                           "Slic Debug Messages"
+str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
+str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
+str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_Upgrade                             "Unit upgrading"
+str_profile_SmoothBorders                       "Smooth empire borders"
+str_profile_CivFlags                            "Show Civilization Unit flags"
+str_profile_NoAIProductionDeficit               "AI No Production Deficit"
+str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI City Defense Bonus"                         # AI population adds to city defenses
+str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Revolting cities create barbarians"            # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
+str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
+str_profile_DebugCityAstar                      "Debug road build path"
+str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"
+
+# Added for extended keyboard mapping options keys 6/2004 L. Hirth
+str_tbl_ldl_Music_Options			"Music options"
+str_tbl_ldl_Decend				"Decend"
+str_tbl_ldl_Execute_Eyepoint			"Focus on object (eye)"
+str_tbl_ldl_Move_Order				"Move order"
+str_tbl_ldl_End_Unit_Turn			"End unit turn"
+str_tbl_ldl_Process_Unit_Orders			"Process given unit orders"
+str_tbl_ldl_Group_Army				"Group all units to army"
+str_tbl_ldl_Ungroup_Army			"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug			"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test				"Rand test (playtest)"
+str_tbl_ldl_Command_Enter			"Command enter (playtest)"
+str_tbl_ldl_Command_Enter_Alternate		"Command enter alternate (playtest)"
+
+# New gamesetting options
+#implemented
+str_ldl_Army_Names_On				"Show Army Names"
+str_ldl_Army_Names_Off				"Hide Army Names"
+str_ldl_Civ_Flags_On				"Show Nation Flags"
+str_ldl_Civ_Flags_Off				"Hide Nation Flags"
+str_ldl_Show_City_Prod_Off			"Hide City Production"
+str_ldl_Show_City_Prod_On			"Show City Production"
+str_ldl_SmoothBorders_On			"Smooth Icon Borders"
+str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
+str_ldl_Good_Animations_Off			"Good Animations Off"
+str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+
+str_tbl_ldl_CityCaptureOptions_On		"City Capture Options - On"
+str_tbl_ldl_CityCaptureOptions_Off		"City Capture Options - Off"
+str_tbl_ldl_OneCityChallenge_On			"One City Challenge - On"
+str_tbl_ldl_OneCityChallenge_Off		"One City Challenge - Off"
+str_tbl_ldl_RevoltCasualties_On			"Riots Kill Population - On"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltCasualties_Off		"Riots Kill Population - Off"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"Riots Create Barbarians - On"			# Revolting city creates barbarians
+str_tbl_ldl_RevoltInsurgents_Off		"Riots Create Barbarians - Off"			# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians - On"		# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Spawn Barbarians - Off"		# Entrenched barbs create more barbs
+str_tbl_ldl_GoldPerUnitSupport_On		"Unit Gold Support - On"				# All pay gold hunger unit support.
+str_tbl_ldl_GoldPerUnitSupport_Off		"Unit Gold Support - Off"				# 
+str_tbl_ldl_GoldPerCity_On			"City Maintenance Costs - On"			# Everyone pays gold amount per city
+str_tbl_ldl_GoldPerCity_Off			"City Maintenance Costs - Off"			# AI pays gold amount per city
+str_tbl_ldl_Upgrade_On				"Unit Upgrading - On"				# Units can be upgraded
+str_tbl_ldl_Upgrade_Off				"Unit Upgrading - Off"				# Units cannot be upgraded
+
+str_ldl_DebugAI					"Debug AI"
+str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
+str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
+str_ldl_Debug_AI_On				"Show Debug AI Text"
+str_ldl_Debug_AI_Off				"Hide Debug AI Text"
+str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations - On"
+str_tbl_ldl_NonRandomCivs_Off			"Non-Random AI Nations - Off"
+str_tbl_ldl_NoCityLimit_On			"No City Limits - On"				# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"No City Limits - Off"				# City limit for all players
+str_tbl_ldl_NewCombat_Off			"New Combat - Off"
+str_tbl_ldl_NewCombat_On			"New Combat - On"
+str_tbl_ldl_NoGoodyHuts_Off			"No Ruins - Off"
+str_tbl_ldl_NoGoodyHuts_On			"No Ruins - On"
+# Custom map window (wet/dry etc.)
+str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
+str_tbl_ldl_RandomCustomMap_On			"Random Settings"
+
+# Rules window description strings.
+str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
+str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
+str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."
+str_tbl_ldl_RuleDetail_RiotsCreateBarbarians	"Riots Create Barbarians\nWhen a city riots there is a chance of barbarians appearing near the city. The chance is increased with the barbarian level and further increased if your civilization has a conflicting city style (or culture) with the city."
+str_tbl_ldl_RuleDetail_RiotsKillPopulation	"Riots Kill Population\nWhen a city of size 10 or greater riots there is a chance of people being killed in the city."
+str_tbl_ldl_RuleDetail_BarbsSpawnBarbs		"Barbarians Spawn Barbarians\nIncreases the chance of more barbarians appearing."
+str_tbl_ldl_RuleDetail_NonRandomCivs		"Non-Random AI Nations\nAI civilizations will be chosen in order (rather than at random) from the civilization database. See civilisation.txt for the order of all civilizations."
+str_tbl_ldl_RuleDetail_Upgrade			"Unit Upgrading\nAllows players to upgrade units using gold savings. See the Great Library on each unit for upgrade types, and the Upgrade article in the GL for an explanation on the use and costs of upgrading."
+str_tbl_ldl_RuleDetail_NewCombat		"New Combat\nDuring battle the defending army's front line will only use their defense rating, and the attacking army's front line will only use their attack rating. Veteran units will also receive a defensive boost."
+str_tbl_ldl_RuleDetail_NoGoodyHuts		"No Ruins\nNo ruins will be placed on the map for a new game."
+str_tbl_ldl_RuleDetail_UnitGold			"Unit Gold Support\nAs well as the normal unit production upkeep, units will cost gold savings to support. See the Great Library entry for each unit's gold support cost."
+str_tbl_ldl_RuleDetail_CityMaintenance		"City Maintenance Costs\nEach city will require it's city size in commerce to maintain."
+str_tbl_ldl_RuleDetail_NoCityLimit		"No City Limits\nNo city limits will allow all players to exceed government city caps without happiness penalties."
+str_tbl_ldl_RuleDetail_Ages			"Custom Ages\nIf an advanced starting age is chosen new cities will receive all buildings up to and including the starting age for free."
+
+# Not Implemented
+str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness - On"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_Off		"Conflicting Citystyle Unhappiness - Off"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_SE_DebugAI					"debug"
+str_SE_ShowEnemyHealth				"show"
+str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_Off			"Entrenched Barbarians settle cities - Off"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_Off			"Entrenched Barbarians create Tile Imps - Off"	# Entrenched barbarians create an imp
+str_tbl_ldl_AICityDefenderBonus_On		"AI City Defense bonus - On"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_On			"Entrenched Barbarians settle cities - On"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_On			"Entrenched Barbarians create Tile Imps - On"	# Entrenched barbarians create an imp
+str_tbl_ldl_AINoSinking_On			"AI ships don't sink"				# AI ships don't sink
+str_tbl_ldl_AINoSinking_Off			"AI ships can sink"				# AI ships don't sink

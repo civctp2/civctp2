@@ -55,7 +55,7 @@
 str_ldl_Already_Offer				"Vous avez déjà proposé cette marchandise. Remplacer l'offre précédente ?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER				"Tous les empires s'inclineront dorénavant devant un nouveau maître ; [player.1.leader_name] a terminé le projet de vie extraterrestre."
+ENDGAME_WON_OTHER				"Tous les empires s'inclineront dorénavant devant un nouveau maître ; [player[0].leader_name] a terminé le projet de vie extraterrestre."
 
 ##Comma is the separator in numbers.  In German this would be a period. (non breakable space in French)
 str_ldl_comma					" "

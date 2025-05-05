@@ -2,7 +2,7 @@
 str_ldl_Already_Offer	"You are already offering that good. Replace old offer?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, [player.1.leader_name] has completed the Alien Life Project."
+ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, [player[0].leader_name] has completed the Alien Life Project."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	","

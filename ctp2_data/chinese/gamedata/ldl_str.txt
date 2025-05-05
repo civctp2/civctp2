@@ -55,7 +55,7 @@
 str_ldl_Already_Offer	"已提供特产，要变更吗？"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"所有的文明帝国都将恭迎新的人类主宰，因为 {player[1].leader_name} 已经完成了外星人生命计划。"
+ENDGAME_WON_OTHER	"所有的文明帝国都将恭迎新的人类主宰，因为 {player[0].leader_name} 已经完成了外星人生命计划。"
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"，"
