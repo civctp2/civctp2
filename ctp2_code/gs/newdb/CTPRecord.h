@@ -78,12 +78,12 @@ public:
 	bool ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
 	bool ParseFloatInArray(DBLexer *lex, double **array, sint32 *numElements);
 	bool ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElements);
-	bool ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
+	bool ParseStringIdInArray(DBLexer *lex, sint32 **array, char ***sarray, sint32 *numElements);
 
 	bool ParseIntInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
 	bool ParseFloatInArray(DBLexer *lex, double *array, sint32 *numElements, sint32 maxSize);
 	bool ParseFileInArray(DBLexer *lex, char **array, sint32 *numElements, sint32 maxSize);
-	bool ParseStringIdInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
+	bool ParseStringIdInArray(DBLexer *lex, sint32 *array, char **sarray, sint32 *numElements, sint32 maxSize);
 };
 
 #endif

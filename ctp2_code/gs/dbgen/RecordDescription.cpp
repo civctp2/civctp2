@@ -1083,7 +1083,7 @@ void RecordDescription::ExportParser(FILE *outfile)
 			fprintf(outfile, "    }\n");
 			break;
 		case DATUM_STRINGID:
-			fprintf(outfile, "    if(!lex->GetStringIdAssignment(m_Value)) {\n");
+			fprintf(outfile, "    if(!lex->GetStringIdAssignment(m_Value, m_VaulueIDText)) {\n");
 			fprintf(outfile, "        DBERROR((\"Expected string\"));\n");
 			fprintf(outfile, "        return 0;\n");
 			fprintf(outfile, "    }\n");
@@ -1160,7 +1160,7 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, &m_%s, &m_%sIDText, &m_num%s))\n", dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_FLOAT:
 					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, &m_%s, &m_num%s))\n", dat->m_name, dat->m_name);
@@ -1190,8 +1190,8 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 							dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
-							dat->m_name, dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, (sint32 *)m_%s, (char **)m_%sIDText, &m_num%s, k_MAX_%s)) {\n",
+							dat->m_name, dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_FLOAT:
 					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, (double *)m_%s, &m_num%s, k_MAX_%s)) {\n",
@@ -1225,7 +1225,7 @@ void RecordDescription::ExportTokenCases(FILE *outfile)
 					fprintf(outfile, "                }\n");
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!lex->GetStringIdAssignment(m_%s)) {\n", dat->m_name);
+					fprintf(outfile, "                if(!lex->GetStringIdAssignment(m_%s, m_%sIDText)) {\n", dat->m_name, dat->m_name);
 					fprintf(outfile, "                    DBERROR((\"Expected string ID\"));\n");
 					fprintf(outfile, "                    done = true; break;\n");
 					fprintf(outfile, "                }\n");
@@ -1289,7 +1289,7 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 				break;
 			case DATUM_STRINGID:
 				fprintf(outfile, "                Assert(false)\n");
-				fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
+				fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, m_%s, m_%sIDText, &m_num%s)) {\n", dat->m_name, dat->m_name, dat->m_name);
 				break;
 			case DATUM_FLOAT:
 				fprintf(outfile, "                Assert(false)\n");
@@ -1324,8 +1324,8 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 				break;
 			case DATUM_STRINGID:
 				fprintf(outfile, "                Assert(false)\n");
-				fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, (sint32 *)m_%s, &m_num%s, k_MAX_%s)) {\n",
-						dat->m_name, dat->m_name, dat->m_name);
+				fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, (sint32 *)m_%s, (char **)m_%sIDText, &m_num%s, k_MAX_%s)) {\n",
+						dat->m_name, dat->m_name, dat->m_name, dat->m_name);
 				break;
 			case DATUM_FLOAT:
 				fprintf(outfile, "                Assert(false)\n");
@@ -1363,7 +1363,7 @@ void RecordDescription::ExportDefaultToken(FILE *outfile)
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_STRINGID:
-				fprintf(outfile, "                if(!lex->GetStringId(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                if(!lex->GetStringId(m_%s, m_%sIDText)) {\n", dat->m_name, dat->m_name);
 				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
@@ -1515,13 +1515,10 @@ void RecordDescription::ExportStringUpdater(FILE *outfile)
 	{
 		Datum * dat = walk.GetObj();
 
-		switch (dat->m_type)
-		{
-			case DATUM_STRINGID:
-				dat->StringUpdater(outfile);
-				break;
-			default:
-				break;
+		if(dat->m_type == DATUM_STRINGID
+		|| dat->m_type == DATUM_BIT_PAIR && dat->m_bitPairDatum->m_type == DATUM_STRINGID
+		){
+			dat->StringUpdater(outfile);
 		}
 	}
 

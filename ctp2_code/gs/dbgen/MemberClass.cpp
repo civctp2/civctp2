@@ -711,7 +711,7 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 					fprintf(outfile, "                if(!CTPRecord::ParseIntInArray(lex, &m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::ParseStringIdInArray(lex, m_%s, &m_%sIDText, &m_num%s)) {\n", dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_FLOAT:
 					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, &m_%s, &m_num%s)) {\n", dat->m_name, dat->m_name);
@@ -740,8 +740,8 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 							dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!CTPRecord::GetStringIdInArray(lex, &m_%s, &m_num%s, k_MAX_%s)) {\n",
-							dat->m_name, dat->m_name, dat->m_name);
+					fprintf(outfile, "                if(!CTPRecord::GetStringIdInArray(lex, &m_%s, &m_%sIDText, &m_num%s, k_MAX_%s)) {\n",
+							dat->m_name, dat->m_name, dat->m_name, dat->m_name);
 					break;
 				case DATUM_FLOAT:
 					fprintf(outfile, "                if(!CTPRecord::ParseFloatInArray(lex, &m_%s, &m_num%s, k_MAX_%s)) {\n",
@@ -772,7 +772,7 @@ void MemberClass::ExportTokenCases(FILE *outfile, char *recordName)
 					fprintf(outfile, "                }\n");
 					break;
 				case DATUM_STRINGID:
-					fprintf(outfile, "                if(!lex->GetStringIdAssignment(m_%s)) {\n", dat->m_name);
+					fprintf(outfile, "                if(!lex->GetStringIdAssignment(m_%s, m_%sIDText)) {\n", dat->m_name, dat->m_name);
 					fprintf(outfile, "                    done = true; break;\n");
 					fprintf(outfile, "                }\n");
 					break;
@@ -904,7 +904,7 @@ void MemberClass::ExportDefaultToken(FILE *outfile, char *recordName)
 				fprintf(outfile, "                }\n");
 				break;
 			case DATUM_STRINGID:
-				fprintf(outfile, "                if(!lex->GetStringId(m_%s)) {\n", dat->m_name);
+				fprintf(outfile, "                if(!lex->GetStringId(m_%s, m_%sIDText)) {\n", dat->m_name, dat->m_name);
 				fprintf(outfile, "                    DBERROR((\"Unknown token\"));\n");
 				fprintf(outfile, "                    done = true; break;\n");
 				fprintf(outfile, "                }\n");
