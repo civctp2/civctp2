@@ -67,7 +67,7 @@ Advance {
 	Bit GLHidden
 	Bit GoodyHutExcluded
 
-    Int PowerPoints = 0
+	Int PowerPoints = 0
 	Bit(Float) PollutionSizeModifier
 	Bit(Float) PollutionProductionModifier
 

@@ -44,7 +44,7 @@ class aui_Control;
 class ctp2_ListBox;
 class ctp2_ListItem;
 class ctp2_Button;
-class ctp2_HyperTextBox;
+class ctp2_Static;
 
 /*sint32 musicscreen_displayMyWindow();
 sint32 musicscreen_removeMyWindow(uint32 action);
@@ -75,7 +75,7 @@ private:
 	static LanguageScreen* s_languageScreen;
 
 	ctp2_ListBox*          m_LanguageListBox;
-	ctp2_HyperTextBox*     m_languageDescription;
+	ctp2_Static*           m_languageDescription;
 	ctp2_Button*           m_getLanguageFromOS;
 };
 

@@ -352,7 +352,7 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 
 AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -360,8 +360,8 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	if(block->GetAttribute(k_CTP2_LISTBOX_LDL_BEVELWIDTH)) {
-		m_bevelWidth = block->GetInt(k_CTP2_LISTBOX_LDL_BEVELWIDTH);
+	if(block->GetAttribute(k_AUI_LDL_BEVELWIDTH)) {
+		m_bevelWidth = block->GetInt(k_AUI_LDL_BEVELWIDTH);
 	} else {
 		m_bevelWidth = k_CTP2_HYPERTEXTBOX_BEVELWIDTH;
 	}

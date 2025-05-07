@@ -116,6 +116,8 @@ protected:
 	virtual void	MouseRGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseRDropInside(aui_MouseEvent * mouseData);
 
+	virtual AUI_ERRCODE DoneInstantiatingThis(const MBCHAR *ldlBlock);
+
 	bool	ConstructImageRect(uint32 index);
 
 	AUI_ERRCODE DrawImages(aui_Surface *destSurf,RECT *destRect);
@@ -134,6 +136,8 @@ protected:
 	void *m_imageMapCookie;
 
 	bool m_ignoreHighlight;
+
+	RECT m_borderOffset;
 };
 
 #endif

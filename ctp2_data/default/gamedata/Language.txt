@@ -45,7 +45,7 @@
 
 LANGUAGE_CHINESE {
 	IsoCode "zh"
-	Description "ChineseDescription"
+	Description INFO_CHINESE
 	Directory "chinese"
 	Disabled
 }
@@ -54,7 +54,7 @@ LANGUAGE_CHINESE {
 
 LANGUAGE_CZECH {
 	IsoCode "cs"
-	Description "CzechDescription"
+	Description INFO_CZECH
 	Directory "czech"
 	Disabled
 }
@@ -63,7 +63,7 @@ LANGUAGE_CZECH {
 
 LANGUAGE_ENGLISH {
 	IsoCode "en"
-	Description "EnglishDescription"
+	Description INFO_ENGLISH
 	Directory "english"
 	Default
 }
@@ -72,7 +72,7 @@ LANGUAGE_ENGLISH {
 
 LANGUAGE_FRENCH {
 	IsoCode "fr"
-	Description "FrenchDescription"
+	Description INFO_FRENCH
 	Directory "french"
 }
 
@@ -80,7 +80,7 @@ LANGUAGE_FRENCH {
 
 LANGUAGE_GERMAN {
 	IsoCode "de"
-	Description "GermanDescription"
+	Description INFO_GERMAN
 	Directory "german"
 }
 
@@ -88,7 +88,7 @@ LANGUAGE_GERMAN {
 
 LANGUAGE_ITALIAN {
 	IsoCode "it"
-	Description "ItalianDescription"
+	Description INFO_ITALIAN
 	Directory "italian"
 }
 
@@ -96,7 +96,7 @@ LANGUAGE_ITALIAN {
 
 LANGUAGE_JAPANESE {
 	IsoCode "ja"
-	Description "JapaneseDescription"
+	Description INFO_JAPANESE
 	Directory "japanese"
 	Disabled
 }
@@ -105,7 +105,7 @@ LANGUAGE_JAPANESE {
 
 LANGUAGE_POLISH {
 	IsoCode "pl"
-	Description "PolishDescription"
+	Description INFO_POLISH
 	Directory "polish"
 	Disabled
 }
@@ -114,7 +114,7 @@ LANGUAGE_POLISH {
 
 LANGUAGE_SPANISH {
 	IsoCode "es"
-	Description "SpanishDescription"
+	Description INFO_SPANISH
 	Directory "spanish"
 }
 

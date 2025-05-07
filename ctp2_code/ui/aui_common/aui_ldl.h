@@ -50,24 +50,33 @@ struct aui_LdlObject
 };
 
 
-#define k_AUI_LDL_MAXBLOCK			1024
+#define k_AUI_LDL_MAXBLOCK          1024
 
-#define k_AUI_LDL_DEFAULTTEMPLATE	"default"
+#define k_AUI_LDL_DEFAULTTEMPLATE   "default"
 
-#define k_AUI_LDL_PARENT			"parent"
-#define k_AUI_LDL_HANCHOR			"xanchor"
-#define k_AUI_LDL_VANCHOR			"yanchor"
-#define k_AUI_LDL_HABSPOSITION		"xpix"
-#define k_AUI_LDL_HRELPOSITION		"xpct"
-#define k_AUI_LDL_VABSPOSITION		"ypix"
-#define k_AUI_LDL_VRELPOSITION		"ypct"
-#define k_AUI_LDL_HABSSIZE			"widthpix"
-#define k_AUI_LDL_HRELSIZE			"widthpct"
-#define k_AUI_LDL_VABSSIZE			"heightpix"
-#define k_AUI_LDL_VRELSIZE			"heightpct"
-#define k_AUI_LDL_OBJECTTYPE		"objecttype"
-#define k_AUI_LDL_ATOMIC			"atomic"
-#define k_AUI_LDL_DETACH			"detach"
+#define k_AUI_LDL_PARENT            "parent"
+#define k_AUI_LDL_HANCHOR           "xanchor"
+#define k_AUI_LDL_VANCHOR           "yanchor"
+#define k_AUI_LDL_HABSPOSITION      "xpix"
+#define k_AUI_LDL_HRELPOSITION      "xpct"
+#define k_AUI_LDL_VABSPOSITION      "ypix"
+#define k_AUI_LDL_VRELPOSITION      "ypct"
+#define k_AUI_LDL_HABSSIZE          "widthpix"
+#define k_AUI_LDL_HRELSIZE          "widthpct"
+#define k_AUI_LDL_VABSSIZE          "heightpix"
+#define k_AUI_LDL_VRELSIZE          "heightpct"
+#define k_AUI_LDL_OBJECTTYPE        "objecttype"
+#define k_AUI_LDL_ATOMIC            "atomic"
+#define k_AUI_LDL_DETACH            "detach"
+
+#define k_AUI_LDL_BEVELWIDTH        "bevelwidth"
+#define k_AUI_LDL_BEVELTYPE         "beveltype"
+#define k_AUI_LDL_BORDER_LEFT       "borderleft"
+#define k_AUI_LDL_BORDER_RIGHT      "borderright"
+#define k_AUI_LDL_BORDER_TOP        "bordertop"
+#define k_AUI_LDL_BORDER_BOTTOM     "borderbottom"
+#define k_AUI_LDL_BORDER_WIDTH      "borderwidth"
+#define k_AUI_LDL_BORDER_HEIGHT     "borderheight"
 
 class aui_Ldl : public aui_Base
 {

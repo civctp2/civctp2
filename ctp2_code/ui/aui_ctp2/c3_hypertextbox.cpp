@@ -145,8 +145,8 @@ AUI_ERRCODE c3_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	if(block->GetAttribute(k_CTP2_LISTBOX_LDL_BEVELWIDTH)) {
-		m_bevelWidth = block->GetInt(k_CTP2_LISTBOX_LDL_BEVELWIDTH);
+	if(block->GetAttribute(k_AUI_LDL_BEVELWIDTH)) {
+		m_bevelWidth = block->GetInt(k_AUI_LDL_BEVELWIDTH);
 	} else {
 		m_bevelWidth = k_C3_HYPERTEXTBOX_BEVELWIDTH;
 	}
@@ -449,7 +449,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					}
 					else
 					{
-						uint32 truncLen = ptr - start;
+						size_t truncLen = ptr - start;
 
 						penPos.x = penPos.y = 0;
 						const MBCHAR *testPtr = start;

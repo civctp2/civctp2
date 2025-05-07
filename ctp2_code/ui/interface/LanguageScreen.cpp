@@ -40,10 +40,10 @@
 #include "aui_uniqueid.h"
 #include "ctp2_listbox.h"
 #include "ctp2_button.h"
-#include "ctp2_hypertextbox.h"
 #include "ctp2_Static.h"
 
 #include "LanguageRecord.h"
+#include "StrDB.h"
 
 LanguageScreen* LanguageScreen::s_languageScreen = NULL;
 extern C3UI *   g_c3ui;
@@ -59,6 +59,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	Assert(m_LanguageListBox);
 
 	m_LanguageListBox->SortByColumn(0, true);
+	m_LanguageListBox->SetForceSelect(TRUE);
 
 	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); ++i)
 	{
@@ -84,7 +85,8 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 		m_LanguageListBox->AddItem(item);
 	}
 
-	m_languageDescription = new ctp2_HyperTextBox(errcode, aui_UniqueId(), "LanguageScreen.LanguageDescription");
+	m_languageDescription = (ctp2_Static *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageDescription");
+	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(0)->GetDescription()));
 
 	m_getLanguageFromOS = spNew_ctp2_Button(errcode, "LanguageScreen", "SelectTrackButton", LanguageScreen::GetLanguageFromOS);
 
@@ -130,6 +132,8 @@ void LanguageScreen::DisplayWindow()
 void LanguageScreen::RemoveWindow(uint32 action)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
+
+	if(s_languageScreen == NULL) return;
 
 	AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(s_languageScreen->Id());
 	Assert(auiErr == AUI_ERRCODE_OK);

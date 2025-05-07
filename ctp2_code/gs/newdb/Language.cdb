@@ -24,7 +24,7 @@
 
 Language {
 	String IsoCode
-	String Description # Thhis can't be a StringID, as we load that before the StringDB
+	StringID Description
 	String Directory
 	Bit Default
 	Bit Disabled

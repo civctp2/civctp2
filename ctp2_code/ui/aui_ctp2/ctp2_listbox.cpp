@@ -162,8 +162,8 @@ AUI_ERRCODE ctp2_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	sint32 bevelWidth   = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELWIDTH );
-	sint32 bevelType    = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELTYPE );
+	sint32 bevelWidth   = block->GetInt( k_AUI_LDL_BEVELWIDTH );
+	sint32 bevelType    = block->GetInt( k_AUI_LDL_BEVELTYPE );
 
 	return InitCommon(bevelWidth, bevelType);
 }
@@ -512,14 +512,14 @@ AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	m_borderOffset.left   = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_LEFT) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_LEFT) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
-	m_borderOffset.right  = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_RIGHT) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_RIGHT) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
-	m_borderOffset.top    = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_TOP) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_TOP) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
-	m_borderOffset.bottom = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_BOTTOM) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
+	m_borderOffset.left   = block->GetAttributeType(k_AUI_LDL_BORDER_LEFT) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_LEFT) : block->GetInt(k_AUI_LDL_BORDER_WIDTH);
+	m_borderOffset.right  = block->GetAttributeType(k_AUI_LDL_BORDER_RIGHT) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_RIGHT) : block->GetInt(k_AUI_LDL_BORDER_WIDTH);
+	m_borderOffset.top    = block->GetAttributeType(k_AUI_LDL_BORDER_TOP) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_TOP) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
+	m_borderOffset.bottom = block->GetAttributeType(k_AUI_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_BOTTOM) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
 
 	Resize(Width() + m_borderOffset.left + m_borderOffset.right,
 			Height() + m_borderOffset.top + m_borderOffset.bottom);

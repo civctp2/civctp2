@@ -889,7 +889,7 @@ template CTP2_TEXT_BOX:CTP2_GENERIC_TEXT_DISPLAY_20 {
 #
 # Generic Border box (looks like list box)
 #
-template CTP2_BORDER_BOX {
+template CTP2_BORDER_BOX : CTP2_STANDARD_FONT {
 	# Image layout.
 	int numberoflayers 1
 	int imagesperlayer 9

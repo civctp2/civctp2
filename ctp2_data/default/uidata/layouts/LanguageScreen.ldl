@@ -40,12 +40,18 @@ LanguageScreen {
 		int focusindex 1
 	}
 
-	LanguageDescription : CTP2_TEXT_BOX {
-		int	xpix	362
-		int	ypix	75
-		int	widthpix	274
-		int	heightpix	270
-		int	bevelwidth	0
+	LanguageDescription : CTP2_BORDER_BOX {
+
+		string objecttype "ctp2_Static"
+		# Ignore mouse events.
+		bool		mouseblind		true
+
+		int  xpix      362
+		int  ypix       75
+		int  widthpix  274
+		int  heightpix 270
+		bool wordwrap TRUE
+		int  maxlength 512
 	}
 
 	SelectTrackButton:SP_BUTTON_SMALL {
