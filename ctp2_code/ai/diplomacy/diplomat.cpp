@@ -206,10 +206,10 @@ Diplomat::DiplomatVector Diplomat::s_theDiplomats;
 sint32 Diplomat::s_proposalTypeToElemIndex[PROPOSAL_MAX];
 
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
-Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId)
+Diplomat & Diplomat::GetDiplomat(const size_t & playerId)
 {
 	Assert(playerId >= 0);
-	Assert(static_cast<size_t>(playerId) < s_theDiplomats.size());
+	Assert(playerId < s_theDiplomats.size());
 	Assert(playerId == s_theDiplomats[playerId].GetPlayerId());
 
 	return s_theDiplomats[playerId];
@@ -223,7 +223,7 @@ bool Diplomat::HasDiplomat(const size_t & playerId)
 	&&      playerId == s_theDiplomats[playerId].GetPlayerId());
 }
 
-void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
+void Diplomat::ResizeAll(const size_t & newMaxPlayers)
 {
 	sint32 old_size = s_theDiplomats.size();
 	s_theDiplomats.resize(newMaxPlayers);
@@ -235,7 +235,7 @@ void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
 
 		if (playerId < old_size)
 		{
-			for (sint32 foreignerId = 0; foreignerId < newMaxPlayers; ++foreignerId)
+			for (size_t foreignerId = 0; foreignerId < newMaxPlayers; ++foreignerId)
 			{
 				if (foreignerId >= old_size || g_player[foreignerId] == NULL)
 				{

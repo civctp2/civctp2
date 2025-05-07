@@ -2197,9 +2197,9 @@ void FZCommentCommand::Execute(sint32 argc, char **argv)
 {
 #ifdef _DEBUG
 	MBCHAR str[_MAX_PATH];
-	sint32 pos = 0;
+	size_t pos = 0;
 
-	for(sint32 i = 1; i < argc; i++) {
+	for(size_t i = 1; i < argc; i++) {
 		if(pos + strlen(argv[i]) >= _MAX_PATH)
 			break;
 		memcpy(&str[pos], argv[i], strlen(argv[i]));
@@ -2207,10 +2207,6 @@ void FZCommentCommand::Execute(sint32 argc, char **argv)
 		str[pos++] = ' ';
 	}
 	str[pos] = 0;
-
-
-
-
 #endif
 }
 
@@ -2219,8 +2215,6 @@ void FliLogCommand::Execute(sint32 argc, char **argv)
 	Assert(argc == 2);
 	if(argc != 2)
 		return;
-
-
 }
 
 void ReloadFliCommand::Execute (sint32 argc, char **argv)
@@ -3075,9 +3069,9 @@ void ChatMaskCommand::Execute(sint32 argc, char **argv)
 void ChatCommand::Execute(sint32 argc, char **argv)
 {
 	MBCHAR str[k_MAX_CHAT_LEN];
-	sint32 pos = 0;
+	size_t pos = 0;
 
-	for(sint32 i = 1; i < argc; i++) {
+	for(size_t i = 1; i < argc; i++) {
 		if(pos + strlen(argv[i]) >= k_MAX_CHAT_LEN)
 			break;
 		memcpy(&str[pos], argv[i], strlen(argv[i]));

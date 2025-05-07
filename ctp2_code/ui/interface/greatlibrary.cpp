@@ -1879,15 +1879,15 @@ void GreatLibrary::UpdateList( DATABASE database )
 // Remark(s)  : Returns 0 if database is invalid
 //
 //----------------------------------------------------------------------------
-int GreatLibrary::Get_Database_Size(int the_database)
+size_t GreatLibrary::Get_Database_Size(int the_database)
 {
 	switch (the_database)
-    {
+	{
 	default:
-        return 0;
+		return 0;
 
 	case DATABASE_UNITS:
-        return g_theUnitDB->NumRecords();
+		return g_theUnitDB->NumRecords();
 
 	case DATABASE_SEARCH:
 		return m_search_results.size();

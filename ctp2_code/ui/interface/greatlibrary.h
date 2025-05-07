@@ -218,7 +218,7 @@ public:
 
 
 
-	int Get_Database_Size(int the_database);
+	size_t Get_Database_Size(int the_database);
 
 	void Search_Great_Library();
 
