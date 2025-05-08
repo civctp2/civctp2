@@ -252,7 +252,7 @@ aui_ImageBase::~aui_ImageBase()
 }
 
 aui_Image *aui_ImageBase::GetImage(
-	sint32 state,
+	size_t state,
 	AUI_IMAGEBASE_SUBSTATE substate ) const
 {
 	if ( state < 0 || state >= m_numStateImageGroups )
@@ -267,7 +267,7 @@ aui_Image *aui_ImageBase::GetImage(
 
 	if(m_loadOnDemand)
 	{
-		sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
+		size_t index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
 
 		if(m_stateImageNames[index] && (!m_stateImageGroups[state][substate]))
 		{
@@ -301,7 +301,7 @@ AUI_IMAGEBASE_BLTFLAG aui_ImageBase::SetImageBltFlag(
 aui_Image *aui_ImageBase::SetImage
 (
 	MBCHAR const *          image,
-	sint32                  state,
+	size_t                  state,
 	AUI_IMAGEBASE_SUBSTATE  substate
 )
 {
@@ -324,7 +324,7 @@ aui_Image *aui_ImageBase::SetImage
 		{
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
-			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
+			size_t index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
 
 			delete m_stateImageNames[index];
 			m_stateImageNames[index] = strdup(image);
@@ -351,7 +351,7 @@ aui_Image *aui_ImageBase::SetImage
 		{
 			Assert( state >= 0 && state < m_numStateImageGroups );
 
-			sint32 index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
+			size_t index = (state * AUI_IMAGEBASE_SUBSTATE_LAST) + substate;
 
 			delete m_stateImageNames[index];
 			m_stateImageNames[index] = NULL;
@@ -368,7 +368,7 @@ aui_Image *aui_ImageBase::SetImage
 AUI_ERRCODE aui_ImageBase::DrawImage(
 	aui_Surface *destSurf,
 	RECT *destRect,
-	sint32 state,
+	size_t state,
 	AUI_IMAGEBASE_SUBSTATE substate )
 {
 	aui_Image *image = GetImage( state, substate );

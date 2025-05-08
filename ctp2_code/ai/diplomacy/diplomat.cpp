@@ -225,10 +225,10 @@ bool Diplomat::HasDiplomat(const size_t & playerId)
 
 void Diplomat::ResizeAll(const size_t & newMaxPlayers)
 {
-	sint32 old_size = s_theDiplomats.size();
+	size_t old_size = s_theDiplomats.size();
 	s_theDiplomats.resize(newMaxPlayers);
 
-	for (sint32 playerId = 0; playerId < newMaxPlayers; playerId++)
+	for (size_t playerId = 0; playerId < newMaxPlayers; playerId++)
 	{
 		s_theDiplomats[playerId].SetPlayerId(playerId);
 		s_theDiplomats[playerId].Resize(newMaxPlayers);

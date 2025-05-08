@@ -291,7 +291,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 
 AUI_ERRCODE aui_BitmapFont::Unload( void )
 {
-	for ( sint32 i = m_surfaceList->L(); i; i-- )
+	for ( size_t i = m_surfaceList->L(); i; i-- )
 		delete m_surfaceList->RemoveHead();
 
 	memset( m_glyphs, 0, sizeof( m_glyphs ) );
@@ -1399,7 +1399,7 @@ bool aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 
 	if ( string != stop )
 	{
-		sint32 end = string - name - 3;
+		size_t end = string - name - 3;
 		Assert( end > 0 );
 		if ( end > 0 )
 		{
@@ -1443,7 +1443,7 @@ void aui_BitmapFont::DumpCachedSurfaces( aui_Surface *destSurf )
 	uint16 *origDestBuf = destBuf;
 
 	ListPos position = m_surfaceList->GetHeadPosition();
-	for ( sint32 i = m_surfaceList->L(); i; i-- )
+	for ( size_t i = m_surfaceList->L(); i; i-- )
 	{
 		aui_Surface *srcSurf = m_surfaceList->GetNext( position );
 

@@ -388,7 +388,7 @@ void StringDB::AssignIndex(StringRecord * & ptr)
 		AssignIndex(ptr->m_lesser);
 	}
 
-	ptr->m_index = m_all.size();
+	ptr->m_index = static_cast<StringId>(m_all.size());
 	m_all.push_back(ptr);
 
 	if (ptr->m_greater)

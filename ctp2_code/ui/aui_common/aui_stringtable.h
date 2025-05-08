@@ -31,13 +31,13 @@ public:
 	);
 	virtual ~aui_StringTable();
 
-	sint32	    GetNumStrings( void ) const
+	size_t    GetNumStrings( void ) const
 	{
-		return static_cast<sint32>(m_Strings.size());
+		return m_Strings.size();
 	};
 
-	const MBCHAR *    GetString(sint32 index) const;
-	AUI_ERRCODE	SetString(const MBCHAR * text, sint32 index);
+	const MBCHAR *    GetString(size_t index) const;
+	AUI_ERRCODE	SetString(const MBCHAR * text, size_t index);
 
 private:
 	size_t		FindNumStringsFromLdl(ldl_datablock * block);

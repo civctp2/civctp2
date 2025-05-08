@@ -22,7 +22,7 @@ public:
 	ns_Tribes();
 	virtual ~ns_Tribes();
 
-	sint32 GetNumTribes( void ) const { return m_stringtable->GetNumStrings(); }
+	size_t GetNumTribes( void ) const { return m_stringtable->GetNumStrings(); }
 	aui_StringTable *GetStrings( void ) const { return m_stringtable; }
 
 private:

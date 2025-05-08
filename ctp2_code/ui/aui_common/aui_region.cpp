@@ -319,7 +319,7 @@ void aui_Region::DeleteChildren()
 {
 	ListPos position = m_childList->GetHeadPosition();
 
-	for ( sint32 i = m_childList->L(); i; i-- ) {
+	for ( size_t i = m_childList->L(); i; i-- ) {
 		aui_Region *child = m_childList->GetNext(position);
 		child->DeleteChildren();
 		delete child;
@@ -399,7 +399,7 @@ AUI_ERRCODE aui_Region::Adjust( void )
 		m_dim->CalculateAll( &m_x, &m_y, &m_width, &m_height );
 
 		ListPos position = m_childList->GetHeadPosition();
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Region *child = m_childList->GetNext( position );
 			child->Adjust();
@@ -492,7 +492,7 @@ AUI_ERRCODE aui_Region::InsertChild( aui_Region *child, sint32 index )
 AUI_ERRCODE aui_Region::RemoveChild( uint32 regionId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Region *region = m_childList->GetNext( position );
@@ -516,7 +516,7 @@ AUI_ERRCODE aui_Region::RemoveChild( uint32 regionId )
 aui_Region *aui_Region::GetChild( uint32 regionId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetNext( position );
 		if ( region->Id() == regionId ) return region;
@@ -525,12 +525,12 @@ aui_Region *aui_Region::GetChild( uint32 regionId )
 	return NULL;
 }
 
-aui_Region *aui_Region::GetChildByIndex(sint32 index)
+aui_Region *aui_Region::GetChildByIndex(size_t index)
 {
 	Assert(m_childList != NULL);
 	if (!m_childList) return NULL;
 
-	if (index < 0 || static_cast<size_t>(index) >= m_childList->L())
+	if (index < 0 || index >= m_childList->L())
 		return NULL;
 
 	ListPos position = m_childList->FindIndex(index);
@@ -539,7 +539,7 @@ aui_Region *aui_Region::GetChildByIndex(sint32 index)
 	return (aui_Region *)m_childList->GetAt( position );
 }
 
-sint32 aui_Region::NumChildren(void)
+size_t aui_Region::NumChildren(void)
 {
 	return m_childList ? m_childList->L() : 0;
 }
@@ -617,7 +617,7 @@ AUI_ERRCODE aui_Region::HideThis( void )
 AUI_ERRCODE aui_Region::ShowChildren( void )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetNext( position );
 		region->Show();
@@ -629,7 +629,7 @@ AUI_ERRCODE aui_Region::ShowChildren( void )
 AUI_ERRCODE aui_Region::HideChildren( void )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetNext( position );
 		region->Hide();
@@ -662,7 +662,7 @@ AUI_ERRCODE aui_Region::Enable( BOOL enable )
 	if(m_childList) {
 
 		ListPos position = m_childList->GetHeadPosition();
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Region *region = m_childList->GetNext( position );
 			region->Enable( enable );
@@ -685,7 +685,7 @@ AUI_ERRCODE aui_Region::Reset( void )
 	ResetThis();
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetNext( position );
 		region->Reset();
@@ -718,7 +718,7 @@ BOOL aui_Region::IsDescendent( aui_Region *region )
 	if ( GetChild( region->Id() ) ) return TRUE;
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *childRegion = m_childList->GetNext( position );
 		if ( childRegion->IsDescendent( region ) ) return TRUE;
@@ -755,7 +755,7 @@ AUI_ERRCODE aui_Region::HandleMouseEvent( aui_MouseEvent *input, BOOL handleIt )
 		localInput.position.x -= m_x;
 		localInput.position.y -= m_y;
 
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Region *region = m_childList->GetNext( position );
 			AUI_ERRCODE errcode = region->HandleMouseEvent(
@@ -848,7 +848,7 @@ AUI_ERRCODE aui_Region::Draw( aui_Surface *surface, sint32 x, sint32 y )
 AUI_ERRCODE aui_Region::DrawChildren( aui_Surface *surface, sint32 x, sint32 y )
 {
 	ListPos position = m_childList->GetTailPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetPrev( position );
 
@@ -1032,7 +1032,7 @@ AUI_ERRCODE aui_Region::UndoEdit( void )
 AUI_ERRCODE aui_Region::ExpandRect( RECT *rect )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *child = m_childList->GetNext( position );
 		RECT crect = { child->X(), child->Y(),
@@ -1355,7 +1355,7 @@ void aui_Region::EditModeModifyRegion( RECT rect )
 AUI_ERRCODE aui_Region::DoneInstantiating()
 {
 	ListPos position = m_childList->GetTailPosition();
-	for(sint32 i = m_childList->L(); i; i-- ) {
+	for(size_t i = m_childList->L(); i; i-- ) {
 		aui_Region *region = m_childList->GetPrev( position );
 
 		AUI_ERRCODE errcode = region->DoneInstantiating();

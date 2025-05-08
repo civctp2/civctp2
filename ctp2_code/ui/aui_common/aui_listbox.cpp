@@ -814,7 +814,7 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 	m_numColumns = m_header->ChildList()->L();
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_numRows = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_numRows = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 
@@ -1157,7 +1157,7 @@ void aui_ListBox::WhatsChanged(
 	deselectedList.DeleteAll();
 
 	ListPos position = m_selectedList->GetHeadPosition();
-	sint32 i;
+	size_t i;
 	for ( i = m_selectedList->L(); i; i-- )
 	{
 		sint32 itemIndex = m_selectedList->GetNext( position );

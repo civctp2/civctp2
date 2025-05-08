@@ -186,7 +186,7 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 		hyperText = m_hyperText;
 	}
 
-	sint32 len = strlen( hyperText );
+	size_t len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
 	aui_Static *hs = CreateHyperStatic(
@@ -207,9 +207,9 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 	m_hyperStaticList->AddTail( hs );
 
 	if ( m_hyperStaticList->L() > k_AUI_HYPERTEXTBOX_LDL_MAXSTATICS )
-    {
+	{
 		delete m_hyperStaticList->RemoveHead();
-    }
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -218,9 +218,9 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 void aui_HyperTextBase::RemoveHyperStatics(void)
 {
 	for (sint32 i = m_hyperStaticList->L(); i; --i)
-    {
+	{
 		delete m_hyperStaticList->RemoveTail();
-    }
+	}
 }
 
 
@@ -278,7 +278,7 @@ AUI_ERRCODE aui_HyperTextBase::DrawThisHyperText(
 	sint32 y )
 {
 	ListPos position = m_hyperStaticList->GetHeadPosition();
-	for ( sint32 i = m_hyperStaticList->L(); i; i-- )
+	for (size_t i = m_hyperStaticList->L(); i; i-- )
 	{
 		aui_Static *hs = m_hyperStaticList->GetNext( position );
 

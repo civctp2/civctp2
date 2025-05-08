@@ -1133,7 +1133,7 @@ void loadsavescreen_delete( void )
 		sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
 		_finddata_t findData;
-		int fileHandle=_findfirst(path,&findData);
+		intptr_t fileHandle=_findfirst(path,&findData);
 		while(fileHandle)
 		{
 			sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, findData.name);

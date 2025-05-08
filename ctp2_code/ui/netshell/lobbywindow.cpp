@@ -749,27 +749,27 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 	aui_Switch *ms = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_MUTESWITCH));
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	sint32 i;
+	size_t i;
 	for (i = justDeselectedList.L(); i; i--)
-    {
+	{
 		ns_PlayerItem *     item    =
-            (ns_PlayerItem *) listbox->GetItemByIndex(justDeselectedList.GetNext(position));
+		    (ns_PlayerItem *) listbox->GetItemByIndex(justDeselectedList.GetNext(position));
 		NETFunc::Player *   player  = item->GetNetShellObject()->GetNETFuncObject();
 		if (chatbox->GetPlayer() && player->Equals(chatbox->GetPlayer()))
-        {
+		{
 			chatbox->SetPlayer(0);
 		}
 	}
 
 	position = justSelectedList.GetHeadPosition();
 	for (i = justSelectedList.L(); i; i--)
-    {
+	{
 		ns_PlayerItem *     item    =
-            (ns_PlayerItem *) listbox->GetItemByIndex(justSelectedList.GetNext(position));
+		    (ns_PlayerItem *) listbox->GetItemByIndex(justSelectedList.GetNext(position));
 		NETFunc::Player *   player  = item->GetNetShellObject()->GetNETFuncObject();
 
-        chatbox->SetPlayer(player);
-        ms->SetState(player->IsMuted() ? 1 : 0);
+		chatbox->SetPlayer(player);
+		ms->SetState(player->IsMuted() ? 1 : 0);
 	}
 
 	justSelectedList.DeleteAll();

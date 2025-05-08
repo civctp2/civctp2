@@ -445,7 +445,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 		hyperText = m_hyperText;
 	}
 
-	uint32 len = strlen( hyperText );
+	size_t len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
 	const MBCHAR *ptr = hyperText;

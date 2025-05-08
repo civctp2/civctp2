@@ -161,7 +161,7 @@ AUI_ERRCODE aui_TextBox::CalculateItems(const MBCHAR * text)
 
 	if ( cur == stop ) return AUI_ERRCODE_OK;
 
-	uint32 length = 0;
+	size_t length = 0;
 	aui_Static **itemPtr = m_items + m_curItem;
 
 	{

@@ -378,7 +378,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 
 	Assert(m_argValue.size() == g_gevManager->GetNumArgs(ev));
 
-	for (size_t i = 0; i < Count(); ++i)
+	for (sint32 i = 0; i < static_cast<sint32>(Count()); ++i)
 	{
 		EVENTLOG(("%s ", g_gevManager->ArgCharToName(g_gevManager->ArgChar(ev, i))));
 		switch(g_gevManager->ArgChar(ev, i)) {
