@@ -60,6 +60,9 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 
 	m_LanguageListBox->SortByColumn(0, true);
 	m_LanguageListBox->SetForceSelect(TRUE);
+	m_LanguageListBox->SetMultiSelect(FALSE);
+
+	m_LanguageListBox->SetActionFuncAndCookie(LanguageScreen::ItemSelected, NULL);
 
 	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); ++i)
 	{
@@ -86,7 +89,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	}
 
 	m_languageDescription = (ctp2_Static *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageDescription");
-	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(0)->GetDescription()));
+//	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(0)->GetDescription()));
 
 	m_getLanguageFromOS = spNew_ctp2_Button(errcode, "LanguageScreen", "SelectTrackButton", LanguageScreen::GetLanguageFromOS);
 
@@ -157,6 +160,23 @@ sint32 LanguageScreen::CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, 
 	ctp2_Static *text2 = (ctp2_Static *)item2->GetChildByIndex(0);
 
 	return _stricoll(text1->GetText(), text2->GetText());
+}
+
+void LanguageScreen::ItemSelected(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	// This is for the text boxes and updated once selected
+	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
+
+	if(s_languageScreen == NULL) return;
+
+	s_languageScreen->SetLanguageDescription();
+}
+
+void LanguageScreen::SetLanguageDescription()
+{
+	ctp2_ListItem *item = (ctp2_ListItem *)m_LanguageListBox->GetSelectedItem();
+	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
+	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
 }
 
 /*
