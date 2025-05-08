@@ -893,6 +893,9 @@ void CivPaths::SetLocalizedPathFromProfileOrDB()
 					if(lanRec->GetDisabled())
 						continue;
 
+					if(lanRec->GetHidden())
+						continue;
+
 					if(strcmp(lanRec->GetIsoCode(), locales[j].language) == 0)
 					{
 						SetLocalizedPath(lanRec->GetDirectory());
@@ -921,6 +924,9 @@ void CivPaths::SetLocalizedPathFromProfileOrDB()
 				const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
 
 				if(lanRec->GetDisabled())
+					continue;
+
+				if(lanRec->GetHidden())
 					continue;
 
 				if(CompareLocals(lanRec->GetIsoCode(), buffer))
