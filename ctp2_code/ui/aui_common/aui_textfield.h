@@ -109,6 +109,7 @@ public:
 
 	sint32	GetMaxFieldLen( void ) const { return m_maxFieldLen; }
 	sint32	SetMaxFieldLen( sint32 maxFieldLen );
+	size_t  GetTextLength() { return strlen(m_Text); };
 
 	virtual aui_Control	*SetKeyboardFocus( void );
 	virtual AUI_ERRCODE	ReleaseKeyboardFocus( void );

@@ -627,7 +627,7 @@ void aui_TextField::GetSelection(sint32 *start, sint32 *end)
 
 void aui_TextField::SelectAll(void)
 {
-	SetSelection(9999, 9999);
+	SetSelection(0, GetTextLength());
 }
 
 #ifdef __AUI_USE_DIRECTX__
