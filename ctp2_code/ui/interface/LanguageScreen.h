@@ -64,6 +64,7 @@ public:
 	static sint32 CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 
 	void SetLanguageDescription();
+	void ApplyLanguage();
 
 private:
 

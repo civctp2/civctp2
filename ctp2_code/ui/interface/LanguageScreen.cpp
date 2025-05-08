@@ -32,6 +32,7 @@
 #include "LanguageScreen.h"
 
 #include "c3ui.h"
+#include "CivPaths.h"
 #include "profileDB.h"          // g_theProfileDB
 #include "Globals.h"            // allocated::clear
 #include "keypress.h"
@@ -159,6 +160,7 @@ void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 dat
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
+	s_languageScreen->ApplyLanguage();
 	LanguageScreen::RemoveWindow(action);
 }
 
@@ -199,5 +201,17 @@ void LanguageScreen::SetLanguageDescription()
 
 	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
 	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
+}
+
+void LanguageScreen::ApplyLanguage()
+{
+	ctp2_ListItem *item = (ctp2_ListItem *)m_LanguageListBox->GetSelectedItem();
+
+	if(!item) return;
+
+	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
+
+	const LanguageRecord* lanRec = g_theLanguageDB->Get(lan);
+	g_civPaths->SetLocalizedPath(lanRec->GetDirectory());
 }
 

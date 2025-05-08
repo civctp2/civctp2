@@ -119,9 +119,10 @@ public:
 
 	void SetLocalizedPathFromProfileOrDB();
 
+	void SetLocalizedPath(const MBCHAR *path);
+
 private:
 
-	void SetLocalizedPath(const MBCHAR *path);
 	bool CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const;
 
 	MBCHAR *    MakeAssetPath
