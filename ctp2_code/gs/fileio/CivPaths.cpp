@@ -965,6 +965,8 @@ void CivPaths::SetLocalizedPath(const MBCHAR *path)
 {
 	sprintf(m_localizedPath, "%s", path);
 	ReplaceFileSeperator(m_localizedPath);
+	if(g_theProfileDB)
+		g_theProfileDB->SetLanguageDirectory(path);
 }
 
 bool CivPaths::CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const

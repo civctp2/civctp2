@@ -32,6 +32,7 @@
 #include "LanguageScreen.h"
 
 #include "c3ui.h"
+#include "profileDB.h"          // g_theProfileDB
 #include "Globals.h"            // allocated::clear
 #include "keypress.h"
 
@@ -52,7 +53,8 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 :   c3_PopupWindow(errcode, aui_UniqueId(), "LanguageScreen", bpp, AUI_WINDOW_TYPE_FLOATING, false)
 {
 	AddTitle("LanguageScreen.Name");
-	AddClose(LanguageScreen::AcceptPress);
+	AddOk(LanguageScreen::AcceptPress);
+	AddCancel(LanguageScreen::CancelPress);
 
 	m_LanguageListBox = (ctp2_ListBox *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageBox");
 
@@ -63,6 +65,10 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	m_LanguageListBox->SetMultiSelect(FALSE);
 
 	m_LanguageListBox->SetActionFuncAndCookie(LanguageScreen::ItemSelected, NULL);
+
+	ctp2_ListItem *selItem = NULL;
+
+	MBCHAR* languageDir = g_theProfileDB->GetLanguageDirectory();
 
 	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); ++i)
 	{
@@ -86,13 +92,20 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 		text->SetText(lanRec->GetNameText());
 		item->SetCompareCallback(LanguageScreen::CompareItems);
 		m_LanguageListBox->AddItem(item);
+
+		if(strcmp(lanRec->GetDirectory(), languageDir) == 0)
+			selItem = item;
 	}
+
+	m_LanguageListBox->SelectItem(selItem);
 
 	m_languageDescription = (ctp2_Static *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageDescription");
 
 	m_getLanguageFromOS = spNew_ctp2_Button(errcode, "LanguageScreen", "SelectTrackButton", LanguageScreen::GetLanguageFromOS);
 
 	*errcode = aui_Ldl::SetupHeirarchyFromRoot("LanguageScreen");
+
+	SetLanguageDescription();
 }
 
 LanguageScreen::~LanguageScreen()
@@ -149,6 +162,13 @@ void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 dat
 	LanguageScreen::RemoveWindow(action);
 }
 
+void LanguageScreen::CancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+{
+	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
+
+	LanguageScreen::RemoveWindow(action);
+}
+
 void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 }
@@ -174,6 +194,9 @@ void LanguageScreen::ItemSelected(aui_Control *control, uint32 action, uint32 da
 void LanguageScreen::SetLanguageDescription()
 {
 	ctp2_ListItem *item = (ctp2_ListItem *)m_LanguageListBox->GetSelectedItem();
+
+	if(!item) return;
+
 	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
 	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
 }
