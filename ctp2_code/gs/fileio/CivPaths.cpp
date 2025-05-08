@@ -96,7 +96,7 @@ void CivPaths_InitCivPaths()
 	// saved there, get it from the operating system. Or use the default entry
 	// in the langauage database. If this does not exsist, just stay with the 
 	// value from civpath.txt.
-	g_civPaths->SetLocalizedPathFromProfileOrDB();
+	g_civPaths->FindAndSetLocalizedPath();
 }
 
 void CivPaths_CleanupCivPaths()
@@ -866,7 +866,7 @@ void CivPaths::ResetExtraDataPaths(void)
 
 }
 
-void CivPaths::SetLocalizedPathFromProfileOrDB()
+void CivPaths::FindAndSetLocalizedPath()
 {
 	Assert(g_theProfileDB);
 
@@ -875,49 +875,24 @@ void CivPaths::SetLocalizedPathFromProfileOrDB()
 	if(LanguageDir[0] != '\0')
 	{
 		SetLocalizedPath(LanguageDir);
+		return;
 	}
-	else
-	{
+
+	const LanguageRecord* lanRec = FindLanguage();
+
+	if(lanRec != NULL)
+		SetLocalizedPath(lanRec->GetDirectory());
+}
+
+const LanguageRecord* CivPaths::FindLanguage()
+{
 #if defined(__AUI_USE_SDL__)
-		SDL_Locale* locales = SDL_GetPreferredLocales();
+	SDL_Locale* locales = SDL_GetPreferredLocales();
 
-		if(locales != NULL)
-		{
-			// Get the language that matches the IsoCode
-			for(size_t j = 0; locales[j].language != NULL; j++)
-			{
-				for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
-				{
-					const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
-
-					if(lanRec->GetDisabled())
-						continue;
-
-					if(lanRec->GetHidden())
-						continue;
-
-					if(strcmp(lanRec->GetIsoCode(), locales[j].language) == 0)
-					{
-						SetLocalizedPath(lanRec->GetDirectory());
-						SDL_free(locales);
-						return;
-					}
-				}
-			}
-		}
-
-		SDL_free(locales);
-
-#elif defined(__AUI_USE_DIRECTX__)
-		ULONG size = 0;
-
-		GetUILanguageFallbackList(NULL, 0, &size);
-
-		wchar_t* buffer = new wchar_t[size];
-		GetUILanguageFallbackList(buffer, size, NULL);
-
+	if(locales != NULL)
+	{
 		// Get the language that matches the IsoCode
-		while(buffer[0] != L'\0')
+		for(size_t j = 0; locales[j].language != NULL; j++)
 		{
 			for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
 			{
@@ -929,28 +904,28 @@ void CivPaths::SetLocalizedPathFromProfileOrDB()
 				if(lanRec->GetHidden())
 					continue;
 
-				if(CompareLocals(lanRec->GetIsoCode(), buffer))
+				if(strcmp(lanRec->GetIsoCode(), locales[j].language) == 0)
 				{
-					SetLocalizedPath(lanRec->GetDirectory());
-					return;
-				}
-			}
-
-			while(true)
-			{
-				buffer++;
-				if(buffer[0] == L'\0')
-				{
-					buffer++;
-					break;
+					SDL_free(locales);
+					return lanRec;
 				}
 			}
 		}
-#else
-#error No locale detection defined for non DX / non SDL builds
-#endif
+	}
 
-		// Get default Language from database
+	SDL_free(locales);
+
+#elif defined(__AUI_USE_DIRECTX__)
+	ULONG size = 0;
+
+	GetUILanguageFallbackList(NULL, 0, &size);
+
+	wchar_t* buffer = new wchar_t[size];
+	GetUILanguageFallbackList(buffer, size, NULL);
+
+	// Get the language that matches the IsoCode
+	while(buffer[0] != L'\0')
+	{
 		for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
 		{
 			const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
@@ -958,13 +933,47 @@ void CivPaths::SetLocalizedPathFromProfileOrDB()
 			if(lanRec->GetDisabled())
 				continue;
 
-			if(lanRec->GetDefault())
+			if(lanRec->GetHidden())
+				continue;
+
+			if(CompareLocals(lanRec->GetIsoCode(), buffer))
 			{
-				SetLocalizedPath(lanRec->GetDirectory());
-				return;
+				return lanRec;
+			}
+		}
+
+		while(true)
+		{
+			buffer++;
+			if(buffer[0] == L'\0')
+			{
+				buffer++;
+				break;
 			}
 		}
 	}
+#else
+#error No locale detection defined for non DX / non SDL builds
+#endif
+
+	// Get default Language from database
+	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+	{
+		const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+		if(lanRec->GetDisabled())
+			continue;
+
+		if(lanRec->GetHidden())
+			continue;
+
+		if(lanRec->GetDefault())
+		{
+			return lanRec;
+		}
+	}
+
+	return NULL;
 }
 
 void CivPaths::SetLocalizedPath(const MBCHAR *path)

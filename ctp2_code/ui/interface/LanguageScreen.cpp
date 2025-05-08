@@ -173,6 +173,11 @@ void LanguageScreen::CancelPress(aui_Control *control, uint32 action, uint32 dat
 
 void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
+	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
+
+	if(s_languageScreen == NULL) return;
+
+	s_languageScreen->SelectLocLanguage();
 }
 
 sint32 LanguageScreen::CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
@@ -215,5 +220,24 @@ void LanguageScreen::ApplyLanguage()
 
 	const LanguageRecord* lanRec = g_theLanguageDB->Get(lan);
 	g_civPaths->SetLocalizedPath(lanRec->GetDirectory());
+}
+
+void LanguageScreen::SelectLocLanguage()
+{
+	const LanguageRecord* lanRec = g_civPaths->FindLanguage();
+
+	if(lanRec == NULL)
+		return;
+
+	for(sint32 i = 0;  i < m_LanguageListBox->NumItems(); ++i)
+	{
+		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(m_LanguageListBox->GetItemByIndex(i));
+
+		if(reinterpret_cast<sint32>(item->GetUserData()) == lanRec->GetIndex())
+		{
+			m_LanguageListBox->SelectItem(item);
+			return;
+		}
+	}
 }
 

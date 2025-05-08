@@ -43,6 +43,8 @@
 #include "c3files.h"
 #include <vector>	// list did not work: crashes on begin() for empty list
 
+class LanguageRecord;
+
 class CivPaths {
 private:
 	MBCHAR *m_hdPath;
@@ -117,7 +119,8 @@ public:
 	void        ResetExtraDataPaths(void);
 	void        ReplaceFileSeperator(MBCHAR* path);
 
-	void SetLocalizedPathFromProfileOrDB();
+	void FindAndSetLocalizedPath();
+	const LanguageRecord* FindLanguage();
 
 	void SetLocalizedPath(const MBCHAR *path);
 

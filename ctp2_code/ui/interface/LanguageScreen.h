@@ -65,6 +65,7 @@ public:
 
 	void SetLanguageDescription();
 	void ApplyLanguage();
+	void SelectLocLanguage();
 
 private:
 
