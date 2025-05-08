@@ -201,6 +201,8 @@ void LanguageScreen::SetLanguageDescription()
 
 	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
 	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
+
+	Ok()->Enable(!g_theLanguageDB->Get(lan)->GetDisabled());
 }
 
 void LanguageScreen::ApplyLanguage()
