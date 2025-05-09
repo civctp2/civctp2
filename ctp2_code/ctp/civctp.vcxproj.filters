@@ -6069,5 +6069,11 @@
     <Text Include="..\..\ctp2_data\default\gamedata\wondermovie.txt">
       <Filter>Text Files\Game Data\Default</Filter>
     </Text>
+    <Text Include="..\..\ctp2_data\default\uidata\credits.txt">
+      <Filter>Text Files</Filter>
+    </Text>
+    <Text Include="..\..\ctp2_data\default\uidata\keymap.txt">
+      <Filter>Text Files</Filter>
+    </Text>
   </ItemGroup>
 </Project>

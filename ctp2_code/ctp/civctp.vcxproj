@@ -21649,6 +21649,8 @@
     <Text Include="..\..\ctp2_data\default\gamedata\Wonder.txt" />
     <Text Include="..\..\ctp2_data\default\gamedata\wondericon.txt" />
     <Text Include="..\..\ctp2_data\default\gamedata\wondermovie.txt" />
+    <Text Include="..\..\ctp2_data\default\uidata\credits.txt" />
+    <Text Include="..\..\ctp2_data\default\uidata\keymap.txt" />
     <Text Include="..\..\ctp2_data\english\gamedata\add_str.txt" />
     <Text Include="..\..\ctp2_data\english\gamedata\cht_str.txt" />
     <Text Include="..\..\ctp2_data\english\gamedata\civ_str.txt" />
