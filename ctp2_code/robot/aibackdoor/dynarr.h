@@ -76,12 +76,12 @@ public:
 
     T & operator [] (const size_t i) {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; } ;
 
     const T & operator [] (const size_t i) const {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; } ;
 
     DynamicArray<T> & operator = (const DynamicArray<T> &copyme);
@@ -89,12 +89,12 @@ public:
 
 	const T & Get(const size_t i) const {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; } ;
 
 	T & Access(const size_t i) const {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; }
 
 	sint32 Find(const T & me) const;

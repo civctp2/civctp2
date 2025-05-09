@@ -1290,7 +1290,7 @@ nf_AIPlayer *AllinoneWindow::GetAIPlayerFromKey( uint16 key )
 	return NULL;
 }
 
-BOOL AllinoneWindow::WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale )
+BOOL AllinoneWindow::WhoHasTribe( size_t index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale )
 {
 	Assert( curKey != NULL );
 	if ( !curKey ) return FALSE;
@@ -1362,7 +1362,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 	{
 		if ( m_mode == CONTINUE_CREATE || m_mode == CONTINUE_JOIN )
 		{
-			for ( sint32 i = 2; i < g_nsTribes->GetNumTribes(); i++ )
+			for ( size_t i = 2; i < g_nsTribes->GetNumTribes(); i++ )
 			{
 				uint16 curKey;
 				BOOL curIsAI;
@@ -1422,7 +1422,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 		}
 		else
 		{
-			for ( sint32 i = 2; i < g_nsTribes->GetNumTribes(); i++ )
+			for ( size_t i = 2; i < g_nsTribes->GetNumTribes(); i++ )
 			{
 				uint16 curKey;
 				BOOL curIsAI;
@@ -2566,7 +2566,7 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 	}
 
 	spnewgametribescreen_addAllTribes();
-	sint32 i;
+	size_t i;
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
 		if ( tribeSlots[ i ].tribe != g_playersetup.GetTribe() )
@@ -2699,7 +2699,7 @@ void AllinoneWindow::UpdateConfig( void )
 	aui_Control *psspinner = m_controls[ CONTROL_PLAYSTYLEVALUESPINNER ];
 	aui_Control *psstatic = m_controls[ CONTROL_PLAYSTYLEVALUESTATICTEXT ];
 
-	sint32 index = playstyle->GetSelectedItem();
+	size_t index = playstyle->GetSelectedItem();
 	Assert( index >= 0 && index < m_playStyleValueStrings->GetNumStrings());
 	if ( index < 0 || index >= m_playStyleValueStrings->GetNumStrings() )
 		return;

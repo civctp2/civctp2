@@ -330,7 +330,7 @@ void c3_ListBox::Clear(void)
 
 
 AUI_ERRCODE c3_ListBox::SortByColumn(
-	sint32 column,
+	size_t column,
 	BOOL ascending )
 {
 

@@ -261,7 +261,7 @@ sint32 radarwindow_Initialize()
 	sint32 row = 0;
 
 
-	for(sint32 childIndex = 0; childIndex < topBorder->NumChildren(); childIndex++) {
+	for(size_t childIndex = 0; childIndex < topBorder->NumChildren(); childIndex++) {
 
 		aui_Region *child = topBorder->GetChildByIndex(childIndex);
 

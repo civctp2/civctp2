@@ -152,7 +152,7 @@ protected:
 
 	aui_Image * LoadTheImage(const MBCHAR * name);
 
-	sint32					m_numStateImageGroups;
+	size_t					m_numStateImageGroups;
 	aui_StateImageGroup		*m_stateImageGroups;
 
 

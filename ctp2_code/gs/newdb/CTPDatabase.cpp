@@ -342,8 +342,8 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 template <class T> T *CTPDatabase<T>::Access(size_t index)
 {
 	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	if((index < 0) || (index >= m_numRecords))
+	Assert(index < static_cast<size_t>(m_numRecords));
+	if((index < 0) || (index >= static_cast<size_t>(m_numRecords)))
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("CTPDatabase::Access: index: %i, numRecords: %i\n", index, m_numRecords));
 		return NULL;
@@ -355,8 +355,8 @@ template <class T> T *CTPDatabase<T>::Access(size_t index)
 template <class T> sint32 CTPDatabase<T>::GetName(size_t index)
 {
 	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	if((index < 0) || (index >= m_numRecords))
+	Assert(index < static_cast<size_t>(m_numRecords));
+	if((index < 0) || (index >= static_cast<size_t>(m_numRecords)))
 		return 0;
 
 	return m_records[index]->m_name;
@@ -365,8 +365,8 @@ template <class T> sint32 CTPDatabase<T>::GetName(size_t index)
 template <class T> const char *CTPDatabase<T>::GetNameStr(size_t index)
 {
 	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	if((index < 0) || (index >= m_numRecords))
+	Assert(index < static_cast<size_t>(m_numRecords));
+	if((index < 0) || (index >= static_cast<size_t>(m_numRecords)))
 		return 0;
 
 	return g_theStringDB->GetNameStr(m_records[index]->m_name);

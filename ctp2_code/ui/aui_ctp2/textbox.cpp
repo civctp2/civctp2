@@ -340,13 +340,13 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 				x = ColumnWidth( 0 );
 
 			ListPos subPosition = item->ChildList()->GetHeadPosition();
-			for ( sint32 j = 1; j < m_numColumns; j++ )
+			for ( size_t j = 1; j < m_numColumns; j++ )
 			{
 				if ( !subPosition ) break;
 
 				aui_Item *subItem =
 					(aui_Item *)item->ChildList()->GetNext( subPosition );
-				if ( minHorizontal <= j && j < maxHorizontal )
+				if ( static_cast<size_t>(minHorizontal) <= j && j < static_cast<size_t>(maxHorizontal))
 				{
 					subItem->Move( x, 0 );
 

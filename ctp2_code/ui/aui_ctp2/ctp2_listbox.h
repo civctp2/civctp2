@@ -98,7 +98,7 @@ public:
 
 	void Clear();
 
-	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );
+	virtual AUI_ERRCODE SortByColumn( size_t column, BOOL ascending );
 	virtual AUI_ERRCODE Draw(aui_Surface *surface = NULL, sint32 x = 0, sint32 y = 0);
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL, sint32 x = 0, sint32 y = 0 );
 

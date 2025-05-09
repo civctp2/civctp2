@@ -459,7 +459,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 				break;
 		}
 
-		if (i + 1 < m_argValue.size())
+		if (static_cast<size_t>(i + 1) < m_argValue.size())
 		{
 			EVENTLOG((", "));
 		}

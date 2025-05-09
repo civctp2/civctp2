@@ -636,7 +636,7 @@ AUI_ERRCODE aui_Control::DrawThis(
 
 
 AUI_ERRCODE aui_Control::DrawThisStateImage(
-	sint32 state,
+	size_t state,
 	aui_Surface *destSurf,
 	RECT *destRect )
 {

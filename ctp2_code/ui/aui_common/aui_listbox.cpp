@@ -613,7 +613,7 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 			for ( size_t j = m_selectedList->L(); j; j-- )
 			{
 				ListPos prevSelectedPosition = selectedPosition;
-				sint32 index = m_selectedList->GetNext( selectedPosition );
+				size_t index = m_selectedList->GetNext( selectedPosition );
 				if ( index > i )
 					m_selectedList->SetAt( prevSelectedPosition, index - 1 );
 			}
@@ -881,14 +881,14 @@ AUI_ERRCODE aui_ListBox::RepositionItems( void )
 				x = ColumnWidth( 0 );
 
 			ListPos subPosition = item->ChildList()->GetHeadPosition();
-			for ( sint32 j = 1; j < m_numColumns; j++ )
+			for ( size_t j = 1; j < m_numColumns; j++ )
 			{
 
 				if ( !subPosition ) break;
 
 				aui_Item *subItem =
 					(aui_Item *)item->ChildList()->GetNext( subPosition );
-				if ( minHorizontal <= j && j < maxHorizontal )
+				if ( static_cast<size_t>(minHorizontal) <= j && j < static_cast<size_t>(maxHorizontal) )
 				{
 					subItem->Move( x, 0 );
 
@@ -930,7 +930,7 @@ AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 	ListPos widthPosition = m_widthList->GetHeadPosition();
 	ListPos position = m_header->ChildList()->GetHeadPosition();
 	bool firstVisibleHeader = true;
-	for (sint32 i = 0; i < m_numColumns; i++)
+	for (size_t i = 0; i < m_numColumns; i++)
 	{
 		if (!position) {
 			break;
@@ -940,7 +940,7 @@ AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 
 		aui_Switch *theSwitch = (aui_Switch *)m_header->ChildList()->GetNext(position);
 
-		if (minHorizontal <= i && i < maxHorizontal)
+		if (static_cast<size_t>(minHorizontal) <= i && i < static_cast<size_t>(maxHorizontal))
 		{
 			// First visible header
 			if (width > 0 && firstVisibleHeader)

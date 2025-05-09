@@ -61,7 +61,7 @@ protected:
 public:
 
 	uint32	WhichIsSelected( void ) const { return m_whichIsSelected; }
-	sint32	WhichIndexIsSelected( void );
+	size_t	WhichIndexIsSelected( void );
 
 	AUI_ERRCODE	AddSwitch( aui_Switch *theSwitch ) { return AddChild( (aui_Region *)theSwitch ); }
 	AUI_ERRCODE RemoveSwitch( uint32 switchId ) { return RemoveChild( switchId ); }

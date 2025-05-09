@@ -2199,7 +2199,7 @@ void FZCommentCommand::Execute(sint32 argc, char **argv)
 	MBCHAR str[_MAX_PATH];
 	size_t pos = 0;
 
-	for(size_t i = 1; i < argc; i++) {
+	for(sint32 i = 1; i < argc; i++) {
 		if(pos + strlen(argv[i]) >= _MAX_PATH)
 			break;
 		memcpy(&str[pos], argv[i], strlen(argv[i]));
@@ -3071,7 +3071,7 @@ void ChatCommand::Execute(sint32 argc, char **argv)
 	MBCHAR str[k_MAX_CHAT_LEN];
 	size_t pos = 0;
 
-	for(size_t i = 1; i < argc; i++) {
+	for(sint32 i = 1; i < argc; i++) {
 		if(pos + strlen(argv[i]) >= k_MAX_CHAT_LEN)
 			break;
 		memcpy(&str[pos], argv[i], strlen(argv[i]));

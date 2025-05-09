@@ -855,7 +855,7 @@ void Datum::ExportDestructor(FILE *outfile)
 		switch(m_type)
 		{
 			case DATUM_STRINGID:
-				fprintf(outfile, "    for (size_t index = 0; index < m_num%s; ++index)\n", m_name );
+				fprintf(outfile, "    for (sint32 index = 0; index < m_num%s; ++index)\n", m_name );
 				fprintf(outfile, "    {\n");
 				fprintf(outfile, "        delete m_%s[index];\n", m_name );
 				fprintf(outfile, "        delete m_%sIDText[index];\n", m_name );
@@ -865,7 +865,7 @@ void Datum::ExportDestructor(FILE *outfile)
 				break;
 			case DATUM_FILE:
 			case DATUM_STRING:
-				fprintf(outfile, "    for (size_t index = 0; index < m_num%s; ++index)\n", m_name );
+				fprintf(outfile, "    for (sint32 index = 0; index < m_num%s; ++index)\n", m_name );
 				fprintf(outfile, "    {\n");
 				fprintf(outfile, "        delete m_%s[index];\n", m_name );
 				fprintf(outfile, "    }\n");
@@ -881,7 +881,7 @@ void Datum::ExportDestructor(FILE *outfile)
 		switch(m_type)
 		{
 			case DATUM_STRINGID:
-				fprintf(outfile, "    for (size_t index = 0; index < k_MAX_%s; ++index)\n", m_name );
+				fprintf(outfile, "    for (sint32 index = 0; index < k_MAX_%s; ++index)\n", m_name );
 				fprintf(outfile, "    {\n");
 				fprintf(outfile, "        delete m_%sIDText[index];\n", m_name );
 				fprintf(outfile, "    }\n");
@@ -928,7 +928,7 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 		switch (m_type)
 		{
 		case DATUM_STRINGID:
-			fprintf(outfile, "%sfor (size_t index = 0; index < m_num%s; ++index)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < m_num%s; ++index)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    delete m_%sIDText[index];\n", ind, m_name);
 			fprintf(outfile, "%s}\n", ind);
@@ -941,7 +941,7 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 			fprintf(outfile, "%s}\n\n", ind);
 
 			fprintf(outfile, "%s// Copy string elements of m_%sIDText[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%sIDText[index] = new char [strlen(rval.m_%sIDText[index])+1];\n", ind, m_name, m_name);
 			fprintf(outfile, "%s    strcpy(m_%sIDText[index], rval.m_%sIDText[index]);\n", ind, m_name, m_name);
@@ -969,7 +969,7 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 
 		case DATUM_FILE:
 		case DATUM_STRING:
-			fprintf(outfile, "%sfor (size_t index = 0; index < m_num%s; ++index)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < m_num%s; ++index)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    delete m_%s[index];\n", ind, m_name);
 			fprintf(outfile, "%s}\n", ind);
@@ -982,7 +982,7 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 			fprintf(outfile, "%s}\n\n", ind);
 
 			fprintf(outfile, "%s// Copy string elements of %s[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%s[index] = new char [strlen(rval.m_%s[index])+1];\n", ind, m_name, m_name);
 			fprintf(outfile, "%s    strcpy(m_%s[index], rval.m_%s[index]);\n", ind, m_name, m_name);
@@ -997,13 +997,13 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 		{
 		case DATUM_STRINGID:
 			fprintf(outfile, "%s// Free string elements of m_%sIDText[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < m_num%s; ++index)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < m_num%s; ++index)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    delete m_%sIDText[index];\n", ind, m_name);
 			fprintf(outfile, "%s}\n\n", ind);
 
 			fprintf(outfile, "%s// Copy string elements of m_%sIDText[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%sIDText[index] = new char [strlen(rval.m_%sIDText[index])+1];\n", ind, m_name, m_name);
 			fprintf(outfile, "%s    strcpy(m_%sIDText[index], rval.m_%sIDText[index]);\n", ind, m_name, m_name);
@@ -1020,13 +1020,13 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 		case DATUM_FILE:
 		case DATUM_STRING:
 			fprintf(outfile, "%s// Free string elements of %s[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < m_num%s; ++index)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < m_num%s; ++index)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    delete m_%s[index];\n", ind, m_name);
 			fprintf(outfile, "%s}\n\n", ind);
 
 			fprintf(outfile, "%s// Copy string elements of %s[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%s[index] = new char [strlen(rval.m_%s[index])+1];\n", ind, m_name, m_name);
 			fprintf(outfile, "%s    strcpy(m_%s[index], rval.m_%s[index]);\n", ind, m_name, m_name);
@@ -1035,7 +1035,7 @@ void Datum::ExportOperatorAssignment(FILE *outfile)
 
 		case DATUM_STRUCT:
 			fprintf(outfile, "%s// Copy struct elements of %s[]\n", ind, m_name);
-			fprintf(outfile, "%sfor (size_t index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
+			fprintf(outfile, "%sfor (sint32 index = 0; index < rval.m_num%s; index++)\n", ind, m_name);
 			fprintf(outfile, "%s{\n", ind);
 			fprintf(outfile, "%s    m_%s[index] = rval.m_%s[index];\n", ind, m_name, m_name);
 			fprintf(outfile, "%s}\n\n", ind);
@@ -1192,7 +1192,7 @@ void Datum::StringUpdater(FILE  *outfile)
 		switch(m_type)
 		{
 			case DATUM_STRINGID:
-				fprintf(outfile, "    for (size_t index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    for (sint32 index = 0; index < m_num%s; index++)\n", m_name );
 				fprintf(outfile, "    {\n");
 				fprintf(outfile, "        g_theStringDB->GetStringID(m_%sIDText[index], m_%s[index]);\n", m_name, m_name);
 				fprintf(outfile, "    }\n");
@@ -1218,7 +1218,7 @@ void Datum::ExportMerge(FILE *outfile, char *recordName)
 			case DATUM_STRINGID:
 				fprintf(outfile, "    // replace string elements of m_%sIDText\n",m_name);
 				fprintf(outfile, "    // first remove old elements of m_%sIDText\n",m_name);
-				fprintf(outfile, "    for (size_t index = 0; index < m_num%s; index++)\n", m_name );
+				fprintf(outfile, "    for (sint32 index = 0; index < m_num%s; index++)\n", m_name );
 				fprintf(outfile, "    {\n");
 				fprintf(outfile, "        delete m_%sIDText[index];\n", m_name);
 				fprintf(outfile, "    }\n");

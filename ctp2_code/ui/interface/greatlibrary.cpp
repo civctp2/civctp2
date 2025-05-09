@@ -1944,7 +1944,7 @@ void GreatLibrary::Search_Great_Library()
 	char        search_key[MAX_SEARCH_KEY];
 	m_search_word->GetFieldText(search_key, MAX_SEARCH_KEY);
 
-    String_Search::Set_Case_Sensitive(false);
+	String_Search::Set_Case_Sensitive(false);
 	String_Search::Set_Search_Key(search_key);
 
 	Great_Library_Item  current;
@@ -1952,7 +1952,7 @@ void GreatLibrary::Search_Great_Library()
 
 	for (int i = DATABASE_UNITS; i < DATABASE_SEARCH; i++)
 	{
-		for (int j = 0; j < Get_Database_Size(i); j++)
+		for (size_t j = 0; j < Get_Database_Size(i); j++)
 		{
 			bool match = false;
 

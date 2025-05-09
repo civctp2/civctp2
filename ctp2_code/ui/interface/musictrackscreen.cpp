@@ -152,8 +152,8 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	Assert( AUI_SUCCESS(errcode) );
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "MusicTrackListItem");
-	for (sint32 i = 0; i < s_trackNames->GetNumStrings(); ++i)
-    {
+	for (size_t i = 0; i < s_trackNames->GetNumStrings(); ++i)
+	{
 		s_trackList->AddItem
             (new MusicTrackListItem
                 (&errcode, i, s_trackNames->GetString(i), controlBlock)

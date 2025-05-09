@@ -88,7 +88,7 @@ public:
 
 
 
-	BOOL WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale );
+	BOOL WhoHasTribe( size_t index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale );
 
 
 

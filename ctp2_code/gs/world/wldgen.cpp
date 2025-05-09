@@ -1281,7 +1281,7 @@ void World::GenerateTrenches()
 	}
 
 	m *= trench;
-	m *= 0.01;
+	m *= static_cast<sint32>(m * 0.01);
 
 	if (m < 1)
 		return;

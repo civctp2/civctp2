@@ -79,7 +79,7 @@ public:
 
 	ns_Item<T,NetShellT> *FindItem( T *object );
 
-	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );
+	virtual AUI_ERRCODE SortByColumn( size_t column, BOOL ascending );
 
 protected:
 
@@ -452,7 +452,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
-	sint32 column,
+	size_t column,
 	BOOL ascending )
 {
 

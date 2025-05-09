@@ -158,7 +158,7 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(const MBCHAR *ldlBlock)
 	if ( setImages )
 	{
 		MBCHAR temp[ k_AUI_LDL_MAXBLOCK + 1 ] = "";
-		for ( sint32 i = 0; i < m_numStateImageGroups; i++ )
+		for ( size_t i = 0; i < m_numStateImageGroups; i++ )
 		for ( sint32 j = 0; j < AUI_IMAGEBASE_SUBSTATE_LAST; j++ )
 		{
 			sprintf( temp, "%s%d", m_substateLdlKeywords[ j ], i );
@@ -242,7 +242,7 @@ aui_ImageBase::~aui_ImageBase()
 
 	if (m_stateImageGroups)
 	{
-		for ( sint32 i = 0; i < m_numStateImageGroups; i++)
+		for ( size_t i = 0; i < m_numStateImageGroups; i++)
 		    for (sint32 j = 0; j < AUI_IMAGEBASE_SUBSTATE_LAST; j++)
 			    if (m_stateImageGroups[ i ][ j ])
 				    g_ui->UnloadImage( m_stateImageGroups[ i ][ j ] );
