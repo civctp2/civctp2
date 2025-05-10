@@ -74,6 +74,9 @@ private:
 	ctp2_ListBox*          m_LanguageListBox;
 	ctp2_Static*           m_languageDescription;
 	ctp2_Button*           m_getLanguageFromOS;
+	ctp2_Static*           m_warning;
+
+	sint32                 m_startLanguage;
 };
 
 #endif

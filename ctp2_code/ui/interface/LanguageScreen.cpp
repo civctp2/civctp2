@@ -95,7 +95,10 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 		m_LanguageListBox->AddItem(item);
 
 		if(strcmp(lanRec->GetDirectory(), languageDir) == 0)
+		{
 			selItem = item;
+			m_startLanguage = i;
+		}
 	}
 
 	m_LanguageListBox->SelectItem(selItem);
@@ -103,6 +106,10 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	m_languageDescription = (ctp2_Static *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageDescription");
 
 	m_getLanguageFromOS = spNew_ctp2_Button(errcode, "LanguageScreen", "SelectTrackButton", LanguageScreen::GetLanguageFromOS);
+
+	m_warning = new ctp2_Static(errcode, aui_UniqueId(), "LanguageScreen.Warning");
+
+	m_warning->Hide();
 
 	*errcode = aui_Ldl::SetupHeirarchyFromRoot("LanguageScreen");
 
@@ -114,6 +121,7 @@ LanguageScreen::~LanguageScreen()
 	delete m_LanguageListBox;
 	delete m_languageDescription;
 	delete m_getLanguageFromOS;
+	delete m_warning;
 }
 
 void LanguageScreen::Init()
@@ -208,6 +216,11 @@ void LanguageScreen::SetLanguageDescription()
 	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
 
 	Ok()->Enable(!g_theLanguageDB->Get(lan)->GetDisabled());
+
+	if(m_startLanguage == lan)
+		m_warning->Hide();
+	else
+		m_warning->Show();
 }
 
 void LanguageScreen::ApplyLanguage()
@@ -219,7 +232,15 @@ void LanguageScreen::ApplyLanguage()
 	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
 
 	const LanguageRecord* lanRec = g_theLanguageDB->Get(lan);
+	g_theProfileDB->SetLanguageDirectory(lanRec->GetDirectory());
+
+#if 0
+	// That would be needed to change the userinterface language without restart.
+	// That's just the first. Then the language database would need to be reloaded.
+	// The string IDs in the otherdatabases need then to be updated.
+	// And the most difficult the interface would need to be updated.
 	g_civPaths->SetLocalizedPath(lanRec->GetDirectory());
+#endif
 }
 
 void LanguageScreen::SelectLocLanguage()

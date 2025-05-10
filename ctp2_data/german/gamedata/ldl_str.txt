@@ -156,7 +156,7 @@ str_ldl_Pollution_Level				"Verschm.-Niveau:"
 
 str_ldl_RES_CHANGE_BUTTON			"Auflösung"
 str_ldl_RES_TITLE				"Auflösung"
-str_ldl_RES_REBOOT_WARNING			"Bitte startet Call To Power II neu!"
+str_ldl_RES_REBOOT_WARNING			"Diese Änderung erfolgt, wenn Ihr Call To Power II neu startet!"
 
 DIP_EXCHANGE_ADVANCE_NONE			"Austausch von Neuerungen nicht möglich."
 str_ldl_Cant_disband_city			"Städte mit einer Bevölkerungsgröße von 4 und mehr können nicht aufgelöst werden."
