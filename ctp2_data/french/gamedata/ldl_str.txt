@@ -3092,7 +3092,7 @@ str_profile_CityClick                           "Sélectionner la ville au lieu d
 str_profile_DebugSlic                           "Messages du débogueur de Slic"
 str_profile_DebugSlicEvents                     "Messages de débogage des événements Slic"
 str_profile_EndTurnWithEmptyBuildQueues         "Finir tour sans construction en cours"
-str_profile_RunInBackground                     "Permettre fin de tour automatique"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "Amélioration des unités"
 str_profile_SmoothBorders                       "Frontières de l'empire lissées"
 str_profile_CivFlags                            "Unités avec drapeau de la civilisation"
