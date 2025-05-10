@@ -58,6 +58,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	AddCancel(LanguageScreen::CancelPress);
 
 	m_LanguageListBox = (ctp2_ListBox *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageBox");
+	m_startLanguage = -1;
 
 	Assert(m_LanguageListBox);
 
@@ -101,7 +102,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 		}
 	}
 
-	m_LanguageListBox->SelectItem(selItem);
+	if (selItem != NULL) m_LanguageListBox->SelectItem(selItem);
 
 	m_languageDescription = (ctp2_Static *)aui_Ldl::BuildHierarchyFromRoot("LanguageScreen.LanguageDescription");
 
