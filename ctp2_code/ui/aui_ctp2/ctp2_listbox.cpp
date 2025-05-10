@@ -334,7 +334,7 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	Assert( 0 <= column && column < m_numColumns );
 	if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
 
-	m_sortColumn = column;
+	m_sortColumn = static_cast<sint32>(column);
 	m_sortAscending = ascending;
 
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;
@@ -387,7 +387,7 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
+	if ( maxVertical > static_cast<sint32>(m_numRows) ) maxVertical = static_cast<sint32>(m_numRows);
 
 	RECT selectRect = rect;
 	InflateRect( &selectRect, -1, 0 );
@@ -536,7 +536,7 @@ void ctp2_ListBox::GetDisplayRange(sint32 &top, sint32 &bottom)
 	top = m_verticalRanger->GetValueY();
 	bottom = top + m_itemsPerHeight - 1;
 	if(bottom > m_numRows)
-		bottom = m_numRows;
+		bottom = static_cast<sint32>(m_numRows);
 }
 
 void ctp2_ListBox::EnsureItemVisible(sint32 index)

@@ -137,7 +137,7 @@ void ns_ListBox<T,NetShellT>::Change( T *object )
 		UpdateNetShellItem( item );
 		item->ShouldDraw();
 
-		SortByColumn( m_sortColumn, m_sortAscending );
+		SortByColumn( static_cast<sint32>(m_sortColumn), m_sortAscending );
 	}
 }
 
@@ -461,10 +461,10 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
 	Assert( 0 <= column && column < m_numColumns );
 	if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
 
-	m_sortColumn = column;
+	m_sortColumn = static_cast<sint32>(column);
 	m_sortAscending = ascending;
 
-	sint32 limit = m_numRows - 1;
+	sint32 limit = static_cast<sint32>(m_numRows - 1);
 	if ( limit <= 0 ) return AUI_ERRCODE_OK;
 
 	BOOL changed;

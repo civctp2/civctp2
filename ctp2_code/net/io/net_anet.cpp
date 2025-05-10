@@ -447,7 +447,7 @@ NET_ERR
 ActivNetIO::Idle()
 {
 	uint8 buf[dp_MAXLEN_UNRELIABLE + 512];
-    size_t size = dp_MAXLEN_UNRELIABLE + 512;
+	size_t size = dp_MAXLEN_UNRELIABLE + 512;
 	uint16 idFrom;
 	uint16 idTo;
 	dp_result_t res;
@@ -715,7 +715,7 @@ ActivNetIO::Idle()
 
 					m_response->PacketReady(idFrom,
 											buf,
-											size);
+											static_cast<sint32>(size));
 				}
 				break;
 			}

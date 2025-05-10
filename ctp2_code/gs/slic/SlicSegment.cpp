@@ -777,7 +777,7 @@ bool SlicSegment::GetSourceLines(sint32 &firstLineNum, sint32 &firstLineOffset, 
 	}
 }
 
-sint32 SlicSegment::FindLineNumber(sint32 offset)
+sint32 SlicSegment::FindLineNumber(size_t offset)
 {
 	sint32 curLine = -1;
 	bool foundOffset = false;

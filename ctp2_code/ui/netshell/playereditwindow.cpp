@@ -464,7 +464,7 @@ void PlayerEditWindow::OKButtonAction::Execute(
 	aui_Radio *radio = (aui_Radio *)sg->GetChild( sg->WhichIsSelected() );
 	if ( radio )
 	{
-		for (size_t i = 0; i < sg->ChildList()->L(); ++i)
+		for (sint32 i = 0; i < static_cast<sint32>(sg->ChildList()->L()); ++i)
 		{
 			if ( p->FindControl(
 					PlayerEditWindow::CONTROL_EXPERIENCE0CHECKBOX + i ) == radio

@@ -161,7 +161,7 @@ AUI_ERRCODE C3ListBox::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
+	if ( maxVertical > static_cast<sint32>(m_numRows) ) maxVertical = static_cast<sint32>(m_numRows);
 
 	RECT selectRect = rect;
 	InflateRect( &selectRect, -1, 0 );

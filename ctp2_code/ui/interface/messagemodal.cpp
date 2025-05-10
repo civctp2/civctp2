@@ -339,8 +339,8 @@ MessageModal::~MessageModal ()
 	if ( m_messageModalResponseAction ) {
 		ListPos position = m_messageModalResponseAction->GetHeadPosition();
 
-		for ( sint32 i = m_messageModalResponseAction->L(); i; i-- )
-        {
+		for ( size_t i = m_messageModalResponseAction->L(); i; i-- )
+		{
 			delete m_messageModalResponseAction->GetNext( position );
 		}
 
@@ -349,11 +349,11 @@ MessageModal::~MessageModal ()
 	}
 
 	if ( m_messageModalResponseButton )
-    {
+	{
 		ListPos position = m_messageModalResponseButton->GetHeadPosition();
 
-		for ( sint32 i = m_messageModalResponseButton->L(); i; i-- )
-        {
+		for ( size_t i = m_messageModalResponseButton->L(); i; i-- )
+		{
 			delete m_messageModalResponseButton->GetNext( position );
 		}
 

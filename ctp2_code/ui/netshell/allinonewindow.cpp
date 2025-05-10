@@ -710,7 +710,7 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return AUI_ERRCODE_HACK;
 
-	sint32 numStyles = st.GetNumStrings();
+	sint32 numStyles = static_cast<sint32>(st.GetNumStrings());
 
 	for ( sint32 i = 0; i < numStyles; i++ )
 	{
@@ -935,7 +935,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 	listbox->SetAbsorbancy( FALSE );
 	sint32 height = listbox->Height();
 
-	m_numAvailUnits = g_nsUnits->GetStrings()->GetNumStrings();
+	m_numAvailUnits = static_cast<sint32>(g_nsUnits->GetStrings()->GetNumStrings());
 	g_gamesetup.SetNumAvailUnits( m_numAvailUnits );
 
 	aui_Switch *item = NULL;
@@ -1001,7 +1001,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	tech_WLList<aui_Switch *> improvementList;
 
-	m_numAvailImprovements = g_nsImprovements->GetStrings()->GetNumStrings();
+	m_numAvailImprovements = static_cast<sint32>(g_nsImprovements->GetStrings()->GetNumStrings());
 	g_gamesetup.SetNumAvailImprovements( m_numAvailImprovements );
 	for ( i = 0; i < m_numAvailImprovements; i++ )
 	{
@@ -1056,7 +1056,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	tech_WLList<aui_Switch *> wonderList;
 
-	m_numAvailWonders = g_nsWonders->GetStrings()->GetNumStrings();
+	m_numAvailWonders = static_cast<sint32>(g_nsWonders->GetStrings()->GetNumStrings());
 	g_gamesetup.SetNumAvailWonders( m_numAvailWonders );
 	for ( i = 0; i < m_numAvailWonders; i++ )
 	{
@@ -1307,7 +1307,7 @@ BOOL AllinoneWindow::WhoHasTribe( size_t index, uint16 *curKey, BOOL *curIsAI, B
 
 	*curIsFemale = FALSE;
 
-	if (!IsValidTribeIndex(index))
+	if (!IsValidTribeIndex(static_cast<sint32>(index)))
 	{
 		return FALSE;
 	}
@@ -1381,7 +1381,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 								g_gamesetup.GetSavedTribeSlots()[ j ].isAI == isAI )
 							{
 								if ( isFemale ) *isFemale = g_gamesetup.GetSavedTribeSlots()[ j ].isFemale;
-								return i;
+								return static_cast<sint32>(i);
 							}
 						}
 					} else {
@@ -1390,13 +1390,13 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 						   (m_scenInfo.m_startInfoType == (uint8)STARTINFOTYPE_NOLOCS)) {
 
 							if ( isFemale ) *isFemale = curIsFemale;
-							return i;
+							return static_cast<sint32>(i);
 						}
 
 						for( sint32 j = 0; j < m_scenInfo.m_numStartPositions; j++) {
 							if(m_scenInfo.m_civs[j] == i - 1) {
 								if(isFemale) *isFemale = curIsFemale;
-								return i;
+								return static_cast<sint32>(i);
 							}
 						}
 					}
@@ -1433,7 +1433,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 				if ( curKey == 0 )
 				{
 					if ( isFemale ) *isFemale = curIsFemale;
-					return i;
+					return static_cast<sint32>(i);
 				}
 			}
 		}
@@ -2607,7 +2607,7 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 			}
 
 			if ( !found )
-				spnewgametribescreen_removeTribe( i - 1 );
+				spnewgametribescreen_removeTribe( static_cast<sint32>(i - 1) );
 		}
 	}
 }
@@ -2820,7 +2820,7 @@ void AllinoneWindow::DeleteAIPlayer( nf_AIPlayer *player )
 
 sint32 AllinoneWindow::CurNumHumanPlayers( void )
 {
-	return g_netfunc->players.size();
+	return static_cast<sint32>(g_netfunc->players.size());
 }
 
 sint32 AllinoneWindow::CurNumAiPlayers( void )

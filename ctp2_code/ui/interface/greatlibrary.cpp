@@ -1110,7 +1110,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		}
 
 		m_history.push_back(new_gl_page);
-		m_history_position = m_history.size() - 1;
+		m_history_position = static_cast<int>(m_history.size() - 1);
 		m_forwardButton->Enable(FALSE);
 		m_backButton->Enable(m_history_position > 0);
 	}
@@ -1952,7 +1952,7 @@ void GreatLibrary::Search_Great_Library()
 
 	for (int i = DATABASE_UNITS; i < DATABASE_SEARCH; i++)
 	{
-		for (size_t j = 0; j < Get_Database_Size(i); j++)
+		for (sint32 j = 0; j < static_cast<sint32>(Get_Database_Size(i)); j++)
 		{
 			bool match = false;
 

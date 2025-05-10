@@ -156,7 +156,7 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	{
 		s_trackList->AddItem
             (new MusicTrackListItem
-                (&errcode, i, s_trackNames->GetString(i), controlBlock)
+                (&errcode, static_cast<sint32>(i), s_trackNames->GetString(i), controlBlock)
             );
 	}
 

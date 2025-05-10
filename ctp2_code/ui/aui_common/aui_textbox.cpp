@@ -134,7 +134,7 @@ AUI_ERRCODE aui_TextBox::AppendText
 
 	strncat( m_text, text, m_maxLength - m_curLength );
 
-	m_curLength = strlen( m_text );
+	m_curLength =  static_cast<sint32>(strlen( m_text ));
 
 	return AUI_ERRCODE_OK;
 }

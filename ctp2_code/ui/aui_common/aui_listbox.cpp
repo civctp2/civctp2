@@ -363,7 +363,7 @@ AUI_ERRCODE aui_ListBox::Draw(
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
+	if ( maxVertical > m_numRows ) maxVertical = static_cast<sint32>(m_numRows);
 
 	RECT selectRect = rect;
 
@@ -596,7 +596,7 @@ AUI_ERRCODE aui_ListBox::InsertItem( aui_Item *item, sint32 index )
 AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( size_t i = 0; i < (sint32)m_pane->ChildList()->L(); i++ )
+	for ( sint32 i = 0; i < (sint32)m_pane->ChildList()->L(); i++ )
 	{
 		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
@@ -613,7 +613,7 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 			for ( size_t j = m_selectedList->L(); j; j-- )
 			{
 				ListPos prevSelectedPosition = selectedPosition;
-				size_t index = m_selectedList->GetNext( selectedPosition );
+				sint32 index = m_selectedList->GetNext( selectedPosition );
 				if ( index > i )
 					m_selectedList->SetAt( prevSelectedPosition, index - 1 );
 			}
@@ -622,7 +622,7 @@ AUI_ERRCODE aui_ListBox::RemoveItem( uint32 itemId )
 			&&   !m_selectedList->L()
 			&&   m_pane->ChildList()->L() )
 			{
-				if ( i < m_pane->ChildList()->L() )
+				if ( i < static_cast<sint32>(m_pane->ChildList()->L()) )
 					m_selectedList->AddHead( i );
 				else
 					m_selectedList->AddHead( i ? i - 1 : 0 );
@@ -758,7 +758,7 @@ sint32 aui_ListBox::ItemsPerWidth( sint32 column )
 	sint32 width = 0;
 
 	ListPos position = m_widthList->FindIndex( column );
-	for ( sint32 i = m_numColumns - column; i > 0; i-- )
+	for ( size_t i = m_numColumns - column; i > 0; i-- )
 	{
 		if ( (width += position ?
 				m_widthList->GetNext( position ) :
@@ -787,7 +787,7 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 
 	sint32 i;
 	for(
-		i = m_numColumns - static_cast<sint32>(m_widthList->L());
+		i = static_cast<sint32>(m_numColumns - m_widthList->L());
 		i > 0 && (width += m_maxItemWidth) <= m_width;
 		i-- )
 			count++;
@@ -799,7 +799,7 @@ sint32 aui_ListBox::HorizontalRangerPositionCount( void )
 		j-- )
 			count++;
 
-	sint32 columns = m_numColumns ? m_numColumns : static_cast<sint32>(m_widthList->L());
+	sint32 columns =  static_cast<sint32>(m_numColumns ? m_numColumns :m_widthList->L());
 	if ( !columns ) columns = count;
 
 	return columns - count;
@@ -850,7 +850,7 @@ AUI_ERRCODE aui_ListBox::RepositionItems( void )
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
+	if ( maxVertical > m_numRows ) maxVertical = static_cast<sint32>(m_numRows);
 
 	Assert( m_pane );
 	if ( !m_pane ) return AUI_ERRCODE_INVALIDPARAM;
@@ -881,14 +881,14 @@ AUI_ERRCODE aui_ListBox::RepositionItems( void )
 				x = ColumnWidth( 0 );
 
 			ListPos subPosition = item->ChildList()->GetHeadPosition();
-			for ( size_t j = 1; j < m_numColumns; j++ )
+			for ( sint32 j = 1; j < m_numColumns; j++ )
 			{
 
 				if ( !subPosition ) break;
 
 				aui_Item *subItem =
 					(aui_Item *)item->ChildList()->GetNext( subPosition );
-				if ( static_cast<size_t>(minHorizontal) <= j && j < static_cast<size_t>(maxHorizontal) )
+				if ( minHorizontal <= j && j < maxHorizontal )
 				{
 					subItem->Move( x, 0 );
 
@@ -1025,7 +1025,7 @@ AUI_ERRCODE aui_ListBox::RepositionRangers( void )
 		m_verticalRangerOffset.y );
 
 	newMax = m_itemsPerHeight ?
-		m_numRows - m_itemsPerHeight :
+		static_cast<sint32>(m_numRows - m_itemsPerHeight):
 		0;
 	if ( newMax < 0 ) newMax = 0;
 
@@ -1179,7 +1179,7 @@ AUI_ERRCODE aui_ListBox::DragSelect(sint32 relativeY)
 	if ( m_dragDropWindow ) return AUI_ERRCODE_OK;
 
 	sint32 maxY = m_itemsPerHeight;
-	if ( maxY > m_numRows ) maxY = m_numRows;
+	if ( maxY > static_cast<sint32>(m_numRows) ) maxY = static_cast<sint32>(m_numRows);
 	maxY *= m_maxItemHeight;
 
 	sint32 itemIndex = 0;
@@ -1191,7 +1191,7 @@ AUI_ERRCODE aui_ListBox::DragSelect(sint32 relativeY)
 	else
 	{
 		itemIndex = m_itemsPerHeight + m_verticalRanger->GetValueY() - 1;
-		if ( itemIndex >= m_numRows ) itemIndex = m_numRows - 1;
+		if ( itemIndex >= static_cast<sint32>(m_numRows) ) itemIndex = static_cast<sint32>(m_numRows - 1);
 	}
 
 	if (itemIndex < 0 || GetItemByIndex(itemIndex)->IsDisabled()) {
@@ -1513,7 +1513,7 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
-		if ( maxY > m_numRows ) maxY = m_numRows;
+		if ( maxY > static_cast<sint32>(m_numRows) ) maxY = static_cast<sint32>(m_numRows);
 		maxY *= m_maxItemHeight;
 
 		if (relativeY < maxY )
@@ -1649,7 +1649,7 @@ void aui_ListBox::MouseRGrabInside( aui_MouseEvent *mouseData )
 		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
-		if ( maxY > m_numRows ) maxY = m_numRows;
+		if ( maxY > static_cast<sint32>(m_numRows) ) maxY = static_cast<sint32>(m_numRows);
 		maxY *= m_maxItemHeight;
 
 		if (relativeY < maxY )
@@ -1887,7 +1887,7 @@ void aui_ListBox::MouseLDoubleClickInside( aui_MouseEvent *mouseData )
 		sint32 relativeY = CalculateRelativeY(mouseData->position.y);
 
 		sint32 maxY = m_itemsPerHeight;
-		if ( maxY > m_numRows ) maxY = m_numRows;
+		if ( maxY > static_cast<sint32>(m_numRows) ) maxY = static_cast<sint32>(m_numRows);
 		maxY *= m_maxItemHeight;
 
 		if (relativeY < maxY )

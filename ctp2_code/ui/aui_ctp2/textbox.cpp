@@ -312,10 +312,10 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical =
-	    std::min<sint32>(m_numRows, minVertical + m_itemsPerHeight);
+	    std::min<sint32>(static_cast<sint32>(m_numRows), minVertical + m_itemsPerHeight);
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = 0; i < m_numRows; i++ )
+	for ( sint32 i = 0; i < static_cast<sint32>(m_numRows); i++ )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		if ( minVertical <= i && i < maxVertical )
@@ -340,7 +340,7 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 				x = ColumnWidth( 0 );
 
 			ListPos subPosition = item->ChildList()->GetHeadPosition();
-			for ( size_t j = 1; j < m_numColumns; j++ )
+			for ( sint32 j = 1; j < static_cast<sint32>(m_numColumns); j++ )
 			{
 				if ( !subPosition ) break;
 

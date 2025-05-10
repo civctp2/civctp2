@@ -135,7 +135,7 @@ public:
 	const char *GetFilename() { return m_filename; }
 	uint8 *FindNextLine(uint8 *start);
 	bool GetSourceLines(sint32 &firstLineNum, sint32 &firstLineOffset, sint32 &lastLineNum);
-	sint32 FindLineNumber(sint32 offset);
+	sint32 FindLineNumber(size_t offset);
 	bool LineHasBreak(sint32 line, bool &conditional);
 
 	void SetBreak(sint32 lineNumber, bool setBreak);
