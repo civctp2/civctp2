@@ -345,7 +345,7 @@ ProfileDB::ProfileDB()
 	Var("AutoDeselect"               , PV_BOOL  , &m_autoDeselect               , NULL);
 	Var("AutoSelectNext"             , PV_BOOL  , &m_autoSelectNext             , NULL);
 	Var("AutoSelectFirstUnit"        , PV_BOOL  , &m_autoSelectFirstUnit        , NULL);
-	Var("AutoTurnCycle"              , PV_BOOL  , &m_autoTurnCycle              , NULL, false);
+	Var("AutoTurnCycle"              , PV_BOOL  , &m_autoTurnCycle              , NULL);
 	Var("CombatLog"                  , PV_BOOL  , &m_combatLog                  , NULL, false);
 
 	Var("UseLeftClick"               , PV_BOOL  , &m_useLeftClick               , NULL, false);
@@ -442,29 +442,29 @@ ProfileDB::ProfileDB()
 	Var("CityClick"                  , PV_BOOL  , &m_cityClick                  , NULL, false);
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL  , &m_endTurnWithEmptyBuildQueues, NULL, false);
 	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL);
-	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
-	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
+	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);   //
+	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);   //
 	/// @todo Move this to the scenario editor
-	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, isDebug);
+	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, isDebug); //
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL, false);
 	// emod new profile flags // Please make sure that only those show up which are used.
 	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL, false);
-	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);
-	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities            , NULL, false);
-	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL, false);
-	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties           , NULL, false);
-	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents           , NULL, false);
-	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL, false);
-	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL, false);
-	Var("AINoSinking"                , PV_BOOL  , &m_AINoSinking                , NULL, false);
-	Var("GoldPerUnitSupport"         , PV_BOOL  , &m_GoldPerUnitSupport         , NULL, false);
-	Var("GoldPerCity"                , PV_BOOL  , &m_GoldPerCity                , NULL, false);
-	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
-	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
-	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);
+	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);   //
+	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities            , NULL, false);   //
+	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL, false);   //
+	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties           , NULL, false);   //
+	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents           , NULL, false);   //
+	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL, false);   //
+	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL, false);   //
+	Var("AINoSinking"                , PV_BOOL  , &m_AINoSinking                , NULL, false);   //
+	Var("GoldPerUnitSupport"         , PV_BOOL  , &m_GoldPerUnitSupport         , NULL, false);   //
+	Var("GoldPerCity"                , PV_BOOL  , &m_GoldPerCity                , NULL, false);   //
+	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);   //
+	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);   //
+	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);   //
 	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, isDebug);
-	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false);
-	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
+	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false);   //
+	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);   //
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
 	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL, false);
 	Var("NoGoodyHuts"                , PV_BOOL  , &m_noGoodyHuts                , NULL, false);
