@@ -1151,7 +1151,7 @@ void slicif_end_while()
 //              time.
 //
 //----------------------------------------------------------------------------
-void slicif_dump_code(unsigned char* code, int codeSize)
+void slicif_dump_code(unsigned char* code, size_t codeSize)
 {
 	unsigned char* codePtr = code;
 	double dval;
@@ -1166,7 +1166,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 	while(codePtr < code + codeSize) {
 		SOP op = (SOP)*codePtr;
-		fprintf(debuglog, "%04lx: ", codePtr - code);
+		fprintf(debuglog, "%04zx: ", codePtr - code);
 		codePtr++;
 		switch(op) {
 			case SOP_PUSHI:

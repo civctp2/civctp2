@@ -93,12 +93,12 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 	uint16		i;
 	for (i=0; i<s->GetNumFrames(); i++)
 	{
-	    normal_ssizes[i] = s->GetFrameDataSize(i);
-	    normal_msizes[i] = s->GetMiniFrameDataSize(i);
+		normal_ssizes[i] = static_cast<sint32>(s->GetFrameDataSize(i));
+		normal_msizes[i] = static_cast<sint32>(s->GetMiniFrameDataSize(i));
 	}
 
-    WriteData((uint8 *)normal_ssizes,s->GetNumFrames()*sizeof(uint32));
-    WriteData((uint8 *)normal_msizes,s->GetNumFrames()*sizeof(uint32));
+	WriteData((uint8 *)normal_ssizes,s->GetNumFrames()*sizeof(uint32));
+	WriteData((uint8 *)normal_msizes,s->GetNumFrames()*sizeof(uint32));
 
 	uint32		compressed_ssizes[800];
 	for (i=0; i<s->GetNumFrames(); i++)
@@ -107,32 +107,32 @@ void SpriteFile::WriteSpriteData(Sprite *s)
 
 		size_t          size            = s->GetFrameDataSize(i);
 		uint8 *         CompressedData  = CompressData((void *)s->GetFrameData(i), size);
-        size_t const    compressed_size = size;
+		size_t const    compressed_size = size;
 
-	    if (m_version>k_SPRITEFILE_VERSION1)
+		if (m_version>k_SPRITEFILE_VERSION1)
 		{
 			size += sizeof(uint32);
 			WriteData((uint32)normal_ssizes[i]);
 		}
 
 		WriteData(CompressedData, compressed_size);
-		compressed_ssizes[i] = compressed_size;
+		compressed_ssizes[i] = static_cast<sint32>(compressed_size);
 
 		delete [] CompressedData;
 	}
 
 	if(m_version>k_SPRITEFILE_VERSION1)
 	{
-	    long const    current_pos = GetFilePos();
-	    SetFilePos(frame_offset_pos);
-	    WriteData((uint8 *)compressed_ssizes,s->GetNumFrames()*sizeof(uint32));
-	    SetFilePos(current_pos);
+		long const    current_pos = GetFilePos();
+		SetFilePos(frame_offset_pos);
+		WriteData((uint8 *)compressed_ssizes,s->GetNumFrames()*sizeof(uint32));
+		SetFilePos(current_pos);
 	}
 
 	for (i=0; i<s->GetNumFrames(); i++)
 	{
 		spriteutils_ConvertPixelFormatForFile
-            (s->GetMiniFrameData(i), s->GetWidth()/2, s->GetHeight()/2);
+		    (s->GetMiniFrameData(i), s->GetWidth()/2, s->GetHeight()/2);
 		WriteData((uint8 *)s->GetMiniFrameData(i), s->GetMiniFrameDataSize(i));
 	}
 }
@@ -159,8 +159,8 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 
 		for (i=0; i<num_frames; i++)
 		{
-			normal_ssizes[j][i] = s->GetFrameDataSize(j, i);
-		    normal_msizes[j][i] = s->GetMiniFrameDataSize(j, i);
+			normal_ssizes[j][i] = static_cast<uint32>(s->GetFrameDataSize(j, i));
+			normal_msizes[j][i] = static_cast<uint32>(s->GetMiniFrameDataSize(j, i));
 		}
 
 		WriteData((uint8 *)normal_ssizes[j],sizeof(uint32) * s->GetNumFrames());
@@ -176,15 +176,15 @@ void SpriteFile::WriteFacedSpriteData(FacedSprite *s)
 													s->GetWidth(), s->GetHeight());
 
 			size_t  size            = normal_ssizes[j][i];
-		    uint8 * CompressedData  = CompressData((void *)s->GetFrameData(j,i),size);
+			uint8 * CompressedData  = CompressData((void *)s->GetFrameData(j,i),size);
 			size_t  compressed_size = size;
 
 			if(m_version>k_SPRITEFILE_VERSION1)
-			   WriteData((uint32)normal_ssizes[j][i]);
+				WriteData(static_cast<uint32>(normal_ssizes[j][i]));
 
 			WriteData(CompressedData, compressed_size);
 
-		    compressed_ssizes[j][i] = size;
+			compressed_ssizes[j][i] = static_cast<uint32>(size);
 
 			delete [] CompressedData;
 		}
@@ -2289,7 +2289,7 @@ SpriteFile::CompressData_LZW1(void *Data, size_t &DataLen)
  uint8  *p_dst_first=(uint8 *)g_compression_buff;
 
  size_t  src_len=DataLen;
- uint32     p_dst_len=COM_BUFF_SIZE;
+ size_t     p_dst_len=COM_BUFF_SIZE;
 
  uint8 *p_src=p_src_first,*p_dst=p_dst_first;
  uint8 *p_src_post=p_src_first+src_len,*p_dst_post=p_dst_first+src_len;
@@ -2307,16 +2307,16 @@ SpriteFile::CompressData_LZW1(void *Data, size_t &DataLen)
 	uint8 *p,*s;
 	uint16 unroll=16,len;
 	uint32 index;
-	uint32 offset;
+	size_t offset;
 
 	if (p_dst>p_dst_post)
 		goto overrun;
 
-    if (p_src>p_src_max16)
-    {
+	if (p_src>p_src_max16)
+	{
 		unroll=1;
 		if (p_src>p_src_max1)
-        {
+		{
 			if (p_src==p_src_post)
 				break;
 			goto literal;
@@ -2325,33 +2325,33 @@ SpriteFile::CompressData_LZW1(void *Data, size_t &DataLen)
 
 begin_unrolled_loop:
 
-    index=((40543*((((p_src[0]<<4)^p_src[1])<<4)^p_src[2]))>>4) & 0xFFF;
+	index=((40543*((((p_src[0]<<4)^p_src[1])<<4)^p_src[2]))>>4) & 0xFFF;
 
 	p=hash[index];
 	hash[index]=s=p_src;
 	offset=s-p;
 
 	if ((offset>4095) || (p<p_src_first) || (offset==0) || LZW1_PS || LZW1_PS || LZW1_PS)
-    {
+	{
 literal:
-	 	*p_dst++=*p_src++;
-	 	control>>=1;
-	 	control_bits++;
+		*p_dst++=*p_src++;
+		control>>=1;
+		control_bits++;
 	}
-    else
-    {
-	   LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS ||
-       LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || s++;
-	   len = static_cast<uint16>(s - p_src - 1);
-       *p_dst++=(unsigned char)(((offset&0xF00)>>4)+(len-1));
-	   *p_dst++=(unsigned char)(offset&0xFF);
-       p_src+=len;
-	   control=(control>>1)|0x8000; control_bits++;
+	else
+	{
+		LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS ||
+		LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || LZW1_PS || s++;
+		len = static_cast<uint16>(s - p_src - 1);
+		*p_dst++=(unsigned char)(((offset&0xF00)>>4)+(len-1));
+		*p_dst++=(unsigned char)(offset&0xFF);
+		 p_src+=len;
+		control=(control>>1)|0x8000; control_bits++;
 	}
 
 
 	if (--unroll)
-	   goto begin_unrolled_loop;
+		goto begin_unrolled_loop;
 
 	if (control_bits==16)
 	{

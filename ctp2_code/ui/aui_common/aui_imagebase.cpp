@@ -161,7 +161,7 @@ AUI_ERRCODE aui_ImageBase::InitCommonLdl(const MBCHAR *ldlBlock)
 		for ( size_t i = 0; i < m_numStateImageGroups; i++ )
 		for ( sint32 j = 0; j < AUI_IMAGEBASE_SUBSTATE_LAST; j++ )
 		{
-			sprintf( temp, "%s%d", m_substateLdlKeywords[ j ], i );
+			sprintf( temp, "%s%zu", m_substateLdlKeywords[ j ], i );
 			SetImage(
 				block->GetString( temp ),
 				i,

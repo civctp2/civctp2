@@ -2741,7 +2741,7 @@ SlicStructDescription *SlicEngine::GetStructDescription(SLIC_BUILTIN which)
 	return m_builtin_desc[which];
 }
 
-void SlicEngine::Break(SlicSegment *segment, sint32 offset, SlicObject *context, SlicStack *stack,
+void SlicEngine::Break(SlicSegment *segment, size_t offset, SlicObject *context, SlicStack *stack,
 					   MessageData *message)
 {
 
