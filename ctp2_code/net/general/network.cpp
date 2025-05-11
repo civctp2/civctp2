@@ -2410,10 +2410,10 @@ void Network::SendChatText(MBCHAR *str, size_t len)
 			sprintf(buf, "Risk: %d", g_theGameSettings->GetRisk());
 			g_chatBox->AddLine(m_playerIndex, buf);
 
-			sprintf(buf, "Pollution: %s", g_theGameSettings->GetPollution() ? "On" : "Off");
+			sprintf(buf, "Pollution: %s", g_theGameSettings->IsPollution() ? "On" : "Off");
 			g_chatBox->AddLine(m_playerIndex, buf);
 
-			sprintf(buf, "Bloodlust: %s", g_theGameSettings->GetAlienEndGame() ? "Off" : "On");
+			sprintf(buf, "Bloodlust: %s", g_theGameSettings->IsAlienEndGame() ? "Off" : "On");
 			g_chatBox->AddLine(m_playerIndex, buf);
 
 			if(g_theGameSettings->GetStartingAge() > 0 || g_theGameSettings->GetEndingAge() < g_theAgeDB->NumRecords()) {

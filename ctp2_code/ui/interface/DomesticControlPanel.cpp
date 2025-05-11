@@ -57,6 +57,7 @@
 #include "aui_bitmapfont.h"
 #include "c3math.h"             // AsPercentage
 #include "c3ui.h"
+#include "GameSettings.h"
 
 extern Pollution            *g_thePollution;
 
@@ -387,7 +388,14 @@ void DomesticControlPanel::UpdateStats()
 
 	MBCHAR stringBuffer[50];
 
-	sprintf(stringBuffer, "%d/%d", cities, g_theGovernmentDB->Get(government)->GetTooManyCitiesThreshold());
+	if(g_theGameSettings->IsNoCityLimit())
+	{
+		sprintf(stringBuffer, "%d", cities);
+	}
+	else
+	{
+		sprintf(stringBuffer, "%d/%d", cities, g_theGovernmentDB->Get(government)->GetTooManyCitiesThreshold());
+	}
 	m_citiesValue->SetText(stringBuffer);
 
 	sprintf(stringBuffer, "%d", population);

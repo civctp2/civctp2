@@ -2003,7 +2003,7 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 //----------------------------------------------------------------------------
 void CityData::CalcPollution(void)
 {
-	if (!g_theGameSettings->GetPollution())
+	if (!g_theGameSettings->IsPollution())
 	{
 		m_cityPopulationPollution   = 0;
 		m_cityIndustrialPollution   = 0;
@@ -2107,7 +2107,7 @@ void CityData::CalcPollution(void)
 //----------------------------------------------------------------------------
 void CityData::DoLocalPollution()
 {
-	if(!g_theGameSettings->GetPollution())
+	if(!g_theGameSettings->IsPollution())
 		return;
 
 	if(m_total_pollution < g_theConstDB->Get(0)->GetLocalPollutionLevel())
@@ -3743,9 +3743,16 @@ void CityData::CalculateBonusGold()
 	//////////////////////////////////
 	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings(), m_owner);
-	//gold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num());
-	m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num() * g_theGovernmentDB->Get(gov)->GetTooManyCitiesThreshold());
-	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	if(g_theGameSettings->IsNoCityLimit())
+	{
+		m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num());
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	}
+	else
+	{
+		m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num() * g_theGovernmentDB->Get(gov)->GetTooManyCitiesThreshold());
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	}
 
 	///////////////////////////////////////////////
 	// EMOD - Add (or if negative Subtract) gold per unit
@@ -4666,7 +4673,7 @@ sint32 CityData::GetSupportCityCost() const
 		return goldPerCity * PopCount();
 	}
 
-	if(g_theProfileDB->IsGoldPerCity())
+	if(g_theGameSettings->IsGoldPerCity())
 	{
 		return PopCount();
 	}
@@ -11512,7 +11519,7 @@ void CityData::InsurgentSpawn()
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
-	|| g_theProfileDB->IsRevoltInsurgents()
+	|| g_theGameSettings->IsRevoltInsurgents()
 	){
 		double barbchance   = risk->GetBarbarianChance();
 		double notFounder   = 0.0;
@@ -11555,7 +11562,7 @@ void CityData::RiotCasualties()
 	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
 	if(
 	   (      g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()
-	      ||  g_theProfileDB->IsRevoltCasualties()
+	      ||  g_theGameSettings->IsRevoltCasualties()
 	   )
 	   &&     PopCount() >= 10
 	  )

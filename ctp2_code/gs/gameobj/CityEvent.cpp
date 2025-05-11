@@ -83,6 +83,7 @@
 #include "TerrainRecord.h"
 #include "terrainutil.h"
 #include "TerrImprovePool.h"
+#include "GameSettings.h"
 
 extern void player_ActivateSpaceButton(sint32 pl);
 
@@ -103,7 +104,7 @@ STDEHANDLER(CaptureCityEvent)
 
 	sint32 const    originalOwner   = city.GetOwner();
 	MapPoint        pos;
-    city.GetPos(pos);
+	city.GetPos(pos);
 
 	//EMOD capitol stuff is in army event shouldn't it go here?
 	if (city.CD()->IsCapitol()) {
@@ -118,13 +119,14 @@ STDEHANDLER(CaptureCityEvent)
 	city.ResetCityOwner(newOwner, TRUE, (CAUSE_REMOVE_CITY) cause); //this is where capitol is destroyed. unitdata::resetcityowner
 
 	if (city.GetData()->GetCityData()->PopCount() < 1)
-    {
+	{
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_KillCity,
 			GEA_City, city,
 			GEA_Int, CAUSE_REMOVE_ARMY_ATTACKED,
 			GEA_Player, newOwner,
 			GEA_End);
-	//added cities leaving ruin options requires a tileimp with the flag IsCityRuin to be placed
+
+			//added cities leaving ruin options requires a tileimp with the flag IsCityRuin to be placed
 			if (g_theProfileDB->GetCityLeavesRuins()){
 				for (sint32 imp = 0; imp < g_theTerrainImprovementDB->NumRecords(); imp++) {
 					const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
@@ -199,8 +201,7 @@ STDEHANDLER(CaptureCityEvent)
 		}
 
 		if (
-			(g_theProfileDB->IsCityCaptureOptions())
-			//(g_theProfileDB->GetValueByName("CityCaptureOptions"))
+			(g_theGameSettings->IsCityCaptureOptions())
 		&& (city.GetData()->GetCityData()->PopCount() > 1)
 		){
 //EMOD Capture city options

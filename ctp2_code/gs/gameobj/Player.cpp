@@ -224,7 +224,6 @@
 #include "Order.h"
 #include "PlayHap.h"
 #include "pollution.h"
-#include "profileDB.h"
 #include "QuickSlic.h"
 #if defined(_DEBUG)
 #include "primitives.h"
@@ -2189,7 +2188,7 @@ sint32 Player::CalcUnitSupportGold()
 	}
 
 	// user profile entry, cannot define exact support.
-	if (g_theProfileDB->IsGoldPerUnitSupport())
+	if (g_theGameSettings->IsGoldPerUnitSupport())
 	{
 		if (IsHuman())
 		{
@@ -2545,7 +2544,7 @@ void Player::EndTurnPollution(void)
 	for(i = 0; i < m_all_cities->Num(); i++)
 	{
 		city = m_all_cities->Access(i);
-		if(g_theGameSettings->GetPollution())
+		if(g_theGameSettings->IsPollution())
 		{
 			m_pollution_history[0] += city.GetPollution();
 		}
@@ -5323,13 +5322,13 @@ bool Player::GetArmyIndex(const Unit &u, sint32 &idx)
 
 void Player::AdjustPollution(const sint32 amount)
 {
-	if (g_theGameSettings->GetPollution())
+	if (g_theGameSettings->IsPollution())
 		m_pollution_history[0] += amount;
 }
 
 void Player::AdjustEventPollution(const sint32 amount)
 {
-	if (g_theGameSettings->GetPollution())
+	if (g_theGameSettings->IsPollution())
 		m_event_pollution[0] += amount ;
 }
 
@@ -8440,7 +8439,7 @@ bool Player::CanBuildUnit(const sint32 type) const
 	|| rec->GetSettleWater()
 	){  //so far it makes all units unavailable? And Why don't you check for the settling attributes like beeing able to build cities?
 		if(IsHuman()
-		&& g_theProfileDB->IsOneCityChallenge()
+		&& g_theGameSettings->IsOneCityChallenge()
 		){
 			return false;
 		}
@@ -9521,7 +9520,7 @@ bool Player::CanBuildLeader(const sint32 type) const
 	|| rec->GetSettleWater()
 	){
 		if(IsHuman()
-		&& g_theProfileDB->IsOneCityChallenge()
+		&& g_theGameSettings->IsOneCityChallenge()
 		){
 			return false;
 		}

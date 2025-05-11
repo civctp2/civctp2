@@ -11473,7 +11473,7 @@ void ArmyData::BarbarianSpawning()
 
 		if(
 			(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-		||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+		||  (g_theGameSettings->IsBarbarianSpawnsBarbarian())
 		){
 
 			if ( (barbhorde) >= (barbmax^2) ) {

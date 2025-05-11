@@ -167,6 +167,7 @@
 #include "World.h"
 #include "Wormhole.h"
 #include "GovernmentRecord.h"
+#include "GameSettings.h"
 
 #ifdef _DEBUG
 #include "aui.h"
@@ -1300,7 +1301,7 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 	}
 	base += (base * bonuses);
 	// finally add city attack buildings, so they're not subject to bonuses.
-	if (!g_theProfileDB->IsNewCombat()) {
+	if (!g_theGameSettings->IsNewCombat()) {
 		Unit	city	= g_theWorld->GetCity(m_pos);
 		if(city.IsValid()) {
 			base += city.CD()->GetOffenseBonus(defender);
@@ -3418,7 +3419,7 @@ double UnitData::GetOffense(const Unit &defender) const
 
 	// finally add city attack buildings, so they're not subject to bonuses.
 	// Note: This are only used with old combat.
-	if (!g_theProfileDB->IsNewCombat())
+	if (!g_theGameSettings->IsNewCombat())
 	{
 		Unit	city	= g_theWorld->GetCity(m_pos);
 		if(city.IsValid())
@@ -3466,7 +3467,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 	if(modDef != intDef)
 		base = modDef;
 
-	if (g_theProfileDB->IsNewCombat())
+	if (g_theGameSettings->IsNewCombat())
 	{// these were not in original combat for defence
 		if (IsVeteran())
 		{

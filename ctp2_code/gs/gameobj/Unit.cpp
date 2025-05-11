@@ -101,6 +101,7 @@
 #include "TerrainRecord.h"
 #include "SlicObject.h"
 #include "profileDB.h"
+#include "GameSettings.h"
 
 extern Pollution *  g_thePollution;
 
@@ -2490,7 +2491,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 //		order_valid = unit_rec->GetParatrooperTransport();
 	else if(order_rec->GetUnitPretest_CanUpgrade())
 	{
-		if(g_theProfileDB->IsUpgrade())
+		if(g_theGameSettings->IsUpgrade())
 		{
 			order_valid = (GetData()->GetBestUpgradeUnitType() >= 0);
 		}

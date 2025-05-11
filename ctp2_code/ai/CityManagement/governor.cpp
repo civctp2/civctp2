@@ -149,6 +149,7 @@
 #include "Events.h"
 #include "gaiacontroller.h"
 #include "GameEventUser.h"
+#include "GameSettings.h"
 #include "Globals.h"
 #include "GoalRecord.h"
 #include "GovernmentRecord.h"
@@ -394,20 +395,23 @@ sint32 Governor::ComputeBestGovernment() const
 		if (obsolete)
 			continue;
 
-		sint32 const newCityLimit = rec->GetTooManyCitiesThreshold();
-		if (player_ptr->GetNumCities() > newCityLimit)
+		if(!g_theGameSettings->IsNoCityLimit())
 		{
-			sint32 const oldCityLimit =
-				g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->
+			sint32 const newCityLimit = rec->GetTooManyCitiesThreshold();
+			if(player_ptr->GetNumCities() > newCityLimit)
+			{
+				sint32 const oldCityLimit =
+					g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->
 					GetTooManyCitiesThreshold();
 
-			if (newCityLimit > oldCityLimit)
-			{
-				// Do consider upgrading, to improve the situation
-			}
-			else
-			{
-				continue;
+				if(newCityLimit > oldCityLimit)
+				{
+					// Do consider upgrading, to improve the situation
+				}
+				else
+				{
+					continue;
+				}
 			}
 		}
 

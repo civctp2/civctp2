@@ -235,7 +235,7 @@ double Happy::CalcTooManyCities(Player *p)
 	double res;
 	if (num_cities <= t
 		|| g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() && p->IsRobot()
-		|| g_theProfileDB->IsNoCityLimit())
+		|| g_theGameSettings->IsNoCityLimit())
 	{
 		res = 0.0;
 		//add option for flexible city limits (set to map size?)

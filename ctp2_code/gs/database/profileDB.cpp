@@ -673,12 +673,123 @@ void ProfileDB::SetDiplmacyLog(BOOL b)
 	}
 }
 
+void ProfileDB::SetGenocideRule(BOOL rule)
+{
+	m_genocide = rule;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetGenocide(m_genocide);
+	}
+}
+
 void ProfileDB::SetPollutionRule( BOOL rule )
 {
 	m_pollution = rule;
 
-	if ( g_theGameSettings ) {
+	if (g_theGameSettings)
+	{
 		g_theGameSettings->SetPollution( m_pollution );
+	}
+}
+
+void ProfileDB::SetCityCaptureOptions(BOOL on)
+{
+	m_cityCaptureOptions = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetCityCaptureOptions(m_cityCaptureOptions);
+	}
+}
+
+void ProfileDB::SetOneCity(BOOL on)
+{
+	m_OneCityChallenge = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetOneCityChallenge(m_OneCityChallenge);
+	}
+}
+
+void ProfileDB::SetRevoltInsurgents(BOOL on)
+{
+	m_RevoltInsurgents = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetRevoltInsurgents(m_RevoltInsurgents);
+	}
+}
+
+void ProfileDB::SetRevoltCasualties(BOOL on)
+{
+	m_RevoltCasualties = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetRevoltCasualties(m_RevoltCasualties);
+	}
+}
+
+void ProfileDB::SetBarbarianSpawnsBarbarian(BOOL on)
+{
+	m_BarbarianSpawnsBarbarian = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetBarbarianSpawnsBarbarian(m_BarbarianSpawnsBarbarian);
+	}
+}
+
+void ProfileDB::SetGoldPerUnitSupport(BOOL on)
+{
+	m_GoldPerUnitSupport = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetGoldPerUnitSupport(m_GoldPerUnitSupport);
+	}
+}
+
+void ProfileDB::SetGoldPerCity(BOOL on)
+{
+	m_GoldPerCity = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetGoldPerCity(m_GoldPerCity);
+	}
+}
+
+void ProfileDB::SetNoCityLimit(BOOL on)
+{
+	m_NoCityLimit = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetNoCityLimit(m_NoCityLimit);
+	}
+}
+
+void ProfileDB::SetUpgrade(BOOL on)
+{
+	m_upgrade = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetUpgrade(m_upgrade);
+	}
+}
+
+void ProfileDB::SetNewCombat(BOOL on)
+{
+	m_newcombat = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetNewCombat(m_newcombat);
 	}
 }
 

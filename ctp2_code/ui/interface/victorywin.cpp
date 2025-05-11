@@ -486,7 +486,7 @@ sint32 victorywin_UpdateData( sint32 type )
 	strcpy(strbuf, pl->GetDescriptionString());
 
 	if (s_highScoreWin) {
-		if(g_theGameSettings && g_theGameSettings->GetKeeppScore()) {
+		if(g_theGameSettings && g_theGameSettings->IsKeepScore()) {
 			s_highScoreWin->m_highScoreDB->AddHighScore(strbuf,curScore);
 		}
 	}
