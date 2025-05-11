@@ -194,22 +194,31 @@ sint32 spnewgamerulesscreen_removeMyWindow(uint32 action)
 }
 
 
-AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
+AUI_ERRCODE spnewgamerulesscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_spNewGameRulesScreen ) return AUI_ERRCODE_OK;
+	if(s_spNewGameRulesScreen)
+	{
+		if(callback)
+		{
+			s_spNewGameRulesScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+		}
+
+		return AUI_ERRCODE_OK;
+	}
 
 	strcpy(windowBlock, "SPNewGameRulesScreen");
 
 	s_spNewGameRulesScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
-		Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
 
-		s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
-		s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
-		s_spNewGameRulesScreen->SetStronglyModal(TRUE);
+	Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
+	if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
+
+	s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
+	s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
+	s_spNewGameRulesScreen->SetStronglyModal(TRUE);
 
 	s_genocide			= spNew_aui_Switch(&errcode, windowBlock, "RuleOne",             spnewgamerulesscreen_checkPress, &check[R_GENOCIDE     ]);
 	s_pollution			= spNew_aui_Switch(&errcode, windowBlock, "RuleTwo",             spnewgamerulesscreen_checkPress, &check[R_POLLUTION    ]);
@@ -239,7 +248,11 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( block, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRulesScreen->AddTitle( block );
-	s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_exitPress );
+
+	if(callback == NULL)
+		s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_exitPress );
+	else
+		s_spNewGameRulesScreen->AddClose( callback );
 
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );

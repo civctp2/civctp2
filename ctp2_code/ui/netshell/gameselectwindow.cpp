@@ -766,7 +766,7 @@ void StartSelectingWindow::NewButtonAction::Execute(
 
 		s->SetName( name );
 		//Special rules
-		s->SetBloodlust(!g_theProfileDB->IsAlienEndGameOn());
+		s->SetBloodlust(g_theProfileDB->IsGenocideRule());
 		s->SetPollution(static_cast<char>(g_theProfileDB->IsPollutionRule()));
 
 		//Ages

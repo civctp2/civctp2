@@ -91,6 +91,7 @@
 #include "spnewgamediffscreen.h"
 #include "spnewgamemapsizescreen.h"
 #include "spnewgamemapshapescreen.h"
+#include "spnewgamerulesscreen.h"
 #include "spnewgametribescreen.h"
 #include "spnewgamewindow.h"
 #include "StrDB.h"                         // g_theStringDB
@@ -226,6 +227,7 @@ AUI_ERRCODE AllinoneWindow::InitCommon( void )
 
 	custommapscreen_Initialize( AllinoneWorldTypeCallback );
 	spnewgamediffscreen_Initialize( AllinoneDifficultyCallback );
+	spnewgamerulesscreen_Initialize( AllinoneMoreRulesCallback );
 
 	m_numAvailUnits = 0;
 	memset( m_units, 0, sizeof( m_units ) );
@@ -489,6 +491,15 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_DIFFICULTYBUTTON ] = control;
 
+	control = spNew_ctp2_Button(
+		&errcode,
+		"ruleswindow",
+		"rulessheet.morerulesbutton",
+		NULL);
+	Assert( AUI_NEWOK(control,errcode) );
+	if ( !AUI_NEWOK(control,errcode) ) return errcode;
+	m_controls[ CONTROL_MORERULESBUTTON ] = control;
+
 	control = new aui_Switch(
 		&errcode,
 		aui_UniqueId(),
@@ -684,6 +695,7 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	m_controls[ CONTROL_WORLDTYPEBUTTON ]->SetAction(new WorldTypeButtonAction);
 	m_controls[ CONTROL_WORLDSHAPEBUTTON ]->SetAction(new WorldShapeButtonAction);
 	m_controls[ CONTROL_DIFFICULTYBUTTON ]->SetAction(new DifficultyButtonAction);
+	m_controls[ CONTROL_MORERULESBUTTON ]->SetAction(new MoreRulesButtonAction);
 
 	((aui_ListBox *)m_controls[ CONTROL_HPLAYERSLISTBOX ])->GetHeader()->
 		Enable( FALSE );
@@ -4033,10 +4045,9 @@ void AllinoneWindow::BloodlustSwitchAction::Execute(
 
 	sint32 bloodlust = ((aui_Switch *)control)->GetState();
 
-	{
-		g_gamesetup.SetBloodlust(static_cast<char>(bloodlust));
-		w->UpdateGameSetup(true);
-	}
+	g_theProfileDB->SetGenocideRule(bloodlust != 0);
+	g_gamesetup.SetBloodlust(static_cast<char>(bloodlust));
+	w->UpdateGameSetup(true);
 }
 
 void AllinoneWindow::PollutionSwitchAction::Execute(
@@ -4052,10 +4063,9 @@ void AllinoneWindow::PollutionSwitchAction::Execute(
 
 	sint32 poll = ((aui_Switch *)control)->GetState();
 
-	{
-		g_gamesetup.SetPollution(static_cast<char>(poll));
-		w->UpdateGameSetup(true);
-	}
+	g_theProfileDB->SetPollutionRule(poll != 0);
+	g_gamesetup.SetPollution(static_cast<char>(poll));
+	w->UpdateGameSetup(true);
 }
 
 void AllinoneWindow::CivPointsButtonAction::Execute(
@@ -4439,6 +4449,44 @@ void AllinoneDifficultyCallback(
 		g_gamesetup.SetDifficulty1(static_cast<char>(spnewgamediffscreen_getDifficulty1()));
 		g_gamesetup.SetDifficulty2(static_cast<char>(spnewgamediffscreen_getDifficulty2()));
 		w->UpdateGameSetup(true);
+	}
+}
+
+void AllinoneWindow::MoreRulesButtonAction::Execute(
+	aui_Control *control,
+	uint32 action,
+	uint32 data )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+	
+	spnewgamerulesscreen_displayMyWindow();
+}
+
+void AllinoneMoreRulesCallback(
+	aui_Control *control,
+	uint32 action,
+	uint32 data,
+	void* cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	AllinoneWindow *w = g_allinoneWindow;
+	if ( !w ) return;
+
+	g_theProfileDB->Save();
+
+	spnewgamerulesscreen_removeMyWindow( action );
+
+	if ( w->GetMode() == w->CREATE )
+	{
+		g_gamesetup.SetBloodlust(g_theProfileDB->IsGenocideRule());
+		g_gamesetup.SetPollution(static_cast<char>(g_theProfileDB->IsPollutionRule()));
+
+		g_gamesetup.SetStartAge(static_cast<char>(agesscreen_getStartAge()));
+		g_gamesetup.SetEndAge(static_cast<char>(agesscreen_getEndAge()));
+		w->UpdateGameSetup(true);
+
+		g_allinoneWindow->UpdateDisplay();
 	}
 }
 

@@ -193,12 +193,12 @@ public:
 
 
 
-
 		CONTROL_AGESBUTTON,
 		CONTROL_MAPSIZEBUTTON,
 		CONTROL_WORLDTYPEBUTTON,
 		CONTROL_WORLDSHAPEBUTTON,
 		CONTROL_DIFFICULTYBUTTON,
+		CONTROL_MORERULESBUTTON,
 
 
 
@@ -257,10 +257,10 @@ public:
 
 	void	UpdateTribeSwitches( void );
 
+	void	UpdateDisplay( void );
 
 protected:
 	void	UpdateConfig( void );
-	void	UpdateDisplay( void );
 
 	bool m_createdExclusions;
 
@@ -334,6 +334,7 @@ protected:
     AUI_ACTION_BASIC(WorldTypeButtonAction);
     AUI_ACTION_BASIC(WorldShapeButtonAction);
     AUI_ACTION_BASIC(DifficultyButtonAction);
+	AUI_ACTION_BASIC(MoreRulesButtonAction);
 
 	friend class CivPointsButtonAction;
 	friend class HandicappingSwitchAction;
@@ -436,7 +437,11 @@ void AllinoneTribeCallback(
 
 
 
-
+void AllinoneMoreRulesCallback(
+	aui_Control *control,
+	uint32 action,
+	uint32 data,
+	void* cookie );
 void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,
