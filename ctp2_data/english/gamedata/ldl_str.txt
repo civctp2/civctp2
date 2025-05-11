@@ -3170,14 +3170,14 @@ str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
 str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
 str_ldl_Debug_AI_On				"Show Debug AI Text"
 str_ldl_Debug_AI_Off				"Hide Debug AI Text"
-str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations - On"
-str_tbl_ldl_NonRandomCivs_Off			"Non-Random AI Nations - Off"
-str_tbl_ldl_NoCityLimit_On			"No City Limits - On"				# No city limit for all players
-str_tbl_ldl_NoCityLimit_Off			"No City Limits - Off"				# City limit for all players
-str_tbl_ldl_NewCombat_Off			"New Combat - Off"
-str_tbl_ldl_NewCombat_On			"New Combat - On"
-str_tbl_ldl_NoGoodyHuts_Off			"No Ruins - Off"
-str_tbl_ldl_NoGoodyHuts_On			"No Ruins - On"
+str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
+str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
+str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
+str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
+str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
 # Custom map window (wet/dry etc.)
 str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
 str_tbl_ldl_RandomCustomMap_On			"Random Settings"
