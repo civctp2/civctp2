@@ -338,7 +338,7 @@ void NewTurnCount::RunNewYearMessages(void)
 			{
 				if(g_player[i])
 				{
-					if(i == highPlayer)
+					if(i == highPlayer && !g_theGameSettings->IsGenocide())
 					{
 						g_player[i]->GameOver(GAME_OVER_WON_OUT_OF_TIME, -1);
 					}

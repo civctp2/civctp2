@@ -115,6 +115,7 @@
 #include "gfx_options.h"
 #include "net_diplomacy.h"
 #include "RandGen.h"            // g_rand
+#include "GameSettings.h"
 
 #ifdef __linux__
 #include "../ctp/cifm.h"
@@ -950,7 +951,7 @@ void Diplomat::BeginTurn()
 	sint32 diplomacyEndgameIndex = CtpAi::GetEndgameWorldUnionIndex();
 
 	Assert(diplomacyEndgameIndex);
-	if (diplomacyEndgameIndex >= 0)
+	if (diplomacyEndgameIndex >= 0 && !g_theGameSettings->IsGenocide())
 	{
 		double population_percent;
 		double land_percent;
