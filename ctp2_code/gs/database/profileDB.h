@@ -551,7 +551,7 @@ public:
     void SetThroneRoom(BOOL throneRoom)                 { m_throneRoom = throneRoom; }
 
     void SetMaxPlayers(sint32 max)                      { m_max_players = max; }
-    void SetAlienEndGame(BOOL on)                       { m_alienEndGame = on; }
+	void SetAlienEndGame(BOOL on);
     void SetAllowAISettleMoveCheat(BOOL on)             { m_allow_ai_settle_move_cheat = on; }
     void SetAllUnitCompleteMessages(BOOL on)            { m_unitCompleteMessages = on; }
     void SetNonContinuousUnitCompleteMessages(BOOL on)  { m_nonContinuousUnitCompleteMessages = on; }

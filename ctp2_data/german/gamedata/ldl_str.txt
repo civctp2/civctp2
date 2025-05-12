@@ -31,13 +31,14 @@
 # - Keep also the indentation the same.
 # - You may add comments after the last line of strings that are specific to 
 #   one language only.
+#
 #----------------------------------------------------------------------------
 #
 # Modifications from the original Activision code:
 #
 # - Moved build list sequence strings to gl_str.txt.
 #   - April 7th 2005 Martin Gühmann
-# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
@@ -49,6 +50,7 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-00
@@ -946,6 +948,7 @@ str_ldl_Offer					"Anbieten"
 str_ldl_OFFER_A_GIFT				"Schenkung anbieten"
 str_ldl_OFFER_AN_EXCHANGE			"Gegenleistung anbieten"
 str_ldl_Offer_Good				"Gut anbieten"
+str_ldl_Routes_COLON				"Routen:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -3149,6 +3152,8 @@ str_ldl_Good_Animations_On			"Güter-Animationen An"
 str_ldl_Windowed_Mode_Off			"Spiele im Vollbildmodus"
 str_ldl_Windowed_Mode_On			"Spiele im Festermodus"
 
+str_tbl_ldl_AlienLife_Off				"Siegt ohne Gaia-Controller"
+str_tbl_ldl_AlienLife_On				"Siegt mit dem Gaia-Controller"
 str_tbl_ldl_CityCaptureOptions_On		"Stadteroberungsoptionen"
 str_tbl_ldl_CityCaptureOptions_Off		"Keine Stadteroberungsoptionen"
 str_tbl_ldl_OneCityChallenge_On			"Eine-Stadt-Herausforderung"
@@ -3185,6 +3190,7 @@ str_tbl_ldl_RandomCustomMap_On			"Zufallseinstellungen"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Vernichtung\nFür den Sieg müsst Ihr alle Gegner vernichten."
+str_tbl_ldl_RuleDetail_AlienLife		"Wissenschaftssieg\nFür den Sieg könnt ihr den Gaia-Controller errichten."
 str_tbl_ldl_RuleDetail_Pollution		"Umweltverschmutzung\nUmweltverschmutzung macht die Menschen in den Städten unzufrieden. Wenn die Umweltverschmutzung sehr schwer ist, zerstört sie das Gelände um einer Stadt. Im schlimmsten Falle lässt sie den Meeresspiegel ansteigen und verwüstet das Land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"Stadteroberungsoptionen\n Wenn Ihr eine Stadt erobert, habt Ihr drei Möglichkeiten: Befreiht Ihr eine Stadt, so wird sie den Babaren übergeben. Wenn Ihr die Stadt schleift, so wird sie bis auf die Grundmauern niedergebrannt und die Einwohner werden masakriert. Wenn ihr die Stadt besetzt, so wird sie in Euer Reich eingegliedert."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"Eine-Stadt-Herausforderung\nIhr könnt keine Einheiten bauen, die neue Städte gründen können."

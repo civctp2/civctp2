@@ -1,16 +1,66 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (Czech)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the main strings.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin Gühmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin Gühmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
+# - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
+# - Added strings for political map - 6-Jul-2009 EPW
+# - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
+# -Added strings for view capital buttons - 4-Jan-EPW
+# -Added string for relationships 7-Jan-EPW
+#
+#
+#----------------------------------------------------------------------------
+
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"You are already offering that good. Replace old offer?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, [player[0].leader_name] has completed the Alien Life Project."
+ENDGAME_WON_OTHER	"All Civilizations will now bow to a new master, {player[0].leader_name} has completed the Alien Life Project."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	","
-
-###Strings Moved Over from Junk###
-
-CAPITALIZATION 	"Kapitalizace "
-INFRASTRUCTURE 	"Infrastruktura "
 
 #Age Names#	
 AGE_NAME_ANCIENT	"Starobylá"
@@ -18,6 +68,13 @@ AGE_NAME_RENAISS	"Renezance"
 AGE_NAME_MODERN		"Moderní"
 AGE_NAME_GENETIC	"Genetická"
 AGE_NAME_DIAMOND	"Diamantová"
+
+###Strings Moved Over from Junk###
+
+CAPITALIZATION 	"Kapitalizace "
+INFRASTRUCTURE 	"Infrastruktura "
+
+
 
 YOU_BROKE_ALLIANCE "Rozbil jsi spojenectví s [player.1.civ_name_plural]."
 YOU_BROKE_CEASE_FIRE "Rozbil jsi mírovou smlouvu s [player.1.civ_name_plural]."
@@ -1028,6 +1085,7 @@ str_ldl_Offer	"Nabídka"
 str_ldl_OFFER_A_GIFT	"NABÍDNOUT DAR"
 str_ldl_OFFER_AN_EXCHANGE	"NABÍDNOUT VÝMENU"
 str_ldl_Offer_Good	"Nabídnout Zbozí"
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Zavrít"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan

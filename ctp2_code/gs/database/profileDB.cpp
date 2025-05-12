@@ -377,6 +377,7 @@ ProfileDB::ProfileDB()
 	Var("MapSize"                    , PV_NUM   , (sint32 *)&m_mapSize          , NULL, false);
 
 	Var("AlienEndGame"               , PV_BOOL  , &m_alienEndGame               , NULL, false);
+	Var("Genocide"                   , PV_BOOL  , &m_genocide                   , NULL, false);
 	Var("UnitCompleteMessages"       , PV_BOOL  , &m_unitCompleteMessages       , NULL);
 	Var("NonContinuousUnitCompleteMessages", PV_BOOL  , &m_nonContinuousUnitCompleteMessages, NULL);
 	Var("DebugSlic"                  , PV_BOOL  , &m_debugSlic                  , NULL);
@@ -680,6 +681,16 @@ void ProfileDB::SetGenocideRule(BOOL rule)
 	if(g_theGameSettings)
 	{
 		g_theGameSettings->SetGenocide(m_genocide);
+	}
+}
+
+void ProfileDB::SetAlienEndGame(BOOL on)
+{
+	m_alienEndGame = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetAlienEndGameOn(m_alienEndGame);
 	}
 }
 

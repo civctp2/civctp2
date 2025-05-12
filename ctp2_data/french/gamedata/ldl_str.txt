@@ -946,6 +946,7 @@ str_ldl_Offer					"Offre"
 str_ldl_OFFER_A_GIFT				"OFFRIR UN CADEAU"
 str_ldl_OFFER_AN_EXCHANGE			"PROPOSER UN ECHANGE"
 str_ldl_Offer_Good				"Offrir une marchandise"
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -3149,6 +3150,8 @@ str_ldl_Good_Animations_On			"Good Animations On"
 str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
 str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
 
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
 str_tbl_ldl_CityCaptureOptions_On		"Options de capture des villes"
 str_tbl_ldl_CityCaptureOptions_Off		"Pas d'options de capture des villes"
 str_tbl_ldl_OneCityChallenge_On			"Défi une ville"
@@ -3185,6 +3188,7 @@ str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."
