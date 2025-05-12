@@ -57,6 +57,7 @@ static aui_Switch	*s_walk						= NULL,
 					*s_smooth					= NULL,
 					*s_armyNames				= NULL,
 					*s_goodAnims				= NULL,
+					*s_runInBackground			= NULL,
 					*s_cityProd					= NULL,
 #if defined(__AUI_USE_SDL__)
 					*s_windowedMode				= NULL,
@@ -91,6 +92,7 @@ enum
 	GS_GOODANIMS,
 	GS_CITYPROD,
 	GS_WINDOWEDMODE,
+	GS_RUNINBACKGROUNT,
 
 	GS_TOTAL
 };
@@ -115,6 +117,7 @@ static uint32 check[] =
 	GS_GOODANIMS,
 	GS_CITYPROD,
 	GS_WINDOWEDMODE,
+	GS_RUNINBACKGROUNT,
 
 	GS_TOTAL
 };
@@ -181,6 +184,7 @@ void graphicsscreen_initializeValues()
 	s_smooth          ->SetState(g_theProfileDB->IsSmoothBorders());
 	s_goodAnims       ->SetState(g_theProfileDB->IsGoodAnim());
 	s_cityInfluence   ->SetState(g_theProfileDB->IsShowCityInfluence());
+	s_runInBackground ->SetState(g_theProfileDB->IsRunInBackground());
 	s_grid            ->SetState(g_isGridOn);
 	s_cityProd        ->SetState(g_theProfileDB->IsShowCityProduction());
 #if defined(__AUI_USE_SDL__)
@@ -258,6 +262,7 @@ AUI_ERRCODE graphicsscreen_Initialize( void )
 
 	s_smooth           = spNew_aui_Switch  (&errcode, windowBlock, "SmoothButton",           graphicsscreen_checkPress, &check[GS_SMOOTH]);
 	s_goodAnims        = spNew_aui_Switch  (&errcode, windowBlock, "GoodsButton",            graphicsscreen_checkPress, &check[GS_GOODANIMS]);
+	s_runInBackground  = spNew_aui_Switch  (&errcode, windowBlock, "RunInBackgroundButton",  graphicsscreen_checkPress, &check[GS_RUNINBACKGROUNT]);
 	s_cityProd         = spNew_aui_Switch  (&errcode, windowBlock, "ShowCityProdButton",     graphicsscreen_checkPress, &check[GS_CITYPROD]);
 #if defined(__AUI_USE_SDL__)
 	s_windowedMode     = spNew_aui_Switch  (&errcode, windowBlock, "WindowedModeButton",     graphicsscreen_checkPress, &check[GS_WINDOWEDMODE]);
@@ -307,6 +312,7 @@ void graphicsscreen_Cleanup()
 	mycleanup(s_civflags);
 	mycleanup(s_smooth);
 	mycleanup(s_goodAnims);
+	mycleanup(s_runInBackground);
 	mycleanup(s_cityProd);
 #if defined(__AUI_USE_SDL__)
 	mycleanup(s_windowedMode);
@@ -361,7 +367,6 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 
 void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
 {
-
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
 	uint32 checkbox = *((uint32*)cookie);
@@ -408,6 +413,9 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 	case GS_GOODANIMS:
 		func = &ProfileDB::SetGoodAnim;
 		s_goodAnimToggled = TRUE;
+		break;
+	case GS_RUNINBACKGROUNT:
+		func = &ProfileDB::SetRunInBackground;
 		break;
 	case GS_CITYPROD:
 		func = &ProfileDB::SetShowCityProduction;

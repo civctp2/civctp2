@@ -2,7 +2,7 @@
 #
 # Project      : Call To Power 2
 # File type    : String text file
-# Description  : Main string file (English)
+# Description  : Main string file (Polish)
 # Id           : $Id:$
 #
 #----------------------------------------------------------------------------
@@ -49,6 +49,8 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -3156,6 +3158,8 @@ str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
 str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
 str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
 str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
 str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"

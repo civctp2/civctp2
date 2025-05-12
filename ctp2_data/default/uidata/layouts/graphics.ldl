@@ -171,6 +171,14 @@ GraphicsWindow {
 			string	string1	"str_ldl_Good_Animations_On"
 		}
 	}
+	RunInBackgroundButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	310
+		stringtable {
+			string	string0	"str_ldl_Run_In_Background_Off"
+			string	string1	"str_ldl_Run_In_Background_On"
+		}
+	}
 
 	#At bottom center
 	####################################
