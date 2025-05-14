@@ -313,6 +313,7 @@ BOOL aui_TextField::SetFieldText(const MBCHAR *text, sint32 caretPos)
 	return success;
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
+	m_Text[m_maxFieldLen-1] = '\0'; // strncpy does not append '\0' if text is longer than m_maxFieldLen
 
 	if (caretPos < 0 || caretPos > static_cast<sint32>(strlen(m_Text)))
 	{
