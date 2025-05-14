@@ -758,6 +758,24 @@ bool aui_TextField::HandleKey(uint32 wParam)
 {
 	if ( GetKeyboardFocus() == this )
 	{
+		// That's a bit hacky, but works
+		// We simply translate what we get for Ctrl+c, Ctrl+x, and Ctrl+v
+		// from SDLMessageHandler in civ3_main.cpp.
+		switch(wParam)
+		{
+			case 'c' - 'a' + 1:
+				wParam = SDLK_COPY;
+				break;
+			case 'x' - 'a' + 1:
+				wParam = SDLK_CUT;
+				break;
+			case 'v' - 'a' + 1:
+				wParam = SDLK_PASTE;
+				break;
+			default:
+				break;
+		}
+
 		switch ( wParam )
 		{
 			// Have to handle the enter key here so that buffered input will
@@ -886,6 +904,65 @@ bool aui_TextField::HandleKey(uint32 wParam)
 			case SDLK_RIGHT + 512:
 				if(strlen(m_Text) > static_cast<size_t>(m_selEnd)) m_selEnd++;
 				break;
+			case SDLK_COPY:
+			{
+				if(m_selStart != m_selEnd)
+				{
+					size_t start  = (m_selStart < m_selEnd) ? m_selStart : m_selEnd;
+					size_t end    = (m_selStart < m_selEnd) ? m_selEnd : m_selStart;
+					size_t length = end - start;
+
+					std::string str(m_Text);
+					SDL_SetClipboardText(str.substr(start, length).c_str());
+				}
+
+				break;
+			}
+			case SDLK_CUT:
+			{
+				if(m_selStart != m_selEnd)
+				{
+					size_t start  = (m_selStart < m_selEnd) ? m_selStart : m_selEnd;
+					size_t end    = (m_selStart < m_selEnd) ? m_selEnd : m_selStart;
+					size_t length = end - start;
+
+					std::string str(m_Text);
+					SDL_SetClipboardText(str.substr(start, length).c_str());
+
+					str.erase(start, length);
+					SetFieldText(str.c_str(), start); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selStart = start;
+					m_selEnd = start;
+				}
+
+				break;
+			}
+			case SDLK_PASTE:
+			{
+				if(!SDL_HasClipboardText())
+					break;
+
+				std::string str(m_Text);
+
+				if(m_selStart != m_selEnd)
+				{
+					size_t start  = (m_selStart < m_selEnd) ? m_selStart : m_selEnd;
+					size_t end    = (m_selStart < m_selEnd) ? m_selEnd : m_selStart;
+					size_t length = end - start;
+
+					str.erase(start, length);
+					m_selStart = start;
+					m_selEnd = start;
+				}
+
+				char* clipboardText = SDL_GetClipboardText();
+				str.insert(m_selStart, clipboardText);
+				SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+
+				SDL_free(clipboardText);
+
+				break;
+			}
 			case ' ':
 			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);
 			default:
