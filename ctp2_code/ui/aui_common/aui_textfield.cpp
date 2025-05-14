@@ -94,7 +94,7 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( const MBCHAR *ldlBlock )
 	const MBCHAR *font = block->GetString( k_AUI_TEXTFIELD_LDL_FONT );
 	sint32 fontheight = block->GetInt( k_AUI_TEXTFIELD_LDL_FONT );
 
-	sint32 maxFieldLen =
+	size_t maxFieldLen =
 		block->GetAttributeType( k_AUI_TEXTFIELD_LDL_MAXFIELDLEN ) == ATTRIBUTE_TYPE_INT ?
 		block->GetInt( k_AUI_TEXTFIELD_LDL_MAXFIELDLEN ) :
 		1024;
@@ -119,7 +119,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	BOOL autovscroll,
 	BOOL autohscroll,
 	BOOL isfilename,
-	sint32 maxFieldLen,
+	size_t maxFieldLen,
 	BOOL passwordReady )
 {
 	m_blink = FALSE;
@@ -287,21 +287,20 @@ aui_TextField::~aui_TextField()
 #endif
 }
 
-sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
+sint32 aui_TextField::GetFieldText( MBCHAR *text, size_t maxCount )
 {
 #ifdef __AUI_USE_DIRECTX__
 	return GetWindowText(m_hwnd, text, std::min(m_maxFieldLen, maxCount));
 #else
-	sint32 n = std::min(m_maxFieldLen,maxCount);
-	if (n <= 0)
-		return 0;
+	sint32 n = std::min(m_maxFieldLen, maxCount);
+
 	strncpy(text, m_Text, n-1);
 	text[n-1] = '\0';
 	return static_cast<sint32>(strlen(text));
 #endif
 }
 
-BOOL aui_TextField::SetFieldText(const MBCHAR *text, sint32 caretPos)
+BOOL aui_TextField::SetFieldText(const MBCHAR *text, size_t caretPos)
 {
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
@@ -315,10 +314,10 @@ BOOL aui_TextField::SetFieldText(const MBCHAR *text, sint32 caretPos)
 	strncpy(m_Text, text, m_maxFieldLen);
 	m_Text[m_maxFieldLen-1] = '\0'; // strncpy does not append '\0' if text is longer than m_maxFieldLen
 
-	if (caretPos < 0 || caretPos > static_cast<sint32>(strlen(m_Text)))
+	if (caretPos < 0 || caretPos > GetTextLength())
 	{
 		// select nothing, move insertion point to end
-		m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
+		m_selStart = m_selEnd = GetTextLength();
 	}
 	else
 	{
@@ -371,28 +370,22 @@ BOOL aui_TextField::SetIsFileName( BOOL isFileName )
 	return wasFileName;
 }
 
-sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
+size_t aui_TextField::SetMaxFieldLen( size_t maxFieldLen )
 {
-	sint32 prevMaxFieldLen = m_maxFieldLen;
+	size_t prevMaxFieldLen = m_maxFieldLen;
 
 	m_maxFieldLen = maxFieldLen;
 
-#if 0 // not doing anything
 	if (m_maxFieldLen != prevMaxFieldLen)
 	{
-#ifndef __AUI_USE_DIRECTX__
-		// Merged in from Linux branch but I leave it as it was for Windows, see above
-		// In fact that is very wired as this is not used
+#if !defined(__AUI_USE_DIRECTX__)
 		char* newText = new char[maxFieldLen + 1];
 		strncpy(newText, m_Text, maxFieldLen);
 		newText[maxFieldLen] = '\0';
 		delete[] m_Text;
 		m_Text = newText;
-#else
-		fprintf(stderr, "%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
 #endif
 	}
-#endif
 
 	return prevMaxFieldLen;
 }
@@ -619,18 +612,20 @@ void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
 			0 );
 }
 
-void aui_TextField::SetSelection(sint32 start, sint32 end)
+void aui_TextField::SetSelection(size_t start, size_t end)
 {
 #ifdef __AUI_USE_DIRECTX__
 	SendMessage( m_hwnd, EM_SETSEL, (WPARAM)start, (LPARAM)end);
 	UpdateWindow( m_hwnd );
 #else
-	m_selStart = start;
-	m_selEnd = end;
+	size_t textLength = GetTextLength();
+
+	m_selStart = std::min(start, textLength);
+	m_selEnd   = std::min(end,   textLength);
 #endif
 }
 
-void aui_TextField::GetSelection(sint32 *start, sint32 *end)
+void aui_TextField::GetSelection(size_t *start, size_t *end)
 {
 #ifdef __AUI_USE_DIRECTX__
 	SendMessage(m_hwnd, EM_GETSEL, (WPARAM)start, (LPARAM)end);

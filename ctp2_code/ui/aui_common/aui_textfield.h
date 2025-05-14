@@ -89,12 +89,12 @@ protected:
 		BOOL autovscroll = TRUE,
 		BOOL autohscroll = TRUE,
 		BOOL isfilename = FALSE,
-		sint32 maxFieldLen = 1024,
+		size_t maxFieldLen = 1024,
 		BOOL passwordReady = FALSE);
 
 public:
-	sint32	GetFieldText(MBCHAR *text, sint32 maxCount);
-	BOOL	SetFieldText(const MBCHAR *text, sint32 caretPos = -1);
+	sint32	GetFieldText(MBCHAR *text, size_t maxCount);
+	BOOL	SetFieldText(const MBCHAR *text, size_t caretPos = -1);
 
 #ifdef __AUI_USE_DIRECTX__
 	BOOL	IsMultiLine( void ) const { return m_multiLine; }
@@ -107,8 +107,8 @@ public:
 	BOOL	IsFileName( void ) const { return m_isFileName; }
 	BOOL	SetIsFileName( BOOL isFileName );
 
-	sint32	GetMaxFieldLen( void ) const { return m_maxFieldLen; }
-	sint32	SetMaxFieldLen( sint32 maxFieldLen );
+	size_t	GetMaxFieldLen( void ) const { return m_maxFieldLen; }
+	size_t	SetMaxFieldLen( size_t maxFieldLen );
 	size_t  GetTextLength() { return strlen(m_Text); };
 
 	virtual aui_Control	*SetKeyboardFocus( void );
@@ -129,8 +129,8 @@ public:
 	virtual bool HandleKey(uint32 wParam);
 #endif
 
-	void SetSelection(sint32 start, sint32 end);
-	void GetSelection(sint32 *start, sint32 *end);
+	void SetSelection(size_t start, size_t end);
+	void GetSelection(size_t *start, size_t *end);
 	void SelectAll(void);
 
 protected:
@@ -142,10 +142,10 @@ protected:
 
 	BOOL	m_isFileName;
 
-	sint32	m_maxFieldLen;
+	size_t	m_maxFieldLen;
 	MBCHAR *m_Text;
-	sint32  m_selStart;
-	sint32  m_selEnd;
+	size_t  m_selStart;
+	size_t  m_selEnd;
 
 public:
 	sint32	m_textHeight;
@@ -167,7 +167,7 @@ public:
 LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LPARAM lParam );
 int CALLBACK EnumTextFontsProc( LOGFONT *lplf, TEXTMETRIC *lptm, DWORD dwType, LPARAM lParam );
 #elif defined(__AUI_USE_SDL__)
-void TextFieldWindowProc(SDL_Event &event); //this does not exist and should process key-press events, using HandleKey instead similar to SDLMessageHandler (civ3_main.cpp) and aui_ListBox::HandleKey
+// void TextFieldWindowProc(SDL_Event &event); //this does not exist and should process key-press events, using HandleKey instead similar to SDLMessageHandler (civ3_main.cpp) and aui_ListBox::HandleKey
 #endif
 
 #endif
