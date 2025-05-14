@@ -531,23 +531,37 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		}
 	}
 #elif defined(__AUI_USE_SDL__)
+
+#if defined(WIN32)
+	COLORREF winColor              = GetSysColor(COLOR_WINDOW);
+	COLORREF winTextColor          = GetSysColor(COLOR_WINDOWTEXT);
+	COLORREF winHighLightColor     = GetSysColor(COLOR_HIGHLIGHT);
+	COLORREF winHighLightTextColor = GetSysColor(COLOR_HIGHLIGHTTEXT);
+#else
+	// Maybe there is also a method on Linux for getting the colorefs by name
+	COLORREF winColor              = RGB(0xff, 0xff, 0xff);
+	COLORREF winTextColor          = RGB(20, 20, 20);
+	COLORREF winHighLightColor     = RGB(0x00, 0x78, 0xd7);
+	COLORREF winHighLightTextColor = RGB(0xff, 0xff, 0xff);
+#endif
+
 	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
 
 	// Fill background
 	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
-	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, 0xff, 0xff, 0xff));
+	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, GetRValue(winColor), GetGValue(winColor), GetBValue(winColor)));
 
-	// Draw string
 	m_Font->DrawString(surface, &rect, &rect, m_Text,
-	                   k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
-	                   RGB(20,20,20), 0);
+		k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
+		winTextColor, 0, m_selStart, m_selEnd, winHighLightTextColor, winHighLightColor);
+
 
 	// Calculate caret position
 	// ToDo: Implement multiline
-	char save = m_Text[m_selStart];
-	m_Text[m_selStart] = '\0';
+	char save = m_Text[m_selEnd];
+	m_Text[m_selEnd] = '\0';
 	int offset = m_Font->GetStringWidth(m_Text);
-	m_Text[m_selStart] = save;
+	m_Text[m_selEnd] = save;
 
 	// Draw blinking caret
 	if (m_blink && GetKeyboardFocus() == this)
@@ -781,6 +795,12 @@ bool aui_TextField::HandleKey(uint32 wParam)
 					SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 					m_selEnd = m_selStart;
 				}
+				else if(m_selEnd < m_selStart)
+				{
+					str.erase(m_selEnd, m_selStart - m_selEnd);
+					SetFieldText(str.c_str(), m_selEnd); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selStart = m_selEnd;
+				}
 				else
 				{
 					Assert(0);
@@ -790,7 +810,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 			case SDLK_DELETE:
 			{
 				std::string str(m_Text); // char array to c++ string
-				if (m_selStart == m_selEnd)
+				if(m_selStart == m_selEnd)
 				{
 					if (str.length() > 0 && static_cast<size_t>(m_selStart) < str.length())
 					{
@@ -798,11 +818,17 @@ bool aui_TextField::HandleKey(uint32 wParam)
 						SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 					}
 				}
-				else if (m_selEnd > m_selStart)
+				else if(m_selEnd > m_selStart)
 				{
 					str.erase(m_selStart, m_selEnd - m_selStart);
 					SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 					m_selEnd = m_selStart;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					str.erase(m_selEnd, m_selStart - m_selEnd);
+					SetFieldText(str.c_str(), m_selEnd); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selStart = m_selEnd;
 				}
 				else
 				{
@@ -817,12 +843,47 @@ bool aui_TextField::HandleKey(uint32 wParam)
 		//		if (m_multiLine) /* ToDo: Implement multiline */;
 				break;
 			case SDLK_LEFT  + 256:
-				if(m_selStart > 0) m_selStart--;
-				if(m_selEnd   > 0) m_selEnd--;
+				if(m_selStart == m_selEnd)
+				{
+					if(m_selEnd > 0) m_selEnd--;
+
+					m_selStart = m_selEnd;
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					m_selEnd = m_selStart;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					m_selStart = m_selEnd;
+				}
 				break;
 			case SDLK_RIGHT + 256:
-				if(strlen(m_Text) > static_cast<size_t>(m_selStart)) m_selStart++;
-				if(strlen(m_Text) > static_cast<size_t>(m_selEnd))   m_selEnd++;
+				if(m_selStart == m_selEnd)
+				{
+					if(strlen(m_Text) > static_cast<size_t>(m_selEnd)) m_selEnd++;
+					m_selStart = m_selEnd;
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					m_selStart = m_selEnd;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					m_selEnd = m_selStart;
+				}
+				break;
+			case SDLK_UP    + 512:
+				//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 512:
+				//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 512:
+				if(m_selEnd > 0) m_selEnd--;
+				break;
+			case SDLK_RIGHT + 512:
+				if(strlen(m_Text) > static_cast<size_t>(m_selEnd)) m_selEnd++;
 				break;
 			case ' ':
 			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);
@@ -851,6 +912,12 @@ bool aui_TextField::HandleKey(uint32 wParam)
 					str.erase(m_selStart, m_selEnd - m_selStart);
 					m_selEnd = m_selStart;
 				}
+				else if(m_selEnd < m_selStart)
+				{
+					str.erase(m_selEnd, m_selStart - m_selEnd);
+					m_selStart = m_selEnd;
+				}
+
 
 				str.insert(m_selStart, 1, static_cast<char>(wParam));
 				m_selStart++;

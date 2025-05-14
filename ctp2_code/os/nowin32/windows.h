@@ -234,6 +234,10 @@ typedef struct hwnd_t* HWND;
 #define HIWORD(w) ((WORD)((w)>>16))
 #endif
 #define RGB(r,g,b) ((BYTE)(b) << 16 | (BYTE)(g) << 8 | (BYTE)(r))
+
+#define GetRValue(rgb)      ((BYTE)(rgb & 0xff))
+#define GetGValue(rgb)      ((BYTE)(rgb & 0xff) >>  8)
+#define GetBValue(rgb)      ((BYTE)(rgb & 0xff) >> 16)
 #define WINAPI
 
 
