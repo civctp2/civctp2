@@ -330,7 +330,7 @@ void c3_ListBox::Clear(void)
 
 
 AUI_ERRCODE c3_ListBox::SortByColumn(
-	size_t column,
+	sint32 column,
 	BOOL ascending )
 {
 
@@ -339,7 +339,7 @@ AUI_ERRCODE c3_ListBox::SortByColumn(
 	Assert( 0 <= column && column < m_numColumns );
 	if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
 
-	m_sortColumn = static_cast<sint32>(column);
+	m_sortColumn = column;
 	m_sortAscending = ascending;
 
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;

@@ -326,7 +326,7 @@ void ctp2_ListBox::Clear(void)
 }
 
 AUI_ERRCODE ctp2_ListBox::SortByColumn(
-	size_t column,
+	sint32 column,
 	BOOL ascending )
 {
 	if ( column == -1 ) return AUI_ERRCODE_OK;

@@ -346,7 +346,7 @@ AUI_ERRCODE TextBox::RepositionItems( void )
 
 				aui_Item *subItem =
 					(aui_Item *)item->ChildList()->GetNext( subPosition );
-				if ( static_cast<size_t>(minHorizontal) <= j && j < static_cast<size_t>(maxHorizontal))
+				if ( minHorizontal <= j && j < maxHorizontal)
 				{
 					subItem->Move( x, 0 );
 

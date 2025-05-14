@@ -363,7 +363,7 @@ AUI_ERRCODE aui_ListBox::Draw(
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = static_cast<sint32>(m_numRows);
+	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
 
 	RECT selectRect = rect;
 
@@ -823,7 +823,7 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		if ( item->Height() > m_maxItemHeight )
 			m_maxItemHeight = item->Height();
 
-		size_t j = item->ChildList()->L();
+		sint32 j = static_cast<sint32>(item->ChildList()->L());
 		if ( j + 1 > m_numColumns ) m_numColumns = j + 1;
 
 		ListPos subPosition = item->ChildList()->GetHeadPosition();
@@ -930,7 +930,7 @@ AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 	ListPos widthPosition = m_widthList->GetHeadPosition();
 	ListPos position = m_header->ChildList()->GetHeadPosition();
 	bool firstVisibleHeader = true;
-	for (size_t i = 0; i < m_numColumns; i++)
+	for (sint32 i = 0; i < m_numColumns; i++)
 	{
 		if (!position) {
 			break;
@@ -940,7 +940,7 @@ AUI_ERRCODE aui_ListBox::RepositionHeaderSwitches( void )
 
 		aui_Switch *theSwitch = (aui_Switch *)m_header->ChildList()->GetNext(position);
 
-		if (static_cast<size_t>(minHorizontal) <= i && i < static_cast<size_t>(maxHorizontal))
+		if (minHorizontal <= i && i < maxHorizontal)
 		{
 			// First visible header
 			if (width > 0 && firstVisibleHeader)

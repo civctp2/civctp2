@@ -93,7 +93,7 @@ protected:
 		BOOL passwordReady = FALSE);
 
 public:
-	sint32	GetFieldText(MBCHAR *text, size_t maxCount);
+	size_t	GetFieldText(MBCHAR *text, size_t maxCount);
 	BOOL	SetFieldText(const MBCHAR *text, size_t caretPos = -1);
 
 #ifdef __AUI_USE_DIRECTX__

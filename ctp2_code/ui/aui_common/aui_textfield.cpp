@@ -287,16 +287,16 @@ aui_TextField::~aui_TextField()
 #endif
 }
 
-sint32 aui_TextField::GetFieldText( MBCHAR *text, size_t maxCount )
+size_t aui_TextField::GetFieldText( MBCHAR *text, size_t maxCount )
 {
 #ifdef __AUI_USE_DIRECTX__
 	return GetWindowText(m_hwnd, text, std::min(m_maxFieldLen, maxCount));
 #else
-	sint32 n = std::min(m_maxFieldLen, maxCount);
+	size_t n = std::min(m_maxFieldLen, maxCount);
 
 	strncpy(text, m_Text, n-1);
 	text[n-1] = '\0';
-	return static_cast<sint32>(strlen(text));
+	return strlen(text);
 #endif
 }
 

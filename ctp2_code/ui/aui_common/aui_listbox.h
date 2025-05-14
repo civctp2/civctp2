@@ -142,7 +142,7 @@ public:
 	AUI_ERRCODE	DeselectItem( sint32 index, uint32 data = 0 );
 	AUI_ERRCODE	DeselectItem( aui_Item *item, uint32 data = 0 );
 
-	virtual AUI_ERRCODE SortByColumn( size_t column, BOOL ascending )
+	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending )
 	{
 		if ( column == -1 ) return AUI_ERRCODE_OK;
 
@@ -287,8 +287,8 @@ protected:
 	sint32		m_scrollDx;
 	sint32		m_scrollDy;
 
-	size_t		m_numRows;
-	size_t		m_numColumns;
+	sint32		m_numRows;
+	sint32		m_numColumns;
 	sint32		m_maxItemWidth;
 	sint32		m_maxItemHeight;
 	sint32		m_itemsPerWidth;

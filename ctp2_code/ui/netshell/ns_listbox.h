@@ -79,7 +79,7 @@ public:
 
 	ns_Item<T,NetShellT> *FindItem( T *object );
 
-	virtual AUI_ERRCODE SortByColumn( size_t column, BOOL ascending );
+	virtual AUI_ERRCODE SortByColumn( sint32 column, BOOL ascending );
 
 protected:
 
@@ -452,7 +452,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
-	size_t column,
+	sint32 column,
 	BOOL ascending )
 {
 
@@ -461,10 +461,10 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::SortByColumn(
 	Assert( 0 <= column && column < m_numColumns );
 	if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
 
-	m_sortColumn = static_cast<sint32>(column);
+	m_sortColumn = column;
 	m_sortAscending = ascending;
 
-	sint32 limit = static_cast<sint32>(m_numRows - 1);
+	sint32 limit = m_numRows - 1;
 	if ( limit <= 0 ) return AUI_ERRCODE_OK;
 
 	BOOL changed;
