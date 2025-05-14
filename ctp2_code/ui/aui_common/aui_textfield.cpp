@@ -560,8 +560,9 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	// Draw blinking caret
 	if (m_blink && GetKeyboardFocus() == this)
 	{
+		COLORREF test     = RGB(0xff, 0x00, 0x00);
 		SDL_Rect r2 = { rect.left + offset - 1, rect.top + 2, 2, rect.bottom - rect.top - 4 };
-		SDL_FillRect(SDLsurf, &r2, 0);
+		SDL_FillRect(SDLsurf, &r2, SDL_MapRGB(SDLsurf->format, GetRValue(winTextColor), GetGValue(winTextColor), GetBValue(winTextColor)));
 	}
 #endif
 
