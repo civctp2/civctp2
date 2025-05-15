@@ -915,6 +915,8 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				wParam = SDLK_PASTE;
 				break;
 			default:
+				if(wParam < ' ')
+					return true;
 				break;
 		}
 
