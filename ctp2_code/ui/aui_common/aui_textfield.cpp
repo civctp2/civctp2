@@ -982,6 +982,16 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				if(!SDL_HasClipboardText())
 					break;
 
+				char* clipboardText = SDL_GetClipboardText();
+
+				size_t selLength = (m_selStart < m_selEnd) ? m_selEnd - m_selStart: m_selStart - m_selEnd;
+
+				if(GetTextLength() + strlen(clipboardText) - selLength >= GetMaxFieldLen() - 1)
+				{
+					SDL_free(clipboardText);
+					break;
+				}
+
 				std::string str(m_Text);
 
 				if(m_selStart != m_selEnd)
@@ -995,7 +1005,6 @@ bool aui_TextField::HandleKey(uint32 wParam)
 					m_selEnd = start;
 				}
 
-				char* clipboardText = SDL_GetClipboardText();
 				str.insert(m_selStart, clipboardText);
 				SetFieldText(str.c_str(), m_selStart + strlen(clipboardText)); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 
@@ -1008,10 +1017,9 @@ bool aui_TextField::HandleKey(uint32 wParam)
 			default:
 			{ // append char to char array, apparently easiest with std::string
 
-				static MBCHAR text[ 1025 ];
-				GetFieldText( text, 1024 );
+				size_t selLength = (m_selStart < m_selEnd) ? m_selEnd - m_selStart: m_selStart - m_selEnd;
 				// Don't let any more characters in if you're at the max.
-				if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
+				if ( (sint32)strlen( m_Text ) - selLength >= GetMaxFieldLen() - 1) break;
 
 #if 0
 				// Attempt to put unicode characters in, but does not work
