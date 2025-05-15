@@ -146,11 +146,17 @@ protected:
 	MBCHAR *m_Text;
 	size_t  m_selStart;
 	size_t  m_selEnd;
+	size_t  m_viewStart;
+
+#if defined(__AUI_USE_SDL__)
+	size_t GetInvisibleNumToSelStart();
+	void UpdateView();
+#endif
 
 public:
 	sint32	m_textHeight;
 	MBCHAR	m_desiredFont[256];
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	HFONT	m_hfont;
 	HFONT	m_holdfont;
 #else

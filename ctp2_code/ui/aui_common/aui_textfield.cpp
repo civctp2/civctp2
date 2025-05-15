@@ -230,6 +230,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
 	// select nothing, move insertion point to end
 	m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
+	m_viewStart = 0;
 
 	// This supposed to set the font size as far as I understand it. However,
 	// it doesn't do it without SetPointSize. At least it fixes an assert.
@@ -325,6 +326,8 @@ BOOL aui_TextField::SetFieldText(const MBCHAR *text, size_t caretPos)
 	}
 
 	if ( GetKeyboardFocus() == this ) g_winFocus = this;
+
+	UpdateView();
 
 	return TRUE;
 #endif
@@ -541,26 +544,28 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
 
+	MBCHAR* text     =  m_Text     + m_viewStart;
+	size_t  selStart = (m_selStart > m_viewStart) ? m_selStart - m_viewStart : 0;
+	size_t  selEnd   = (m_selEnd   > m_viewStart) ? m_selEnd   - m_viewStart : 0;
+
 	// Fill background
 	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
 	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, GetRValue(winColor), GetGValue(winColor), GetBValue(winColor)));
 
-	m_Font->DrawString(surface, &rect, &rect, m_Text,
+	m_Font->DrawString(surface, &rect, &rect, text,
 		k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
-		winTextColor, 0, m_selStart, m_selEnd, winHighLightTextColor, winHighLightColor);
-
+		winTextColor, 0, selStart, selEnd, winHighLightTextColor, winHighLightColor);
 
 	// Calculate caret position
 	// ToDo: Implement multiline
-	char save = m_Text[m_selEnd];
-	m_Text[m_selEnd] = '\0';
-	int offset = m_Font->GetStringWidth(m_Text);
-	m_Text[m_selEnd] = save;
+	char save    = text[selEnd];
+	text[selEnd] = '\0';
+	int offset   = m_Font->GetStringWidth(text);
+	text[selEnd] = save;
 
 	// Draw blinking caret
 	if (m_blink && GetKeyboardFocus() == this)
 	{
-		COLORREF test     = RGB(0xff, 0x00, 0x00);
 		SDL_Rect r2 = { rect.left + offset - 1, rect.top + 2, 2, rect.bottom - rect.top - 4 };
 		SDL_FillRect(SDLsurf, &r2, SDL_MapRGB(SDLsurf->format, GetRValue(winTextColor), GetGValue(winTextColor), GetBValue(winTextColor)));
 	}
@@ -571,6 +576,37 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	return AUI_ERRCODE_OK;
 }
+
+#if defined(__AUI_USE_SDL__)
+size_t aui_TextField::GetInvisibleNumToSelStart()
+{
+	RECT  rect   = { 0, 0, m_width, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + m_selEnd;
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	return stop - start;
+}
+
+void aui_TextField::UpdateView()
+{
+	if(m_selEnd <= m_viewStart)
+	{
+		m_viewStart = m_selEnd;
+	}
+	else
+	{
+		size_t invisibleNum = GetInvisibleNumToSelStart();
+		if(invisibleNum > 0)
+		{
+			m_viewStart += invisibleNum;
+		}
+	}
+}
+#endif
 
 void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
@@ -790,7 +826,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				{
 					if (str.length() > 0 && m_selStart > 0)
 					{
-						if (str.length() <= static_cast<size_t>(m_selStart))
+						if (str.length() <= m_selStart)
 						{
 							str.pop_back(); //lop off character
 							SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
@@ -872,11 +908,13 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				{
 					m_selStart = m_selEnd;
 				}
+
+				UpdateView();
 				break;
 			case SDLK_RIGHT + 256:
 				if(m_selStart == m_selEnd)
 				{
-					if(strlen(m_Text) > static_cast<size_t>(m_selEnd)) m_selEnd++;
+					if(strlen(m_Text) > m_selEnd) m_selEnd++;
 					m_selStart = m_selEnd;
 				}
 				else if(m_selEnd > m_selStart)
@@ -887,6 +925,8 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				{
 					m_selEnd = m_selStart;
 				}
+
+				UpdateView();
 				break;
 			case SDLK_UP    + 512:
 				//		if(m_multiLine) /* ToDo: Implement multiline */;
@@ -896,9 +936,11 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				break;
 			case SDLK_LEFT  + 512:
 				if(m_selEnd > 0) m_selEnd--;
+				UpdateView();
 				break;
 			case SDLK_RIGHT + 512:
-				if(strlen(m_Text) > static_cast<size_t>(m_selEnd)) m_selEnd++;
+				if(strlen(m_Text) > m_selEnd) m_selEnd++;
+				UpdateView();
 				break;
 			case SDLK_COPY:
 			{
@@ -953,7 +995,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 
 				char* clipboardText = SDL_GetClipboardText();
 				str.insert(m_selStart, clipboardText);
-				SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+				SetFieldText(str.c_str(), m_selStart + strlen(clipboardText)); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 
 				SDL_free(clipboardText);
 
