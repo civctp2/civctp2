@@ -689,19 +689,25 @@ void aui_TextField::MouseLDoubleClickInside(aui_MouseEvent * mouseData)
 
 	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
 
+	// Get the system prefered locale
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+	std::locale loc(locales[0].language);
+	SDL_free(locales);
+
 	const MBCHAR* wordStart = start;
-	for(; wordStart > m_Text && isalnum(*wordStart); wordStart--)
+	for(; wordStart > m_Text && std::isalnum(*wordStart, loc); wordStart--)
 	{
 		// Nothing to do
 	}
 
-	m_selStart = wordStart - m_Text + 1;
+	// If we are at the beginning and it is a word character, we don't add if space or something else we must add one
+	m_selStart = wordStart - m_Text + (std::isalnum(*wordStart, loc) ? 0 : 1);
 
 	if(m_selStart < m_viewStart)
 		m_viewStart = m_selStart;
 
 	const MBCHAR* wordEnd = start;
-	for(; wordEnd < stop && isalnum(*wordEnd); wordEnd++)
+	for(; wordEnd < stop && std::isalnum(*wordEnd, loc); wordEnd++)
 	{
 		// Nothing to do
 	}
