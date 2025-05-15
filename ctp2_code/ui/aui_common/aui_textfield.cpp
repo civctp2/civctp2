@@ -654,6 +654,26 @@ void aui_TextField::MouseLDragInside(aui_MouseEvent * mouseData)
 	UpdateView();
 }
 
+void aui_TextField::MouseLDragOutside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLDragOutside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	m_selEnd = start - m_Text;
+
+	UpdateView();
+}
+
 void aui_TextField::MouseLGrabInside(aui_MouseEvent * mouseData)
 {
 	if ( IsDisabled() ) return;

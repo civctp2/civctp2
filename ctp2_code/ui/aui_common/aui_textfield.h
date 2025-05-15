@@ -169,6 +169,7 @@ public:
 
 #if defined(__AUI_USE_SDL__)
 	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
 #endif
