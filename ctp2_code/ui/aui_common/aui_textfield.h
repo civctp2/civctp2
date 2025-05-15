@@ -166,6 +166,12 @@ public:
 
 	virtual void	MouseLGrabOutside(aui_MouseEvent * mouseData);
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
+
+#if defined(__AUI_USE_SDL__)
+	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
+	virtual void	MouseLDoubleClickInside(aui_MouseEvent * mouseData);
+#endif
 };
 
 

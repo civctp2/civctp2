@@ -633,6 +633,85 @@ void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 	}
 }
 
+#if defined(__AUI_USE_SDL__)
+void aui_TextField::MouseLDragInside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLDragInside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	m_selEnd = start - m_Text;
+
+	UpdateView();
+}
+
+void aui_TextField::MouseLGrabInside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLGrabInside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	m_selStart = m_selEnd = start - m_Text;
+
+	UpdateView();
+}
+
+void aui_TextField::MouseLDoubleClickInside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLGrabInside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	const MBCHAR* wordStart = start;
+	for(; wordStart > m_Text && isalnum(*wordStart); wordStart--)
+	{
+		// Nothing to do
+	}
+
+	m_selStart = wordStart - m_Text + 1;
+
+	if(m_selStart < m_viewStart)
+		m_viewStart = m_selStart;
+
+	const MBCHAR* wordEnd = start;
+	for(; wordEnd < stop && isalnum(*wordEnd); wordEnd++)
+	{
+		// Nothing to do
+	}
+
+	m_selEnd = wordEnd - m_Text;
+
+	UpdateView();
+}
+#endif
+
 void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -819,7 +898,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				break;
 			// No tags allowed, they are for "tabbing focus" between controls.
 			case VK_TAB:
-				fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+			//	fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
 				return false;
 			case VK_BACK:
 			{

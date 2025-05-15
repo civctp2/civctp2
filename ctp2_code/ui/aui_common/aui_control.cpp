@@ -392,19 +392,11 @@ AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 
 AUI_ERRCODE aui_Control::ToWindow( RECT *rect )
 {
-
-
-
-
-
-
-
 	if (!m_parent) return AUI_ERRCODE_OK;
-
 
 	if ( m_parent != (aui_Region *)m_window )
 	{
-        Assert(m_parent);
+		Assert(m_parent);
 		OffsetRect( rect, m_parent->X(), m_parent->Y() );
 		((aui_Control *)m_parent)->ToWindow( rect );
 	}
