@@ -902,6 +902,9 @@ bool aui_TextField::HandleKey(uint32 wParam)
 		// from SDLMessageHandler in civ3_main.cpp.
 		switch(wParam)
 		{
+			case 'a' - 'a' + 1:
+				wParam = SDLK_SELECT;
+				break;
 			case 'c' - 'a' + 1:
 				wParam = SDLK_COPY;
 				break;
@@ -1048,6 +1051,9 @@ bool aui_TextField::HandleKey(uint32 wParam)
 			case SDLK_RIGHT + 512:
 				if(strlen(m_Text) > m_selEnd) m_selEnd++;
 				UpdateView();
+				break;
+			case SDLK_SELECT:
+				SelectAll();
 				break;
 			case SDLK_COPY:
 			{
