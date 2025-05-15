@@ -605,6 +605,8 @@ void aui_TextField::UpdateView()
 			m_viewStart += invisibleNum;
 		}
 	}
+
+	m_blink = TRUE;
 }
 #endif
 
