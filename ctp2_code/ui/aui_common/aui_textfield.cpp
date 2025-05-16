@@ -956,6 +956,9 @@ bool aui_TextField::HandleKey(uint32 wParam)
 			case 'v' - 'a' + 1:
 				wParam = SDLK_PASTE;
 				break;
+			case VK_BACK:
+			case '\t' + 128:
+				break;
 			default:
 				if(wParam < ' ')
 					return true;
@@ -970,7 +973,7 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				aui_TextField::HitEnter();
 				break;
 			// No tags allowed, they are for "tabbing focus" between controls.
-			case VK_TAB:
+			case '\t' + 128:
 			//	fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
 				return false;
 			case VK_BACK:
