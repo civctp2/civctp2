@@ -17,6 +17,7 @@
 #include "aui_sdlsurface.h"
 #include <string>
 #include <codecvt>
+#include <locale>
 #endif
 
 WNDPROC aui_TextField::m_windowProc = NULL;

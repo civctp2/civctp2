@@ -386,6 +386,7 @@ ctp_ctp2_SOURCES = \
 	ui/interface/IntroMovieWin.cpp \
 	ui/interface/IntroMovieWindow.cpp \
 	ui/interface/km_screen.cpp \
+	ui/interface/LanguageScreen.cpp \
 	ui/interface/loadsavemapscreen.cpp \
 	ui/interface/loadsavemapwindow.cpp \
 	ui/interface/loadsavescreen.cpp \
