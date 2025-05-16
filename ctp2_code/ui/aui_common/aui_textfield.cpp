@@ -736,6 +736,47 @@ void aui_TextField::MouseLDoubleClickInside(aui_MouseEvent * mouseData)
 
 	UpdateView();
 }
+
+void aui_TextField::SelectWordStart()
+{
+	// Get the system prefered locale
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+	std::locale loc(locales[0].language);
+	SDL_free(locales);
+
+	const MBCHAR* wordStart = m_Text + m_selEnd;
+	const MBCHAR*      stop = m_Text + GetTextLength();
+
+	bool isNotAlphaNum = true;
+	for(; wordStart > m_Text && (std::isalnum(*wordStart, loc) || isNotAlphaNum); wordStart--)
+	{
+		if(isNotAlphaNum)
+			isNotAlphaNum = !std::isalnum(*wordStart, loc);
+
+		m_selEnd--;
+	}
+}
+
+void aui_TextField::SelectWordEnd()
+{
+	// Get the system prefered locale
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+	std::locale loc(locales[0].language);
+	SDL_free(locales);
+
+	const MBCHAR* wordEnd = m_Text + m_selEnd;
+	const MBCHAR*    stop = m_Text + GetTextLength();
+
+	bool isNotAlphaNum = true;
+	for(; wordEnd < stop && (std::isalnum(*wordEnd, loc) || isNotAlphaNum); wordEnd++)
+	{
+		if(isNotAlphaNum)
+			isNotAlphaNum = !std::isalnum(*wordEnd, loc);
+
+		m_selEnd++;
+	}
+}
+
 #endif
 
 void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
@@ -1052,6 +1093,36 @@ bool aui_TextField::HandleKey(uint32 wParam)
 				break;
 			case SDLK_RIGHT + 512:
 				if(strlen(m_Text) > m_selEnd) m_selEnd++;
+				UpdateView();
+				break;
+			case SDLK_UP    + 768:
+				//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 768:
+				//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 768:
+				SelectWordStart();
+				m_selStart = m_selEnd;
+				UpdateView();
+				break;
+			case SDLK_RIGHT + 768:
+				SelectWordEnd();
+				m_selStart = m_selEnd;
+				UpdateView();
+				break;
+			case SDLK_UP    + 1024:
+				//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 1024:
+				//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 1024:
+				SelectWordStart();
+				UpdateView();
+				break;
+			case SDLK_RIGHT + 1024:
+				SelectWordEnd();
 				UpdateView();
 				break;
 			case SDLK_SELECT:

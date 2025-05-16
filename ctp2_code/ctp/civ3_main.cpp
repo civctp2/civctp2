@@ -1789,15 +1789,23 @@ int SDLMessageHandler(void* userdata, SDL_Event* event)
 				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : '\0' \
 					); \
 				break;
+#define SDLKCONVSHIFTANDCTRL(sdl_name, charWoShift, charWShift, charWCtrl, charWCtrlAndShift) \
+			case (sdl_name): \
+				wp = ( \
+						(mod & KMOD_SHIFT) ? \
+							(mod & KMOD_CTRL) ? (charWCtrlAndShift) : (charWShift) : \
+							(mod & KMOD_CTRL) ? (charWCtrl) : (charWoShift) \
+					); \
+				break;
 			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_TAB, '\t' + 128);
 			SDLKCONV(SDLK_RETURN, VK_RETURN + 128);
 			SDLKCONV(SDLK_KP_ENTER, VK_RETURN + 128);
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
-			SDLKCONVSHIFT(SDLK_UP, SDLK_UP + 256, SDLK_UP + 512);
-			SDLKCONVSHIFT(SDLK_DOWN, SDLK_DOWN + 256, SDLK_DOWN + 512);
-			SDLKCONVSHIFT(SDLK_LEFT, SDLK_LEFT + 256, SDLK_LEFT + 512);
-			SDLKCONVSHIFT(SDLK_RIGHT, SDLK_RIGHT + 256, SDLK_RIGHT + 512);
+			SDLKCONVSHIFTANDCTRL(SDLK_UP, SDLK_UP + 256, SDLK_UP + 512, SDLK_UP + 768, SDLK_UP + 1024);
+			SDLKCONVSHIFTANDCTRL(SDLK_DOWN, SDLK_DOWN + 256, SDLK_DOWN + 512, SDLK_DOWN + 768, SDLK_DOWN + 1024);
+			SDLKCONVSHIFTANDCTRL(SDLK_LEFT, SDLK_LEFT + 256, SDLK_LEFT + 512, SDLK_LEFT + 768, SDLK_LEFT + 1024);
+			SDLKCONVSHIFTANDCTRL(SDLK_RIGHT, SDLK_RIGHT + 256, SDLK_RIGHT + 512, SDLK_RIGHT + 768, SDLK_RIGHT + 1024);
 			SDLKCONV(SDLK_DELETE, SDLK_DELETE);
 			SDLKCONV(SDLK_KP_PERIOD, SDLK_DELETE);
 			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');

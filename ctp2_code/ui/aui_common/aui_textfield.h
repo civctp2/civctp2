@@ -168,6 +168,9 @@ public:
 	virtual void	PostChildrenCallback(aui_MouseEvent * mouseData);
 
 #if defined(__AUI_USE_SDL__)
+	void SelectWordStart();
+	void SelectWordEnd();
+
 	virtual void	MouseLDragInside(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragOutside(aui_MouseEvent * mouseData);
 	virtual void	MouseLGrabInside(aui_MouseEvent * mouseData);
