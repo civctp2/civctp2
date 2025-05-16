@@ -47,7 +47,10 @@ class CivArchive;
 
 #include "Ic3CivArchive.h"
 #include "ctp2_inttypes.h"
-// #include <SDL_endian.h>
+
+#if defined(__AUI_USE_SDL__)
+#include <SDL_endian.h>
+#endif
 
 #define k_ARCHIVE_MAGIC_VALUE_1	'OTAK'
 #define k_ARCHIVE_MAGIC_VALUE_2	'U-98'
@@ -64,9 +67,11 @@ class DataCheck ;
   #define   INTERFACE_RESULT_TYPE(a_Type) STDMETHODIMP_(a_Type)
 #endif
 
+#if !defined(__AUI_USE_SDL__)
 #define SDL_SwapLE16(x) (x)
 #define SDL_SwapLE32(x) (x)
 #define SDL_SwapLE64(x) (x)
+#endif
 
 class CivArchive : public IC3CivArchive
 {
