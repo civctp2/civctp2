@@ -1913,7 +1913,8 @@ bool ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 		}
 		else
 		{
-			Assert(0);
+			// This is OK, if no movepoints are remaining
+			//Assert(0);
 		}
 
 		ClearTargetingMode();
