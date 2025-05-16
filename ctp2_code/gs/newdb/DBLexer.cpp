@@ -341,7 +341,7 @@ bool DBLexer::GetBitIndex(const char **bitnames, sint32 numBitnames, sint32 &ind
 	return false;
 }
 
-void DBLexer::ReportError(char *fmt, ...)
+void DBLexer::ReportError(const char *fmt, ...)
 {
 	va_list list;
 	va_start(list, fmt);

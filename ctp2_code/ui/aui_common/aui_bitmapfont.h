@@ -149,8 +149,8 @@ public:
 		uint32 flags = 0,
 		COLORREF color = RGB(255,255,255),
 		sint32 underline = 0,
-		size_t selStart = NULL,
-		size_t selEnd  = NULL,
+		size_t selStart = 0,
+		size_t selEnd  = 0,
 		COLORREF highLightColorFG = RGB(0,0,0),
 		COLORREF highLightColorBG = RGB(0,0,0)
 	);
