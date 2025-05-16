@@ -71,9 +71,10 @@ public:
 	AUI_ERRCODE ChangeSize(sint32 width, sint32 height);
 
 	aui_MovieManager* CreateMovieManager( void );
-protected:
+
 	virtual AUI_ERRCODE SDLDrawScreen( void );
 
+protected:
 	SDL_Window *m_SDLWindow;
 	SDL_Renderer *m_SDLRenderer;
 	SDL_Texture *m_SDLTexture;

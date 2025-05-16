@@ -405,14 +405,14 @@ public:
 	tech_WLList<DirtyRectInfo *> *GetDirtyRectInfoList( void )
 	{ return m_dirtyRectInfoList; }
 
+#ifdef __AUI_USE_SDL__
+	virtual AUI_ERRCODE SDLDrawScreen( void ) { return AUI_ERRCODE_OK; }
+#endif
+
 protected:
 	AUI_ERRCODE	TagMouseEvents( sint32 numEvents, aui_MouseEvent *events );
 
 	virtual AUI_ERRCODE ClipAndConsolidate( void );
-
-#ifdef __AUI_USE_SDL__
-	virtual AUI_ERRCODE SDLDrawScreen( void ) { return AUI_ERRCODE_OK; }
-#endif
 
 	AUI_ERRCODE InsertDirtyRectInfo( RECT *rect, aui_Window *window );
 	void FlushDirtyRectInfoList( void );

@@ -189,11 +189,7 @@ AUI_ERRCODE aui_SDLSurface::Blank(const uint32 &color)
 
 void aui_SDLSurface::Flip()
 {
-#if 0
-	if(m_isPrimary)
-		SDL_Flip(m_lpdds);
-	// else?
-#endif
+	g_ui->SDLDrawScreen();
 }
 
 #endif
