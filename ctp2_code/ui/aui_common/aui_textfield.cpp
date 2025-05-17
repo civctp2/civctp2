@@ -712,9 +712,19 @@ void aui_TextField::MouseLDoubleClickInside(aui_MouseEvent * mouseData)
 
 	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
 
-	// Get the system prefered locale
+	// Get the system preferred locale
 	SDL_Locale* locales = SDL_GetPreferredLocales();
-	std::locale loc(locales[0].language);
+
+	std::locale loc;
+	try
+	{
+		loc = std::locale(locales[0].language);
+	}
+	catch(std::runtime_error&)
+	{
+		// Nothing to do here we have a valid locale, just not the one we want
+	}
+
 	SDL_free(locales);
 
 	const MBCHAR* wordStart = start;
@@ -742,9 +752,19 @@ void aui_TextField::MouseLDoubleClickInside(aui_MouseEvent * mouseData)
 
 void aui_TextField::SelectWordStart()
 {
-	// Get the system prefered locale
+	// Get the system preferred locale
 	SDL_Locale* locales = SDL_GetPreferredLocales();
-	std::locale loc(locales[0].language);
+
+	std::locale loc;
+	try
+	{
+		loc = std::locale(locales[0].language);
+	}
+	catch(std::runtime_error&)
+	{
+		// Nothing to do here we have a valid locale, just not the one we want
+	}
+
 	SDL_free(locales);
 
 	const MBCHAR* wordStart = m_Text + m_selEnd;
@@ -762,9 +782,19 @@ void aui_TextField::SelectWordStart()
 
 void aui_TextField::SelectWordEnd()
 {
-	// Get the system prefered locale
+	// Get the system preferred locale
 	SDL_Locale* locales = SDL_GetPreferredLocales();
-	std::locale loc(locales[0].language);
+
+	std::locale loc;
+	try
+	{
+		loc = std::locale(locales[0].language);
+	}
+	catch(std::runtime_error&)
+	{
+		// Nothing to do here we have a valid locale, just not the one we want
+	}
+
 	SDL_free(locales);
 
 	const MBCHAR* wordEnd = m_Text + m_selEnd;
