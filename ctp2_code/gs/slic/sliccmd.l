@@ -94,9 +94,9 @@ extern char *sliccmd_input;
 extern char *sliccmd_input_ptr;
 extern int sliccmd_input_len;
 
-int my_scinput(char *buf, int max_size)
+size_t my_scinput(char *buf, int max_size)
 {
-	int n = min(max_size, (sliccmd_input + sliccmd_input_len) - sliccmd_input_ptr);
+	size_t n = min(max_size, (sliccmd_input + sliccmd_input_len) - sliccmd_input_ptr);
 	if(n > 0) {
 		memcpy(buf, sliccmd_input_ptr, n);
 		sliccmd_input_ptr += n;

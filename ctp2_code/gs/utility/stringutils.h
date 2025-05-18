@@ -59,6 +59,6 @@ void stringutils_Interpret
 	size_t const    a_Capacity = k_MAX_INTERP_LEN
 );
 
-void stringutils_SetStaticStringId(StringId & stringId, char * stringName);
+void stringutils_SetStaticStringId(StringId & stringId, const char * stringName);
 
 #endif

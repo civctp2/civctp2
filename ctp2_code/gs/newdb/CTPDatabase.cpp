@@ -296,7 +296,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 		if ((mainRecord >= 0) && (validIndex > 0))
 		{
 			// Add the new object to the list of modified records.
-			size_t const	newIndex	= m_modifiedRecords.size();
+			sint32 const	newIndex	= static_cast<sint32>(m_modifiedRecords.size());
 			obj->SetIndex(newIndex);
 			m_modifiedRecords.push_back(obj);
 

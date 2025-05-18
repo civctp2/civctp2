@@ -64,7 +64,7 @@ void free_crc()
    g_crcTable = NULL;
 }
 
-uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, sint32 data_blk_size)
+uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, size_t data_blk_size)
 {
    if (!g_crcTable) {
       gen_crc_table();

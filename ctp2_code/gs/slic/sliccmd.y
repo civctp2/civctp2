@@ -52,7 +52,7 @@ char *sliccmd_output;
 int sliccmd_output_len;
 char *sliccmd_input;
 char *sliccmd_input_ptr;
-int sliccmd_input_len;
+size_t sliccmd_input_len;
 int sliccmd_first_token;
 int sliccmd_done;
 int sliccmd_parse_failed;
