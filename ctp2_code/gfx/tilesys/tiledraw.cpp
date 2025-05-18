@@ -122,8 +122,6 @@ extern sint32		g_fog_toggle;
 extern sint32		g_god;
 
 static COLOR		g_curSelectColor = COLOR_SELECT_0;
-static sint32		g_nano_flash = 0;
-static sint32		g_bio_flash = 0;
 
 #define k_POP_BOX_SIZE_MINIMUM	10
 
@@ -4156,10 +4154,9 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 		{
 			POINT dimensions = tileSet->GetMapIconDimensions(bioDisease);
 
-			Pixel16 color = (++g_bio_flash > 10) ? GetColor(COLOR_YELLOW) : GetPlayerColor(bioInfectedOwner);
-			if (g_bio_flash > 10) {
-				g_bio_flash = 0;
-			}
+			sint32 flash = g_theConstDB->Get(0)->GetFlashInMilSecs();
+			sint32 flashPerioid = (flash > 0) ? GetTickCount() % (flash*2) : 0; // If flash <= 0 no flash
+			Pixel16 color = (flashPerioid > flash) ? GetColor(COLOR_YELLOW) : GetPlayerColor(bioInfectedOwner);
 
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,
@@ -4179,10 +4176,10 @@ RECT TiledMap::DrawCityIcons(aui_Surface & surf, sint32 owner, bool fog, const R
 		{
 			POINT dimensions = tileSet->GetMapIconDimensions(nanoDisease);
 
-			Pixel16 color = (++g_nano_flash > 10) ? GetColor(COLOR_YELLOW) : GetPlayerColor(bioInfectedOwner);
-			if (g_nano_flash > 10) {
-				g_nano_flash = 0;
-			}
+			sint32 flash = g_theConstDB->Get(0)->GetFlashInMilSecs();
+			sint32 flashPerioid = (flash > 0) ? GetTickCount() % (flash*2) : 0; // If flash <= 0 no flash
+			Pixel16 color = (flashPerioid > flash) ? GetColor(COLOR_YELLOW) : GetPlayerColor(bioInfectedOwner);
+
 
 			DrawClippedColorizedOverlay(icon, surf, outerRect.right-1, outerRect.bottom - dimensions.y, color, alpha);
 			primitives_ClippedFrame16(surf, outerRect.right - 1, outerRect.bottom - dimensions.y, dimensions.x,

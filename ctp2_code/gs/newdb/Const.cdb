@@ -349,4 +349,5 @@ Const : alsire {
 	Float  BaseRoadPriorityVsThreatRank     = 0.5
 	Int    CosiderNumCitiesForSlaves        = 5
 	Float  SmallCityImproveCoeff            = 1.0
+	Int    FlashInMilSecs                   = 2000
 }
