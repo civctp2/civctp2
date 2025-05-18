@@ -14,7 +14,7 @@
 #undef min
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
-int my_scinput(char *buf, int max_size);
+size_t my_scinput(char *buf, int max_size);
 
 #undef YY_INPUT
 #define YY_INPUT(b, r, ms) (r = my_scinput(b, ms))
