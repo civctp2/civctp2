@@ -1749,7 +1749,7 @@ void SelectedItem::SetDrawablePathDest(MapPoint &dest)
 		}
 		else // For debugging the AI
 		{
-			m_is_pathing = Agent::FindPath(a, m_cur_mouse_tile, true, *m_good_path, total_cost);
+			m_is_pathing = Agent::FindPath(a, m_cur_mouse_tile, false, *m_good_path, total_cost);
 		}
 	}
 	else if(m_select_state[player] == SELECT_TYPE_LOCAL_ARMY_UNLOADING)
