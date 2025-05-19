@@ -6481,19 +6481,19 @@ void CommandLine::DisplayOffers(BOOL on)
 
 void CommandLine::DisplayMem()
 {
-    m_displayHelp = FALSE;
+	m_displayHelp = FALSE;
 	m_persistent = FALSE;
 	m_displayCityResources = FALSE;
 	m_displayOffers = FALSE;
-    m_display_mem = !m_display_mem;
+	m_display_mem = !m_display_mem;
 
 #if defined(_DEBUG) && defined(WIN32)
-    if (m_display_mem) {
-        _CrtMemState new_state;
-        _CrtMemCheckpoint(&new_state);
+	if (m_display_mem) {
+		_CrtMemState new_state;
+		_CrtMemCheckpoint(&new_state);
 
-        m_old_mem_count = new_state.lTotalCount;
-    }
+		m_old_mem_count = new_state.lTotalCount;
+	}
 #endif
 }
 
