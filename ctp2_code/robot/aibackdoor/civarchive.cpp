@@ -69,7 +69,7 @@ uint32 CivArchive::Release()
 	return 0;
 }
 
-#define k_ALLOC_SIZE		((uint32)8096)
+#define k_ALLOC_SIZE		((size_t)8096)
 
 CivArchive::CivArchive()
 {
@@ -82,7 +82,7 @@ CivArchive::CivArchive()
 	m_bIsStoring = true;
 }
 
-CivArchive::CivArchive(uint32 ulSize)
+CivArchive::CivArchive(size_t ulSize)
 {
 	Assert(0<ulSize);
 	m_refCount = 0;
@@ -99,7 +99,7 @@ CivArchive::~CivArchive()
 	m_pbBaseMemory = NULL;
 }
 
-void CivArchive::SetSize(uint32 ulSize)
+void CivArchive::SetSize(size_t ulSize)
 {
 	delete m_pbBaseMemory ;
 	m_pbBaseMemory = NULL;
@@ -112,11 +112,11 @@ void CivArchive::SetSize(uint32 ulSize)
 	m_bIsStoring = false ;
 }
 
-void CivArchive::DoubleExpand(uint32 ulAmount)
+void CivArchive::DoubleExpand(size_t ulAmount)
 {
 
 	Assert(0 < m_ulAllocated);
-	uint32 ulSize = m_ulAllocated;
+	size_t ulSize = m_ulAllocated;
 
 #ifdef _DEBUG
 	sint32 finite_loop=0;
@@ -147,7 +147,7 @@ void CivArchive::DoubleExpand(uint32 ulAmount)
 	m_pbBaseMemory = pbData;
 }
 
-void CivArchive::Store(uint8 *pbData, uint32 ulLen)
+void CivArchive::Store(uint8 *pbData, size_t ulLen)
 {
 #ifdef ARCHIVE_TYPE_CHECK
 TypeCheck(TYPE_CHECK_ARRAY);
@@ -163,7 +163,7 @@ TypeCheck(TYPE_CHECK_ARRAY);
 	m_ulLength += ulLen;
 }
 
-void CivArchive::Load(uint8 *pbData, uint32 ulLen)
+void CivArchive::Load(uint8 *pbData, size_t ulLen)
 {
 #ifdef ARCHIVE_TYPE_CHECK
 	TypeCheck(TYPE_CHECK_ARRAY);

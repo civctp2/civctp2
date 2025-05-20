@@ -515,7 +515,7 @@ const NegotiationEventList & Foreigner::GetNegotiationEvents() const
 
 void Foreigner::ExecuteDelayedNegotiations()
 {
-	for(sint32 i = m_negotiationEvents.size() - 1; i >= 0; --i)
+	for(size_t i = 0; i < m_negotiationEvents.size(); ++i)
 	{
 		if(m_negotiationEvents[i].round < 0)
 		{

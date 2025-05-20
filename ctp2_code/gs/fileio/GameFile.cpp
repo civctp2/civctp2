@@ -2055,7 +2055,7 @@ uint32 GameMapFile::Save(const MBCHAR *filepath, SaveMapInfo *info)
 	if (createInfo)
 		delete info;
 
-	uint32 ulLen = archive.StreamLen();
+	uint32 ulLen = static_cast<uint32>(archive.StreamLen());
 	n = c3files_fwrite(&ulLen, sizeof(ulLen), 1, fpSave);
 	if (n!=1)
 	{

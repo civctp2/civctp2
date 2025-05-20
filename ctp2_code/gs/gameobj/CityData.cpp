@@ -318,7 +318,7 @@ class HackCityArchive : public CivArchive
 public:
 	void SetStoreOn() { CivArchive::SetStore(); }
 	uint8 *GetStr() { return GetStream(); }
-	uint32 StreamLen() { return CivArchive::StreamLen(); }
+	size_t StreamLen() { return CivArchive::StreamLen(); }
 };
 
 #ifdef _SLOW_BUT_SAFE

@@ -329,7 +329,7 @@ bool MapFile::SaveCities(FILE *outfile)
 
 		return true;
 	}
-	m_chunk.m_size = archive.StreamLen() + sizeof(cityCount);
+	m_chunk.m_size = static_cast<uint32>(archive.StreamLen() + sizeof(cityCount));
 	if(!m_chunk.Save(outfile))
 	{
 
@@ -369,16 +369,18 @@ bool MapFile::SaveUnits(FILE *outfile)
 	archive.SetStore();
 
 	for (int y = 0; y < g_theWorld->GetYHeight(); y++)
-    {
+	{
 		for (int x = 0; x < g_theWorld->GetXWidth(); x++)
-        {
+		{
 			Cell *cell = g_theWorld->GetCell(x, y);
 			CellUnitList *units = cell->UnitArmy();
-			if(units) {
+			if(units)
+			{
 				archive << static_cast<uint16>(x);
 				archive << static_cast<uint16>(y);
 				archive << static_cast<uint32>(units->Num());
-                for (sint32 i = 0; i < units->Num(); i++) {
+				for (sint32 i = 0; i < units->Num(); i++)
+				{
 					archive.PutUINT8((uint8)units->Access(i).GetOwner());
 					archive << static_cast<sint32>(units->Access(i).GetType());
 				}
@@ -388,7 +390,7 @@ bool MapFile::SaveUnits(FILE *outfile)
 	}
 
 	m_chunk.m_id = k_UNITS_HEADER;
-	m_chunk.m_size = archive.StreamLen() + sizeof(numCellsWithUnits);
+	m_chunk.m_size = static_cast<uint32>(archive.StreamLen() + sizeof(numCellsWithUnits));
 	if(!m_chunk.Save(outfile))
 	{
 
@@ -428,17 +430,17 @@ bool MapFile::SaveImprovements(FILE *outfile)
 	archive.SetStore();
 
 	for (int y = 0; y < g_theWorld->GetYHeight(); y++)
-    {
+	{
 		for (int x = 0; x < g_theWorld->GetXWidth(); x++)
-        {
+		{
 			Cell *cell = g_theWorld->GetCell(x, y);
 			if (cell->GetNumDBImprovements() > 0)
-            {
+			{
 				archive << static_cast<uint16>(x);
 				archive << static_cast<uint16>(y);
 				archive.PutUINT8((uint8)cell->GetNumDBImprovements());
 				for (sint32 i = 0; i < cell->GetNumDBImprovements(); i++)
-                {
+				{
 					archive << static_cast<sint32>(cell->GetDBImprovement(i));
 				}
 				numCells++;
@@ -447,10 +449,9 @@ bool MapFile::SaveImprovements(FILE *outfile)
 	}
 
 	m_chunk.m_id = k_IMPROVEMENTS_HEADER;
-	m_chunk.m_size = archive.StreamLen() + sizeof(numCells);
+	m_chunk.m_size = static_cast<uint32>(archive.StreamLen() + sizeof(numCells));
 	if(!m_chunk.Save(outfile))
 	{
-
 		MessageBoxDialog::Information("Error saving improvements.","ErrSaveImprovements");
 		return false;
 	}
@@ -477,7 +478,7 @@ bool MapFile::SaveVision(FILE *outfile)
 	m_chunk.m_size = (g_theWorld->GetXWidth() * g_theWorld->GetYHeight() * sizeof(uint16)) + sizeof(sint16) * 2 + sizeof(sint8);
 	m_chunk.m_id = k_VISION_HEADER;
 	for (uint8 p = 0; p < k_MAX_PLAYERS; p++)
-    {
+	{
 		if(!g_player[p]) continue;
 
 		if(!m_chunk.Save(outfile))
