@@ -462,7 +462,7 @@ public:
 	sint32 PayWages(sint32 w);
 	sint32 GetWagesNeeded() const;
 
-	void CalcHappiness(sint32 &virtualGoldSpent, bool firstPass) { Assert(m_city_data); m_city_data->CalcHappiness(virtualGoldSpent, firstPass); }
+	void CalcHappiness(bool firstPass = false) { Assert(m_city_data); m_city_data->CalcHappiness(firstPass); }
 
 	void BeginTurn();
 	void AddHappyTimer(sint32 turns, double adjust, HAPPY_REASON reason);

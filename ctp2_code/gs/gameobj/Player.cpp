@@ -1390,8 +1390,7 @@ Unit Player::CreateCity(
 	AddCityReferenceToPlayer(u, cause);
 
 	g_selected_item->RegisterCreatedCity(m_owner);
-	sint32 virtgoldspent = 0;
-	u.CalcHappiness(virtgoldspent, FALSE);
+	u.CalcHappiness(false);
 
 	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
@@ -1468,8 +1467,7 @@ bool Player::AddCityReferenceToPlayer(Unit u,  CAUSE_NEW_CITY cause)
 {
 	m_all_cities->Insert(u);
 
-	sint32 virtual_goal=0;
-	u.CalcHappiness(virtual_goal, TRUE);
+	u.CalcHappiness(true);
 
 	MapPoint pos;
 	u.GetPos(pos);

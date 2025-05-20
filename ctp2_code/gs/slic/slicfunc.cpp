@@ -3470,7 +3470,7 @@ SFN_ERROR Slic_AddPops::Call(SlicArgList *args)
 
 	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
-	cd->GetHappy()->CalcHappiness(*cd, false, delta_martial_law, true);
+	cd->CalcHappiness(true);
 
 	return SFN_ERROR_OK;
 }
@@ -7238,7 +7238,7 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 
 	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
-	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);
+	cd->CalcHappiness(true);
 
 	return SFN_ERROR_OK;
 }
@@ -7246,12 +7246,12 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 //EMODs
 SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 	if (!city.IsValid())
-    {
+	{
 		return SFN_ERROR_OK;
 	}
 
@@ -7270,7 +7270,7 @@ SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
 	city.GetData()->GetCityData()->ChangePopulation(-PCount);
 	//city.GetData()->GetCityData()->Disband();
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_Pillage::Call(SlicArgList *args)

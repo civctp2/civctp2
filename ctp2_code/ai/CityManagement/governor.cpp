@@ -1878,8 +1878,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 
 	//////////////////////////////////////////////////
 	// Recalculate Happiness after specialists removal
-	sint32 vgs;
-	city->CalcHappiness(vgs, true);
+	city->CalcHappiness(false);
 
 	/////////////////////////////////////
 	// Get maximum percent of specialists

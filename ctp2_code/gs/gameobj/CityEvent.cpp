@@ -292,7 +292,7 @@ STDEHANDLER(CityTurnPreProductionEvent)
 	if(!args->GetCity(0, city))
 		return GEV_HD_Continue;
 
-	city.CalcHappiness(g_player[city.GetOwner()]->m_virtualGoldSpent, TRUE);
+	city.CalcHappiness(true);
 	city.CheckRiot();
 	return GEV_HD_Continue;
 }

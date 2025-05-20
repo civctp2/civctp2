@@ -557,7 +557,7 @@ public:
 
 	bool GetIsRioting(void) const { return m_is_rioting; }
 
-	void CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass);
+	void CalcHappiness(bool isFirstPass = false);
 	void CheckRiot();
 	double GetHappiness() const;
 	double GetHappySize() const;

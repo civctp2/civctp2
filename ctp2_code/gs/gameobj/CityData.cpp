@@ -1129,8 +1129,7 @@ void CityData::Initialize(sint32 settlerType)
 	//SectarianHappiness(); //emod  - does this initialize it?
 	//m_secthappy = 0; //did not initialize
 
-	sint32 martialLaw;
-	m_happy->CalcHappiness(*this, false, martialLaw, true);
+	CalcHappiness(true);
 
 	const UnitRecord * settlerRec   = NULL;
 	sint32 numPops = 1;
@@ -5279,7 +5278,7 @@ void CityData::EndTurn()
 	GenerateCityInfluence(m_home_city.RetPos(), m_sizeIndex);
 }
 
-void CityData::CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass)
+void CityData::CalcHappiness(bool isFirstPass)
 {
 	sint32 delta_martial_law;
 	m_happy->CalcHappiness(*this, false, delta_martial_law, isFirstPass);
@@ -11276,8 +11275,7 @@ void CityData::ProcessAllResources()
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for nothing         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	// Recalculation happiness as crime losses depends on happiness.
-	sint32 gold;
-	CalcHappiness(gold, false);
+	CalcHappiness(false);
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for happiness calc  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
@@ -11321,7 +11319,7 @@ void CityData::ProcessAllResources()
 #endif
 	// Production has an effect on pollution and polltion has an effect
 	// on happiness. Of course better would be only one recalculation.
-	CalcHappiness(gold, false);
+	CalcHappiness(false);
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for happiness       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 

@@ -1466,10 +1466,9 @@ double Unit::GetHappyCrime() const
 	return GetData()->GetHappyCrime();
 }
 
-void Unit::CalcHappiness(sint32 &virtualGoldSpent, bool firstPass)
-
+void Unit::CalcHappiness(bool firstPass)
 {
-	AccessData()->CalcHappiness(virtualGoldSpent, firstPass);
+	AccessData()->CalcHappiness(firstPass);
 }
 
 bool Unit::IsPatrolling() const
