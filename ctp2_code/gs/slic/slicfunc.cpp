@@ -3468,7 +3468,6 @@ SFN_ERROR Slic_AddPops::Call(SlicArgList *args)
 		}
 	}
 
-	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
 	cd->CalcHappiness(true);
 
@@ -7236,7 +7235,6 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 		}
 	}
 
-	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
 	cd->CalcHappiness(true);
 
