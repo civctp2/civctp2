@@ -6259,16 +6259,16 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 
 	m_doUprising = UPRISING_CAUSE_NONE;
 
-	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+	MapPoint cpos;
+	m_home_city.GetPos(cpos);
+
+	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit(cpos);
 	Assert(cheapUnit >= 0);
 	if (cheapUnit < 0)
 		return;
 
 	sint32 numSlaves = SlaveCount();
 	PLAYER_INDEX si = PLAYER_INDEX_VANDALS; // let slave army belong to vandals for the fight to avoid inappropriate "civ-conquered" event in case of failure
-
-	MapPoint cpos;
-	m_home_city.GetPos(cpos);
 
 	if(numSlaves > k_MAX_ARMY_SIZE)
 		numSlaves = k_MAX_ARMY_SIZE;
@@ -11658,7 +11658,7 @@ void CityData::Militia()
 
 	if(g_theWorld->GetCell(cpos)->GetNumUnits() <= 0)
 	{
-		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit(cpos);
 
 		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
 		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()

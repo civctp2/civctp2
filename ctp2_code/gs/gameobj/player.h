@@ -442,7 +442,7 @@ public:
 	void Sleep(sint32 idx);
 	void WakeUp(sint32 idx);
 
-	sint32 GetCheapestMilitaryUnit();
+	sint32 GetCheapestMilitaryUnit(const MapPoint& pos);
 
 	void BeginTurnPollution(void) ;
 	void EndTurnPollution(void) ;

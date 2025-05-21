@@ -6695,17 +6695,15 @@ bool player_isEnemy(PLAYER_INDEX me, PLAYER_INDEX him)
 	return !AgreementMatrix::s_agreements.HasAgreement(me, him, PROPOSAL_TREATY_ALLIANCE);
 }
 
-sint32 Player::GetCheapestMilitaryUnit()
+sint32 Player::GetCheapestMilitaryUnit(const MapPoint& pos)
 {
-	sint32 i;
 	sint32 cheapindex = -1;
 	sint32 cheapcost = 0x7fffffff;
-	for(i = 0; i < g_theUnitDB->NumRecords(); i++)
+	for(sint32 i = 0; i < g_theUnitDB->NumRecords(); i++)
 	{
 		const UnitRecord *rec = g_theUnitDB->Get(i, m_government_type);
 		bool isObsolete = false;
-		sint32 o;
-		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++)
+		for(sint32 o = 0; o < rec->GetNumObsoleteAdvance(); o++)
 		{
 			if(HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
 			{
@@ -6715,6 +6713,9 @@ sint32 Player::GetCheapestMilitaryUnit()
 		}
 
 		if(isObsolete && cheapindex >= 0)
+			continue;
+
+		if(!g_theWorld->CanEnter(pos, rec->GetMovementType()))
 			continue;
 
 		if((rec->GetEnableAdvanceIndex() < 0 || HasAdvance(rec->GetEnableAdvanceIndex())) &&
