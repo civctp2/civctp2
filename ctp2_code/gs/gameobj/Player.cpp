@@ -6700,67 +6700,78 @@ sint32 Player::GetCheapestMilitaryUnit()
 	sint32 i;
 	sint32 cheapindex = -1;
 	sint32 cheapcost = 0x7fffffff;
-	for(i = 0; i < g_theUnitDB->NumRecords(); i++) {
+	for(i = 0; i < g_theUnitDB->NumRecords(); i++)
+	{
 		const UnitRecord *rec = g_theUnitDB->Get(i, m_government_type);
 		bool isObsolete = false;
 		sint32 o;
-		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++) {
-			if(HasAdvance(rec->GetObsoleteAdvanceIndex(o))) {
+		for(o = 0; o < rec->GetNumObsoleteAdvance(); o++)
+		{
+			if(HasAdvance(rec->GetObsoleteAdvanceIndex(o)))
+			{
 				isObsolete = true;
 				break;
 			}
 		}
+
 		if(isObsolete && cheapindex >= 0)
 			continue;
+
 		if((rec->GetEnableAdvanceIndex() < 0 || HasAdvance(rec->GetEnableAdvanceIndex())) &&
 		   rec->GetShieldCost() < cheapcost &&
-		   rec->GetAttack() > 0) {
+		   rec->GetAttack() > 0)
+		{
 			cheapcost = rec->GetShieldCost();
 			cheapindex = i;
 		}
 	}
+
 	Assert(cheapindex >= 0);
 	return cheapindex;
 }
 
 MBCHAR *Player::GenerateDescriptionString(bool is_winner)
 {
-    char const * ptag = NULL;
+	char const * ptag = NULL;
 	sint32 curScore = infowin_GetCivScore(m_owner);
 
-    if (is_winner) {
-        if (curScore <= 20)        ptag = "PLAYER_DESCRIPTION_WINNER_RANK_1";
-        else if (curScore <= 40)   ptag = "PLAYER_DESCRIPTION_WINNER_RANK_2";
-        else if (curScore <= 60)   ptag = "PLAYER_DESCRIPTION_WINNER_RANK_3";
-        else if (curScore <= 80)   ptag = "PLAYER_DESCRIPTION_WINNER_RANK_4";
-        else if (curScore <= 100)  ptag = "PLAYER_DESCRIPTION_WINNER_RANK_5";
-        else                       ptag = "PLAYER_DESCRIPTION_WINNER_RANK_6";
-    } else {
-        if (curScore <= 5)         ptag = "PLAYER_DESCRIPTION_LOSER_RANK_1";
-        else if (curScore <= 10)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_2";
-        else if (curScore <= 15)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_3";
-        else if (curScore <= 20)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_4";
-        else if (curScore <= 25)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_5";
-        else                       ptag = "PLAYER_DESCRIPTION_LOSER_RANK_6";
-    }
+	if (is_winner)
+	{
+		if (curScore <= 20)        ptag = "PLAYER_DESCRIPTION_WINNER_RANK_1";
+		else if (curScore <= 40)   ptag = "PLAYER_DESCRIPTION_WINNER_RANK_2";
+		else if (curScore <= 60)   ptag = "PLAYER_DESCRIPTION_WINNER_RANK_3";
+		else if (curScore <= 80)   ptag = "PLAYER_DESCRIPTION_WINNER_RANK_4";
+		else if (curScore <= 100)  ptag = "PLAYER_DESCRIPTION_WINNER_RANK_5";
+		else                       ptag = "PLAYER_DESCRIPTION_WINNER_RANK_6";
+	}
+	else
+	{
+		if (curScore <= 5)         ptag = "PLAYER_DESCRIPTION_LOSER_RANK_1";
+		else if (curScore <= 10)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_2";
+		else if (curScore <= 15)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_3";
+		else if (curScore <= 20)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_4";
+		else if (curScore <= 25)   ptag = "PLAYER_DESCRIPTION_LOSER_RANK_5";
+		else                       ptag = "PLAYER_DESCRIPTION_LOSER_RANK_6";
+	}
 
-    SlicContext sc;
-    sc.AddCivilisation(m_owner);
-    stringutils_Interpret
-        (g_theStringDB->GetNameStr(ptag), sc, m_descrip_string, sizeof(m_descrip_string));
+	SlicContext sc;
+	sc.AddCivilisation(m_owner);
+	stringutils_Interpret
+	    (g_theStringDB->GetNameStr(ptag), sc, m_descrip_string, sizeof(m_descrip_string));
 
-    return m_descrip_string;
+	return m_descrip_string;
 }
 
 MBCHAR *Player::GetDescriptionString()
 {
-    if (m_descrip_string[0]) {
-
-        return(m_descrip_string);
-    } else {
-
-        return(GenerateDescriptionString(true));
-    }
+	if (m_descrip_string[0])
+	{
+		return(m_descrip_string);
+	}
+	else
+	{
+		return(GenerateDescriptionString(true));
+	}
 }
 
 void Player::GameOverCheck(sint32 killedBy)
@@ -6776,7 +6787,8 @@ void Player::GameOverCheck(sint32 killedBy)
 
 void Player::GameOver(GAME_OVER reason, sint32 data)
 {
-	if (PLAYER_INDEX_VANDALS == m_owner) {
+	if (PLAYER_INDEX_VANDALS == m_owner)
+	{
 		return;
 	}
 
@@ -6786,25 +6798,23 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 	sint32 i, aPlayer = 0; // Maybe has to be reconsidered (Barbs)
 	sint32 count = 0;
 
-	switch(reason) {
+	switch(reason)
+	{
 		case GAME_OVER_WON_CONQUERED_WORLD:
 		case GAME_OVER_WON_SCENARIO:
 		case GAME_OVER_WON_OUT_OF_TIME:
-            GenerateDescriptionString(true);
+			GenerateDescriptionString(true);
 			m_hasWonTheGame = TRUE;
 			break;
 		case GAME_OVER_WON_DIPLOMACY:
-            GenerateDescriptionString(true);
+			GenerateDescriptionString(true);
 			m_hasWonTheGame = TRUE;
-			for(i = 1; i < k_MAX_PLAYERS; i++) {
-				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
-
-
-
-
-
-					if(!g_network.IsClient()) {
-
+			for(i = 1; i < k_MAX_PLAYERS; i++)
+			{
+				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner)
+				{
+					if(!g_network.IsClient())
+					{
 						g_player[i]->GameOver(GAME_OVER_LOST_DIPLOMACY, -1);
 					}
 				}
@@ -6812,18 +6822,16 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 			break;
 
 		case GAME_OVER_WON_SCIENCE:
-			if (!g_network.IsActive()) {
+			if (!g_network.IsActive())
+			{
 				GenerateDescriptionString(true);
 				m_hasWonTheGame = TRUE;
-				for(i = 1; i < k_MAX_PLAYERS; i++) {
-					if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
-
-
-
-
-
-						if(!g_network.IsClient()) {
-
+				for(i = 1; i < k_MAX_PLAYERS; i++)
+				{
+					if(g_player[i] && !g_player[i]->m_isDead && i != m_owner)
+					{
+						if(!g_network.IsClient())
+						{
 							g_player[i]->GameOver(GAME_OVER_LOST_SCIENCE, -1);
 						}
 					}
@@ -6834,17 +6842,20 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		case GAME_OVER_LOST_CONQUERED:
 		case GAME_OVER_LOST_INEPT:
 		case GAME_OVER_LOST_SCENARIO:
-            GenerateDescriptionString(false);
+			GenerateDescriptionString(false);
 			StartDeath(reason, data);
-			for(i = 1; i < k_MAX_PLAYERS; i++) {
-				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner) {
+			for(i = 1; i < k_MAX_PLAYERS; i++)
+			{
+				if(g_player[i] && !g_player[i]->m_isDead && i != m_owner)
+				{
 					count++;
 					aPlayer = i;
 				}
 			}
-			if(count == 1) {
-				if(!g_network.IsClient()) {
-
+			if(count == 1)
+			{
+				if(!g_network.IsClient())
+				{
 					g_player[aPlayer]->GameOver(GAME_OVER_WON_CONQUERED_WORLD, -1);
 				}
 			}
@@ -6853,19 +6864,23 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 		case GAME_OVER_LOST_OUT_OF_TIME:
 		case GAME_OVER_LOST_SCIENCE:
 		case GAME_OVER_LOST_DIPLOMACY:
-            GenerateDescriptionString(false);
+			GenerateDescriptionString(false);
 			m_hasLostTheGame = TRUE;
 			break;
 
-        default:
-            Assert(false);
-            break;
+		default:
+			Assert(false);
+			break;
 	}
 
-	if(g_network.IsHost()) {
-		if(reason == GAME_OVER_WON_OUT_OF_TIME || reason == GAME_OVER_LOST_OUT_OF_TIME) {
+	if(g_network.IsHost())
+	{
+		if(reason == GAME_OVER_WON_OUT_OF_TIME || reason == GAME_OVER_LOST_OUT_OF_TIME)
+		{
 
-		} else {
+		}
+		else
+		{
 			g_network.Enqueue(new NetInfo(NET_INFO_CODE_GAME_OVER, reason, m_owner, data));
 		}
 	}
@@ -6875,15 +6890,15 @@ void Player::GameOver(GAME_OVER reason, sint32 data)
 	{
 		close_AllScreens();
 
-
 		if (reason == GAME_OVER_LOST_SCIENCE ||
-			reason == GAME_OVER_LOST_DIPLOMACY) {
-
+			reason == GAME_OVER_LOST_DIPLOMACY)
+		{
 			infowin_Initialize();
 			victorywin_Initialize(k_VICWIN_DEFEAT);
 			victorywin_DisplayWindow(k_VICWIN_DEFEAT);
-		} else {
-
+		}
+		else
+		{
 			g_director->CatchUp();
 			g_director->AddPlayVictoryMovie(reason, previouslyWon, previouslyLost);
 		}
@@ -6898,9 +6913,11 @@ bool Player::CheckPlayerDead()
 	
 	DPRINTF(k_DBG_GAMESTATE, ("Player::CheckPlayerDead : m_all_cities->Num()=%d, m_all_units->Num=%d\n", m_all_cities->Num(), m_all_units->Num()));
 
-	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num() < 1)) {
+	if(m_all_cities->Num() <= 0 && (!m_first_city || m_all_units->Num() < 1))
+	{
 		return true;
 	}
+
 	return false;
 }
 
@@ -6908,8 +6925,8 @@ extern sint32 g_noai_stop_player;
 
 void Player::StartDeath(GAME_OVER reason, sint32 data)
 {
-	if(m_isDead) {
-
+	if(m_isDead)
+	{
 		return;
 	}
 
@@ -6923,39 +6940,45 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
 		g_network.KillPlayer(m_owner, reason, data);
 	}
 
-    SlicObject *so = new SlicObject("77YouLose") ;
-    so->AddRecipient(m_owner) ;
+	SlicObject *so = new SlicObject("77YouLose") ;
+	so->AddRecipient(m_owner) ;
 	so->AddPlayer(m_owner);
-    g_slicEngine->Execute(so) ;
+	g_slicEngine->Execute(so) ;
 
-    if (reason == GAME_OVER_LOST_CONQUERED && data != m_owner) {
-        so = new SlicObject("76PlayerDefeatedBy");
-        so->AddCivilisation(m_owner) ; // m_owner <=> killed player
-        so->AddCivilisation(data) ; // data <=> killedBy
-        so->AddAllRecipientsBut(m_owner);
-        g_slicEngine->Execute(so) ;
+	if (reason == GAME_OVER_LOST_CONQUERED && data != m_owner)
+	{
+		so = new SlicObject("76PlayerDefeatedBy");
+		so->AddCivilisation(m_owner) ; // m_owner <=> killed player
+		so->AddCivilisation(data) ; // data <=> killedBy
+		so->AddAllRecipientsBut(m_owner);
+		g_slicEngine->Execute(so) ;
 		if(g_player[data]) {
 			g_player[data]->m_score->AddOpponentConquered();
 		}
-    } else {
-        so = new SlicObject("75PlayerDefeated") ;
-        so->AddCivilisation(m_owner) ;
-        so->AddAllRecipientsBut(m_owner);
-        g_slicEngine->Execute(so) ;
-    }
+	}
+	else
+	{
+		so = new SlicObject("75PlayerDefeated") ;
+		so->AddCivilisation(m_owner) ;
+		so->AddAllRecipientsBut(m_owner);
+		g_slicEngine->Execute(so) ;
+	}
 
 	m_isDead = TRUE;
-    g_aPlayerIsDead = TRUE;
+	g_aPlayerIsDead = TRUE;
 
-    if (g_theProfileDB->IsAIOn()) {
+	if (g_theProfileDB->IsAIOn())
+	{
+		if (m_owner == NewTurnCount::GetStopPlayer())
+		{
+			NewTurnCount::SetStopPlayer(g_selected_item->GetPlayerAfterThis(m_owner));
+		}
 
-        if (m_owner == NewTurnCount::GetStopPlayer()) {
-            NewTurnCount::SetStopPlayer(g_selected_item->GetPlayerAfterThis(m_owner));
-        }
-
-    } else {
-        g_noai_stop_player = g_selected_item->GetPlayerAfterThis(m_owner);
-    }
+	}
+	else
+	{
+		g_noai_stop_player = g_selected_item->GetPlayerAfterThis(m_owner);
+	}
 
 	//// clear seenBy bit for dead player (needed for RemoveUnseenRoute)
 	const TradeDynamicArray *allRoutes = g_theTradePool->AccessAllRoutes();
@@ -6964,10 +6987,11 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
 		allRoutes->Access(i).RemoveSeenByBit(m_owner); // checks if a route is not seen any more and then removes it completely
 	}
 
-
-	if(m_terrainImprovements) {
+	if(m_terrainImprovements)
+	{
 		sint32 i, n = m_terrainImprovements->Num();
-		for(i = n - 1; i >= 0; i--) {
+		for(i = n - 1; i >= 0; i--)
+		{
 			m_terrainImprovements->Access(i).Kill();
 		}
 	}
@@ -6979,56 +7003,55 @@ void Player::StartDeath(GAME_OVER reason, sint32 data)
 	}
 
 	g_featTracker->CheckConquerFeat(m_owner,data);
-
-
-
-
 }
-
 
 void Player::RemoveDeadPlayers()
 {
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_REMOVE_DEAD_PLAYERS));
 	}
 
 	sint32 i, playersInGame = 0;
-	for(i = 1; i < k_MAX_PLAYERS; i++) {
-		if(g_player[i] && g_player[i]->m_isDead) {
-
-
-
-
-
-
-
+	for(i = 1; i < k_MAX_PLAYERS; i++)
+	{
+		if(g_player[i] && g_player[i]->m_isDead)
+		{
 			g_theWorld->RegisterPlayerDead(i);
 
 			sint32 j, k;
 
-			for(j = 0; j < k_MAX_PLAYERS; j++) {
+			for(j = 0; j < k_MAX_PLAYERS; j++)
+			{
 				if(!g_player[j] || j == i)
 					continue;
-				for(k = g_player[j]->m_all_cities->Num() - 1; k >= 0; k--) {
+
+				for(k = g_player[j]->m_all_cities->Num() - 1; k >= 0; k--)
+				{
 					CityData *cd = g_player[j]->m_all_cities->Access(k).GetData()->GetCityData();
-					if(cd->GetFranchiseOwner() == i) {
+					if(cd->GetFranchiseOwner() == i)
+					{
 						cd->SetFranchiseTurnsRemaining(0);
 					}
 
-					if(cd->IsConvertedTo() == i) {
+					if(cd->IsConvertedTo() == i)
+					{
 						cd->Unconvert();
 					}
 				}
 			}
 
-			for(j = g_player[i]->m_all_armies->Num() - 1; j >= 0; j--) {
-				for(k = g_player[i]->m_all_armies->Access(j).Num() - 1; k >= 0; k--) {
+			for(j = g_player[i]->m_all_armies->Num() - 1; j >= 0; j--)
+			{
+				for(k = g_player[i]->m_all_armies->Access(j).Num() - 1; k >= 0; k--)
+				{
 					g_player[i]->m_all_armies->Access(j)[k].Kill(CAUSE_REMOVE_ARMY_NO_MAT_SUPPORT, -1);
 				}
 			}
 
 #ifdef _DEBUG
-			for(j = 0; j < g_player[i]->m_all_units->Num(); j++) {
+			for(j = 0; j < g_player[i]->m_all_units->Num(); j++)
+			{
 				DPRINTF(k_DBG_GAMESTATE, ("Unit %lx still alive\n",
 										  g_player[i]->m_all_units->Access(j).m_id));
 			}
@@ -7036,15 +7059,18 @@ void Player::RemoveDeadPlayers()
 			Assert(g_player[i]->m_all_units->Num() == 0);
 			Assert(g_player[i]->m_all_armies->Num() == 0);
 			if(g_player[i]->m_all_units->Num() != 0 ||
-			   g_player[i]->m_all_armies->Num() != 0) {
+			   g_player[i]->m_all_armies->Num() != 0)
+			{
 				BOOL HeyYou_DontJustHitIGoTellJoe = FALSE;
 				Assert(HeyYou_DontJustHitIGoTellJoe);
 			}
 #endif
 
-			if(!g_deadPlayer) {
+			if(!g_deadPlayer)
+			{
 				g_deadPlayer = new PointerList<Player>;
 			}
+
 			g_deadPlayer->AddHead(g_player[i]);
 			g_player[i]->m_score->SetFinalScore(g_player[i]->m_score->GetTotalScore());
 
@@ -7058,9 +7084,11 @@ void Player::RemoveDeadPlayers()
 			CtpAi::RemovePlayer(i);
 		}
 	}
+
 	g_aPlayerIsDead = FALSE;
 
-	for (i=1; i < k_MAX_PLAYERS; i++) {
+	for (i=1; i < k_MAX_PLAYERS; i++)
+	{
 		if (g_player[i] && !g_player[i]->m_isDead)
 			playersInGame++ ;
 	}
@@ -7069,8 +7097,10 @@ void Player::RemoveDeadPlayers()
 Player *Player::GetDeadPlayer(sint32 index)
 {
 	PointerList<Player>::Walker walk(g_deadPlayer);
-	while(walk.IsValid()) {
-		if(walk.GetObj()->m_owner == index) {
+	while(walk.IsValid())
+	{
+		if(walk.GetObj()->m_owner == index)
+		{
 			return walk.GetObj();
 		}
 		walk.Next();
@@ -7078,20 +7108,8 @@ Player *Player::GetDeadPlayer(sint32 index)
 	return NULL;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
 sint32 Player::LoadBuildQueue(const sint32 city, const MBCHAR *file)
-	{
+{
 	Unit	c ;
 
 	CityData	*cityData ;
@@ -7105,23 +7123,10 @@ sint32 Player::LoadBuildQueue(const sint32 city, const MBCHAR *file)
 	cityData = c.GetData()->GetCityData() ;
 
 	return (cityData->LoadQueue(file)) ;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 sint32 Player::SaveBuildQueue(const sint32 city, const MBCHAR *file)
-	{
+{
 	Unit	c ;
 
 	CityData	*cityData ;
@@ -7135,8 +7140,7 @@ sint32 Player::SaveBuildQueue(const sint32 city, const MBCHAR *file)
 	cityData = c.GetData()->GetCityData() ;
 
 	return (cityData->SaveQueue(file)) ;
-	}
-
+}
 
 sint32 Player::GetTotalResources()
 {
@@ -7153,19 +7157,8 @@ sint32 Player::GetTotalResources()
 	return res;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void Player::BeginTurnMonopoly(void)  //EMOD add back in but grant a feat?
-	{
+{
 #ifdef CTP1_TRADE
 	SlicObject	*so ;
 
@@ -7175,15 +7168,14 @@ void Player::BeginTurnMonopoly(void)  //EMOD add back in but grant a feat?
 
 	cities = m_all_cities->Num() ;
 	for (i=0; i<g_theResourceDB->NumRecords(); i++)
-		{
-
+	{
 		resourceCount = 0;
 		for (j=0; j<cities; j++)
 		{
 			resourceCount += m_all_cities->Access(j).AccessData()->GetCityData()->GetResourceCount(i) ;
 
 			if (resourceCount > g_theConstDB->GetMonopolyThreshold())
-				{
+			{
 				so = new SlicObject("26MonopolyDetected") ;
 				for (p=0; p<k_MAX_PLAYERS; p++)
 					if(g_player[i] && (p != m_owner) && !g_player[i]->m_isDead)
@@ -7195,11 +7187,11 @@ void Player::BeginTurnMonopoly(void)  //EMOD add back in but grant a feat?
 				g_slicEngine->Execute(so) ;
 
 				break;
-				}
 			}
 		}
-#endif
 	}
+#endif
+}
 
 bool Player::ContinentShared() const
 {
@@ -7266,7 +7258,6 @@ bool Player::HasSameGoodAsTraded() const
 #endif
 	return false;
 }
-
 
 sint32 Player::GetTradeWith(PLAYER_INDEX third_party)
 {
@@ -7342,29 +7333,29 @@ DIPLOMATIC_STRENGTH Player::GetRelativeStrength(PLAYER_INDEX him) const
 
 ATTITUDE_TYPE Player::GetAttitude(PLAYER_INDEX him) const
 {
+	Assert(m_owner != him);
+	if (m_owner == him) return ATTITUDE_TYPE_NEUTRAL;
 
-    Assert(m_owner != him);
-    if (m_owner == him) return ATTITUDE_TYPE_NEUTRAL;
+	Assert(0 <= him);
+	Assert(him < k_MAX_PLAYERS);
+	Assert(g_player[him]);
 
-    Assert(0 <= him);
-    Assert(him < k_MAX_PLAYERS);
-    Assert(g_player[him]);
+	BOOL is_weak = FALSE;
+	BOOL is_strong = FALSE;
 
-    BOOL is_weak = FALSE;
-    BOOL is_strong = FALSE;
-
-    switch (GetRelativeStrength(him)) {
-    case DIPLOMATIC_STRENGTH_VERY_WEAK:
-    case DIPLOMATIC_STRENGTH_WEAK:
-        is_weak = TRUE;
-        break;
-    case DIPLOMATIC_STRENGTH_STRONG:
-    case DIPLOMATIC_STRENGTH_VERY_STRONG:
-        is_strong = TRUE;
-        break;
-    default:
-        break;
-    }
+	switch (GetRelativeStrength(him))
+	{
+		case DIPLOMATIC_STRENGTH_VERY_WEAK:
+		case DIPLOMATIC_STRENGTH_WEAK:
+			is_weak = TRUE;
+			break;
+		case DIPLOMATIC_STRENGTH_STRONG:
+		case DIPLOMATIC_STRENGTH_VERY_STRONG:
+			is_strong = TRUE;
+			break;
+		default:
+			break;
+	}
 
 	if(!IsRobot() || g_network.IsClient()) {
 		switch(m_diplomatic_state[him]) {
@@ -7385,53 +7376,58 @@ ATTITUDE_TYPE Player::GetAttitude(PLAYER_INDEX him) const
 		}
 	}
 
-
-
-
-
-
-
-
-
-
-
-    switch (m_regard->GetUpdatedRegard(m_owner, him)) {
-    case REGARD_TYPE_LOVE:
-        if (is_weak) {
-            return(ATTITUDE_TYPE_WEAK_FRIENDLY);
-        } else {
-            return(ATTITUDE_TYPE_STRONG_FRIENDLY);
-        }
-    case REGARD_TYPE_FRIENDLY:
-        if (is_weak) {
-            return(ATTITUDE_TYPE_WEAK_FRIENDLY);
-        } else if (is_strong) {
-            return(ATTITUDE_TYPE_STRONG_FRIENDLY);
-        } else {
-            return(ATTITUDE_TYPE_NEUTRAL);
-        }
-    case REGARD_TYPE_NEUTRAL:
-        return(ATTITUDE_TYPE_NEUTRAL);
-
-    case REGARD_TYPE_COLDWAR:
-        if (is_weak) {
-            return(ATTITUDE_TYPE_WEAK_HOSTILE);
-        } else if (is_strong) {
-            return(ATTITUDE_TYPE_STRONG_HOSTILE);
-        } else {
-            return(ATTITUDE_TYPE_NEUTRAL);
-        }
-    case REGARD_TYPE_HOTWAR:
-    case REGARD_TYPE_INSANE_HATRED:
-        if (is_weak) {
-            return(ATTITUDE_TYPE_WEAK_HOSTILE);
-        } else {
-            return(ATTITUDE_TYPE_STRONG_HOSTILE);
-        }
-    default:
-        Assert(0);
-        return(ATTITUDE_TYPE_NEUTRAL);
-    }
+	switch (m_regard->GetUpdatedRegard(m_owner, him))
+	{
+		case REGARD_TYPE_LOVE:
+			if (is_weak) {
+				return(ATTITUDE_TYPE_WEAK_FRIENDLY);
+			}
+			else
+			{
+				return(ATTITUDE_TYPE_STRONG_FRIENDLY);
+			}
+		case REGARD_TYPE_FRIENDLY:
+			if (is_weak)
+			{
+				return(ATTITUDE_TYPE_WEAK_FRIENDLY);
+			}
+			else if (is_strong)
+			{
+				return(ATTITUDE_TYPE_STRONG_FRIENDLY);
+			}
+			else
+			{
+				return(ATTITUDE_TYPE_NEUTRAL);
+			}
+		case REGARD_TYPE_NEUTRAL:
+			return(ATTITUDE_TYPE_NEUTRAL);
+		case REGARD_TYPE_COLDWAR:
+			if (is_weak)
+			{
+				return(ATTITUDE_TYPE_WEAK_HOSTILE);
+			}
+			else if (is_strong)
+			{
+				return(ATTITUDE_TYPE_STRONG_HOSTILE);
+			}
+			else
+			{
+				return(ATTITUDE_TYPE_NEUTRAL);
+			}
+		case REGARD_TYPE_HOTWAR:
+		case REGARD_TYPE_INSANE_HATRED:
+			if (is_weak)
+			{
+				return(ATTITUDE_TYPE_WEAK_HOSTILE);
+			}
+			else
+			{
+				return(ATTITUDE_TYPE_STRONG_HOSTILE);
+			}
+		default:
+			Assert(0);
+			return(ATTITUDE_TYPE_NEUTRAL);
+	}
 }
 
 sint32 Player::GetKnowledgeStrength() const
@@ -7462,7 +7458,8 @@ sint32 Player::GetTradeStrength() const
 sint32 Player::GetTotalPopulation() const
 {
 	sint32 totalPop = 0;
-	for(sint32 i = 0; i < m_all_cities->Num(); i++) {
+	for(sint32 i = 0; i < m_all_cities->Num(); i++)
+	{
 		totalPop += m_all_cities->Access(i).PopCount();
 	}
 	return totalPop;
@@ -7471,7 +7468,8 @@ sint32 Player::GetTotalPopulation() const
 sint32 Player::GetPartialPopulation() const
 {
 	sint32 partialPop = 0;
-	for(sint32 i = 0; i < m_all_cities->Num(); i++) {
+	for(sint32 i = 0; i < m_all_cities->Num(); i++)
+	{
 		partialPop += m_all_cities->Access(i).GetCityData()->GetPartialPopulation();
 	}
 	return partialPop;
@@ -7557,7 +7555,8 @@ void Player::BuildDiplomaticSlicMessage(DiplomaticRequest &r)
 	so->AddCivilisation(r.GetRecipient());
 	so->AddAttitude(g_player[r.GetOwner()]->GetAttitude(r.GetRecipient()));
 
-	switch(r.GetRequest()) {
+	switch(r.GetRequest())
+	{
 		case REQUEST_TYPE_GREETING:
 			break;
 		case REQUEST_TYPE_DEMAND_ADVANCE:
@@ -7618,8 +7617,8 @@ void Player::BuildDiplomaticSlicMessage(DiplomaticRequest &r)
 			Assert(false);
 			break;
 	}
-	g_slicEngine->Execute(so);
 
+	g_slicEngine->Execute(so);
 }
 
 sint32 Player::GetPoints() const
@@ -7632,20 +7631,25 @@ sint32 Player::DeductPoints(sint32 p)
 	Assert(m_powerPoints >= p);
 	if(m_powerPoints >= p)
 		m_powerPoints -= p;
-	if(g_network.IsHost()) {
+
+	if(g_network.IsHost())
+	{
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_POWER_POINTS,
 									  m_owner, m_powerPoints));
 	}
+
 	return m_powerPoints;
 }
 
 sint32 Player::AddPoints(sint32 p)
 {
 	m_powerPoints += p;
-	if(g_network.IsHost()) {
+	if(g_network.IsHost())
+	{
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_POWER_POINTS,
 									  m_owner, m_powerPoints));
 	}
+
 	return m_powerPoints;
 }
 
@@ -7655,6 +7659,7 @@ sint32 Player::SetPoints(sint32 p)
 		g_network.Enqueue(new NetInfo(NET_INFO_CODE_POWER_POINTS,
 									  m_owner, m_powerPoints));
 	}
+
 	return(m_powerPoints = p);
 }
 
