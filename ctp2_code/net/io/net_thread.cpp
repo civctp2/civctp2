@@ -654,7 +654,7 @@ void NetThread::AddPlayer(uint16 id, char* name)
 	TPacketData *packet = new TPacketData(k_RPC_ID,
 										  k_RPC_ADD_PLAYER,
 										  (uint8*)name,
-										  strlen(name) + 1 + sizeof(uint16),
+										  static_cast<sint32>(strlen(name) + 1 + sizeof(uint16)),
 										  TRUE);
 	putshort(&packet->m_buf[strlen(name) + 1], id);
 	m_incoming->AddTail(packet);
