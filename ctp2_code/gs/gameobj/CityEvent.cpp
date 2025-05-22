@@ -127,7 +127,7 @@ STDEHANDLER(CaptureCityEvent)
 			GEA_End);
 
 			//added cities leaving ruin options requires a tileimp with the flag IsCityRuin to be placed
-			if (g_theProfileDB->GetCityLeavesRuins()){
+			if (g_theProfileDB->GetCityLeavesRuins() && !g_network.IsActive()){
 				for (sint32 imp = 0; imp < g_theTerrainImprovementDB->NumRecords(); imp++) {
 					const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 					if (rec->GetIsCityRuin()){

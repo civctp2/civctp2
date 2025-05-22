@@ -3654,7 +3654,7 @@ void CityData::CalculateCoeffProd()
 	}
 
 	//emod for energy impacts
-	if(g_theProfileDB->IsNRG())
+	if(g_theProfileDB->IsNRG() && !g_network.IsActive())
 	{
 		double energysupply = g_player[m_owner]->GetEnergySupply();
 		if ((energysupply < 1.0) && (energysupply > 0.0))
@@ -3841,7 +3841,7 @@ void CityData::CalculateCoeffGold()
 	}
 
 	//emod for energy impacts
-	if(g_theProfileDB->IsNRG())
+	if(g_theProfileDB->IsNRG() && !g_network.IsActive())
 	{
 		double energysupply = g_player[m_owner]->GetEnergySupply();
 		if(energysupply > 0.0)
@@ -5750,7 +5750,7 @@ double CityData::GetDefendersBonus() const
 {
 	// EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
 	if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus()
-	||  g_theProfileDB->IsAICityDefenderBonus())
+	||  g_theProfileDB->IsAICityDefenderBonus() && !g_network.IsActive())
 	&& g_player[m_owner]->IsRobot()
 	){
 		return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
@@ -11145,7 +11145,7 @@ sint32 CityData::SectarianHappiness() const
 {
 	if(
 	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
-	||(g_theProfileDB->IsSectarianHappiness())
+	||(g_theProfileDB->IsSectarianHappiness() && !g_network.IsActive())
 	) {
 		ProcessSectarianHappiness(m_secthappy, m_owner, m_cityStyle);
 	}
@@ -11662,7 +11662,7 @@ void CityData::Militia()
 
 		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
 		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
-		|| 	g_theProfileDB->IsAIMilitiaUnit())
+		|| 	g_theProfileDB->IsAIMilitiaUnit() && !g_network.IsActive())
 		&& g_player[m_owner]->IsRobot()
 		){
 			g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);
