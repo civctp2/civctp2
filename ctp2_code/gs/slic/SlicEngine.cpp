@@ -747,6 +747,8 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_AddMovement);
 	m_functionHash->Add(new Slic_ToggleVeteran);
 	m_functionHash->Add(new Slic_IsVeteran);
+	m_functionHash->Add(new Slic_ToggleElite);
+	m_functionHash->Add(new Slic_IsElite);
 
 	m_functionHash->Add(new Slic_CantAttackUnit);
 	m_functionHash->Add(new Slic_CantAttackCity);
@@ -970,6 +972,10 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetContinent);
 	m_functionHash->Add(new Slic_GetContinentSize);
 	m_functionHash->Add(new Slic_IsWater);
+	m_functionHash->Add(new Slic_SetVeteran);
+	m_functionHash->Add(new Slic_UnsetVeteran);
+	m_functionHash->Add(new Slic_SetElite);
+	m_functionHash->Add(new Slic_UnsetElite);
 	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
 	//Added by E

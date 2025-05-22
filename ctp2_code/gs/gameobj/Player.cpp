@@ -9198,7 +9198,7 @@ A build option not to exceed city limit
 double Player::BreadBasket()  //allows for food outside the empire to contribute to all cities
 {
 	if(!m_all_cities)
-		return 0;
+		return 0.0;
 
 	double comfood = 0.0;
 
