@@ -145,6 +145,7 @@
 #include "GlobalWarmingRecord.h"
 #include "MapRecord.h"
 #include "MapIconRecord.h"
+#include "LanguageRecord.h"
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
 #include "GameEventManager.h"
@@ -3048,6 +3049,11 @@ void SlicEngine::AddDatabases()
 															   g_ConstRecord_Accessors,
 															   g_Const_Tokens,
 															   k_Num_ConstRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<LanguageRecord,
+									LanguageRecordAccessorInfo>("LanguageDB", g_theLanguageDB,
+															   g_LanguageRecord_Accessors,
+															   g_Language_Tokens,
+															   k_Num_LanguageRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)
