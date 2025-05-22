@@ -1161,7 +1161,14 @@ void SelectedItem::SetSelectUnit(const Unit& u, bool all, bool isDoubleClick)
 			m_select_state[o] = SELECT_TYPE_REMOTE_ARMY;
 		}
 
-		m_selected_army[o] = u.GetArmy();
+		if(u.IsBeingTransported())
+		{
+			m_selected_army[o] = u.GetTransport().GetArmy();
+		}
+		else
+		{
+			m_selected_army[o] = u.GetArmy();
+		}
 
 		m_select_cycle.Insert(u.GetArmy());
 
