@@ -53,8 +53,8 @@ STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ;
 
 class IC3CivArchive : public IUnknown {
 public:
-  virtual void Store(uint8 *pbData, uint32 ulLen) = 0;
-  virtual void Load(uint8 *pbData, uint32 ulLen) = 0;
+  virtual void Store(uint8 *pbData, size_t ulLen) = 0;
+  virtual void Load(uint8 *pbData, size_t ulLen) = 0;
   virtual BOOL IsStoring() = 0;
 };
 #endif// !USE_COM_REPLACEMENT
