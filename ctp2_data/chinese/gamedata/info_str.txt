@@ -431,6 +431,15 @@ SUE_FRANCHISE_FAILED_ATTACKER 		"ËäÈ»ÎÒ¹úÂÉÊ¦Å¬Á¦³ÂÊöÊÂÊµ£¬È»¶øÅĞ¾ö½á¹ûÈ´ÈÃÍâ¹úÔ
 PARTY_COMPLETE_VICTIM 			"{player[0].civ_name_singular}µÄ{unitrecord[0].name}ÔÚ{city[0].name}¾ÙĞĞÑç»á¡£Ñç»áĞÎÊ½ºÍÊ³Îï¶¼ÊÇÒ»Á÷µÄ£¬µ±Íí±öÖ÷¾¡»¶Ö±µ½É¢³¡¡£Ñç»áÑûÇëÁËĞí¶àÎÒ¹ú¹ÙÔ±£¬¹ÙÔ±ÃÇÈÏÎª£¬ÎÒ¹úÓ¦Óë{player[0].civ_name_plural}¼ÓÇ¿ºÏ×÷¹ØÏµ¡£"
 PARTY_COMPLETE_ATTACKER 		"{unitrecord[0].name}ÔÚ{city[0].name}¾ÙĞĞÁËÑç»á¡£µ±Íí¹Ú¸ÇÔÆ¼¯£¬±öÖ÷¾¡»¶¡£¿ÉÒÔÔ¤¼û£¬{player[0].civ_name_plural}·Ç³£Ô¸ÒâÓëÎÒ¹ú¼ÓÇ¿Íâ½»ºÏ×÷¹ØÏµ¡£"
 
+# Hear Gossip #
+GOSSIP_WARTIME_READINESS		"The {player[0].civ_name_plural} are at wartime readiness"
+GOSSIP_ALERT_READINESS			"The {player[0].civ_name_plural} are on alert"
+GOSSIP_PEACETIME_READINESS		"The {player[0].civ_name_plural} are at peacetime readiness"
+GOSSIP_CAPTION					"Gossip"
+GOSSIP_BORING					"The {player[0].civ_name_plural} are a remarkably boring people, and have nothing worth gossiping about"
+GOSSIP_MAP						"We have gleaned knowledge of the world map from the {player[0].civ_name_plural}"
+GOSSIP_COMPLETE_ATTACKER		"Our Diplomats have overheard gossip. We have gained {advance[0].name}."
+
 ##Disabled Screen Buttons##
 
 CIV_STATUS_DISABLED  			"Äã±ØĞë½¨ÓĞ³ÇÊĞ£¬²ÅÄÜ½øÈëÕâ»­Ãæ¡£"
@@ -590,26 +599,26 @@ INFO_SPANISH			"Italian is one of the six languages Call to Power II was origina
 ###############
 
 # Common buttons
-BUTTON_ACCEPT				"½ÓÊÜ"
-BUTTON_CANCEL				"È¡Ïû"
-BUTTON_CLOSE				"¹Ø±Õ"
+BUTTON_ACCEPT			"½ÓÊÜ"
+BUTTON_CANCEL			"È¡Ïû"
+BUTTON_CLOSE			"¹Ø±Õ"
 BUTTON_GOAL				"Ä¿µÄ"
-BUTTON_LIBRARY				"Í¼Êé¹İ"
-BUTTON_MAYBE				"¿ÉÄÜ"
+BUTTON_LIBRARY			"Í¼Êé¹İ"
+BUTTON_MAYBE			"¿ÉÄÜ"
 BUTTON_YES				"ÊÇ"
 BUTTON_NO				"·ñ"
 BUTTON_OK				"¹Ø±Õ"
-BUTTON_RANDOM				"Ëæ»ú"
-BUTTON_READY				"×¼±¸"
-BUTTON_REJECT				"¾Ü¾ø"
-BUTTON_RESEARCH				"ÑĞ¾¿"
-BUTTON_SET_PRICE			"¶¨¼Û"
-BUTTON_STEAL_THIS			"<- ÇÔÈ¡Õâ¸ö"
-BUTTON_EXPEL				"ÇıÖğ"
+BUTTON_RANDOM			"Ëæ»ú"
+BUTTON_READY			"×¼±¸"
+BUTTON_REJECT			"¾Ü¾ø"
+BUTTON_RESEARCH			"ÑĞ¾¿"
+BUTTON_SET_PRICE		"¶¨¼Û"
+BUTTON_STEAL_THIS		"<- ÇÔÈ¡Õâ¸ö"
+BUTTON_EXPEL			"ÇıÖğ"
 
 # Network buttons
-BUTTON_EJECT				"¾Ü¾ø"
-BUTTON_LET_THEM_STAY			"ÈÃËûÃÇµÈ»á"
+BUTTON_EJECT			"¾Ü¾ø"
+BUTTON_LET_THEM_STAY	"ÈÃËûÃÇµÈ»á"
 
 # Buttons for quitting the game
 BUTTON_CONTINUE				"¼ÌĞø"

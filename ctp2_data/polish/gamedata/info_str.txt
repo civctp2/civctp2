@@ -76,6 +76,7 @@ IA_WAR_DISCONTENT_RISING		"{player[0].sir_cap}, poniewaz zbyt duzo jednostek woj
 
 
 ## Diplomacy Messages ##
+TREATY_TO_EXPIRE				"Nasz traktat pokojowy z {player[0].civ_name_plural} jest bliski wygasniecia."
 BROKE_TREATY				"{player[0].civ_name_singular} zerwali traktat z nacja {player[1].civ_name_plural}."
 NO_PIRACY_BROKEN			"{player[0].civ_name_singular} zostali przylapani na pladrowaniu naszych szlakow handlowych."
 ECOPACT_BROKEN				"{player[0].civ_name_singular} naruszyli pakt ekologicznty ktory z nami podpisali.  Ich miasta zatruwaja caly swiat!"
@@ -90,11 +91,23 @@ ALLIANCE_BROKEN_BY_3RD 			"{player[0].sir_cap}, wiesci donosza, ze {player[1].ci
 ALL_AGREEMENTS_BROKEN_BY_AI		"{player[1].leader_name} ma dla nas wiadomosc, {player[0].sir}:  Due to external forces and extenuating circumstances, {player[2].country_name} can no longer honor its agreements with you.  Consider all Pacts, Treaties and Agreements with us null and void."
 YOU_BROKE_ALLIANCE			"You have broken an alliance with the {player[0].civ_name_plura}]."
 YOU_BROKE_CEASE_FIRE			"You have broken a peace treaty with the {player[0].civ_name_plural}."
-CANT_ATTACK_ALLIES			"You have an alliance with the {player[0].civ_name_plural}, you cannot attack them without first breaking the alliance. Do you wish to break the alliance now?"
-CANT_ATTACK_ALLIES_CAN_EXPEL		"Do you wish to break your treaty with the {player[0].civ_name_plural}? You may expel the units without breaking the treaty."
+CANT_ATTACK_ALLIES				"You have an alliance with the {player[0].civ_name_plural}, you cannot attack them without first breaking the alliance. Do you wish to break the alliance now?"
+CANT_ATTACK_ALLIES_CAN_EXPEL	"Do you wish to break your treaty with the {player[0].civ_name_plural}? You may expel the units without breaking the treaty."
 CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0].civ_name_plural}. Are you sure you wish to continue?"
 CANT_ATTACK_TEAMMATES			"{player[0].leader_name} is your teammate, you cannot attack him."
 
+## Useful diplomacy messages that should be reimplemented ##
+CEASE_FIRE_BROKEN				"Niehonorowi {player[0].civ_name_plural} zdradzili nasz Traktat Pokojowy, atakujac nas bez prowokacji."
+LEAVE_OUR_LANDS_BROKEN			"{player[0].civ_name_plural} zdradzili pakt o nie naruszaniu terytorium."
+LEAVE_OUR_LANDS_BROKEN_BY_YOU	"Zdradzile(a)s twoja obietnice o wycofaniu twoich oddzialow z terytorium {player[0].civ_name_singular}."
+REDUCE_POLLUTION_BROKEN			"{player[0].civ_name_plural} zdradzili umowe o zmniejszeniu zanieczyszczen."
+REDUCE_POLLUTION_BROKEN_BY_YOU	"Zdradzile(a)s twoja umowe o zmniejszeniu zanieczyszczen z [player.1.civ_name_plural]."
+STOP_TRADE_WITH_BROKEN			"{player[0].civ_name_plural} zdradzili swoja umowe o zaprzestaniu handlu z {player[1].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN_BY_YOU	"Zdradzile(a)s nasza umowe z {player[0].civ_name_plural} o zaprzestaniu handlu z {player[1].civ_name_plural}."
+END_POLLUTION_BROKEN			"{player[0].civ_name_plural} zdradzili pakt o zaprzestaniu zanieczyszczania."
+END_POLLUTION_BROKEN_BY_YOU		"Zdradzile(a)s pakt o zaprzestaniu zanieczyszczania z {player[0].civ_name_plural}."
+ATTACK_ENEMY_BROKEN				"{player[0].civ_name_plural} zdradzili swoja umowe o zaatakowaniu {player[1].civ_name_plural."
+ATTACK_ENEMY_BROKEN_BY_YOU		"Zdradzile(a)s twoja umowe z {player[0].civ_name_plural} o zaatakowaniu {player[1].civ_name_plural}."
 
 ## Empire & City Related ##
 UNIT_COMPLETED 				"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}."
@@ -307,14 +320,13 @@ INCITE_REVOLUTION_COMPLETE_VICTIM 	"Ludnosci miasta {city[0].name} wszczela bunt
 
 ## Infection ##
 ## Infector Attack ##
-BIOINFECT_COMPLETE_VICTIM 		"{player[0].sir_cap}, w miescie {city[0].name} szerzy sie straszliwa epidemia.  Tysiece ludzi jest niezdolnych do pracy a cale miasto stalo sie niezadowolone.  Za ten straszliwy wypadek odpowiedzialny jest najprawdopodobniej wrogi bio-terrorysta."
-BIOINFECT_FAILED_VICTIM 		"{player[0].sir_cap}, wrogi bio-terrorysta zostal przylapany na prob zarazenia ludnosci miasta {city[0].name}."
-BIOINFECT_COMPLETE_AGRESSOR 		"Udalo sie Nam dokonac ataku biologicznego.  Ludnosc w miescie {city[0].name} cierpi teraz z powodu naszego szkodliwego virusa.  Produkcja i zadowolenie drastycznie obnizyly sie w tym miescie."
-
-BIOINFECT_FAILED_AGRESSOR 		"Niestety, Nasz bio-terrorysta zawiodl.  Naszej przyszlej ofierze udalo sie wykryc jego zamiary."
-IMMUNE_TO_BIOINFECT_AGRESSOR 		"Our bio-infect attack on the city of {city[0].name} has failed.  The city most certainly has some sort of immunity to biological weapons."
-IMMUNE_TO_BIOINFECT_VICTIM 		"{player[0].sir_cap}, our vigilance and preparedness have paid off!  The Micro Defense Improvement has protected {city[0].name} from an attempted biological weapons attack."
-INFECTED_VIA_TRADE 			"An infectious agent is wreaking havoc in {city[0].name}. It seems to have spread through that city's trade routes."
+BIOINFECT_COMPLETE_VICTIM		"{player[0].sir_cap}, w miescie {city[0].name} szerzy sie straszliwa epidemia.  Tysiece ludzi jest niezdolnych do pracy a cale miasto stalo sie niezadowolone.  Za ten straszliwy wypadek odpowiedzialny jest najprawdopodobniej wrogi bio-terrorysta."
+BIOINFECT_FAILED_VICTIM			"{player[0].sir_cap}, wrogi bio-terrorysta zostal przylapany na prob zarazenia ludnosci miasta {city[0].name}."
+BIOINFECT_COMPLETE_AGRESSOR		"Udalo sie Nam dokonac ataku biologicznego.  Ludnosc w miescie {city[0].name} cierpi teraz z powodu naszego szkodliwego virusa.  Produkcja i zadowolenie drastycznie obnizyly sie w tym miescie."
+BIOINFECT_FAILED_AGRESSOR		"Niestety, Nasz bio-terrorysta zawiodl.  Naszej przyszlej ofierze udalo sie wykryc jego zamiary."
+IMMUNE_TO_BIOINFECT_AGRESSOR		"Our bio-infect attack on the city of {city[0].name} has failed.  The city most certainly has some sort of immunity to biological weapons."
+IMMUNE_TO_BIOINFECT_VICTIM		"{player[0].sir_cap}, our vigilance and preparedness have paid off!  The Micro Defense Improvement has protected {city[0].name} from an attempted biological weapons attack."
+INFECTED_VIA_TRADE			"An infectious agent is wreaking havoc in {city[0].name}. It seems to have spread through that city's trade routes."
 
 ## Investigate City ##
 ## Spy Attack ##
@@ -409,9 +421,18 @@ SUE_FRANCHISE_FAILED_ATTACKER 		"Though our Lawyer fought valiantly, the foreign
 PARTY_COMPLETE_VICTIM 			"A {player[0].civ_name_singular} {unitrecord[0].name} has held a formal reception in our city of {city[0].name}.  The entertainment was first rate, the food was excellent and everyone had a wonderful evening.  Many of our officials were quite taken with the {player[0].civ_name_plural}, and feel that we should make every effort to set aside our differences and foster a sense of partnership with them."
 PARTY_COMPLETE_ATTACKER 		"Nasz {unitrecord[0].name} zlozyl wizyte w miescie {city[0].name}.  The event, attended by {player[0].civ_name_singular} dignitaries and government officials, went quite well.  Mozemy oczekiwac ze {player[0].civ_name_singular} w przyszlosci beda z nami chetniej wspolpracowac."
 
+# Hear Gossip #
+GOSSIP_WARTIME_READINESS		"The {player[0].civ_name_plural} are at wartime readiness"
+GOSSIP_ALERT_READINESS			"The {player[0].civ_name_plural} are on alert"
+GOSSIP_PEACETIME_READINESS		"The {player[0].civ_name_plural} are at peacetime readiness"
+GOSSIP_CAPTION					"Gossip"
+GOSSIP_BORING					"The {player[0].civ_name_plural} are a remarkably boring people, and have nothing worth gossiping about"
+GOSSIP_MAP						"We have gleaned knowledge of the world map from the {player[0].civ_name_plural}"
+GOSSIP_COMPLETE_ATTACKER		"Our Diplomats have overheard gossip. We have gained {advance[0].name}."
+
 ##Disabled Screen Buttons##
 
-CIV_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
+CIV_STATUS_DISABLED				"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
 SCIENCE_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
 CITY_STATUS_DISABLED			"Wpierw zbuduj miasto aby uzyskac dostep do tego ekranu."
 DIPLOMACY_STATUS_DISABLED		"Wpierw musisz poznac inne imperium aby uzyskac dostep do tego ekranu."
@@ -485,31 +506,40 @@ INFO_SPANISH			"Italian is one of the six languages Call to Power II was origina
 ###############
 
 # Common buttons
-BUTTON_ACCEPT       "Accept"
-BUTTON_CANCEL       "Anuluj"
-BUTTON_CLOSE        "Zamknij"
-BUTTON_GOAL         "Cel"
-BUTTON_LIBRARY      "Library"
-BUTTON_MAYBE        "Maybe"
-BUTTON_YES          "Tak"
-BUTTON_NO           "Nie"
-BUTTON_OK           "Ok"
-BUTTON_RANDOM       "Random"
-BUTTON_READY        "Ready"
-BUTTON_REJECT       "Reject"
-BUTTON_RESEARCH     "Research"
-BUTTON_SET_PRICE    "Set Price"
-BUTTON_STEAL_THIS          "<- Steal This"
-BUTTON_EXPEL "Eksmisja"
+BUTTON_ACCEPT			"Accept"
+BUTTON_CANCEL			"Anuluj"
+BUTTON_CLOSE			"Zamknij"
+BUTTON_GOAL				"Cel"
+BUTTON_LIBRARY			"Library"
+BUTTON_MAYBE			"Maybe"
+BUTTON_YES				"Tak"
+BUTTON_NO				"Nie"
+BUTTON_OK				"Ok"
+BUTTON_RANDOM			"Random"
+BUTTON_READY			"Ready"
+BUTTON_REJECT			"Reject"
+BUTTON_RESEARCH			"Research"
+BUTTON_SET_PRICE		"Set Price"
+BUTTON_STEAL_THIS		"<- Steal This"
+BUTTON_EXPEL			"Eksmisja"
 
 # Network buttons
-BUTTON_EJECT				"Eject"
-BUTTON_LET_THEM_STAY			"Let Them Stay"
+BUTTON_EJECT			"Eject"
+BUTTON_LET_THEM_STAY	"Let Them Stay"
 
 # Buttons for quitting the game
-BUTTON_CONTINUE "Continue"
-BUTTON_END_GAME "End Game"
-BUTTON_QUIT_GAME "Quit Game"
+BUTTON_CONTINUE				"Continue"
+BUTTON_END_GAME				"End Game"
+BUTTON_QUIT_GAME			"Quit Game"
+
+# Buttons razing, enslaving etc. of cities
+BUTTON_RAZE				"Raze"
+BUTTON_PLUNDER				"Plunder"
+BUTTON_PILLAGE				"Pillage"
+BUTTON_LIBERATE				"Liberate"
+BUTTON_ENSLAVE				"Enslave"
+BUTTON_FREESLAVES			"Free Slaves"
+BUTTON_OCCUPY				"Occupy"
 
 # Some odd buttons, are those actually used?
 ACCEPT					"Accept"

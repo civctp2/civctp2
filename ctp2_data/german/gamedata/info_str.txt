@@ -431,9 +431,18 @@ SUE_FRANCHISE_FAILED_ATTACKER		"Obwohl sich unsere Anwälte große Mühe geben, gel
 PARTY_COMPLETE_VICTIM			"{unitrecord[0].name#UNDEF_CAPS} {player[0].civ_name_plural#ARTICLE_GEN} hat einen offiziellen Empfang in unserer Stadt {city[0].name} gegeben. Es wurde erstklassige Unterhaltung geboten, das Buffet war hervorragend und alle haben sich prächtig amüsiert. Viele unserer Beobachter waren von den {player[0].civ_name_plural#DAT} beeindruckt und sind der Meinung, dass wir versuchen sollten, unsere Differenzen beizulegen und auf partnerschaftliche Beziehungen mit diesem Volke hinzuarbeiten."
 PARTY_COMPLETE_ATTACKER			"{unitrecord[0].name#PRONOUN_OUR_PLURAL_CAPS} haben in der fremden Stadt {city[0].name} einen Empfang gegeben. Bei dieser erfolgreichen Veranstaltung waren auch {player[0].civ_name_singular#UNDEF_PLURAL_ACC} Würdenträger und Regierungsangehörige zu Gast und wir hoffen, dass die {player[0].civ_name_plural} in Zukunft bereitwilliger mit uns zusammenarbeiten werden."
 
+# Hear Gossip #
+GOSSIP_WARTIME_READINESS		"Die {player[0].civ_name_plural} befinden sich in Kriegsbereitschaft."
+GOSSIP_ALERT_READINESS			"Die {player[0].civ_name_plural} sind in Alarmbereitschaft."
+GOSSIP_PEACETIME_READINESS		"Die {player[0].civ_name_plural} befinden sich in Friedenszeiten entsprechender Militärbereitschaft."
+GOSSIP_CAPTION					"Tratsch"
+GOSSIP_BORING					"Die {player[0].civ_name_plural} sind ein bemerkenswert langweilig: Sie tratschen über nichts Interessantes."
+GOSSIP_MAP						"Wir haben den {player[0].civ_name_plural#DAT} Wissen über die Weltkarte entlockt."
+GOSSIP_COMPLETE_ATTACKER		"Unsere Diplomaten haben viel Tratsch gehört. Auf diese Weise konnten wir Erkenntnisse über {advance[0].name#ARTICLE_ACC} gewinnen."
+
 ##Disabled Screen Buttons##
 
-CIV_STATUS_DISABLED			"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
+CIV_STATUS_DISABLED				"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
 SCIENCE_STATUS_DISABLED			"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
 CITY_STATUS_DISABLED			"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
 DIPLOMACY_STATUS_DISABLED		"Dieser Bereich ist erst nach der Kontaktaufnahme mit einer anderen Nation zugänglich."
@@ -590,26 +599,26 @@ INFO_SPANISH			"Spanisch ist eine der sechs Sprachen, in der Call to Power II ur
 ###############
 
 # Common buttons
-BUTTON_ACCEPT				"Akzeptieren"
-BUTTON_CANCEL				"Zurück"
-BUTTON_CLOSE				"OK"
+BUTTON_ACCEPT			"Akzeptieren"
+BUTTON_CANCEL			"Zurück"
+BUTTON_CLOSE			"OK"
 BUTTON_GOAL				"Ziel"
-BUTTON_LIBRARY				"Große Bibliothek"
-BUTTON_MAYBE				"Vielleicht"
+BUTTON_LIBRARY			"Große Bibliothek"
+BUTTON_MAYBE			"Vielleicht"
 BUTTON_YES				"Ja"
 BUTTON_NO				"Nein"
 BUTTON_OK				"OK"
-BUTTON_RANDOM				"Zufällig"
-BUTTON_READY				"OK"
-BUTTON_REJECT				"Ablehnen"
-BUTTON_RESEARCH				"Erforschen"
-BUTTON_SET_PRICE			"Preis festlegen"
-BUTTON_STEAL_THIS			"<- Stehlen"
-BUTTON_EXPEL				"Vertreiben"
+BUTTON_RANDOM			"Zufällig"
+BUTTON_READY			"OK"
+BUTTON_REJECT			"Ablehnen"
+BUTTON_RESEARCH			"Erforschen"
+BUTTON_SET_PRICE		"Preis festlegen"
+BUTTON_STEAL_THIS		"<- Stehlen"
+BUTTON_EXPEL			"Vertreiben"
 
 # Network buttons
-BUTTON_EJECT				"Rauswerfen"
-BUTTON_LET_THEM_STAY			"Teilnehmen lassen"
+BUTTON_EJECT			"Rauswerfen"
+BUTTON_LET_THEM_STAY	"Teilnehmen lassen"
 
 # Buttons for quitting the game
 BUTTON_CONTINUE				"Fortfahren"

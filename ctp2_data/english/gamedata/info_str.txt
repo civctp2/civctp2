@@ -97,16 +97,16 @@ CANT_ATTACK_HAVE_TREATY			"This action will break our treaty with the {player[0]
 CANT_ATTACK_TEAMMATES			"{player[0].leader_name} is your teammate, you cannot attack him."
 
 ## Useful diplomacy messages that should be reimplemented ##
-CEASE_FIRE_BROKEN			"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
+CEASE_FIRE_BROKEN				"The dishonorable {player[0].civ_name_plural} have violated our peace treaty agreement, attacking us without provocation."
 LEAVE_OUR_LANDS_BROKEN			"The {player[0].civ_name_plural} have violated the stop trespassing agreement."
-LEAVE_OUR_LANDS_BROKEN_BY_YOU		"You have violated your promise to pull your troops out of {player[0].civ_name_singular} territory."
+LEAVE_OUR_LANDS_BROKEN_BY_YOU	"You have violated your promise to pull your troops out of {player[0].civ_name_singular} territory."
 REDUCE_POLLUTION_BROKEN			"The{player[0].civ_name_plural} have violated the reduce pollution agreement."
-REDUCE_POLLUTION_BROKEN_BY_YOU		"You have violated your reduce pollution agreement with the {player[0].civ_name_plural}."
+REDUCE_POLLUTION_BROKEN_BY_YOU	"You have violated your reduce pollution agreement with the {player[0].civ_name_plural}."
 STOP_TRADE_WITH_BROKEN			"The insolent {player[0].civ_name_plural} have violated their agreement to stop trading with the {player[1].civ_name_plural}."
-STOP_TRADE_WITH_BROKEN_BY_YOU		"You have violated your agreement with the {player[0].civ_name_plural} to stop trading with the {player[1].civ_name_plural}."
+STOP_TRADE_WITH_BROKEN_BY_YOU	"You have violated your agreement with the {player[0].civ_name_plural} to stop trading with the {player[1].civ_name_plural}."
 END_POLLUTION_BROKEN			"The {player[0].civ_name_plural} have violated the pact to end pollution."
 END_POLLUTION_BROKEN_BY_YOU		"You have violated the pact to end pollution with the {player[0].civ_name_plural}."
-ATTACK_ENEMY_BROKEN			"The {player[0].civ_name_plural} have violated their agreement to attack the {player[1].civ_name_plural}."
+ATTACK_ENEMY_BROKEN				"The {player[0].civ_name_plural} have violated their agreement to attack the {player[1].civ_name_plural}."
 ATTACK_ENEMY_BROKEN_BY_YOU		"You have violated your agreement with the {player[0].civ_name_plural} to attack the {player[1].civ_name_plural}."
 
 
@@ -431,9 +431,18 @@ SUE_FRANCHISE_FAILED_ATTACKER		"Though our Lawyer fought valiantly, the foreign 
 PARTY_COMPLETE_VICTIM			"A {player[0].civ_name_singular} {unitrecord[0].name} has held a formal reception in our city of {city[0].name}. The entertainment was first rate, the food was excellent and everyone had a wonderful evening. Many of our officials were quite taken with the {player[0].civ_name_plural}, and feel that we should make every effort to set aside our differences and foster a sense of partnership with them."
 PARTY_COMPLETE_ATTACKER			"Our {unitrecord[0].name} held a reception in the foreign city of {city[0].name}. The event, attended by {player[0].civ_name_singular} dignitaries and government officials, went quite well. We should expect that the {player[0].civ_name_plural} will be more willing to work with us in the future."
 
+# Hear Gossip #
+GOSSIP_WARTIME_READINESS		"The {player[0].civ_name_plural} are at wartime readiness"
+GOSSIP_ALERT_READINESS			"The {player[0].civ_name_plural} are on alert"
+GOSSIP_PEACETIME_READINESS		"The {player[0].civ_name_plural} are at peacetime readiness"
+GOSSIP_CAPTION					"Gossip"
+GOSSIP_BORING					"The {player[0].civ_name_plural} are a remarkably boring people, and have nothing worth gossiping about"
+GOSSIP_MAP						"We have gleaned knowledge of the world map from the {player[0].civ_name_plural}"
+GOSSIP_COMPLETE_ATTACKER		"Our Diplomats have overheard gossip. We have gained {advance[0].name}."
+
 ##Disabled Screen Buttons##
 
-CIV_STATUS_DISABLED			"You need to build a city before you can access this screen."
+CIV_STATUS_DISABLED				"You need to build a city before you can access this screen."
 SCIENCE_STATUS_DISABLED			"You need to build a city before you can access this screen."
 CITY_STATUS_DISABLED			"You need to build a city before you can access this screen."
 DIPLOMACY_STATUS_DISABLED		"You must contact another empire before you can access this screen."
