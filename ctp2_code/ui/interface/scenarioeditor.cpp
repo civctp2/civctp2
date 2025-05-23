@@ -277,11 +277,11 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	// MBCHAR m_scenarioName[k_SCENARIO_NAME_MAX];
 {
 	m_scenarioName[0] = 0;
-    if (g_theWorld)
-    {
-	    m_xWrap = g_theWorld->IsXwrap();
-	    m_yWrap = g_theWorld->IsYwrap();
-    }
+	if (g_theWorld)
+	{
+		m_xWrap = g_theWorld->IsXwrap();
+		m_yWrap = g_theWorld->IsYwrap();
+	}
 
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_scenarioEditorBlock);
 	Assert(m_window);
@@ -346,10 +346,11 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod
 	//s_ShowEnemyHealth		= spNew_aui_Switch(err, s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod5
 	//ctp2_Switch *s_ShowEnemyHealth = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth");
-    //s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
+	//s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
 
 	m_debugAI = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI");
 	m_debugAI->SetActionFuncAndCookie(DebugAI, NULL);
+	m_debugAI->SetState(g_graphicsOptions->IsArmyTextOn());
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "UnitControls.LabelToggle", ToggleLabels, NULL);
 
@@ -468,12 +469,12 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	m_addStuffWindow->SetDraggable( TRUE);
 
 	ctp2_Switch *pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.XWrapButton");
-    pButton->SetState((m_xWrap) ? 1 : 0);
+	pButton->SetState((m_xWrap) ? 1 : 0);
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.XWrapButton", SetXWrap, NULL);
 
 	pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.YWrapButton");
-    pButton->SetState((m_yWrap) ? 1 : 0);
+	pButton->SetState((m_yWrap) ? 1 : 0);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.YWrapButton", SetYWrap, NULL);
 
 	*err = AUI_ERRCODE_OK;
