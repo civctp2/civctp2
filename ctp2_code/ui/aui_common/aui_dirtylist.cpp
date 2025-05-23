@@ -154,7 +154,7 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 					CopyRect( rect, moreRects );
 
 					ListPos insertPosition = prevPosition;
-					for ( size_t j = 1; j < num; j++ )
+					for ( size_t j = 1; j < static_cast<size_t>(num); j++ )
 					{
 						RECT *r = m_rectMemory->New();
 						Assert( r != NULL );
