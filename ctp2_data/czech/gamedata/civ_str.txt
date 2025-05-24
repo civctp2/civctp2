@@ -3,7 +3,7 @@
 # Project      : Call To Power 2
 # File type    : String text file
 # Description  : Civ specific strings, e.g civ names, civ leaders,
-#                city names (English)
+#                city names (Czech)
 # Id           : $Id:$
 #
 #----------------------------------------------------------------------------
@@ -240,7 +240,7 @@ MALIAN_DIPLOMAT_PHOTO		"updp050.tga"
 # Add missing photos
 
 ## Insert as portion of Strings.txt	
-	
+
 BARBARIAN "Barbarians"
 
 BARBARIAN_LEADERM_NAME "Attila"
@@ -401,44 +401,44 @@ AMERICAN_CITY_49		"Columbus"
 AMERICAN_CITY_50		"La Jolla"
 
 
-SCOTTISH "Scottish"
+SCOTTISH			"Scottish"
 
-SCOTTISH_LEADERM_NAME "William Wallace"
-SCOTTISH_LEADERF_NAME "Mary Stuart"
-SCOTTISH_COUNTRY_NAME "Scotland"
-SCOTTISH_SINGULAR "Scottish"
-SCOTTISH_PLURAL "Scots"
+SCOTTISH_LEADERM_NAME		"William Wallace"
+SCOTTISH_LEADERF_NAME		"Mary Stuart"
+SCOTTISH_COUNTRY_NAME		"Scotland"
+SCOTTISH_SINGULAR		"Scottish"
+SCOTTISH_PLURAL			"Scots"
 
-SCOTTISH_CITY_1 "Glasgow"
-SCOTTISH_CITY_2 "Edinburgh"
-SCOTTISH_CITY_3 "Stirling"
-SCOTTISH_CITY_4 "Perth"
-SCOTTISH_CITY_5 "Falkirk"
-SCOTTISH_CITY_6 "Dunbar"
-SCOTTISH_CITY_7 "Muir of Ord"
-SCOTTISH_CITY_8 "Gairloch"
-SCOTTISH_CITY_9 "Aberdeen"
-SCOTTISH_CITY_10 "Kilmarnock"
-SCOTTISH_CITY_11 "Cowdenbeath"
-SCOTTISH_CITY_12 "Nairn"
-SCOTTISH_CITY_13 "Bathgate"
-SCOTTISH_CITY_14 "Linlithgow"
-SCOTTISH_CITY_15 "Inverness"
-SCOTTISH_CITY_16 "Melrose"
-SCOTTISH_CITY_17 "Rothesay"
-SCOTTISH_CITY_18 "Monifieth"
-SCOTTISH_CITY_19 "Aviemore"
-SCOTTISH_CITY_20 "Kirkcaldy"
-SCOTTISH_CITY_21 "Fraserburgh"
-SCOTTISH_CITY_22 "Portlethen"
-SCOTTISH_CITY_23 "Glenrothes"
-SCOTTISH_CITY_24 "Dufftown"
-SCOTTISH_CITY_25 "Findhorn"
-SCOTTISH_CITY_26 "Borgue"
-SCOTTISH_CITY_27 "Lockerbie"
-SCOTTISH_CITY_28 "Dalkeith"
-SCOTTISH_CITY_29 "Gretna"
-SCOTTISH_CITY_30 "Dingwall"
+SCOTTISH_CITY_1			"Glasgow"
+SCOTTISH_CITY_2			"Edinburgh"
+SCOTTISH_CITY_3			"Stirling"
+SCOTTISH_CITY_4			"Perth"
+SCOTTISH_CITY_5			"Falkirk"
+SCOTTISH_CITY_6			"Dunbar"
+SCOTTISH_CITY_7			"Muir of Ord"
+SCOTTISH_CITY_8			"Gairloch"
+SCOTTISH_CITY_9			"Aberdeen"
+SCOTTISH_CITY_10		"Kilmarnock"
+SCOTTISH_CITY_11		"Cowdenbeath"
+SCOTTISH_CITY_12		"Nairn"
+SCOTTISH_CITY_13		"Bathgate"
+SCOTTISH_CITY_14		"Linlithgow"
+SCOTTISH_CITY_15		"Inverness"
+SCOTTISH_CITY_16		"Melrose"
+SCOTTISH_CITY_17		"Rothesay"
+SCOTTISH_CITY_18		"Monifieth"
+SCOTTISH_CITY_19		"Aviemore"
+SCOTTISH_CITY_20		"Kirkcaldy"
+SCOTTISH_CITY_21		"Fraserburgh"
+SCOTTISH_CITY_22		"Portlethen"
+SCOTTISH_CITY_23		"Glenrothes"
+SCOTTISH_CITY_24		"Dufftown"
+SCOTTISH_CITY_25		"Findhorn"
+SCOTTISH_CITY_26		"Borgue"
+SCOTTISH_CITY_27		"Lockerbie"
+SCOTTISH_CITY_28		"Dalkeith"
+SCOTTISH_CITY_29		"Gretna"
+SCOTTISH_CITY_30		"Dingwall"
 SCOTTISH_CITY_31		"Skigersta"
 SCOTTISH_CITY_32		"Garrabost"
 SCOTTISH_CITY_33		"Shader"

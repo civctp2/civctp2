@@ -790,7 +790,7 @@ STATUSBAR_DIPMAN_TABLE_VIEWFULLTEXT_BUTTON		"Double-click here to review the ful
 TOOLTIP_DIPMAN_TABLE_VIEWFULLTEXT_BUTTON		"Review Full Proposal"
 
 # Diplomacy Manager Embargo Button
-TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON			"Declare an Embargo"
+TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON			"Vyhlásit Embargo"
 STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON			"Click here to prevent a foreign nation from trading with you."
 
 #	Respond To Proposal Window

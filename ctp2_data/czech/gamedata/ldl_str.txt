@@ -73,13 +73,9 @@ AGE_NAME_DIAMOND	"Diamantová"
 
 CAPITALIZATION 	"Kapitalizace "
 INFRASTRUCTURE 	"Infrastruktura "
+BUILDINGNONE					"Empty"
 
-
-
-YOU_BROKE_ALLIANCE "Rozbil jsi spojenectví s [player.1.civ_name_plural]."
-YOU_BROKE_CEASE_FIRE "Rozbil jsi mírovou smlouvu s [player.1.civ_name_plural]."
 DIPxxx3_AGREEMENT_END_POLLUTION "Eko Pakt"
-CANT_ATTACK_ALLIES "Más spojenectví s [player.1.civ_name_plural], nemuzes je napadnou be predeslého rozbití spojenectví.  Chces tedy rozbít spojenectví?"
 X_LAB "X-lab"
 GENE_SEQUENCER "Gene Sequencer"
 
@@ -98,7 +94,6 @@ str_ldl_CANCEL_OFFER_CAPS	"ZRUSIT NABÍDKU"
 str_ldl_No_item_selected_in_list	"Zádné polozky v seznamu nevybrány!"
 str_ldl_Foreign_Attitude	"Foreign Attitude"
 str_ldl_Local	"Local"
-str_ldl_Neutral	"Neutral"
 str_ldl_mp_dbase_out_of_synch	"Database is out of synch. Returning to Lobby"
 
 ##This is the latest batch from Add_str.txt 02-26-99##
@@ -110,10 +105,6 @@ str_ldl_nodialup		"You need to dialup, to use internet"
 str_ldl_connectionerr	"Network connection error"
 str_ldl_Enemy_Moves_Off		"Ukazovat Neprátelské Pohyby VYP"
 str_ldl_Enemy_Moves_On		"Ukazovat Neprátelské Pohyby ZAP"
-NETWORK_PLAYER_STATUS_HUMAN "Local"
-NETWORK_PLAYER_STATUS_CONNECTED "Connected"
-NETWORK_PLAYER_STATUS_AI_OPEN "AI (Open)"
-NETWORK_PLAYER_STATUS_AI_CLOSED "AI (Closed)"
 KEY_NAME_TAB "Tab"
 KEY_NAME_ENTER "Enter"
 KEY_NAME_SPACE "Space"
@@ -127,7 +118,6 @@ str_tbl_ldl_Close_Message "Zavrít Zprávu"
 str_tbl_ldl_Yes "Ano"
 str_tbl_ldl_No  "Ne"
 str_tbl_ldl_Quit "Konec"
-
 
 
 str_tbl_ldl_Next_Round "Dalsí Kolo"
@@ -153,7 +143,6 @@ str_tbl_ldl_Save_World "Rychlé Ukládání"
 str_tbl_ldl_Load_World "Rychlé Nacítání"
 
 
-
 SAVE_OVERWRITE	"Tímto prepisete predchozí ulozený soubor.\nChcete pokracovat?"
 
 str_ldl_Expectations	"Ocekávání"
@@ -166,12 +155,6 @@ POLLUTION_TOXIC	"Toxické"
 
 str_ldl_Total_City_Pollution	"Celkové Znecistení Mesta"
 str_ldl_Pollution_Level	"Uroven Znecistení"
-
-
-
-CANT_ATTACK_HAVE_TREATY "This action will break our treaty with the [player.1.civ_name_plural].  Are you sure you wish to continue?"
-AT_LEAST_ONE_COULDNT_BE_EXPELLED "The [player.1.civ_name_plural] were not able to find accomodations for all their armies in our territory.  They pledge to remove their units as soon as possible."
-
 
 str_ldl_RES_CHANGE_BUTTON	" Rozlisení"
 str_ldl_RES_TITLE			"Velikost Rozlisení"
@@ -208,8 +191,6 @@ str_ldl_Turns	"Kola"
 
 DELETE_QUEUE	"Jste si jist, ze chcete vymazat tuto stavební frontu?"
 str_tbl_ldl_Ongoing	"Ongoing"
-BUTTON_CONTINUE "Pokracovat"
-BUTTON_END_GAME "Konec Hry"
 LOADING	"Nacítám..."
 
 str_ldl_Server_Name_COLON "Jméno Serveru:"
@@ -251,9 +232,6 @@ str_ldl_AFB_ECD		"ECD's (Built/Next Stage/Final):"
 str_ldl_AFB_FIELD		"Fields (Built/Next Stage/Final):"
 str_ldl_AFB_CHANCE	"Chance of Failure:"
 
-
-BUTTON_EXPEL "Expel"
-
 ## bmh012099 - added for throne room/monument screen
 str_ldl_Monument_Title			"Monumenty"
 str_ldl_Monument_Upgrade_Available	"Vyber monument k vylepsení."
@@ -282,10 +260,6 @@ str_ldl_CAPS_EXPEL "VYPUDIT"
 str_ldl_CAPS_CANCEL_MOVE "ZRUSIT POHYB"
 str_ldl_END_TUTORIAL "KONEC TUTORIALU"
 
-
-CANT_ATTACK_ALLIES_CAN_EXPEL "Opravdu chcete zrusit smlouvu s  [player.1.civ_name_plural]?  Muzete tuto jednotku vytlacit bez porusení smlouvy."
-
-
 str_tbl_ldl_You_Need_Embassy_To_Demand	"K pozadování objevu potrebujes velvyslanectví."
 str_tbl_ldl_GIFT_MAP	"DÁT MAPU"
 
@@ -295,10 +269,6 @@ str_tbl_ldl_FAIR		"SPATNÝ"
 str_tbl_ldl_AVERAGE		"PRUMERNÝ"
 str_tbl_ldl_GOOD		"DOBRÝ"
 str_tbl_ldl_EXCELLENT	"VÝBORNÝ"
-##
-
-## rsh011899 - added for civ status screen
-str_ldl_CAPS_GOVERNMENT	"VLÁDNÍ FORMA"
 ##
 
 str_ldl_POPSCIENCE "Zlata konvertovaného do vedy"
@@ -322,6 +292,7 @@ str_ldl_Config_Header "KONFIG"
 str_ldl_Game_Header "HRA"
 str_ldl_Map_Header "MAPA"
 str_ldl_QUITTOSHELL "KONEC"
+
 str_ldl_Tutorial_Advice_Off "Rada Tutorialu Vyp"
 str_ldl_Tutorial_Advice_On " Rada Tutorialu Zap"
 str_ldl_Right_Click_Move "Pravý Klik Zap"
@@ -432,53 +403,6 @@ str_ldl_AdvisorTurn "Kolo"
 #Rename City
 #Delete
 
-#### TILE IMPROVEMENT DESCRIPTIONS #######
-DESCRIPTION_TILEIMP_FARMS	"Farmy.  Stojí 200 PW."
-DESCRIPTION_TILEIMP_ADVANCED_FARMS	"Pokrocilé Farmy.  Stojí 500 PW."
-DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"Hydroponické Farmy. Stojí 1400 PW."
-DESCRIPTION_TILEIMP_MINES	"Doly. Minimální cena 300 PW."
-DESCRIPTION_TILEIMP_ADVANCED_MINES	"Pokrocilé Doly. Minimální Cena 800 PW."
-DESCRIPTION_TILEIMP_MEGA_MINES	"Mega Doly. Minimální Cena 1600 PW."
-DESCRIPTION_TILEIMP_UNDERSEA_MINES	"Podmorské Doly. Minimální Cena 400 PW."
-DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"Pokrocilé Podmorské Doly. Minimální Cena 1000 PW."
-DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"Mega Podmorské Doly. Minimální Cena 2200 PW."
-DESCRIPTION_TILEIMP_NETS	"Síte. Minimální Cena 200 PW."
-DESCRIPTION_TILEIMP_FISHERIES	"Rybárství. Minimální Cena 500 PW."
-DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"Automatické Rybárství. Minimální Cena 1400 PW."
-DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"Shromázdená Zátoka. Stojí 600 PW."
-DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"Advanced Assembly Bays.  Cost 1400 PW."
-DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"Mega Assembly Bays.  Cost 2200 PW."
-DESCRIPTION_TILEIMP_FOOD_PODS	"Food Pods.  Cost 600 PW."
-DESCRIPTION_TILEIMP_FOOD_MODULES	"Food Modules.  Cost 1400 PW."
-DESCRIPTION_TILEIMP_FOOD_TANKS	"Food Tanks.  Cost 2200 PW."
-DESCRIPTION_TILEIMP_RUINS	"Ruiny"
-DESCRIPTION_TILEIMP_ROAD	"Cesty.  Minimum Cost 60 PW."
-DESCRIPTION_TILEIMP_RAILROAD	"Zeleznice.  Minimum Cost 120 PW."
-DESCRIPTION_TILEIMP_MAGLEV	"MagLevs.  Minimum Cost 240 PW."
-DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"Undersea Tunnels.  Minimum Cost 1200 PW."
-
-
-#### installation DESCRIPTIONS ####
-DESCRIPTION_INSTALLATION_LISTENING_POSTS	"Listening Post.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_RADAR_STATIONS	"Radar Station.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_AIR_BASES	"Airbase.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_FORTIFICATIONS	"Fortification.  Cost 1000 PW."
-DESCRIPTION_INSTALLATION_SONAR_BUOYS	"Sonar Buoy.  Cost 150 PW."
-
-#### terrain transform DESCRIPTIONS	"####"
-DESCRIPTION_DESERTS	"Poust"
-DESCRIPTION_FORESTS	"Les"
-DESCRIPTION_GLACIERS	"Ledovec"
-DESCRIPTION_GRASSLAND	"Luciny"
-DESCRIPTION_HILLS	"Hill"
-DESCRIPTION_RAINFOREST	"Dzungle"
-DESCRIPTION_ALPINE	"Pohorí"
-DESCRIPTION_SAVANNAH	"Pláne"
-DESCRIPTION_SWAMPS	"baziny"
-DESCRIPTION_TUNDRA	"Tundry"
-
-
-
 ###Keeper Stuff###
 
 ## KEEPER STUFF 1 ##
@@ -503,11 +427,6 @@ str_tbl_ldl_Total_Negative_Points_Colon "Celkem Negativních Bodu:"
 str_tbl_ldl_Total_Points_Colon "Celkem Bodu:"
 str_tbl_ldl_Civ_Score_Colon		"Skore:"
 
-
-#Who knows where this goes?#
-UNIT_ORDER_TRANSPORTED "In Transport"
-TITLE_CITY_BUILD_QUEUE_IS_EMPTY "{city[0].name}"
-
 str_tbl_ldl_The_Diplomats	"Our leaders are busy. We are not interested in discussing anything with you at this time."
 str_tbl_ldl_Select_a_new	"Vyber nový obev k výzkumu."
 str_ldl_Review_Tutorial_Messages	"Review Tutorial Messages"
@@ -526,8 +445,6 @@ str_ldl_Civ_Score		"Skore"
 str_ldl_Year_Founded_COLON	"Rok Zalození:"
 str_ldl_Turns_to_Next_Disaster	"Kol k dalsí katastrofe"
 
-
-
 str_ldl_CAPS_MAKE_QUEUE	"VYTVORIT FRONTU"
 str_ldl_CAPS_LOAD_QUEUE "NACÍST FRONTU"
 str_ldl_CAPS_DELETE_QUEUE "SMAZAT FRONTU"
@@ -545,22 +462,6 @@ str_ldl_CAPS_FOREIGN	"FOREIGN"
 
 str_ldl_NEXT	"DALSÍ"
 
-# Age Names
-AGE_NAME_ANCIENT  "Starobylý Vek"
-AGE_NAME_RENAISS  "Vek Renesance"
-AGE_NAME_MODERN   "Moderní Vek"
-AGE_NAME_GENETIC  "Vek Genetiky"
-AGE_NAME_DIAMOND  "Vek Diamantu"
-
-
-
-
-
-
-
-
-
-
 # strings for victory window
 str_ldl_YOUR_CIVILIZATION_SCORE_IS_COLON	"YOUR SCORE IS:"
 str_ldl_YOUR_NAME_WILL_GO_DOWN_IN_THE_ANNALS_OF_HISTORY_AS	"YOUR NAME WILL GO DOWN IN THE ANNALS OF HISTORY AS"
@@ -568,6 +469,7 @@ str_ldl_POPULATION_COLON	"POPULACE:"
 str_ldl_CIV_SCORE			"SKORE"
 str_ldl_POWER_GRAPH			"GRAF MOCI"
 str_ldl_DEFEAT				"PORÁZKA"
+
 str_ldl_THE_DESTITUTE			"NEDOSTATEK"
 str_ldl_THE_SQUIRREL_HEARTED	"THE SQUIRREL HEARTED"
 str_ldl_THE_RED_FACED			"THE RED FACED"
@@ -581,7 +483,6 @@ str_ldl_THE_LION_HEARTED		"THE LION HEARTED"
 str_ldl_THE_INDOMITABLE			"THE INDOMITABLE"
 str_ldl_THE_CIV_LORD			"THE ALMIGHTY"	
 
-str_ldl_CAPS_TRADE				"OBCHOD"
 str_ldl_Small_Type				"Typ"
 str_ldl_Caravans_COLON			"Karavany:"
 str_ldl_Gold_From_Trade_COLON	"Zlato z Obchodu:"
@@ -594,44 +495,6 @@ str_tbl_ldl_Destination			"Místo urcení"
 str_tbl_ldl_upd001_tga	"upd001.tga"
 str_tbl_ldl_upd005_tga	"upd005.tga"
 
-
-##Network Game Messages##
-
-#NETWORK_PLAYER_LEFT "[action.1.name] has left the game.  A computer player will take control of the exiting player's empire."
-#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the [player.1.civ_name_plural]"
-#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the [player.1.civ_name_plural], but that empire originally belonged to someone else.  Do you wish to eject them?"
-#BUTTON_EJECT "Eject"
-#BUTTON_LET_THEM_STAY "Let Them Stay"
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
-#NETWORK_WAITING_ON_PLAYERS "Waiting on players"
-#NETWORK_WAITING_FOR_DATA "Waiting for data"
-#NETWORK_RESYNCING "Resynchronizing"
-
-
-# Button label strings
-BUTTON_ACCEPT       "Prijmout"
-BUTTON_CANCEL       "Zrusit"
-BUTTON_CLOSE        "Zavrít"
-BUTTON_GOAL         "Cíl"
-BUTTON_LIBRARY      "Knihovna"
-BUTTON_MAYBE        "Mozná"
-BUTTON_NO           "Ne"
-BUTTON_OK           "Zavrít"
-BUTTON_RANDOM       "Náhodná"
-BUTTON_READY        "Pripraven"
-BUTTON_REJECT       "Odmítnout"
-BUTTON_RESEARCH     "Výzkum"
-BUTTON_SET_PRICE    "Nastavit Cenu"
-BUTTON_STEAL_THIS          "<- Ukrást to"
-BUTTON_YES          "Ano"
-ACCEPT  "Accept"
-REJECT  "Reject"
-YES		"Yes"
-NO 		"No"
 str_ldl_Abort	"Zrusit"
 str_ldl_Open	"Otevrít"
 str_ldl_Close	"Zavrít"
@@ -695,6 +558,7 @@ str_ldl_Buy_Now	"Kup ted"
 str_ldl_BY_YOU	"TEBOU"
 str_ldl_Cancel	"Zrusit"
 str_ldl_Cancel_Route	"Zrusit cestu"
+
 str_ldl_CAPS_ACTION	"AKCE"
 str_ldl_CAPS_ADVANCE	"OBJEV"
 str_ldl_CAPS_ADVANCES	"OBJEVY"
@@ -722,15 +586,12 @@ str_ldl_CAPS_GOLD2	"SÍT\nZLATO"
 str_ldl_CAPS_GOLD	"ZLATO"
 str_ldl_CAPS_GOLD_COLON	"ZLATO:"
 str_ldl_CAPS_GOODS	"ZBOZÍ"
-# Spacing changed - updated string in add_ldl
-# str_ldl_CAPS_GREAT_LIBRARY	"VELKÁ KNIHOVNA"
 str_ldl_CAPS_HAPPINESS	"NÁLADA"
 str_ldl_CAPS_HAPPY	"STASTNÝ"
 str_ldl_CAPS_HEALTH	"ZFRAVÍ"
 str_ldl_CAPS_INFO	"PORADÍ"
 str_ldl_CAPS_INTELLIGENCE	"INTELIGENCE"
 str_ldl_CAPS_LAND	"ZEME"
-str_ldl_CAPS_LOAD_QUEUE	"NAHRÁT FRONTU"
 str_ldl_CAPS_LOCK	"ZAMEK"
 str_ldl_CAPS_MALE	"MUZ"
 str_ldl_CAPS_MAP	"MAPA"
@@ -802,6 +663,9 @@ str_ldl_Cities	"Mesta"
 str_ldl_CITIES_COLON	"MESTA:"
 str_ldl_City	"Mesto"
 str_ldl_City_Bonus_COLON	"Defenzíva mesta:"
+str_ldl_City_Air_Attack_Bonus_COLON		"City Air Attack:"
+str_ldl_City_Land_Attack_Bonus_COLON		"City Land Attack:"
+str_ldl_City_Sea_Attack_Bonus_COLON		"City Sea Attack:"
 str_ldl_City_Builder	"Stavitel Mesta"
 str_ldl_CITY_ESPIONAGE	"SPOINÁZ MESTA"
 str_ldl_CITY_GOLD	"MESTSKÉ ZLATO"
@@ -904,7 +768,6 @@ str_ldl_Few_Goods	"Málo Zbozí"
 str_ldl_File_Injunction	"File Injunction.  Cost: 300 Gold"
 str_ldl_Fog_Of_War_Off	"Fog Of War Off"
 str_ldl_Folder_COLON	"Folder:"
-str_ldl_Food	"Jídlo"
 str_ldl_Food_	"Jídlo "
 str_ldl_Food_COLON	"Jídlo:"
 str_ldl_Food_Eaten	"Snezené Jídlo"
@@ -1249,6 +1112,7 @@ str_ldl_Soothsay	"Vestit.  Cena: 500 Zlatých"
 str_ldl_SOUND	"ZVUK"
 str_ldl_SOUND_OPTIONS	"ZVUK"
 str_ldl_Space	"Vesmír"
+str_ldl_MUSIC_OPTIONS				"Music"
 str_ldl_Special	"Speciální"
 str_ldl_SPECIAL_ABILITIES	"SPECIÁLNÍ SCHOPNOSTI"
 str_ldl_SPECIAL_ATTACKS	"SPECIÁLNÍ ÚTOK"
@@ -1284,7 +1148,6 @@ str_ldl_This_is_a_scenario_game	"Tohle je scénár."
 str_ldl_This_is_not_a_scenario_game	"Tohle není scénár."
 str_ldl_This_is_the_continuation_of_a_saved_game	"Tohle je pokracování ulozené hry."
 str_ldl_Throw_Party	"Throw Party"
-str_ldl_Tile	"Ctverecek"
 str_ldl_Tile_Imp	"Tile Imp"
 str_ldl_To	"To"
 str_ldl_TO_COLON	"TO:"
@@ -1296,6 +1159,7 @@ str_ldl_Total_Points	"Celkem Bodu"
 str_ldl_TOTAL_PRODUCTION	"CELKOVÁPRODUKCE"
 str_ldl_Total_PW	"Celkem VP"
 str_ldl_Trade	"Obchod"
+str_ldl_Trade_Bonus				"from Trade"
 str_ldl_Trade_Earned	"Vydeláno Obchodem"
 str_ldl_Trade_Off	"Obchod Vyp"
 str_ldl_Trade_Points	"Body z Obchodu"
@@ -1364,7 +1228,6 @@ str_tbl_ldl_Arabian	"Arabský"
 str_tbl_ldl_Asian	"Asijský"
 str_tbl_ldl_AT_PEACE	"V MÍRU"
 str_tbl_ldl_AT_WAR	"VE VÁLCE"
-str_tbl_ldl_Average	"Prumerný"
 str_tbl_ldl_Bioinfect	"Infikovat Mesto"
 str_tbl_ldl_Blow_Up_Cabinet	"Bomb Cabinet"
 str_tbl_ldl_Bombard	"Bombardovat"
@@ -1565,7 +1428,32 @@ str_tbl_ldl_Random_Order_On	"Random Order On"
 str_tbl_ldl_Random_Order_Off  "Random Order Off"
 str_ldl_Fuel_COLON  "Fuel:"
 
+### New World Shape Strings ###
 
+str_tbl_ldl_North_South_Wrap_Only			"North-South Wrap Only"
+str_ldl_North_and_South_edges_of_the_map_connect	"North and South edges of the map connect."
+str_ldl_Uranus_World					"Uranus World"
+str_tbl_ldl_Uranus_World				"Uranus World"
+
+### New Single Player Game Player Screen Strings ###
+
+str_ldl_SPNGPS_NumPlayerSpinner			"Number of players"
+str_ldl_SPNGPS_MaxPlayerSpinner			"Maximum number of players"
+str_ldl_SPNGPS_PlayerSpinner			"Start player"
+
+str_ldl_SPNGPS_NumPlayerText			"Sets the number of players in the new game."
+str_ldl_SPNGPS_MaxPlayerText			"Sets the maximum number of civilizations that can be in the game at the same time."
+str_ldl_SPNGPS_PlayerText			"Sets the start player. Determines the civ color."
+
+### Added Disclaimer Strings ###
+
+str_ldl_Disclaimer1				"THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
+str_ldl_Disclaimer2				"This version of Call To Power 2 was developed at http://apolyton.net"
+str_ldl_Disclaimer3				"Contact the authors at ctp2source@apolyton.net"
+
+### Version String ###
+
+str_ldl_version					"2004-07-26"
 
 
 ###   DO NOT TRANSLATE   #############################################################################################
@@ -1595,7 +1483,6 @@ str_ldl_8	"8"
 str_tbl_ldl_upba5012_tga	"upba5012.tga"
 str_tbl_ldl_upba5013_tga	"upba5013.tga"
 str_tbl_ldl_upba5014_tga	"upba5014.tga"
-CANT_ATTACK_TEAMMATES "{player[0].leader_name} is your teammate, you cannot attack him."
 
 ## branch icons
 str_tbl_ldl_upk100.tga	"upk100.tga"
@@ -1610,8 +1497,6 @@ str_tbl_ldl_upk108.tga	"upk108.tga"
 str_tbl_ldl_upk109.tga	"upk109.tga"
 str_tbl_ldl_upk110.tga	"upk110.tga"
 str_tbl_ldl_upk111.tga	"upk111.tga"
-
-
 
 
 # Junk 1 #
@@ -1666,52 +1551,10 @@ str_ldl_Current_Setting	"Current Setting"
 str_ldl_Current_Supply	"Current Supply"
 str_ldl_demand_a_map	"You will demand a map of uncharted lands"
 str_ldl_Deplorable	"Deplorable"
-str_ldl_DESCRIPTION_INSTALLATION_X_RAY_MINES	"DESCRIPTION_INSTALLATION_X_RAY_MINES"
 str_ldl_Debug_version	"Debug version won't be here in final release."
 str_ldl_Defense_COLON	"Defense:"
 str_ldl_d	"d"
-str_ldl_DESCRIPTION_ALPINE	"DESCRIPTION_ALPINE"
-str_ldl_Description_COLON	"Description:"
-str_ldl_DESCRIPTION_DESERTS	"DESCRIPTION_DESERTS"
-str_ldl_DESCRIPTION_FORESTS	"DESCRIPTION_FORESTS"
-str_ldl_DESCRIPTION_GLACIERS	"DESCRIPTION_GLACIERS"
-str_ldl_DESCRIPTION_GRASSLAND	"DESCRIPTION_GRASSLAND"
-str_ldl_DESCRIPTION_HILLS	"DESCRIPTION_HILLS"
-str_ldl_DESCRIPTION_INSTALLATION_AIR_BASES	"DESCRIPTION_INSTALLATION_AIR_BASES"
-str_ldl_DESCRIPTION_INSTALLATION_DRYDOCK	"DESCRIPTION_INSTALLATION_DRYDOCK"
-str_ldl_DESCRIPTION_INSTALLATION_FORTIFICATIONS	"DESCRIPTION_INSTALLATION_FORTIFICATIONS"
-str_ldl_DESCRIPTION_INSTALLATION_LAND_MINES	"DESCRIPTION_INSTALLATION_LAND_MINES"
-str_ldl_DESCRIPTION_INSTALLATION_LISTENING_POSTS	"DESCRIPTION_INSTALLATION_LISTENING_POSTS"
-str_ldl_DESCRIPTION_INSTALLATION_MAGNETIC_MINES	"DESCRIPTION_INSTALLATION_MAGNETIC_MINES"
-str_ldl_DESCRIPTION_INSTALLATION_RADAR_STATIONS	"DESCRIPTION_INSTALLATION_RADAR_STATIONS"
-str_ldl_DESCRIPTION_INSTALLATION_SONAR_BUOYS	"DESCRIPTION_INSTALLATION_SONAR_BUOYS"
-str_ldl_DESCRIPTION_INSTALLATION_SPACEDOCK	"DESCRIPTION_INSTALLATION_SPACEDOCK"
-str_ldl_DESCRIPTION_RAINFOREST	"DESCRIPTION_RAINFOREST"
-str_ldl_DESCRIPTION_SAVANNAH	"DESCRIPTION_SAVANNAH"
-str_ldl_DESCRIPTION_SWAMPS	"DESCRIPTION_SWAMPS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_FARMS	"DESCRIPTION_TILEIMP_ADVANCED_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_MINES	"DESCRIPTION_TILEIMP_ADVANCED_MINES"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS	"DESCRIPTION_TILEIMP_ADVANCED_ROBOTIC_DOCKS"
-str_ldl_DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_ADVANCED_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES	"DESCRIPTION_TILEIMP_AUTOMATED_FISHERIES"
-str_ldl_DESCRIPTION_TILEIMP_FARMS	"DESCRIPTION_TILEIMP_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_FISHERIES	"DESCRIPTION_TILEIMP_FISHERIES"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_MODULES	"DESCRIPTION_TILEIMP_FOOD_MODULES"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_PODS	"DESCRIPTION_TILEIMP_FOOD_PODS"
-str_ldl_DESCRIPTION_TILEIMP_FOOD_TANKS	"DESCRIPTION_TILEIMP_FOOD_TANKS"
-str_ldl_DESCRIPTION_TILEIMP_HYDROPONIC_FARMS	"DESCRIPTION_TILEIMP_HYDROPONIC_FARMS"
-str_ldl_DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_LEVEL_MEGA_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_MAGLEV	"DESCRIPTION_TILEIMP_MAGLEV"
-str_ldl_DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY	"DESCRIPTION_TILEIMP_MEGA_MANUFACTURING_BAY"
-str_ldl_DESCRIPTION_TILEIMP_MEGA_MINES	"DESCRIPTION_TILEIMP_MEGA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_MINES	"DESCRIPTION_TILEIMP_MINES"
-str_ldl_DESCRIPTION_TILEIMP_NETS	"DESCRIPTION_TILEIMP_NETS"
-str_ldl_DESCRIPTION_TILEIMP_RAILROAD	"DESCRIPTION_TILEIMP_RAILROAD"
-str_ldl_DESCRIPTION_TILEIMP_ROAD	"DESCRIPTION_TILEIMP_ROAD"
-str_ldl_DESCRIPTION_TILEIMP_ROBOTIC_DOCKS	"DESCRIPTION_TILEIMP_ROBOTIC_DOCKS"
-str_ldl_DESCRIPTION_TILEIMP_UNDERSEA_MINES	"DESCRIPTION_TILEIMP_UNDERSEA_MINES"
-str_ldl_DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL	"DESCRIPTION_TILEIMP_UNDERSEA_TUNNEL"
-str_ldl_DESCRIPTION_TUNDRA	"DESCRIPTION_TUNDRA"
+str_ldl_Description_COLON			"Description:"
 str_ldl_DF	"DF"
 str_ldl_DISCONTENT	"DISCONTENT"
 str_ldl_Dumb	"Dumb"
@@ -2131,35 +1974,19 @@ str_ldl_ScenMode "Mod:"
 #
 # Sprite editor stuff
 #
-str_SprEd_Move "  Pohyb"
-str_SprEd_Attack "  Atttack"
-str_SprEd_Idle "  Idle"
-str_SprEd_Victory "  Victory"
-str_SprEd_Work "  Work"
-str_SprEd_StepPlus " Step +"
-str_SprEd_StepMinus " Step -"
-str_SprEd_PlayOnce " Play Once"
-str_SprEd_Loop " Loop"
-str_SprEd_FacingPlus " Facing +"
-str_SprEd_FacingMinus " Facing -"
-
-# MDS 091300
-# Added for Scenario Editor buttons
-#
-str_tbl_ldl_XWrap		"XWrap"
-str_tbl_ldl_YWrap		"YWrap"
-str_tbl_ldl_Cut			"Cut Selected Region"
-str_tbl_ldl_Copy		"Copy Selected Region"
-str_tbl_ldl_Paste		"Paste Region"
-str_tbl_ldl_SmallBrush	"Small Brush"
-str_tbl_ldl_MedBrush	"Medium Brush"
-str_tbl_ldl_LargeBrush	"Large Brush"
-str_tbl_ldl_SaveClip	"Save Clip"
-str_tbl_ldl_LoadClip	"Load Clip"
-str_tbl_ldl_Explore		"Set Map Explored"
-str_tbl_ldl_Unexplore	"Set Map Unexplored"
-str_tbl_ldl_Fog			"Toggle Fog of War"
-
+str_SprEd_Load					"  Load"
+str_SprEd_Save					"  Save"
+str_SprEd_Move					"  Pohyb"
+str_SprEd_Attack				"  Atttack"
+str_SprEd_Idle					"  Idle"
+str_SprEd_Victory				"  Victory"
+str_SprEd_Work					"  Work"
+str_SprEd_StepPlus				" Step +"
+str_SprEd_StepMinus				" Step -"
+str_SprEd_PlayOnce				" Play Once"
+str_SprEd_Loop					" Loop"
+str_SprEd_FacingPlus			" Facing +"
+str_SprEd_FacingMinus			" Facing -"
 
 
 
@@ -2315,6 +2142,8 @@ str_ldl_ShowQueue     			"Zobraz Frontu"
 str_ldl_EditQueue 			"postav"
 str_ldl_HideQueue 			"Schovat Frontu"
 
+str_ldl_OptimizeSpecialists			"Optimize Specialists"
+
 str_ldl_Costs 				"Náklady"
 str_ldl_Gives 				"Výhody"
 str_ldl_YouHave 			"Más"
@@ -2325,6 +2154,11 @@ str_ldl_Sell 				"Prodat"
 str_ldl_Population 			"Pop:"
 str_ldl_Growth 				"Rust:"
 str_ldl_CityList 			"Seznam Mest"
+
+str_ldl_ConversionLoss				"Conversion Loss"
+str_ldl_FranchiseLoss				"Franchise Loss"
+
+str_ldl_GrowthTurns				"Growth Turns"
 
 str_ldl_DipProposalsReceived 		"Obdrzené Nabídky"
 str_ldl_DipProposalsMade     		"Nabídky Poslané"
@@ -2368,7 +2202,7 @@ str_dip_InvalidProposal 		"Select proposal from left-hand list"
 str_ldl_Threaten 			"Vyhrozovat"
 
 
-# 
+#
 # New Control Panel Strings
 #
 
@@ -2396,7 +2230,6 @@ str_ldl_OptionsMenuTitle		"Nastavení"
 str_ldl_EmpireManager			"Rísský Manazer"
 str_ldl_ScienceManager				"Vedecký manazer"
 str_ldl_TradeOpenMarket			"Obchod - Otevrít Trh"
-str_ldl_TradeSummary			"Obchod - Souhrn"
 str_ldl_Gaia				"Spínac Gaia"
 
 # Cities Menu Strings
@@ -2433,6 +2266,8 @@ str_ldl_Gameplay			"Nastavení Hry"
 str_ldl_MapFilters			"Filtry Mapy"	
 str_ldl_Graphics			"Grafika"		
 str_ldl_Sound				"Zvuk"			
+str_ldl_Music					"Music"
+str_ldl_Language					"Jazyk"
 str_ldl_Advanced			"Pokrocilý"      
 str_ldl_SaveGame			"Ulozit Hru"		
 str_ldl_LoadGame			"Nacíst Hru"		
@@ -2446,6 +2281,11 @@ str_ldl_NewArmy 			"Nová Armáda"
 str_ldl_SingleUnits 			"Ostatní Jednotky"
 str_ldl_ArmyCount 			"V Armáde: %d"
 str_ldl_Armies 				"Armády"
+
+
+##
+## Scenario Editor strings
+##
 
 str_ldl_ScenYear 			"Rok"
 str_ldl_NumPlayers 			"# Players"
@@ -2485,6 +2325,28 @@ str_ldl_FileName 			"Soubor:"
 str_ldl_Leader 				"Jméno Vudce: "
 str_ldl_CityName 			"Jméno Mesta: "
 
+# MDS 091300
+# Added for Scenario Editor buttons
+#
+str_tbl_ldl_XWrap		"XWrap"
+str_tbl_ldl_YWrap		"YWrap"
+str_tbl_ldl_Cut			"Cut Selected Region"
+str_tbl_ldl_Copy		"Copy Selected Region"
+str_tbl_ldl_Paste		"Paste Region"
+str_tbl_ldl_SmallBrush	"Small Brush"
+str_tbl_ldl_MedBrush	"Medium Brush"
+str_tbl_ldl_LargeBrush	"Large Brush"
+str_tbl_ldl_SaveClip	"Save Clip"
+str_tbl_ldl_LoadClip	"Load Clip"
+str_tbl_ldl_Explore		"Set Map Explored"
+str_tbl_ldl_Unexplore	"Set Map Unexplored"
+str_tbl_ldl_Fog			"Toggle Fog of War"
+
+
+##
+## Order Strings
+##
+
 str_ldl_order_attack 			"Napadnout"
 str_ldl_order_move 			"Presun"
 str_ldl_order_paradrop 			"Paradrop"
@@ -2522,10 +2384,12 @@ str_ldl_order_pillage 			"Vyplenit"
 str_ldl_order_advertise 		"Oznámit"
 str_ldl_order_conduct_hit 		"Conduct Hit"
 str_ldl_order_settle 			"Osídlit"
+str_ldl_order_settle_in_city			"Settle in City"
 str_ldl_order_nuke_city 		"Shodit Atomovku"
 str_ldl_order_disband_army 		"Rozpustit Armádu"
 str_ldl_order_board_transport 		"Nalodit se"
 str_ldl_order_unload 			"Vylodit"
+str_ldl_order_upgrade				"Upgrade"
 str_ldl_order_launch 			"Space Launch"
 str_ldl_order_target 			"Nastavit Cíl"
 str_ldl_order_clear_target 		"Vycistit Cíl"
@@ -2535,18 +2399,20 @@ str_ldl_order_faith_healing 		"Lécba Vernosti"
 str_ldl_order_refuel 			"Doplnit Palivo"
 str_ldl_order_sleep 			"Strázit"
 
-str_ldl_TradeYourCity 			"Nase Mesto"
-str_ldl_TradeGood 			"Má Toto Zbozí"
-str_ldl_TradeSendCity 			"Toto Mesto To Koupí"
-str_ldl_TradePrice 			"Pro"
-str_ldl_TradeCaravans 			"Karavany"
-str_ldl_TradeNation 			"Stát"
-str_ldl_CreateRoute 			"Vytvorit Stezku"
-str_ldl_BreakRoute 			"Rozbít Stezku"
+str_ldl_TradeYourCity			"Nase Mesto"
+str_ldl_TradeGood			"Má Toto Zbozí"
+str_ldl_TradeSendCity			"Toto Mesto To Koupí"
+str_ldl_TradePrice			"Pro"
+str_ldl_TradeCaravans			"Karavany"
+str_ldl_TradeBonus				"Bonus"
+str_ldl_TradeNation			"Stát"
+str_ldl_CreateRoute			"Vytvorit Stezku"
+str_ldl_BreakRoute			"Rozbít Stezku"
 str_ldl_TradeShowAdvisor		"Poradce"
-str_ldl_TradeHideAdvisor 		"Poradce"
-str_ldl_TradeSummary 			"Souhrn"
-str_ldl_TradeMarket 			"Trh"
+str_ldl_TradeHideAdvisor		"Poradce"
+str_ldl_TradeSummary			"Souhrn"
+str_ldl_TradeImport				"Import"
+str_ldl_TradeMarket			"Trh"
 
 str_ldl_TradeSellingGood 		"Is Selling"
 str_ldl_TradeSellingToCity 		"Do Tohoto Mesta"
@@ -2554,6 +2420,8 @@ str_ldl_TradeSellingToCity 		"Do Tohoto Mesta"
 str_ldl_CaravansAvailable 		"K Dispozici Karavan:"
 str_ldl_CaravansInUse 			"Pouzívá se Karavan:"
 str_ldl_TotalTradeProfit 		"Celkový Obchodní Výnos:"
+str_ldl_TotalPiracyLoss				"Expected Piracy Loss:"
+str_ldl_TotalTransitProfit			"Total Transit Profit:"
 str_ldl_TotalTradeRoutes 		"Celkove Obchodních Cest:"
 
 str_ldl_TradeTitle 			"O B C H  O D N  Í  M A  N A Z E R"
@@ -2616,14 +2484,13 @@ str_ldl_PERCENT_SYMBOL	"%"
 # Generic close button label
 str_ldl_CLOSE_BUTTON	"Zavrít"
 
-# <changeme> New control panel strings.
+# New control panel strings.
 str_ldl_CP_CITIES			"Mesta"
 str_ldl_CP_TOT_POP			"Populace"
 str_ldl_CP_CUR_GOVT			"Forma Vlády"
 str_ldl_CP_PUBLIC_WORKS		"Verejné Práce"
 str_ldl_CP_SCIENCE			"Veda"
 str_ldl_CP_POLLUTION		"Znecistení"
-# end <changeme> block.  The rest of these are old strings.
 str_ldl_CP_GOVERNOR			"STAROSTA"
 str_ldl_CP_IMPROVEMENTS		"VYLEPSENÍ"
 str_ldl_CP_TERRAFORM		"TERAFORMACE"
@@ -2657,6 +2524,23 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"Maintenance:"
 str_ldl_DD_SCIENCE_LABEL			"Veda:"
 str_ldl_DD_SAVINGS_LABEL			"Úspora:"
 str_ldl_DD_DETAILS					"Detaily"
+str_ldl_DD_OPTIMIZE_SLIDERS			"Optimize Sliders"
+str_ldl_DD_TERRAIN_LABEL			"Terrain:"
+str_ldl_DD_TCOMMERCE_LABEL			"Commerce:"
+str_ldl_DD_BUILDINGS_LABEL			"Buildings:"
+str_ldl_DD_FARMERS_LABEL			"Farmers:"
+str_ldl_DD_LABORERS_LABEL			"Laborers:"
+str_ldl_DD_GOVERNMENT_LABEL			"Government:"
+str_ldl_DD_WAGES_EFFECT_LABEL			"Worker Wages:"
+str_ldl_DD_SCIENTISTS_LABEL			"Scientists:"
+str_ldl_DD_MERCHANTS_LABEL			"Merchants:"
+str_ldl_DD_FEATS_AND_WONDERS_LABEL		"Feats & Wonders:"
+str_ldl_DD_TRADE_LABEL				"Trade:"
+str_ldl_DD_CONVERSIONS_LABEL			"Conversions:"
+str_ldl_DD_UNIT_SUPPORT_LABEL			"Unit Support:"
+str_ldl_DD_ENEMY_LABEL				"Enemy:"
+str_ldl_DD_SCIENCE_TITLE			"SCIENCE"
+str_ldl_DD_GOLD_TITLE				"GOLD"
 # Government Tab Panel
 str_ldl_DD_GOV_CURRENT				"Stávající Vládní Forma"
 str_ldl_DD_GOV_COMPARE				"Compare To"
@@ -2688,7 +2572,7 @@ str_ldl_ND_STL_CITY_NAME			"Jméno Mesta"
 str_ldl_ND_STL_MAYOR				"Starosta"
 str_ldl_ND_STL_PRIORITY				"Priorita"
 str_ldl_ND_STL_BUILDING				"Stavba"
-str_ldl_ND_STL_TIME                 "Kola"
+str_ldl_ND_STL_TIME					"Kola"
 str_ldl_ND_ST_GOVERNOR				"STAROSTA:"
 str_ldl_ND_ST_RUSH_BUY				"Urychlení Stavby"
 str_ldl_ND_ON						"ZAP"
@@ -2731,6 +2615,7 @@ str_ldl_MB_CANCEL					"Storno"
 
 # Army Management
 str_ldl_ArmyManagement "Manazer Armády"
+str_ldl_ArmyManagementTitle			"M A N A Z E R   A R M Á D Y"
 
 # Diplomacy wizard
 str_ldl_DiplomacyWizardTitle "D I P L O M A T I K Á  N A B Í D K A"
@@ -2782,6 +2667,7 @@ str_ldl_BuildManagerTitle "S T A V E B N Í  M A N A Z E R"
 #str_ldl_CityWinPollution "Znecistení"
 ######
 
+str_ldl_SendMessage				"Send"
 str_ldl_CreateProposal "Nová Nabídka"
 str_ldl_Details "Detaily"
 
@@ -2821,6 +2707,9 @@ str_ldl_HappyPositive "Bonus"
 str_ldl_Polluters "Polluters"
 str_ldl_Cleaners "Cleaners"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Pollution"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Crime"
 str_ldl_CityWinCrimeFormat "Crime: %d%%"
 str_ldl_IW_CONFIRM_WAR "Declare war on {player[0].country_name}?"
 
@@ -2855,28 +2744,39 @@ str_tbl_ldl_InProgress			"Game in progress:"
 str_tbl_ldl_Defeat				"Defeat:"
 	
 # Great Library
+str_ldl_CAPS_GREAT_LIBRARY	"V E L K Á   K N I H O V N A"
 str_ldl_GreatLibraryGoalSetTo "Nastavit cíl na: %s"
+str_ldl_GreatLibraryGoalKnown			"%s is already known. No goal was set."
+str_ldl_GreatLibraryNoGoalPossible		"%s cannot be researched."
 str_ldl_SEARCH_WORD "Hledat:"
 str_ldl_TECH_TREE "Tech Strom"
 str_ldl_SET_GOAL	"Nastavit Cíl"
-
-
+str_ldl_SORT_BY_AGE				"Sort by Age"
 
 
 # Ranking Tab
-str_ldl_RANKING_MILITARY "Vojsko"
-str_ldl_RANKING_ECONOMIC "Ekonomika"
-str_ldl_RANKING_SCIENTIFIC "Veda"
-str_ldl_RANKING_OVERALL "Celkove"
-str_ldl_INFO_RANKING_TAB "Poradí"
-str_ldl_RANKING_RANK "Poradí:"
-str_ldl_LINE_BUTTON "Line Graph"
-str_ldl_ZEROSUM_BUTTON "Zero Sum Graph"
+str_ldl_RANKING_MILITARY			"Military"
+str_ldl_RANKING_ECONOMIC			"Economic"
+str_ldl_RANKING_SCIENTIFIC			"Scientific"
+str_ldl_RANKING_OVERALL				"Overall"
+str_ldl_RANKING_POLLUTION			"Znecistení"
+str_ldl_RANKING_TRADE				"Trade"
+str_ldl_RANKING_GOLD				"Gold"
+str_ldl_RANKING_CITIES				"Cities"
+str_ldl_RANKING_POPULATION			"Population"
+str_ldl_RANKING_AREA				"Area"
+str_ldl_RANKING_UNITS				"Units"
+str_ldl_RANKING_BUILDINGS			"Buildings"
+str_ldl_RANKING_WONDERS				"Wonders"
+str_ldl_RANKING_RANK				"Poradí:"
+str_ldl_INFO_RANKING_TAB			"Poradí"
+str_ldl_LINE_BUTTON					"Line Graph"
+str_ldl_ZEROSUM_BUTTON				"Zero Sum Graph"
 
 # Timeline Tab
-str_ldl_INFO_TIMELINE_TAB "Timeline"
-str_ldl_RIGHT_BUTTON "Scroll Right"
-str_ldl_LEFT_BUTTON "Scroll Left"
+str_ldl_INFO_TIMELINE_TAB			"Timeline"
+str_ldl_RIGHT_BUTTON				"Scroll Right"
+str_ldl_LEFT_BUTTON					"Scroll Left"
 
 
 # Intelligence Detail Screen
@@ -2900,6 +2800,7 @@ str_ldl_DipDetails_LeaderPersonality	"Leader Personality: {player[0].leaderperon
 str_ldl_DipDetails_EmbassyMsg			"* Embassy required to access privileged information."
 str_ldl_DipDetails_NoEmbassy			"<Zádné Vyslanectví>"
 
+# Tile improvent panel
 str_ldl_ImproveLand "Zeme"
 str_ldl_ImproveOcean "Ocean"
 str_ldl_ImproveSpecial "Specialní"
@@ -2910,6 +2811,9 @@ str_ldl_ImproveTerraformOcean "Teraform Oceanu"
 str_ldl_RADAR_MAP_UNITS		"Jednotky"
 str_ldl_RADAR_MAP_CITIES	"Mesta"
 str_ldl_RADAR_MAP_BORDERS	"Hranice"
+str_ldl_RADAR_MAP_POLITICAL			"Political"
+str_ldl_RADAR_MAP_CAPITOLS			"Capitols"
+str_ldl_RADAR_MAP_RELATIONSHIPS		"Relationships"
 
 str_ldl_BV_RETREAT "Retreat"
 
@@ -2934,13 +2838,7 @@ AUTOSAVE_NAME				"AUTOSAVE"
 
 TRADE_ROUTE_RESET 			"Trade route reset!"
 
-VICTORY_ENSLAVEMENT_CITY 		"Your {unit[0].name} has captured a new slave and sent it to {city[0].name}."
-
-HOTSEAT_HUMAN "Human"
-HOTSEAT_AI "Computer"
-
 SHOW_ME "Show me"
-BUTTON_QUIT_GAME "Quit Game"
 
 TEST_BEGIN_TURN "myValue's value is {myValue}"
 TEST_UNIT_KILLED "A {unit[0].name} was killed"
@@ -2948,19 +2846,6 @@ TEST_UNIT_KILLED "A {unit[0].name} was killed"
 INFOBAR_UNITS "Units: "
 INFOBAR_CITY "City: "
 INFOBAR_UNEXPLORED "Unexplored"
-
-UNIT_HOPLITE_NEW "Hoplite"
-
-BUILD_LIST_SEQUENCE_PRODUCTION "Production"
-BUILD_LIST_SEQUENCE_GROWTH "Growth"
-BUILD_LIST_SEQUENCE_OFFENSE "Offense"
-BUILD_LIST_SEQUENCE_DEFENSE "Defense"
-BUILD_LIST_SEQUENCE_SCIENCE "Science"
-BUILD_LIST_SEQUENCE_GOLD "Gold"
-BUILD_LIST_SEQUENCE_WONDERS "Wonders"
-BUILD_LIST_SEQUENCE_HAPPINESS "Happiness"
-
-MOVED_ALL_ARMIES_GENIUS "You have moved all of your armies, you must be some kind of genius!"
 
 UNIT_CATEGORY_GENERIC "Generic"
 UNIT_CATEGORY_SETTLER "Settler"
@@ -2975,10 +2860,7 @@ UNIT_CATEGORY_SPECIAL "Special"
 
 UNIT_LOCATION_IN_FIELD "In the field"
 UNIT_LOCATION_IN_SPACE "In space"
-
-T_TURN0 "This is Turn 0"
-
-T_CREATE_CITY "A city was created"
+UNIT_ORDER_TRANSPORTED "In Transport"
 
 ARMY_NAME_PREFIX "Army #"
 
@@ -3117,6 +2999,7 @@ str_ldl_EditQueueBuildings "Stavby"
 str_ldl_EditQueueWonders "Divy"
 str_ldl_EditQueueAppend "Pridat >"
 str_ldl_EditQueueInsert ">Vlozit<"
+str_ldl_EditQueueSuggest			"Suggest"
 
 str_ldl_EditQueueAttack "Ut"
 str_ldl_EditQueueDefense "Obr"
@@ -3144,11 +3027,16 @@ str_ldl_Remove "Vymazat >"
 str_ldl_AddAll "<< Pridat Vse"
 str_ldl_RemoveAll "Smazat Vse >>"
 
+
 # # END OF STUFF ADDED 9/5/00
 
 #Disbanding Cities Strings
 str_ldl_CantDisbandCitySize		"Nemuzes rozpustit mìsto, které má velikost vetsí nez 3.."
 str_ldl_CantDisbandLastCity		"Nemuzes rozpustit tvé poslední mesto."
+
+# Stuff added 20-Nov-2007 # I have no idea were else to put it
+str_FileDoesNotExist                            "File does not exist: "
+str_MapSizesDiffer                              "The new map does not have the same size as the loaded map.\n The map sizes must fit. Map size old/new: "
 
 # Profile strings (Advanced options list)
 str_profile_UnitAnim 				"Umoznit Animaci Jednotek"
@@ -3196,3 +3084,138 @@ str_profile_AutoOpenCityWindow 			"Open Build Manager When Creating City"
 str_profile_ShowEnemyHealth 			"Show Enemy Unit Health Status"
 str_profile_ShowCityInfluence 			"Show City Influence"
 str_profile_ShowPoliticalBorders 		"Zobrazit Státní Hranice"
+str_profile_EndTurnSound "Zvuk Konce Kola"
+str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
+str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
+str_profile_ShowOrderUnion                      "Show All Army Orders" 
+str_profile_RecentAtTop                         "Put New Messages At Top"
+str_profile_CityClick                           "Select City Instead Of Army"
+str_profile_DebugSlic                           "Slic Debug Messages"
+str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
+str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
+str_profile_RunInBackground                     "Game runs in background"
+str_profile_Upgrade                             "Unit upgrading"
+str_profile_SmoothBorders                       "Smooth empire borders"
+str_profile_CivFlags                            "Show Civilization Unit flags"
+str_profile_NoAIProductionDeficit               "AI No Production Deficit"
+str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI City Defense Bonus"                         # AI population adds to city defenses
+str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Revolting cities create barbarians"            # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
+str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
+str_profile_DebugCityAstar                      "Debug road build path"
+str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"
+
+# Added for extended keyboard mapping options keys 6/2004 L. Hirth
+str_tbl_ldl_Music_Options				"Music options"
+str_tbl_ldl_Language_Options			"Language options"
+str_tbl_ldl_Decend						"Decend"
+str_tbl_ldl_Execute_Eyepoint			"Focus on object (eye)"
+str_tbl_ldl_Move_Order					"Move order"
+str_tbl_ldl_End_Unit_Turn				"End unit turn"
+str_tbl_ldl_Process_Unit_Orders			"Process given unit orders"
+str_tbl_ldl_Group_Army					"Group all units to army"
+str_tbl_ldl_Ungroup_Army				"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug				"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test					"Rand test (playtest)"
+str_tbl_ldl_Command_Enter				"Command enter (playtest)"
+str_tbl_ldl_Command_Enter_Alternate		"Command enter alternate (playtest)"
+
+# New gamesetting options
+#implemented
+str_ldl_Army_Names_On				"Show Army Names"
+str_ldl_Army_Names_Off				"Hide Army Names"
+str_ldl_Civ_Flags_On				"Show Nation Flags"
+str_ldl_Civ_Flags_Off				"Hide Nation Flags"
+str_ldl_Show_City_Prod_Off			"Hide City Production"
+str_ldl_Show_City_Prod_On			"Show City Production"
+str_ldl_SmoothBorders_On			"Smooth Icon Borders"
+str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
+str_ldl_Good_Animations_Off			"Good Animations Off"
+str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
+
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
+str_tbl_ldl_CityCaptureOptions_On		"City Capture Options - On"
+str_tbl_ldl_CityCaptureOptions_Off		"City Capture Options - Off"
+str_tbl_ldl_OneCityChallenge_On			"One City Challenge - On"
+str_tbl_ldl_OneCityChallenge_Off		"One City Challenge - Off"
+str_tbl_ldl_RevoltCasualties_On			"Riots Kill Population - On"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltCasualties_Off		"Riots Kill Population - Off"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"Riots Create Barbarians - On"			# Revolting city creates barbarians
+str_tbl_ldl_RevoltInsurgents_Off		"Riots Create Barbarians - Off"			# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians - On"		# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Spawn Barbarians - Off"		# Entrenched barbs create more barbs
+str_tbl_ldl_GoldPerUnitSupport_On		"Unit Gold Support - On"				# All pay gold hunger unit support.
+str_tbl_ldl_GoldPerUnitSupport_Off		"Unit Gold Support - Off"				# 
+str_tbl_ldl_GoldPerCity_On			"City Maintenance Costs - On"			# Everyone pays gold amount per city
+str_tbl_ldl_GoldPerCity_Off			"City Maintenance Costs - Off"			# AI pays gold amount per city
+str_tbl_ldl_Upgrade_On				"Unit Upgrading - On"				# Units can be upgraded
+str_tbl_ldl_Upgrade_Off				"Unit Upgrading - Off"				# Units cannot be upgraded
+
+str_ldl_DebugAI					"Debug AI"
+str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
+str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
+str_ldl_Debug_AI_On				"Show Debug AI Text"
+str_ldl_Debug_AI_Off				"Hide Debug AI Text"
+str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
+str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
+str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
+str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
+str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
+# Custom map window (wet/dry etc.)
+str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
+str_tbl_ldl_RandomCustomMap_On			"Random Settings"
+
+# Rules window description strings.
+str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
+str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
+str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
+str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."
+str_tbl_ldl_RuleDetail_RiotsCreateBarbarians	"Riots Create Barbarians\nWhen a city riots there is a chance of barbarians appearing near the city. The chance is increased with the barbarian level and further increased if your civilization has a conflicting city style (or culture) with the city."
+str_tbl_ldl_RuleDetail_RiotsKillPopulation	"Riots Kill Population\nWhen a city of size 10 or greater riots there is a chance of people being killed in the city."
+str_tbl_ldl_RuleDetail_BarbsSpawnBarbs		"Barbarians Spawn Barbarians\nIncreases the chance of more barbarians appearing."
+str_tbl_ldl_RuleDetail_NonRandomCivs		"Non-Random AI Nations\nAI civilizations will be chosen in order (rather than at random) from the civilization database. See civilisation.txt for the order of all civilizations."
+str_tbl_ldl_RuleDetail_Upgrade			"Unit Upgrading\nAllows players to upgrade units using gold savings. See the Great Library on each unit for upgrade types, and the Upgrade article in the GL for an explanation on the use and costs of upgrading."
+str_tbl_ldl_RuleDetail_NewCombat		"New Combat\nDuring battle the defending army's front line will only use their defense rating, and the attacking army's front line will only use their attack rating. Veteran units will also receive a defensive boost."
+str_tbl_ldl_RuleDetail_NoGoodyHuts		"No Ruins\nNo ruins will be placed on the map for a new game."
+str_tbl_ldl_RuleDetail_UnitGold			"Unit Gold Support\nAs well as the normal unit production upkeep, units will cost gold savings to support. See the Great Library entry for each unit's gold support cost."
+str_tbl_ldl_RuleDetail_CityMaintenance		"City Maintenance Costs\nEach city will require it's city size in commerce to maintain."
+str_tbl_ldl_RuleDetail_NoCityLimit		"No City Limits\nNo city limits will allow all players to exceed government city caps without happiness penalties."
+str_tbl_ldl_RuleDetail_Ages			"Custom Ages\nIf an advanced starting age is chosen new cities will receive all buildings up to and including the starting age for free."
+
+# Not Implemented
+str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness - On"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_Off		"Conflicting Citystyle Unhappiness - Off"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_SE_DebugAI					"debug"
+str_SE_ShowEnemyHealth				"show"
+str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_Off			"Entrenched Barbarians settle cities - Off"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_Off			"Entrenched Barbarians create Tile Imps - Off"	# Entrenched barbarians create an imp
+str_tbl_ldl_AICityDefenderBonus_On		"AI City Defense bonus - On"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_On			"Entrenched Barbarians settle cities - On"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_On			"Entrenched Barbarians create Tile Imps - On"	# Entrenched barbarians create an imp
+str_tbl_ldl_AINoSinking_On			"AI ships don't sink"				# AI ships don't sink
+str_tbl_ldl_AINoSinking_Off			"AI ships can sink"				# AI ships don't sink

@@ -56,7 +56,6 @@ LANGUAGE_CZECH {
 	IsoCode "cs"
 	Description INFO_CZECH
 	Directory "czech"
-	Disabled
 }
 
 ## 2 ##########################################################

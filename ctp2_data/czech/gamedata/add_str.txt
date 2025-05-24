@@ -1,8 +1,39 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (Czech)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
+# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
 
-# More Stuuf for LDL_STR
+# More Stuff for LDL_STR
 # Multiplayer Disclaimer String
 str_ldl_MultiplayerDisclaimer	"Activision recommends a maximum of 4 players for Call to Power multiplayer games."
 
@@ -25,50 +56,6 @@ str_ldl_DisbandUnit                 "Rozpustit"
 # City Window
 str_ldl_CityWindowUpkeep "Údrzba"
 
-# Diplomat pictures.  Bit weird storing these in a string file, but it works.
-# Transplanted, and modified (filenames are updp* now, ctp1 was upd*), from civ_str.txt 
-GREEK_DIPLOMAT_PHOTO		"updp023.tga"
-AMERICAN_DIPLOMAT_PHOTO	"updp010.tga"
-SCOTTISH_DIPLOMAT_PHOTO	"updp044.tga"
-IRISH_DIPLOMAT_PHOTO			"updp028.tga"
-ENGLISH_DIPLOMAT_PHOTO	"updp019.tga"
-NATIVE_AMERICAN_DIPLOMAT_PHOTO	"updp035.tga"
-GERMAN_DIPLOMAT_PHOTO	"updp022.tga"
-FRENCH_DIPLOMAT_PHOTO	"updp021.tga"
-JAPANESE_DIPLOMAT_PHOTO	"updp030.tga"
-CHINESE_DIPLOMAT_PHOTO	"updp015.tga"
-RUSSIAN_DIPLOMAT_PHOTO	"updp043.tga"
-SPANISH_DIPLOMAT_PHOTO	"updp045.tga"
-PORTUGUESE_DIPLOMAT_PHOTO	"updp041.tga"
-DUTCH_DIPLOMAT_PHOTO	"updp017.tga"
-VIKING_DIPLOMAT_PHOTO	"updp048.tga"
-ROMAN_DIPLOMAT_PHOTO	"updp042.tga"
-EGYPTIAN_DIPLOMAT_PHOTO	"updp018.tga"
-PERSIAN_DIPLOMAT_PHOTO	"updp038.tga"
-TURKISH_DIPLOMAT_PHOTO	"updp047.tga"
-PHOENICIAN_DIPLOMAT_PHOTO	"updp039.tga"
-WELSH_DIPLOMAT_PHOTO	"updp049.tga"
-CUBAN_DIPLOMAT_PHOTO	"updp016.tga"
-ZULU_DIPLOMAT_PHOTO	"updp050.tga"
-HEBREW_DIPLOMAT_PHOTO	"updp024.tga"
-ASSYRIAN_DIPLOMAT_PHOTO	"updp011.tga"
-INDIAN_DIPLOMAT_PHOTO	"updp026.tga"
-THAI_DIPLOMAT_PHOTO	"updp046.tga"
-POLYNESIAN_DIPLOMAT_PHOTO	"updp040.tga"
-INDONESIAN_DIPLOMAT_PHOTO	"updp027.tga"
-JAMAICAN_DIPLOMAT_PHOTO		"updp029.tga"
-INCAN_DIPLOMAT_PHOTO	"updp025.tga"
-MAYAN_DIPLOMAT_PHOTO	"updp032.tga"
-CANADIAN_DIPLOMAT_PHOTO	"updp014.tga"
-NIGERIAN_DIPLOMAT_PHOTO	"updp037.tga"
-KOREAN_DIPLOMAT_PHOTO	"updp031.tga"
-BRAZILIAN_DIPLOMAT_PHOTO	"updp013.tga"
-AUSTRALIAN_DIPLOMAT_PHOTO	"updp012.tga"
-MEXICAN_DIPLOMAT_PHOTO	"updp033.tga"
-ETHIOPIAN_DIPLOMAT_PHOTO	"updp020.tga"
-MONGOLIAN_DIPLOMAT_PHOTO	"updp034.tga"
-NICARAGUAN_DIPLOMAT_PHOTO	"updp036.tga"
-
 # Dip wizard strings
 # Gets displayed on the "Accept" button depending on context
 str_ldl_DipWizardClose "Close" 
@@ -77,9 +64,6 @@ str_ldl_DipWizardCheckIntelligence "Check Intelligence"
 # Empire Manager
 str_ldl_People_ "People:"
 str_ldl_Cities_ "Cities:"
-
-
-T_NO_KILL_CIVILIAN "Attacking the {player[0].civ_name_singular} {unitrecord[0].name} has caused diplomatic tension.\n\nIn the future, you can Expel civilian units like the {unitrecord[0].name} and not risk losing the trust of other nations.  Select any of your military units and use the <c:0,50,200>Expel<e> order." 
 
 # Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
 # here for someone who does.
@@ -105,6 +89,7 @@ str_ldl_CityWinStatisticsTab "Status"
 #str_code_CityWinTotalHappinessFormat "Total: %d"
 
 str_code_QueryRebuildCapitol "Are you sure you wish to rebuild your capitol?"
+str_code_QuerySwitchProduction "Switch production type? (City will lose %d%% stored production)"
 
 # Trade manager strings
 str_ldl_TradeManagerCities "Zobrazit mesta:"
@@ -112,9 +97,6 @@ str_ldl_TradeManagerOwnCities "Vlastní"
 str_ldl_TradeManagerFriendlyCities "Prátelské"
 str_ldl_TradeManagerAllCities "Vsechny"
 str_ldl_TradeManagerCitiesPerGood "Mest za jedno zbozí:"
-
-# Moved from info_str.txt, had an error (string[0] no good, need action[0])
-NEXT_EMAIL_PLAYER 			"Please mail the saved game on your desktop to {player[0].leader_name} ({action[0].name}) of the {player[0].civ_name_plural}."
 
 # Added strings for the science screen.
 str_ldl_ResearchGoal		"* Cíl:"
@@ -147,8 +129,6 @@ str_ldl_AdvancedOptions "POKROCILÉ NASTAVENÍ"
 str_ldl_INFORMATION_DIALOG_TITLE 			"S T A T I S T I C S"
 
 str_COMPUTER_TURNS		"Hraje Pocítac..."
-
-str_ldl_CAPS_GREAT_LIBRARY	"V E L K Á   K N I H O V N A"
 
 #revised from ldl_str.txt
 str_code_TotalPollutionFormat "%d"
@@ -186,26 +166,6 @@ str_ldl_GenerateGoods "Generovat Zbozí"
 ## Strings above sent to be localized 9/26/00
 ##############################################
 
-#
-# Network strings: Commented out in ldl_str.txt, converted to ctp2 format
-#
-NETWORK_PLAYER_LEFT "{action[0].name} has left the game.  A computer player will take control of the exiting player's empire."
-NETWORK_PLAYER_JOINED "{action[0].name} has taken control of the {player[0].civ_name_plural}"
-NETWORK_DIFFERENT_PLAYER_JOINED "{action[0].name} is joining as the {player[0].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
-BUTTON_EJECT "Eject"
-BUTTON_LET_THEM_STAY "Let Them Stay"
-NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
-NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
-NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
-NETWORK_WAITING_ON_PLAYERS "Waiting on players"
-NETWORK_WAITING_FOR_DATA "Waiting for data"
-NETWORK_RESYNCING "Resynchronizing"
-
-# This one is new.  Used as the "sender" of chat messages that are sent by the engine, not another player.
-NETWORK_SENDER_SYSTEM "System"
-
 str_ldl_AddStuff "A D D  S T U F F"
 str_ldl_SelectCity "Vyber Mesto!"
 str_ldl_AddPW "Pridat Verejné Práce:"
@@ -222,11 +182,6 @@ str_ldl_IntelligenceTitle "I N T E L I G E N C E"
 ## Strings above sent to be localized 10/01/00
 ##############################################
 str_ldl_PosField "Pos:"
-
-
-#JBR1003 - moved from cut_str
-SENDER_KILLED_TRADE_ROUTE "{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}."
-NETWORK_TIME_LEFT "Time Left"
 
 str_ldl_CityEspionage "Spionáz Mesta"
 str_ldl_NatlManagerHotKey "F1"
@@ -256,6 +211,8 @@ str_ldl_RestartHotKey "ctl+z"
 
 str_ldl_NewGameHotKey "ctl+x"
 str_ldl_SoundHotKey "ctl+v"
+str_ldl_MusicHotKey "ctl+m"
+str_ldl_LanguageHotKey "Ctrl+j"
 str_ldl_GraphicsHotKey "ctl+f"
 str_ldl_GameplayHotKey "ctl+p"
 str_ldl_CityEspionageHotKey "ctl+e"
@@ -266,7 +223,6 @@ str_ldl_FindPosLabel "Najít Poz:"
 str_ldl_CityManager "Manazer Mesta"
 
 # Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
-NETWORK_CURRENT_PLAYER "Tento Hrác"
 str_tbl_ldl_Open_City_Management "Manazer Mestá"
 str_tbl_ldl_Open_Build_Queue "Mestská Stavební Fronta"
 str_tbl_ldl_Open_Trade_Summary "Obchodní Prehled"
@@ -357,34 +313,13 @@ str_SE_FindPosY "Vloz Y koordináty"
 str_SE_FindMe "Klikni na centrum X,Y koordinátu"
 str_SE_RemoveGoods "Vymaz vsechno zbozí z mapy"
 str_SE_GenerateGoods "Pridej do mapy zbozí"
-
-### Changed Strings
-## add {city[0].name}
-#IA_SETTLING_TOO_CLOSE   		"Nemuzeme vybudovat nove mesto uvnitr limitu mesta {city[0].name}. Proto bychom meli nalézt vzdálenejsí vhodnou lokaci ."
-
-### Trust Warning Messages ###
-### Global Trust Loss ###
-TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, povrazdili jsme {player[1].civ_name_singular} civiliní jednotku! V ocích celého sveta je to povazováno za válecnou kriminalitu .  Nerozcílili jsme tím jen {player[1].civ_name_plural}, ale i vsechny ostatní národy."
-TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, napadli jsme {player[1].civ_name_plural} bez varoaní nebo provokace!  Cítí hlubokou zradu v nasem porusení bezného chování.  Navíc si ted svetové komunity kladou otázky zda-li jsme jeste duveryhodni."
-MILITARY_PACT_BROKEN_BY_YOU 		"{player[0].sir_cap}, by not sending our troops to the {player[1].civ_name_singular} front lines, we have violated our Military Pact with them.  They are feeling betrayed."
-TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, napadením {player[1].civ_name_plural} jsme s nimi vyvolali nasí mírovou smlouvu!  They are outraged and will certainly warn the other nations of the world to be wary of us in the future."
-ALLIANCE_BROKEN_BY_YOU 			"{player[0].sir_cap}, we have violated our Alliance with the {player[1].civ_name_plural}!  They are deeply upset with us!  It is doubtful that any nation will trust us after such an egregious violation of trust!"
-
-### Nation-specific Trust Loss ###
-IA_BREAK_LEAVE_OUR_LANDS  		"{player[0].sir_cap}, souhlasili jsme respektovat hranice {player[1].civ_name_singular}.  Chces presunutím jednotek na jejich uzemí riskovat vyvolání jejich hnevu?"
-TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, we have failed to withdraw our troops from {player[1].civ_name_singular} lands.  They are growing wary of us, and will be hesitant to enter agreements with us in the future."
-TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Because we have continued to pirate {player[1].civ_name_singular} trade routes, they are angry with us.  The {player[1].civ_name_plural} may not trust us in the future."
-TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, porusili jsme nase primerí s {player[1].civ_name_plural}.  Jsou nasimi ciny hluboce rozhorceni, a muze mít za následek  dlouhodobou neduveru."
-TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, nase nedávné akce ustanovila porusení naseho Výzkumného Paktu s {player[1].civ_name_plural}.  Jsou k nám ted ostrazití, a zkousí pochopit nase zámery."
-TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, nase nedávná akce nás prinutila nectít nas Obchodní Pakt s {player[1].civ_name_plural}. To je porusení duvery kterou vám jen tak nezapomenou!"
-ECOPACT_BROKEN_BY_YOU 			"{player[0].sir_cap},porusili jsme Pakt Znecistení s {player[1].country_name}.  Nejsou z nás stastní!"
+str_SE_DebugAI "Show AI Army Goals"
 
 # Filename prefix for quicksaves.
 QUICKSAVE_NAME "QUICKSAVE"
 
 # Scenario editor <CHANGEME>
 str_ldl_Confirm_Restart		"Tímto restartujete hru, jste si jistý svým cinem?"
-REGARD_EVENT_WONDER "The {player[0].civ_name_plural} are impressed by the amazing wonders our nation possessess."
 
 # for the keymap screen
 str_tbl_ldl_Advanced_Options "Pokrocilé Nastavení"
@@ -406,13 +341,6 @@ CONTEXT_VIEW_CARGO "  Zobrazit Náklad"
 # For netshell list header
 str_ldl_Settlers "Osadníci"
 
-# Diplomacy Manager Embargo Button
-TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Vyhlásit Embargo"
-STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Click here to prevent a foreign nation from trading with you."
-
-# Default Build List Sequence
-BUILD_LIST_SEQUENCE_DEFAULT "Default"
-
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Enacting this government will cause some of your units to be disbanded, are you sure you wish to enact it?"
 
@@ -432,11 +360,7 @@ STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"Klikni zde pro vymazání vsech jednotek z
 STATUSBAR_ARMYMAN_CLOSE_BUTTON					"Klikni zde pro uzavrení manazeru armády."
 STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Klikni zde pro vytvorení nové armády."
 
-# Fix for localization
-str_profile_EndTurnSound "Zvuk Konce Kola"
-
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Map Info"
 
-# One more reason for happiness display on city manager
-HAPPY_REASON_FEATS "Svátky Divu"
+

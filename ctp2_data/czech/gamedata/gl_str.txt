@@ -737,15 +737,15 @@ PERSONALITY_CALLENBACH_DESCRIPTION		"Populist Zealot"
 
 ### Age Strings ###
 
-AGE_ONE						"Ancient"
+AGE_ONE						"Starobylá"
 AGE_TWO						"Classic"
 AGE_THREE					"Middle Ages"
-AGE_FOUR					"Renaissance"
+AGE_FOUR					"Renezance"
 AGE_FIVE					"Industrial"
-AGE_SIX						"Modern"
+AGE_SIX						"Moderní"
 AGE_SEVEN					"Information Age"
-AGE_EIGHT					"Genetic"
-AGE_NINE					"Diamond"
+AGE_EIGHT					"Genetická"
+AGE_NINE					"Diamantová"
 AGE_TEN						"Future"
 
 ### City Style Strings ###
