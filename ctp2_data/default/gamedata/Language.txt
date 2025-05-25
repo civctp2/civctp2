@@ -106,7 +106,6 @@ LANGUAGE_POLISH {
 	IsoCode "pl"
 	Description INFO_POLISH
 	Directory "polish"
-	Disabled
 }
 
 ## 8 ##########################################################

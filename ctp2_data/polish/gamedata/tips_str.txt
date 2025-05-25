@@ -1,3 +1,52 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Tooltip and status bar strings (Polish)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the localized strings for tooltips and the status bar.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Added new tooltips for national management dialog. (L. Hirth Added 6/2004)
+# - Added new statusbartip for new optimize specialist button, in the 
+#   city manager. - April 7th 2005 Martin Gühmann
+# - Moved Diplomacy Embargo Button strings from add_str.txt (Aug 14th 2005 Martin Gühmann)
+# - Added strings for political map - 6-Jul-2009 EPW
+# - Added strings for capitol button -5-Jan-10 EPW
+# - Added strings for relationship button -7-Jan-10 EPW
+#
+#----------------------------------------------------------------------------
+
 # Control Panel
 STATUSBAR_END_TURN_BUTTON	"Kliknij ZAKONCZ TURE, gdy bedziesz chcial zakonczyc ture."
 TOOLTIP_END_TURN_BUTTON		"Konczy twoja ture"
@@ -137,14 +186,12 @@ STATUSBAR_TILEIMP_SELECT_RIG2_BUTTON	"Nowocz. kopalnie podmorskie musza byc umie
 TOOLTIP_TILEIMP_SELECT_RIG2_BUTTON	"Nowocz. kopalnia podmorska"
 STATUSBAR_TILEIMP_SELECT_RIG3_BUTTON	"Zespol kopaln podmorskich musi byc umieszczany na segmentach glebokiej wody."
 TOOLTIP_TILEIMP_SELECT_RIG3_BUTTON	"Zespol kopaln podmorskich"
-
 STATUSBAR_TILEIMP_SELECT_TUNNEL_BUTTON	"Tunel podmorski musi byc umieszczony na segmencie oceanicznym."
 TOOLTIP_TILEIMP_SELECT_TUNNEL_BUTTON	"Tunel podmorski"
 STATUSBAR_TILEIMP_SELECT_PIER1_BUTTON	"Porty musza byc umieszczane na segmentach oceanicznych blisko brzegu."
 TOOLTIP_TILEIMP_SELECT_PIER1_BUTTON	"Port"
 STATUSBAR_TILEIMP_SELECT_PIER2_BUTTON	"Platformy wiertnicze musza byc umieszczane na segmentach oceanicznych."
 TOOLTIP_TILEIMP_SELECT_PIER2_BUTTON	"Platforma wiertnicza"
-
 STATUSBAR_TILEIMP_SELECT_PIER3_BUTTON	"Pier3 must be placed on an ocean tile near the shore."
 TOOLTIP_TILEIMP_SELECT_PIER3_BUTTON	"Pier3 - TBD"
 STATUSBAR_TILEIMP_SELECT_LISTENPOST_BUTTON	"Posterunek musi byc umieszczony na segmencie ladu blisko granicy."
@@ -222,6 +269,8 @@ TOOLTIP_MESSAGES_READNEWSPAPER_BUTTON	"Read Newspaper"
 # aka "The Helm"
 STATUSBAR_SHORTCUTPAD_YEARTURN_TOGGLE_BUTTON	"Kliknij aby zmienic tury/lata."
 TOOLTIP_SHORTCUTPAD_YEARTURN_TOGGLE_BUTTON	"tury/lata"
+STATUSBAR_DOUGS_PROG					"Armies with orders (sentinel/fortified: dark)."
+TOOLTIP_DOUGS_PROG					"Armies with orders"
 STATUSBAR_SHORTCUTPAD_GOTO_CIVSCR_BUTTON	"Kliknij tu aby otworzyc ekran Zarzadcy Imperium."
 TOOLTIP_SHORTCUTPAD_GOTO_CIVSCR_BUTTON		"Zarzadca Imperium"
 STATUSBAR_SHORTCUTPAD_GOTO_SCIENCESCR_BUTTON	"Kliknij tu aby otworzyc ekran Zarzadcy Naukowego."
@@ -252,6 +301,12 @@ STATUSBAR_MINIMAP_SHOW_TRADE_BUTTON 		"Kliknij tu aby pokazac lub ukryc szlaki h
 TOOLTIP_MINIMAP_SHOW_TRADE_BUTTON		"Pokaz/Ukryj Szlaki handlowe"
 STATUSBAR_MINIMAP_SHOW_TERRAIN_BUTTON 		"Kliknij tu aby pokazac lub ukryc szczegoly terenu."
 TOOLTIP_MINIMAP_SHOW_TERRAIN_BUTTON		"Pokaz/Ukryj Szczegoly terenu"
+STATUSBAR_MINIMAP_SHOW_POLITICAL_BUTTON			"Click to show or hide political map."
+TOOLTIP_MINIMAP_SHOW_POLITICAL_BUTTON			"Show/Hide Political Map"
+STATUSBAR_MINIMAP_SHOW_CAPITOLS_BUTTON			"Click to show or hide city capitols."
+TOOLTIP_MINIMAP_SHOW_CAPITOLS_BUTTON			"Show/Hide Capitols"
+STATUSBAR_MINIMAP_SHOW_RELATIONS_BUTTON			"Click to show or hide relationships."
+TOOLTIP_MINIMAP_SHOW_RELATIONS_BUTTON			"Show/Hide Relationships"
 
 # Empire Manager Screen
 #
@@ -552,9 +607,13 @@ TOOLTIP_CITYMAN_MAIN_CITYPOP_DISPLAY		"This city's total population"
 STATUSBAR_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Kliknij tu aby edytowac kolejke budowy dla tego miasta."
 TOOLTIP_CITYMAN_MAIN_GOTOQUEUE_BUTTON		"Go to Build Queue"
 STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON		"Kliknij tu aby otworzyc ekran Wielkiej Biblioteki."
+TOOLTIP_CITYMAN_MAIN_OPTIMIZESPEC_BUTTON		"Optimize Specialists"
+STATUSBAR_CITYMAN_MAIN_GOTOGL_BUTTON			"Click here to go to the Great Library."
 TOOLTIP_CITYMAN_MAIN_GOTOGL_BUTTON		"Go to Great Library"
 STATUSBAR_CITYMAN_MAIN_INSERT_BUTTON		"Z lewej kolumny wybierz obiekt i kliknij tu aby wstawic go do aktualnej kolejki."
 TOOLTIP_CITYMAN_MAIN_INSERT_BUTTON		"Insert Build Queue"
+STATUSBAR_CITYMAN_MAIN_SUGGEST_BUTTON			"Click here to add a build item suggested by the city advisor."
+TOOLTIP_CITYMAN_MAIN_SUGGEST_BUTTON			"Add suggested build item"
 STATUSBAR_CITYMAN_MAIN_APPEND_BUTTON		"Click here to add this queue onto the end of all the selected cities' build queues."
 TOOLTIP_CITYMAN_MAIN_APPEND_BUTTON		"Append Build Queue"
 STATUSBAR_CITYMAN_MAIN_OVERWRITE_BUTTON		"Click here to replace current queues with this one."
@@ -587,12 +646,32 @@ STATUSBAR_CITYMAN_NATL_SUMM_SORTPOLL_BUTTON	"Kliknij tu aby posortowac liste wed
 TOOLTIP_CITYMAN_NATL_SUMM_SORTPOLL_BUTTON	"Wedlug poziomu zanieczyszczen"
 STATUSBAR_CITYMAN_NATL_SUMM_SORTCRIME_BUTTON	"Kliknij tu aby posortowac liste wedlug poziomu przestepczosci."
 TOOLTIP_CITYMAN_NATL_SUMM_SORTCRIME_BUTTON	"Wedlug poziomu przestepczosci"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTCONV_BUTTON		"Click here to sort by gold loss due conversion."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCONV_BUTTON		"Sort by loss due to conversion"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTFRAN_BUTTON		"Click here to sort by production loss due to franchising."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFRAN_BUTTON		"Sort by loss due to franchising"
 STATUSBAR_CITYMAN_NATL_SUMM_EXIT_BUTTON       	"Kliknij tu aby zamknac ekran Zarzadcy Narodowego."
 TOOLTIP_CITYMAN_NATL_SUMM_EXIT_BUTTON       	"Zamknij"
 STATUSBAR_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON	"Kliknij tu aby posortowac liste wedlug statusu burmistrza."
 TOOLTIP_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON	"Wedlug "
 STATUSBAR_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON	"Kliknij tu aby posortowac liste wedlug zadan burmistrza."
 TOOLTIP_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON	"Wedlug zadan burmistrza"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"Click here to sort by the number of farmers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTFARMER_BUTTON		"Sort by farmers"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"Click here to sort by the number of laborers."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTLABORER_BUTTON		"Sort by laborers"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"Click here to sort by the number of merchants."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMERCHANT_BUTTON		"Sort by merchants"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON	"Click here to sort by the number of scientists."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTSCIENTIST_BUTTON		"Sort by scientists"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"Click here to sort by the number of military units."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTCOMBAT_UNITS_BUTTON	"Sort by military units"
+STATUSBAR_CITYMAN_NATL_SUMM_EXIT_BUTTON			"Click here to close the National Management Screen."
+TOOLTIP_CITYMAN_NATL_SUMM_EXIT_BUTTON			"Close"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON		"Click here to sort list by mayor status."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTMAYOR_BUTTON		"Sort by mayor"
+STATUSBAR_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON		"Click here to sort list by mayor's priority."
+TOOLTIP_CITYMAN_NATL_SUMM_SORTPRIOR_BUTTON		"Sort by priority"
 
 #	National Summary Advice Window
 STATUSBAR_CITYMAN_NATL_ADV_ADVREC_DISPLAY		"This is the National Advisor's recommendation for your next action."
@@ -709,6 +788,10 @@ STATUSBAR_DIPMAN_TABLE_CLOSE_BUTTON			"Click here to return to your empire."
 TOOLTIP_DIPMAN_TABLE_CLOSE_BUTTON			"Exit Negotiations"
 STATUSBAR_DIPMAN_TABLE_VIEWFULLTEXT_BUTTON	"Double-click here to review the full text of this proposal."
 TOOLTIP_DIPMAN_TABLE_VIEWFULLTEXT_BUTTON		"Review Full Proposal"
+
+# Diplomacy Manager Embargo Button
+TOOLTIP_DIPMAN_TABLE_EMBARGO_BUTTON		"Declare an Embargo"
+STATUSBAR_DIPMAN_TABLE_EMBARGO_BUTTON		"Kliknij tu aby wstrzymac handel z dana nacja."
 
 #	Respond To Proposal Window
 STATUSBAR_DIPMAN_RESPOND_REJECT_BUTTON		"Odrzuc ta propozycje"

@@ -61,7 +61,7 @@ IA_SELL_IMPROVEMENT			"Sprzedanie z tego miasta ulepszenia o nazwie {building[0]
 IA_FREE_SLAVES				"Czy chcesz wypuscic niewolnikow pracujacych w miescie {city[0].name}? "
 IA_POLLUTION_ENDS_GOVERNMENT		"Ludzie nie mogac dluzej zniesc klamstw i obludy panujacego w naszym rzadzie, sila doprowadzili do jego obalenia. Teraz w Naszym kraju panuje anarchia."
 IA_MAX_CITIES_REACHED			"Osiagnales maksymalna ilosc miast mozliwych do utrzymania w tym ustroju.  Jesli bedziesz dalej powiekszal swoje imperium, uczynisz swoich obywateli nieszczesliwych.  Byc moze powinienes rozwazyc zmiane ustroju?"
-IA_SETTLING_TOO_CLOSE			"Nie mozesz zbudowac nowego miasta w obszarze juz istniejacego. Powinnismy poszukac nowej lokacji dla przyszlego miasta, takiej ktora pozwoli na jego swobodny rozwoj."
+IA_SETTLING_TOO_CLOSE			"Nie mozesz zbudowac nowego miasta w obszarze miasta {city[0].name} juz istniejacego. Powinnismy poszukac nowej lokacji dla przyszlego miasta, takiej ktora pozwoli na jego swobodny rozwoj."
 IA_CITY_WILL_STARVE_INITIAL_WARNING	"{player[0].sir_cap}, miasto {city[0].name} produkuje zbyt malo zywnosci aby wyzywic swoich mieszkancow.  Ludzie niedlugo zaczna korzystac z zapasow zywnosci aby uchronic sie przed glodem."
 IA_CITY_WILL_STARVE_FOOD_STORES_LOW	"{player[0].sir_cap}, miasto {city[0].name} prawie calkowicie wyczerpalo swoje zapasy zywnosci.  Jesli mieszkancy nie beda produkowac wiecej zywnosci niedlugo moga zaczac glodowac."
 IA_CITY_WILL_STARVE			"W miescie {city[0].name} zabraklo zywnosci.  Jesli zakonczysz tura mieszkancy zaczna przymierac glodem. Czy chcesz teraz zakonczyc ture?"
@@ -79,9 +79,9 @@ IA_WAR_DISCONTENT_RISING		"{player[0].sir_cap}, poniewaz zbyt duzo jednostek woj
 TREATY_TO_EXPIRE				"Nasz traktat pokojowy z {player[0].civ_name_plural} jest bliski wygasniecia."
 BROKE_TREATY				"{player[0].civ_name_singular} zerwali traktat z nacja {player[1].civ_name_plural}."
 NO_PIRACY_BROKEN			"{player[0].civ_name_singular} zostali przylapani na pladrowaniu naszych szlakow handlowych."
-ECOPACT_BROKEN				"{player[0].civ_name_singular} naruszyli pakt ekologicznty ktory z nami podpisali.  Ich miasta zatruwaja caly swiat!"
+ECOPACT_BROKEN				"{player[0].civ_name_singular} naruszyli pakt ekologicznty ktory z nami podpisali. Ich miasta zatruwaja caly swiat!"
 ECOPACT_BROKEN_BY_YOU			"{player[0].sir_cap}, zalamalismy pakt ekologiczny ktory podpisalismy z nacja {player[1].civ_name_plural}.  Oni nie sa z tego zadowoleni!"
-ECOPACT_BROKEN_BY_3RD			"{player[0].sir_cap}, {player[0].civ_name_plural} zlamali pakt ekologiczny  ktory podpisali z nacja {player[1].civ_name_plural}."
+ECOPACT_BROKEN_BY_3RD			"{player[0].sir_cap}, {player[0].civ_name_plural} zlamali pakt ekologiczny ktory podpisali z nacja {player[1].civ_name_plural}."
 MILITARY_PACT_BROKEN_BY_YOU		"{player[0].sir_cap}, nie wysylajac swoich wojsk na pomoc nacji {player[1].civ_name_plural}, naruszylismy pakt wojskowy ktory z nimi podisalismy.  {player[1].civ_name_singular} czuja sie oszukani."
 MILITARY_PACT_BROKEN_BY_AI		"{player[0].sir_cap}, {player[1].civ_name_plural} nie dotrzymali zalozen paktu wojskowego ktory z nami podpisali, nie udzielili nam pomocy wojskowej w chwili gdy byla nam potrzebna."
 MILITARY_PACT_BROKEN_BY_3RD 		"{player[0}.sir_cap}, {player[1].country_name} zlamala pakt wojskowy ktory podpisala z nacja {player[2].civ_name_plural}."
@@ -109,49 +109,57 @@ END_POLLUTION_BROKEN_BY_YOU		"Zdradzile(a)s pakt o zaprzestaniu zanieczyszczania
 ATTACK_ENEMY_BROKEN				"{player[0].civ_name_plural} zdradzili swoja umowe o zaatakowaniu {player[1].civ_name_plural."
 ATTACK_ENEMY_BROKEN_BY_YOU		"Zdradzile(a)s twoja umowe z {player[0].civ_name_plural} o zaatakowaniu {player[1].civ_name_plural}."
 
+
 ## Empire & City Related ##
-UNIT_COMPLETED 				"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}."
-NEW_UNIT_COMPLETED 			"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}.  Nastepny obiekt w kolejce to: {action[0].name}."
-CITY_BUILD_QUEUE_IS_EMPTY 		"Kolejka budowy w miescie {city[0].name} jest pusta."
-UNIT_COMPLETED_QUEUE_EMPTY 		"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
-BUILDING_BUILT 				"W miescie {city[0].name} zakonczono budowe {building[0].name}.  Nastepny obiekt w kolejce to: {action[0].name}."
-BUILDING_BUILT_QUEUE_EMPTY 		"W miescie {city[0].name} zakonczono budowe {building[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
-WONDER_BUILT 				"W miescie {city[0].name} zakonczono budowe Cudu Swiata: {wonder[0].name#ARTICLE}{wonder[0].name}.  Nastepny obiekt w kolejce to: {action[0].name}."
-WONDER_BUILT_QUEUE_EMPTY 		"W miescie {city[0].name} zakonczono budowe Cudu Swiata: {wonder[0].name#ARTICLE}{wonder[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
-ENDGAME_BUILT 				"W miescie {city[0].name} zakonczono budowe {action[0].name}.  Nastepny obiekt w kolejce to: {action[1].name}."
-ENDGAME_BUILT_QUEUE_EMPTY 		"W miescie {city[0].name} zakonczono budowe {action[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
-CITY_INEFFICIENCY 			"Ludzie w miescie {city[0].name} usiluja budowac obiekt ktory jest przestarzaly.  Powinnismy wydac im nowe rozkazy."
-CITY_IS_CELEBRATING_HAPPINESS 		"{player[0].sir_cap}, obywatele miasta {city[0].name} swietuja ku Twojej czci.  Sa dumni, ze naleza do narodu {player[0].civ_name_plural} i maja tak wspanialego przywodce jak Ty."
-CRISIS_CITY_IS_INFECTED 		"Ludzie w miescie {city[0].name} cierpia z powodu choroby jaka wywolal u nas wrogi bio-terorysta. Powinnismy pozamykac wszystkie szlaki handlowe przechodzace przez to miasto,  ryzyko zarazenia jest zbyt wysokie."
-CITY_RIOTING 				"W miescie {city[0].name} jest bunt!!  Tlumy rozwscieczonych obywateli grabia i niszcza miasto.  policja jest bezsilna a sytuacja sie pogarsza."
-NEW_CIV 				"Ludnosci w miescie {city[0].name} nalezacym {player[0].civ_name_plural} zbuntowalo sie przeciwko swojemu wladzy i stowrzylo nowe imperium.  Od teraz uwazaja sie za {player[1].civ_name_plural}. "
-CITY_NEW_OWNER 				"{player[1].civ_name_singular} zdobyli {city[0].name} miasto {player[0].civ_name_plural}."
-CIV_NEW_GOV 				"Nasi zagraniczni informatorzy donosza, ze {player[0].civ_name_singular} zmienili swoj ustroj polityczny na {gov[0].name}."
-NEW_GOV_ENACTED  			"Nasz narod wylania sie z mrokow tyrani i zmienia swoja forme rzadow."
-SEA_CITY_BUILDER 			"Nasze naukowe osiagniecia otworzyly przed Nami nowe drogi rozwoju. Miasto {city[0].name} rozpoczelo kolonizacje oceanu."
-NOT_ENOUGH_GOLD 			"{player[0].sir_cap}, Nasz skarbiec zaczyna swiecic pustkami.  Musimy zwiekszyc nasze dochody, gdyz w przeciwnym razie bedziemy zmuszeni do sprzedazy budynkow w miescie aby moc pokryc aktualne wydatki!"
-NO_MAINT 				"Z powodu braku funduszy zostalismy zmuszeni do sprzedania ulepszenia: {building[0].name} znajdujacego sie w miescie {city[0].name}."
-BARBARIAN_WARNING 			"W poblizu miasta {city[0].name} zauwazono barbarzyncow."
-WAGE_LEVEL_RESET 			"Nie mamy wystarczajacej ilosci pieniedzy aby wyplacic wynagrodzenie mieszkancom miasta.  Zostalismy zmuszeni do obnizenia ich plac do takiego poziomu jaki jestesmy w stanie pokryc."
-CANT_BUILD_UNIT_CELL_IS_FULL 		"W miescie {city[0].name} zostala wstrzymana budowa nowej jednostki znajdujacej sie w kolejce. W tym miescie jest juz 12 jednostek, co stanowi maksymalna dopuszczalna ilosc jednostek na segment. Musimy przeniesc conajmniej jedna jednostke z miasta {city[0].name} aby mozliwa byla dalsza produkcja jednostek w tym miescie."
-BUILDING_SETTLER_CITY_OF_ONE 		"W miescie {city[0].name} dobiega konca budowa jednostki {unitrecord[0].name}. Poniewaz wskaznik populacji w miescie {city[0].name} wynosci jeden, budowa jednostki {unitrecord[0].name} spowoduje rozwiazanie miasta. Czy chcesz ja wybudowac mimo to?"
-CITY_DESTROYED_BY_STARVING  		"Wszyscy obywatele w miescie {city[0].name} zmarli z glodu."
-CITY_DESTROYED_BY_WAR  			"Miasto {city[0].name} zostalo calkowicie zniszczone przez wrogie wojska.  Zaden z jego mieszkancow nie zdolal przezyc ataku."
-CRISIS_CITIES_IN_REVOLT 		"{player[0].sir_cap}, przynosimy zle wiadomosci z miasta {city[0].name}.  Jego mieszkancy nie chca juz Ciebie dluzej sluchac.  Dobrowadzili do byntu i stworzyli wlasne imperium."
-CRISIS_CITY_IS_NANO_INFECTED 		"{player[0].sir_cap}, Miasto {city[0].name} zostalo zarazone przez wrogiego agenta.  Powinnismy pozamykac wszystkie szlaki handlowe, tak aby inne miasta nie zostaly zarazone."
-SEA_CITY_OTHERS 			"{player[0].sir_cap}, Otrzymalismy informacje ze {player[1].civ_name_singular} zalozyli swoja pierwsza podmorska kolonie."
-UNIT_DISBANDED_ON_GOV_CHANGE 		"{player[0].sir_cap}, z powodu zmiany ustroju czesc z naszych jednostek zostala rozwiazana."
+UNIT_COMPLETED				"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}."
+NEW_UNIT_COMPLETED			"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}.  Nastepny obiekt w kolejce to: {action[0].name}."
+CITY_BUILD_QUEUE_IS_EMPTY		"Kolejka budowy w miescie {city[0].name} jest pusta."
+TITLE_CITY_BUILD_QUEUE_IS_EMPTY		"{city[0].name}"
+UNIT_COMPLETED_QUEUE_EMPTY		"Nowa jednostka {unit[0].name} jest gotowa w miescie {city[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
+BUILDING_BUILT				"W miescie {city[0].name} zakonczono budowe {building[0].name}.  Nastepny obiekt w kolejce to: {action[0].name}."
+BUILDING_BUILT_QUEUE_EMPTY		"W miescie {city[0].name} zakonczono budowe {building[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
+WONDER_BUILT				"W miescie {city[0].name} zakonczono budowe Cudu Swiata: {wonder[0].name#ARTICLE}{wonder[0].name}.  Nastepny obiekt w kolejce to: {action[0].name}."
+WONDER_BUILT_QUEUE_EMPTY		"W miescie {city[0].name} zakonczono budowe Cudu Swiata: {wonder[0].name#ARTICLE}{wonder[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
+ENDGAME_BUILT				"W miescie {city[0].name} zakonczono budowe {action[0].name}.  Nastepny obiekt w kolejce to: {action[1].name}."
+ENDGAME_BUILT_QUEUE_EMPTY		"W miescie {city[0].name} zakonczono budowe {action[0].name}.  Kolejka budowy w miescie {city[0].name} jest pusta."
+CITY_INEFFICIENCY			"Ludzie w miescie {city[0].name} usiluja budowac obiekt ktory jest przestarzaly.  Powinnismy wydac im nowe rozkazy."
+CITY_IS_CELEBRATING_HAPPINESS		"{player[0].sir_cap}, obywatele miasta {city[0].name} swietuja ku Twojej czci.  Sa dumni, ze naleza do narodu {player[0].civ_name_plural} i maja tak wspanialego przywodce jak Ty."
+CRISIS_CITY_IS_INFECTED			"Ludzie w miescie {city[0].name} cierpia z powodu choroby jaka wywolal u nas wrogi bio-terorysta. Powinnismy pozamykac wszystkie szlaki handlowe przechodzace przez to miasto,  ryzyko zarazenia jest zbyt wysokie."
+CITY_RIOTING				"W miescie {city[0].name} jest bunt!!  Tlumy rozwscieczonych obywateli grabia i niszcza miasto.  policja jest bezsilna a sytuacja sie pogarsza."
+NEW_CIV					"Ludnosci w miescie {city[0].name} nalezacym {player[0].civ_name_plural} zbuntowalo sie przeciwko swojemu wladzy i stowrzylo nowe imperium.  Od teraz uwazaja sie za {player[1].civ_name_plural}. "
+CIV_NEW_GOV					"Nasi zagraniczni informatorzy donosza, ze {player[0].civ_name_singular} zmienili swoj ustroj polityczny na {gov[0].name}."
+CITY_NEW_OWNER					"{player[1].civ_name_singular} zdobyli {city[0].name} miasto {player[0].civ_name_plural}."
+NEW_GOV_ENACTED				"Nasz narod wylania sie z mrokow tyrani i zmienia swoja forme rzadow."
+SEA_CITY_BUILDER			"Nasze naukowe osiagniecia otworzyly przed Nami nowe drogi rozwoju. Miasto {city[0].name} rozpoczelo kolonizacje oceanu."
+NOT_ENOUGH_GOLD				"{player[0].sir_cap}, Nasz skarbiec zaczyna swiecic pustkami.  Musimy zwiekszyc nasze dochody, gdyz w przeciwnym razie bedziemy zmuszeni do sprzedazy budynkow w miescie aby moc pokryc aktualne wydatki!"
+NO_MAINT				"Z powodu braku funduszy zostalismy zmuszeni do sprzedania ulepszenia: {building[0].name} znajdujacego sie w miescie {city[0].name}."
+BARBARIAN_WARNING			"W poblizu miasta {city[0].name} zauwazono barbarzyncow."
+WAGE_LEVEL_RESET			"Nie mamy wystarczajacej ilosci pieniedzy aby wyplacic wynagrodzenie mieszkancom miasta.  Zostalismy zmuszeni do obnizenia ich plac do takiego poziomu jaki jestesmy w stanie pokryc."
+CANT_BUILD_UNIT_CELL_IS_FULL		"W miescie {city[0].name} zostala wstrzymana budowa nowej jednostki znajdujacej sie w kolejce. W tym miescie jest juz 12 jednostek, co stanowi maksymalna dopuszczalna ilosc jednostek na segment. Musimy przeniesc conajmniej jedna jednostke z miasta {city[0].name} aby mozliwa byla dalsza produkcja jednostek w tym miescie."
+BUILDING_SETTLER_CITY_OF_ONE		"W miescie {city[0].name} dobiega konca budowa jednostki {unitrecord[0].name}. Poniewaz wskaznik populacji w miescie {city[0].name} wynosci jeden, budowa jednostki {unitrecord[0].name} spowoduje rozwiazanie miasta. Czy chcesz ja wybudowac mimo to?"
+CITY_DESTROYED_BY_STARVING		"Wszyscy obywatele w miescie {city[0].name} zmarli z glodu."
+CITY_DESTROYED_BY_WAR			"Miasto {city[0].name} zostalo calkowicie zniszczone przez wrogie wojska.  Zaden z jego mieszkancow nie zdolal przezyc ataku."
+CRISIS_CITIES_IN_REVOLT			"{player[0].sir_cap}, przynosimy zle wiadomosci z miasta {city[0].name}.  Jego mieszkancy nie chca juz Ciebie dluzej sluchac.  Dobrowadzili do byntu i stworzyli wlasne imperium."
+CRISIS_CITY_IS_NANO_INFECTED		"{player[0].sir_cap}, Miasto {city[0].name} zostalo zarazone przez wrogiego agenta.  Powinnismy pozamykac wszystkie szlaki handlowe, tak aby inne miasta nie zostaly zarazone."
+SEA_CITY_OTHERS				"{player[0].sir_cap}, Otrzymalismy informacje ze {player[1].civ_name_singular} zalozyli swoja pierwsza podmorska kolonie."
+UNIT_DISBANDED_ON_GOV_CHANGE		"{player[0].sir_cap}, z powodu zmiany ustroju czesc z naszych jednostek zostala rozwiazana."
 
 ## SLIC stuff
-BUTTON_DONT_SHOW_AGAIN 			"Nie pokazuj tego wiecej."
-NEW_CITY_BUILT 				"Zalozyles miasto {city[0].name}."
-WAR_OVER 				"{player[0].civ_name_singular} nie sa juz w stanie wojny z nacja {player[1].civ_name_plural}."
+BUTTON_DONT_SHOW_AGAIN			"Nie pokazuj tego wiecej."
+NEW_CITY_BUILT				"Zalozyles miasto {city[0].name}."
+WAR_OVER				"{player[0].civ_name_singular} nie sa juz w stanie wojny z nacja {player[1].civ_name_plural}."
 
 
 ## Trade Messages ##
-TRADE_PIRATED 				"{player[0].sir_cap}, Nasz szlak handlowy z miasta {city[0].name} do miasta {city[1].name} zostal napadniety przez {player[1].civ_name_plural]."
+TRADE_PIRATED				"{player[0].sir_cap}, Nasz szlak handlowy z miasta {city[0].name} do miasta {city[1].name} zostal napadniety przez {player[1].civ_name_plural]."
+TRADE_PIRATE_BONUS			"The trade route carrying {good[0].name} from {city[0].name} to {city[1].name} has been pirated by the {player[0].civ_name_plural} and {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold was lost."
+TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carrying {good[0].name} from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, {player[1].civ_name_singular} nalozyli embargo handlowe na wszystkie nasze towary.  Wszystkie istniejace szlaki handlowe prowadzace do kraju {player[1].civ_name_plural} zostaly zamkniete!  Stracilismy niestety tez wszystkie przydzielone do nich karawany."
 TRADE_ROUTES_BROKEN_BY_WAR		"Zle wiesci, {player[0].sir}.  Z powodu narastajacych konfliktow mniedzy Nami a panstwem {player[1].civ_name_plural}, wszystkie nasze szlaki handlowe prowadzace do miast {player[1].civ_name_plural} zostaly zamkniete.  Stracilismy niestety tez wszystkie przydzielone do nich karawany."
+TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
+TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
+SENDER_CREATED_TRADE_ROUTE			"{player[0].leader_name} has created a trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, bringing {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
+SENDER_KILLED_TRADE_ROUTE			"{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, which was worth {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE 			"Sprzedaz towaru: {good[0].name} do miasta {city[1].name} dostarczy nam {gold[0].value} sztuk zlota, i wymaga {value[0].value} karawan."
@@ -226,6 +234,7 @@ CAPITAL_CITY_CAPTURED_VICTIM 		"Nasza stolica, miasto {city[0].name} zostalo zdo
 CAPITAL_CITY_CAPTURED_ATTACKER 		"Decydujace zwyciestwo!  zdobylismy stolice {player[0].civ_name_plural}."
 CIV_STARTED_WAR 			"{player[0].civ_name_singular} rozpoczeli walke z panstwem {player[1].civ_name_plural}."
 ADVANCE_FROM_CAPTURING_CITY 		"Dzieki zdobyciu miasta {city[0].name}, uzyskales dostep do wynalazku {advance[0].name}."
+ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}, we were horrified to discover that the {player[1].civ_name_plural} were able not only to take our city of {city[0].name}, but also to steal the secret of {advance[0].name}."
 
 ## Combat ##
 UNIT_VETERAN 				"Za walecznosc, twoja jednostka {unit[0].name} uzyskala status weteranow."
@@ -260,7 +269,7 @@ UPRISING_FAILED_VICTIM 			"Czyjne i lojalne wojska udaremnily wrogiemu abolicjon
 
 ## Conduct Hit ##
 ## Eco-terrorist Attack ##
-CONDUCTHIT_COMPLETE_VICTIM 		"Wplywowa polityk zostal zamordowany w miescie {city[0].name}.  Zamachowcem byl wrogi eko-terorysta, najprawdopodobniej nienawidzacy naszego kraju.  Nasi ludzie rozpaczaja, boja sie i sa bardzo niezadowoleni."
+CONDUCTHIT_COMPLETE_VICTIM		"Wplywowa polityk zostal zamordowany w miescie {city[0].name}.  Zamachowcem byl wrogi eko-terorysta, najprawdopodobniej nienawidzacy naszego kraju.  Nasi ludzie rozpaczaja, boja sie i sa bardzo niezadowoleni."
 CONDUCTHIT_FAILED_VICTIM		"Udalo sie nam powstrzymac wrogiego eko-teroryste przed dokonaniem zamachu politycznego w miescie {city[0].name}."
 CONDUCTHIT_COMPLETE_ATTACKER		"Jednemu z Naszych eko-terorystow udalo sie dokonac zamachu na jednego z politykow przebywajacego w miescie {city[0].name}.  Ludzie na szczesie skierowali cala swoja zlosc na swojego wladce oskarzajac go o brak ochrony w swoim panstwie."
 CONDUCTHIT_FAILED_ATTACK		"Zle nowiny, {player[0].sir}.  Nasz eko-terorysta zostal zlapany zamin udalo mu sie dokanac zamachu w miescie {city[0].name}."
@@ -268,19 +277,22 @@ CONDUCTHIT_FAILED_ATTACK		"Zle nowiny, {player[0].sir}.  Nasz eko-terorysta zost
 ## Convert City ##
 ## Cleric Attack ##
 ## Televangelist Attack ##
-CONVERT_COMPLETE_VICTIM 		"Wroga jednostka: {unitrecord[0].name}, dokonala udanej proby nawrocenia ludnosci w miescie {city[0].name}."
-CONVERT_FAILED_VICTIM 			"Zlapalismy wroga jednostke: {unitrecord[0].name}, probujaca nawrocic ludnosc w miescie {city[0].name}."
-CONVERT_FAILED_ATTACKER 		"Proba nawrocenia ludnosci miasta {city[0].name} na Nasza wiare zakonczyla sie niepowodzeniem, mieszkancy miasta odrzucili Nasza religie."
-PROTECTED_FROM_CONVERSION_BY_WONDER 	"Miasto {city[0].name} jest chronione przed nawracaniem, dzieki Cudowni Swiata o nazwie {wonder[0].name}."
+CONVERT_COMPLETE_VICTIM			"Wroga jednostka: {unitrecord[0].name}, dokonala udanej proby nawrocenia ludnosci w miescie {city[0].name}."
+CONVERT_FAILED_VICTIM			"Zlapalismy wroga jednostke: {unitrecord[0].name}, probujaca nawrocic ludnosc w miescie {city[0].name}."
+CONVERT_FAILED_ATTACKER			"Proba nawrocenia ludnosci miasta {city[0].name} na Nasza wiare zakonczyla sie niepowodzeniem, mieszkancy miasta odrzucili Nasza religie."
+PROTECTED_FROM_CONVERSION_BY_WONDER	"Miasto {city[0].name} jest chronione przed nawracaniem, dzieki Cudowni Swiata o nazwie {wonder[0].name}."
 
 ## Enslave ##
 ## Slaver Attack ##
-SLAVERY_COMPLETE_ATTACKER 		"{player[0].sir_cap}, naszemu lowcy niewolnikow udalo sie pojmac niewolnikow!  Zostana oni teraz przydzieleni do pracy w miescie {city[0].name}."
-SLAVE_COMPLETE_VICTIM 			"Lowca niewolnikow zaatakowal nasze miasto {city[0].name}.  Czesc jego mieszkancow zostal pojmana i wywieziona."
-SLAVE_FAILED_VICTIM 			"Obroncom miasta {city[0].name} udalo sie pojmac wrogiego lowce niewolnikow podczas proby ataku."
-PROTECTED_FROM_SLAVERY_VICTIM 		"Wspaniale wiesci!  Mury obronne w miescie {city[0].name} obronily jego ludnosc przed atakiem lowcy niewolnikow."
-PROTECTED_FROM_SLAVERY_ATTACKER 	"Mury obronne w miescie {city[0].name} przeszkodzily Naszemu lowcy niewolnikow w pojmaniu jego mieszkancow."
+SLAVERY_COMPLETE_ATTACKER		"{player[0].sir_cap}, naszemu lowcy niewolnikow udalo sie pojmac niewolnikow!  Zostana oni teraz przydzieleni do pracy w miescie {city[0].name}."
+SLAVE_COMPLETE_VICTIM			"Lowca niewolnikow zaatakowal nasze miasto {city[0].name}.  Czesc jego mieszkancow zostal pojmana i wywieziona."
+SLAVE_FAILED_VICTIM			"Obroncom miasta {city[0].name} udalo sie pojmac wrogiego lowce niewolnikow podczas proby ataku."
+SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}, our slave raid has failed in {city[0].name}, fortunately our slavers could escape."
+SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}, our slave raid has failed in {city[0].name}, unfortunately our slavers were caught and killed."
+PROTECTED_FROM_SLAVERY_VICTIM		"Wspaniale wiesci!  Mury obronne w miescie {city[0].name} obronily jego ludnosc przed atakiem lowcy niewolnikow."
+PROTECTED_FROM_SLAVERY_ATTACKER	"Mury obronne w miescie {city[0].name} przeszkodzily Naszemu lowcy niewolnikow w pojmaniu jego mieszkancow."
 SETTLER_SLAVED_VICTIM 			"Tragedia!!  Nasi osadnicy znikneli bez sladu.  Najprawdopodobniej za ten bestialski czyn odpowiedzialni sa wrodzy lowcy niewolnikow."
+VICTORY_ENSLAVEMENT_CITY		"Your {unit[0].name} has captured a new slave and sent it to {city[0].name}."
 
 ## Establish Embassy ##
 ## Diplomat Action ##
@@ -333,6 +345,10 @@ INFECTED_VIA_TRADE			"An infectious agent is wreaking havoc in {city[0].name}. I
 ## Cyberninja Attack ##
 INVESTIGATE_CITY_FAILED_VICTIM 		"Our counterintelligence efforts have paid off.  Operatives have thwarted a foreign spy's attempt to investigate our city of {city[0].name}."
 INVESTIGATE_CITY_FAILED_AGRESSOR 	"Our {unitrecord[0].name} was captured while attempting to investigate the city of {city[0].name}."
+# Added 7/2004 L. Hirth
+INVESTIGATE_CITY_FAILED_ESC_VICTIM	"Our counterintelligence efforts have paid off. Operatives have thwarted a foreign spy's attempt to investigate our city of {city[0].name}. But unfortunately we couldn't catch him."
+INVESTIGATE_CITY_FAILED_ESC_AGRESSOR	"Our {unitrecord[0].name} was captured while attempting to investigate the city of {city[0].name}. But luckily he could escape."
+# Added End
 
 ## Nanite Cleansing ##
 ## Eco-Ranger Attack ##
@@ -340,13 +356,6 @@ NANITE_CLEANSE_COMPLETE_VICTIM 		"Dreadful news, {player[0].sir}.  A foreign Eco
 NANITE_CLEANSE_FAILED_VICTIM 		"{player[0].sir_cap}, we have managed to avert an atrocity!  Our city, {city[0].name}, successfully prevented a foreign Eco-Ranger from unleashing a Nanite Cleansing attack."
 NANITE_CLEANSE_COMPLETE_ATTACK 		"Victory, glorious victory!  Our Eco-Ranger has succeeded in leveling the city of {city[0].name} with a Nanite Cleansing attack.  Nature has been restored to its rightful place in that part of the world."
 NANITE_CLEANSE_FAILED_ATTACK 		"Our Eco-Ranger has failed to unleash a Nanite Cleansing attack on the city of {city[0].name}."
-
-#Nano-Terror#
-IMMUNE_TO_NANO_TERROR_VICTIM		"Your people can sleep well again. The city of {city[0].name} is immune to nano-attack."
-NANO_TERROR_FAILED_VICTIM			"Our scientists have foiled an enemy plot to sabotage the industries of {city[0].name} with a nefarious nanological weapon."
-NANO_TERROR_COMPLETE_VICTIM			"Foreign dogs have unleashed a nanological virus on the city of {city[0].name}."
-NANO_TERROR_FAILED_AGRESSOR			"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
-IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."
 
 ## Nuclear Missile ##
 ## Nuke Attack ##
@@ -373,6 +382,7 @@ IMMUNE_TO_PLAGUE_VICTIM 		"{city[0].name} is immune to the insidious effects of 
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY 				"We have succeeded in reforming {city[0].name}.  Its citizens are no longer under foreign influence."
+REFORM_CITY_VICTIM			"The citizens of the formerly converted city of {city[0].name} are no longer under our influence. They used to pay {gold[0].value} gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##
@@ -406,20 +416,20 @@ STOPPED_BY_SPIES_AGRESSOR  		"Foreign counter-intelligence efforts in the city o
 
 ## Sue ##
 ## Lawyer Attack ##
-SUE_COMPLETE_VICTIM 			"We have suffered a legal setback.  A foreign Lawyer has successfully sued our one of our {unitrecord[0].name} units."
-SUE_FAILED_VICTIM 			"A foreign Lawyer has tried in vain to sue one of our {unitrecord[0].name} units.  Justice, however, has prevailed."
-SUE_COMPLETE_ATTACKER 			"Our Lawyer has successfully litigated the destruction of a foreign {unitrecord[0].name}."
-SUE_FAILED_ATTACKER 			"Our Lawyer has failed in its attempt to sue a foreign {unitrecord[0].name}."
-SUE_FRANCHISE_COMPLETE_VICTIM 		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop."
-SUE_FRANCHISE_FAILED_VICTIM 		"Despite the best efforts of a foreign Lawyer, our franchise in the city of {city[0].name} remains in business."
-SUE_FRANCHISE_COMPLETE_ATTACKER 	"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business."
-SUE_FRANCHISE_FAILED_ATTACKER 		"Though our Lawyer fought valiantly, the foreign franchise in {city[0].name} remains to drain even more money from our citizens."
+SUE_COMPLETE_VICTIM			"We have suffered a legal setback. A foreign Lawyer has successfully sued one of our {unitrecord[0].name} units."
+SUE_FAILED_VICTIM			"A foreign Lawyer has tried in vain to sue one of our {unitrecord[0].name} units.  Justice, however, has prevailed."
+SUE_COMPLETE_ATTACKER			"Our Lawyer has successfully litigated the destruction of a foreign {unitrecord[0].name}."
+SUE_FAILED_ATTACKER			"Our Lawyer has failed in its attempt to sue a foreign {unitrecord[0].name}."
+SUE_FRANCHISE_COMPLETE_VICTIM		"Foreign legal action has forced our franchise in the city of {city[0].name} to close up shop."
+SUE_FRANCHISE_FAILED_VICTIM			"Despite the best efforts of a foreign Lawyer, our franchise in the city of {city[0].name} remains in business."
+SUE_FRANCHISE_COMPLETE_ATTACKER		"A Lawyer of ours has successfully sued the foreign franchise in our city of {city[0].name}, forcing it out of business."
+SUE_FRANCHISE_FAILED_ATTACKER		"Though our Lawyer fought valiantly, the foreign franchise in {city[0].name} remains to drain even more money from our citizens."
 
 ## Hold Reception ##
 ## Diplomat Action ##
 ## Empathic Diplomat Action ##
-PARTY_COMPLETE_VICTIM 			"A {player[0].civ_name_singular} {unitrecord[0].name} has held a formal reception in our city of {city[0].name}.  The entertainment was first rate, the food was excellent and everyone had a wonderful evening.  Many of our officials were quite taken with the {player[0].civ_name_plural}, and feel that we should make every effort to set aside our differences and foster a sense of partnership with them."
-PARTY_COMPLETE_ATTACKER 		"Nasz {unitrecord[0].name} zlozyl wizyte w miescie {city[0].name}.  The event, attended by {player[0].civ_name_singular} dignitaries and government officials, went quite well.  Mozemy oczekiwac ze {player[0].civ_name_singular} w przyszlosci beda z nami chetniej wspolpracowac."
+PARTY_COMPLETE_VICTIM				"A {player[0].civ_name_singular} {unitrecord[0].name} has held a formal reception in our city of {city[0].name}. The entertainment was first rate, the food was excellent and everyone had a wonderful evening. Many of our officials were quite taken with the {player[0].civ_name_plural}, and feel that we should make every effort to set aside our differences and foster a sense of partnership with them."
+PARTY_COMPLETE_ATTACKER			"Nasz {unitrecord[0].name} zlozyl wizyte w miescie {city[0].name}. The event, attended by {player[0].civ_name_singular} dignitaries and government officials, went quite well. Mozemy oczekiwac ze {player[0].civ_name_singular} w przyszlosci beda z nami chetniej wspolpracowac."
 
 # Hear Gossip #
 GOSSIP_WARTIME_READINESS		"The {player[0].civ_name_plural} are at wartime readiness"
@@ -466,15 +476,19 @@ GC_ENEMY_ACTIVATION_STOPPED_BY_THEM 	"We just received word that the {player[0].
 ### Multiplayer ###
 ### Hotseat Game Messages ###
 ### Email Game Messages ###
-#NETWORK_PLAYER_LEFT "[action.1.name] has left the game.  A computer player will take control of the exiting player's empire."
-#NETWORK_PLAYER_JOINED "[action.1.name] has taken control of the [player.1.civ_name_plural]"
-#NETWORK_DIFFERENT_PLAYER_JOINED "[action.1.name] is joining as the [player.1.civ_name_plural], but that empire originally belonged to someone else.  Do you wish to eject them?"
-#NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
-#NETWORK_NEW_HOST "[action.1.name] is now the host of this game."
-#NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
-#NETWORK_WAITING_ON_PLAYERS "Waiting on players"
-#NETWORK_WAITING_FOR_DATA "Waiting for data"
-#NETWORK_RESYNCING "Resynchronizing"
+NETWORK_PLAYER_LEFT "{action[0].name} has left the game.  A computer player will take control of the exiting player's empire."
+NETWORK_PLAYER_JOINED "{action[0].name} has taken control of the {player[0].civ_name_plural}"
+NETWORK_DIFFERENT_PLAYER_JOINED "{action[0].name} is joining as the {player[0].civ_name_plural}, but that empire originally belonged to someone else.  Do you wish to eject them?"
+NETWORK_YOU_ARE_NOW_HOST "You are now the host of this game."
+NETWORK_NEW_HOST "{action[0].name} is now the host of this game."
+NETWORK_SESSION_LOST "Connection to host lost, returning to lobby"
+NETWORK_ACTIVENET_LOST "Connection to Activenet server lost, attempting to return to lobby."
+NETWORK_WAITING_ON_PLAYERS "Waiting on players"
+NETWORK_WAITING_FOR_DATA "Waiting for data"
+NETWORK_RESYNCING "Resynchronizing"
+NETWORK_SENDER_SYSTEM			"System"			# Used as the "sender" of chat messages that are sent by the engine, not another player.
+NETWORK_TIME_LEFT			"Time Left"
+NETWORK_CURRENT_PLAYER			"Current player"
 NETWORK_PLAYER_STATUS_HUMAN "Local"
 NETWORK_PLAYER_STATUS_CONNECTED "Connected"
 NETWORK_PLAYER_STATUS_AI_OPEN "AI (Open)"
@@ -486,6 +500,85 @@ HOTSEAT_CITY_ATTACKED			"The {player[0].civ_name_plural} attacked {city[0].name}
 HOTSEAT_ARMY_ATTACKED			"The {player[0].civ_name_plural} attacked your {unit[1].name} with a {unit[0].name}"
 HOTSEAT_HUMAN				"Human"
 HOTSEAT_AI				"Computer"
+
+### Trust Warning Messages ###
+### Global Trust Loss ###
+TRUST_LOST_KILLED_CIVILIAN_UNIT		"{player[0].sir_cap}, we have killed a {player[1].civ_name_singular} civilian unit!  This is considered a war crime in the eyes of the world.  We have not only upset the {player[1].civ_name_plural}, but every other nation."
+TRUST_LOSS_UNPROVOKED_ATTACK		"{player[0].sir_cap}, we have attacked the {player[1].civ_name_plural} without warning or provocation!  They feel deeply betrayed at our violation of standard conduct.  To make matters worse, the world community is now questioning our trustworthiness."
+TRUST_LOSS_VIOLATED_PEACE_TREATY	"{player[0].sir_cap}, by attacking the {player[1].civ_name_plural} we have violated our established peace treaty with them!  They are outraged and will certainly warn the other nations of the world to be wary of us in the future."
+TRUST_LOSS_VIOLATED_MILITARY_PACT	""
+TRUST_LOSS_VIOLATED_ALLIANCE		""
+
+### Nation-specific Trust Loss ###
+TRUST_LOSS_FAIL_TO_WITHDRAW		"{player[0].sir_cap}, we have failed to withdraw our troops from {player[1].civ_name_singular} lands.  They are growing wary of us, and will be hesitant to enter agreements with us in the future."
+TRUST_LOSS_FAIL_TO_STOP_PIRACY		"Because we have continued to pirate {player[1].civ_name_singular} trade routes, they are angry with us.  The {player[1].civ_name_plural} may not trust us in the future."
+TRUST_LOSS_FAIL_TO_REDUCE_WEAPONS	""
+TRUST_LOSS_FAIL_TO_REDUCE_POLLUTION	""
+TRUST_LOSS_VIOLATED_CEASE_FIRE		"{player[0].sir_cap}, we have violated our cease fire with the {player[1].civ_name_plural}.  They are deeply upset with us, and may no longer trust us as a result."
+TRUST_LOSS_VIOLATED_RESEARCH_PACT	"{player[0].sir_cap}, our recent actions have constituted a violation of our Research Pact with the {player[1].civ_name_plural}.  They are now wary of us, and question our intentions."
+TRUST_LOSS_VIOLATED_POLLUTION_PACT	""
+TRUST_LOSS_VIOLATED_TRADE_PACT		"{player[0].sir_cap}, our recent actions have forced us to renege on our Trade Pact with the {player[1].civ_name_plural}.  This is a violation of trust that they will not soon forget!"
+
+#Nano-Terror#
+IMMUNE_TO_NANO_TERROR_VICTIM		"Your people can sleep well again. The city of {city[0].name} is immune to nano-attack."
+NANO_TERROR_FAILED_VICTIM			"Our scientists have foiled an enemy plot to sabotage the industries of {city[0].name} with a nefarious nanological weapon."
+NANO_TERROR_COMPLETE_VICTIM			"Foreign dogs have unleashed a nanological virus on the city of {city[0].name}."
+NANO_TERROR_FAILED_AGRESSOR			"Your quest to save the Earth has fallen on hard times. Your nano-attack has failed."
+IMMUNE_TO_NANO_TERROR_AGRESSOR		"Despite your best efforts, your enemy has foreseen your cunning nature. The city that you targeted for nano-attack is immune."
+
+### From the tutorial moved to the common game
+T_NO_KILL_CIVILIAN "Attacking the {player[0].civ_name_singular} {unitrecord[0].name} has caused diplomatic tension.\n\nIn the future, you can Expel civilian units like the {unitrecord[0].name} and not risk losing the trust of other nations.  Select any of your military units and use the <c:0,50,200>Expel<e> order." 
+
+#Miscellaneous
+MOVED_ALL_ARMIES_GENIUS "You have moved all of your armies, you must be some kind of genius!"
+
+########################################
+### New City Capture Option strings 2.0
+########################################
+
+DESTROY_CITY_TITLE			"Incorporate or destroy city?"
+DESTROY_CITY				"{player[0].leader_name#SIR_CAP}, we conquered the city {city[0].name}. Thousands of citizens await your decision with fear: You can enslave the local population and raze the city to the ground, or pillage it, sack it and cause a bloodbath to the civil population. But note a bloodbath will lower our regard. Alternatively you can welcome the citizens and their city into your Empire."
+DESTROY_CITY2				"{player[0].leader_name#SIR_CAP}, we conquered the city {city[0].name}. Thousands of citizens await your decision with fear: You can move the local population and raze the city to the ground, or pillage it, sack it and cause a bloodbath to the civil population. But note a bloodbath will lower our regard. Alternatively you can welcome the citizens and their city into our Empire."
+EXTEND_EMPIRE				"Extend Empire"
+BLOODBATH				"Bloodbath"
+REGARD_EVENT_BLOODBATH			"The {player[0].civ_name_plural} take us for cruel murderers, as at our last city capture happend a bloothbath."
+ENSLAVE					"Enslave"
+REGARD_EVENT_ENSLAVE			"The {player[0].civ_name_plural} do not trust us, because we used the last city captures for cheap slave gaining."
+EVACUATE				"Move Citizens" 
+BLOODBATH_MSG_TITLE			"A bloodbath happened!"
+BLOODBATH_MSG				"After the capture of the city {city[0].name} by the {player[0].civ_name_plural} massive red streams of blood flowed through the streets. As far as known no citizien was able to escape from this slaugter."
+ENSLAVE_MSG_TITLE			"Massive Enslaving!"
+ENSLAVE_MSG				"According to the latest reports the {player[0].civ_name_plural} have enslaved all the citizens of the {city[0].name} after pillaging and sacking it."
+EVACUATE_MSG_TITLE			"City Evacuation!"
+EVACUATE_MSG				"After the capture of the city {city[0].name} the {player[0].civ_name_plural} evacuated the city and resettled the population."
+HUGE_SLAVE_UPRISING_TITLE		"Huge Slave Uprising!"
+HUGE_SLAVE_UPRISING			"{player[0].leader_name#SIR_CAP}, our latest enslavement program caused some serious problems in the city {city[0].name}, because of the huge number of new slaves. Many slaves were able to flee in the chaos, they surprised our troop while they slept, killed them and took our equipment."
+HUGE_SLAVE_UPRISING_OTHERS_TITLE	"Huge Slave Uprising!"
+HUGE_SLAVE_UPRISING_OTHERS		"Apparently there were probably a few problems during the lastest enslavement program of the {player[0].civ_name_plural}, the city {city[0].name} and the environs fell into the hands of the recent captured slaves."
+EVACUATE_UNHAPPINESS_TITLE		"Decrease of Happiness because of Resettlements!"
+EVACUATE_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, due to the latest evacuations our cities were able to note a  growth of the population. Unfortunatly the new citizens are angered about the fact that they had to give up their possessions and belongings and had to leave their home. We have to reckon with a lower happiness in the cities of our new citizens in the next time."
+BLOODBATH_UNHAPPINESS_TITLE		"Decrease of Happiness because of Bloodbath!"
+BLOODBATH_UNHAPPINESS			"{player[0].leader_name#SIR_CAP}, the news from the bloodbath in the city {city[0].name} made unshure the inhabitants of our empire, we have to expect a drop of happiness. In addition we lost some reputation at the other civilisations."
+
+#New Messages#
+CAPTURED_CITY_OPTIONS			"The city of {city[0].name} has fallen to our forces! The city is at our mercy, what are your orders?"
+LOST_AT_SEA				"Our {unitrecord[0].name} has been lost at Sea! Remember some units may sink easily on the high seas and pull down with them all onboard units into the deepth!"
+UNIT_UPGRADED				"Our {unitrecord[0].name} has been rearmed and trained as a {unitrecord[1].name}! "
+HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unitrecord[0].name}!"
+INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}."
+GUERRILLA_SPAWN				"Our {unitrecord[0].name} has raised guerrillas to aid our cause!"
+
+# New Messages # Belong somewhere else
+# Doves and hawks there are better names for them
+ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
+CIV2DOVES				"The Dove Party dominates parliament! They have vetoed this aggression."
+CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
+BARBWAR					"These savages threaten our citizens. Pacification operations have begun!"
+
+# New Messages #
+UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
+UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."
+RIOT_CASUALTIES			"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
 
 # Langauages #
 INFO_CHINESE			"The Chinese version is a fan translation and so there are no language specific sound files and no videos in Chinese. The translation is quite complete. Just some  text from the Apolyton Edition is missing. The text files are saved as unicode, which however is not compatible with Call to Power II. Until Call to Power 2 accepts unicode text files or another soltion was found Chinese is disabled. Of course, if you now how you can help with this."

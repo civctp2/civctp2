@@ -1,3 +1,46 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains diplomacy and advisor strings (Polish)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the diplomacy and advisor strings.
+#   It contains nothing else.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Sychronized files between languages.
+#
+#----------------------------------------------------------------------------
+
 	## New DIPLOMACY strings ##
 
 ##
@@ -49,23 +92,24 @@ REGARD_EVENT_ENEMY_NANO_INFECTED_CITY "Nasze podstepne uzycie nanotechnologii do
 REGARD_EVENT_ENEMY_CREATED_PARK "Z powodu dokonania przez nas eko-zaglady, {player[0].civ_name_singular} stracili do nas zaufanie."
 REGARD_EVENT_ENEMY_INJOINED_CITY "Our use of injunctions to thwart productivity in {player[0].civ_name_singular} cities is a source of friction between our nations."
 REGARD_EVENT_ENEMY_PILLAGED "Oni gniewaja sie za to, ze nasze jednostki zniszczyly im udoskonalenia segmentow."
-
+REGARD_EVENT_UNITS_GIFTED				"Your generosity has not been forgotten."
+REGARD_EVENT_WONDER "The {player[0].civ_name_plural} are impressed by the amazing wonders our nation possessess."
 
 ##
 ## Motivations
-## 
+##
 
-MOTIVATION_ENLIST_FRIENDS_ADVICE "Powinnismy poprosic naszych sojusznikow o pomoc w walce z wrogiem."
-MOTIVATION_FEAR_SCIENCE_ADVICE "Nasze zacofanie technologiczne odbija sie niekorzystnie na sile armi.  Powinnismy przeznaczyc wiecej srodkow na badania naukowe bo inaczej nasze wojska beda zawsze ponosic kleske."
-MOTIVATION_FEAR_MILITARY_ADVICE "Nasze wojska sa zbyt slabe i moga nie byc w stanie odeprzec ataku nieprzyjaciela.  Powinnismy wejsc w jakis sojusz aby umocnic nasza pozycje."
-MOTIVATION_FEAR_TRADE_ADVICE "Aby moc rywalizowac z innymi nacjami, powinnismy ozywic nasza ekonomie.  Poszerzajac szlaki i podpisujac pakty handlowe zdobedziemy tak potrzebne nam zloto."
-MOTIVATION_STOP_PIRACY_ADVICE "Nasze szlaki handlowe sa obrabowywane przez nieznanych rozbojnikow.  Powinnismy podjac jakas akcje dyplomatyczna w celu usuniecia tego problemu."
-MOTIVATION_MAKE_FRIEND_ADVICE "Powinnismy wejsc w sojusz z jakims silnym panstwem aby moc jeszcze latwiej dazyc do realizacji naszych celow."
-MOTIVATION_DESIRE_SCIENCE_ADVICE "Obawiam sie, ze nasi rywale sa bardziej rozinieci technologicznie niz my.  Powinnismy poszykac dyplomatycznych sposobow poszerzenia naszej wiedzy."
-MOTIVATION_DESIRE_GOLD_ADVICE "Powinnismy gromadzic wiecej pieniedzy, aby moc zaspokoic nasze bierzace potrzeny."
-MOTIVATION_FEAR_CITY_DEFENSE_ADVICE "Obawiam sie, ze miasto {city[0].name} moze niedlugo dostac sie w rece wroga.  Powinnismy uczynic jakies kroki dyplomatyczne aby temu zapobiec."
-MOTIVATION_FEAR_POLLUTION_ADVICE "Obawiam sie, ze zanieczyszczenia moga przyczynic sie do globalnego ocieplenia co okazalo by sie swiatowym kataklizmem ekologicznym.  Powinnismy zmniejszyc poziom zanieczyszczen w naszym kraju i kazac zrobic to samo innym narodom."
-
+MOTIVATION_ENLIST_FRIENDS_ADVICE			"Powinnismy poprosic naszych sojusznikow o pomoc w walce z wrogiem."
+MOTIVATION_FEAR_SCIENCE_ADVICE				"Nasze zacofanie technologiczne odbija sie niekorzystnie na sile armi.  Powinnismy przeznaczyc wiecej srodkow na badania naukowe bo inaczej nasze wojska beda zawsze ponosic kleske."
+MOTIVATION_FEAR_MILITARY_ADVICE				"Nasze wojska sa zbyt slabe i moga nie byc w stanie odeprzec ataku nieprzyjaciela.  Powinnismy wejsc w jakis sojusz aby umocnic nasza pozycje."
+MOTIVATION_FEAR_TRADE_ADVICE				"Aby moc rywalizowac z innymi nacjami, powinnismy ozywic nasza ekonomie.  Poszerzajac szlaki i podpisujac pakty handlowe zdobedziemy tak potrzebne nam zloto."
+MOTIVATION_FEAR_TECHNOLOGY_ADVICE			"If we do not continue our research, our troops will be soon at the end of their tether."
+MOTIVATION_STOP_PIRACY_ADVICE				"Nasze szlaki handlowe sa obrabowywane przez nieznanych rozbojnikow.  Powinnismy podjac jakas akcje dyplomatyczna w celu usuniecia tego problemu."
+MOTIVATION_MAKE_FRIEND_ADVICE				"Powinnismy wejsc w sojusz z jakims silnym panstwem aby moc jeszcze latwiej dazyc do realizacji naszych celow."
+MOTIVATION_DESIRE_SCIENCE_ADVICE			"Obawiam sie, ze nasi rywale sa bardziej rozinieci technologicznie niz my.  Powinnismy poszykac dyplomatycznych sposobow poszerzenia naszej wiedzy."
+MOTIVATION_DESIRE_GOLD_ADVICE				"Powinnismy gromadzic wiecej pieniedzy, aby moc zaspokoic nasze bierzace potrzeny."
+MOTIVATION_FEAR_CITY_DEFENSE_ADVICE			"Obawiam sie, ze miasto {city[0].name} moze niedlugo dostac sie w rece wroga.  Powinnismy uczynic jakies kroki dyplomatyczne aby temu zapobiec."
+MOTIVATION_FEAR_POLLUTION_ADVICE			"Obawiam sie, ze zanieczyszczenia moga przyczynic sie do globalnego ocieplenia co okazalo by sie swiatowym kataklizmem ekologicznym.  Powinnismy zmniejszyc poziom zanieczyszczen w naszym kraju i kazac zrobic to samo innym narodom."
 
 ##
 ##  Miscellaneous Diplomacy Strings
@@ -91,6 +135,10 @@ DIP_OFFER_GIVE_CITY " Zaproponuj miasto..."
 DIP_REQUEST_GIVE_CITY " Prosba o miasto..."
 DIP_OFFER_WITHDRAW_TROOPS " Zaproponuj wycofanie sie"
 DIP_REQUEST_WITHDRAW_TROOPS " Prosba o wycofanie sie"
+##DIP_OFFER_WITHDRAW_TROOPS_FROM_ALLIE			"Offer withdraw of allie..."
+##DIP_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE		"Requesr withdraw of allie..."
+##DIP_OFFER_INVADE					"Offer invasion..."
+##DIP_REQUEST_INVADE					"Request invasion..."
 DIP_OFFER_STOP_PIRACY " Zaproponuj zaprzestanie piractwa"
 DIP_REQUEST_STOP_PIRACY " Prosba o zaprzestanie piractwa"
 DIP_OFFER_BREAK_AGREEMENT " Zaproponuj zerwanie porozumien..."
@@ -107,6 +155,8 @@ DIP_OFFER_GIVE_ADVANCE " Zaproponuj wynalazek..."
 DIP_REQUEST_GIVE_ADVANCE " Prozba o wynalazek..."
 DIP_OFFER_GIVE_GOLD " Zaproponuj zloto..."
 DIP_REQUEST_GIVE_GOLD " Prozba o zloto..."
+##DIP_OFFER_GIVE_ANNUAL_GOLD				"Offer an annual gold tribute..."
+##DIP_REQUEST_GIVE_ANNUAL_GOLD				"Request an annual gold tribute..."
 DIP_OFFER_REDUCE_POLLUTION " Redukcje poz. zanieczyszczen"
 DIP_REQUEST_REDUCE_POLLUTION " O redukcje poz. zanieczyszczen"
 DIP_OFFER_MAP " Zaproponuj mape"
@@ -139,6 +189,7 @@ DIP_DETAILS_NONE_EX_1 "In exchange, NONE (Tone 1)"
 DIP_DETAILS_NONE_EX_2 "In exchange, NONE (Tone 2)"
 DIP_DETAILS_NONE_EX_3 "In exchange, NONE (Tone 3)"
 DIP_DETAILS_NONE_EX_4 "In exchange, NONE (Tone 4)"
+
 DIP_DETAILS_OFFER_GIVE_CITY_0 "Dla tak cenionej nacji jak Wasza, proponujemy nasze miasto {city[0].name}."
 DIP_DETAILS_OFFER_GIVE_CITY_1 "W duchu naszej przyjazni, proponujemy Wam nasze miasto {city[0].name}."
 DIP_DETAILS_OFFER_GIVE_CITY_2 "Pokornie prosimy Cie o przyjecie daru w postaci miasta {city[0].name}."
@@ -159,6 +210,7 @@ DIP_DETAILS_REQUEST_GIVE_CITY_EX_1 "W zamian zyczliwie prosimy cie o odstapienie
 DIP_DETAILS_REQUEST_GIVE_CITY_EX_2 "W zamian blagamy Cie o danie Nam miasta {city[0].name} pod nasza kontrole."
 DIP_DETAILS_REQUEST_GIVE_CITY_EX_3 "W zamian aby uniknac pozniejszych nieprzyjemnosci, zalecamy Ci bezzwlocznie oddac Nam miasta {city[0].name}."
 DIP_DETAILS_REQUEST_GIVE_CITY_EX_4 "W zamian zadamy abys natychmiast dal Nam pelna kontrole nad miastem {city[0].name}!!"
+
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_0 "Proponujemy Tobie wycofanie naszych wojsk z Twojego kraju i utrzymanie pokoju."
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_1 "Abysmy pozostali w dobrych stosunkach, proponujemy wycofanie swoich wojsk z Waszego kraju."
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_2 "Szybko usuniemy nasze wojska z Waszego imperium.  Nie chcielismy Cie rozgniewac, wybacz."
@@ -179,6 +231,7 @@ DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_1 "W zamian bardzo chcielibysmy abys calk
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_2 "W zamian blagamy Cie abys wycofal Swoja armie z naszych terenow, abysmy dalej mogli zyc w pokoju."
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_3 "W zamian musimy zazadac abys usunal swoje wojska z Naszego kraju!  Twoje zamiary sa wrogie."
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_EX_4 "W zamian, zadamy aby twoje wojska natychmiast opuscily Nasze imerium!!  Nie badz tak glupi i nie prowokuj Nas!"
+
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_FROM_ALLIE_0 "Przyrzekamy usunac nasze wojska z ziem Waszych sojusznikow.  {player[2].civ_name_singular} nie beda juz wiecej niepokojeni przez nasze wojska."
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_FROM_ALLIE_1 "Drogi przywodco, proponujemy Tobie wycofanie naszych wojsk z terytorium zamieszkalego przez {player[2].civ_name_plural} tak szybko jak to tylko mozliwe."
 DIP_DETAILS_OFFER_WITHDRAW_TROOPS_FROM_ALLIE_2 "Przyrzekamy blyskawiczne usuniecie wojsk z terytorium zamieszkalego przez {player[2].civ_name_plural}.  Nie mamy zamiaru Cie prowokowac."
@@ -199,6 +252,7 @@ DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_1 "W zamian wezmieny pod uwage
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_2 "W zamian bedziemy zobowiazani jesli wycofacie wojska z terytorium zamieszkalego przez {player[2].civ_name_plural}."
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_3 "W zamian zadamy natychmiastowego wycofania wojsk z terytorium zamieszkalego przez {player[2].civ_name_plural}."
 DIP_DETAILS_REQUEST_WITHDRAW_TROOPS_FROM_ALLIE_EX_4 "W zamian zadamy calkowitego usuniecia wojsk z terytorium zamieszkalego przez {player[2].civ_name_plural}.  Oni sa Naszymi sojusznikami i maja Nasze wsparcie."
+
 DIP_DETAILS_OFFER_INVADE_0 "Zaatakujemy {player[2].civ_name_plural}, twoich wrogow."
 DIP_DETAILS_OFFER_INVADE_1 "Poniewaz jestesmy zaprzyjaznionymi narodami, zaatakujemy waszych wrogow {player[2].civ_name_plural}."
 DIP_DETAILS_OFFER_INVADE_2 "Proponujemy swoja pomoc w walce z narodem {player[2].civ_name_plural}.  Moze sie przyda."
@@ -219,6 +273,7 @@ DIP_DETAILS_REQUEST_INVADE_EX_1 "W zamian prosimy Cie o przysluge, zaatakuj {pla
 DIP_DETAILS_REQUEST_INVADE_EX_2 "W zamian blagamy Cie, abys pomogl nam w walec z naszymi wrogami.  Prosimy zaatakuj {player[2].civ_name_plural}."
 DIP_DETAILS_REQUEST_INVADE_EX_3 "W zamian zadamy abys, zaatakowal {player[2].civ_name_plural}.  Niech nikt nie pozostanie przy zyciu."
 DIP_DETAILS_REQUEST_INVADE_EX_4 "W zamian zadamy abys, natychmiast zaatakowal {player[2].civ_name_plural}."
+
 DIP_DETAILS_OFFER_STOP_PIRACY_0 "Aby utrzymac nasze dobre stosunki, nie bedziemy napadac na Twoje szlaki handlowe."
 DIP_DETAILS_OFFER_STOP_PIRACY_1 "Przestaniemy napadac na Twoje szlaki handlowe.  Nie chcemy psuc naszych stosunkow."
 DIP_DETAILS_OFFER_STOP_PIRACY_2 "Natychmiast przestaniemy napadac na Wasze szlaki handlowe!  Przepraszamy za zniewage Waszego imperium."
@@ -239,6 +294,7 @@ DIP_DETAILS_REQUEST_STOP_PIRACY_EX_1 "W zamian, abysmy dalej mogli byc przyjacio
 DIP_DETAILS_REQUEST_STOP_PIRACY_EX_2 "W zamian blagamy cie abys przestal ingerowac w dzialalnosc handlowa jaka prowadzimy.  Prosimy, przestan napadac na nasze szlaki handlowe."
 DIP_DETAILS_REQUEST_STOP_PIRACY_EX_3 "W zamian zadamy abys zaprzestal swoj niegodziwy proceder rabowania Naszych szlakow handlowych."
 DIP_DETAILS_REQUEST_STOP_PIRACY_EX_4 "W zamian zadamy zaprzestania aktu pogardy, jakim jest twoje bezmyslne napadanie na nasze szlaki handlowe."
+
 DIP_DETAILS_OFFER_BREAK_AGREEMENT_0 "Pomoc Wam jako naszym przyjaciolom jest bardzo wazna, dlatego zerwiemy wszystkie porozumienia z nacja {player[2].civ_name_plural}."
 DIP_DETAILS_OFFER_BREAK_AGREEMENT_1 "Zerwanie wszystkich porozumien z nacja {player[2].civ_name_plural} potraktujcie jako gest przyjazni i pomocy."
 DIP_DETAILS_OFFER_BREAK_AGREEMENT_2 "Przyrzekamy zlamac wszystkie porozumienia z nacja {player[2].civ_name_plural} tak szybko, jak to tylko mozliwe."
@@ -259,6 +315,7 @@ DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_1 "W zamian musimy Was, naszych przyjacio
 DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_2 "W zamian blagamy cie abys zakonczyl wszystkie istniejace porozumienia z nacja {player[2].civ_name_plural}."
 DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_3 "W zamian zadamy, abyscie zlamali wszystkie porozumienia z nacja {player[2].civ_name_plural}.  Jesli nie chcecie miec w przyszlosci klopotow, musicie sie zgodzic na Nasze zadania."
 DIP_DETAILS_REQUEST_BREAK_AGREEMENT_EX_4 "W zamian zadamy, abyscie zerwali wszelkie porozumienia z nacja {player[2].civ_name_plural}.  Nie wolno sie wam wiecej z nimi zadawac."
+
 DIP_DETAILS_OFFER_STOP_RESEARCH_0 "Przyrzekamy nie prowadzic badan nad {advance[0].name} i zajac sie innym naukowym projektem."
 DIP_DETAILS_OFFER_STOP_RESEARCH_1 "Jestesmy sklonni wstrzymac badania nad aktualnym wynalazkiem {advance[0].name}, aby nie psuc przyjazni miedzy nami."
 DIP_DETAILS_OFFER_STOP_RESEARCH_2 "Natychmiast przestaniemy prowadzic badania nad {advance[0].name}."
@@ -279,6 +336,7 @@ DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_1 "W zamian prosimy cie, abys przerwal bada
 DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_2 "W zamian blagamy cie, abys przerwal badania nad {advance[0].name}."
 DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_3 "W zamian zadamy abys zaprzestal prowadzenia badan nad {advance[0].name}.  Chyba nie chcesz nas rozgniewac?"
 DIP_DETAILS_REQUEST_STOP_RESEARCH_EX_4 "W zamian zadamy przerwania badan nad {advance[0].name} i to szybko."
+
 DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_0 "Dazymu do pokoju miedzy wszystkimi nacjami.  Dlatego, zredukujemy nasz arsenal broni nuklearnej o {value[0].value} procent."
 DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_1 "Dla tak szanowanego panstwa jak Wasze, chetnie zredukujemy nasz aresnal broni nuklearnej o {value[0].value} procent."
 DIP_DETAILS_OFFER_REDUCE_NUCLEAR_WEAPONS_2 "Proponujemy redukcje naszego arsenalu broni nuklearnej o {value[0].value} procent.  Mamy nadzieje, ze zadowoli Was to."
@@ -299,6 +357,7 @@ DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_1 "W zamian prosimy cie abys uszan
 DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_2 "W zamian blagamy cie o {value[0].value} procentowa redukcje arsenalu broni nuklearnej.  Nasze panstwo zyje w strachu przed Toba."
 DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_3 "W zamian zadamy {value[0].value} procentowej redukcji waszego arsenalu broni nuklearnej.  Nie wolno wam odmowic."
 DIP_DETAILS_REQUEST_REDUCE_NUCLEAR_WEAPONS_EX_4 "W zamian zadamy natychmiastowej redukcji arsenalu broni nuklearnej o {value[0].value} procent!  Oczekujemy calkowitej wspolpracy z Nami."
+
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_0 "Aby utrzymac dobre stosunki miedzy nami zobowiazujemy sie zredukowac arenal broni biologicznej o {value[0].value} procent."
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_1 "W duchu przyjazni miedzy naszymi narodami zobowiazujemy sie zredukowac arenal broni biologicznej o {value[0].value} procent."
 DIP_DETAILS_OFFER_REDUCE_BIO_WEAPONS_2 "Chcac sprzyjac tak poteznemu imperium jak Wasze przyrzekamy zredukowac arenal broni biologicznej o {value[0].value} procent."
@@ -319,6 +378,7 @@ DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_1 "W zamian prosimy cie o zmniejszenie
 DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_2 "W zamian blagamy cie, abys zmniejszyl swoj smiercionosny arsenal broni biologicznej o {value[0].value} procent."
 DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_3 "W zamian zadamy jak najszybszej redukcji arsenalu broni biologicznej, o {value[0].value} procent."
 DIP_DETAILS_REQUEST_REDUCE_BIO_WEAPONS_EX_4 "W zamian masz natychmiast zredukowac arsenal broni biologicznej o {value[0].value}!  To nie jest czcze gadanie!"
+
 DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_0 "Aby utrzymac pokoj, zobowiazujemy sie do {value[0].value} procentowego zmniejszenia arsenalu broni nanotechnicznej."
 DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_1 "Poniewaz nie chcemy ryzykowac zerwania z Wami pokoju, przyrzekamy zmniejszyc nasz arsenal broni nanotechnicznej o {value[0].value} procent."
 DIP_DETAILS_OFFER_REDUCE_NANO_WEAPONS_2 "Natychmiast zmniejszymy nasz arsenal broni nanotechnicznej o {value[0].value} procent.  Nie chcemy stwarzac grozby wojny niekonwencjonalnej."
@@ -339,6 +399,7 @@ DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_1 "Prosimy cie o zmniejszenie arsenal
 DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_2 "W zamian blagamy Was o litosc.  Prosimy, zredukujcie Swoj arsenal broni nanotechnicznej o {value[0].value} procent."
 DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_3 "W zamian nalegamy o {value[0].value} procentowa redukcje waszego arsenalu broni nanotechnicznej.  Chyba nie chcecie ponosic pozniejszych konsekwencji odmowy."
 DIP_DETAILS_REQUEST_REDUCE_NANO_WEAPONS_EX_4 "W zamian zadamy {value[0].value} procentowego zmniejszenia arsenalu broni nanotechnicznej.  Masz sie do tego zastosowac, bez zadnych dyskusji."
+
 DIP_DETAILS_OFFER_GIVE_ADVANCE_0 "Powiemy Tobie na czym polega {advance[0].name}, uznaj ten gest jako znak naszej przyjazni."
 DIP_DETAILS_OFFER_GIVE_ADVANCE_1 "Jako, ze nasze narody zyja w zgodzie powiemy Wam na czym polega {advance[0].name}."
 DIP_DETAILS_OFFER_GIVE_ADVANCE_2 "Pokornie prosimy o przyjecie daru w postaci wynalazku {advance[0].name}."
@@ -359,6 +420,7 @@ DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_1 "W zamian prosimy o gest przyjazni jakim b
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_2 "W zamian blagamy cie abys w swojej bezgranicznej wspanialomyslnosci przekazal , nam tak wazna dla nas wiedze, na temat {advance[0].name}."
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_3 "W zamian zadamy abys natychmiast powiedzial na czym polega {advance[0].name}."
 DIP_DETAILS_REQUEST_GIVE_ADVANCE_EX_4 "W zamian zadmy wszystkiego na temat {advance[0].name}.  Twoj narod jest niezdolny do pelnego wykorzystania wiedzy na ten temat i nie ma prawa jej przechowywac."
+
 DIP_DETAILS_OFFER_GIVE_GOLD_0 "Ofiarujemy Tobie {gold[0].value} sztuk zlota na znak naszej przyjazni."
 DIP_DETAILS_OFFER_GIVE_GOLD_1 "Cieszymy sie ze mozemy Tobie przekazac pomoc w postaci {gold[0].value} sztuk zlota."
 DIP_DETAILS_OFFER_GIVE_GOLD_2 "Blagamy cie o przyjecie naszego szczerego daru w postaci {gold[0].value} sztuk zlota."
@@ -379,6 +441,7 @@ DIP_DETAILS_REQUEST_GIVE_GOLD_EX_1 "W zamian uprzejmie prosimy cie o pomoc w pos
 DIP_DETAILS_REQUEST_GIVE_GOLD_EX_2 "W zamian blagamy cie abys udzielil nam pomocy dajac {gold[0].value} sztuk zlota, to zapewni godne zycie naszym ludziom."
 DIP_DETAILS_REQUEST_GIVE_GOLD_EX_3 "W zamian zadamy {gold[0].value} sztuk zlota. Chyba nie chcecie nas rozgniewac."
 DIP_DETAILS_REQUEST_GIVE_GOLD_EX_4 "W zamian zadamy natychmiastowego dania Nam {gold[0].value} sztuk zlota, jako dowodu twojego oddania."
+
 DIP_DETAILS_OFFER_GIVE_ANNUAL_GOLD_0 "Proponujemy Tobie danine w wysokosci {gold[0].value} sztuk zlota co kazda ture, tak aby Twoje panstwo dalej moglo sie rozwijac."
 DIP_DETAILS_OFFER_GIVE_ANNUAL_GOLD_1 "Poniewaz jestesmy zaprzyjaznionymi narodami, proponujemy Tobie danine w wysokosci {gold[0].value} sztuk zlota co kazda ture."
 DIP_DETAILS_OFFER_GIVE_ANNUAL_GOLD_2 "Proponujemy Tobie danine w wysokosci {gold[0].value} sztuk zlota co kazda ture.  Mamy nadzieje, ze dzieki temu darowi bedziemy mogli liczyc pozniej na wzgledy."
@@ -399,6 +462,7 @@ DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_1 "W zamian prosimy Was o danine w wysok
 DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_2 "W zamian blagamy Was o danine w wysokosci {gold[0].value} sztuk zlota co kazda ture.  Prosimy abyscie byli litosciwy."
 DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_3 "W zamian nalegamy abys spelnil nasze zadanie.  Bedziesz Nam dawal {gold[0].value} sztuk zlota co kazda ture."
 DIP_DETAILS_REQUEST_GIVE_ANNUAL_GOLD_EX_4 "W zamian zadamy {gold[0].value} sztuk zlota co kazda ture.  Bedzie dowodem twojej wiernosci."
+
 DIP_DETAILS_OFFER_REDUCE_POLLUTION_0 "Proponujemy redukcje poziomu zanieczyszczen w naszym panstwie do {value[0].value} jednostek lub mniej.  Chcemy aby nasz swiat byl czysty."
 DIP_DETAILS_OFFER_REDUCE_POLLUTION_1 "Chcemy uczynic swiat lepszym miejscem dlatego zobowiazujemu sie zmniejszyc poziom zanieczyszczen do {value[0].value} jednostek lub mniej."
 DIP_DETAILS_OFFER_REDUCE_POLLUTION_2 "Przysiegamy zmniejszyc nasz poziom zanieczyszczen do {value[0].value} jednostek lub mniej, aby zadowolic naszych sasiadow."
@@ -419,6 +483,7 @@ DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_1 "W zamian prosimy Was, jak przyjaciele
 DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_2 "W zamian pokornie blagamy abys obnizyl poziom zanieczyszczen do {value[0].value} jednostek lub mniej.  Nasze dzieci beda wdzieczne."
 DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_3 "W zamian zadamy redukcji poziomu zanieczyszczen do {value[0].value} jednostek lub mniej.  Nigdy nie wygrasz jesli tak bedziesz lekcewazyl srodowisko."
 DIP_DETAILS_REQUEST_REDUCE_POLLUTION_EX_4 "W zamian zadamy natychmiastowego zmniejszenia zanieczyszczen w calym waszym imperium!  Zmniejszenie do poziomu {value[0].value} jednostek lub mniej jest absolutnym minimum jakie mozemy zaakceptowac!"
+
 DIP_DETAILS_OFFER_MAP_0 "Proponujemy swoje mapy, chcemy podzielic sie z Wami wynikami naszych podrozy."
 DIP_DETAILS_OFFER_MAP_1 "Chcac wyrazic wielki szacunek jakim cie darzymy proponujemy przyjecie naszych map."
 DIP_DETAILS_OFFER_MAP_2 "Mamy nadzieje ze danie naszych map tak wielkiej cywilizacji jak Twoja jest wystarczajacym gestem pokory."
@@ -439,6 +504,7 @@ DIP_DETAILS_REQUEST_MAP_EX_1 "W zamian prosimy Was o pokazanie nam swoich map, p
 DIP_DETAILS_REQUEST_MAP_EX_2 "W zamian blagamy Wie o udostepnienie nam Waszych map, tak abysmy mogli poznac otaczajacy nas swiat."
 DIP_DETAILS_REQUEST_MAP_EX_3 "W zamian zadamy Waszych map, abysmy mogli zobaczyc co udalo cie wam odkryc."
 DIP_DETAILS_REQUEST_MAP_EX_4 "W zamian zadamy pelnego odkrycia Nam waszych.  Jesli cos ukryjecie to sie rozgniewamy."
+
 DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_0 "Nie mamy zamiaru lamac naszych obietnic, dlatego uszanujemy nasze porozumienie militarne i zaatakujemy {player[2].civ_name_plural}."
 DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_1 "Chcemy uszanowac nasze porozumienie aby wspierac sie militarnie.  Zaatakujemy {player[2].civ_name_plural} w Twojej obronie."
 DIP_DETAILS_OFFER_HONOR_MILITARY_AGREEMENT_2 "Zaatakujemu {player[2].civ_name_plural}, aby uszanowac nasze porozumienie militarne jakie zawarlismy z Toba."
@@ -459,6 +525,7 @@ DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_1 "W zamian prosimy Was o dotrzy
 DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_2 "W zamian blagamy Was abyscie honorowali porozumienie wojskowe jakie podpisales z nami i zaatakowanie {player[2].civ_name_plural}."
 DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_3 "W zamian zadamy, abys dotrzymywal danego slowa.  Podpisalismy wspolnie porozumienie wojskowe i zadamy jego pelnego honorowania, dlatego masz zaatakowac {player[2].civ_name_plural}."
 DIP_DETAILS_REQUEST_HONOR_MILITARY_AGREEMENT_EX_4 "W zamian zadamy, abys dotrzymal porozumienia wojskowego jakie oboje zawarlismy i natychmiast zaatakowal {player[2].civ_name_plural}.  Konsekwencje zdrady beda dla was straszliwe."
+
 DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_0 "Obiecujemy szanowac nasze porozumienie ekologiczne, utrzymamy poziom zanieczyszczen ponizej {value[0].value} jednostek."
 DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_1 "Jako przyjaciele, zobowiazujemy sie do utrzymania poziomu zanieczyszczen ponizej {value[0].value} jednostek.  Nie chcemy przyczynic sie do pogorszenia naszych stosunkow."
 DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_2 "Przyzekamy honorowac porozumienie ekologiczne jakie zawarlismy z Toba.  Dolozymy wszelkich staran aby zanieczyszczenia wytwarzane przez nasz narod utrzymac na poziomie {value[0].value} jednostek lub mniej."
@@ -479,11 +546,7 @@ DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_1 "W zamian prosimu cie o honor
 DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_2 "W zamian blagamy cie o przestrzeganie porozumienia ekologicznego.  Zgodziles sie utrzymac poziom zanieczyszczen ponizej {value[0].value} jednostek, mamy nadzieje, ze dotrzymasz slowa."
 DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_3 "W zamian zadamy abys zmniejszyl poziom zanieczyszczed do {value[0].value} jednostek lub mniej.  Nie mozesz odwolywac swoich postanowien."
 DIP_DETAILS_REQUEST_HONOR_POLLUTION_AGREEMENT_EX_4 "W zamian zadamy honorowania porozumienia ekologicznego.  Poziom zanieczyszczen w twoim panstwie nie moze przekraczac {value[0].value} jednostek!"
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_0 "W zamian dolozymy wszelkich staran aby utrzymac poziom naszych zanieczyszczen ponizej {value[0].value} jednostek.."
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_1 "W zamian bedziemy honorowac pakt ekologiczny jaki podpisalismy.  Tak jak ustalilismy, obnizymy nasz poziom zanieczyszczen do {value[0].value} jednostek lub mniej."
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_2 "W zamian przyrzekamy honorowac nasze porozumienie ekologiczne.  Zanieczyszczenia nigdy nie przekrocza poziomu {value[0].value} jednostek, tak jak to bylo ustalone w umowie."
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_3 "W zamian bedziemy honorowac nasze porozumienie ekologiczne.  Prosicie nas, tak wielka nacje, o dardzo duzo mimo to postaramy sie nie przekroczyc poziomu {value[0].value} jednostek."
-DIP_DETAILS_OFFER_HONOR_POLLUTION_AGREEMENT_EX_4 "W zamian laskawie dotrzymamy naszego slowa.  Zanieczyszczenia nie przekrocz poziomu {value[0].value} jednostek."
+
 DIP_DETAILS_OFFER_END_EMBARGO_0 "Proponujemy zakonczenie embarga jakie nalozylismy na Wasz handel.  Powinnismy czerpac wspolne korzysci z handlu."
 DIP_DETAILS_OFFER_END_EMBARGO_1 "Cieszymy sie, ze mozemy zakonczyc embargo jakie nalozylismy na Wasz hndel."
 DIP_DETAILS_OFFER_END_EMBARGO_2 "Blyskawicznie zakonczymy embargo jakie nalozylismy na Wasz handel.  Nie chcielismy Was rozgniewac."
@@ -504,6 +567,7 @@ DIP_DETAILS_REQUEST_END_EMBARGO_EX_1 "W zamian zyczliwie prosimy Was o zakonczen
 DIP_DETAILS_REQUEST_END_EMBARGO_EX_2 "W zamian blagamy Was abyscie umozliwili naszej nacji przetrwanie konczac embargo jakie nalozyliscie na nas."
 DIP_DETAILS_REQUEST_END_EMBARGO_EX_3 "W zamian zadamy calkowitego zniesienia embarga handlowego.  Ktore zostalo nalozone bezpodstawnie."
 DIP_DETAILS_REQUEST_END_EMBARGO_EX_4 "W zamian zadamy natychmiastowego zniesienia embarga handlowego.  Nie badz taki dlupi i nie prowokuj nas!"
+
 DIP_DETAILS_TREATY_DECLARE_WAR_0 "Proponuje abysmy polaczyli Swoje sily i wspolnie zaatakowali {player[2].civ_name_plural}."
 DIP_DETAILS_TREATY_DECLARE_WAR_1 "Proponuje abysmy wspolnymi silami zaatakowali {player[2].civ_name_plural}.  Razem mozemy zniczczyc ta niepoprawna nacje."
 DIP_DETAILS_TREATY_DECLARE_WAR_2 "Niesmialo proponujemy polaczenie naszych sil i wspolny atak na {player[2].civ_name_plural}."
@@ -514,6 +578,7 @@ DIP_DETAILS_TREATY_DECLARE_WAR_EX_1 "W zamian proponujemy abys przylaczyl sie do
 DIP_DETAILS_TREATY_DECLARE_WAR_EX_2 "W zamian prosimy Was abyscie wspolnie z nami wypowiedzieli wojne nacji {player[2].civ_name_plural}."
 DIP_DETAILS_TREATY_DECLARE_WAR_EX_3 "W zamian zadamy abys przylaczyl sie do naszej kampani przeciwko nacji {player[2].civ_name_plural}.  Lepiej badz po wlasciwej stronie tego konfliktu."
 DIP_DETAILS_TREATY_DECLARE_WAR_EX_4 "W zamian zadamy abys wypowiedzial wojne nacji {player[2].civ_name_plural}, tak samo jak My.  Przylacz sie do Nas!"
+
 DIP_DETAILS_TREATY_CEASEFIRE_0 "Wojna jest zbyt kosztowna i niepotrzebna.  Podpisz z nami zawieszenie broni."
 DIP_DETAILS_TREATY_CEASEFIRE_1 "Jestesmy narodem ktory ma zwyczajne cele.  W imie naszej przyjazni podpisz zawieszenie broni."
 DIP_DETAILS_TREATY_CEASEFIRE_2 "Blagamy Was o podpisanie zawieszenia broni, mamy nadzieje, ze sie nad nami zlitujesz."
@@ -524,6 +589,7 @@ DIP_DETAILS_TREATY_CEASEFIRE_EX_1 "W zamian mamy nadzieje, ze zgodzisz sie podpi
 DIP_DETAILS_TREATY_CEASEFIRE_EX_2 "W zamian blagamy Was o podpisanie zawieszenia broni.  Jestesmy juz zbyt slabi."
 DIP_DETAILS_TREATY_CEASEFIRE_EX_3 "W zamian zadamy podisania zawieszenia broni.  Niech zdrowy rozsadek zwyciezy."
 DIP_DETAILS_TREATY_CEASEFIRE_EX_4 "W zamian zadamy natychmiastowego podpisania zawieszenia broni."
+
 DIP_DETAILS_TREATY_PEACE_0 "Proponujemy abysmy zapomnieli o wszystkich wasniach miedzy nami i naszymi narodami.  Przygotowalismy traktat pokojowy do podpisania, aby zabezpieczyc przyszlosc naszych potomkow."
 DIP_DETAILS_TREATY_PEACE_1 "W duchu naszej przyjazni proponujemy podpisanie traktatu pokojowego ktory zapewni nam trwaly pokoj miedzy naszymi nacjami."
 DIP_DETAILS_TREATY_PEACE_2 "Proponujemy zawarcie pokoju miedzy naszymi nacjami, abysmy mogli wspolistniec z tak wielkim narodem jak Wasz, i uczyc sie od niego."
@@ -534,6 +600,7 @@ DIP_DETAILS_TREATY_PEACE_EX_1 "W zamian proponujemy traktat pokojowy miedzy nasz
 DIP_DETAILS_TREATY_PEACE_EX_2 "W zamian proponujemy traktat pokojowy.  Zgodzisz sie na to?"
 DIP_DETAILS_TREATY_PEACE_EX_3 "W zamian zadamy podpisania traktatu pokojowego.  Nie chcemy miec ciagle widma wojny."
 DIP_DETAILS_TREATY_PEACE_EX_4 "W zamian zadamy podpisania traktatu pokojowego."
+
 DIP_DETAILS_TREATY_TRADE_PACT_0 "Proponujemy umowe handlowa, dzieki ktorej oba nasze narody odniosa kozysc majatkowa."
 DIP_DETAILS_TREATY_TRADE_PACT_1 "Jestesmy radzi, ze mozemy zaproponowac umowe handlowa tak przyjacielskiej nacji jak wasza."
 DIP_DETAILS_TREATY_TRADE_PACT_2 "Proponujemy umowe handlowa po to abysmy mogli odniesc kozysci materialne handlujac z tak potezna i bogata nacja jak Wasza."
@@ -544,6 +611,7 @@ DIP_DETAILS_TREATY_TRADE_PACT_EX_1 "W zamian proponujemy umowe handlowa.  Jako p
 DIP_DETAILS_TREATY_TRADE_PACT_EX_2 "W zamian chcielibysmy podpisac umowe handlowa z tak wspanialym narodem jak Twoj.  Oboje mozemy miec kozysci z tego porozumienia.  Mamy nadzieje, ze sie zgodzisz."
 DIP_DETAILS_TREATY_TRADE_PACT_EX_3 "W zamian nalegamy abys podpisal umowe handlowa.  Chetnie bedziemy z toba handlowac, nie przegap takiej okazji."
 DIP_DETAILS_TREATY_TRADE_PACT_EX_4 "W zamian zadamy abys podpisal umowe handlowa.  W twoim interesie jest aby utrzymywac dobre stosunki z nami."
+
 DIP_DETAILS_TREATY_RESEARCH_PACT_0 "Proponujemy aby nasze narody podpisaly umowe naukowa.  Polaczenie naszych sil przyniesie obu naszym narodom kozysci."
 DIP_DETAILS_TREATY_RESEARCH_PACT_1 "Proponujemy podpisanie umowy naukowej.  Mozemu tylko zyskac dzieki temu paktowi."
 DIP_DETAILS_TREATY_RESEARCH_PACT_2 "Prosimy Cie o podpisanie umowy naukowej, mamy nadzieje, ze sie zgodzisz i w ten sposob wspomozesz nasz narod."
@@ -554,6 +622,7 @@ DIP_DETAILS_TREATY_RESEARCH_PACT_EX_1 "W zamian proponujemu umowe naukowa.  Okaz
 DIP_DETAILS_TREATY_RESEARCH_PACT_EX_2 "W zamian prosimy Cie abys rozwazyl podpisanie paktu naukowego.  Bedziemy Ci bardzo wdzieczni jesli uszanujesz nasza prozbe i podpiszesz pakt dzieki ktoremy bedziemy mogli sie rozwijac."
 DIP_DETAILS_TREATY_RESEARCH_PACT_EX_3 "W zamian nalegamy abys podpisal umowe naukowa.  Korzysci bedzie wiele, ale jesli nie podpiszesz bedziesz mial wiecej problemow."
 DIP_DETAILS_TREATY_RESEARCH_PACT_EX_4 "W zamian zadamy podpisania umowy naukowej.  Nie badz tak glupi i nie odmawiaj nam."
+
 DIP_DETAILS_TREATY_MILITARY_PACT_0 "Proponujemy pakt wojskowy, gwarantujacy pomoc w przypadku napasci na jedno z naszych panstw."
 DIP_DETAILS_TREATY_MILITARY_PACT_1 "Proponujemy pakt wojskowy.  Panstwa z tak dobrymi stosunkami jak nasze powinny zapewniac sobie pokoj."
 DIP_DETAILS_TREATY_MILITARY_PACT_2 "Proponujemy pakt wojskowy.  Zawsze bedziemy wam spieszyc z pomoca i mamy nadzieje, ze Wy uczynicie to samo."
@@ -575,6 +644,7 @@ DIP_DETAILS_TREATY_POLLUTION_PACT_EX_1 "W zamian proponujemu pakt ekologiczny.  
 DIP_DETAILS_TREATY_POLLUTION_PACT_EX_2 "W zamian prosimy Cie abys zgodzil sie podpisac pakt ekologiczny.  Bedziemy czuc sie zobowiazani do utrzymania poziomu zanieczyszczen ponizej {value[0].value} jednostem.  Mamy nadzieje, ze Ty tez."
 DIP_DETAILS_TREATY_POLLUTION_PACT_EX_3 "W zamian nalegamy abys podpisal pakt ekologiczny z nami.  Oczekujemu, ze poziom zanieczyszczen nigdy nie przekroczy {value[0].value} jednostek."
 DIP_DETAILS_TREATY_POLLUTION_PACT_EX_4 "W zamian zadamy abys podpisal pakt ekologiczny z nami, utrzymuj poziom zanieczyszczen ponizej {value[0].value} jednostek w ca³ym swoim panstewku."
+
 DIP_DETAILS_TREATY_ALLIANCE_0 "Wielki przywodco, nasze narody daza do podobnych celow.  Proponujemy podpisanie sojuszu tak abysmy mogli wspolnie mogli rzadzic swiatem."
 DIP_DETAILS_TREATY_ALLIANCE_1 "Proponujemu zawarcie sojuszu dla uczczenia naszej wieloletniej narodowej przyjazni."
 DIP_DETAILS_TREATY_ALLIANCE_2 "Proponujemu zawarcie sojuszu aby miec pewnosc ze pokoj miedzy naszymi narodami bedzie trwac wiecznie."
