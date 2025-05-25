@@ -469,6 +469,7 @@ str_ldl_POPULATION_COLON			"Bevölkerung:"
 str_ldl_CIV_SCORE				"Punkte"
 str_ldl_POWER_GRAPH				"Stärkediagramm"
 str_ldl_DEFEAT					"Niederlage"
+
 # So we offend female leaders
 str_ldl_THE_DESTITUTE				"DER DÄMLICHE"
 str_ldl_THE_SQUIRREL_HEARTED			"DER ÄNGSTLICHE"

@@ -78,5 +78,3 @@ FEAT_GOT_ZOROASTER	"ËöÂÞÑÇË¹µÂÔÚÎÒÃÇµÄ¹ú¶È´«µÀ£¡ ÕâÊÇApolyton Edition°æ±¾¼ÓÈë×Ú½
 FEAT_GOT_EGYPT2		"Ê×¸ö½¨Ôì·¨ÀÏÉñÃíµÄÎÄÃ÷½«±»ÊÓÎªÉñÊ¥ÎÄÃ÷£¡  ÕâÊÇApolyton Edition°æ±¾¼ÓÈë×Ú½ÌÒªËØµÄÒ»¸öÀý×Ó£¬Ææ¼£±¾Éí²»»áÔö¼Ó½±Àø£¬µ«½«»á¸øÃ¿×ù³ÇÊÐÔöÌíÒ»×ù×Ú½ÌËÂÃí£¬²¢ÏÔÊ¾¸Ã×Ú½ÌµÄ±êÊ¶£¬Ëæ×ÅÉñÑ§·¢Õ¹Äã¿ÉÒÔÅÉÉñÖ°ÈËÔ±È¥ÍØÕ¹ÆäËû³ÇÊÐµÄ½ÌÇø¡£"  
 FEAT_GOT_ZOROASTER2	"Ê×¸ö½¨ÔìËöÂÞÑÇË¹µÂÉñÌ³µÄÎÄÃ÷½«±»ÊÓÎªÉñÊ¥ÎÄÃ÷£¡  ÕâÊÇApolyton Edition°æ±¾¼ÓÈë×Ú½ÌÒªËØµÄÒ»¸öÀý×Ó£¬Ææ¼£±¾Éí²»»áÔö¼Ó½±Àø£¬µ«½«»á¸øÃ¿×ù³ÇÊÐÔöÌíÒ»×ù×Ú½ÌËÂÃí£¬²¢ÏÔÊ¾¸Ã×Ú½ÌµÄ±êÊ¶£¬Ëæ×ÅÉñÑ§·¢Õ¹Äã¿ÉÒÔÅÉÉñÖ°ÈËÔ±È¥ÍØÕ¹ÆäËû³ÇÊÐµÄ½ÌÇø¡£"
 
-
-

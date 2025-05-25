@@ -470,6 +470,7 @@ str_ldl_CIV_SCORE			"SKORE"
 str_ldl_POWER_GRAPH			"GRAF MOCI"
 str_ldl_DEFEAT				"PORÁZKA"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE			"NEDOSTATEK"
 str_ldl_THE_SQUIRREL_HEARTED	"THE SQUIRREL HEARTED"
 str_ldl_THE_RED_FACED			"THE RED FACED"

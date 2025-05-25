@@ -49,6 +49,8 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE				"PUNTOS IMP."
 str_ldl_POWER_GRAPH				"GRÁFICO DE PODER"
 str_ldl_DEFEAT					"DERROTA"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"EL INDIGENTE"
 str_ldl_THE_SQUIRREL_HEARTED			"EL CORAZÓN DE ARDILLA"
 str_ldl_THE_RED_FACED				"EL AVERGONZADO"
@@ -2750,8 +2753,6 @@ str_ldl_SEARCH_WORD				"Búsqueda:"
 str_ldl_TECH_TREE				"Árbol tecnológico"
 str_ldl_SET_GOAL				"Fijar objetivo"
 str_ldl_SORT_BY_AGE				"Ordenar por edad"
-
-
 
 
 # Ranking Tab

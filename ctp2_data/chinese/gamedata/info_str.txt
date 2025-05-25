@@ -160,7 +160,6 @@ TRADE_PASS				"The trade route passing through our city of {city[0].name} carryi
 TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
 SENDER_CREATED_TRADE_ROUTE			"{player[0].leader_name} has created a trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, bringing {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
 SENDER_KILLED_TRADE_ROUTE			"{player[0].leader_name} has cancelled the trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, which was worth {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
-#消了从{city[0].name}到{city[1].name}的{good[0].name}贸易路线。"
 
 ## Trade Advisor Stuff ##
 SELECTED_TRADE_ADVICE 			"将{good[0].name}运往{city[1].name}贩卖，需要{value[0].value}个商队，可得{gold[0].value}黄金。"
@@ -214,7 +213,8 @@ DISCOVERED_ANCIENT_TREASURE 		"在古文明的遗址中，我们挖掘到{gold[0].value}黄金."
 BESET_BY_VANDALS 			"提高戒备！部队遭到野蛮人的伏击。"
 BESET_BY_NOTHING 			"搜查古代遗址后，未发现任何物品。"
 
-## Government ##CANT_CHANGE_GOV 			"未发现新政体前，您无法变更政体。"
+## Government ##
+CANT_CHANGE_GOV 			"未发现新政体前，您无法变更政体。"
 CHANGE_GOV_WARNING 			"改变政体势必会经历短暂的无政府状态，您确定要变更为{government[0].name}?"
 PLAYER_DISCOVERS_NEW_GOVERNMENT 	"发现了{GovernmentDB(government[0].type)}。变更为新政体吗？"
 
@@ -239,7 +239,8 @@ ADVANCE_FROM_CAPTURING_CITY_VICTIM	"{player[0].sir_cap}，我惶恐的向您报告：{play
 ## Combat ##
 UNIT_VETERAN 				"战斗中的英勇表现，{unit[0].name}晋升为菁英部队。"
 
-## Age Change Messages ##AGE_ONE_ENTERED 			"新帝国在逐步发展下，进入了上古时代。"
+## Age Change Messages ##
+AGE_ONE_ENTERED 			"新帝国在逐步发展下，进入了上古时代。"
 AGE_TWO_ENTERED 			"文字书写替代了口口相传，进入古典时代"
 AGE_THREE_ENTERED 			"在古罗马的废墟中，我们的帝国顽强成长，进入中世纪。"
 AGE_FOUR_ENTERED 			"帝国开始了科学与人文的发展，进入文艺复兴时代。"
@@ -290,8 +291,7 @@ SLAVE_FAILED_ATTACKER			"{player[0].sir_cap}，我们的猎奴行动在 {city[0].name} 失
 SLAVE_KILLED_ATTACKER			"{player[0].sir_cap}，我们的猎奴行动在 {city[0].name} 失败了，奴隶贩子也被处死了。"
 PROTECTED_FROM_SLAVERY_VICTIM 		"好消息，城墙阻止了奴隶贩子对{city[0].name}的渗透。"
 PROTECTED_FROM_SLAVERY_ATTACKER 	"{city[0].name}城墙阻止了我奴隶贩子渗入该市抓奴隶。"
-SETTLER_SLAVED_VICTIM			"The horror!! Our {unitrecord[0].name} has disappeared without a trace. Foreign slavers are most likely responsible for this heinous act."
-## SETTLER_SLAVED_VICTIM 			"真可怕。我们的开拓队无声无息地失踪了，外国奴隶贩子是最有可能干出这种令人发指的行为。"
+SETTLER_SLAVED_VICTIM 			"真可怕。我们的开拓队无声无息地失踪了，外国奴隶贩子是最有可能干出这种令人发指的行为。" ##  {unitrecord[0].name} missing ## SETTLER_SLAVED_VICTIM			"The horror!! Our {unitrecord[0].name} has disappeared without a trace. Foreign slavers are most likely responsible for this heinous act."
 VICTORY_ENSLAVEMENT_CITY 		"我国的{unit[0].name}新俘虏了一名奴隶，并将他送至{city[0].name}。"
 
 ## Establish Embassy ##

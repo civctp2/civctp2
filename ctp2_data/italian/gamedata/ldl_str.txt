@@ -470,6 +470,7 @@ str_ldl_CIV_SCORE				"Punteggio CIV "
 str_ldl_POWER_GRAPH				"Grafico potenza"
 str_ldl_DEFEAT					"Sconfitta"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"IL MISERO"
 str_ldl_THE_SQUIRREL_HEARTED			"CUOR DI SCOIATTOLO"
 str_ldl_THE_RED_FACED				"IL RUBICONDO"

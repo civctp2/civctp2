@@ -4001,7 +4001,6 @@ Emeralds are among the most precious naturally produced stones in the world.  Pr
 Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
 [END]
 
-
 [TERRAIN_WHITE_HILL_GOOD_THREE_PREREQ]
 [END]
 
@@ -4062,6 +4061,7 @@ Silver is a precious metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MO
 
 [TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_HISTORICAL]
 Silver (Ag) is a metallic element, one of the first metals used by humans. Pure silver is nearly white, lustrous, soft, very ductile, malleable, and an excellent conductor of heat and electricity. It is used in mirrors, coins, utensils, antiseptics, jewelry, and for electrolytic plating of tableware. Silver nitrate is its most important compound. Silver reacts with hydrogen sulfide in air to form silver sulfide (tarnish). Photographic emulsions contain silver halides, which are sensitive to light. Silver alloys are used in dentistry and electrical contacts. Sterling silver contains 92.5 percent silver and 7.5 percent copper. Silver is obtained from the ores argentite, cerarygrite, pyrargyrite, stephanite, and proustite.[END]
+[END]
 
 [TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_PREREQ]
 [END]
@@ -4171,7 +4171,6 @@ Location:
 [TERRAIN_WATER_BEACH_GOOD_ONE_HISTORICAL]
 Throughout history, the crab has been prized as a delicacy.  In more recent times, crabs have been found to be useful in cosmetics, drugs, water treatment, even fertilizer. Chitisan, found in the crab's shell, contains DNA inhibitors that may have use as, ironically, a  cancer inhibitor.
 [END]
-
 
 [TERRAIN_WATER_BEACH_GOOD_TWO_PREREQ]
 Location:
@@ -11034,6 +11033,7 @@ In the late 20th century, a society of litigiousness permeated much of the Weste
 [CONCEPT_CLASSIC_AGE_HISTORICAL]
 The classical period covers the epoch of the ascent Roman Republic, in particular the last 100 years. Caesar, Sallust and Augustus are only some representatives of this era. From this time many written documents were preserved for us, which differentiates this time significantly from the preceding epochs. But also the Roman Republic was a place where the learned could hold power, and the age of learning begun properly.
 [END]
+
 [CONCEPT_COMPUTER_AGE_GAMEPLAY]
 [END]
 

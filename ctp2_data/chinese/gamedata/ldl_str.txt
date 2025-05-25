@@ -49,6 +49,8 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -425,9 +427,9 @@ str_tbl_ldl_Total_Negative_Points_Colon "总扣分："
 str_tbl_ldl_Total_Points_Colon "总分："
 str_tbl_ldl_Civ_Score_Colon		"文明积分："
 
-
-#Who knows where this goes?#
-UNIT_ORDER_TRANSPORTED "正在传送"
+str_tbl_ldl_The_Diplomats "我们的领袖目前公务繁忙，我们并没有兴趣与贵国在此时商谈任何事务。" 
+str_tbl_ldl_Select_a_new			"Select a new Advance to research."
+str_ldl_Review_Tutorial_Messages		"Review Tutorial Messages"
 str_ldl_END	"结束"
 str_ldl_End_Tutorial_Dialog	"你确定要结束教学模式了吗？"
 str_ldl_Skill_Level	"技术等级"
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE			"文明积分"
 str_ldl_POWER_GRAPH			"权力图"
 str_ldl_DEFEAT				"击败"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE			"穷困的人"
 str_ldl_THE_SQUIRREL_HEARTED	"胆小如鼠的人"
 str_ldl_THE_RED_FACED			"红脸的人"
@@ -1885,31 +1888,31 @@ str_tbl_ldl_Music_Track_10	"卡莉舞曲"
 
 
 ###Grammar and Description Stuff###
-GRAMMAR_MALE_LOSER_RANK_1     "穷困的人"
-GRAMMAR_FEMALE_LOSER_RANK_1   "穷困的人"
-GRAMMAR_MALE_LOSER_RANK_2     "胆小如鼠的人"
-GRAMMAR_FEMALE_LOSER_RANK_2   "胆小如鼠的人"
-GRAMMAR_MALE_LOSER_RANK_3     "红脸的人"
-GRAMMAR_FEMALE_LOSER_RANK_3   "红脸的人"
-GRAMMAR_MALE_LOSER_RANK_4     "疲惫的人"
-GRAMMAR_FEMALE_LOSER_RANK_4   "疲惫的人"
-GRAMMAR_MALE_LOSER_RANK_5     "柔顺的人"
-GRAMMAR_FEMALE_LOSER_RANK_5   "柔顺的人"
-GRAMMAR_MALE_LOSER_RANK_6     "迟缓的人"
-GRAMMAR_FEMALE_LOSER_RANK_6   "迟缓的人"
+#GRAMMAR_MALE_LOSER_RANK_1     "穷困的人"
+#GRAMMAR_FEMALE_LOSER_RANK_1   "穷困的人"
+#GRAMMAR_MALE_LOSER_RANK_2     "胆小如鼠的人"
+#GRAMMAR_FEMALE_LOSER_RANK_2   "胆小如鼠的人"
+#GRAMMAR_MALE_LOSER_RANK_3     "红脸的人"
+#GRAMMAR_FEMALE_LOSER_RANK_3   "红脸的人"
+#GRAMMAR_MALE_LOSER_RANK_4     "疲惫的人"
+#GRAMMAR_FEMALE_LOSER_RANK_4   "疲惫的人"
+#GRAMMAR_MALE_LOSER_RANK_5     "柔顺的人"
+#GRAMMAR_FEMALE_LOSER_RANK_5   "柔顺的人"
+#GRAMMAR_MALE_LOSER_RANK_6     "迟缓的人"
+#GRAMMAR_FEMALE_LOSER_RANK_6   "迟缓的人"
 
-GRAMMAR_MALE_WINNER_RANK_1    "认真的人"
-GRAMMAR_FEMALE_WINNER_RANK_1  "认真的人"
-GRAMMAR_MALE_WINNER_RANK_2    "聪明的人"
-GRAMMAR_FEMALE_WINNER_RANK_2  "聪明的人"
-GRAMMAR_MALE_WINNER_RANK_3    "勇敢的人"
-GRAMMAR_FEMALE_WINNER_RANK_3  "勇敢的人"
-GRAMMAR_MALE_WINNER_RANK_4    "雄才大略的人"
-GRAMMAR_FEMALE_WINNER_RANK_4  "雄才大略的人"
-GRAMMAR_MALE_WINNER_RANK_5    "不屈不挠的人"
-GRAMMAR_FEMALE_WINNER_RANK_5  "不屈不挠的人"
-GRAMMAR_MALE_WINNER_RANK_6    "具有文明霸主相的人"
-GRAMMAR_FEMALE_WINNER_RANK_6  "具有文明霸主相的人"
+#GRAMMAR_MALE_WINNER_RANK_1    "认真的人"
+#GRAMMAR_FEMALE_WINNER_RANK_1  "认真的人"
+#GRAMMAR_MALE_WINNER_RANK_2    "聪明的人"
+#GRAMMAR_FEMALE_WINNER_RANK_2  "聪明的人"
+#GRAMMAR_MALE_WINNER_RANK_3    "勇敢的人"
+#GRAMMAR_FEMALE_WINNER_RANK_3  "勇敢的人"
+#GRAMMAR_MALE_WINNER_RANK_4    "雄才大略的人"
+#GRAMMAR_FEMALE_WINNER_RANK_4  "雄才大略的人"
+#GRAMMAR_MALE_WINNER_RANK_5    "不屈不挠的人"
+#GRAMMAR_FEMALE_WINNER_RANK_5  "不屈不挠的人"
+#GRAMMAR_MALE_WINNER_RANK_6    "具有文明霸主相的人"
+#GRAMMAR_FEMALE_WINNER_RANK_6  "具有文明霸主相的人"
 
 PLAYER_DESCRIPTION_LOSER_RANK_1			"{player[0].leader_name}"
 PLAYER_DESCRIPTION_LOSER_RANK_2			"{player[0].leader_name}"
@@ -2750,8 +2753,6 @@ str_ldl_SEARCH_WORD "搜索："
 str_ldl_TECH_TREE "科技树"
 str_ldl_SET_GOAL	"设定目标"
 str_ldl_SORT_BY_AGE "按时代排序"
-
-
 
 
 # Ranking Tab

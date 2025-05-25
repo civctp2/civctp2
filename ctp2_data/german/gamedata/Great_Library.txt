@@ -4189,7 +4189,6 @@ Fische sind Wasserwirbeltiere mit Flossen, innerem Kiemen, und schuppiger Haut. 
 Die meisten Fische sind wechselwarme Wasserwirbeltiere, die mit einem glitschigen Sekret bedeckt sind um die Reibung zu vermindern. Der meisten Fische haben Schuppen. Ein typischer Fisch entspricht der Torpedoform, der Kopf enthält das Gehirn und weitere Sinnesorgane, ein kräftiger Rumpf enthält die inneren Organe, und ein muskulöser Schwanz bildet den Abschluss. Die meisten Fische schwimmen in wellenförmigen Bewegungen durchs Wasser und kontrollieren die Richtung mit ihren Flossen. Obwohl einige Fische, wie zum Beispiel Haie, lebende Junge gebären, werden die meisten Fischeier im Wasser befruchtet und und ausgebrütet. Es gibt über 20.000 Fischarten, die in drei Klassen eingeteilt werden: Agnatha, die ursprünglichsten Fische, kiefernlos und ohne gepaarten Brust- und Bauchflossen (wie zum Beispiel der Lampenfisch); Chondrichthyes, Knorpelfische, mit einem Knorpelskelett aber ohne Schwimmblase oder Lungen (wie zum Beispiel der Hai und der Rochen); und Osteichthyes, die Knochenfische, die am weitestens entwickelt sind. Knochenfische haben Knochenskelett und Schwimmblasen oder Lungen. Man unterscheidet zwischen den Fleischflossern (wie zum Beispiel dem Lappenflosser und dem Lungenfisch) und den Strahlflossern (wie zum Beispiel der Barsch). Der größte Fisch, der Riesenhai (Rhincodon typus), erreicht 15 Meter Länge und wird weltweit in tropischen Meeren angetroffen. Das kleinste ist der 1,3 Zentimeter große Gubbie (Familie Gobiidae) der Philippinen. 
 [END]
 
-[END]
 [TERRAIN_WATER_BEACH_GOOD_THREE_PREREQ]
 Fundort:
 
@@ -11142,6 +11141,26 @@ Im späten 20. Jahrhundert war die Gesellschaft der westlichen Welt regelrecht pr
 [END]
 
 ########################  AE MOD  Entries
+
+[ORDER_UPGRADE_ARMY_PREREQ]
+Requires:
+Any unit
+[END]
+
+[ORDER_UPGRADE_ARMY_STATISTICS]
+Effect:
+Permanently deletes the old unit and replaces it with a new unit
+Units must be upgraded in <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> 
+<L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e> cost is based on the difference in unit shield value multplied by your government's Unit rush modifier
+[END]
+
+[ORDER_UPGRADE_ARMY_GAMEPLAY]
+A player may want to upgrade a unit for a variety of reasons.  Older and obsolete units are often too weak to be much of an asset in combat.  In some rules setting the AI player is able to upgrade without a gold cost. Often the gold costs can be quite exppensive preventing a player from upgrading an entire military in a single turn.
+
+[END]
+
+[ORDER_UPGRADE_ARMY_HISTORICAL]
+[END]
 
 [UNIT_LONGBOWMAN_PREREQ]
 Requires:

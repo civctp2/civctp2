@@ -363,4 +363,5 @@ STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Klikni zde pro vytvorení nové armády."
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Map Info"
 
+str_ldl_EditQueueReallyDelete "Permanently delete Queue %s?"
 

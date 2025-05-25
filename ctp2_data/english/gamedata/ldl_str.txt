@@ -470,6 +470,7 @@ str_ldl_CIV_SCORE				"SCORE"
 str_ldl_POWER_GRAPH				"POWER GRAPH"
 str_ldl_DEFEAT					"DEFEAT"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"THE DESTITUTE"
 str_ldl_THE_SQUIRREL_HEARTED			"THE SQUIRREL HEARTED"
 str_ldl_THE_RED_FACED				"THE RED FACED"
@@ -2742,7 +2743,7 @@ str_tbl_ldl_VictoryScience			"Wonder Victory:"
 str_tbl_ldl_VictoryConquest			"Solo Victory:"
 str_tbl_ldl_InProgress				"Game in progress:"
 str_tbl_ldl_Defeat				"Defeat:"
-	
+
 # Great Library
 str_ldl_CAPS_GREAT_LIBRARY			"G R E A T    L I B R A R Y"
 str_ldl_GreatLibraryGoalSetTo			"Goal set to: %s"

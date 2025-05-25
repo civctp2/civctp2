@@ -606,6 +606,7 @@ CONCEPT_WONDERS					"奇观"
 CONCEPT_WORK_HOURS				"工时"
 CONCEPT_WORKER					"工人"
 
+
 #### Pop STRINGS ####
 POP_WORKER					"工人"
 POP_SLAVE					"奴隶"

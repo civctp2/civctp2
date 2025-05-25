@@ -49,6 +49,8 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE				"SCORE"
 str_ldl_POWER_GRAPH				"Courbe de puissance"
 str_ldl_DEFEAT					"DEFAITE"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"LE DESTITUE"
 str_ldl_THE_SQUIRREL_HEARTED			"LA POULE MOUILLEE"
 str_ldl_THE_RED_FACED				"LE CONFUS"
@@ -2750,8 +2753,6 @@ str_ldl_SEARCH_WORD				"Recherche :"
 str_ldl_TECH_TREE				"ARBORESCENCE"
 str_ldl_SET_GOAL				"Fixer objectif"
 str_ldl_SORT_BY_AGE				"Trier par âge"
-
-
 
 
 # Ranking Tab

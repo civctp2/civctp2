@@ -46,6 +46,7 @@
 # - Added strings for relationship button -7-Jan-10 EPW
 #
 #----------------------------------------------------------------------------
+
 # Control Panel
 STATUSBAR_END_TURN_BUTTON	"完成一切动作时，请按结束回合钮"
 TOOLTIP_END_TURN_BUTTON		"结束此回合"
@@ -456,7 +457,7 @@ TOOLTIP_TRADEMAN_OPEN_PIRACY_DISPLAY		"抢劫中"
 
 # City Management Screen
 #
-# 	Statistics Window
+#	Statistics Window
 STATUSBAR_CITYMAN_STATS_CITYLAYOUT_DISPLAY	"显示城市及市郊的外貌"
 TOOLTIP_CITYMAN_STATS_CITYLAYOUT_DISPLAY	"城市外观"
 STATUSBAR_CITYMAN_STATS_GROWTHRATE_DISPLAY	"显示目前城市成长率。"
@@ -504,7 +505,7 @@ TOOLTIP_CITYMAN_STATS_CLEANERS_DISPLAY       	"环保项目"
 STATUSBAR_CITYMAN_STATS_CRIMERATE		"显示城市目前的犯罪率。"
 TOOLTIP_CITYMAN_STATS_CRIMERATE			"犯罪率"
 
-# 	Main City Management Window
+#	Main City Management Window
 STATUSBAR_CITYMAN_MAIN_PREVCITY_BUTTON		"回到上个城市画面。"
 TOOLTIP_CITYMAN_MAIN_PREVCITY_BUTTON		"上个城市"
 STATUSBAR_CITYMAN_MAIN_CURRCITY_DISPLAY		"目前所检视的城市。"
