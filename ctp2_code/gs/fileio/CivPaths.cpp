@@ -37,6 +37,7 @@
 #include "CivPaths.h"
 #include "profileDB.h"        // g_theProfileDB
 #include "LanguageRecord.h"
+#include <clocale>
 #if defined(__AUI_USE_SDL__)
 #include "SDL_locale.h"
 #endif
@@ -97,6 +98,8 @@ void CivPaths_InitCivPaths()
 	// in the langauage database. If this does not exsist, just stay with the 
 	// value from civpath.txt.
 	g_civPaths->FindAndSetLocalizedPath();
+
+	g_civPaths->SetLocaleFromLanguage();
 }
 
 void CivPaths_CleanupCivPaths()
@@ -882,6 +885,19 @@ void CivPaths::FindAndSetLocalizedPath()
 
 	if(lanRec != NULL)
 		SetLocalizedPath(lanRec->GetDirectory());
+}
+
+void CivPaths::SetLocaleFromLanguage()
+{
+	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+	{
+		const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+		if(strcmp(m_localizedPath, lanRec->GetDirectory()) == 0)
+		{
+			std::setlocale(LC_COLLATE, lanRec->GetIsoCode());
+			return;
+		}
+	}
 }
 
 const LanguageRecord* CivPaths::FindLanguage()

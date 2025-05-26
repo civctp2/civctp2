@@ -124,6 +124,8 @@ public:
 
 	void SetLocalizedPath(const MBCHAR *path);
 
+	void SetLocaleFromLanguage();
+
 private:
 
 	bool CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const;
