@@ -6492,7 +6492,7 @@ void CommandLine::DisplayMem()
 		_CrtMemState new_state;
 		_CrtMemCheckpoint(&new_state);
 
-		m_old_mem_count = new_state.lTotalCount;
+		m_old_mem_count = static_cast<sint32>(new_state.lTotalCount);
 	}
 #endif
 }

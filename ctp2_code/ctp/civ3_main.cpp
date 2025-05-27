@@ -105,7 +105,6 @@
 #include "debugmemory.h"
 #include "debugwindow.h"
 #include "director.h"
-#include "ErrMsg.h"
 #include "gamefile.h"
 #include "gameinit.h"
 #include "GameOver.h"
@@ -607,8 +606,6 @@ bool ui_CheckForScroll(void)
 	static bool     isMouseScrolling            = false;
 	static sint32   smoothX                     = 0;
 	static sint32   smoothY                     = 0;
-	static sint32	lastdeltaX                  = 0;
-	static sint32	lastdeltaY                  = 0;
 	static bool     scrolled_last_time          = false;
 	static uint32   scroll_start;
 
@@ -670,9 +667,6 @@ bool ui_CheckForScroll(void)
 
 			if (deltaX)
 				deltaY = 0;
-
-			lastdeltaX = deltaX;
-			lastdeltaY = deltaY;
 
 			if(scrolled_last_time) {
 				scrolled_last_time = false;
@@ -744,9 +738,6 @@ bool ui_CheckForScroll(void)
 			smoothY = deltaY = 0;
 		else
 			smoothX = 0;
-
-		lastdeltaX = deltaX;
-		lastdeltaY = deltaY;
 
 		if (isMouseScrolling)
 		{
@@ -1577,7 +1568,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			if (g_civScenarios->ScenarioHasSavedGame(scen))
 			{
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			}
 			else
 			{
@@ -1609,7 +1600,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			if (g_civScenarios->ScenarioHasSavedGame(scen))
 			{
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			}
 			else
 			{
@@ -1644,12 +1635,18 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			static const int FRAMES_PER_SECOND = 30;
 			static const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
 			const int frameTicksLeft = frameStartTick + TICKS_PER_FRAME - GetTickCount();
-			if (frameTicksLeft > 0) {
-				if (!SDL_WaitEventTimeout(NULL, frameTicksLeft)) {
+
+			if (frameTicksLeft > 0)
+			{
+				if (!SDL_WaitEventTimeout(NULL, frameTicksLeft))
+				{
 					break;
 				}
-			} else {
-				if (!SDL_PollEvent(NULL)) {
+			}
+			else
+			{
+				if (!SDL_PollEvent(NULL))
+				{
 					break;
 				}
 			}
@@ -1657,37 +1654,37 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			// If you want to handle more events then update FilterEvents in aui_sdl.cpp
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION-1);
 
-			if (0 > n)
+			if(0 > n)
 			{
 				fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 				break;
 			}
 
-			if (0 == n)
+			if(0 == n)
 			{
 				n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_MOUSEWHEEL+1, SDL_LASTEVENT);
 
-				if (0 > n)
+				if(0 > n)
 				{
 					fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 					break;
 				}
 
-				if (0 == n)
+				if(0 == n)
 				{
 					// other events are handled in other threads
 					// or no more events
 					break;
 				}
 			}
-			if (SDL_QUIT == event.type) {
+			if(SDL_QUIT == event.type) {
 				gDone = TRUE;
 			}
 
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
-			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+			if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 			{
-				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex))
+				if(-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex))
 				{
 					fprintf(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
 					break;
@@ -1695,7 +1692,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 				g_secondaryKeyboardEventQueue.push(event);
 
-				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex))
+				if(-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex))
 				{
 					fprintf(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 					break;
@@ -1704,9 +1701,9 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 #elif defined(__AUI_USE_DIRECTX__)
 
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
+		while(PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 		{
-			if (WM_QUIT == msg.message)
+			if(WM_QUIT == msg.message)
 			{
 				gDone = TRUE;
 			}

@@ -109,7 +109,7 @@ NetConsole::NetConsole(uint16 port)
 	}
 
 	if(s_winsockInitialized) {
-		m_listenSock = socket(AF_INET, SOCK_STREAM, 0);
+		m_listenSock = static_cast<sock_t>(socket(AF_INET, SOCK_STREAM, 0));
 		Assert(m_listenSock >= 0);
 
 		struct sockaddr_in addr;
@@ -201,7 +201,7 @@ void NetConsole::Idle()
 #else
 			uint32 len = sizeof(naddr);
 #endif
-			sock_t newsock = accept(m_listenSock, (struct sockaddr *)&naddr, &len);
+			sock_t newsock = static_cast<sock_t>(accept(m_listenSock, (struct sockaddr *)&naddr, &len));
 			sint32 whichSock;
 			for(whichSock = 0; whichSock < k_MAX_CONNECTIONS; whichSock++) {
 				if(m_connections[whichSock] < 0) {
@@ -259,7 +259,7 @@ void NetConsole::Print(const char *fmt, va_list vl)
 	static char buf[33000];
 	sint32 len;
 	vsprintf((char *)buf, fmt, vl);
-	len = strlen(buf);
+	len = static_cast<sint32>(strlen(buf));
 
 	char *c = buf;
 	while(*c && c < buf+len && len < k_MAX_SOCK_READ) {

@@ -811,10 +811,10 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 	m_maxItemWidth = 0;
 	m_maxItemHeight = 0;
 
-	m_numColumns = m_header->ChildList()->L();
+	m_numColumns = static_cast<sint32>(m_header->ChildList()->L());
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( size_t i = m_numRows = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_numRows = static_cast<sint32>(m_pane->ChildList()->L()); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 

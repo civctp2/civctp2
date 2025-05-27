@@ -236,7 +236,7 @@ AUI_ERRCODE aui_TextBase::InitCommon(
 
 	if ( text )
 	{
-		m_curLength = strlen( text );
+		m_curLength = static_cast<uint32>(strlen( text ));
 
 		if ( m_curLength > m_maxLength )
 			m_curLength = m_maxLength;
@@ -287,7 +287,7 @@ AUI_ERRCODE aui_TextBase::SetText(
 	if ( maxlen > m_maxLength ) maxlen = m_maxLength;
 	strncpy( m_text, text, maxlen );
 
-	m_curLength = strlen( m_text );
+	m_curLength = static_cast<uint32>(strlen( m_text ));
 
 	return AUI_ERRCODE_OK;
 }
@@ -325,7 +325,7 @@ AUI_ERRCODE aui_TextBase::AppendText(MBCHAR const * text)
 	Assert( m_curLength + strlen( text ) <= m_maxLength );
 	strncat( m_text, text, m_maxLength - m_curLength );
 
-	m_curLength = strlen( m_text );
+	m_curLength = static_cast<uint32>(strlen( m_text ));
 
 	return AUI_ERRCODE_OK;
 }

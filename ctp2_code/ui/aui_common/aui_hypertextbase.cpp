@@ -84,7 +84,7 @@ AUI_ERRCODE aui_HyperTextBase::InitCommon(
 
 	if ( hyperText )
 	{
-		m_hyperCurLen = strlen( hyperText );
+		m_hyperCurLen = static_cast<uint32>(strlen( hyperText ));
 
 		if ( m_hyperCurLen > m_hyperMaxLen )
 			m_hyperCurLen = m_hyperMaxLen;
@@ -153,7 +153,7 @@ AUI_ERRCODE aui_HyperTextBase::SetHyperText
 	if (hyperText)
     {
         strncpy(m_hyperText, hyperText, std::min(maxlen, m_hyperMaxLen));
-        m_hyperCurLen = std::min<size_t>(m_hyperMaxLen, strlen(m_hyperText));
+        m_hyperCurLen = static_cast<uint32>(std::min<size_t>(m_hyperMaxLen, strlen(m_hyperText)));
     	return AddHyperStatics(NULL);
     }
     else
@@ -172,7 +172,7 @@ AUI_ERRCODE aui_HyperTextBase::AppendHyperText( const MBCHAR *hyperText )
 
 	strncat( m_hyperText, hyperText, m_hyperMaxLen - m_hyperCurLen );
 
-	m_hyperCurLen = strlen( m_hyperText );
+	m_hyperCurLen = static_cast<uint32>(strlen( m_hyperText ));
 
 	return AddHyperStatics( hyperText );
 }
@@ -191,7 +191,7 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 
 	aui_Static *hs = CreateHyperStatic(
 		hyperText,
-		len,
+		static_cast<uint32>(len),
 		m_hyperTtffile,
 		m_hyperPointSize,
 		m_hyperBold,
@@ -217,7 +217,7 @@ AUI_ERRCODE aui_HyperTextBase::AddHyperStatics( const MBCHAR *hyperText )
 
 void aui_HyperTextBase::RemoveHyperStatics(void)
 {
-	for (sint32 i = m_hyperStaticList->L(); i; --i)
+	for (size_t i = m_hyperStaticList->L(); i; --i)
 	{
 		delete m_hyperStaticList->RemoveTail();
 	}

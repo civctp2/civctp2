@@ -143,7 +143,7 @@ void ctp2_HyperTextBox::FormatText
 	{
 		aui_Static *	hs		=
 			CreateHyperStatic(ptr,
-							  a_TextEnd - ptr,	// may be corrected later
+							  static_cast<uint32>(a_TextEnd - ptr),	// may be corrected later
 							  m_hyperTtffile,
 							  m_hyperPointSize,
 							  m_hyperBold,
@@ -242,7 +242,7 @@ void ctp2_HyperTextBox::FormatText
 				else
 				{
 					// Put a part on this line, and continue on the next line.
-					hs->SetText(start, ptr - start);
+					hs->SetText(start, static_cast<uint32>(ptr - start));
 					hs->Move(m_curStaticPos.x, m_curStaticPos.y);
 					hs->Resize(penPos.x, hs->Height());
 

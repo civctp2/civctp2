@@ -390,7 +390,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 #endif
 				aui_Static *hs = CreateHyperStatic(
 					ptr,
-					len,
+					static_cast<uint32>(len),
 					m_hyperTtffile,
 					m_hyperPointSize,
 					m_hyperBold,
@@ -480,7 +480,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 						else
 						{
 							len -= truncLen;
-							hs->SetText( start, truncLen );
+							hs->SetText( start, static_cast<uint32>(truncLen) );
 
 							hs->Move( m_curStaticPos.x, m_curStaticPos.y );
 							hs->Resize( penPos.x, hs->Height() );

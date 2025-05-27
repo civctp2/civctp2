@@ -353,7 +353,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, size_t 
 				firstNonEmpty = 0;
 			}
 
-			*table++ = startDataPtr - startOfData;
+			*table++ = static_cast<Pixel16>(startDataPtr - startOfData);
 			lastNonEmpty = y;
 		} else {
 
@@ -593,7 +593,7 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, size_
 				firstNonEmpty = 0;
 			}
 
-			*table++ = startDataPtr - startOfData;
+			*table++ = static_cast<Pixel16>(startDataPtr - startOfData);
 			lastNonEmpty = y;
 		} else {
 
