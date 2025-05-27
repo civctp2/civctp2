@@ -166,6 +166,7 @@
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <libgen.h>         // dirname
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -1483,7 +1484,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 #endif
 #endif // __GNUC__
 
-#ifdef WIN32
+#if defined(WIN32)
 	char exepath[_MAX_PATH];
 	if (GetModuleFileName(NULL, exepath, _MAX_PATH) != 0)
 	{
@@ -1511,6 +1512,17 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			SetCurrentDirectory(exepath);
 		}
 	}
+#elif defined(LINUX)
+	char result[PATH_MAX];
+	ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+
+	const char *path;
+	if (count != -1) {
+		path = dirname(result);
+	}
+
+	chdir(path);
+	fprintf(stderr, "%s\n", path);
 #endif
 
 	appstrings_Initialize();
