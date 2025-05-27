@@ -1352,7 +1352,7 @@ public:
 
 	STATUS Connect(char *file);
 
-	STATUS Join(Game *g, char *password = "");
+	STATUS Join(Game *g, const char *password = "");
 
 	STATUS Join(Lobby *l);
 

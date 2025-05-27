@@ -565,7 +565,7 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 	KEY_FUNCTION keyFunc = KEY_FUNCTION(item->GetKey());
 	uint32 keycode = item->GetKeycode();
 
-	theKeyMap->remap_key( keyFunc, wParam, keycode );
+	theKeyMap->remap_key( keyFunc, static_cast<uint32>(wParam), keycode );
 	item->UpdateKey( theKeyMap->get_keycode(keyFunc) );
 
 

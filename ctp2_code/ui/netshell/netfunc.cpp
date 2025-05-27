@@ -2878,7 +2878,7 @@ NETFunc::STATUS NETFunc::Reset() {
 	return OK;
 }
 
-NETFunc::STATUS NETFunc::Join(Game *g, char *password) {
+NETFunc::STATUS NETFunc::Join(Game *g, const char *password) {
 
 	if(g->IsCurrentSession())
 		return ERR;

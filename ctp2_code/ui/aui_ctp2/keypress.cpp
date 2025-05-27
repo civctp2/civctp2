@@ -361,7 +361,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			{
 				optionsscreen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 			}
-			else if (g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(wParam))
+			else if (g_c3ui->TopWindow() && g_c3ui->TopWindow()->HandleKey(static_cast<uint32>(wParam)))
 			{
 				// Nothing
 			}
@@ -381,11 +381,11 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	aui_Window *topWindow = g_c3ui->TopWindow();
 	if(topWindow && (!g_controlPanel || topWindow != g_controlPanel->GetWindow()) && topWindow != g_statusWindow)
 	{
-		if(topWindow->HandleKey(wParam))
+		if(topWindow->HandleKey(static_cast<uint32>(wParam)))
 			return 0;
 	}
 
-	if(g_spriteEditWindow && g_spriteEditWindow->HandleKey(wParam)) // pass keys to text field in sprite edit bar (open/save sprites)
+	if(g_spriteEditWindow && g_spriteEditWindow->HandleKey(static_cast<uint32>(wParam))) // pass keys to text field in sprite edit bar (open/save sprites)
 	{
 		return 0;
 	}
@@ -402,7 +402,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		return TRUE;
 	}
 
-	KEY_FUNCTION	kf = theKeyMap->get_function(wParam);
+	KEY_FUNCTION	kf = theKeyMap->get_function(static_cast<uint32>(wParam));
 	if (kf != KEY_FUNCTION_NOOP)
 	{
 		g_selected_item->RegisterUIClick();

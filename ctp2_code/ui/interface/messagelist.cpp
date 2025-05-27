@@ -191,22 +191,16 @@ return;
 
 }
 
-
-
-
 void MessageList::CheckMaxMessages( void )
 {
-
-	uint32 count = m_iconList->L();
+	uint32 count = static_cast<uint32>(m_iconList->L());
 	uint32 maxCount = ( m_offset + g_messageMaxVisible );
 
 	if ( count > maxCount )
 		messagewin_MoreMessagesIcon( TRUE );
 	else
 		messagewin_MoreMessagesIcon( FALSE );
-
 }
-
 
 void MessageList::ChangeOffset( sint32 offset, int flag )
 {
