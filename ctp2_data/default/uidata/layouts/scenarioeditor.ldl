@@ -436,14 +436,14 @@ ScenarioEditor:CTP2_TITLE_WINDOW {
 				string statustext "str_SE_Good4"
 				string tipwindow "str_SE_Good4"
 			}
-			Pollution:SCEN_TOGGLE_SWITCH {
-				int xpix 267
-				int ypix 197
-				int widthpix 80
+			Rules:CTP2_BUTTON_SMALL {
+				int xpix 265
+				int ypix 195
+				int widthpix 90
 				int heightpix 22
-				string text "str_ldl_Pollution"
-				string statustext "str_SE_Pollution"
-				string tipwindow "str_SE_Pollution"
+				string text "str_ldl_Rules"
+				string statustext "str_ldl_Rules"
+				string tipwindow "str_ldl_Rules"
 			}
 		}
 

@@ -109,6 +109,8 @@ public:
 	void SetStartingAge              (sint32 age)       { m_startingAge = age; }
 	void SetEndingAge                (sint32 age)       { m_endingAge   = age; }
 
+	void SaveToProfile() const;
+
 	sint32 GetDifficulty()            const { return m_difficulty;                                          }
 	sint32 GetRisk()                  const { return m_risk;                                                }
 	sint32 GetStartingAge()           const { return m_startingAge;                                         }

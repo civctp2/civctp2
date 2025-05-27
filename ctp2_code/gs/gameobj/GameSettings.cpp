@@ -113,3 +113,27 @@ void GameSettings::Serialize(CivArchive &archive)
 		archive.LoadChunk((uint8*)&m_difficulty, (uint8*)&m_flags2 + sizeof(m_flags2));
 	}
 }
+
+void GameSettings::SaveToProfile() const
+{
+	g_theProfileDB->SetDifficulty(GetDifficulty());
+	g_theProfileDB->SetRiskLevel(GetRisk());
+	g_theProfileDB->SetSPStartingAge(GetStartingAge());
+	g_theProfileDB->SetSPEndingAge(GetEndingAge());
+
+	g_theProfileDB->SetAlienEndGame(IsAlienEndGame());
+
+	g_theProfileDB->SetGenocideRule(IsGenocide());
+
+	g_theProfileDB->SetPollutionRule(IsPollution());
+	g_theProfileDB->SetCityCaptureOptions(IsCityCaptureOptions());
+	g_theProfileDB->SetOneCity(IsOneCityChallenge());
+	g_theProfileDB->SetRevoltInsurgents(IsRevoltInsurgents());
+	g_theProfileDB->SetRevoltCasualties(IsRevoltCasualties());
+	g_theProfileDB->SetBarbarianSpawnsBarbarian(IsBarbarianSpawnsBarbarian());
+	g_theProfileDB->SetUpgrade(IsUpgrade());
+	g_theProfileDB->SetNewCombat(IsNewCombat());
+	g_theProfileDB->SetGoldPerUnitSupport(IsGoldPerUnitSupport());
+	g_theProfileDB->SetGoldPerCity(IsGoldPerCity());
+	g_theProfileDB->SetNoCityLimit(IsNoCityLimit());
+}
