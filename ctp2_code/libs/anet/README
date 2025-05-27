@@ -30,4 +30,6 @@ For a packing list and links to documentation, see index.html.
 
 To use nmake go to the Developer Command Prompt from your Visual Studio installation and then go to ..\anet\src and run there build.bat. The output files will be in ..\anet\win\.
 
+## Building the Linux server and tools ##
 
+Go to anet/src/linux/ and run ./build there.
