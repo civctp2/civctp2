@@ -692,7 +692,13 @@ void aui_TextField::MouseLGrabInside(aui_MouseEvent * mouseData)
 
 	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
 
-	m_selStart = m_selEnd = start - m_Text;
+	m_selEnd = start - m_Text;
+
+	if(!mouseData->IsSetLeftShift()
+	&& !mouseData->IsSetRightShift())
+	{
+		m_selStart = m_selEnd;
+	}
 
 	UpdateView();
 }
