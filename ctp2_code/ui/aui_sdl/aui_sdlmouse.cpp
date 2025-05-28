@@ -170,6 +170,8 @@ void aui_SDLMouse::GetInput(SDL_Event* event)
 		default:
 			break;
 	}
+
+	m_data.flags = m_flags;
 }
 
 sint32 aui_SDLMouse::ManipulateInputs(aui_MouseEvent *data, BOOL add)

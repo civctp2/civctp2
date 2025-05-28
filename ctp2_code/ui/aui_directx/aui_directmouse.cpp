@@ -387,24 +387,25 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 			&numElements,
 			0 );
 
-		switch ( hr )
+		switch(hr)
 		{
-		case DI_BUFFEROVERFLOW:
-		case DI_OK:
-			break;
+			case DI_BUFFEROVERFLOW:
+			case DI_OK:
+				break;
 
-		case DIERR_NOTACQUIRED:
-			return AUI_ERRCODE_NOTACQUIRED;
+			case DIERR_NOTACQUIRED:
+				return AUI_ERRCODE_NOTACQUIRED;
 
-		case DIERR_INPUTLOST:
-			Acquire();
-			return AUI_ERRCODE_INPUTLOST;
+			case DIERR_INPUTLOST:
+				Acquire();
+				return AUI_ERRCODE_INPUTLOST;
 
-		default:
-			return AUI_ERRCODE_GETDEVICEDATAFAILED;
+			default:
+				return AUI_ERRCODE_GETDEVICEDATAFAILED;
 		}
 
-		if ( numElements == 0 ) {
+		if ( numElements == 0 )
+		{
 			if(haveMoves)
 				return AUI_ERRCODE_OK;
 			else
@@ -413,117 +414,137 @@ AUI_ERRCODE aui_DirectMouse::GetInput( void )
 
 		switch ( ptrOd->dwOfs )
 		{
+			case DIMOFS_X:
+				m_data.position.x += sint32(m_sensitivity * sint32(ptrOd->dwData));
 
-		case DIMOFS_X:
-			m_data.position.x += sint32(m_sensitivity * sint32(ptrOd->dwData));
-			if ( m_data.position.x >= g_ui->SecondaryWidth() )
-				m_data.position.x = g_ui->SecondaryWidth() - 1;
-			else if ( m_data.position.x < 0 )
-				m_data.position.x = 0;
-			m_data.flags = m_flags;
-			haveMoves = true;
-			break;
+				if(m_data.position.x >= g_ui->SecondaryWidth())
+					m_data.position.x = g_ui->SecondaryWidth() - 1;
+				else if(m_data.position.x < 0)
+					m_data.position.x = 0;
 
-		case DIMOFS_Y:
-			m_data.position.y += sint32(m_sensitivity * sint32(ptrOd->dwData));
-			if ( m_data.position.y >= g_ui->SecondaryHeight() )
-				m_data.position.y = g_ui->SecondaryHeight() - 1;
-			else if ( m_data.position.y < 0 )
-				m_data.position.y = 0;
-			m_data.flags = m_flags;
-			haveMoves = true;
-			break;
-
-		case DIMOFS_BUTTON0:
-
-			if (g_theProfileDB && g_theProfileDB->GetLeftHandedMouse()) {
-
-				m_data.rbutton = uint8(ptrOd->dwData) & 0x80;
 				m_data.flags = m_flags;
-			} else {
-				m_data.lbutton = uint8(ptrOd->dwData) & 0x80;
+				haveMoves = true;
+				break;
+
+			case DIMOFS_Y:
+				m_data.position.y += sint32(m_sensitivity * sint32(ptrOd->dwData));
+
+				if(m_data.position.y >= g_ui->SecondaryHeight())
+					m_data.position.y = g_ui->SecondaryHeight() - 1;
+				else if(m_data.position.y < 0)
+					m_data.position.y = 0;
+
 				m_data.flags = m_flags;
-			}
-			return AUI_ERRCODE_OK;
+				haveMoves = true;
+				break;
 
-		case DIMOFS_BUTTON1:
+			case DIMOFS_BUTTON0:
+				if(g_theProfileDB && g_theProfileDB->GetLeftHandedMouse())
+				{
+					m_data.rbutton = uint8(ptrOd->dwData) & 0x80;
+					m_data.flags = m_flags;
+				}
+				else
+				{
+					m_data.lbutton = uint8(ptrOd->dwData) & 0x80;
+					m_data.flags = m_flags;
+				}
+				return AUI_ERRCODE_OK;
 
-			if (g_theProfileDB && g_theProfileDB->GetLeftHandedMouse()) {
+			case DIMOFS_BUTTON1:
+				if(g_theProfileDB && g_theProfileDB->GetLeftHandedMouse())
+				{
+					m_data.lbutton = uint8(ptrOd->dwData) & 0x80;
+					m_data.flags = m_flags;
+				}
+				else
+				{
+					m_data.rbutton = uint8(ptrOd->dwData) & 0x80;
+					m_data.flags = m_flags;
+				}
+				return AUI_ERRCODE_OK;
 
-				m_data.lbutton = uint8(ptrOd->dwData) & 0x80;
+			case DIMOFS_BUTTON2:
+				m_data.mbutton = uint8(ptrOd->dwData) & 0x80;
 				m_data.flags = m_flags;
-			} else {
-				m_data.rbutton = uint8(ptrOd->dwData) & 0x80;
+				return AUI_ERRCODE_OK;
+
+			case DIMOFS_BUTTON3:
+				m_data.tbutton = uint8(ptrOd->dwData) & 0x80;
 				m_data.flags = m_flags;
-			}
-			return AUI_ERRCODE_OK;
+				return AUI_ERRCODE_OK;
 
-		case DIMOFS_BUTTON2:
-			m_data.mbutton = uint8(ptrOd->dwData) & 0x80;
-			m_data.flags = m_flags;
-			return AUI_ERRCODE_OK;
+			case DIMOFS_BUTTON4:
+				m_data.ubutton = uint8(ptrOd->dwData) & 0x80;
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-		case DIMOFS_BUTTON3:
-			m_data.tbutton = uint8(ptrOd->dwData) & 0x80;
-			m_data.flags = m_flags;
-			return AUI_ERRCODE_OK;
+			case DIMOFS_BUTTON5:
+				m_data.vbutton = uint8(ptrOd->dwData) & 0x80;
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-		case DIMOFS_BUTTON4:
-			m_data.ubutton = uint8(ptrOd->dwData) & 0x80;
-			m_data.flags = m_flags;
-			return AUI_ERRCODE_OK;
+			case DIMOFS_BUTTON6:
+				m_data.wbutton = uint8(ptrOd->dwData) & 0x80;
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-		case DIMOFS_BUTTON5:
-			m_data.vbutton = uint8(ptrOd->dwData) & 0x80;
-			m_data.flags = m_flags;
-			return AUI_ERRCODE_OK;
+			case DIMOFS_BUTTON7:
+				m_data.xbutton = uint8(ptrOd->dwData) & 0x80;
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-		case DIMOFS_BUTTON6:
-			m_data.wbutton = uint8(ptrOd->dwData) & 0x80;
-			m_data.flags = m_flags;
-			return AUI_ERRCODE_OK;
+			case DIK_LSHIFT:
+				if(uint8(ptrOd->dwData) & 0x80)
+				{
+					SetLeftShift();
+				}
+				else
+				{
+					UnsetLeftShift();
+				}
 
-		case DIMOFS_BUTTON7:
-			m_data.xbutton = uint8(ptrOd->dwData) & 0x80;
-			m_data.flags = m_flags;
-			return AUI_ERRCODE_OK;
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-		case DIK_LSHIFT :
-			if (uint8(ptrOd->dwData) & 0x80) {
+			case DIK_RSHIFT:
+				if(uint8(ptrOd->dwData) & 0x80)
+				{
+					SetRightShift();
+				}
+				else
+				{
+					UnsetRightShift();
+				}
 
-				m_flags |= k_MOUSE_EVENT_FLAG_LSHIFT;
-			} else {
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-				m_flags &= ~k_MOUSE_EVENT_FLAG_LSHIFT;
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_RSHIFT :
-			if (uint8(ptrOd->dwData) & 0x80) {
+			case DIK_LCONTROL:
+				if(uint8(ptrOd->dwData) & 0x80)
+				{
+					SetLeftControl();
+				}
+				else
+				{
+					UnsetLeftControl();
+				}
 
-				m_flags |= k_MOUSE_EVENT_FLAG_RSHIFT;
-			} else {
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 
-				m_flags &= ~k_MOUSE_EVENT_FLAG_RSHIFT;
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_LCONTROL :
-			if (uint8(ptrOd->dwData) & 0x80) {
+			case DIK_RCONTROL:
+				if(uint8(ptrOd->dwData) & 0x80)
+				{
+					SetRightControl();
+				}
+				else
+				{
+					UnsetRightControl();
+				}
 
-				m_flags |= k_MOUSE_EVENT_FLAG_LCONTROL;
-			} else {
-
-				m_flags &= ~k_MOUSE_EVENT_FLAG_LCONTROL;
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_RCONTROL :
-			if (uint8(ptrOd->dwData) & 0x80) {
-
-				m_flags |= k_MOUSE_EVENT_FLAG_RCONTROL;
-			} else {
-
-				m_flags &= ~k_MOUSE_EVENT_FLAG_RCONTROL;
-			}
-			return AUI_ERRCODE_OK;
+				m_data.flags = m_flags;
+				return AUI_ERRCODE_OK;
 		}
 	}
 

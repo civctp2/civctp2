@@ -58,19 +58,27 @@ class ldl_datablock;
 
 struct aui_MouseEvent
 {
-	POINT	position;
-	BOOL	lbutton;
-	BOOL	rbutton;
+	POINT   position;
+	BOOL    lbutton;
+	BOOL    rbutton;
 	BOOL    mbutton;
 	BOOL    tbutton;
 	BOOL    ubutton;
 	BOOL    vbutton;
 	BOOL    wbutton;
 	BOOL    xbutton;
-	uint32	time;
-	sint32	movecount;
-	sint32	framecount;
-	uint32	flags;
+	uint32  time;
+	sint32  movecount;
+	sint32  framecount;
+
+	uint32  flags;
+
+	bool IsSet (uint32 flag) { return flags & flag; }
+
+	bool IsSetLeftShift   () { return IsSet(k_MOUSE_EVENT_FLAG_LSHIFT); }
+	bool IsSetRightShift  () { return IsSet(k_MOUSE_EVENT_FLAG_RSHIFT); }
+	bool IsSetLeftControl () { return IsSet(k_MOUSE_EVENT_FLAG_LCONTROL); }
+	bool IsSetRightControl() { return IsSet(k_MOUSE_EVENT_FLAG_RCONTROL); }
 };
 
 #define k_MOUSE_MAXINPUT			48
@@ -175,8 +183,28 @@ public:
 		RECT *imageRect,
 		aui_DirtyList *imageAreas ) = 0;
 
-	uint32 GetFlags(void) { return m_flags;}
+	uint32 GetFlags(void) { return m_flags; }
 	void SetFlags(uint32 flags) { m_flags = flags; }
+
+	void   SetFlag(uint32 flag) { m_flags |=  flag; }
+	void UnsetFlag(uint32 flag) { m_flags &= ~flag; }
+
+	void   SetLeftShift   () {   SetFlag(k_MOUSE_EVENT_FLAG_LSHIFT); }
+	void   SetRightShift  () {   SetFlag(k_MOUSE_EVENT_FLAG_RSHIFT); }
+	void   SetLeftControl () {   SetFlag(k_MOUSE_EVENT_FLAG_LCONTROL); }
+	void   SetRightControl() {   SetFlag(k_MOUSE_EVENT_FLAG_RCONTROL); }
+
+	void UnsetLeftShift   () { UnsetFlag(k_MOUSE_EVENT_FLAG_LSHIFT); }
+	void UnsetRightShift  () { UnsetFlag(k_MOUSE_EVENT_FLAG_RSHIFT); }
+	void UnsetLeftControl () { UnsetFlag(k_MOUSE_EVENT_FLAG_LCONTROL); }
+	void UnsetRightControl() { UnsetFlag(k_MOUSE_EVENT_FLAG_RCONTROL); }
+
+	bool IsSet (uint32 flag) { return m_flags & flag; }
+
+	bool IsSetLeftShift   () { return IsSet(k_MOUSE_EVENT_FLAG_LSHIFT); }
+	bool IsSetRightShift  () { return IsSet(k_MOUSE_EVENT_FLAG_RSHIFT); }
+	bool IsSetLeftControl () { return IsSet(k_MOUSE_EVENT_FLAG_LCONTROL); }
+	bool IsSetRightControl() { return IsSet(k_MOUSE_EVENT_FLAG_RCONTROL); }
 
 protected:
 	static sint32 m_mouseRefCount;

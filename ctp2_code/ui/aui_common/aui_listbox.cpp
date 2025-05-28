@@ -1533,24 +1533,23 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 				}
 				else
 				{
-					if (m_multiSelect) {
-						if (!(mouseData->flags & k_MOUSE_EVENT_FLAG_LCONTROL
-								|| mouseData->flags & k_MOUSE_EVENT_FLAG_RCONTROL)) {
-
-							while (m_visualSelectedList->L() > 0)
+					if(m_multiSelect)
+					{
+						if(!(mouseData->IsSetLeftControl()
+						||   mouseData->IsSetRightControl())
+						){
+							while(m_visualSelectedList->L() > 0)
 								m_visualSelectedList->RemoveHead();
 
 							m_selectStatus = AUI_LISTBOX_SELECTSTATUS_SELECTING;
-
-						} else {
-
+						}
+						else
+						{
 							m_selectStatus = AUI_LISTBOX_SELECTSTATUS_DESELECTING;
 
 							m_visualSelectedList->DeleteAt(
-								m_visualSelectedList->Find( itemIndex ) );
+								m_visualSelectedList->Find(itemIndex));
 						}
-					}  else {
-
 					}
 				}
 			}
@@ -1560,34 +1559,44 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 
 				if ( !m_multiSelect
 					|| (m_multiSelect
-						&& !(mouseData->flags & k_MOUSE_EVENT_FLAG_LCONTROL
-							|| mouseData->flags & k_MOUSE_EVENT_FLAG_RCONTROL
-							|| mouseData->flags & k_MOUSE_EVENT_FLAG_LSHIFT
-							|| mouseData->flags & k_MOUSE_EVENT_FLAG_RSHIFT))
-						&& m_visualSelectedList->L() ) {
+						&& !(mouseData->IsSetLeftControl()
+							|| mouseData->IsSetRightControl()
+							|| mouseData->IsSetLeftShift()
+							|| mouseData->IsSetRightShift()))
+						&& m_visualSelectedList->L() )
+				{
 
 					while (m_visualSelectedList->L() > 0)
 						m_visualSelectedList->RemoveHead();
 				}
-				if (m_multiSelect
-					&& (mouseData->flags & k_MOUSE_EVENT_FLAG_LSHIFT
-						|| mouseData->flags & k_MOUSE_EVENT_FLAG_RSHIFT)) {
 
+				if (m_multiSelect
+				&& (mouseData->IsSetLeftShift()
+				||  mouseData->IsSetRightShift())
+				){
 					sint32		firstIndex = 999999,
 								index;
 
 					sint32 i;
-					for (i=0; i<(sint32)(m_visualSelectedList->L()); i++) {
+					for (i=0; i<(sint32)(m_visualSelectedList->L()); i++)
+					{
 						index = m_visualSelectedList->GetAtIndex(i);
 						if (index <= firstIndex) firstIndex = index;
 					}
-					if (firstIndex != 999999 && firstIndex != itemIndex) {
-						if (firstIndex < itemIndex) {
-							for (sint32 i=firstIndex; i<itemIndex; i++) {
+
+					if (firstIndex != 999999 && firstIndex != itemIndex)
+					{
+						if (firstIndex < itemIndex)
+						{
+							for (sint32 i=firstIndex; i<itemIndex; i++)
+							{
 								m_visualSelectedList->AddTail(i);
 							}
-						} else {
-							for (sint32 i=itemIndex+1; i<firstIndex; i++) {
+						}
+						else
+						{
+							for (sint32 i=itemIndex+1; i<firstIndex; i++)
+							{
 								m_visualSelectedList->AddTail(i);
 							}
 						}
@@ -1616,10 +1625,13 @@ void aui_ListBox::MouseLGrabInside( aui_MouseEvent *mouseData )
 			m_dragIndex = itemIndex;
 
 			m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_MOUSELGRABINSIDE;
-		} else {
-
-			if(!m_forceSelect) {
-				for(size_t i = m_selectedList->L(); i; i--) {
+		}
+		else
+		{
+			if(!m_forceSelect)
+			{
+				for(size_t i = m_selectedList->L(); i; i--)
+				{
 					DeselectItem(m_selectedList->GetAtIndex(0));
 				}
 			}
