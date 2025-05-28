@@ -2583,6 +2583,13 @@ Si se <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>terraforma<e> una casilla donde hay
 [CONCEPT_GOODS_HISTORICAL]
 [END]
 
+[CONCEPT_GOSSIP_GAMEPLAY]
+Every turn in which an <L:DATABASE_UNITS,UNIT_DIPLOMAT>Diplomat<e> or <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathic Diplomat<e> is positioned next to a foreign <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Capital City<e>, there is a small chance of Hearing Gossip. There are several types of information that could be acquired this way, including that nation's <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Military Readiness<e> posture, a map of an unknown region, or even an unknown <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>advance<e>.
+[END]
+
+[CONCEPT_GOSSIP_HISTORICAL]
+[END]
+
 [CONCEPT_GOVERNMENTS_GAMEPLAY]
 El gobierno es un sistema complejo de instituciones políticas, leyes y costumbres mediante las cuales se lleva a cabo la función gubernativa.
 
@@ -7639,11 +7646,13 @@ Obsolete:
 Habilidades:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Abrir embajadas<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Organizar recepciones<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Abrir embajadas<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Organizar recepciones<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_STATISTICS]
@@ -7788,9 +7797,11 @@ La filosofía de la ecotopía, defensora de un ecologismo radical y de una forma d
 [UNIT_EMPATHIC_DIPLOMAT_PREREQ]
 Requiere:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Eugenesia<e>
+
 Habilidades:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Abrir embajadas<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Organizar recepciones<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Ver a las <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Unidades Stealth<e>
 [END]
 
@@ -7812,6 +7823,7 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [UNIT_EMPATHIC_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Abrir embajadas<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Organizar recepciones<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Ver a las <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Unidades Stealth<e>
 [END]
 

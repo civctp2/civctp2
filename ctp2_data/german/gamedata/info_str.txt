@@ -436,7 +436,7 @@ GOSSIP_WARTIME_READINESS		"Die {player[0].civ_name_plural} befinden sich in Krie
 GOSSIP_ALERT_READINESS			"Die {player[0].civ_name_plural} sind in Alarmbereitschaft."
 GOSSIP_PEACETIME_READINESS		"Die {player[0].civ_name_plural} befinden sich in Friedenszeiten entsprechender Militärbereitschaft."
 GOSSIP_CAPTION					"Tratsch"
-GOSSIP_BORING					"Die {player[0].civ_name_plural} sind ein bemerkenswert langweilig: Sie tratschen über nichts Interessantes."
+GOSSIP_BORING					"Die {player[0].civ_name_plural} sind ein bemerkenswert langweiliges Volk: Sie tratschen über nichts Interessantes."
 GOSSIP_MAP						"Wir haben den {player[0].civ_name_plural#DAT} Wissen über die Weltkarte entlockt."
 GOSSIP_COMPLETE_ATTACKER		"Unsere Diplomaten haben viel Tratsch gehört. Auf diese Weise konnten wir Erkenntnisse über {advance[0].name#ARTICLE_ACC} gewinnen."
 

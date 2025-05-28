@@ -2588,6 +2588,13 @@ If one <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>Terraforms<e> a tile with a Good o
 [CONCEPT_GOODS_HISTORICAL]
 [END]
 
+[CONCEPT_GOSSIP_GAMEPLAY]
+Every turn in which an <L:DATABASE_UNITS,UNIT_DIPLOMAT>Diplomat<e> or <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathic Diplomat<e> is positioned next to a foreign <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Capital City<e>, there is a small chance of Hearing Gossip. There are several types of information that could be acquired this way, including that nation's <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Military Readiness<e> posture, a map of an unknown region, or even an unknown <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>advance<e>.
+[END]
+
+[CONCEPT_GOSSIP_HISTORICAL]
+[END]
+
 [CONCEPT_GOVERNMENTS_GAMEPLAY]
 Government is the complex of political institutions, laws, and customs through which the function of governing is carried out.  
 
@@ -2911,7 +2918,7 @@ Several factors contribute to the profitability of certain trade routes, includi
 [CONCEPT_TRADE_ROUTE_GAMEPLAY]
 Players may create trade routes, in which Caravans (and later, Freight Transports) carry goods between <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> both foreign and domestic.  A line between two <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> indicates a trade route.  Players can tell at a glance what <L:DATABASE_CONCEPTS,CONCEPT_CITY>Cities<e> are trading by a small icon, representing the trade good, which travels along the line.
 
-Empires can pirate the trade routes of their rivals once per turn.  The trade route is not destroyed.  Rather, the pirates abscond with that the profits for that turn.  Piracy is considered an act of aggression and usually has diplomatic consequences.
+Empires can pirate the trade routes of their rivals once per turn.  The trade route is not destroyed.  Rather, the pirates abscond with the profits for that turn.  Piracy is considered an act of aggression and usually has diplomatic consequences.
 [END]
 
 [CONCEPT_TRADE_ROUTE_HISTORICAL]
@@ -6985,7 +6992,7 @@ The Aircraft Carrier extends the range of air units by providing them with a mob
 [UNIT_AIRCRAFT_CARRIER_HISTORICAL]
 The origins of the modern aircraft carrier date back to 1910, when an American civilian pilot, Eugene Ely, flew a plane off a specially built platform attached to the deck of the U.S. cruiser Birmingham at Hampton Roads, Virginia.  Ely then performed the first carrier landing, on the quarterdeck of the battleship Pennsylvania, in San Francisco, California on January 18, 1911.  By using wires attached to sandbags, he was able to stop his plane quickly.  The British, Japanese and U.S. navies began to develop the first true carriers with unobstructed flight decks but the war ended before they could see battle.  The aircraft carrier came of age in World War II as they began to prove themselves more versatile, effective and destructive than battleships and battle cruisers for naval combat.
 
-In the beginning of World War II, planes dive-bombing and torpedo bombing from carriers did not have enough velocity or destructive power to penetrate battleship armor.  By the end of the war, advances in aircraft and weapons technology finally gave carrier-based planes the power they needed to sink even the largest Yamato-class battleships of the Japanese fleet.  The long reign of the battleship ended when U.S. carrier-based planes sunk the Musashi in October 1944 and the Yamato in 1945.  Carriers continued to be the most formidable ship in the world for well into the 21st century.
+In the beginning of World War II, planes dive-bombing and torpedo bombing from carriers did not have enough velocity or destructive power to penetrate battleship armor.  By the end of the war, advances in aircraft and weapons technology finally gave carrier-based planes the power they needed to sink even the largest Yamato-class battleships of the Japanese fleet.  The long reign of the battleship ended when U.S. carrier-based planes sunk the Musashi in October 1944 and the Yamato in 1945.  Carriers continued to be the most formidable ships in the world for well into the 21st century.
 [END]
 
 [UNIT_ARCHER_PREREQ]
@@ -7630,11 +7637,13 @@ Obsolete:
 Abilities:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_STATISTICS]
@@ -7780,9 +7789,11 @@ The Ecotopian philosophy of radical environmentalism, comprised of a way of life
 [UNIT_EMPATHIC_DIPLOMAT_PREREQ]
 Requires:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Gene Therapy<e>
+
 Abilities:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 See <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e>
 [END]
 
@@ -7804,6 +7815,7 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [UNIT_EMPATHIC_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 See <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth Units<e>
 [END]
 

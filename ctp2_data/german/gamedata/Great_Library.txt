@@ -2590,6 +2590,13 @@ Wird ein Geländefeld mit einem Rohstoff per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFO
 [CONCEPT_GOODS_HISTORICAL]
 [END]
 
+[CONCEPT_GOSSIP_GAMEPLAY]
+In jeder Runde, in der ein <L:DATABASE_UNITS,UNIT_DIPLOMAT>Diplomat<e> oder eine <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathische Diplomatin<e> bei einer fremden <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Häuptstadt<e> steht, so dass sie Tratsch hören. Einige Typen von Informationen können so gewonnen werden. Dabei handelt es sich um die <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Militärbereitschaft<e> eines Reiches, unbekannte Regionen der Karte, oder sogar eine unbekannte <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Neuerung<e>.
+[END]
+
+[CONCEPT_GOSSIP_HISTORICAL]
+[END]
+
 [CONCEPT_GOVERNMENTS_GAMEPLAY]
 Eine Regierung besteht aus politischen Institutionen, der Gesetzgebung und Organen, die die Regierungsfunktionen ausführen und umsetzen. 
 
@@ -7787,6 +7794,7 @@ Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Botschaft errichten<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Empfang geben<e>
 Identifizierung anderer <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheiten<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hört Tratsch<e>
 [END]
 
 [UNIT_DIPLOMAT_STATISTICS]
@@ -7807,6 +7815,7 @@ Nahrungsbedarf: {UnitDB(UnitRecord[0]).FoodHunger}
 [UNIT_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Botschaft errichten<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Empfang geben<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hört Tratsch<e>
 Identifizierung anderer <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheiten<e>
 [END]
 
@@ -7944,6 +7953,7 @@ Voraussetzung:
 Fähigkeiten:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Botschaft errichten<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Empfang geben<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hört Tratsch<e>
 Identifizierung anderer <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheiten<e>
 [END]
 
@@ -7966,6 +7976,7 @@ Nahrungsbedarf: {UnitDB(UnitRecord[0]).FoodHunger}
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Botschaft errichten<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Empfang geben<e>
 Identifizierung anderer <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>Stealth-Einheiten<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hört Tratsch<e>
 [END]
 
 [UNIT_EMPATHIC_DIPLOMAT_GAMEPLAY]

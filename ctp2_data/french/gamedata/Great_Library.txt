@@ -2588,6 +2588,13 @@ Si le joueur <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>terraforme<e> une case avec 
 [CONCEPT_GOODS_HISTORICAL]
 [END]
 
+[CONCEPT_GOSSIP_GAMEPLAY]
+Every turn in which an <L:DATABASE_UNITS,UNIT_DIPLOMAT>Diplomat<e> or <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathic Diplomat<e> is positioned next to a foreign <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Capital City<e>, there is a small chance of Hearing Gossip. There are several types of information that could be acquired this way, including that nation's <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Military Readiness<e> posture, a map of an unknown region, or even an unknown <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>advance<e>.
+[END]
+
+[CONCEPT_GOSSIP_HISTORICAL]
+[END]
+
 [CONCEPT_GOVERNMENTS_GAMEPLAY]
 Le gouvernement est l'ensemble des institutions politiques, lois et coutumes assurant la fonction de gestion de l'empire.
 
@@ -2622,12 +2629,12 @@ Les aménagements ont un prix. Une ville les construit à partir des ressources de
 [CONCEPT_IMPROVEMENTS_HISTORICAL]
 [END]
 
-[CONCEPT_INFRASTRUCTURE_GAMEPLAY]
-Dans Call to Power II, l'industrie d'une ville peut être convertie en <L:DATABASE_CONCEPTS,CONCEPT_PUBLIC_WORKS>travaux publics<e>. Ceux-ci servent à la construction de <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>fermes<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>routes<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>mines<e> et autres <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>aménagements de case<e>. Grâce aux infrastructures, le volume total de la <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>production<e> d'une ville est converti et incorporé à la réserve de <L:DATABASE_CONCEPTS,CONCEPT_PUBLIC_WORKS>travaux publics<e> à chaque tour. Dès lors que les infrastructures sont sélectionnées dans la liste d'attente de construction, celles-ci sont reportées automatiquement au prochain tour.
-[END]
-
 [CONCEPT_INFRASTRUCTURE_SUMMARY]
 Convertissent la <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>production<e> en <L:DATABASE_CONCEPTS,CONCEPT_PUBLIC_WORKS>travaux publics<e>
+[END]
+
+[CONCEPT_INFRASTRUCTURE_GAMEPLAY]
+Dans Call to Power II, l'industrie d'une ville peut être convertie en <L:DATABASE_CONCEPTS,CONCEPT_PUBLIC_WORKS>travaux publics<e>. Ceux-ci servent à la construction de <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>fermes<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>routes<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>mines<e> et autres <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>aménagements de case<e>. Grâce aux infrastructures, le volume total de la <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>production<e> d'une ville est converti et incorporé à la réserve de <L:DATABASE_CONCEPTS,CONCEPT_PUBLIC_WORKS>travaux publics<e> à chaque tour. Dès lors que les infrastructures sont sélectionnées dans la liste d'attente de construction, celles-ci sont reportées automatiquement au prochain tour.
 [END]
 
 [CONCEPT_INFRASTRUCTURE_HISTORICAL]
@@ -7656,12 +7663,14 @@ Obsolete:
 Capacités :
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Etablir des ambassades<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Donner des réceptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Repérer les autres <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unités furtives<e>
 [END]
 
 [UNIT_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Etablit des ambassades<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Donne des réceptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Repère les <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unités furtives<e>
 [END]
 
@@ -7813,6 +7822,7 @@ Condition :
 Capacités :
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Etablir des ambassades<e>,
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Donner des réceptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Repérer les <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unités furtives<e>
 [END]
 
@@ -7834,6 +7844,7 @@ Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [UNIT_EMPATHIC_DIPLOMAT_SUMMARY]
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Etablit des ambassades<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Donne des réceptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Repère les <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unités furtives<e>
 [END]
 

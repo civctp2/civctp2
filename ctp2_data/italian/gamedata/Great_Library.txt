@@ -2590,6 +2590,13 @@ Se si sottopone a <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>trasformazione<e> una c
 [CONCEPT_GOODS_HISTORICAL]
 [END]
 
+[CONCEPT_GOSSIP_GAMEPLAY]
+Every turn in which an <L:DATABASE_UNITS,UNIT_DIPLOMAT>Diplomat<e> or <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathic Diplomat<e> is positioned next to a foreign <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Capital City<e>, there is a small chance of Hearing Gossip. There are several types of information that could be acquired this way, including that nation's <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Military Readiness<e> posture, a map of an unknown region, or even an unknown <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>advance<e>.
+[END]
+
+[CONCEPT_GOSSIP_HISTORICAL]
+[END]
+
 [CONCEPT_GOVERNMENTS_GAMEPLAY]
 Il governo è il complesso di istituzioni politiche, leggi e usi attraverso i quali la funzione di governo viene svolta. 
 
@@ -7611,14 +7618,16 @@ Richiede:
 Obsolete:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Eugenetica<e>
 
-Abilità:
-<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
-<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Dà ricevimenti<e>
+Abilities:
+<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
+<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_SUMMARY]
-<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
-<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Dà ricevimenti<e>
+<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
+<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_STATISTICS]
@@ -7764,9 +7773,11 @@ La filosofia ecotopista dell'ambientalismo radicale, che proponeva uno stile di 
 [UNIT_EMPATHIC_DIPLOMAT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Eugenetica<e>
+
 Abilità:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Dà ricevimenti<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Vede le <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unità antiradar<e>
 [END]
 
