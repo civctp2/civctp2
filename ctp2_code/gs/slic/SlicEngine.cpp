@@ -976,6 +976,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_UnsetVeteran);
 	m_functionHash->Add(new Slic_SetElite);
 	m_functionHash->Add(new Slic_UnsetElite);
+	m_functionHash->Add(new Slic_HearGossip);
 	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
 	//Added by E

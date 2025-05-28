@@ -630,6 +630,7 @@ SLICFUNC(SFR_VOID, SetVeteran)
 SLICFUNC(SFR_VOID, UnsetVeteran)
 SLICFUNC(SFR_VOID, SetElite)
 SLICFUNC(SFR_VOID, UnsetElite)
+SLICFUNC(SFR_VOID, HearGossip)
 //New slicfunctions by Solver
 SLICFUNC(SFR_INT, IsOnSameContinent)
 //New slicfunctions by E

@@ -7341,6 +7341,43 @@ SFN_ERROR Slic_UnsetElite::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_HearGossip
+//
+// Description: Makes a unit hear gossip, if it can hear gossip and is in the
+//              range of a foreign capital. Quite useless as a such a units
+//              hears gossip if it is next to a foreign captal at begin turn.
+//              Unless you also wanna hear gossip while in transit. Otherwise,
+//              good for testing.
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR       : execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_HearGossip::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	u->HearGossip();
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
 // Authored   : Solver
 //
 // Name       : Slic_IsOnSameContinent
