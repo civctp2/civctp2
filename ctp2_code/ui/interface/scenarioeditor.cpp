@@ -464,8 +464,13 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	m_window->SetDraggable( TRUE );
 	m_addStuffWindow->SetDraggable( TRUE);
 
+	ctp2_Switch *pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.XWrapButton");
+	pButton->SetState((m_xWrap) ? 1 : 0);
+
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.XWrapButton", SetXWrap, NULL);
 
+	pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.YWrapButton");
+	pButton->SetState((m_yWrap) ? 1 : 0);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.YWrapButton", SetYWrap, NULL);
 
 	*err = AUI_ERRCODE_OK;
@@ -2773,10 +2778,6 @@ void ScenarioEditor::SetupGlobalControls()
 
 	m_debugAI->SetState(g_graphicsOptions->IsArmyTextOn());
 
-	ctp2_Switch *pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.XWrapButton");
-	pButton->SetState((m_xWrap) ? 1 : 0);
-	pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.YWrapButton");
-	pButton->SetState((m_yWrap) ? 1 : 0);
 
 	table = new aui_StringTable(&err, "WorldControlsStringTable");
 
