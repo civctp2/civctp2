@@ -684,6 +684,8 @@ public:
 	sint32 CalculateTotalFuel() const;
 	double CalculateTotalMovePoints() const;
 
+	void HearGossip();
+
 //emod
 	bool IsElite() const { return Flag(k_UDF_IS_ELITE); };
 	void SetElite();
