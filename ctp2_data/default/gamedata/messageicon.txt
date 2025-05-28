@@ -1,4 +1,4 @@
-106
+108
 #
 # WARNING should always be first, and WARNING_SELECTED second.
 # Otherwise order doesn't matter.
@@ -110,3 +110,5 @@ TUT_LEVEL_6					"MGMI056.tga"
 TUT_LEVEL_6_SELECTED		"MGMI056.tga"
 NEW_BUILDING				"MGMI057.tga"
 NEW_BUILDING_SELECTED		"MGMI057.tga"
+GOSSIP						"MGMI061.tga"
+GOSSIP_SELECTED				"MGMI061.tga"
