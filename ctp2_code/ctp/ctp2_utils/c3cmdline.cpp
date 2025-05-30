@@ -1660,7 +1660,7 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 {
 	sint32		i;
-	MBCHAR		*unitFileNames[] = {
+	const MBCHAR	*unitFileNames[] = {
 					"GU01.SPR",
 					"GU02.SPR",
 					"GU03.SPR",
@@ -1741,7 +1741,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 				};
 	sint32		numUnits  = 77;
 
-	MBCHAR		*cityFileNames[] = {
+	const MBCHAR	*cityFileNames[] = {
 						"GC001.SPR",
 						"GC002.SPR",
 						"GC003.SPR",
@@ -1810,7 +1810,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 				};
 	sint32		numCities = 65;
 
-	MBCHAR		*goodFileNames[] = {
+	const MBCHAR	*goodFileNames[] = {
 						"GG00.SPR",
 						"GG01.SPR",
 						"GG02.SPR",
@@ -1836,7 +1836,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 	UnitSpriteGroup		*usg;
 	GoodSpriteGroup		*gsg;
 
-	MBCHAR *name;
+	const MBCHAR *name;
 	MBCHAR saveName[_MAX_PATH];
 
 	for (i = 0; i < numUnits; i++)
@@ -5656,7 +5656,7 @@ void DipLogOnCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]);
         g_theDiplomacyLog->LogPlayer(p);
     }
-#endif _DEBUG
+#endif // _DEBUG
 }
 
 void DipLogOffCommand::Execute (sint32 argc, char** argv)
@@ -5672,7 +5672,7 @@ void DipLogOffCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]);
         g_theDiplomacyLog->UnlogPlayer(p);
     }
-#endif _DEBUG
+#endif // _DEBUG
 }
 
 void RestartCommand::Execute(sint32 argc, char** argv)

@@ -16,9 +16,9 @@ class aui_Surface;
 
 struct CommandRecord
 {
-	char* m_name;
+	const char* m_name;
 	Command* m_handler;
-	char* m_helptext;
+	const char* m_helptext;
 };
 
 class Command

@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Added more yy* symbols to be replaced by sc* symbols so that there are
-//   less problems with the other parser charing the same global symbols that
+//   less problems with the other parser sharing the same global symbols that
 //   caused usage of invalid memory. - May 28th 2005 Martin Gühmann
 //
 //----------------------------------------------------------------------------

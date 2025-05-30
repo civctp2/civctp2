@@ -66,7 +66,7 @@
 #endif
 #define lint
 
-void yyerror(char* err);
+void yyerror(const char* err);
 
 #ifdef _DEBUG
 FILE *debuglog;
@@ -493,7 +493,7 @@ const char *slicif_get_filename()
 	return include_filename_stack[include_stack_ptr];
 }
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
     extern int line;
 #ifdef _DEBUG

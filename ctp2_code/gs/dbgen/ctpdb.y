@@ -65,7 +65,7 @@
 
 #define lint
 
-void yyerror(char *err);
+void yyerror(const char *err);
 
 int yylex();
 
@@ -250,7 +250,7 @@ exclusivebits: EXCLUSIVEBITS NAME '{' names '}'
 			   ;
 
 %%
-void yyerror(char *err)
+void yyerror(const char *err)
 {
 	printf("Line %d: %s\n", g_line_number, err);
 	s_done = 1;
