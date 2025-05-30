@@ -1513,7 +1513,6 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	}
 
 	chdir(path);
-	fprintf(stderr, "%s\n", path);
 #endif
 
 	appstrings_Initialize();
