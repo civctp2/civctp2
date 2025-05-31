@@ -738,7 +738,7 @@ STDEHANDLER(ArmyMoveEvent)
 		return GEV_HD_Continue;
 	}
 
-	armyData->CheckLoadSleepingCargoFromCity(NULL);
+	armyData->CheckLoadSleepingCargoFromCity();
 
 	if (armyData->IsMovePointsEnough(newPos))
 	{

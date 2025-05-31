@@ -425,7 +425,7 @@ public:
 
     bool ExecuteMoveOrder(Order *order);
 
-    void CheckLoadSleepingCargoFromCity(Order *order);
+    void CheckLoadSleepingCargoFromCity();
 //  bool Move(WORLD_DIRECTION, Order *order); // commented, since not used any more
     bool FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order);
     bool FinishAttack(Order *order);

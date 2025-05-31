@@ -413,6 +413,8 @@ private:
     sint32 m_showCityProduction;
     /// Swtich between windowed and fullscreen mode
     sint32 m_windowedMode;
+    /// Sleeping units automatically board
+    sint32 m_sleepingUnitsBoard;
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
@@ -447,9 +449,6 @@ public:
 
     sint32 GetValueByName(const char *name) const;
     void SetValueByName(const char *name, sint32 value);
-
-
-
 
     //Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
     void SetNPlayers(uint32 n)                          { Assert((n > 1) && (n <= k_MAX_PLAYERS)); m_nPlayers = n; }
@@ -616,6 +615,7 @@ public:
     void SetShowCityProduction(BOOL on)                 { m_showCityProduction = on; }
 
     void SetWindowedMode(BOOL val)                      { m_windowedMode = val; }
+    void SetSleepingUnitsBoard(BOOL val)                { m_sleepingUnitsBoard = val; }
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
 
@@ -874,6 +874,7 @@ public:
     BOOL    IsShowCityProduction()              { return m_showCityProduction; }
 
     BOOL    IsWindowedMode() const              { return m_windowedMode; }
+    BOOL    IsSleepingUnitsBoard() const        { return m_sleepingUnitsBoard; }
 };
 
 extern ProfileDB *g_theProfileDB;

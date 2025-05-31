@@ -6726,8 +6726,11 @@ bool ArmyData::IsOccupiedByForeigner(const MapPoint &pos)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
+void ArmyData::CheckLoadSleepingCargoFromCity()
 {
+	if(!g_player[m_owner]->IsRobot() && !g_theProfileDB->IsSleepingUnitsBoard())
+		return;
+
 	Cell *cell = g_theWorld->GetCell(m_pos);
 	//if neither in a city nor in an airfield
 	if( cell->GetCity().m_id == 0

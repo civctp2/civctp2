@@ -3109,18 +3109,19 @@ str_profile_RevoltInsurgents                    "Revolting cities create barbari
 str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
 str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
 str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
-str_profile_AINoCityLimit                       "AI No City LImit"                              # AI not affected by city limit
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
 str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
 str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
-str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"                  # AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                      # AI doesnt pay unit gold hunger
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
 str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
 str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
 str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
 str_profile_NewCombat                           "New Combat"
-str_profile_WindowedMode                        "Window Mode"
+str_profile_WindowedMode                        "Windowed Mode"                                 # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Sentineling units board automatically"         # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Añadido para extender las opciones del teclado. 6/2004 L. Hirth
 str_tbl_ldl_Music_Options				"Opciones de Musica"

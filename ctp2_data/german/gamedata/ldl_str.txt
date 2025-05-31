@@ -3120,7 +3120,8 @@ str_profile_OneCityChallenge                    "Eine-Stadt-Herausforderung"    
 str_profile_CityCaptureOptions                  "Stadteroberungsoptionen"                       # Captured city options
 str_profile_DebugCityAstar                      "Straﬂenbaupfad debuggen"
 str_profile_NewCombat                           "Neues Kampfsystem"
-str_profile_WindowedMode                        "Fenstermodus"
+str_profile_WindowedMode                        "Fenstermodus"                                  # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Schlafende Einheiten gehen an Board"           # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
 str_tbl_ldl_Music_Options				"Musikeinstellungen"

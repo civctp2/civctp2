@@ -264,6 +264,7 @@ ProfileDB::ProfileDB()
     m_spEndingAge                       (-1),
     m_showCityProduction                (TRUE),
     m_windowedMode                      (FALSE),
+    m_sleepingUnitsBoard                (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -480,6 +481,8 @@ ProfileDB::ProfileDB()
 #else
 	Var("WindowedMode"               , PV_BOOL  , &m_windowedMode               , NULL, false);
 #endif
+
+	Var("SleepingUnitsBoard"          , PV_BOOL  , &m_sleepingUnitsBoard         , NULL);
 }
 
 void ProfileDB::DefaultSettings(void)
