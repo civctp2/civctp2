@@ -1,4 +1,6 @@
 ## build in patterns https://git.kernel.org/pub/scm/git/git.git/tree/userdiff.c?id=HEAD # https://git-scm.com/docs/gitattributes/#_defining_a_custom_hunk_header
+*.h      diff=cpp
+*.cpp    diff=cpp
 *.py	 diff=python
 
 ## By default disable any auto-conversion of line terminators.
