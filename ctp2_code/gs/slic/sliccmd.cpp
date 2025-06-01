@@ -304,7 +304,7 @@ void *sliccmd_array_lookup_reference(char *arrayName, int index, char *memberNam
 	return member;
 }
 
-void sliccmd_error(char *s)
+void sliccmd_error(const char *s)
 {
 	if(sliccmd_use_dialogs) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
