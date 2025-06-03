@@ -1,12 +1,12 @@
-           anet: a networking library for peer-to-peer games
-                         September 4, 2001
-                             Dan Kegel
-                         dank-anet@kegel.com
-                      http://www.kegel.com/anet
+# anet: a networking library for peer-to-peer games #
+September 4, 2001<br>
+Dan Kegel<br>
+dank-anet@kegel.com<br>
+http://www.kegel.com/anet
 
 This is the source code to the library used by some multiplayer games 
 released by Activision and others between 1995 and 2000.  
-It is copyright 1995-2001 by Activision, and is now released under the LGPL.
+It is copyright 1995-2001 by Activision, and is now released under the [LGPL](LICENSE).
 It is hoped that this will enable people still playing those games to set 
 up and run their own game servers if desired.  
 Also, the library may still be of some interest to game programmers looking for
@@ -33,3 +33,7 @@ To use nmake go to the Developer Command Prompt from your Visual Studio installa
 ## Building the Linux server and tools ##
 
 Go to anet/src/linux/ and run ./build there.
+
+## Dokumentation ##
+
+Check out the html [documentation](./doc/index.html).

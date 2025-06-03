@@ -20,7 +20,7 @@ The latest release is the [Apolyton Edition 2025-01-20](https://github.com/civct
 This is the Apolyton version of the *Call to Power II* (CTP2) source code based on the released source code from Activision, that did not include the patch. The code has been stripped of comments, but is otherwise complete as far as Activision's code goes. It was originally built with Microsoft Visual Studio 6.0. In the mean time the Apolyton code was modified so that it works with later versions.
 This version also builds on Linux (i386 and x86_64), Ubuntu, Pandora, and Pyra.
 
-On Linux, CTP2 builds as 32 and 64 bit application, on Windows only as 32 bit application. To allow 64 bit builds on Windows, assembler code and the Miles Sound System library needs to be replaced.
+On Linux and Windows, CTP2 builds as 32 and 64 bit application, these use SDL2 for display. On Windows also legacy Direct X builds are available. These are mainly for reference to check that the SDL port is complete. The Direct X versions build as 32 and 64 bit versions. However, CTP2 requires 16 bpp graphics support, which is only available for 32 bit programs, and thus 64 bit CTP2 Direct X versions refuse to start.
 
 Note that the game files are not included in this repository, you can get them from the original CD or from the [GoG version](https://www.gog.com/game/call_to_power_2).
 
@@ -59,7 +59,7 @@ The Windows version supports CD audio music, and the Linux version supports ripp
 
 The music and the videos are not needed for the playing CTP2. However, if you want to use them you can just use the CD on Windows. However, the GoG audio tracks are not supported on Windows, but you can play them in another player such as VLC, while playing the game.
 
-As the Linux version does not support direct play from the CD-ROM, you need to rip the music-files from the CD and put them on your disk. The music-files can be ripped with `crip` (http://bach.dynet.com/crip/) or `cdparanoia`.
+As the Linux version does not support direct play from the CD-ROM, you need to rip the music-files from the CD and put them on your disk. The music-files can be ripped with [`crip`](http://bach.dynet.com/crip/) or `cdparanoia`.
 
 Alternatively, you can download the music-files from YouTube. For that, go in the terminal to the directory `ctp2_code/ctp/music` (create it if necessary) and run the following code:
 
@@ -85,29 +85,41 @@ This will also copy the videos to that directory.
 
 CTP2 was originally built on Windows with Visual Studio 6. Today, the code compiles on Visual Studio 2017 and 2019 and probably also later. The code has not been compiled on Windows with any other compiler than the Visual Studio compiler. Beside a version of Visual Studio you need:
 
-1. The Windows SDK installed on your computer for DirectX support
+1. The Windows SDK installed on your computer
+2. Install Nasm if you want to build SDL builds. A zip-file with the 64 bit windows version and its license is included in the root directory of this repository. You can get the latest version from http://www.nasm.us/pub/nasm/releasebuilds/<!-- Comment so that full stop does not fuse to the URL -->. The two executables inside go into C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\VC if you use the 32 bit version of Visual Studio 2017. Adjust the path accordingly if you use a later version or the 64 bit version.
 2. An environment variable named CDKDIR on your computer. In Windows XP/2000, go to Control
 Panel->System->Environment Variables, and add it, with it's value set to [your source path]/ctp2/bin, the directory with bison, flex, and other tools in it. On Windows 10 it is Control
 Panel->System->Advanced System Settings->Environment Variables or PC Settings->Info->Advanced System Settings->Environment Variables or press Windows+Pause ->Advanced System Settings->Environment Variables
-3. A tmp directory in the root directory of the hard drive where the code is. If your source code working copy is on drive C: then create C:\tmp. If you have the code on another drive such as E: than it is E:\tmp.
+3. A tmp directory in the root directory of the hard drive or SSD where the code is. If your source code working copy is on drive C: then create C:\tmp. If you have the code on another drive such as E: than it is E:\tmp.
 
-Once all these are in place, open the Visual Studio project file [your source path]/ctp2_code/ctp/civctp.sln in Visual Studio. The project comes with several configurations. The most important ones are:
+Once all these are in place, open the Visual Studio project file [your source path]/ctp2_code/ctp/civctp.sln in Visual Studio. The project comes with several configurations for several platforms.
 
-* Debug: Unoptimized debug build, with logging, asserts, and a memory leak detector. The leak detector makes it actually slow.
-* Final: The build that was shipped with the game.
-* Final with Logging: Like Final but with logging, which is very useful for AI debugging.
-* Release: Not needed for us, it is close to the Final version but does not include the CD check that the Final version originally included.
-* Debug Browse: Like Debug but seems allow also to browse the stack external Microsoft code. So far untested. It requires MSVCRTD.dll, which needs to placed into the folder ctp_code/ctp/ folder. It might be included in your copy of Visual Studio, but it can also be downloded from the internet, if you search for it.
+The platforms are Win32, x64, ARM, and ARM64. Currently the code compiles on all platforms, but it does not link on ARM and AM64 as the library files for SDL2 and FFmpeg. A possibility would be to integrate the source of `SDL2` and compile the libraries with the project. `FFmpeg` requires Nasm that produces assembler files for various x86 based platforms, unfortunately not for ARM. `FFmpeg` is for video support and can be disabled if the preprocessor macro and the "..\msvc\lib\*" libraries are removed from the project settings. If build on ARM/ARM64 you need ARM/ARM64 version of `flex` and `byacc`.
 
-The executables these configurations generate are in [your source path]/ctp2_code/ctp/ and called:
+The configurations are:
 
-* CivCTP_dbg.exe for Debug
-* ctp2.exe for Final
-* ctp2log.exe for Final with Logging
-* ctp2r.exe for Release
-* CivCTP_dbg_browse.exe
+* Debug: (DirectX build) Unoptimized debug build, with logging, asserts, and a memory leak detector.
+* Final: (DirectX build) The build that was shipped with the game.
+* Logging: (DirectX build) Like Final but with logging, which is very useful for AI debugging.
+* Release: (DirectX build) Not really needed, it is close to the Final version but does not include the CD check that the Final version originally includedand, it is unoptimized, and seems to include some testing features.
+* Debug-SDL: (SDL build) Unoptimized debug build, with logging, asserts, and a memory leak detector.
+* Final-SDL: (SDL build) The build that was shipped with the game.
+* Logging-SDL: (SDL build) Like Final but with logging, which is very useful for AI debugging.
 
-CTP2 can directly be run from Visual Studio, to do so press F5 if you want to run it on the debugger, which will be slow and does not make sense for a Final version. To run without debugging, press Ctrl F5. If necessary, CTP2 will be built, first. Some of the map plugins may fail to build the first time in a clean project. Just try compile those again.
+These configurations generate the executables in [your source path]/ctp2_code/ctp/ for Win32 and in [your source path]/ctp2_code/ctp/x64/ for x64 builds. The executables are called:
+<br>
+
+| Configuration   | Executable      |
+|-----------------|-----------------|
+|Debug            | ctp2-dbg-dx.exe |
+|Final            | ctp2-dx.exe     |
+|Logging          | ctp2-dbg-dx.exe |
+|Release          | ctp2-log-dx.exe |
+|Debug-SDL        | ctp2-dbg.exe    |
+|Final-SDL        | ctp2.exe        |
+|Logging-SDL      | ctp2-log.exe    |
+
+CTP2 can directly be run from Visual Studio, to do so press F5 if you want to run it on the debugger, which will be slow and does not make sense for a Final version. To run without debugging, press Ctrl F5. If necessary, CTP2 will be built, first. Make sure that the start project is set to ctp2, it should be bold in the side menu, otherwise Visual Studio may try to start something else such as Crater.dll, and since it is a dll it will not start. 
 
 ## Building on Linux
 
@@ -147,13 +159,36 @@ If you get the message on the terminal: `Failed to load module "atk-bridge"`. In
 
 ### Running
 
-When everything is ready, simply go to the program folder, for example with `cd ~/ctp2/ctp2_code/ctp` and launch the game with `./ctp2`. There are a few command line option like `-fullscreen` that can be useful. `-fullscreen` launches CTP2 into fullscreen, otherwise CTP2 runs in a window, which however you cannot resize.
+When everything is ready, simply go to the program folder, for example with `cd ~/ctp2/ctp2_code/ctp` and launch the game with `./ctp2` or you can also type `./ctp2_code/ctp/ctp2` ifyour in the folder `~/ctp2/`.
 
 ### Installation
 
 CTP2 can be installed on your Linux computer for all users in principle. Just run `make install` in the root folder of your working copy. However, this is not tested and so it is unknown whether this installs everything needed.
 
+## Contributing
+
+If you want to contribute to this project check out the [contributing guide lines](CONTRIBUTING.md). There you can learn about pull requests, coding style, tabs and spaces, debug tools, graphics, and get a few tips about using Visual Studio if you are unfamiliar with it.
+
+## Included Libraries
+
+This project includes several third party libraries, to whhich their respective licenses apply:
+<br>
+
+| Library           | Type             | Readme                                                | License                                                         | Repository / Web Site                                               |
+|-------------------|------------------|-------------------------------------------------------|-----------------------------------------------------------------|---------------------------------------------------------------------|
+| Anet              | Source           | [Readme](./ctp2_code/libs/anet/README.md)             | [LGPL](./ctp2_code/libs/anet/LICENSE)                           |                                                                     |
+| FFmpeg-n6.1.2     | Source           | [Readme](./ctp2_code/libs/FFmpeg-n6.1.2/README.md)    | [Licenses](./ctp2_code/libs/FFmpeg-n6.1.2/LICENSE.md)           | [Web Site](https://ffmpeg.org/download.html#releases)               |
+| Freetype-1.3.1    | Source           | [Readme](./ctp2_code/libs/freetype-1.3.1/README)      | [FreeType Project](./ctp2_code/libs/freetype-1.3.1/license.txt) | [Web Site](https://freetype.org/download.html)                      |
+| SDL2_image-2.8.8  | Library          | [Readme](./ctp2_code/libs/SDL2_image-2.8.8/README.txt)| [Custom](./ctp2_code/libs/SDL2_image-2.8.8/LICENSE.txt)         | [Repository](https://github.com/libsdl-org/SDL_image/releases)      |
+| SDL2_mixer-2.8.1  | Library          | [Readme](./ctp2_code/libs/SDL2_mixer-2.8.1/README.txt)| [Custom](./ctp2_code/libs/SDL2_mixer-2.8.1/LICENSE.txt)         | [Repository](https://github.com/libsdl-org/SDL_mixer/releases)      |
+| SDL2-2.30.12      | Library          | [Readme](./ctp2_code/libs/SDL2-2.30.12/README.md)     | [Custom](./ctp2_code/libs/SDL2-2.30.12/LICENSE.txt)             | [Repository](https://github.com/libsdl-org/SDL/releases)            |
+| Tiff-4.7.0        | Source           | [Readme](./ctp2_code/libs/tiff-4.7.0/README.md)       | [LibTIFF](./ctp2_code/libs/tiff-4.7.0/LICENSE.md)               | [Repository](https://libtiff.gitlab.io/libtiff/releases/index.html) |
+| Zlib-1.3.1        | Source           | [Readme](./ctp2_code/libs/zlib-1.3.1/README)          | [LibTIFF](./ctp2_code/libs/zlib-1.3.1/LICENSE)                  | [Repository](https://github.com/madler/zlib/releases)               |
+| Nasm-2.16.03      | Win x64 Binary   |                                                       | [Inside Zip File](./nasm-2.16.03-win64.zip)                     | [Repository](http://www.nasm.us/pub/nasm/releasebuilds)             |
+| Byacc             | Win x86 Binary   | [Readme](./bin/byacc-README)                          | Public Domain                                                   | [Repository](https://invisible-island.net/byacc)                    |
+| Flex-2.5.4        | Win x86 Binary   |                                                       | [Custom](./bin/flex-COPYING)                                    | [Repository](https://github.com/westes/flex/releases)               |
+| Win-Linux-Tools   | Win x86 Binaries |                                                       | [GNU GPL](./bin/GNUGeneralPublicLicence2.txt)                   |                                                                     |
+
 ## Converting old Linux save-games to new unified format
 
 The old format of Linux save-games was not compatible with that of windows save-games. The format is now unified such that each OS can open save-games from the other. However, due to this, old Linux save-games need to be converted to the new format if you want to continue with those under the new ctp2 version (after [22dd1804804](https://github.com/civctp2/civctp2/commit/22dd180480445561bbbcd3efc60f08d2fe5c53e5)). A [game-converter-version](https://github.com/civctp2/civctp2/releases/tag/GameConverter) was created for this purpose (see, [#77](https://github.com/civctp2/civctp2/pull/77)), which can load the old format but saves games to the new format.
-
