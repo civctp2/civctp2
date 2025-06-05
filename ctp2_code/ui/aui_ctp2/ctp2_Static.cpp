@@ -492,9 +492,15 @@ AUI_ERRCODE ctp2_Static::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 	m_borderOffset.bottom = block->GetAttributeType(k_AUI_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
 		block->GetInt(k_AUI_LDL_BORDER_BOTTOM) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
 
-	Resize(Width() + m_borderOffset.left + m_borderOffset.right,
-		Height() + m_borderOffset.top + m_borderOffset.bottom);
-	Offset(-m_borderOffset.left, -m_borderOffset.top);
+	if( m_borderOffset.left   != 0
+	||  m_borderOffset.right  != 0
+	||  m_borderOffset.top    != 0
+	||  m_borderOffset.bottom != 0
+	){
+		Resize(Width() + m_borderOffset.left + m_borderOffset.right,
+			Height() + m_borderOffset.top + m_borderOffset.bottom);
+		Offset(-m_borderOffset.left, -m_borderOffset.top);
+	}
 
 	return aui_Static::DoneInstantiatingThis(ldlBlock);
 }
