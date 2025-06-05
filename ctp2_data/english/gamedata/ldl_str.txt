@@ -2594,7 +2594,7 @@ str_ldl_SD_CURRENT_EXPENDITURE			"Current Spendings:"
 str_ldl_SD_TOTAL_COST				"Total Cost:"
 
 # Science Victory
-str_ldl_SCIENCE_VICTORY_TITLE			"SCIENCE VICTORY"
+str_ldl_SCIENCE_VICTORY_TITLE			"S C I E N C E   V I C T O R Y"
 str_ldl_SV_REQ_MAINFRAMES			"Controller Cores Required:"
 str_ldl_SV_REQ_TOWERS				"Min Obelisks Required:"
 str_ldl_SV_REQ_SATELLITES			"Min Satellites Required:"
@@ -2802,7 +2802,7 @@ str_ldl_DipDetails_LeaderPersonality		"Leader Personality: {player[0].leaderpero
 str_ldl_DipDetails_EmbassyMsg			"* Embassy required to access privileged information."
 str_ldl_DipDetails_NoEmbassy			"<No Embassy>"
 
-# Tile improvent panel
+# Tile improvement panel
 str_ldl_ImproveLand				"Land"
 str_ldl_ImproveOcean				"Ocean"
 str_ldl_ImproveSpecial				"Special"
