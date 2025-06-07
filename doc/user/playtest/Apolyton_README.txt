@@ -22,12 +22,36 @@ It might be wise, if you have the space available, to make a copy of
 your CTP2 directory and unzip this into the copy, so that you can preserve an
 unchanged copy for playing mods, etc.
 
+If you want to use the 32 bit SDL version you have to do nothing. If you want to
+use the 64 bit Windows version update your shortcuts pointing to 
+.\ctp2_program\ctp\x64\ctp2.exe. If you love your settings then copy 
+usercritmsgs.txt, userkeymap.txt, and userprofile.txt from .\ctp2_program\ctp\
+to .\ctp2_program\ctp\x64\. If you insist on using the 32 bit DirectX version
+then update your shortcuts to .\ctp2_program\ctp\ctp2-dx.exe. Of course, you
+can start the executables from their folders directly.
+
+The used language version is now a user setting, it is determined automatically
+when you start this version for the first time according to your OS settings
+and the available languages. If you are unhappy with the choice you can go to
+the language options screen and change it there.
+
+The SDL version has a windowed option, which you can select from the graphics
+options. Make sure if you go for windowed mode that the selected resolution is
+below your current screen resolution. Otherwise the frame and title bar will be
+outside of the field of view and the mouse range on Windows and on Linux the
+bottom and the right part will not be on screen. The window is not resizable.
+
+
 After installation, you can start a new game or continue a game from
 a previous version. All you need to do - after loading your save game - is to
 open the chat window by typing the apostrophe key (') and enter: /reloadslic
 You have to do this once per save game.
 
-For Chinese gamers: If you use a Chinese version of the game you have to
+For Chinese gamers: It is unclear if that version is just a fan translation.
+                    However, right now it does not load and so is disabled.
+                    Of course you can help fixing this. In case there is a 
+                    retail version of that, which you use do the following.
+                    You have to
                     first rename your ..\ctp2_data\english\ folder to
                     ..\ctp2_data\chinese\, then unzip the Apolyton Edition
                     over your CTP2 installation, and then edit your
@@ -46,20 +70,19 @@ This version comes with new tech posters, which are in the same directory as thi
 Known bugs:
 
 - When you start a new game from a running game than the game put the new game screen in the
-middle but does not paint the rest of the screen black so that you left with what was on the
-screen before. However, this does not disturb the function.
+  middle but does not paint the rest of the screen black so that you left with what was on the
+  screen before. However, this does not disturb the function.
 - The map on the Gaia Controller does not show the coverage over sea.
 
-On Windows:
+On Windows DirectX build only:
 - The new shield that indicates in the control panel that more than one unit is on a tile does
-not display the number of units.
+  not display the number of units.
+- The chat window has some problems selecting text with the mouse.
 
 On Linux:
-Keyboard issues, at least with a German keyboard.
-- The apostrope key (') to open the chat window does not work. Yo can open
-the chat window via the menu.
-- The secondary enter key on the num pad does not work. Instead use the 
-primary big enter key.
+- MP is broken
+- Slecting words in text field via double click treat language specific characters as non word
+  characters.
 
 The Great History: In case you are interested, here are the previous playtest threads on Apolyton:
 http://apolyton.net/forums/showthread.php?t=103817 "PROJECT: Playtest"
@@ -72,9 +95,151 @@ http://apolyton.net/forums/showthread.php?t=185707 "CTP2 Apolyton Edition: Revis
 http://apolyton.net/forums/showthread.php?t=187205 "CTP2 Apolyton Edition: Revision 1013 (25-Jul-2009)"
 http://apolyton.net/forums/showthread.php?t=190316 "Apolyton CTP2 Edition: Revision 1056 (28-Feb-2010)"
 http://apolyton.net/forums/showthread.php?t=191653 "Apolyton CTP2 Edition: Revision 1097 (07-Jun-2010)"
-http://apolyton.net/forums/showthread.php?t=196269 "Apolyton CTP2 Edition: Revision 1111 (12-Jun-2011)"
+https://apolyton.net/forum/other-games/call-to-power-2/ctp2-source-code-project/245678-apolyton-ctp2-edition-revision-1111-12-jun-2011
+https://apolyton.net/forum/other-games/call-to-power-2/ctp2-source-code-project/9479186-ctp2-apolyton-edition-2025-01-20
 
 Changelog (Well, you don't have to read the full thing. ;)):
+2025-06-XX
+Added:    32 and 64 bit Windows SDL builds
+
+::Start SDL specfic changes::
+::Since there was no Windows SDL version these changes can only observes with the Linux version::
+
+Added:    Select with the mouse and the shift key text in a text field.
+Fixed:    Make the textfield ignore excape characters, except Ctrl+A,
+          Ctrl+C, Ctrl+P, and Ctrl+X, which execute select all,
+          copy, paste, and cut.
+Added:    Make Ctrl+A select everything in a text field.
+Added:    Set the carret position when you click in a text field.
+Added:    Select a word in a text field if left clicked on it.
+Added:    Select the text under the cursor in a text filed if the mouse
+          drags over it. (Left mouse button is pressed.)
+Added:    Localized version for selecting words, which however does not work
+          on Linux.
+Added:    Continue text selection if the mouse is dragging outside the text
+          field.
+Fixed:    Do not enter more caracters into a text field than its size.
+Added:    Keep the carret in text fields always visible.
+Changed:  Make the carret the same color as the text in text fields.
+Added:    Cut, copy and paste in text fields.
+Added:    Press ctrl and the arrow keys the carret jumps a word, if shift
+          is also selected it selects the text to the next word boundary.
+Added:    Highlighting with shift and the arrow keys in text fields.
+Fixed:    A crash in the text field when everything was supposed to be selected.
+Fixed:    Make the carret blink in text fields.
+
+::End of text field specific changes / implementations, a text field has a lot of
+::functionality, and it is still a single line text field without password
+::function. However, that seems not be used.
+
+Fixed:    Make the user interface responding to mouse and keyboard
+          input while the AI is busy.
+Fixed:    The game accepts input from localized keyboards, the apostrophe key
+          now opens the chat screen.
+Fixed:    Make the enter key on the keypad work.
+Fixed:    The text field in the MP lobby accepts input.
+Changed:  Move the fullscreen option in SDL builds from the command line to the
+          the graphics options on the user interface.
+Fixed:    Center the background image in the MP start screen.
+::End SDL specfic changes::
+
+::Other fixes, changes, additions
+Added:    Option to the advanced options if units on sentinel should board a
+          passing transporter. The default option is no boarding.
+Added:    Description text for the Unix internet option on Linux.
+Added:    Gossip
+Fixed:    Allow gaining an advance via gossip, if the target civ has no advance
+          tham this civ is boring.
+Added:    Slic function void HearGossip(unit_t), basically for testing HearGossip, but
+          modders may find it useful.
+Fixed:    Allow with the mouse and the shift key selected more than one item in a 
+          list box.
+Fixed:    The Linux version uses the directory of the executable as working directory.
+          This way you do not have to start CTP2 from that directory, but yoou can start
+          it from anyway.
+Changed:  The strings in the string database are now all in the same place accross
+          languages, except additional strings for the languages, they are at the
+          end. This makes translation easier, as new strings just need to be placed
+          at the same location in the matching files.
+Added:    French scenario text files
+Fixed:    The game will not crash if you click on the eyeball in a message about a unit
+          that became a veteran or elite unit and that is at a board of a transporter.
+          Instead it brings you to that transporter, were the unit is.
+Added:    New slic function for testing the fix for the veteran and elite messages.
+          These may also be useful for modders:
+              - void ToggleElite(unit, int (on/off))
+              - int IsElite(unit)
+              - void SetVeteran(unit)
+              - void UnsetVeteran(unit)
+              - void SetElite(unit)
+              - void UnsetElite(unit)
+Fixed:    Deactivate user profile options in MP that can be considered as cheats.
+          These are.
+             - CitiesLeaveRuins
+             - EnergySupply&DemandRatio
+             - AICityDefenderBonus
+             - SectarianHappiness
+             - AIMilitiaUnit
+             - CityLeavesRuins
+Fixed:    Select only units for uprising and militia that can be on the
+          target terrain.
+Fixed:    Make the happiness impact from bioinfection show up emmidiately in
+          the city manager.
+Fixed:    Update the happiness timer only on BeginTurn. This way the impact
+          of bioinfaction will not disappear if you just press the optimize
+          specialist button.
+Changed:  Reduced the flash interval of the bio and nano infection icons. The
+          flashing can be disabled entirly in const.txt.
+Fixed:    Special rules from the userprofile, which can be set at a new game,
+          cannot be changed during a game anymore, unless you use the scenario
+          editor. Those are:
+             - CityCaptureOptions
+             - OneCityChallenge
+             - RevoltInsurgents
+             - RevoltCasualties
+             - BarbarianSpawnsBarbarian
+             - Upgrade
+             - NewCombat
+             - GoldPerUnitSupport
+             - GoldPerCity
+             - NoCityLimit
+Fixed:    NoCityLimit has been fully implemented the user interface reflect it
+          if it is on or off, and the AI also takes it into account for settling.
+Added:    The special rules screen to the MP rules screen and the scenario editor.
+Added:    Disable the Gaia Victiory on the special rules screen.
+Fixed:    The special rule bloodlust, did nothing, now you have to conquer
+          everybody else to win the disables all other victory types. If you have
+          not won by the year 2300, you lose.
+Added:    Automatic turn end to the advanced opstions.
+Added:    A language database file: Language.txt and a userprofile option
+          for selecting the language.
+Added:    Automatic language selection based on the operating system and the 
+          languages available.
+Added:    Language selection screen in case you do not like the automatic choice.
+          It also gives some informaton about the available languages such their
+          state of completeness.
+Added:    Czech and Polish fan translations, which are however incomplete.
+Fixed:    The AI does not try to pillage tile improvments that have the flag
+          CantPillage (Feature for modders).
+Changed:  Move disclaimer.txt from the program diretory to the data directory.
+          So that it can be truely localized. This means different version in
+          different languages can coexists in the same copy of CTP2.
+Added:    Left hand mouse option to the advance options.
+Fixed:    Some memory corruption on BeginTurn in MP. Unclear whether this has
+          an effect, but the debug version did not like that.
+Fixed:    A terrain synchronization issue in MP. This made the game crash on
+          the client side, when the client was joining an MP game. This bug
+          was introduced in 2008 and effectively disabled MP in CTP2.
+Added:    The run in background is now available on the user interface.
+Fixed:    The user profile option run in background allows to run the game in
+          the background.
+Fixed.    Display the correct ping in the MP chat screen
+Fixed:    Replace the boot server list for MP games so that the game looks for
+          current servers. This may have to be fixed again when servers change.
+Fixed:    Crash in multiplayer civ selection screen when no civ is selected.
+Changed:  Accelerated start up time of the debug version, not really directly
+          relevant for the player, but helps speeding up debugging.
+
 2025-01-20 (No revision number we switched to Git)
 Fixed:    The flames in the credit screen do not have a black background.
 Added:    The GitHub contributors to the ApolytonEdition to the credit screen.
@@ -126,8 +291,8 @@ Changed:  The AI does not try to incite revolutions in Barbarian cities.
           As this does not help.
 Fixed:    The AI only uses the minimum entertainers necessary. The minimum
           is now determined from the value in strategies.txt.
-Fixed:    The AI does not hold diplomatic receptions where it cannot,
-          since 10 turns must pass so that receptions can be hold again.
+Fixed:    The AI does not hold diplomatic receptions if it cannot.
+          10 turns must pass so that receptions can be hold again.
 Changed:  The AI ignores trespassing for Diplomats, so that it can build
           embassies. Trespassing with diplomats is not considered a
           violation anyway.
@@ -323,7 +488,7 @@ Fixed:    You get a message if you earn some gold from a trade route that goes
           though your city.
 Fixed:    The AI uses water units for attacking units and sieging cities.
 Fixed:    The AI uses diplomats for establishing embassies and throwing parties.
-Fixed:    The AI does establish embassies and throws parties at civilizations
+Fixed:    The AI does not establish embassies and throws parties at civilizations
           it is at war with.
 Fixed:    The AI does not build obelisks if they do not increase the coverage.
 Fixed:    The AI does not build farm on installations such as watchtowers and
