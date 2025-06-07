@@ -144,6 +144,9 @@ Fixed:    Center the background image in the MP start screen.
 ::End SDL specfic changes::
 
 ::Other fixes, changes, additions
+Fixed:    Tile borders beween forest and polar hills and between mountains
+          and polar hills as suggested by Kull.
+Updated:  Kull's fixed sprites with more animations.
 Added:    Option to the advanced options if units on sentinel should board a
           passing transporter. The default option is no boarding.
 Added:    Description text for the Unix internet option on Linux.
