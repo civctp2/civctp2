@@ -1441,7 +1441,7 @@ bool aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 
 	if ( string != stop )
 	{
-		size_t end = string - name - 3;
+		size_t end = (string - name - 3) > 0 ? string - name - 3 : 0;
 		Assert( end > 0 );
 		if ( end > 0 )
 		{
