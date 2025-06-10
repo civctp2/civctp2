@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -59,7 +59,7 @@ BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 draw
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
-	register	sint32 j;
+	sint32		j;
 	sint32		len;
 
 	mousePt.x -= drawX;
@@ -147,8 +147,8 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
-	register	sint32 j;
-	register	sint32 len;
+	sint32 j;
+	sint32 len;
 
 	mousePt.x -= drawX;
 	mousePt.y -= drawY;
