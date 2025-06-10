@@ -3673,7 +3673,7 @@ int gtest( int argc, char *argv[] )
 				dp_account_packet_t acctpkt;
 				dp_sessionResult_packet_t sessRes;
 				unsigned char buf[512];
-			} u PACK;
+			} u;
 		} pkt;
 #include "dpunpack.h"
 		size_t size;
