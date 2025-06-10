@@ -6492,7 +6492,7 @@ bool ArmyData::ExecuteOrders(bool propagate)
 			if (g_theDiplomacyLog) {
 				g_theDiplomacyLog->PopRegardRequest();
 			}
-#endif _DEBUG
+#endif // _DEBUG
 
 		if (me.IsValid())
 		{
@@ -9514,7 +9514,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		{
 			g_theDiplomacyLog->PopRegardRequest();
 		}
-#endif _DEBUG
+#endif // _DEBUG
 
 	if(result == ORDER_RESULT_ILLEGAL)
 	{

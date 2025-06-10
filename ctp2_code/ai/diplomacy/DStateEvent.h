@@ -9,4 +9,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __DIPLOMATIC_STATE_EVENT_H__
+#endif // __DIPLOMATIC_STATE_EVENT_H__

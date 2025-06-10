@@ -8,4 +8,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __THREAT_RESPONSE_EVENT_H__
+#endif // __THREAT_RESPONSE_EVENT_H__

@@ -238,7 +238,7 @@ void Astar::RecalcEntryCost(AstarPoint *parent, AstarPoint *node, float &new_ent
 
 #ifdef _DEBUG
 sint32 finite_stack;
-#endif _DEUBG
+#endif // _DEUBG
 
 #ifdef A_STAR_TRACK_CALLSTACK
 #include "debugcallstack.h"

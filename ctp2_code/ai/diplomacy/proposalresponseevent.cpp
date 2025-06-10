@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -304,7 +304,7 @@ STDEHANDLER(PayForAdvance_ProposalResponseEvent)
 	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
 	double desired_gold_precise = 0;
@@ -372,7 +372,7 @@ STDEHANDLER(AdvanceForGold_ProposalResponseEvent)
 	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
 
@@ -445,7 +445,7 @@ STDEHANDLER(AdvanceExchange_ProposalResponseEvent)
 	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	sint32 regard = receiver_diplomat.GetEffectiveRegard(sender);
 
@@ -532,7 +532,7 @@ STDEHANDLER(StopPiracy_ProposalResponseEvent)
 	GetDescription(name, sizeof(name));
 	DPRINTF(k_DBG_DIPLOMACY, ("Executing %s\n",name));
 	ProposalAnalysis::DebugResult(sender_proposal);
-#endif _DEBUG
+#endif // _DEBUG
 
 	const MapAnalysis & map = MapAnalysis::GetMapAnalysis();
 	sint32 piracy_lost_to_sender = map.GetPiracyIncomeByPlayer(sender, receiver);

@@ -97,4 +97,4 @@ private:
 	uint32 m_incursionPermission;
 };
 
-#endif __ROBOT_ASTAR2_H__
+#endif // __ROBOT_ASTAR2_H__
