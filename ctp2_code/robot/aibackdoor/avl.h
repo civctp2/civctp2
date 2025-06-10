@@ -191,7 +191,7 @@ template <class T> sint32 AVL<T>::balance_remove_avl(AVL<T> **node,
       return rotate_remove_avl(node, a, b);
 
    }
-	_ASSERTE(0);
+	Assert(0);
    return FALSE;
 }
 
@@ -199,10 +199,10 @@ template <class T> sint32 AVL<T>::promote_rightmost_avl(AVL<T> **c, AVL<T> **p,
                            AVL<T>  **dead, sint32 is_top)
 {
 
-   _ASSERTE (c != NULL);
-   _ASSERTE (*c != NULL);
-   _ASSERTE (p != NULL);
-   _ASSERTE (*p != NULL);
+   Assert(c != NULL);
+   Assert(*c != NULL);
+   Assert(p != NULL);
+   Assert(*p != NULL);
 
    if ((*c)->m_ptr[AVL_RIGHT] == NULL) {
       *dead = *p;
@@ -298,7 +298,7 @@ template <class T> sint32 AVL<T>::Remove(AVL<T> *delme,
 {
    if ((*node) == NULL) {
 
-      _ASSERTE(0);
+      Assert(0);
 		return FALSE;
    } else if (delme->m_data < (*node)->m_data) {
       if (Remove (delme, dead,
@@ -392,7 +392,7 @@ template <class T> sint32 AVL<T>::balance_insert_avl(AVL<T> **node,
       rotate_insert_avl(node, a, b);
       return FALSE;
    }
-   _ASSERTE(0);
+   Assert(0);
 	return FALSE;
 }
 
@@ -460,7 +460,7 @@ template <class T> sint32 AVL<T>::Search(AVL<T> *matchme,
 template <class T> sint32 AVL<T>::RemoveSmallest(AVL<T> **smallest,
                                     AVL<T> **node)
 
-{  _ASSERTE(node != NULL);
+{  Assert(node != NULL);
 
    if ((*node)->m_ptr[AVL_LEFT] == NULL){
 
