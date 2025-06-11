@@ -2226,24 +2226,24 @@ SFN_ERROR Slic_DoAutoUnload::Call(SlicArgList *args)
 
 SFN_ERROR Slic_DoLandInOcean::Call(SlicArgList *args) //Disabled?
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoOutOfFuel::Call(SlicArgList *args) //Disabled?
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoPillageOwnLand::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit unit = g_slicEngine->GetContext()->GetUnit(0);
 
@@ -2265,24 +2265,24 @@ SFN_ERROR Slic_DoPillageOwnLand::Call(SlicArgList *args)
 
 SFN_ERROR Slic_DoSellImprovement::Call(SlicArgList *args)  //Disabled?
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoCertainRevolution::Call(SlicArgList *args) //Disabled?
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoFreeSlaves::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 
@@ -2308,34 +2308,34 @@ SFN_ERROR Slic_DoFreeSlaves::Call(SlicArgList *args)
 
 SFN_ERROR Slic_DoCannotAffordMaintenance::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoCannotAffordSupport::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoCityWillStarve::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_DoYouWillBreakRoute::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_TerrainType::Call(SlicArgList *args)

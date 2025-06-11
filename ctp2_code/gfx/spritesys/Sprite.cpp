@@ -752,7 +752,7 @@ Pixel16 *Sprite::GetMiniFrameData(uint16 frameNum)
 size_t Sprite::GetMiniFrameDataSize(uint16 frameNum)
 {
 	Assert(frameNum < m_numFrames);
-	if (frameNum >= m_numFrames) return NULL;
+	if (frameNum >= m_numFrames) return 0;
 
 	Assert(m_miniframesSizes != NULL);
 	if (m_miniframesSizes == NULL) return 0;

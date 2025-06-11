@@ -31,7 +31,7 @@ public:
 		sint32 height,
 		BOOL isVertical,
 		const MBCHAR *pattern,
-		sint32 percentFilled = NULL,
+		sint32 percentFilled = 0,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~c3_Slidometer() {}
