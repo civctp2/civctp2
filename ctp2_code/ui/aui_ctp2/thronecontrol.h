@@ -72,7 +72,7 @@ public:
 	ThroneControl(
 		AUI_ERRCODE *retval,
 		sint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL);
 	ThroneControl(
@@ -82,7 +82,7 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ThroneControl();
@@ -112,10 +112,10 @@ public:
 
 	void		SetDrawOrder( sint8 a, sint8 b, sint8 c, sint8 d, sint8 e );
 
-	aui_Surface *InitializeNewBG( MBCHAR *filename );
-	void		CrossFadeImage( MBCHAR *filename );
+	aui_Surface *InitializeNewBG( const MBCHAR *filename );
+	void		CrossFadeImage( const MBCHAR *filename );
 
-	void		DisplayZoomedImage( MBCHAR *filename );
+	void		DisplayZoomedImage( const MBCHAR *filename );
 
 	sint32		GetBlendSpeed( void ) const { return m_blendSpeed; }
 	void		SetBlendSpeed( sint32 blendSpeed ) { m_blendSpeed = blendSpeed; }
@@ -129,7 +129,7 @@ public:
 
 protected:
 	ThroneControl() : aui_Control() {}
-	void InitCommonLdl( MBCHAR *ldlBlock );
+	void InitCommonLdl( const MBCHAR *ldlBlock );
 	void InitCommon( void  );
 
 private:

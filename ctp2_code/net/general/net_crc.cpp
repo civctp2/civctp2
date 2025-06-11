@@ -24,13 +24,13 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin Gühmann)
-// - Added the risk database for sync check. (Aug 29th 2005 Martin Gühmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
-// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin GÃ¼hmann)
+// - Added the risk database for sync check. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin GÃ¼hmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -348,7 +348,7 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void NetCRC::Error(char *buf)
+void NetCRC::Error(const char *buf)
 {
 	extern void network_AbortCallback( sint32 type );
 

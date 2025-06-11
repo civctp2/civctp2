@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ void ZoomedImageActionCallback( aui_Control *control, uint32 action, uint32 data
 
 ThroneControl::ThroneControl(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -108,7 +108,7 @@ ThroneControl::ThroneControl(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -135,7 +135,7 @@ ThroneControl::~ThroneControl()
 #undef cleanup
 }
 
-void ThroneControl::InitCommonLdl(MBCHAR *ldlBlock)
+void ThroneControl::InitCommonLdl(const MBCHAR *ldlBlock)
 {
     ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(datablock);
@@ -294,7 +294,7 @@ void ThroneControl::SetDrawOrder( sint8 a, sint8 b, sint8 c, sint8 d, sint8 e )
 	RenderThrone( m_throneSurface );
 }
 
-aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
+aui_Surface *ThroneControl::InitializeNewBG( const MBCHAR *filename )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Surface *tempBG = NULL;
@@ -323,7 +323,7 @@ aui_Surface *ThroneControl::InitializeNewBG( MBCHAR *filename )
 	return tempBG;
 }
 
-void ThroneControl::CrossFadeImage( MBCHAR *filename )
+void ThroneControl::CrossFadeImage( const MBCHAR *filename )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	aui_Surface *tempBG = NULL;
@@ -361,7 +361,7 @@ void ThroneControl::CrossFadeImage( MBCHAR *filename )
 	}
 }
 
-void ThroneControl::DisplayZoomedImage( MBCHAR *filename )
+void ThroneControl::DisplayZoomedImage( const MBCHAR *filename )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

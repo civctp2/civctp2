@@ -88,7 +88,7 @@ void victorymoviewin_Initialize()
 
 void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 {
-	MBCHAR		*whichMovie;
+	MBCHAR const		*whichMovie;
 
 	Assert(g_victoryMovieWindow != NULL);
 	if (g_victoryMovieWindow == NULL) return;

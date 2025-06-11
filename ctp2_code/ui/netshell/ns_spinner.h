@@ -17,7 +17,7 @@ public:
 	ns_Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	ns_Spinner(
@@ -28,7 +28,7 @@ public:
 		sint32 width,
 		sint32 height,
 		AUI_RANGER_ORIENTATION orientation,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_Spinner() {}

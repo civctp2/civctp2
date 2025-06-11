@@ -123,7 +123,7 @@ void sourcelist_RegisterBreak(SlicSegment *segment, size_t offset)
 	g_sourceList->ShowBreak(offset);
 }
 
-SourceList::SourceList(SourceListCallback *callback, MBCHAR *ldlBlock)
+SourceList::SourceList(SourceListCallback *callback, const MBCHAR *ldlBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -216,7 +216,7 @@ void SourceListButtonCallback(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-sint32 SourceList::Initialize(MBCHAR *windowBlock)
+sint32 SourceList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -408,7 +408,7 @@ void SourceList::StepInto()
 
 SourceListItem::SourceListItem(AUI_ERRCODE *retval, sint32 index,
 							   SlicSegment *segment, MBCHAR *line,
-							   sint32 lineNumber, MBCHAR *ldlBlock) :
+							   sint32 lineNumber, const MBCHAR *ldlBlock) :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	c3_ListItem(retval, ldlBlock)
@@ -441,7 +441,7 @@ void SourceBreakItemCallback(aui_Control *control, uint32 action, uint32 data, v
 }
 
 AUI_ERRCODE SourceListItem::InitCommonLdl(SlicSegment *segment,
-										   MBCHAR *ldlBlock)
+										   const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

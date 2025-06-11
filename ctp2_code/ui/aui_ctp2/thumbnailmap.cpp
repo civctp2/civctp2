@@ -56,7 +56,7 @@ extern ScreenManager * g_screenManager;
 
 ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 :
@@ -74,7 +74,7 @@ ThumbnailMap::ThumbnailMap(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -92,7 +92,7 @@ ThumbnailMap::~ThumbnailMap()
 	delete m_cityList;
 }
 
-void ThumbnailMap::InitCommonLdl(MBCHAR *ldlBlock)
+void ThumbnailMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );

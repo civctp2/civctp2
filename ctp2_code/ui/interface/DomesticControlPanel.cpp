@@ -27,8 +27,8 @@
 // - Blank function added to hide the data of the previous player for hotseat
 //   games.
 // - Use the same science percentage everywhere.
-// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin Gühmann)
-// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin GÃ¼hmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -148,7 +148,7 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 }
 
 
-DomesticControlPanel::DomesticControlPanel(MBCHAR *ldlBlock) :
+DomesticControlPanel::DomesticControlPanel(const MBCHAR *ldlBlock) :
 m_scienceLabel(static_cast<ctp2_Static*>(
                aui_Ldl::GetObject(ldlBlock,
                "DomesticTab.TabPanel.AdvanceProgress.Title"))),

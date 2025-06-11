@@ -8,7 +8,7 @@ class ns_String
 	char *m_string;
 public:
 
-	ns_String(char *ldlblock);
+	ns_String(const char *ldlblock);
 
 	virtual ~ns_String(void);
 

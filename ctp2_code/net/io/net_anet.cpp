@@ -186,7 +186,6 @@ ActivNetIO::EnumTransports()
 
 NET_ERR
 ActivNetIO::SetTransport(sint32 trans_id)
-
 {
 	if(!m_dp) {
 
@@ -218,7 +217,7 @@ ActivNetIO::SetTransport(sint32 trans_id)
 								   trans,
 								   &commInitReq,
 								   NULL);
-        return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
+		return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
 	}
 
 	return NET_ERR_ALREADYOPEN;
@@ -728,7 +727,7 @@ ActivNetIO::Idle()
 }
 
 NET_ERR
-ActivNetIO::SetName(char* name)
+ActivNetIO::SetName(const char* name)
 {
     delete [] m_name;
 	m_name = new char[strlen(name) + 1];
@@ -737,7 +736,7 @@ ActivNetIO::SetName(char* name)
 }
 
 NET_ERR
-ActivNetIO::SetLobby(char* serverName)
+ActivNetIO::SetLobby(const char* serverName)
 {
 	Assert(m_dp);
 	dp_result_t res;

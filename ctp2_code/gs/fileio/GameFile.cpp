@@ -131,7 +131,7 @@ extern PointerList<Player> *        g_deadPlayer;
 
 struct MagicValue
 {
-	char *string;
+	const char *string;
 	sint32 version;
 };
 
@@ -1254,8 +1254,8 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 
 void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 {
-	MBCHAR		*functionName = "GameFile::SaveExtendedGameInfo";
-	MBCHAR		*errorString = "Unable to write save file.";
+	const MBCHAR		*functionName = "GameFile::SaveExtendedGameInfo";
+	const MBCHAR		*errorString  = "Unable to write save file.";
 
 	size_t n = c3files_fwrite(info->gameName, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)

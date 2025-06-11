@@ -18,7 +18,7 @@ MessageIconButton *MessageIconButton::m_currentButton = NULL;
 MessageIconButton::MessageIconButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:

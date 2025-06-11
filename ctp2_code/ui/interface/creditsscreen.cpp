@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Corrected initialisations that were causing ambiguity.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code. (May 29th 2006 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standardized code. (May 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -175,7 +175,7 @@ void creditsscreen_Cleanup()
 class c3_SimpleAnimation : public aui_Static {
 public:
 
-	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock)
+	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock)
 	:
 		// Virtual inheritance, these must be called here, otherwise default constructors without arguments are called
 		aui_ImageBase(ldlBlock),
@@ -223,7 +223,7 @@ protected:
 	{
 	};
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 	void UpdateAnimation(sint32 deltaTime);
 
@@ -261,7 +261,7 @@ AUI_ERRCODE c3_SimpleAnimation::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void c3_SimpleAnimation::InitCommonLdl(MBCHAR *ldlBlock)
+void c3_SimpleAnimation::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(datablock != NULL);
@@ -301,7 +301,7 @@ void c3_SimpleAnimation::UpdateAnimation(sint32 deltaTime)
 class c3_TriggeredAnimation : public aui_Static {
 public:
 
-	c3_TriggeredAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock)
+	c3_TriggeredAnimation(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock)
 	:	aui_Static(retval, id, ldlBlock),
 		m_frames(NULL),
 		m_currentFrame(0),
@@ -348,7 +348,7 @@ protected:
 
 	virtual AUI_ERRCODE DrawBlendImage(aui_Surface *destSurf, RECT *destRect);
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 private:
 
@@ -489,7 +489,7 @@ AUI_ERRCODE c3_TriggeredAnimation::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void c3_TriggeredAnimation::InitCommonLdl(MBCHAR *ldlBlock)
+void c3_TriggeredAnimation::InitCommonLdl(const MBCHAR *ldlBlock)
 {
     ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(datablock != NULL);
@@ -596,7 +596,7 @@ public:
 	(
 		AUI_ERRCODE *	retval,
 		uint32			id,
-		MBCHAR *		ldlBlock
+		const MBCHAR *		ldlBlock
 	)
 	:	aui_Static(retval, id, ldlBlock),
 		m_lastIdle(GetTickCount()),
@@ -610,7 +610,7 @@ public:
 	{
 		std::fill(m_fonts, m_fonts + kCreditsTextNumFonts, (aui_BitmapFont *) NULL);
 
-        ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
+		ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert(datablock);
 		if (!datablock) return;
 
@@ -707,7 +707,7 @@ private:
 
 
 
-CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, sint32 id, MBCHAR *ldlBlock, sint32 bpp,
+CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, sint32 id, const MBCHAR *ldlBlock, sint32 bpp,
 							 AUI_WINDOW_TYPE type, bool bevel)
 	:	C3Window(retval, id, ldlBlock, bpp, type, bevel)
 {
@@ -722,7 +722,7 @@ CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, sint32 id, MBCHAR *ldlBlock, s
 }
 
 CreditsWindow::CreditsWindow(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y,
-							 sint32 width, sint32 height, sint32 bpp, MBCHAR *pattern,
+							 sint32 width, sint32 height, sint32 bpp, const MBCHAR *pattern,
 							 AUI_WINDOW_TYPE type, bool bevel)
 	:	C3Window(retval, id, x, y, width, height, bpp, pattern, type, bevel)
 {
@@ -792,7 +792,7 @@ AUI_ERRCODE CreditsWindow::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void CreditsWindow::InitCommonLdl(MBCHAR *ldlBlock)
+void CreditsWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(datablock != NULL);

@@ -26,7 +26,7 @@
 //
 // - Memory leak repaired.
 // - Memory leak report prevented.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -431,15 +431,15 @@ void LobbyWindow::Update(BOOL init)
 
 AUI_ERRCODE LobbyWindow::Idle( void )
 {
-	if(m_wait) {
-
+	if(m_wait)
+	{
 		if ( !s_dbw )
 			s_dbw = DialogBoxWindow::PopUp(
 				"joinlobbydialogboxwindow",
 				m_dbActionArray );
 
 
-			((aui_Control *)((ns_ChatBox *)FindControl( CONTROL_CHATBOX ))->
+		((aui_Control *)((ns_ChatBox *)FindControl( CONTROL_CHATBOX ))->
 				GetInputField())->ReleaseKeyboardFocus();
 
 		m_wait = false;
@@ -664,7 +664,7 @@ void LobbyWindow::JoinButtonAction::Execute(
 	}
 }
 
-void LobbyWindow::PasswordScreenDone( MBCHAR *password )
+void LobbyWindow::PasswordScreenDone( const MBCHAR *password )
 {
 	ns_GameListBox *listbox = (ns_GameListBox *)
 		FindControl( LobbyWindow::CONTROL_GAMESLISTBOX );

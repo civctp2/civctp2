@@ -249,6 +249,7 @@ Network::Network() :
 	if(m_noThread) {
 		m_netIO = new ActivNetIO;
 		m_netIO->Init(this);
+
 	} else {
 		m_netIO = new NetThread;
 		m_netIO->Init(this);
@@ -1043,7 +1044,7 @@ void Network::PacketReady(sint32 from,
 }
 
 void Network::AddPlayer(uint16 id,
-                        char* name)
+                        const char* name)
 {
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
@@ -2794,7 +2795,7 @@ void Network::TogglePacketLog()
 
 #endif
 
-PlayerData::PlayerData(char* name, uint16 id) :
+PlayerData::PlayerData(const char* name, uint16 id) :
 	m_id(id),
 	m_index(-1),
 	m_frozen(FALSE),

@@ -50,7 +50,7 @@ extern C3UI						*g_c3ui;
 C3FancyWindow::C3FancyWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	MBCHAR ldlBorder[k_NUM_BORDERS][ k_AUI_LDL_MAXBLOCK + 1 ],
 	AUI_WINDOW_TYPE type,
@@ -61,15 +61,6 @@ C3FancyWindow::C3FancyWindow(
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-
-
-
-
-
-
-
-
-
 
 	m_originalDimensions.x = 546;
 	m_originalDimensions.y = 173;

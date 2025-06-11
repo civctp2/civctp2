@@ -87,10 +87,10 @@
 #include "primitives.h"
 #include "colorset.h"                   // g_colorSet
 
-extern C3UI       *g_c3ui;
+extern C3UI         *g_c3ui;
 
-static DipWizard  *s_dipWizard;
-static MBCHAR     *s_dipWizardBlock = "DipWizard";
+static DipWizard    *s_dipWizard;
+static const MBCHAR *s_dipWizardBlock = "DipWizard";
 
 ctp2_Static       *DipWizard::m_stages[DIP_WIZ_STAGE_MAX];
 ctp2_Button       *DipWizard::m_toneButtons[DIPLOMATIC_TONE_MAX];

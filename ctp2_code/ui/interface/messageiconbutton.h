@@ -43,7 +43,7 @@ public:
 	MessageIconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 
@@ -56,9 +56,9 @@ public:
 	void SetCurrentIconButton( MessageIconButton *button );
 
 protected:
-    virtual void	MouseRGrabInside(aui_MouseEvent * data);
-    virtual void	MouseRDropInside(aui_MouseEvent * data);
-    virtual void	MouseRDropOutside(aui_MouseEvent * data);
+	virtual void	MouseRGrabInside(aui_MouseEvent * data);
+	virtual void	MouseRDropInside(aui_MouseEvent * data);
+	virtual void	MouseRDropOutside(aui_MouseEvent * data);
 
 private:
 	static MessageIconButton	*m_currentButton;

@@ -21,7 +21,7 @@ typedef void (SegmentListCallback)(sint32 arg);
 class SegmentListItem : public c3_ListItem
 {
 public:
-	SegmentListItem(AUI_ERRCODE *retval, sint32 index, SlicSegment *segment, MBCHAR *ldlBlock);
+	SegmentListItem(AUI_ERRCODE *retval, sint32 index, SlicSegment *segment, const MBCHAR *ldlBlock);
 
 	virtual void Update();
 
@@ -33,7 +33,7 @@ public:
 protected:
 	SegmentListItem() : c3_ListItem() {}
 
-	AUI_ERRCODE InitCommonLdl(SlicSegment *segment, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(SlicSegment *segment, const MBCHAR *ldlBlock);
 
 private:
 	sint32 m_index;
@@ -43,7 +43,7 @@ private:
 class SegmentList : public KeyboardHandler
 {
 public:
-	SegmentList(SegmentListCallback* callback = 0, MBCHAR *ldlBlock = 0);
+	SegmentList(SegmentListCallback* callback = 0, const MBCHAR *ldlBlock = 0);
 	virtual ~SegmentList(void);
 
 	void DisplayWindow();
@@ -53,7 +53,7 @@ public:
 	virtual void kh_Close();
 
 private:
-	sint32 Initialize(MBCHAR *ldlBlock);
+	sint32 Initialize(const MBCHAR *ldlBlock);
 	sint32 UpdateData();
 
 	c3_PopupWindow *m_window;

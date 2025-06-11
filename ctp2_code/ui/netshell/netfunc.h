@@ -76,9 +76,9 @@ public:
 
 	static dp_species_t s_GameType;
 
-	static char*        s_LobbyName;
+	static const char*  s_LobbyName;
 
-	static char*        s_DllPath;
+	static const char*  s_DllPath;
 
 	static char         s_servername[64];
 	static char         s_playername[dp_PNAMELEN];
@@ -161,6 +161,8 @@ public:
 	Key(Key *k);
 
 	Key(KeyStruct *k);
+
+	virtual ~Key(){}
 
 	void WriteToFile(FILE *saveFile) const;
 	void ReadFromFile(FILE *saveFile);
@@ -1074,6 +1076,8 @@ public:
 
 	Session(dp_object_t *o, KeyStruct *k, long f);
 
+	virtual ~Session(){}
+
 	void WriteToFile(FILE *saveFile) const;
 	void ReadFromFile(FILE *saveFile);
 
@@ -1120,6 +1124,8 @@ public:
 
 	Game(Session *s);
 
+	virtual ~Game(){}
+
 	void WriteToFile(FILE *saveFile) const;
 	void ReadFromFile(FILE *saveFile);
 
@@ -1146,6 +1152,8 @@ public:
 	Lobby(void);
 
 	Lobby(dp_object_t *o, KeyStruct *k, long f);
+
+	virtual ~Lobby(){}
 
 	void SetBad(bool b = true);
 
@@ -1316,7 +1324,7 @@ public:
 
 	static STATUS UnLaunchAll(void);
 
-	STATUS Login(char *username, char *password);
+	STATUS Login(const char *username, const char *password);
 
 	STATUS SetTransport(Transport *t);
 
@@ -1350,7 +1358,7 @@ public:
 
 	STATUS Reset(void);
 
-	STATUS Connect(char *file);
+	STATUS Connect(const char *file);
 
 	STATUS Join(Game *g, const char *password = "");
 

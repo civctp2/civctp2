@@ -556,7 +556,7 @@ void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint3
 	greatLibrary->UpdateList(greatLibrary->m_listDatabase);
 }
 
-TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, MBCHAR * ldlBlock)
+TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, const MBCHAR * ldlBlock)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -570,7 +570,7 @@ TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database
 	*retval = InitCommonLdl(ldlBlock);
 }
 
-AUI_ERRCODE TechListItem::InitCommonLdl(MBCHAR const * ldlBlock)
+AUI_ERRCODE TechListItem::InitCommonLdl(const MBCHAR * ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf(block, "%s.%s", ldlBlock, "Name");

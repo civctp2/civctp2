@@ -27,11 +27,11 @@
 // - Changed the > operator (used by Goal::IsSatisfied method)
 //   Original method only test attack or defense param.
 //   New methode take the sum of all strength (attack, defense, ranged,...)
-//   by Calvitix and Martin Gühmann.
+//   by Calvitix and Martin GÃ¼hmann.
 // - Handled problem with invalid units.
-// - Added get and set methods for the bombard members. (30-Apr-2008 Martin Gühmann)
-// - Position strength is now calculated terrain independently. (13-Aug-2008 Martin Gühmann)
-// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Added get and set methods for the bombard members. (30-Apr-2008 Martin GÃ¼hmann)
+// - Position strength is now calculated terrain independently. (13-Aug-2008 Martin GÃ¼hmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin GÃ¼hmann)
 //   - Added following methods: NothingNeeded, GetTotalMissingStrength, HasEnough, and Log_Debug_Infor
 //
 //----------------------------------------------------------------------------
@@ -368,7 +368,7 @@ bool Squad_Strength::HasEnough(const Squad_Strength & otherStrength, bool ignore
 	    && m_agent_count       >= otherStrength.m_agent_count;
 }
 
-void Squad_Strength::Log_Debug_Info(const int & log, sint32 playerId, sint32 goalType, char * text) const
+void Squad_Strength::Log_Debug_Info(const int & log, sint32 playerId, sint32 goalType, const char * text) const
 {
 	AI_DPRINTF
 	          (

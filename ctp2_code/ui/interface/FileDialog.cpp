@@ -14,7 +14,7 @@
 #include <dirent.h>
 #endif
 
-static MBCHAR *s_block = "GenericFileDialog";
+static const MBCHAR *s_block = "GenericFileDialog";
 extern C3UI *g_c3ui;
 
 FileDialog::FileDialog()

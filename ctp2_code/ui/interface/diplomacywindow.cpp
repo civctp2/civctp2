@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Keep the embargo and war buttons enabled until confirmed by the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -83,16 +83,16 @@
 
 extern C3UI                   *g_c3ui;
 
-static MBCHAR                 *s_dipWindowBlock = "DiplomacyWindow";
+static const MBCHAR           *s_dipWindowBlock = "DiplomacyWindow";
 static DiplomacyWindow        *s_dipWindow;
 
-static MBCHAR                 *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
+static const MBCHAR           *k_DIP_WINDOW_ATTRACT_BUTTON = "ControlPanelWindow.ControlPanel.ShortcutPad.DiplomacyButton";
 
 #define k_INTELLIGENCE_TAB    0
 #define k_NEGOTIATION_TAB     1
 #define k_CREATE_PROPOSAL_TAB 2
 
-char *DiplomacyWindow::sm_toneIcons[DIPLOMATIC_TONE_MAX] = {
+const char *DiplomacyWindow::sm_toneIcons[DIPLOMATIC_TONE_MAX] = {
 	"updi39.tga",
 	"updi40.tga",
 	"updi41.tga",

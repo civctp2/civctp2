@@ -699,31 +699,25 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
-	MBCHAR *imageName = NULL;
-	char **toneIcons = DiplomacyWindow::GetToneIcons();
+	const MBCHAR *imageName = NULL;
+	const char **toneIcons = DiplomacyWindow::GetToneIcons();
 	sint32 p = (sint32)cookie;
 
-
-
-
-
-
-
-
-
-	switch(GetRegardThreshold(p, detailPlayer)) {
-		case HOTWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_ANGRY]; break;
+	switch(GetRegardThreshold(p, detailPlayer))
+	{
+		case HOTWAR_REGARD:  imageName = toneIcons[DIPLOMATIC_TONE_ANGRY];     break;
 		case COLDWAR_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_INDIGNANT]; break;
-		case NEUTRAL_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_EQUAL]; break;
-		case FRIEND_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_MEEK]; break;
-		case ALLIED_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_KIND]; break;
+		case NEUTRAL_REGARD: imageName = toneIcons[DIPLOMATIC_TONE_EQUAL];     break;
+		case FRIEND_REGARD:  imageName = toneIcons[DIPLOMATIC_TONE_MEEK];      break;
+		case ALLIED_REGARD:  imageName = toneIcons[DIPLOMATIC_TONE_KIND];      break;
 		default:
 			Assert(FALSE);
 			break;
 	}
 
-	if(imageName) {
-	    aui_Image * image = g_c3ui->LoadImage(imageName);
+	if(imageName)
+	{
+		aui_Image * image = g_c3ui->LoadImage(imageName);
 		if(image) {
 
 			rect.left += ((rect.right - rect.left) / 2) - (image->TheSurface()->Width() / 2);

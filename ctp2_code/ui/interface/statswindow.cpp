@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -584,7 +584,7 @@ int StatsWindow_Cleanup( void )
 StatsWindow::StatsWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -604,7 +604,7 @@ StatsWindow::StatsWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type)
 	:
 	C3Window( retval, id, x, y, width, height, bpp, pattern, type )
@@ -625,7 +625,7 @@ AUI_ERRCODE StatsWindow::InitCommon(void)
 }
 
 
-AUI_ERRCODE StatsWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE StatsWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	InitCommon();
 	return C3Window::InitCommon();

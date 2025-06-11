@@ -104,12 +104,12 @@ public:
 	LoadSaveMapWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 
 	virtual ~LoadSaveMapWindow();
 
@@ -126,9 +126,9 @@ public:
 	void SetType(uint32 type);
 	uint32 GetType() { return m_type; }
 
-	void SetGameMapName(MBCHAR *name);
-	void SetSaveMapName(MBCHAR *name);
-	void SetNote(MBCHAR *note);
+	void SetGameMapName(const MBCHAR *name);
+	void SetSaveMapName(const MBCHAR *name);
+	void SetNote(const MBCHAR *note);
 
 	BOOL GetGameMapName(MBCHAR *name);
 	BOOL GetSaveMapName(MBCHAR *name);
@@ -200,7 +200,7 @@ private:
 class LSMGameMapsListItem : public c3_ListItem
 {
 public:
-	LSMGameMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameMapInfo *info);
+	LSMGameMapsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, GameMapInfo *info);
 	~LSMGameMapsListItem();
 
 	sint32 Compare(c3_ListItem *item2, uint32 column);
@@ -217,7 +217,7 @@ private:
 class LSMSaveMapsListItem : public c3_ListItem
 {
 public:
-	LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveMapInfo *info);
+	LSMSaveMapsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, SaveMapInfo *info);
 	~LSMSaveMapsListItem();
 
 	sint32 Compare(c3_ListItem *item2, uint32 column);

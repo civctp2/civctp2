@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -41,7 +41,7 @@
 ns_Header::ns_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 :
 	aui_ImageBase   (ldlBlock),
 	aui_TextBase    (ldlBlock, (MBCHAR const *) NULL),
@@ -104,7 +104,7 @@ ns_Header::ns_Header(
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-AUI_ERRCODE ns_Header::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_Header::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
@@ -114,7 +114,7 @@ AUI_ERRCODE ns_Header::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE ns_Header::CreateSwitches( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_Header::CreateSwitches( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

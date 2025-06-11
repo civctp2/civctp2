@@ -25,10 +25,10 @@
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired, cleanup in destructor.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standartized code (May 21st 2006 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -130,7 +130,7 @@ void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
+HotseatList::HotseatList( HotseatListCallback *callback, const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -156,7 +156,7 @@ HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 	Initialize( windowBlock );
 }
 
-sint32 HotseatList::Initialize( MBCHAR *windowBlock )
+sint32 HotseatList::Initialize( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -357,8 +357,8 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 }
 
 HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-								 sint32 civ, bool isHuman, MBCHAR *email,
-								 MBCHAR *ldlBlock)
+								 sint32 civ, bool isHuman, const MBCHAR *email,
+								 const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -412,8 +412,8 @@ void HotseatNameCallback(aui_Control *control, uint32 action, uint32 data,
 
 AUI_ERRCODE HotseatListItem::InitCommonLdl(sint32 civ,
 										   bool isHuman,
-										   MBCHAR *email,
-										   MBCHAR *ldlBlock)
+										   const MBCHAR *email,
+										   const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

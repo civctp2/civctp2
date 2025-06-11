@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Made government modified for units work here even if the class is not
-//   used. (July 29th 2006 Martin Gühmann)
+//   used. (July 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -69,7 +69,7 @@ extern	DebugWindow			*g_debugWindow;
 
 CityInventoryListBox::CityInventoryListBox(AUI_ERRCODE *retval,
 			uint32 id,
-			MBCHAR *ldlBlock,
+			const MBCHAR *ldlBlock,
 			ControlActionCallback *ActionFunc,
 			void *cookie )
 	:
@@ -87,7 +87,7 @@ CityInventoryListBox::CityInventoryListBox (
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc,
 		void *cookie):
 	aui_ImageBase( (sint32)0 ),
@@ -101,7 +101,7 @@ CityInventoryListBox::~CityInventoryListBox()
 {
 }
 
-AUI_ERRCODE CityInventoryListBox::InitCommon(MBCHAR *ldlBlock)
+AUI_ERRCODE CityInventoryListBox::InitCommon(const MBCHAR *ldlBlock)
 {
 	m_buildMode = 0;
 	return AUI_ERRCODE_OK;

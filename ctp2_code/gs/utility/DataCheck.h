@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin Gühmann)
-// - Added sync check for the new map icon database. (27-Mar-2007 Martin Gühmann)
-// - Added sync check for the new map database. (27-Mar-2007 Martin Gühmann)
+// - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin GÃ¼hmann)
+// - Added sync check for the new map icon database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added sync check for the new map database. (27-Mar-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -142,8 +142,8 @@ class DataCheck
 		void SetDisplay(sint32 val);
 		void DisplayCRC(aui_Surface *surf) const;
 		void DumpChecksum(void);
-		void DumpSingleCRC(MBCHAR *grp, sint32 t);
-		void draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, sint32 y) const;
+		void DumpSingleCRC(const MBCHAR *grp, sint32 t);
+		void draw_crc(aui_Surface *surf, const MBCHAR* str1, sint32 t, sint32 x, sint32 y) const;
 		void draw_time(aui_Surface *surf, sint32 x, sint32 y) const;
 	};
 

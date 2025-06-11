@@ -104,7 +104,7 @@ void ldlif_init_log()
 	}
 #endif
 }
-void ldlif_log(char *format, ...)
+void ldlif_log(const char *format, ...)
 {
 #ifdef _DEBUG
 	va_list list;
@@ -208,27 +208,27 @@ void *ldlif_add_empty_block(void *names)
 	return ldlif_end_block(names);
 }
 
-void ldlif_add_bool_attribute(char *name, int val)
+void ldlif_add_bool_attribute(const char *name, int val)
 {
 	ldl_attributeValue<bool> *attr = new ldl_attributeValue<bool>(name, ATTRIBUTE_TYPE_BOOL, val != 0);
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 
-void ldlif_add_int_attribute(char *name, int val)
+void ldlif_add_int_attribute(const char *name, int val)
 {
 	ldl_attributeValue<int> *attr = new ldl_attributeValue<int>(name, ATTRIBUTE_TYPE_INT, val);
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 
-void ldlif_add_float_attribute(char *name, double val)
+void ldlif_add_float_attribute(const char *name, double val)
 {
 	ldl_attributeValue<double> *attr = new ldl_attributeValue<double>(name, ATTRIBUTE_TYPE_DOUBLE, val);
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 
-void ldlif_add_string_attribute(char *name, char *val)
+void ldlif_add_string_attribute(const char *name, const char *val)
 {
-	ldl_attributeValue<char *> *attr = new ldl_attributeValue<char *>(name, ATTRIBUTE_TYPE_STRING, val);
+	ldl_attributeValue<const char *> *attr = new ldl_attributeValue<const char *>(name, ATTRIBUTE_TYPE_STRING, val);
 	s_blockStack->GetTail()->AddAttribute(attr);
 }
 

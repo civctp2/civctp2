@@ -24,15 +24,15 @@
  *
  * Modifications from the original Activision code:
  *
- * - SOP types added by Martin Gühmann to allow:
+ * - SOP types added by Martin GÃ¼hmann to allow:
  *   - Slic database access
  *   - Slic database size access
  * - slicif_cleanup() added.
  * - Replaced slicif_is_sym by slicif_is_name function. This function is
  *   modelled slicif_find_db_index but without error message if this
- *   function fails to retrieve the database index. - Feb. 24th 2005 Martin Gühmann
+ *   function fails to retrieve the database index. - Feb. 24th 2005 Martin GÃ¼hmann
  * - Added bitwise operators
- * - Added database array access. (Sep 16th 2005 Martin Gühmann)
+ * - Added database array access. (Sep 16th 2005 Martin GÃ¼hmann)
  *
  *----------------------------------------------------------------------------
  */
@@ -117,7 +117,7 @@ typedef enum {
 	SOP_EVENT,
 	SOP_ASIZE,
 
-//Added by Martin Gühmann for database support
+//Added by Martin GÃ¼hmann for database support
 	SOP_DBNAME,
 	SOP_DBNAMEREF,
 	SOP_DB,
@@ -130,7 +130,7 @@ typedef enum {
 	SOP_BOR,
 	SOP_BXOR,
 	SOP_BNOT,
-//Added by Martin Gühmann for database array support
+//Added by Martin GÃ¼hmann for database array support
 	SOP_DBNAMEARRAY,
 	SOP_DBNAMECONSTARRAY,
 
@@ -266,7 +266,7 @@ void slicif_register_line(int line, int offset);
 const char *slicif_get_filename();
 
 void slicif_start_event(char *name);
-void slicif_check_arg_symbol(SLIC_SYM type, char *typeName);
+void slicif_check_arg_symbol(SLIC_SYM type, const char *typeName);
 void slicif_check_argument();
 void slicif_check_string_argument();
 void slicif_check_hard_string_argument();
@@ -284,7 +284,7 @@ int slicif_find_db_value_by_index(void *dbptr, int index, const char *valname);
 int slicif_find_db_array_value(void *dbptr, const char *recname, const char *valname, int val);
 int slicif_find_db_array_value_by_index(void *dbptr, int index, const char *valname, int val);
 
-/* Added by Martin Gühmann */
+/* Added by Martin GÃ¼hmann */
 int slicif_is_name(void *dbptr, const char *name);
 
 #if defined(__cplusplus)

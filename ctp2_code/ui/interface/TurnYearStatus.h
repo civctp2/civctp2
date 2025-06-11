@@ -54,7 +54,7 @@ public:
 	static         void  BuildTurnLengthOverride();
 	static         void  CleanupTurnLengthOverride();
 
-	TurnYearStatus(MBCHAR *ldlBlock);
+	TurnYearStatus(const MBCHAR *ldlBlock);
 
 	void Update();
 	void UpdatePlayer(PLAYER_INDEX player);

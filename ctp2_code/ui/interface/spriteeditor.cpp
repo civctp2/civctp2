@@ -208,7 +208,7 @@ void SpriteEditWindow_Cleanup(void)
 SpriteEditWindow::SpriteEditWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -362,7 +362,7 @@ SpriteEditWindow::SetAnimation(sint32 anim)
 }
 
 void
-SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode,MBCHAR *windowBlock)
+SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowBlock)
 {
 	m_Load          = spNew_ctp2_Button(errcode, windowBlock, "STLoadButton", "No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_Save          = spNew_ctp2_Button(errcode, windowBlock, "STSaveButton", "No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
@@ -465,7 +465,7 @@ AUI_ERRCODE SpriteEditWindow::InitCommon(void)
 	return C3Window::InitCommon();
 }
 
-AUI_ERRCODE SpriteEditWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE SpriteEditWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	InitCommon();
 	return C3Window::InitCommon();

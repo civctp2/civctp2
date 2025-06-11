@@ -80,7 +80,7 @@
 extern C3UI *g_c3ui;
 
 static ArmyManagerWindow *s_armyWindow = NULL;
-static MBCHAR *s_armyWindowBlock = "ArmyManager";
+static const MBCHAR *s_armyWindowBlock = "ArmyManager";
 
 ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 {

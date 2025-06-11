@@ -27,7 +27,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern );
+		const MBCHAR *pattern );
 	virtual ~InfoBar() {}
 
 	virtual AUI_ERRCODE DrawThis(

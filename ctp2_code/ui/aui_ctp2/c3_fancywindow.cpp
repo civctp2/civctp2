@@ -26,19 +26,19 @@ c3_FancyWindow::c3_FancyWindow
 (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	MBCHAR ldlBorder[k_NUM_C3_FANCYBORDERS][ k_AUI_LDL_MAXBLOCK + 1 ],
-	MBCHAR *ldlTitle,
+	const MBCHAR *ldlTitle,
 	AUI_WINDOW_TYPE type,
 	bool bevel,
 	void (*exitCallBack)( aui_Control *, uint32, uint32, void *)
 )
 :
     C3Window    (retval, id, ldlBlock, bpp, type, bevel),
-	m_title     (NULL),
-	m_cancel    (NULL),
-	m_ok        (NULL)
+    m_title     (NULL),
+    m_cancel    (NULL),
+    m_ok        (NULL)
 {
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );

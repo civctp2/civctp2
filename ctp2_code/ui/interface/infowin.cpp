@@ -350,10 +350,10 @@ void infowin_Cleanup_Controls(void)
 	allocated::clear(s_labButton);
 	allocated::clear(s_throneButton);
 	allocated::clear(s_pollutionButton);
-    allocated::clear(s_stringTable);
+	allocated::clear(s_stringTable);
 }
 
-sint32 infowin_Init_Controls( MBCHAR *windowBlock )
+sint32 infowin_Init_Controls( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];

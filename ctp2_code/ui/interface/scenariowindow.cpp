@@ -78,7 +78,7 @@ extern MBCHAR                       g_scenarioName[k_SCENARIO_NAME_MAX];
 
 
 
-ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
+ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 {
 	Assert(AUI_SUCCESS(*retval));
 
@@ -143,7 +143,7 @@ void ScenarioWindow::FillListWithScenarios(ctp2_ListBox *available)
 {
 	int					i=0;
 	ScenarioPack		*scenPack;
-	MBCHAR				*ldlBlock = "ScenarioListItem";
+	const MBCHAR		*ldlBlock = "ScenarioListItem";
 
 	scenPack = m_scenarioPack;
 

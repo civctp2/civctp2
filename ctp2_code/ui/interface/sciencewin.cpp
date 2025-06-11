@@ -509,7 +509,7 @@ sint32 knowledgewin_Initialize( void )
 	return 0;
 }
 
-sint32 knowledgewin_InitGraphicTrim( MBCHAR *windowBlock )
+sint32 knowledgewin_InitGraphicTrim( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -666,7 +666,7 @@ sint32 knowledgewin_Cleanup( void )
 	return 0;
 }
 
-KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
+KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -680,7 +680,7 @@ KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -727,7 +727,7 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
+EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -741,7 +741,7 @@ EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlB
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE EmbassyListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE EmbassyListItem::InitCommonLdl(sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -791,7 +791,7 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
+AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -826,7 +826,7 @@ AdvanceListItem::~AdvanceListItem()
 	m_childList->DeleteAll();
 }
 
-AUI_ERRCODE AdvanceListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE AdvanceListItem::InitCommonLdl(sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			subBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1104,7 +1104,7 @@ ScienceWin::ScienceWin( void )
 	Initialize( windowBlock );
 }
 
-sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
+sint32 ScienceWin::Initialize( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];

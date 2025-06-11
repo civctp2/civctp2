@@ -16,7 +16,7 @@
 ns_HeaderSwitch::ns_HeaderSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -46,9 +46,9 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
-	MBCHAR *icon,
-	MBCHAR *pattern,
+	const MBCHAR *text,
+	const MBCHAR *icon,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie,
 	sint32 state,
@@ -76,7 +76,7 @@ ns_HeaderSwitch::ns_HeaderSwitch(
 }
 
 
-AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -86,7 +86,7 @@ AUI_ERRCODE ns_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE ns_HeaderSwitch::InitCommon( MBCHAR *icon )
+AUI_ERRCODE ns_HeaderSwitch::InitCommon( const MBCHAR *icon )
 {
 	m_icon = NULL;
 
@@ -108,7 +108,7 @@ ns_HeaderSwitch::~ns_HeaderSwitch()
 }
 
 
-AUI_ERRCODE ns_HeaderSwitch::SetIcon( MBCHAR *icon )
+AUI_ERRCODE ns_HeaderSwitch::SetIcon( const MBCHAR *icon )
 {
 	Assert( icon != NULL );
 	if ( !icon ) return AUI_ERRCODE_INVALIDPARAM;

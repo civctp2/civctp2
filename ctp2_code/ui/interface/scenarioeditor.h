@@ -26,9 +26,9 @@
 //
 // - Added a private static variable and the accoriding access function
 //   to allow newly created cities to have the size displayed in the
-//   city pop spinner, by Martin Gühmann.
-// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
-// - Added a callback function for civ city style spinner. (Jan 4th 2005 Martin Gühmann)
+//   city pop spinner, by Martin GÃ¼hmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin GÃ¼hmann.
+// - Added a callback function for civ city style spinner. (Jan 4th 2005 Martin GÃ¼hmann)
 // - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class ScenarioEditor {
 	sint32 m_brushSize;
 	sint32 m_unitIndex;
 	sint32 m_cityStyle;
-	//Added by Martin Gühmann to add the pop number
+	//Added by Martin GÃ¼hmann to add the pop number
 	//displayed in the CityPopSpinner to new created cities.
 	sint32 m_newPopSize;
 	SCEN_START_LOC_MODE m_startLocMode;
@@ -185,7 +185,7 @@ class ScenarioEditor {
 	static sint32 UnitIndex();
 	static bool PlaceCityMode();
 	static sint32 CityStyle();
-	//Function added by Martin Gühmann so that the
+	//Function added by Martin GÃ¼hmann so that the
 	//pop size displayed in the CityPopSpinner can
 	//be added to newly created cities.
 	static sint32 CitySize();
@@ -242,7 +242,7 @@ class ScenarioEditor {
 	static void LoadScenario(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveScenario(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveScenarioAs(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NameTheScenarioCallback(MBCHAR *text, sint32 accepted, void *data);
+	static void NameTheScenarioCallback(const MBCHAR *text, sint32 accepted, void *data);
 	static void LoadMap(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void SaveMap(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
@@ -299,7 +299,7 @@ class ScenarioEditor {
 	void SetupGlobalControls();
 	void UpdatePlayerCount();
 
-	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item);
+	void AddDropDownItem(ctp2_DropDown *dd, const MBCHAR *ldlblock, const char * item);
 	sint32 GetNumPlayers();
 	sint32 GetLastPlayer();
 	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);

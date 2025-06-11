@@ -511,7 +511,7 @@ GAME_EVENT_ERR GameEventManager::ActivateHook
 	return m_hooks[type]->Activate(args, 0, resumeIndex);
 }
 
-char *GameEventManager::ArgCharToName(char want)
+const char *GameEventManager::ArgCharToName(char want)
 {
 	switch(want) {
 		case GEAC_ARMY: return "GEA_Army";
@@ -532,7 +532,7 @@ char *GameEventManager::ArgCharToName(char want)
 	}
 }
 
-char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
+const char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
 {
 	switch(want) {
 		case GEA_Army: return "GEA_Army";
@@ -553,7 +553,7 @@ char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
 	}
 }
 
-GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(char arg)
+GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(const char arg)
 {
 	switch(arg) {
 		case GEAC_ARMY: return GEA_Army;

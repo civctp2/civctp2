@@ -23,8 +23,8 @@ typedef void (*WatchListCallback)(sint32 arg);
 class WatchListItem : public c3_ListItem, public SlicSymbolWatchCallback
 {
 public:
-	WatchListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *line,
-				  MBCHAR *ldlBlock);
+	WatchListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *line,
+				  const MBCHAR *ldlBlock);
 	virtual ~WatchListItem();
 
 	virtual void Update();
@@ -39,7 +39,7 @@ public:
 protected:
 	WatchListItem() : c3_ListItem() {}
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 
 private:
 	friend class WatchList;
@@ -53,11 +53,11 @@ private:
 class WatchList : public KeyboardHandler
 {
 public:
-	WatchList(WatchListCallback callback = NULL, MBCHAR *ldlBlock = NULL);
+	WatchList(WatchListCallback callback = NULL, const MBCHAR *ldlBlock = NULL);
 	virtual ~WatchList();
 
 //public:
-	sint32 Initialize(MBCHAR *ldlBlock);
+	sint32 Initialize(const MBCHAR *ldlBlock);
 	sint32 Cleanup();
 	sint32 UpdateData();
 
@@ -69,7 +69,7 @@ public:
 	c3_ListBox *GetList() { return m_list; }
 	void ShowBreak(sint32 offset);
 
-	void AddExpression(char *exp);
+	void AddExpression(const char *exp);
 	void Clear();
 
 	c3_Button *GetNewButton() { return m_newButton; }
@@ -90,7 +90,7 @@ public:
 void watchlist_Display();
 void watchlist_Remove();
 void watchlist_Refresh();
-void watchlist_AddExpression(char *exp);
+void watchlist_AddExpression(const char *exp);
 
 extern WatchList *g_watchList;
 #endif//CTP2_ENABLE_SLICDEBUG

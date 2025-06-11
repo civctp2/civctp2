@@ -201,7 +201,7 @@ void TurnYearStatus::CleanupTurnLengthOverride()
 	s_pTurnLengthOverride = NULL;
 }
 
-TurnYearStatus::TurnYearStatus(MBCHAR *ldlBlock)
+TurnYearStatus::TurnYearStatus(const MBCHAR *ldlBlock)
 :   m_turnYearStatus (static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "TurnYearStatus"))),
     m_dougsProgress  (static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock, "DougsProgressBar"))),
     m_displayType    (DISPLAY_YEAR)

@@ -229,7 +229,7 @@ void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 d
 
 
 
-ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, MBCHAR *ldlBlock)
+ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -243,7 +243,7 @@ ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, 
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE ScreenResListItem::InitCommonLdl(CTPDisplayMode *mode, MBCHAR *ldlBlock)
+AUI_ERRCODE ScreenResListItem::InitCommonLdl(CTPDisplayMode *mode, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

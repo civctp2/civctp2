@@ -26,7 +26,7 @@ StaticTextBox::StaticTextBox(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 size,
 	sint32 bevel)
@@ -41,7 +41,7 @@ StaticTextBox::StaticTextBox(
 StaticTextBox::StaticTextBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock)
+	const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),

@@ -52,7 +52,7 @@ public:
 	ScienceWin( void );
 	virtual ~ScienceWin( void );
 
-	sint32 Initialize( MBCHAR *windowBlock );
+	sint32 Initialize( const MBCHAR *windowBlock );
 protected:
 	c3_Button		*m_closeButton;
 
@@ -107,7 +107,7 @@ class KnowledgeListItem: public c3_ListItem
 {
 public:
 
-	KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock);
+	KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -118,7 +118,7 @@ protected:
 	KnowledgeListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -132,7 +132,7 @@ class EmbassyListItem: public c3_ListItem
 {
 public:
 
-	EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock);
+	EmbassyListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -143,7 +143,7 @@ protected:
 	EmbassyListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -157,7 +157,7 @@ class AdvanceListItem: public c3_ListItem
 {
 public:
 
-	AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock);
+	AdvanceListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock);
 	~AdvanceListItem();
 
 
@@ -170,7 +170,7 @@ protected:
 	AdvanceListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 index, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 index, const MBCHAR *ldlBlock);
 
 public:
 
@@ -182,7 +182,7 @@ private:
 };
 
 sint32 knowledgewin_UpdateFromSwitch( void );
-sint32 knowledgewin_InitGraphicTrim( MBCHAR *windowBlock );
+sint32 knowledgewin_InitGraphicTrim( const MBCHAR *windowBlock );
 sint32 knowledgewin_Initialize( void );
 sint32 knowledgewin_Cleanup( void );
 

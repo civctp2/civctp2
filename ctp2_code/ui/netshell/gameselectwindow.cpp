@@ -378,7 +378,7 @@ uint32 TellEricAboutThisBug( aui_Window *w )
 	return id;
 }
 
-void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
+void GameSelectWindow::PasswordScreenDone( const MBCHAR *password )
 {
 
 	AllinoneWindow *w = g_allinoneWindow;

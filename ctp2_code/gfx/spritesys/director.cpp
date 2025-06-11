@@ -697,7 +697,7 @@ public:
 	virtual void AddTerminateFaceoff(const Unit &faceroffer);
 	virtual void AddTerminateSound(const Unit &unit);
 	virtual void AddInvokeThroneRoom();
-	virtual void AddInvokeResearchAdvance(MBCHAR *text);
+	virtual void AddInvokeResearchAdvance(const MBCHAR *text);
 	virtual void AddBeginScheduler(sint32 player);
 
 	// Animations
@@ -3060,7 +3060,7 @@ void DirectorImpl::AddInvokeThroneRoom()
 	m_actionQueue->AddTail(action);
 }
 
-void DirectorImpl::AddInvokeResearchAdvance(MBCHAR *message)
+void DirectorImpl::AddInvokeResearchAdvance(const MBCHAR *message)
 {
 	if (!message) {
 		return;

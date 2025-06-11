@@ -35,7 +35,7 @@ class ns_TribesDropDown : public c3_DropDown
 public:
 	ns_TribesDropDown(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_TribesDropDown();

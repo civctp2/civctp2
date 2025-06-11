@@ -2286,7 +2286,7 @@ NETFunc::NETFunc(void) {
 	s_status = START;
 }
 
-NETFunc::STATUS NETFunc::Connect(char *file) {
+NETFunc::STATUS NETFunc::Connect(const char *file) {
 
 	s_result = dpCreate(&s_dp, NULL, NULL, file);
 	if(s_result != dp_RES_OK)
@@ -2631,7 +2631,7 @@ NETFunc::STATUS NETFunc::UnLaunchAll() {
 	return OK;
 }
 
-NETFunc::STATUS NETFunc::Login(char *username, char *password) {
+NETFunc::STATUS NETFunc::Login(const char *username, const char *password) {
 	if(s_status == LOGIN) {
 		if(s_userId != dp_UID_NONE || !strlen(username)) {
 			PushMessage(new Message(Message::LOGINOK));
@@ -3567,9 +3567,9 @@ dpid_t NETFunc::s_destination = 0;
 
 dp_species_t NETFunc::s_GameType = 0;
 
-char *NETFunc::s_LobbyName = "Lobby";
+const char *NETFunc::s_LobbyName = "Lobby";
 
-char *NETFunc::s_DllPath = "anet";
+const char *NETFunc::s_DllPath = "anet";
 
 int NETFunc::s_PlayerSetupPacketKey = 0;
 

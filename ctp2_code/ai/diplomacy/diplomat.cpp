@@ -41,15 +41,15 @@
 // - Prevented crash on incorrect input (personality typo).
 // - Improved CleanupAll.
 // - Some agreements have limited duration, PFT 05 MAR 05
-// - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standardized code (May 21st 2006 Martin Gühmann)
+// - Replaced old civilisation database by new civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standardized code (May 21st 2006 Martin GÃ¼hmann)
 // - Made limited duration optional.
-// - Added war over message. (Feb 4th 2007 Martin Gühmann)
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added war over message. (Feb 4th 2007 Martin GÃ¼hmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin GÃ¼hmann)
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
-// - The player's default strategy is restored after save reloading. (13-Jun-2008 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin GÃ¼hmann)
+// - The player's default strategy is restored after save reloading. (13-Jun-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1003,7 +1003,7 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 	StringId strId;
 	REGARD_EVENT_TYPE regard_event_type = REGARD_EVENT_DIPLOMACY;
 	bool act_of_war = false;
-	char * trust_message = NULL;
+	const char * trust_message = NULL;
 
 	if (foreignerId == 0)
 		return;
@@ -2040,7 +2040,7 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 	StringId strId;
 	sint32 regard_cost=0;
 	sint32 trust_cost=0;
-	char *str_buf = NULL;
+	const char *str_buf = NULL;
 
 	switch (threat.detail.type)
 	{

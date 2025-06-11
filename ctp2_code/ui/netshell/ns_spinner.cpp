@@ -11,7 +11,7 @@
 ns_Spinner::ns_Spinner(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:
@@ -31,7 +31,7 @@ ns_Spinner::ns_Spinner(
 	sint32 width,
 	sint32 height,
 	AUI_RANGER_ORIENTATION orientation,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:

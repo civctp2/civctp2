@@ -187,7 +187,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 	}
 }
 
-sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from)
+sint32	sci_advancescreen_displayMyWindow( const MBCHAR *messageText, sint32 from)
 {
 	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
 	s_oldResearching = p->m_advances->GetResearching();
@@ -244,7 +244,7 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 	return 1;
 }
 
-AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
+AUI_ERRCODE sci_advancescreen_Initialize( const MBCHAR *messageText )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -503,7 +503,7 @@ sint32 sci_advancescreen_loadList( void )
 	return 0;
 }
 
-sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
+sint32 sci_advancescreen_updateData( const MBCHAR *messageText, BOOL defaultMessage )
 {
 	MBCHAR str[_MAX_PATH];
 	sint32 advanceTurns;

@@ -978,7 +978,7 @@ void controlPanel_popupPress(aui_Control *control, uint32 action, uint32 data, v
 ControlPanelWindow::ControlPanelWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type ) :
 m_mainWindow(NULL),
@@ -1009,7 +1009,7 @@ m_terraFormMode(false)
 
 	m_currentProgress = 0;
 
-	static MBCHAR *ldlControlBlock = "ControlPanelWindow.ControlPanel";
+	static const MBCHAR *ldlControlBlock = "ControlPanelWindow.ControlPanel";
 	MainControlPanel::Initialize(ldlControlBlock);
 
 	AdjustToScreen();
@@ -1978,7 +1978,7 @@ void ControlPanelWindow::ClearTargetingMode()
 	specialAttackWindow_DisplayData(pos, -1);
 }
 
-void ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
+void ControlPanelWindow::CreateTabGroup(const MBCHAR *ldlBlock)
 {
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab", TabCallback, (void *)CP_TAB_CIV);
 	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab",     TabCallback, (void *)CP_TAB_CITY);
@@ -2000,7 +2000,7 @@ void ControlPanelWindow::CreateTabGroup(MBCHAR *ldlBlock)
 	m_tabs[CP_TAB_TILEIMP] = (ctp2_Tab *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab");
 }
 
-void ControlPanelWindow::CreateTab(sint32 which,MBCHAR *name)
+void ControlPanelWindow::CreateTab(sint32 which, const MBCHAR *name)
 {
 	if ((which<0)||(which>=CP_TAB_LAST)||(name==NULL))
 		return;
@@ -2079,7 +2079,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 
 	ctp2_Static *staticThing = (ctp2_Static *)staticContainer->GetChildByIndex(0);
 
-	MBCHAR *iconName = g_theMessageIconFileDB->GetFilename(message.GetMsgType());
+	const MBCHAR *iconName = g_theMessageIconFileDB->GetFilename(message.GetMsgType());
 	if(!iconName)
 		iconName = k_MESSAGE_ICON_PICTURE_WARNING;
 	staticThing->SetImage(iconName);
@@ -2344,25 +2344,25 @@ void ControlPanelWindow::CreateTileImpBanks()
 	std::fill(m_tileImpButtons, m_tileImpButtons + CP_MAX_TILEIMPBUTTONS, (ctp2_Button *) NULL);
 	std::fill(m_terraFormButtons, m_terraFormButtons + CP_MAX_TILEIMPBUTTONS, (ctp2_Button *) NULL);
 
-	sint32		index;
-	MBCHAR		button_id[256];
-	MBCHAR		*thePaneLDL;
-	ctp2_Button	*a_button;
+	sint32       index;
+	MBCHAR       button_id[256];
+	const MBCHAR *thePaneLDL;
+	ctp2_Button  *a_button;
 	const	TerrainImprovementRecord *timpRec;
 
 	const	IconRecord *irec;
 	bool	found;
 	uint32	row = 0, column = 0, theClass = 0, group_id = 0;
 
-	char *panels[CP_TILEIMP_MAX] = {
+	const char *panels[CP_TILEIMP_MAX] = {
 			"tiLandButtonBank",
 			"tiSpecialButtonBank",
 			"tiOceanButtonBank",
 			"tfLandButtonBank",
 			"tfOceanButtonBank", //emod
 			//"tfExtraButtonBank", //emod
-
 	};
+
 	sint32 panel;
 	for(panel = 0; panel < CP_TILEIMP_MAX; panel++)
 	{
@@ -2622,9 +2622,7 @@ void ControlPanelWindow::ActivateTileImpBank(unsigned int group_id)
 	TileImpPanelRedisplay();
 }
 
-void ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, MBCHAR *string)
-//void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint32 userData)
-//void ScenarioEditor::AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData)
+void ControlPanelWindow::AppendItem(ctp2_ListBox * a_List, const MBCHAR *string)
 {
 	if ((a_List==NULL)||(string==NULL))
 		return;
@@ -2976,7 +2974,7 @@ void ControlPanelWindow::AdjustToScreen()
 	Move(basex,basey);
 }
 
-void ControlPanelWindow::SetControlText(aui_Control *control,MBCHAR *fmt,...)
+void ControlPanelWindow::SetControlText(aui_Control *control, const MBCHAR *fmt, ...)
 {
 	if ((control==NULL)||(fmt==NULL))
 		return;
@@ -3444,7 +3442,7 @@ ControlPanelWindow::SetStack(Army const &selectedArmy, CellUnitList *fullArmy, U
 {
 }
 
-void ThrowPartyUtilityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data)
+void ThrowPartyUtilityDialogBoxCallback(const MBCHAR *text, sint32 val2, void *data)
 {
 }
 

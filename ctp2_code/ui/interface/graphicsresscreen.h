@@ -44,7 +44,7 @@ class ScreenResListItem : public c3_ListItem
 {
 public:
 
-	ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, MBCHAR *ldlBlock);
+	ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void) {}
@@ -52,7 +52,7 @@ public:
 	CTPDisplayMode *GetDisplayMode(void) { return m_mode; }
 protected:
 	ScreenResListItem() : c3_ListItem() {}
-	AUI_ERRCODE InitCommonLdl(CTPDisplayMode *mode, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(CTPDisplayMode *mode, const MBCHAR *ldlBlock);
 
 private:
 	CTPDisplayMode *m_mode;

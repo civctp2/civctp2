@@ -19,7 +19,7 @@ void helptile_closeWindow(void);
 class TileImprovementListItem : public c3_ListItem
 {
 public:
-	TileImprovementListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, sint32 time, uint32 name);
+	TileImprovementListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, sint32 time, uint32 name);
 	void Update();
 private:
 	sint32 m_time;

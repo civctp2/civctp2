@@ -15,7 +15,7 @@ public:
 	TextTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL);
 	TextTab(
@@ -27,8 +27,8 @@ public:
 		sint32 height,
 		sint32 paneWidth,
 		sint32 paneHeight,
-		MBCHAR *pattern = NULL,
-		MBCHAR *text = NULL,
+		const MBCHAR *pattern = NULL,
+		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
 		BOOL selected = FALSE );

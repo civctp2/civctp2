@@ -11,7 +11,7 @@
 extern MessagePool *g_theMessagePool;
 extern Player **g_player;
 
-SlicRecord::SlicRecord(sint32 owner, MBCHAR *title, MBCHAR *text,
+SlicRecord::SlicRecord(sint32 owner, const MBCHAR *title, const MBCHAR *text,
 					   SlicSegment *segment)
 {
 	m_owner = owner;

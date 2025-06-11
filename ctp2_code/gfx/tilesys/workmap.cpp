@@ -69,7 +69,7 @@ extern C3UI				*g_c3ui;
 
 WorkMap::WorkMap(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -87,7 +87,7 @@ WorkMap::WorkMap(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
 							void *cookie)
 	:
@@ -120,7 +120,7 @@ WorkMap::~WorkMap()
 	}
 }
 
-void WorkMap::InitCommonLdl(MBCHAR *ldlBlock)
+void WorkMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );

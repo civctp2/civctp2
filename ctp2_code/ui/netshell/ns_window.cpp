@@ -45,7 +45,7 @@
 ns_Window::ns_Window(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -59,7 +59,7 @@ ns_Window::ns_Window(
 }
 
 
-AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_Window::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -72,7 +72,7 @@ AUI_ERRCODE ns_Window::InitCommonLdl( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE ns_Window::InitCommon( MBCHAR *tile, BOOL retired )
+AUI_ERRCODE ns_Window::InitCommon( const MBCHAR *tile, BOOL retired )
 {
 	m_numControls = 0;
 	m_controls = NULL;
@@ -134,7 +134,7 @@ aui_Control *ns_Window::FindControl( uint32 index )
 }
 
 
-aui_Image *ns_Window::SetTile( MBCHAR *tile )
+aui_Image *ns_Window::SetTile( const MBCHAR *tile )
 {
 	aui_Image *prevTile = m_tile;
 

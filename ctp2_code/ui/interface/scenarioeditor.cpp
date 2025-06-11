@@ -25,37 +25,37 @@
 // Modifications from the original Activision code:
 //
 // - Make the number of city styles you can place with the scenario editor mod
-//   dependent, by Martin Gühmann.
+//   dependent, by Martin GÃ¼hmann.
 // - Make sure that newly created cities have the size as displayed in the
-//   CityPopSpinner, by Martin Gühmann.
+//   CityPopSpinner, by Martin GÃ¼hmann.
 // - Corrected wrap handling, by Fromafar.
-// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin Gühmann.
-// - Memory leaks fixed, by Martin Gühmann and Fromafar.
+// - Fixed Auto-Turn-Off-Pollution-Bug, by Martin GÃ¼hmann.
+// - Memory leaks fixed, by Martin GÃ¼hmann and Fromafar.
 // - Fixed switch to player 1 bug when the scenario editor is loaded for the
-//   first time in a game session, by Martin Gühmann.
-// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
+//   first time in a game session, by Martin GÃ¼hmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin GÃ¼hmann.
 // - Fixed player spinners in the scenario editor so that the last player
 //   is still accessable even if players before in the row were killed,
-//   by Martin Gühmann.
+//   by Martin GÃ¼hmann.
 //   Unfortunatly it looks like here are more problems. Soon after some turns
 //   with the dead player I got Asserts when I try to access the dead player.
-// - Fix of a crash by Martin Gühmann. If you selected a city changed the
+// - Fix of a crash by Martin GÃ¼hmann. If you selected a city changed the
 //   player, the city was destroyed by in game events, conquest, starvation
 //   slic and you switch back via the Scenario Editor to that player the game
 //   crashed, the problem is solved by deselecting everything before player
 //   changing.
-// - Added icons and tooltips to city style buttons, by Martin Gühmann.
+// - Added icons and tooltips to city style buttons, by Martin GÃ¼hmann.
 // - Repaired backwards compatibility and possible crashes.
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
-// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin GÃ¼hmann)
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Added a civ city style choser on the civ tab. (Jan 4th 2005 Martin GÃ¼hmann)
 // - Spinner callbacks are added at the end so that they aren't called due to
-//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin Gühmann)
+//   min or max modifications. This accelerates Scenario Editor initalisation. (Feb 4th 2007 Martin GÃ¼hmann)
 // - Switching between players now updates the city list of the main control
-//   panel city tab. (Feb 4th 2007 Martin Gühmann)
+//   panel city tab. (Feb 4th 2007 Martin GÃ¼hmann)
 // - TODO add show Enemy Health and Debug AI buttons to Unit Tab
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -168,9 +168,9 @@ extern CursorManager*       g_cursorManager;
 
 extern void WhackScreen();
 
-static MBCHAR *s_scenarioEditorBlock = "ScenarioEditor";
+static const MBCHAR *s_scenarioEditorBlock = "ScenarioEditor";
 static ScenarioEditor *s_scenarioEditor = NULL;
-static MBCHAR *s_scenarioAddStuffBlock = "ScenAddStuffWindow";
+static const MBCHAR *s_scenarioAddStuffBlock = "ScenAddStuffWindow";
 
 #define k_TERRAIN_COLS_PER_ROW 6
 #define k_CITY_COLS_PER_ROW 6
@@ -185,19 +185,19 @@ static MBCHAR *s_scenarioAddStuffBlock = "ScenAddStuffWindow";
 #define k_MAX_ADD_GOLD_OR_PW 1000000
 #define MAX_CHARS 7
 
-static MBCHAR *k_WORLD_TAB_BUTTON = "ScenarioEditor.TabGroup.WorldButton";
-static MBCHAR *k_UNIT_TAB_BUTTON = "ScenarioEditor.TabGroup.UnitButton";
-static MBCHAR *k_CITY_TAB_BUTTON = "ScenarioEditor.TabGroup.CityButton";
-static MBCHAR *k_CIV_TAB_BUTTON = "ScenarioEditor.TabGroup.CivButton";
+static const MBCHAR *k_WORLD_TAB_BUTTON = "ScenarioEditor.TabGroup.WorldButton";
+static const MBCHAR *k_UNIT_TAB_BUTTON = "ScenarioEditor.TabGroup.UnitButton";
+static const MBCHAR *k_CITY_TAB_BUTTON = "ScenarioEditor.TabGroup.CityButton";
+static const MBCHAR *k_CIV_TAB_BUTTON = "ScenarioEditor.TabGroup.CivButton";
 
-char *s_scenTabNames[SCEN_TAB_MAX] = {
+const char *s_scenTabNames[SCEN_TAB_MAX] = {
 	"World",
 	"Unit",
 	"City",
 	"Civ",
 };
 
-static char *s_playerSpinners[] = {
+static const char *s_playerSpinners[] = {
 	"UnitControls.Player",
 	"CityControls.Player",
 	"CivControls.Player"
@@ -208,7 +208,7 @@ BOOL s_wasKeepingScore = FALSE;
 
 BOOL g_toeMode = FALSE;
 
-static char *s_modeSwitchNames[SCEN_START_LOC_MODE_MAX] = {
+static const char *s_modeSwitchNames[SCEN_START_LOC_MODE_MAX] = {
 	"TabGroup.Civ.FullModeSwitch",
 	"TabGroup.Civ.PlayerNoCivSwitch",
 	"TabGroup.Civ.PlayerWithCivSwitch",
@@ -243,8 +243,6 @@ void scenarioeditor_SetSaveOptionsFromMode(void)
 
 ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does same as initialize in other files
 :
-
-
 	m_window                    (NULL),
 	m_terrainSwitches           (NULL),
 	m_terrainImpSwitches        (NULL),
@@ -263,7 +261,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
     m_brushSize                 (1),
     m_unitIndex                 (-1),
     m_cityStyle                 (CITY_STYLE_EDITOR), 	//displayed in the CityPopSpinner to new created cities.
- 	m_newPopSize                (1), 	//Added by Martin Gühmann to add the pop number
+ 	m_newPopSize                (1), 	//Added by Martin GÃ¼hmann to add the pop number
     m_startLocMode              (SCEN_START_LOC_MODE_NONE),
     m_haveRegion                (false),
     m_mapMode                   (SCEN_MAP_NONE),
@@ -322,7 +320,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin)
 		{
-			//Added by Martin Gühmann to make sure that the Scenario Editor
+			//Added by Martin GÃ¼hmann to make sure that the Scenario Editor
 			//does not set the player to player 1 when the scenario editor
 			//is loaded for the first time in a session.
 			spin->SetValue((sint32)g_selected_item->GetPlayerOnScreen(), 0);
@@ -890,7 +888,7 @@ void ScenarioEditor::PopulateCityList()
 	ctp2_ListItem *curItem = NULL;
 	ctp2_Static *curItemBox = NULL;
 	sint32 col = 0;
-	//Added by Martin Gühmann so that there are now as much buttons
+	//Added by Martin GÃ¼hmann so that there are now as much buttons
 	//as city styles.
 	for (sint32 cs = 0; cs < g_theCityStyleDB->NumRecords(); cs++) {
 		if(col == 0) {
@@ -922,8 +920,8 @@ void ScenarioEditor::PopulateCityList()
 			curItemBox = NULL;
 		}
 
-//Added by Martin Gühmann to give the city buttons an icon.
-//Added by Martin Gühmann to show the according city style name in the tooltip.
+//Added by Martin GÃ¼hmann to give the city buttons an icon.
+//Added by Martin GÃ¼hmann to show the according city style name in the tooltip.
 
 // Modified to allow buttons not to have an icon:
 // - moved down check to prevent a premature break
@@ -1119,10 +1117,10 @@ bool ScenarioEditor::PlaceCityMode()
 
 sint32 ScenarioEditor::CityStyle()
 {
-    return (s_scenarioEditor) ? s_scenarioEditor->m_cityStyle : CITY_STYLE_EDITOR;
+	return (s_scenarioEditor) ? s_scenarioEditor->m_cityStyle : CITY_STYLE_EDITOR;
 }
 
-//Added by Martin Gühmann to make
+//Added by Martin GÃ¼hmann to make
 //shure that newly created cities
 //have the same pop size as displayed in
 //the CityPopSpinner
@@ -1481,7 +1479,7 @@ void ScenarioEditor::CityPopSpinner(aui_Control *control, uint32 action, uint32 
 
 	if(!spinner) return;
 	sint32 newPop = spinner->GetValueX();
-	//Added by Martin Gühmann to make sure
+	//Added by Martin GÃ¼hmann to make sure
 	//newly created cities have the same pop
 	//size as displayed in the CityPopSpinner
 	s_scenarioEditor->m_newPopSize = newPop;
@@ -2219,7 +2217,7 @@ void ScenarioEditor::PlayerSpinner(aui_Control *control, uint32 action, uint32 d
 
 	if(g_player[newPlayer]) {
 
-		// Added by Martin Gühmann to prevent a crash if you use the
+		// Added by Martin GÃ¼hmann to prevent a crash if you use the
 		// Scenario Editor to select a city, change the player without deselecting
 		// it, destroy this city by conquest or slic or starvation and switching back
 		// to that player.
@@ -2327,7 +2325,7 @@ void ScenarioEditor::SaveScenarioAs(aui_Control *control, uint32 action, uint32 
 	ScenarioWindow::Display(false);
 }
 
-void ScenarioEditor::NameTheScenarioCallback(MBCHAR *text, sint32 accepted, void *data)
+void ScenarioEditor::NameTheScenarioCallback(const MBCHAR *text, sint32 accepted, void *data)
 {
 	Assert(s_scenarioEditor);
 	if(!s_scenarioEditor)
@@ -2360,23 +2358,23 @@ bool ScenarioEditor::WorldHasPlayerOrCiv(sint32 playerOrCiv, sint32 &index)
 		return false;
 
 	if (s_scenarioEditor->m_startLocMode == SCEN_START_LOC_MODE_CIV)
-    {
+	{
 		for (sint32 i = 0; i < g_theWorld->GetNumStartingPositions(); i++)
-        {
+		{
 			if (playerOrCiv == g_theWorld->GetStartingPointCiv(i))
-            {
+			{
 				index = i;
 				return true;
 			}
 		}
 	}
-    else
-    {
+	else
+	{
 		index = playerOrCiv - 1;
 		return g_theWorld->GetNumStartingPositions() >= playerOrCiv;
 	}
 
-    return false;
+	return false;
 }
 
 
@@ -2444,14 +2442,14 @@ void ScenarioEditor::GetLabel(MBCHAR *labelString, sint32 playerOrCiv)
 
 	if (mode == SCEN_START_LOC_MODE_PLAYER ||
 		mode == SCEN_START_LOC_MODE_PLAYER_WITH_CIV)
-    {
+	{
 		sprintf(labelString, "%s (%d/%d)",
 					g_theStringDB->GetNameStr("str_ldl_Player_Text"),
 					index,
 					g_theProfileDB->GetNPlayers()-1);
 	}
-    else if (mode == SCEN_START_LOC_MODE_CIV)
-    {
+	else if (mode == SCEN_START_LOC_MODE_CIV)
+	{
 		if(g_theCivilisationDB->Get(index)) {
 			sprintf(labelString, "%s (%d/%d)",
 					g_theStringDB->GetNameStr(g_theCivilisationDB->Get(index)->GetPluralCivName()),
@@ -3270,10 +3268,10 @@ void ScenarioEditor::FogButton(aui_Control *control, uint32 action, uint32 data,
 	WhackScreen();
 }
 
-void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item)
+void ScenarioEditor::AddDropDownItem(ctp2_DropDown *dd, const MBCHAR *ldlblock, const char * item)
 {
 	ctp2_ListItem * listItem    = static_cast<ctp2_ListItem*>
-        (aui_Ldl::BuildHierarchyFromRoot((MBCHAR *)ldlblock));
+        (aui_Ldl::BuildHierarchyFromRoot(ldlblock));
 	ctp2_Static *   label       = static_cast<ctp2_Static*>
         (listItem->GetChildByIndex(0));
 
@@ -3291,7 +3289,7 @@ sint32 ScenarioEditor::GetNumPlayers()
 	return players;
 }
 
-//Added by Martin Gühmann to get the last player in the game.
+//Added by Martin GÃ¼hmann to get the last player in the game.
 sint32 ScenarioEditor::GetLastPlayer()
 {
 	sint32 players = 0;

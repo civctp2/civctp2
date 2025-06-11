@@ -53,7 +53,7 @@ class ScenarioWindow
 public:
 	ScenarioWindow(
 		AUI_ERRCODE *retval,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 	virtual ~ScenarioWindow();
 
 	static void            Initialize();

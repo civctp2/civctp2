@@ -166,7 +166,7 @@ TutorialWin::TutorialWin( void )
 	UpdateData();
 }
 
-sint32 TutorialWin::Initialize( MBCHAR *windowBlock )
+sint32 TutorialWin::Initialize( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -259,7 +259,7 @@ sint32 TutorialWin::UpdateData( void )
 	return 0;
 }
 
-sint32 TutorialWin::AddToList( MBCHAR *text, sint32 index )
+sint32 TutorialWin::AddToList( const MBCHAR *text, sint32 index )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];

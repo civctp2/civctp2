@@ -149,7 +149,7 @@ public:
 	void AddCurrentMessage();
 
 	PointerList<SlicRecord> *GetRecords(sint32 player);
-	void AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
+	void AddTutorialRecord(sint32 player, const MBCHAR *title, const MBCHAR *text,
 						   SlicSegment *segment);
 
 	bool IsTimerExpired(sint32 timer) const;
@@ -271,9 +271,9 @@ public:
 	bool RunKeyboardTrigger(MBCHAR key);
 
 	void CheckPendingResearch();
-	void AddResearchOnUnblank(sint32 owner, MBCHAR *text);
+	void AddResearchOnUnblank(sint32 owner, const MBCHAR *text);
 
-	SlicSymbolData *CheckForBuiltinWithIndex(MBCHAR *name, sint32 &index);
+	SlicSymbolData *CheckForBuiltinWithIndex(const MBCHAR *name, sint32 &index);
 
 	void AddConst(const MBCHAR *name, sint32 value);
 	bool FindConst(const MBCHAR *name, sint32 *value) const;

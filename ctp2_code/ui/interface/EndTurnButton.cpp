@@ -9,7 +9,7 @@
 #include "AttractWindow.h"
 #include "GameEventManager.h"
 
-EndTurnButton::EndTurnButton(MBCHAR *ldlBlock) :
+EndTurnButton::EndTurnButton(const MBCHAR *ldlBlock) :
 m_endTurn(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "TurnButton")))
 {
 	Assert(m_endTurn);

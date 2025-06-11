@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Put SendNextPlayerMessage into its own event. (14-Nov-2007 Martin Gühmann)
+// - Put SendNextPlayerMessage into its own event. (14-Nov-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -60,7 +60,7 @@ class TurnCount {
 private:
 	void RunNewYearMessages(void);
 	void SendMsgEndOfGameEarlyWarning(void);
-	void SendMsgToAllPlayers(MBCHAR *s);
+	void SendMsgToAllPlayers(const MBCHAR *s);
 	static sint32 sm_the_stop_player;
 
 public:

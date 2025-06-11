@@ -88,7 +88,7 @@ ns_Tribes::~ns_Tribes()
 
 ns_TribesDropDown::ns_TribesDropDown(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
 	void *cookie )
 	:

@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Update the state of the embargo and war buttons after confirmation.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Moved cleanup of statics into the the cleanup method. (Sep 14th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Moved cleanup of statics into the the cleanup method. (Sep 14th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -70,8 +70,8 @@
 extern C3UI                 *g_c3ui;
 
 static IntelligenceWindow   *s_intelligenceWindow = NULL;
-static MBCHAR               *s_intelligenceBlock = "IntelligenceWindow";
-static MBCHAR               *s_intelligenceAdviceBlock = "IntelligenceAdvice";
+static const MBCHAR         *s_intelligenceBlock = "IntelligenceWindow";
+static const MBCHAR         *s_intelligenceAdviceBlock = "IntelligenceAdvice";
 ctp2_ListBox                *IntelligenceWindow::sm_list = NULL;
 
 aui_StringTable             *IntelligenceWindow::sm_strengthImages = NULL;
@@ -423,8 +423,8 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 												 RECT &rect,
 												 void *cookie)
 {
-	MBCHAR *imageName = NULL;
-	char **toneIcons = DiplomacyWindow::GetToneIcons();
+	const MBCHAR *imageName = NULL;
+	const char **toneIcons = DiplomacyWindow::GetToneIcons();
 	sint32 p = (sint32)cookie;
 
 	switch(GetRegardThreshold(p, g_selected_item->GetVisiblePlayer())) {
@@ -439,8 +439,8 @@ AUI_ERRCODE IntelligenceWindow::DrawPlayerRegard(ctp2_Static *control,
 	}
 
 	if(imageName)
-    {
-	    aui_Image * image = g_c3ui->LoadImage(imageName);
+	{
+		aui_Image * image = g_c3ui->LoadImage(imageName);
 
 		if(image) {
 

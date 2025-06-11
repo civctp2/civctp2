@@ -18,15 +18,15 @@ class C3Scroller : public aui_Ranger, public PatternBase
 {
 public:
 	C3Scroller
-    (
-		AUI_ERRCODE *retval,
-		uint32 id,
-		MBCHAR *ldlBlock,
-		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL
-    );
+	(
+	    AUI_ERRCODE *retval,
+	    uint32 id,
+	    const MBCHAR *ldlBlock,
+	    ControlActionCallback *ActionFunc = NULL,
+	    void *cookie = NULL
+	);
 	C3Scroller
-    (
+	(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		sint32 x,
@@ -34,17 +34,17 @@ public:
 		sint32 width,
 		sint32 height,
 		bool   isVertical,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL
-    );
+	);
 
 	virtual AUI_ERRCODE DrawThis
-    (
+	(
 		aui_Surface *surface = NULL,
 		sint32 x = 0,
 		sint32 y = 0
-    );
+	);
 
 	bool	IsVertical( void ) const { return m_isVertical; }
 

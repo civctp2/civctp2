@@ -56,7 +56,7 @@ public:
 
 	ResourceMap(AUI_ERRCODE *retval,
 					sint32 id,
-					MBCHAR *ldlBlock,
+					const MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
 					void *cookie = NULL);
 	ResourceMap(
@@ -66,12 +66,12 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ResourceMap();
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 	void InitCommon( sint32 scale );
 
 	virtual AUI_ERRCODE DrawThis(

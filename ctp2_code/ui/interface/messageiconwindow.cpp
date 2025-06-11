@@ -35,7 +35,7 @@ MessageIconWindow *MessageIconWindow::m_currentIconWindow = NULL;
 MessageIconWindow::MessageIconWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	Message data,
 	sint32 bpp,
 	MessageList *messagelist,
@@ -53,7 +53,7 @@ MessageIconWindow::MessageIconWindow(
 
 
 AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
-										  MBCHAR *ldlBlock,
+										  const MBCHAR *ldlBlock,
 										  MessageList *messagelist )
 {
 	MBCHAR			iconDataBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -146,7 +146,7 @@ AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
 
 	m_icon->SetAction( m_messageOpenAction );
 
-	if ( MBCHAR *text = ( MBCHAR * ) data->AccessData()->GetMsgCaption() )
+	if ( const MBCHAR *text = data->AccessData()->GetMsgCaption() )
 		SetTipWindowText( text );
 
 	return AUI_ERRCODE_OK;
@@ -187,7 +187,7 @@ void MessageIconWindow::SetCurrentIconButton( MessageIconButton *iconButton )
 		m_icon->SetCurrentIconButton( iconButton );
 }
 
-void MessageIconWindow::SetTipWindowText( MBCHAR *text )
+void MessageIconWindow::SetTipWindowText( const MBCHAR *text )
 {
 	if ( text == NULL ) return;
 

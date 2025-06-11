@@ -731,7 +731,7 @@ void loadsavescreen_SaveGame(const MBCHAR *usePath, const MBCHAR *useName)
 
 	if(!useName) {
 
-		char *testchars="\\*\"/:|?<>";
+		const char *testchars="\\*\"/:|?<>";
 		bool charschanged=false;
 		for(i=0; i<strlen(saveInfo->gameName); i++)
 		{

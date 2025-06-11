@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -44,7 +44,7 @@ extern aui_UI *g_ui;
 c3_Header::c3_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -114,7 +114,7 @@ c3_Header::c3_Header(
 }
 
 
-AUI_ERRCODE c3_Header::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Header::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
@@ -126,7 +126,7 @@ AUI_ERRCODE c3_Header::InitCommon( void )
 }
 
 
-AUI_ERRCODE c3_Header::CreateSwitches( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Header::CreateSwitches( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

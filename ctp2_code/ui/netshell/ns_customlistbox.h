@@ -76,7 +76,7 @@ public:
 	ns_TransportListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_TransportListBox();
@@ -90,15 +90,15 @@ public:
 	ns_FileDataListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 #if defined(_MSC_VER)
-        ControlActionCallback * ActionFunc  = NULL,
+		ControlActionCallback * ActionFunc  = NULL,
 #else
 		typename ns_FileDataListBox<NFT,NST>::ControlActionCallback *ActionFunc = NULL,
 #endif
 
 		void *cookie = NULL,
-		char *filename = "")
+		const char *filename = "")
 
 		:
 		aui_ImageBase( ldlBlock),
@@ -200,10 +200,10 @@ public:
 	ns_PlayerSetupListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
-		char *filename = "nsplayer.cfg");
+		const char *filename = "nsplayer.cfg");
 };
 
 class ns_GameSetupListBox:public ns_FileDataListBox<nf_GameSetup, ns_GameSetup> {
@@ -211,10 +211,10 @@ public:
 	ns_GameSetupListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
-		char *filename = "nsgame.cfg");
+		const char *filename = "nsgame.cfg");
 };
 
 class ns_AIPlayerSetupListBox:public ns_FileDataListBox<nf_AIPlayer, ns_AIPlayerSetup> {
@@ -222,10 +222,10 @@ public:
 	ns_AIPlayerSetupListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL,
-		char *filename = "nsai.cfg");
+		const char *filename = "nsai.cfg");
 };
 
 class ns_SessionListBox:public ns_ListBox<NETFunc::Session, ns_Session> {
@@ -233,7 +233,7 @@ public:
 	ns_SessionListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 };
@@ -243,7 +243,7 @@ public:
 	ns_LobbyListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 };
@@ -253,7 +253,7 @@ public:
 	ns_GameListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 };
@@ -263,7 +263,7 @@ public:
 	ns_PlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_PlayerListBox();
@@ -283,7 +283,7 @@ public:
 	ns_RPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 };
@@ -293,7 +293,7 @@ public:
 	ns_ServerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
 	virtual ~ns_ServerListBox();
@@ -314,7 +314,7 @@ public:
 	ns_GPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );
@@ -348,7 +348,7 @@ public:
 	ns_AIPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc = NULL,
 		void *cookie = NULL );

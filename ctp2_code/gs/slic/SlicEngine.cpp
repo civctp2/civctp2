@@ -1096,7 +1096,7 @@ PointerList<SlicRecord> *SlicEngine::GetRecords(sint32 player)
 	return m_records[player];
 }
 
-void SlicEngine::AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
+void SlicEngine::AddTutorialRecord(sint32 player, const MBCHAR *title, const MBCHAR *text,
 								   SlicSegment *segment)
 {
     if (!m_records[player])
@@ -2603,14 +2603,14 @@ void SlicEngine::CheckPendingResearch()
 	}
 }
 
-void SlicEngine::AddResearchOnUnblank(sint32 owner, MBCHAR *text)
+void SlicEngine::AddResearchOnUnblank(sint32 owner, const MBCHAR *text)
 {
 	strcpy(m_researchText, text);
 	m_researchOwner = owner;
 	m_doResearchOnUnblank = TRUE;
 }
 
-SlicSymbolData *SlicEngine::CheckForBuiltinWithIndex(MBCHAR *name, sint32 &index)
+SlicSymbolData *SlicEngine::CheckForBuiltinWithIndex(const MBCHAR *name, sint32 &index)
 {
 	return FALSE;
 }

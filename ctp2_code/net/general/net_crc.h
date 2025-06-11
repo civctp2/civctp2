@@ -48,7 +48,7 @@ public:
 
 private:
 	sint32 SerializeDBs();
-	void Error(char *buf);
+	void Error(const char *buf);
 
 	sint32 m_startAt, m_stopAt;
 	uint32 m_db_crc[k_MAX_DBS][4];

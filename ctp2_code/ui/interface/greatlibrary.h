@@ -128,7 +128,7 @@ public:
 class TechListItem: public ctp2_ListItem
 {
 public:
-	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock);
+	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, const MBCHAR *ldlBlock);
 
 	virtual void Update(void);
 

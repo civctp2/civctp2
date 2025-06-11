@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -98,13 +98,13 @@ void watchlist_Refresh()
 	watchlist_Display();
 }
 
-void watchlist_AddExpression(char *exp)
+void watchlist_AddExpression(const char *exp)
 {
 	watchlist_Display();
 	g_watchList->AddExpression(exp);
 }
 
-WatchList::WatchList(WatchListCallback callback, MBCHAR *ldlBlock)
+WatchList::WatchList(WatchListCallback callback, const MBCHAR *ldlBlock)
 :   m_window                (NULL),
     m_list                  (NULL),
     m_newButton             (NULL),
@@ -195,7 +195,7 @@ void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-sint32 WatchList::Initialize(MBCHAR *windowBlock)
+sint32 WatchList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -263,7 +263,7 @@ sint32 WatchList::UpdateData(void)
 	return 0;
 }
 
-void WatchList::AddExpression(char *exp)
+void WatchList::AddExpression(const char *exp)
 {
 	AUI_ERRCODE retval;
 	WatchListItem *item = new WatchListItem(&retval, 0, exp, "WatchListItem");
@@ -279,7 +279,7 @@ void WatchList::Clear()
 
 
 WatchListItem::WatchListItem(AUI_ERRCODE *retval, sint32 index,
-							 MBCHAR *line, MBCHAR *ldlBlock) :
+							 const MBCHAR *line, const MBCHAR *ldlBlock) :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	c3_ListItem(retval, ldlBlock)
@@ -329,7 +329,7 @@ void WatchBreakItemCallback(aui_Control *control, uint32 action, uint32 data, vo
 	}
 }
 
-AUI_ERRCODE WatchListItem::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE WatchListItem::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

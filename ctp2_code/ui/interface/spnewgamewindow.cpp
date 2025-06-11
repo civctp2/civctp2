@@ -557,7 +557,7 @@ uint32 SPRulesBox::GetPollutionRules() { return m_spGenocide->IsOn(); }
 SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, const MBCHAR *type, const MBCHAR *name)
 :
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *) NULL),
 	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {

@@ -48,7 +48,7 @@ static bool s_initialized		= false;
 static bool s_dip_initialized	= false;
 static int	s_populationHack[k_MAX_PLAYERS];
 
-void gslog_print(char *fmt, ...)
+void gslog_print(const char *fmt, ...)
 {
 #ifndef _BFR_
 	if(!g_theProfileDB->GetEnableLogs())
