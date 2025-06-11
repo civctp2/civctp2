@@ -309,7 +309,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 	if (!transport)
 		return dp_RES_BUG;
 
-    if (hcommDLL)
+	if (hcommDLL)
 		return dp_RES_FULL;   // Don't allow double loading.
 
 	hcommDLL = LoadLibrary(transport->fname);

@@ -3719,7 +3719,7 @@ DP_API dp_result_t dpCreate(
 	dp_t **pdp,
 	dp_transport_t *transport,
 	commInitReq_t *params,
-	char *thawFilename)
+	const char *thawFilename)
 {
 	dp_t *dp;
 	dp_result_t		err;
@@ -4009,7 +4009,7 @@ DP_API dp_result_t dpCloseGameServer(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t dpResolveHostname(
 	dp_t *dp,
-	char *hostname,
+	const char *hostname,
 	char adrbuf[dp_MAX_ADR_LEN])
 {
 	precondition(dp != NULL);
@@ -4124,7 +4124,7 @@ static dp_result_t dp_setSessionTablePeer(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_t *dp,
-	char *masterHostName)	/* server's name, or NULL to clear */
+	const char *masterHostName)	/* server's name, or NULL to clear */
 #ifdef dp_MULTISESSTABLE
 {
 	dp_result_t err;
@@ -4161,7 +4161,7 @@ DP_API dp_result_t DP_APIX dpSetGameServer(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	dp_t *dp,
-	char *masterHostName,	/* server's name, or NULL to clear */
+	const char *masterHostName,	/* server's name, or NULL to clear */
 	dp_species_t sessionType)
 #endif
 {
@@ -4328,7 +4328,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpGetGameServerEx(
 	dp_t *dp,
-	char *masterHostNameBuf,
+	const char *masterHostNameBuf,
 	size_t masterHostNameBufLen,
 	dp_species_t *psessionType)
 {

@@ -118,7 +118,7 @@ static unsigned long sectionOffset = ULONG_MAX;	/* Line after section header */
  Change the .INI file accessed by future calls.
 --------------------------------------------------------------------------*/
 DP_API void dpini_SetFile(
-	char *iniFileName)
+	const char *iniFileName)
 {
 	strncpy(IniFileName, iniFileName, sizeof(IniFileName));
 	IniFileName[sizeof(IniFileName)-1] = 0;

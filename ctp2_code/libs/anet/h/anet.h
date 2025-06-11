@@ -738,8 +738,8 @@ typedef struct {
 #error "Unpacking not defined for this compiler"
 #endif
 
-#endif
-#endif
+#endif // dp_ANET2
+#endif // _CommAPI_h_
 
 /***************************** Functions *********************************/
 
@@ -835,7 +835,7 @@ DP_API dp_result_t DP_APIX dpCreate(
 	dp_t **pdp,
 	dp_transport_t *transport,
 	commInitReq_t *params,
-	char *thawFilename);
+	const char *thawFilename);
 
 /*------------------------------------------------------------------------
  Destroy a dp_t.
@@ -852,7 +852,7 @@ DP_API dp_result_t DP_APIX dpDestroy(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpResolveHostname(
 	dp_t *dp,
-	char *hostname,
+	const char *hostname,
 	char adrbuf[dp_MAX_ADR_LEN]);
 
 /*------------------------------------------------------------------------
@@ -878,7 +878,7 @@ DP_API dp_result_t DP_APIX dpResolveHostname(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	dp_t *dp,
-	char *masterHostName,	/* server's name, or NULL to clear */
+	const char *masterHostName,	/* server's name, or NULL to clear */
 	dp_species_t sessionType);
 
 /*--------------------------------------------------------------------------
@@ -888,7 +888,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpGetGameServerEx(
 	dp_t *dp,
-	char *masterHostNameBuf,
+	const char *masterHostNameBuf,
 	size_t masterHostNameBufLen,
 	dp_species_t *psessionType);
 
@@ -898,7 +898,7 @@ DP_API dp_result_t DP_APIX dpGetGameServerEx(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_t *dp,
-	char *masterHostName);	/* server's name, or NULL to clear */
+	const char *masterHostName);	/* server's name, or NULL to clear */
 
 /*------------------------------------------------------------------------
  Retrieve the current session description.
@@ -1818,7 +1818,7 @@ DP_API int DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen
 /*--------------------------------------------------------------------------
  Change the .INI file accessed by future calls.
 --------------------------------------------------------------------------*/
-DP_API void DP_APIX dpini_SetFile(char *iniFileName);
+DP_API void DP_APIX dpini_SetFile(const char *iniFileName);
 
 /*--------------------------------------------------------------------------
  Return the name of the current .INI file.
