@@ -9,6 +9,7 @@ class aui_Surface;
 class aui_Control;
 class aui_StringTable;
 struct aui_MouseEvent;
+union Cookie;
 
 class IntelligenceWindow {
   private:
@@ -45,31 +46,29 @@ class IntelligenceWindow {
 	static void DisplayDetailsOfSelected();
 
 	static void UpdateAdviceText();
+	static sint32 GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer);
 
 	static AUI_ERRCODE DrawPlayerColor(ctp2_Static *control, aui_Surface *surface,
-									   RECT &rect, void *cookie);
+									   RECT &rect, Cookie cookie);
 
 	static AUI_ERRCODE DrawPlayerFlag(ctp2_Static *control, aui_Surface *surface,
-									   RECT &rect, void *cookie);
-	static sint32 GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer);
+									   RECT &rect, Cookie cookie);
 	static AUI_ERRCODE DrawPlayerRegard(ctp2_Static *control,
 										aui_Surface *surface,
 										RECT &rect,
-										void *cookie);
+										Cookie cookie);
 	static AUI_ERRCODE DrawPlayerStrength(ctp2_Static *control,
 										  aui_Surface *surface,
 										  RECT &rect,
-										  void *cookie);
+										  Cookie cookie);
 	static AUI_ERRCODE DrawEmbassy(ctp2_Static *control,
 								   aui_Surface *surface,
 								   RECT &rect,
-								   void *cookie);
+								   Cookie cookie);
 	static AUI_ERRCODE DrawTreaties(ctp2_Static *control,
 									aui_Surface *surface,
 									RECT &rect,
-									void *cookie);
-
-	static void ClickTreaties(ctp2_Static *control, aui_MouseEvent *mouseData, void *cookie);
+									Cookie cookie);
 
 	static void InitImageTables();
 };

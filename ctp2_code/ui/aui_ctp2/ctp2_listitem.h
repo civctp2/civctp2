@@ -77,15 +77,7 @@ protected:
 	    m_compareCallback   (NULL)
 	{ ; };
 
-	union MultiTypeData
-	{
-		MultiTypeData() : m_voidPtr(NULL) {};
-		void*  m_voidPtr;
-		sint32 m_sin32Type;
-		uint32 m_uin32Type;
-	};
-
-	MultiTypeData               m_userData;
+	Cookie                      m_userData;
 	CTP2ItemCompareCallback *   m_compareCallback;
 };
 

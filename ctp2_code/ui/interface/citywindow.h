@@ -58,6 +58,7 @@ class ctp2_HyperTextBox;
 class ctp2_Button;
 class aui_Image;
 class aui_Region;
+union Cookie;
 
 template <class T> class PointerList;
 
@@ -132,23 +133,23 @@ private:
 	static AUI_ERRCODE DrawGrowthBar(ctp2_Static *control,
 									 aui_Surface *surface,
 									 RECT &rect,
-									 void *cookie );
+									 Cookie cookie );
 	static AUI_ERRCODE DrawHappinessBar(ctp2_Static *control,
 										aui_Surface *surface,
 										RECT &rect,
-										void *cookie );
+										Cookie cookie );
 	static AUI_ERRCODE DrawEfficiencyBar(ctp2_Static *control,
 									 aui_Surface *surface,
 									 RECT &rect,
-									 void *cookie );
+									 Cookie  cookie );
 	static AUI_ERRCODE DrawResourceMap(ctp2_Static *control,
 									   aui_Surface *surface,
 									   RECT &rect,
-									   void *cookie );
+									   Cookie cookie );
 	static AUI_ERRCODE DrawBuildBar(ctp2_Static *control,
 									 aui_Surface *surface,
 									 RECT &rect,
-									 void *cookie );
+									 Cookie cookie );
 
 	void SetCity(const Unit & city);
 	void Update();
@@ -172,11 +173,11 @@ private:
 	static AUI_ERRCODE DrawHappyIcons(ctp2_Static *control,
 									aui_Surface *surface,
 									RECT &rect,
-									void *cookie );
+									Cookie cookie );
 	static AUI_ERRCODE DrawUnhappyIcons(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie );
+									  Cookie cookie );
 
 	static void UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);

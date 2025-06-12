@@ -195,18 +195,12 @@ AUI_ERRCODE aui_Switch::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-void aui_Switch::SetDrawCallbackAndCookie(SwitchDrawCallback *func, void *cookie,bool exclusive)
+void aui_Switch::SetDrawCallbackAndCookie(SwitchDrawCallback *func, Cookie cookie, bool exclusive)
 {
 	m_drawFunc		= func;
 	m_drawCookie	= cookie;
 	m_drawCallbackExclusive	= exclusive;
 }
-
 
 void aui_Switch::MouseLDragOver( aui_MouseEvent *mouseData )
 {

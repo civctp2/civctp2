@@ -278,7 +278,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * flag = (ctp2_Static *) item->GetChildByIndex(k_INT_FLAG_COL))
 					{
-						flag->SetDrawCallbackAndCookie(DrawPlayerFlag, (void *)p, false);
+						flag->SetDrawCallbackAndCookie(DrawPlayerFlag, p, false);
 						flag->SetActionFuncAndCookie(SelectItem, (void *)item);
 					}
 
@@ -292,7 +292,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * regard = (ctp2_Static *) item->GetChildByIndex(k_INT_REGARD_COL))
 					{
-						regard->SetDrawCallbackAndCookie(DrawPlayerRegard, (void *) p, true);
+						regard->SetDrawCallbackAndCookie(DrawPlayerRegard, p, true);
 #if 0   // buf filled, but never used
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
@@ -304,7 +304,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * strength = (ctp2_Static *)item->GetChildByIndex(k_INT_STRENGTH_COL))
 					{
-						strength->SetDrawCallbackAndCookie(DrawPlayerStrength, (void *) p, true);
+						strength->SetDrawCallbackAndCookie(DrawPlayerStrength, p, true);
 #if 0   // buf filled, but never used
 						MBCHAR buf[k_MAX_NAME_LEN];
 						sprintf(buf, "%s: %d",
@@ -316,13 +316,13 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 
 					if (ctp2_Static * embassy = (ctp2_Static *)item->GetChildByIndex(k_INT_EMBASSY_COL))
 					{
-						embassy->SetDrawCallbackAndCookie(DrawEmbassy, (void *) p, true);
+						embassy->SetDrawCallbackAndCookie(DrawEmbassy, p, true);
 						embassy->SetActionFuncAndCookie(SelectItem, item);
 					}
 
 					if (ctp2_Static * treaty = (ctp2_Static *)item->GetChildByIndex(k_INT_TREATIES_COL))
 					{
-						treaty->SetDrawCallbackAndCookie(DrawTreaties, (void *) p, true);
+						treaty->SetDrawCallbackAndCookie(DrawTreaties, p, true);
 						treaty->SetActionFuncAndCookie(SelectItem, item);
 					}
 
@@ -641,10 +641,10 @@ void DiplomacyDetails::SetNation(sint32 player)
 AUI_ERRCODE DiplomacyDetails::DrawPlayerColor(ctp2_Static *control,
 												 aui_Surface *surface,
 												 RECT &rect,
-												 void *cookie)
+												 Cookie cookie)
 {
 
-	sint32 player = (sint32)cookie;
+	sint32 player = cookie.m_sin32Type;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -660,9 +660,9 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerColor(ctp2_Static *control,
 AUI_ERRCODE DiplomacyDetails::DrawPlayerFlag(ctp2_Static *control,
 												 aui_Surface *surface,
 												 RECT &rect,
-												 void *cookie)
+												 Cookie cookie)
 {
-	sint32 player = (sint32)cookie;
+	sint32 player = cookie.m_sin32Type;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -697,11 +697,11 @@ void DiplomacyDetails::SelectItem(aui_Control *control, uint32 action, uint32 da
 AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 												 aui_Surface *surface,
 												 RECT &rect,
-												 void *cookie)
+												 Cookie cookie)
 {
 	const MBCHAR *imageName = NULL;
 	const char **toneIcons = DiplomacyWindow::GetToneIcons();
-	sint32 p = (sint32)cookie;
+	sint32 p = cookie.m_sin32Type;
 
 	switch(GetRegardThreshold(p, detailPlayer))
 	{
@@ -748,9 +748,9 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerRegard(ctp2_Static *control,
 AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 												   aui_Surface *surface,
 												   RECT &rect,
-												   void *cookie)
+												   Cookie cookie)
 {
-	sint32 p = (sint32)cookie;
+	sint32 p = cookie.m_sin32Type;
 
 	if(!g_player[p]) return AUI_ERRCODE_OK;
 	if(!g_player[detailPlayer]) return AUI_ERRCODE_OK;
@@ -806,16 +806,9 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerStrength(ctp2_Static *control,
 AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 											aui_Surface *surface,
 											RECT &rect,
-											void *cookie)
+											Cookie cookie)
 {
-	sint32 p = (sint32)cookie;
-
-
-
-
-
-
-
+	sint32 p = cookie.m_sin32Type;
 
 	if(!sm_embassyImages) {
 		InitImageTables();
@@ -854,56 +847,58 @@ AUI_ERRCODE DiplomacyDetails::DrawEmbassy(ctp2_Static *control,
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
-    {
-    //// similar to IntelligenceWindow::DrawTreaties
-    sint32 p = (sint32)cookie;
-    sint32 visP = g_selected_item->GetVisiblePlayer();
+AUI_ERRCODE DiplomacyDetails::DrawTreaties(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie)
+{
+	//// similar to IntelligenceWindow::DrawTreaties
+	sint32 p = cookie.m_sin32Type;
+	sint32 visP = g_selected_item->GetVisiblePlayer();
 
-    sint32 x = 0;
+	sint32 x = 0;
 
-    sint32 ag;
-    sint32 slot;
-    for(ag = 1; ag < PROPOSAL_MAX; ag++) {
-	const DiplomacyProposalRecord *rec =
-	    g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
+	sint32 ag;
+	sint32 slot;
+	for(ag = 1; ag < PROPOSAL_MAX; ag++)
+	{
+		const DiplomacyProposalRecord *rec =
+		    g_theDiplomacyProposalDB->Get(diplomacyutil_GetDBIndex((PROPOSAL_TYPE)ag));
 
-	if (!rec->GetImageSlot(slot))
-	    continue;
+		if (!rec->GetImageSlot(slot))
+			continue;
 
-	if (rec->GetHasEmbargo())
-	    {
-	    if (!Diplomat::GetDiplomat(p).GetEmbargo(detailPlayer))
-		continue;
-	    }
-	else if(!AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag))
-	    continue;
+		if (rec->GetHasEmbargo())
+		{
+			if (!Diplomat::GetDiplomat(p).GetEmbargo(detailPlayer))
+				continue;
+		}
+		else if(!AgreementMatrix::s_agreements.HasAgreement(detailPlayer, p, (PROPOSAL_TYPE)ag))
+			continue;
 
-	aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
-	Assert(image);
-	if(!image)
-	    continue;
-	RECT srcRect = {
-	    0, 0,
-	    image->TheSurface()->Width(),
-	    image->TheSurface()->Height()
-	    };
+		aui_Image *image = g_c3ui->LoadImage((char *)rec->GetImage());
+		Assert(image);
+		if(!image)
+			continue;
 
-	image->SetChromakey(255,0,255);
+		RECT srcRect = {
+		    0, 0,
+		    image->TheSurface()->Width(),
+		    image->TheSurface()->Height()
+		    };
 
-	x = image->TheSurface()->Width() * slot;
+		image->SetChromakey(255,0,255);
 
-	g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
-	    rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
-	    image->TheSurface(),
-	    &srcRect,
-	    k_AUI_BLITTER_FLAG_CHROMAKEY);
+		x = image->TheSurface()->Width() * slot;
 
-	g_c3ui->UnloadImage(image);
+		g_c3ui->TheBlitter()->Blt(surface, rect.left + x,
+		    rect.top + (((rect.bottom - rect.top) - image->TheSurface()->Height()) / 2),
+		    image->TheSurface(),
+		    &srcRect,
+		    k_AUI_BLITTER_FLAG_CHROMAKEY);
+
+		g_c3ui->UnloadImage(image);
 	}
-    
-    return AUI_ERRCODE_OK;
-    }
+
+	return AUI_ERRCODE_OK;
+}
 
 sint32 DiplomacyDetails::GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer)
 {

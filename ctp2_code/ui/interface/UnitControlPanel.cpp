@@ -63,7 +63,7 @@
 
 extern C3UI *g_c3ui;
 
-UnitControlPanel::UnitControlPanel(MBCHAR * ldlBlock) :
+UnitControlPanel::UnitControlPanel(const MBCHAR * ldlBlock) :
 m_unitDisplayGroup(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 		"UnitTab.TabPanel.UnitSelectionDisplay"))),
 m_unitListLabel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -387,13 +387,13 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	sprintf(valueString, "%d", (sint32)(unit.GetDBRec()->GetFirepower()));
 	m_singleSelectionFirepower->SetText(valueString);
 
-	m_singleSelectionFuel->SetDrawCallbackAndCookie(FuelBarDrawCallback, (void *)unit.m_id);
-	m_singleSelectionHealth->SetDrawCallbackAndCookie(HealthBarActionCallback, reinterpret_cast<void*>(unit.m_id));
+	m_singleSelectionFuel->SetDrawCallbackAndCookie(FuelBarDrawCallback, unit.m_id);
+	m_singleSelectionHealth->SetDrawCallbackAndCookie(HealthBarActionCallback, unit.m_id);
 
 	if (m_curCargo >= 0)
 	{
-		m_singleSelectionIcon->SetDrawCallbackAndCookie(DrawCargoCallback, (void *)unit.m_id, false);
-		m_singleSelectionIcon->SetImageMapCallback(TransportImageCallback, (void *)this);
+		m_singleSelectionIcon->SetDrawCallbackAndCookie(DrawCargoCallback, unit.m_id, false);
+		m_singleSelectionIcon->SetImageMapCallback(TransportImageCallback, this);
 	}
 	else
 	{
@@ -463,7 +463,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 				if (army.IsValid() && army.Num() == 1)
 				{
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback,
-							(void *) army[0].m_id);
+							army[0].m_id);
 				}
 				else {
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
@@ -498,7 +498,7 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 
 	Army army = GetSelectedArmy();
 	if (!army.IsValid() || (army.Num() <= 1))
-    {
+	{
 		SetSelectionMode(SINGLE_SELECTION);
 		return;
 	}
@@ -524,7 +524,7 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 			{
 				m_armySelectionButton[armyIndex]->ExchangeImage(0, 0, unitIconName);
 				m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback,
-						(void *)army[armyIndex].m_id);
+						army[armyIndex].m_id);
 			}
 			else
 			{
@@ -622,7 +622,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 						button->Enable(true);
 						m_transportSelectionCargo[index] = cargoList->Access(index).m_id;
 						m_transportSelectionHealth[index]->SetDrawCallbackAndCookie(HealthBarActionCallback,
-								(void *)cargoList->Access(index).m_id);
+								cargoList->Access(index).m_id);
 					}
 				}
 			}
@@ -860,9 +860,9 @@ bool UnitControlPanel::SelectionContainsMultipleArmies()
 }
 
 AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
-		void * cookie)
+		Cookie cookie)
 {
-	Unit unit(reinterpret_cast<uint32>(cookie));
+	Unit unit(cookie.m_uin32Type);
 	AUI_ERRCODE errorCode = g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 	if (errorCode != AUI_ERRCODE_OK) {
 		return errorCode;
@@ -895,7 +895,7 @@ AUI_ERRCODE UnitControlPanel::HealthBarActionCallback(ctp2_Static * control, aui
 }
 
 AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
-		void * cookie)
+		Cookie cookie)
 {
 	CellUnitList unitList;
 	g_theWorld->GetCell(g_selected_item->GetCurSelectPos())->GetArmy(unitList);
@@ -904,7 +904,7 @@ AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui
 		return AUI_ERRCODE_OK;
 	}
 
-	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie.m_voidPtr);
 	aui_Image * image = control->GetImage();
 	if (!image) {
 		return AUI_ERRCODE_BLTFAILED;
@@ -975,9 +975,9 @@ AUI_ERRCODE UnitControlPanel::StackSymbolDrawCallback(ctp2_Static * control, aui
 }
 
 AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
-		void * cookie)
+		Cookie cookie)
 {
-	Unit unit(reinterpret_cast<uint32>(cookie));
+	Unit unit(cookie.m_uin32Type);
 	if (!unit.IsValid()) {
 		return AUI_ERRCODE_OK;
 	}
@@ -1100,9 +1100,9 @@ void UnitControlPanel::Activated()
 }
 
 AUI_ERRCODE UnitControlPanel::DrawCargoCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
-		void * cookie)
+		Cookie cookie)
 {
-	Unit transport(reinterpret_cast<uint32>(cookie));
+	Unit transport(cookie.m_uin32Type);
 	if (!transport.IsValid()) {
 		return AUI_ERRCODE_OK;
 	}
@@ -1193,29 +1193,29 @@ private:
 };
 
 void UnitControlPanel::SingleSelectionArmySymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event,
-		void * cookie)
+		Cookie cookie)
 {
-	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie.m_voidPtr);
 	g_c3ui->AddAction(new SetSelectionAction(panel, ARMY_SELECTION));
 }
 
-void UnitControlPanel::StackSymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
+void UnitControlPanel::StackSymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie)
 {
-	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie.m_voidPtr);
 	if (panel->m_currentMode == SINGLE_SELECTION || panel->m_currentMode == ARMY_SELECTION) {
 		g_c3ui->AddAction(new SetSelectionAction(panel, MULTIPLE_SELECTION));
 	}
 }
 
-void UnitControlPanel::TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
+void UnitControlPanel::TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie)
 {
-	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie.m_voidPtr);
 	g_c3ui->AddAction(new SetSelectionAction(panel, TRANSPORT_SELECTION));
 }
 
-void UnitControlPanel::TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie)
+void UnitControlPanel::TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie)
 {
-	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel *>(cookie.m_voidPtr);
 	g_c3ui->AddAction(new SetSelectionAction(panel, SINGLE_SELECTION));
 }
 

@@ -42,13 +42,14 @@ class ctp2_Static;
 class ctp2_DropDown;
 class CityData;
 class aui_Surface;
+union Cookie;
 
 #include "Unit.h"
 
 class CityControlPanel {
 public:
 
-	CityControlPanel(MBCHAR *ldlBlock);
+	CityControlPanel(const MBCHAR *ldlBlock);
 
 	void Update();
 
@@ -90,7 +91,7 @@ private:
 	static AUI_ERRCODE ProgressDrawCallback(ctp2_Static *control,
 											aui_Surface *surface,
 											RECT &rect,
-											void *cookie);
+											Cookie cookie);
 
 	bool GetSelectedCity(Unit & selectedCity);
 

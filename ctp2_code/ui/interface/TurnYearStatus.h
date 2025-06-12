@@ -44,6 +44,7 @@ class aui_Control;
 class ctp2_Button;
 class ctp2_Static;
 class aui_Surface;
+union Cookie;
 
 class TurnYearStatus {
 public:
@@ -62,7 +63,7 @@ public:
 	static AUI_ERRCODE DrawDougsProgress(ctp2_Static *control,
 	                                     aui_Surface *surface,
 	                                     RECT &rect,
-	                                     void *cookie);
+	                                     Cookie cookie);
 
 private:
 

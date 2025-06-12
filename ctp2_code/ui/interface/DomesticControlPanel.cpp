@@ -64,7 +64,7 @@ extern Pollution            *g_thePollution;
 AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
                                                        aui_Surface *surface,
                                                        RECT &rect,
-                                                       void *cookie)
+                                                       Cookie cookie)
 {
 	if (g_selected_item==NULL)
 		return AUI_ERRCODE_OK;
@@ -117,7 +117,7 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
                                                        aui_Surface *surface,
                                                        RECT &rect,
-                                                       void *cookie)
+                                                       Cookie cookie)
 {
 
 	double total = double(g_thePollution->GetGlobalPollutionLevel());
@@ -450,7 +450,7 @@ void DomesticControlPanel::UpdateGoldPW()
 AUI_ERRCODE DomesticControlPanel::DrawScienceBar(ctp2_Static *control,
                                                  aui_Surface *surface,
                                                  RECT &rect,
-                                                 void *cookie )
+                                                 Cookie cookie )
 {
 	if(!g_selected_item)
 		return AUI_ERRCODE_OK;

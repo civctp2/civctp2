@@ -2651,9 +2651,9 @@ void DipWizard::DisplayDiplomat(sint32 player)
 AUI_ERRCODE DrawDiplomatColor(ctp2_Static *control,
 							  aui_Surface *surface,
 							  RECT &rect,
-							  void *cookie)
+							  Cookie cookie)
 {
-	sint32 pl = (sint32)cookie;
+	sint32 pl = cookie.m_sin32Type;
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetPlayerColor(pl));
 	return AUI_ERRCODE_OK;
 }
@@ -2662,10 +2662,7 @@ void DipWizard::DisplayResponseDiplomat(sint32 player)
 {
 	m_responseDiplomat->Show();
 
-
-
-
-	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, (void *)player);
+	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, player);
 }
 
 void DipWizard::DisplayParchment(sint32 player)

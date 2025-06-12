@@ -404,10 +404,10 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 AUI_ERRCODE controlpanelwindow_HappinessDrawCallback(ctp2_Static *control,
                                                      aui_Surface *surface,
                                                      RECT &rect,
-                                                     void *cookie)
+                                                     Cookie cookie)
 {
 	if (g_controlPanel)
-		g_controlPanel->HappinessRedisplay(surface,rect,cookie);
+		g_controlPanel->HappinessRedisplay(surface, rect, cookie);
 
 	return AUI_ERRCODE_OK;
 }
@@ -3038,7 +3038,7 @@ void ControlPanelWindow::PollTILEIMPStatus()
 #endif
 }
 
-void ControlPanelWindow::HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie)
+void ControlPanelWindow::HappinessRedisplay(aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 	if (g_selected_item==NULL)
 		return;

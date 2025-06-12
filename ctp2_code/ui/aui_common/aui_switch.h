@@ -96,9 +96,9 @@ public:
 		aui_Switch *control,
 		aui_Surface *surface,
 		RECT &rect,
-		void *cookie );
+		Cookie cookie );
 	void SetDrawCallbackAndCookie(SwitchDrawCallback *func,
-		void *cookie,bool exclusive=true);
+		Cookie cookie, bool exclusive=true);
 
 protected:
 	aui_Switch()
@@ -119,7 +119,7 @@ protected:
 
 	bool	m_drawCallbackExclusive;
 	SwitchDrawCallback *m_drawFunc;
-	void *m_drawCookie;
+	Cookie m_drawCookie;
 
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);

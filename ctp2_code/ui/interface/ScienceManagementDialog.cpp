@@ -286,12 +286,12 @@ void ScienceManagementDialog::UpdateAdvanceList()
 {
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
+	for(sint32 index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
 
 		aui_Switch *header = m_advanceList->GetHeaderSwitchByIndex(index+1);
 
 		header->SetDrawCallbackAndCookie(ColorHeaderActionCallback,
-			reinterpret_cast<void*>(index), false);
+			index, false);
 
 		if (player && player->HasEmbassyWith(index))
 		{
@@ -362,7 +362,7 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 		label->SetText(advance->GetNameText());
 	}
 
-	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
+	for(sint32 index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
 
 		if(ctp2_Static *column = GetListItemColumn(item, k_SCI_COL_ADVANCE + index)) {
 
@@ -370,8 +370,7 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 				((index == g_selected_item->GetVisiblePlayer()) ||
 				player->HasEmbassyWith(index))) {
 
-				column->SetDrawCallbackAndCookie(ColorBoxActionCallback,
-					reinterpret_cast<void*>(index));
+				column->SetDrawCallbackAndCookie(ColorBoxActionCallback, index);
 
 				discovered = TRUE;
 			} else {
@@ -432,7 +431,7 @@ void ScienceManagementDialog::EditResearchButtonActionCallback(aui_Control *cont
 AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
 													aui_Surface *surface,
 													RECT &rect,
-													void *cookie )
+													Cookie cookie )
 {
 	if(!g_selected_item)
 		return AUI_ERRCODE_OK;
@@ -469,7 +468,7 @@ AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
 }
 
 AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+	aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 
 	RECT colorRect = rect;
@@ -479,11 +478,11 @@ AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control
 	colorRect.bottom	-= 1;
 
 	return(g_c3ui->TheBlitter()->ColorBlt16(surface, &colorRect,
-		g_colorSet->GetPlayerColor(reinterpret_cast<sint32>(cookie)), 0));
+		g_colorSet->GetPlayerColor(cookie.m_sin32Type), 0));
 }
 
 AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+	aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 
 	RECT colorRect = rect;
@@ -492,12 +491,9 @@ AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *contr
 	colorRect.right		-= 1;
 	colorRect.bottom	-= 1;
 
-	sint32 index = reinterpret_cast<sint32>(cookie);
+	sint32 index = cookie.m_sin32Type;
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-
-
-
 
 	if(!player || ((index != g_selected_item->GetVisiblePlayer()) &&
 		!player->HasContactWith(index)))

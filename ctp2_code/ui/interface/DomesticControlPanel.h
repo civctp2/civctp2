@@ -49,6 +49,7 @@ class aui_Control;
 class ctp2_Button;
 class ctp2_Static;
 class aui_Surface;
+union Cookie;
 
 class DomesticControlPanel {
 public:
@@ -75,7 +76,7 @@ private:
 	static AUI_ERRCODE DrawScienceBar(ctp2_Static *control,
 	                                  aui_Surface *surface,
 	                                  RECT &rect,
-	                                  void *cookie );
+	                                  Cookie cookie );
 
 	ctp2_Static *m_scienceLabel;
 	ctp2_Button *m_scienceIconButton;

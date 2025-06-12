@@ -47,6 +47,7 @@ class ctp2_ListBox;
 class ctp2_ListItem;
 class ctp2_Static;
 class ctp2_Window;
+union Cookie;
 
 class ScienceManagementDialog {
 public:
@@ -94,16 +95,16 @@ private:
 	static AUI_ERRCODE DrawScienceBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie );
+									  Cookie cookie );
 
 	static void AdvanceListCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);
 
 	static AUI_ERRCODE ColorBoxActionCallback(ctp2_Static *control,
-		aui_Surface *surface, RECT &rect, void *cookie);
+		aui_Surface *surface, RECT &rect, Cookie cookie);
 
 	static AUI_ERRCODE ColorHeaderActionCallback(aui_Switch *control,
-		aui_Surface *surface, RECT &rect, void *cookie);
+		aui_Surface *surface, RECT &rect, Cookie cookie);
 
 	static sint32 CompareAdvance(ctp2_ListItem *item1, ctp2_ListItem *item2,
 		sint32 column);

@@ -39,31 +39,31 @@ class DiplomacyDetails
 	static void SetNation(sint32 player);
 
 	static void CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-
 	static void SelectItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ClickTreaties(ctp2_Static *control, aui_MouseEvent *mouseData, void *cookie);
+
 	static AUI_ERRCODE DrawPlayerColor(ctp2_Static *control, aui_Surface *surface,
-									   RECT &rect, void *cookie);
+									   RECT &rect, Cookie cookie);
 
 	static AUI_ERRCODE DrawPlayerFlag(ctp2_Static *control, aui_Surface *surface,
-									   RECT &rect, void *cookie);
+									   RECT &rect, Cookie cookie);
 	static sint32 GetRegardThreshold(sint32 ofPlayer, sint32 forPlayer);
 	static AUI_ERRCODE DrawPlayerRegard(ctp2_Static *control,
 										aui_Surface *surface,
 										RECT &rect,
-										void *cookie);
+										Cookie cookie);
 	static AUI_ERRCODE DrawPlayerStrength(ctp2_Static *control,
 										  aui_Surface *surface,
 										  RECT &rect,
-										  void *cookie);
+										  Cookie cookie);
 	static AUI_ERRCODE DrawEmbassy(ctp2_Static *control,
 								   aui_Surface *surface,
 								   RECT &rect,
-								   void *cookie);
+								   Cookie cookie);
 	static AUI_ERRCODE DrawTreaties(ctp2_Static *control,
 									aui_Surface *surface,
 									RECT &rect,
-									void *cookie);
-	static void ClickTreaties(ctp2_Static *control, aui_MouseEvent *mouseData, void *cookie);
+									Cookie cookie);
 
 	static void InitImageTables();
 };

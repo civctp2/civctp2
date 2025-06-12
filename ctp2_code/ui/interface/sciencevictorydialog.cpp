@@ -400,25 +400,21 @@ void ScienceVictoryDialog::UpdateConstructionMap(
 
 void ScienceVictoryDialog::UpdateStatus(const GaiaController *gaiaController)
 {
-
 	char buffer[256];
 	sprintf(buffer, g_theStringDB->GetNameStr("str_ldl_SV_COUNTDOWN_SEQUENCE"),
 		gaiaController->TurnsToComplete());
 	m_statusText->SetText(buffer);
-
-
-
 
 	m_statusBar->SetDrawCallbackAndCookie(StatusBarActionCallback,
 		const_cast<GaiaController*>(gaiaController), false);
 }
 
 AUI_ERRCODE ScienceVictoryDialog::StatusBarActionCallback(ctp2_Static *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+	aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 
 	const GaiaController *gaiaController =
-		static_cast<const GaiaController *>(cookie);
+		static_cast<const GaiaController *>(cookie.m_voidPtr);
 
 	double percentComplete =
 		static_cast<double>(gaiaController->TotalCountdownTurns() -

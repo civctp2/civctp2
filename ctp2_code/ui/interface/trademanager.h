@@ -9,6 +9,7 @@ class aui_Surface;
 class aui_Control;
 class ctp2_Button;
 class C3Slider;
+union Cookie;
 
 #include "Unit.h"
 #include "pointerlist.h"
@@ -90,11 +91,11 @@ class TradeManager
 	static AUI_ERRCODE DrawNationColumn(ctp2_Static *control,
 													  aui_Surface *surface,
 													  RECT &rect,
-													  void *cookie);
+													  Cookie cookie);
 	static AUI_ERRCODE DrawPiracyColumn(ctp2_Static *control,
 													  aui_Surface *surface,
 													  RECT &rect,
-													  void *cookie);
+													  Cookie cookie);
 
 	static void InitializeEvents();
 	static void CleanupEvents();

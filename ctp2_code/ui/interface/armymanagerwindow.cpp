@@ -102,16 +102,16 @@ ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveAllButton", ArmyManagerWindow::RemoveAll, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmyName", ArmyManagerWindow::ArmyNameChanged, this);
 
-	sint32 i;
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
+	for(sint32 i = 0; i < k_MAX_ARMY_SIZE; i++)
+	{
 		MBCHAR name[k_MAX_NAME_LEN];
 		sprintf(name, "%s.InArmyBox.Unit%d", s_armyWindowBlock, i);
 		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::InArmy, NULL);
-		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy,(void *)i);
+		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy, i);
 
 		sprintf(name, "%s.OutOfArmyBox.Unit%d", s_armyWindowBlock, i);
 		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::OutOfArmy, NULL);
-		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy,(void *)i);
+		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy, i);
 	}
 
 	*err = AUI_ERRCODE_OK;
@@ -943,12 +943,14 @@ void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, ui
 	armyList->ShouldDraw();
 }
 
-AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
+AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie)
 {
-	if (s_armyWindow->m_inArmy[(int)cookie].IsValid())
+	sint32 armyIndex = cookie.m_sin32Type;
+
+	if (s_armyWindow->m_inArmy[armyIndex].IsValid())
 	{
-		sint32 const maxhp		= s_armyWindow->m_inArmy[(int)cookie]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
-		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_inArmy[(int)cookie].GetHP());
+		sint32 const maxhp		= s_armyWindow->m_inArmy[armyIndex]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
+		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_inArmy[armyIndex].GetHP());
 		sint32 const width		= rect.right - rect.left;
 		sint32 const hpwidth	= width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
@@ -962,12 +964,14 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
+AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie)
 {
-	if (s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
+	sint32 armyIndex = cookie.m_sin32Type;
+
+	if (s_armyWindow->m_outOfArmy[armyIndex].IsValid())
 	{
-		sint32 const maxhp		= s_armyWindow->m_outOfArmy[(int)cookie]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
-		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_outOfArmy[(int)cookie].GetHP());
+		sint32 const maxhp		= s_armyWindow->m_outOfArmy[armyIndex]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
+		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_outOfArmy[armyIndex].GetHP());
 		sint32 const width		= rect.right - rect.left;
 		sint32 const hpwidth	= width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):

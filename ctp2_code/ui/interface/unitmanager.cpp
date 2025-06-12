@@ -488,7 +488,7 @@ void UnitManager::UpdateTacticalList()
 
 		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_HEALTH_COL);
 		if (child) {
-			child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)u.m_id);
+			child->SetDrawCallbackAndCookie(DrawHealthBar, u.m_id);
 		}
 		item->SetUserData(u.m_id);
 		item->SetCompareCallback(CompareTacticalItems);
@@ -833,7 +833,7 @@ sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item
 }
 
 AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surface,
-									   RECT &rect, void *cookie)
+									   RECT &rect, Cookie cookie)
 {
 	RECT destRect = {
 		rect.left + 2,
@@ -847,7 +847,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	if(err != AUI_ERRCODE_OK)
 		return err;
 
-	Unit u ((uint32) cookie);
+	Unit u (cookie.m_uin32Type);
 	Assert(u.IsValid());
 	if(!u.IsValid())
 		return AUI_ERRCODE_INVALIDPARAM;

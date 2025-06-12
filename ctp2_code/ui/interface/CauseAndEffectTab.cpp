@@ -74,7 +74,7 @@
 static sint32 k_ONE_FIVE__NEG_TWO_TWO_CONVERSION = 3;
 static sint32 k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION = 2;
 
-CauseAndEffectTab::CauseAndEffectTab(MBCHAR *ldlBlock) :
+CauseAndEffectTab::CauseAndEffectTab(const MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_detailsButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"DomesticDialog.DetailsButton"))),
@@ -1117,7 +1117,7 @@ void CauseAndEffectTab::UpdateCities()
 AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
                                                           aui_Surface *surface,
                                                           RECT &rect,
-                                                          void *cookie)
+                                                          Cookie cookie)
 {
 	if(g_selected_item == NULL)
 		return(AUI_ERRCODE_OK);

@@ -59,12 +59,12 @@ public:
 		ctp2_Static *control,
 		aui_Surface *surface,
 		RECT &rect,
-		void *cookie );
+		Cookie cookie );
 
 	typedef void (ImageMapCallback)(
 		ctp2_Static *control,
 		aui_MouseEvent *event,
-		void *cookie);
+		Cookie cookie);
 
 	ctp2_Static(AUI_ERRCODE *retval,
 						uint32 id,
@@ -92,17 +92,15 @@ public:
 
 	void SetBevel(uint32 width, uint32 type);
 
-	void SetDrawCallbackAndCookie(StaticDrawCallback *func, void *cookie,bool exclusive=true);
-	void SetImageMapCallback(ImageMapCallback *func, void *cookie);
+	void SetDrawCallbackAndCookie(StaticDrawCallback *func, Cookie cookie, bool exclusive=true);
+	void SetImageMapCallback(ImageMapCallback *func, Cookie cookie);
 
 
 
 
 	void FitToBitmap(void);
 
-	void SetChromaKey(sint32 r,sint32 g,sint32 b);
-
-	void SetChromakey(sint32 r, sint32 g, sint32 b);
+	void SetChromaKey(sint32 r, sint32 g, sint32 b);
 
 	bool	BuildImageList();
 
@@ -130,10 +128,10 @@ protected:
 	RECT   m_textRects[STATIC_IMAGE_MAX];
 
 	StaticDrawCallback *m_drawFunc;
-	void *m_drawCookie;
+	Cookie m_drawCookie;
 
 	ImageMapCallback *m_imageMapCallback;
-	void *m_imageMapCookie;
+	Cookie m_imageMapCookie;
 
 	bool m_ignoreHighlight;
 

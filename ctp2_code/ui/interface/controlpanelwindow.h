@@ -235,7 +235,7 @@ public:
 	void    Select  ();
 	void    Deselect();
 
-	void    HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie);
+	void    HappinessRedisplay(aui_Surface *surface, RECT &rect, Cookie cookie);
 
 	void    BuildMainMenu     ();
 	void    BuildCivMenu      ();

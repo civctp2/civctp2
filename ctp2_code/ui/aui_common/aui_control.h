@@ -55,6 +55,18 @@ class aui_StringTable;
 #define k_AUI_CONTROL_LDL_TIPWINDOW			"tipwindow"
 #define k_AUI_CONTROL_LDL_STRINGTABLE		"stringtable"
 
+union Cookie
+{
+	Cookie(void* ptr = NULL) : m_voidPtr(ptr) {};
+	Cookie(sint32 data)      : m_sin32Type(data) {};
+	Cookie(uint32 data)      : m_uin32Type(data) {};
+
+	Cookie& operator=(void* ptr) { m_voidPtr = ptr; return *this; }
+
+	void*  m_voidPtr;
+	sint32 m_sin32Type;
+	uint32 m_uin32Type;
+};
 
 class aui_Control
 :

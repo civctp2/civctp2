@@ -9,6 +9,7 @@ class aui_Control;
 class ctp2_ListItem;
 class ctp2_Static;
 class aui_Surface;
+union Cookie;
 
 #include "pointerlist.h"
 
@@ -48,7 +49,7 @@ class UnitManager {
 	static sint32 CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 
 	static AUI_ERRCODE DrawHealthBar(ctp2_Static *control, aui_Surface *surface,
-									 RECT &rect, void *cookie);
+									 RECT &rect, Cookie cookie);
 
 	static void UpkeepButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void Advice(aui_Control *control, uint32 action, uint32 data, void *cookie);

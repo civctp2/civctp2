@@ -83,7 +83,7 @@ namespace
 	sint32 const CITY_PRODUCTION_HALTED	= 0x7fffffff;
 }
 
-CityControlPanel::CityControlPanel(MBCHAR *ldlBlock) :
+CityControlPanel::CityControlPanel(const MBCHAR *ldlBlock) :
 m_buildItemLabel(static_cast<ctp2_Static*>(
 				 aui_Ldl::GetObject(ldlBlock,
 				 "CityTab.TabPanel.BuildProgress.Title"))),
@@ -474,7 +474,7 @@ void CityControlPanel::UpdateBuildItem()
 	m_currentItem		= head ? head->m_type : -1;
 	m_currentTurns		= turns;
 	m_buildItemProgressBar->SetDrawCallbackAndCookie
-		(ProgressDrawCallback, (void *) m_currentCity.m_id);
+		(ProgressDrawCallback, m_currentCity.m_id);
 
 	if(numberOfItems < 1) {
 		ClearBuildItem();
@@ -839,12 +839,12 @@ void CityControlPanel::Activated()
 AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 												   aui_Surface *surface,
 												   RECT &rect,
-												   void *cookie)
+												   Cookie cookie)
 {
 	g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 
 	Unit city;
-	city.m_id = (uint32)cookie;
+	city.m_id = cookie.m_uin32Type;
 	if (!city.IsValid()) {
 		return AUI_ERRCODE_OK;
 	}

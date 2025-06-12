@@ -508,7 +508,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 						if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_INDEX))
 						{
 							nation->SetDrawCallbackAndCookie
-							    (DrawNationColumn, (void *)data->m_destination.GetOwner());
+							    (DrawNationColumn, data->m_destination.GetOwner());
 						}
 
 						item->SetCompareCallback(CompareCreateItems);
@@ -760,7 +760,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 		
 			if (ctp2_Static * piracy = (ctp2_Static *)item->GetChildByIndex(k_PIRACY_COL_SUM_INDEX))
 			{
-				piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, (void *)route.m_id);
+				piracy->SetDrawCallbackAndCookie(DrawPiracyColumn, route.m_id);
 			}
 		
 			MBCHAR buf[20];
@@ -799,7 +799,7 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 			if (ctp2_Static * nation = (ctp2_Static *)item->GetChildByIndex(k_NATION_COL_SUM_INDEX))
 			{
 				nation->SetDrawCallbackAndCookie(DrawNationColumn,
-				source ? (void *)route.GetDestination().GetOwner() : (void *)route.GetSource().GetOwner());
+				source ? route.GetDestination().GetOwner() : route.GetSource().GetOwner());
 			}
 		
 			item->SetUserData(route.m_id);
@@ -1048,9 +1048,9 @@ sint32 TradeManager::CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *it
 AUI_ERRCODE TradeManager::DrawNationColumn(ctp2_Static *control,
 										   aui_Surface *surface,
 										   RECT &rect,
-										   void *cookie)
+										   Cookie cookie)
 {
-	sint32 player = (sint32)cookie;
+	sint32 player = cookie.m_sin32Type;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -1071,9 +1071,9 @@ AUI_ERRCODE TradeManager::DrawNationColumn(ctp2_Static *control,
 AUI_ERRCODE TradeManager::DrawPiracyColumn(ctp2_Static *control,
 										   aui_Surface *surface,
 										   RECT &rect,
-										   void *cookie)
+										   Cookie cookie)
 {
-	TradeRoute route((uint32)cookie);
+	TradeRoute route(cookie.m_uin32Type);
 	if(!route.IsValid()) return AUI_ERRCODE_OK;
 
 	Pixel16 color = 0xffff;

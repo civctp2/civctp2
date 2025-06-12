@@ -16,6 +16,7 @@ class ctp2_Window;
 class GaiaController;
 class RadarMap;
 class Unit;
+union Cookie;
 
 class ScienceVictoryDialog {
 public:
@@ -62,7 +63,7 @@ private:
 	void UpdateStatus(const GaiaController *gaiaController);
 
 	static AUI_ERRCODE StatusBarActionCallback(ctp2_Static *control,
-		aui_Surface *surface, RECT &rect, void *cookie);
+		aui_Surface *surface, RECT &rect, Cookie cookie);
 
 
 	static void SwitchShowCallback(aui_Region *region,

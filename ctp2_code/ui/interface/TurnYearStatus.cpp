@@ -268,7 +268,7 @@ void TurnYearStatus::TurnYearStatusActionCallback(aui_Control *control, uint32 a
 AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
                                               aui_Surface *surface,
                                               RECT &rect,
-                                              void *cookie)
+                                              Cookie cookie)
 {
 	if(g_selected_item == NULL)
 		return AUI_ERRCODE_OK;

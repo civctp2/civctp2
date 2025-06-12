@@ -42,10 +42,11 @@ class ctp2_Button;
 class ctp2_Spinner;
 class ctp2_Static;
 class ctp2_Tab;
+union Cookie;
 
 class CauseAndEffectTab {
 public:
-	CauseAndEffectTab(MBCHAR *ldlBlock);
+	CauseAndEffectTab(const MBCHAR *ldlBlock);
 
 	void Update();
 
@@ -69,7 +70,7 @@ private:
 	static void UpdateCities();
 
 	static AUI_ERRCODE HappinessBarActionCallback(ctp2_Static *control,
-		aui_Surface *surface, RECT &rect, void *cookie);
+		aui_Surface *surface, RECT &rect, Cookie cookie);
 
 	static void RationsSpinnerActionCallback(aui_Control *control,
 		uint32 action, uint32 data, void *cookie);

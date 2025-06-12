@@ -83,8 +83,8 @@ class ArmyManagerWindow {
 	static void OutOfArmy(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ArmyNameChanged(aui_Control *control, uint32 action, uint32 data, void *cookie);
 
-	static AUI_ERRCODE DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie);
-	static AUI_ERRCODE DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie);
+	static AUI_ERRCODE DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie);
+	static AUI_ERRCODE DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie);
 
 	void AddSelectedUnits();
 	void RemoveSelectedUnits();

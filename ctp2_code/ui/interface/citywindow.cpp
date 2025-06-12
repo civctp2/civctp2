@@ -166,8 +166,8 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
     m_growthDelta           (NULL),
     m_happinessValue        (NULL),
     m_conversionLossValue   (NULL),
-	m_franchiseLossValue    (NULL),
-	m_growthTurns	        (NULL),
+    m_franchiseLossValue    (NULL),
+    m_growthTurns           (NULL),
     m_buildProgressBar      (NULL),
     m_globalBox             (NULL),
     m_globalFood            (NULL),
@@ -1689,7 +1689,7 @@ void CityWindow::PopulateQueueList(const Unit & city, ctp2_ListBox *listBox, cha
 AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1747,7 +1747,7 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1788,7 +1788,7 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawEfficiencyBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1821,7 +1821,7 @@ AUI_ERRCODE CityWindow::DrawEfficiencyBar(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1984,7 +1984,7 @@ void CityWindow::UpdateActivateButtons()
 AUI_ERRCODE CityWindow::DrawResourceMap(ctp2_Static *control,
 										aui_Surface *surface,
 										RECT &rect,
-										void *cookie)
+										Cookie cookie)
 {
 	if(!g_resourceMap) {
 		workwin_Initialize();
@@ -2109,13 +2109,13 @@ void CityWindow::FillHappinessList()
 		{
 			ctp2_Static *   happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
 			happyAmount->SetDrawCallbackAndCookie
-			    (DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawHappyIcons, (sint32)happies[i].amount, false);
 		}
 		else
 		{
 			ctp2_Static *   unhappyAmount = (ctp2_Static *)box->GetChildByIndex(0);
 			unhappyAmount->SetDrawCallbackAndCookie
-			    (DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawUnhappyIcons, (sint32)happies[i].amount, false);
 		}
 
 		char buf[20];
@@ -2135,9 +2135,9 @@ void CityWindow::FillHappinessList()
 AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 								  aui_Surface *surface,
 								  RECT &rect,
-								  void *cookie )
+								  Cookie cookie )
 {
-	sint32 amount = (sint32)cookie;
+	sint32 amount = cookie.m_sin32Type;
 	aui_Image *im = s_cityWindow->m_unhappyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2146,7 +2146,7 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 	if(numIcons <= 0)
 		numIcons = 1;
 
-    sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
+	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
 
@@ -2175,10 +2175,10 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 								  aui_Surface *surface,
 								  RECT &rect,
-								  void *cookie )
+								  Cookie cookie )
 {
 
-	sint32 amount = (sint32)cookie;
+	sint32 amount = cookie.m_sin32Type;
 	aui_Image *im = s_cityWindow->m_happyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2187,7 +2187,7 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 	if(numIcons <= 0)
 		numIcons = 1;
 
-    sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
+	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
 
