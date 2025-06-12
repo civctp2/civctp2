@@ -89,7 +89,7 @@ public:
             ctp2_ListItem * item = static_cast<ctp2_ListItem *>(this->GetItemByIndex(i));
             if (item)
             {
-                 T * info = static_cast<T *>(item->GetUserData());
+                 T * info = static_cast<T *>(item->GetUserDataPtr());
                  delete info;
                  item->SetUserData(NULL);
             }

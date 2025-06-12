@@ -216,8 +216,7 @@ void GovernmentTab::UpdateCompareGovernmentDropdown()
 			ctp2_Static *label = static_cast<ctp2_Static*>(
 				listItem->GetChildByIndex(0));
 			label->SetText(government->GetNameText());
-			listItem->SetUserData(
-				reinterpret_cast<void*>(governmentIndex));
+			listItem->SetUserData(governmentIndex);
 
 			m_compareGovernment->AddItem(listItem);
 
@@ -474,8 +473,7 @@ std::pair<bool, sint32> GovernmentTab::GetGovernmentSelection()
 
 			currentSelection.first = true;
 
-			currentSelection.second = reinterpret_cast<sint32>
-				(currentItem->GetUserData());
+			currentSelection.second = currentItem->GetUserDataSint32();
 		}
 	}
 

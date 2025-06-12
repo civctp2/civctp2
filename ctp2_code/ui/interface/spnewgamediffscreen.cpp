@@ -202,7 +202,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		if(!item)
 			break;
 
-		item->SetUserData((void *)i);
+		item->SetUserData(i);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -229,7 +229,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		if(!item)
 			break;
 
-		item->SetUserData((void *)i);
+		item->SetUserData(i);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);

@@ -337,9 +337,9 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 		const Response *response = NULL;
 		if(oldItem) {
 			if(toPlayer) {
-				oldSelectedPlayer = (sint32)oldItem->GetUserData();
+				oldSelectedPlayer = oldItem->GetUserDataSint32();
 			} else {
-				oldSelectedPlayer = (sint32)oldItem->GetUserData();
+				oldSelectedPlayer = oldItem->GetUserDataSint32();
 			}
 		}
 
@@ -442,7 +442,7 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 						}
 					}
 
-					item->SetUserData((void *)i);
+					item->SetUserData(i);
 					propList->AddItem(item);
 
 					if(oldSelectedPlayer == i) {
@@ -899,7 +899,7 @@ STDEHANDLER(DipWinResponseReady)
 		sint32 i;
 		for(i = 0; i < lb->NumItems(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
-			if(sint32(item->GetUserData()) == p2) {
+			if(item->GetUserDataSint32() == p2) {
 				lb->SelectItem(item);
 				break;
 			}
@@ -920,7 +920,7 @@ STDEHANDLER(DipWinResponseReady)
 		sint32 i;
 		for(i = 0; i < lb->NumItems(); i++) {
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
-			if(sint32(item->GetUserData()) == p1) {
+			if(item->GetUserDataSint32() == p1) {
 				lb->SelectItem(item);
 				break;
 			}
@@ -965,7 +965,7 @@ STDEHANDLER(DipWinNewProposalEvent)
 			for(i = 0; i < lb->NumItems(); i++) {
 				ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(i);
 				Assert(item);
-				if(item && sint32(item->GetUserData()) == p1) {
+				if(item && item->GetUserDataSint32() == p1) {
 					lb->SelectItem(item);
 					break;
 				}
@@ -1562,7 +1562,7 @@ void DiplomacyWindow::ProposalsMade(aui_Control *control, uint32 action, uint32 
 		s_dipWindow->ShowSections(k_DIPWIN_PROPOSALS_RECEIVED | k_DIPWIN_PROPOSALS_MADE | k_DIPWIN_PROPOSAL_DETAILS);
 	} else {
 
-		sint32 otherPlayer = (sint32)item->GetUserData();
+		sint32 otherPlayer = item->GetUserDataSint32();
 		s_dipWindow->SetViewingResponse(g_selected_item->GetVisiblePlayer(),
 										otherPlayer);
 		RESPONSE_TYPE rtype = Diplomat::GetDiplomat(otherPlayer).GetResponsePending(g_selected_item->GetVisiblePlayer()).type;
@@ -1723,11 +1723,11 @@ void DiplomacyWindow::ThreatList(aui_Control *control, uint32 action, uint32 dat
 		ctp2_ListItem *selItem = (ctp2_ListItem *)lb->GetSelectedItem();
 
 		if(selItem) {
-			if(!s_dipWindow->ThreatContextMenu((sint32)selItem->GetUserData())) {
+			if(!s_dipWindow->ThreatContextMenu(selItem->GetUserDataSint32())) {
 				s_dipWindow->m_sendThreat = THREAT_NONE;
 				lb->DeselectItem(selItem);
 			} else {
-				s_dipWindow->m_sendThreat = (sint32)selItem->GetUserData();
+				s_dipWindow->m_sendThreat = selItem->GetUserDataSint32();
 			}
 		}
 		s_dipWindow->Update();
@@ -1759,7 +1759,7 @@ void DiplomacyWindow::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION actio
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			Assert(item);
 			if(item) {
-				s_dipWindow->m_sendThreat = (sint32)item->GetUserData();
+				s_dipWindow->m_sendThreat = item->GetUserDataSint32();
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(s_dipWindow->m_sendThreat);
 				Assert(rec);
 				if(rec) {

@@ -403,7 +403,7 @@ void ctp2_Menu::ListCallback(aui_Control *control, uint32 action, uint32 data)
 		ctp2_ListItem *item = (ctp2_ListItem *)m_list->GetSelectedItem();
 		if(item) {
 			sint32 index = m_list->GetSelectedItemIndex();
-			Item *itemInfo = (Item *)item->GetUserData();
+			Item *itemInfo = (Item *)item->GetUserDataPtr();
 			Assert(itemInfo);
 
 			m_list->DeselectItem(item);

@@ -122,7 +122,7 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 	for(sint32 i = 0; i < s_CivListBox->NumItems(); ++i)
 	{
 		ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetItemByIndex(i);
-		if(index == reinterpret_cast<sint32>(item->GetUserData()))
+		if(index == item->GetUserDataSint32())
 		{
 			s_CivListBox->SelectItem(i);
 		}
@@ -205,7 +205,7 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action, MBCHAR *lname)
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
 	ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetSelectedItem();
-	sint32 index   = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 index   = item->GetUserDataSint32();
 
 	if ( lname )
 		s_leaderNameTextField->GetFieldText( lname, 100 );
@@ -373,7 +373,7 @@ void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint3
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
 	ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetSelectedItem();
-	sint32 civ = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 civ = item->GetUserDataSint32();
 	StringId nameString;
 
 	if ( s_maleRadio->GetState() )
@@ -392,7 +392,7 @@ void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 
 
 	if(item)
 	{
-		sint32 civ = reinterpret_cast<sint32>(item->GetUserData());
+		sint32 civ = item->GetUserDataSint32();
 
 		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
 
@@ -408,7 +408,7 @@ void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint3
 
 	if(item)
 	{
-		sint32 civ = reinterpret_cast<sint32>(item->GetUserData());
+		sint32 civ = item->GetUserDataSint32();
 
 		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
 
@@ -426,7 +426,7 @@ void spnewgametribescreen_addTribeNoDuplicate(sint32 tribe)
 	for(sint32 i = 0; i < s_CivListBox->NumItems(); i++)
 	{
 		ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetItemByIndex(i);
-		if(tribe == reinterpret_cast<sint32>(item->GetUserData()))
+		if(tribe == item->GetUserDataSint32())
 		{
 			return;
 		}
@@ -457,7 +457,7 @@ void spnewgametribescreen_addTribe(sint32 tribe)
 		if(!item)
 			return;
 
-		item->SetUserData((void *)tribe);
+		item->SetUserData(tribe);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -475,7 +475,7 @@ void spnewgametribescreen_removeTribe(sint32 tribe)
 	for(sint32 i = s_CivListBox->NumItems() - 1; i >= 0; i--)
 	{
 		ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetItemByIndex(i);
-		if(tribe == reinterpret_cast<sint32>(item->GetUserData()))
+		if(tribe == item->GetUserDataSint32())
 		{
 			s_CivListBox->RemoveItemByIndex(i);
 			delete item;

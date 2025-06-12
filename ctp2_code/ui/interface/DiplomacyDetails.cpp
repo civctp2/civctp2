@@ -326,7 +326,7 @@ AUI_ERRCODE DiplomacyDetails::Display(Unit *cfdshk)
 						treaty->SetActionFuncAndCookie(SelectItem, item);
 					}
 
-					item->SetUserData((void*)p);
+					item->SetUserData(p);
 					sm_list->AddItem(item);
 				}
 			}

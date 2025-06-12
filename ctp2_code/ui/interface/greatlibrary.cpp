@@ -1676,19 +1676,22 @@ void GreatLibrary::HandleListButton
 )
 {
 	if (AUI_LISTBOX_ACTION_SELECT == action)
-    {
+	{
 		ctp2_ListItem *item = (ctp2_ListItem *) m_topics_list->GetSelectedItem();
 
 		if (item)
 		{
-		    int const   index = reinterpret_cast<int>(item->GetUserData());
-		    if (index >= 0) {
-			    SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
-		    } else {
-			    m_topics_list->SelectItem(m_topics_list->GetSelectedItemIndex() + 1);
-		    }
-        }
-    }
+			sint32 const   index = item->GetUserDataSint32();
+			if (index >= 0)
+			{
+				SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+			}
+			else
+			{
+				m_topics_list->SelectItem(m_topics_list->GetSelectedItemIndex() + 1);
+			}
+		}
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -2070,7 +2073,7 @@ void GreatLibrary::Forward()
 void GreatLibrary::Add_Item_To_Topics_List
 (
 	const MBCHAR *name,
-	int index
+	sint32 index
 )
 {
 	Assert(m_topics_list);
@@ -2088,7 +2091,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 
 	box->SetText(name);
 	item->Enable(index != CTPRecord::INDEX_INVALID);
-	item->SetUserData((void *) index);
+	item->SetUserData(index);
 	m_topics_list->AddItem(item);
 }
 

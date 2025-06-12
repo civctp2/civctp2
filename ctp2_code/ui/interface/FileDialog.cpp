@@ -101,6 +101,8 @@ void FileDialog::AddFile(const MBCHAR *path, void *cookie)
 
 	box->SetText(path);
 
+	// That may be supossed to be unit32 or sint32 or indeed void*
+	// Actually only call from FileDialog::Fill(), with NULL as argument
 	item->SetUserData(cookie);
 	m_list->AddItem(item);
 }

@@ -227,7 +227,7 @@ public:
 	void Add_Item_To_Topics_List
 	(
 		const MBCHAR *name,
-		int index
+		sint32 index
 	);
 
 	ctp2_Window * GetWindow( void ) const;

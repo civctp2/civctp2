@@ -356,7 +356,7 @@ bool CityControlPanel::GetSelectedCity(Unit & selectedCity)
 		return false;
 	}
 
-	selectedCity.m_id = (uint32)selItem->GetUserData();
+	selectedCity.m_id = selItem->GetUserDataUint32();
 	return selectedCity.IsValid();
 }
 
@@ -682,7 +682,7 @@ void CityControlPanel::UpdateCityList()
 		label->SetText(player->GetCityFromIndex(cityIndex).GetName());
 
 		// Fill userdata of the dropdown list with the city ID
-		listItem->SetUserData(reinterpret_cast<void*>(player->GetCityFromIndex(cityIndex).m_id));
+		listItem->SetUserData(player->GetCityFromIndex(cityIndex).m_id);
 
 		// Add the item to the list
 		m_cityListDropDown->AddItem(listItem);
@@ -799,7 +799,7 @@ void CityControlPanel::SelectedCity()
 	for(sint32 i = 0; i < numberOfItems; i++)
 	{
 		ctp2_ListItem * item = static_cast<ctp2_ListItem*>(m_cityListDropDown->GetListBox()->GetItemByIndex(i));
-		if (item && (uint32)item->GetUserData() == newCity.m_id)
+		if (item && item->GetUserDataUint32() == newCity.m_id)
 		{
 			m_cityListDropDown->SetSelectedItem(i);
 			break;

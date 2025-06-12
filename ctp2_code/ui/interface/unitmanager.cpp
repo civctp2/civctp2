@@ -389,7 +389,7 @@ void UnitManager::UpdateStatsList()
 					child->SetText(buf);
 				}
 
-				item->SetUserData((void *)i);
+				item->SetUserData(i);
 				item->SetCompareCallback(CompareStatItems);
 
 				m_statsList->AddItem(item);
@@ -490,7 +490,7 @@ void UnitManager::UpdateTacticalList()
 		if (child) {
 			child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)u.m_id);
 		}
-		item->SetUserData((void *)u.m_id);
+		item->SetUserData(u.m_id);
 		item->SetCompareCallback(CompareTacticalItems);
 		m_tacticalList->AddItem(item);
 	}
@@ -684,8 +684,8 @@ void UnitManager::UpdateAdviceText()
 
 sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	sint32 idx1 = (sint32)item1->GetUserData();
-	sint32 idx2 = (sint32)item2->GetUserData();
+	sint32 idx1 = item1->GetUserDataSint32();
+	sint32 idx2 = item2->GetUserDataSint32();
 	const UnitRecord *rec1 = g_theUnitDB->Get(idx1);
 	const UnitRecord *rec2 = g_theUnitDB->Get(idx2);
 
@@ -737,8 +737,8 @@ sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 
 sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	Unit u1; u1.m_id = (uint32)item1->GetUserData();
-	Unit u2; u2.m_id = (uint32)item2->GetUserData();
+	Unit u1; u1.m_id = item1->GetUserDataUint32();
+	Unit u2; u2.m_id = item2->GetUserDataUint32();
 	if(!u1.IsValid() || !u2.IsValid())
 		return 0;
 
@@ -815,8 +815,8 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 
 sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	UnitManagerCategoryInfo *info1 = (UnitManagerCategoryInfo *)item1->GetUserData();
-	UnitManagerCategoryInfo *info2 = (UnitManagerCategoryInfo *)item2->GetUserData();
+	UnitManagerCategoryInfo *info1 = (UnitManagerCategoryInfo *)item1->GetUserDataPtr();
+	UnitManagerCategoryInfo *info2 = (UnitManagerCategoryInfo *)item2->GetUserDataPtr();
 
 	switch(column) {
 		case k_ADVICE_CATEGORY_COL:
@@ -938,7 +938,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	ctp2_ListItem *item = lb ? (ctp2_ListItem *)lb->GetSelectedItem() : NULL;
 	if(!item) return;
 
-	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
+	Unit u(item->GetUserDataSint32());
 	Assert(u.IsValid());
 
 	if (u.IsValid())
@@ -1026,7 +1026,7 @@ void UnitManager::DisbandSelected()
 
 		if(theList == m_tacticalList) {
 
-			Unit u; u.m_id = (uint32)item->GetUserData();
+			Unit u; u.m_id = item->GetUserDataUint32();
 
 			m_lastDisbandedUnit = u.m_id;
 			if(g_network.IsClient()) {
@@ -1037,7 +1037,7 @@ void UnitManager::DisbandSelected()
 								   GEA_End);
 		} else if(theList == m_statsList) {
 
-			sint32 unitType = (sint32)item->GetUserData();
+			sint32 unitType = item->GetUserDataSint32();
 			sint32 i;
 			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
 			Assert(pl);

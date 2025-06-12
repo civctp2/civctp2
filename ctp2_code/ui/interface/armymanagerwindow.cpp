@@ -425,7 +425,7 @@ void ArmyManagerWindow::UpdateArmyName()
 
 void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem * item)
 {
-	ArmyListNode * node = (ArmyListNode *)item->GetUserData();
+	ArmyListNode * node = (ArmyListNode *)item->GetUserDataPtr();
 	Assert(node);
 	if (!node) {
 		return;
@@ -494,7 +494,7 @@ void ArmyManagerWindow::RemoveDeadArmies()
 
 		while(walk.IsValid()) {
 			ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetItemByIndex(i);
-			Assert((ArmyListNode *)item->GetUserData() == walk.GetObj());
+			Assert((ArmyListNode *)item->GetUserDataPtr() == walk.GetObj());
 			if((walk.GetObj()->m_army.m_id != 0) &&
 			   !g_theArmyPool->IsValid(walk.GetObj()->m_army)) {
 				walk.Remove();
@@ -617,7 +617,7 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 
 	ctp2_ListItem *selItem = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(selItem) {
-		ArmyListNode *node = (ArmyListNode *)selItem->GetUserData();
+		ArmyListNode *node = (ArmyListNode *)selItem->GetUserDataPtr();
 		s_armyWindow->m_army = node->m_army;
 
 		if(g_theArmyPool->IsValid(node->m_army) &&
@@ -713,7 +713,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	}
 	else
 	{
-		node = (ArmyListNode *)item->GetUserData();
+		node = (ArmyListNode *)item->GetUserDataPtr();
 	}
 
 	sint32 i;
@@ -812,7 +812,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 		return;
 	}
 
-	ArmyListNode *node = (ArmyListNode *)item->GetUserData();
+	ArmyListNode *node = (ArmyListNode *)item->GetUserDataPtr();
 
 	Army theArmy;
 	if((node->m_army.m_id == 0) || (node->m_army.Num() < 1)) {

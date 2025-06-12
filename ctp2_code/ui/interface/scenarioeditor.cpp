@@ -1937,7 +1937,7 @@ void ScenarioEditor::AddAddItem(ctp2_ListBox * a_List, const MBCHAR *text, sint3
 		return;
 
 	textBox->SetText(text);
-	item->SetUserData((void *)userData);
+	item->SetUserData(userData);
 	a_List->AddItem(item);
 }
 
@@ -1975,7 +1975,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(!haveCity)
 				return;
 
-			dbindex = (sint32)selItem->GetUserData();
+			dbindex = selItem->GetUserDataSint32();
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theBuildingDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theBuildingDB->NumRecords())
@@ -1996,7 +1996,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			if(!haveCity)
 				return;
 
-			dbindex = (sint32)selItem->GetUserData();
+			dbindex = selItem->GetUserDataSint32();
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theWonderDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theWonderDB->NumRecords())
@@ -2019,7 +2019,7 @@ void ScenarioEditor::AddAddButton(aui_Control *control, uint32 action, uint32 da
 			break;
 		}
 		case SCEN_ADD_ADVANCES:
-			dbindex = (sint32) selItem->GetUserData();
+			dbindex = selItem->GetUserDataSint32();
 			Assert(dbindex >= 0);
 			Assert(dbindex < g_theAdvanceDB->NumRecords());
 			if(dbindex < 0 || dbindex >= g_theAdvanceDB->NumRecords())
@@ -2085,7 +2085,7 @@ void ScenarioEditor::AddRemoveButton(aui_Control *control, uint32 action, uint32
 	Unit city;
 	BOOL haveCity = g_selected_item->GetSelectedCity(city);
 
-	dbindex = (sint32)selItem->GetUserData();
+	dbindex = selItem->GetUserDataSint32();
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 

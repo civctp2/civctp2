@@ -394,7 +394,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 
 			if (action == (uint32)AUI_LISTBOX_ACTION_SELECT) {
 				if (myitem) {
-					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserDataPtr());
 				}
 			} else
 
@@ -402,7 +402,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 			if (action == (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 
 				if (myitem) {
-					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserDataPtr());
 				}
 
 				if(s_ScenarioWindow->GetMode() == SCENARIO_WINDOW_MODE_LOAD_PACK) {
@@ -433,7 +433,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 			if (action == (uint32)AUI_LISTBOX_ACTION_SELECT) {
 				if( myitem ) {
 
-					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserDataPtr());
 				}
 			} else
 
@@ -441,7 +441,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 			if (action == (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 				if( myitem ) {
 
-					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserDataPtr());
 				}
 
 				if(s_ScenarioWindow->GetMode() == SCENARIO_WINDOW_MODE_LOAD_SCEN) {

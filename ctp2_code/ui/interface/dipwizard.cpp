@@ -560,7 +560,7 @@ void DipWizard::FillProposalLists()
 					break;
 				}
 
-				item->SetUserData((void *)i);
+				item->SetUserData(i);
 
 				ctp2_Static * box = (ctp2_Static *)item->GetChildByIndex(0);
 				Assert(box);
@@ -596,7 +596,7 @@ void DipWizard::FillRecipientLists()
 		if(item) {
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(g_theStringDB->GetNameStr("str_ldl_DipWizNoNation"));
-			item->SetUserData((void *)-1);
+			item->SetUserData(-1);
 			m_nations->AddItem(item);
 		}
 
@@ -615,7 +615,7 @@ void DipWizard::FillRecipientLists()
 				g_player[pl]->m_civilisation->GetCountryName(buf);
 				label->SetText(buf);
 
-				item->SetUserData((void *)pl);
+				item->SetUserData(pl);
 
 				m_nations->AddItem(item);
 			}
@@ -638,7 +638,7 @@ void DipWizard::AddProposalItem(ctp2_ListBox *propList, const DiplomacyProposalR
 					label->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
 				}
 			}
-			propItem->SetUserData((void *)rec->GetIndex());
+			propItem->SetUserData(rec->GetIndex());
 			propList->AddItem(propItem);
 		}
 	}
@@ -658,13 +658,13 @@ void DipWizard::SetNation(sint32 pl)
 
 	ctp2_ListBox *nationList = (ctp2_ListBox *)m_nations->GetListBox();
 	ctp2_ListItem *item = (ctp2_ListItem *)nationList->GetSelectedItem();
-	if(!item || (pl != (sint32)item->GetUserData())) {
+	if(!item || (pl != item->GetUserDataSint32())) {
 		sint32 i;
 		for(i = 0; i < nationList->NumItems(); i++) {
 
 			item = (ctp2_ListItem *)nationList->GetItemByIndex(i);
 			Assert(item);
-			if(item && (pl == (sint32)item->GetUserData())) {
+			if(item && (pl == item->GetUserDataSint32())) {
 				m_nations->SetSelectedItem(i);
 				break;
 			}
@@ -1535,13 +1535,13 @@ void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ProposalContextMenu(item->GetUserDataSint32())) {
 			SetProposal(-1);
 		} else {
 			if(!m_proposalDataPending)
-				SetProposal((sint32)item->GetUserData());
+				SetProposal(item->GetUserDataSint32());
 			else
-				m_menuProposal = (sint32)item->GetUserData();
+				m_menuProposal = item->GetUserDataSint32();
 		}
 	}
 }
@@ -1556,13 +1556,13 @@ void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ProposalContextMenu(item->GetUserDataSint32())) {
 			SetExchange(-1);
 		} else {
 			if(!m_proposalDataPending)
-				SetExchange((sint32)item->GetUserData());
+				SetExchange(item->GetUserDataSint32());
 			else
-				m_menuExchange = (sint32)item->GetUserData();
+				m_menuExchange = item->GetUserDataSint32();
 		}
 	}
 }
@@ -1577,7 +1577,7 @@ void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data,
 
 	ctp2_ListItem *item = (ctp2_ListItem *)m_nations->GetListBox()->GetSelectedItem();
 	if(!item) SetNation(-1);
-	else SetNation((sint32)item->GetUserData());
+	else SetNation(item->GetUserDataSint32());
 	UpdateButtons();
 }
 
@@ -2454,7 +2454,7 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 			ctp2_ListItem *item = (ctp2_ListItem *)m_threatList->GetSelectedItem();
 			Assert(item);
 			if(item) {
-				m_menuThreat = (sint32)item->GetUserData();
+				m_menuThreat = item->GetUserDataSint32();
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(m_threat);
 				Assert(rec);
 				if(rec) {
@@ -2544,15 +2544,15 @@ void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 d
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ThreatContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ThreatContextMenu(item->GetUserDataSint32())) {
 			SetThreat(-1);
 			m_sendButton->Enable(FALSE);
 		} else {
 			m_sendButton->Enable(TRUE);
 			if(!m_proposalDataPending)
-				SetThreat((sint32)item->GetUserData());
+				SetThreat(item->GetUserDataSint32());
 			else
-				m_menuThreat = (sint32)item->GetUserData();
+				m_menuThreat = item->GetUserDataSint32();
 		}
 	}
 }

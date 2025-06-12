@@ -1038,7 +1038,7 @@ void CityWindow::UpdateCostsGives()
 	if(lb) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 		if(item) {
-			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
+			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserDataPtr();
 			Assert(info);
 			if (info) {
 				if(!info->m_isBuilding) {
@@ -1514,7 +1514,7 @@ void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32
 		}
 
 		const IconRecord *icon = NULL;
-		InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
+		InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserDataPtr();
 		Assert(info);
 		if(info->m_isBuilding) {
 			icon = g_theBuildingDB->Get(info->m_type)->GetDefaultIcon();
@@ -1572,7 +1572,6 @@ void CityWindow::UpdateCity(const Unit & city)
 
 void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
 
@@ -1581,7 +1580,7 @@ void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *co
 	if(lb) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 		if(item) {
-			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
+			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserDataPtr();
 			if(!info->m_isBuilding) {
 				return;
 			}
@@ -2217,7 +2216,7 @@ static int cw_comparePollutionItems(const void *item1, const void *item2)
 	ctp2_ListItem *i1 = *(ctp2_ListItem **)item1;
 	ctp2_ListItem *i2 = *(ctp2_ListItem **)item2;
 
-	return (sint32)i1->GetUserData() - (sint32)i2->GetUserData();
+	return i1->GetUserDataSint32() - i2->GetUserDataSint32();
 }
 
 void CityWindow::FillPollutionList()
@@ -2267,7 +2266,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i", cityData->GetPopulationPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)cityData->GetPopulationPollution());
+			item->SetUserData(cityData->GetPopulationPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2283,7 +2282,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i",cityData->GetProductionPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)cityData->GetProductionPollution());
+			item->SetUserData(cityData->GetProductionPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2330,7 +2329,7 @@ void CityWindow::FillPollutionList()
 					sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 					sprintf(interp,"%d",(sint32) value);
 					sublabel->SetText(interp);
-					item->SetUserData((void *)(sint32)value);
+					item->SetUserData((sint32)value);
 					allAbsItems[numAbsItems++] = item;
 				}
 			}

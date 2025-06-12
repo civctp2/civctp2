@@ -1537,7 +1537,7 @@ void ControlPanelWindow::BeginOrderDelivery()
 	ctp2_ListItem *item=(ctp2_ListItem *)m_unitOrders->GetSelectedItem();
 
 	if (item!=NULL)
-		order=(OrderRecord *)item->GetUserData();
+		order=(OrderRecord *)item->GetUserDataPtr();
 
 	BeginOrderDelivery(order);
 }

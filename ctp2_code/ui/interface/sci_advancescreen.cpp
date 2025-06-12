@@ -174,7 +174,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			if(!item) return;
 
-			g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
+			g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( item->GetUserDataSint32() );
 			if(g_scienceManagementDialog)
 			{
 				g_scienceManagementDialog->Update();
@@ -375,7 +375,7 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 			return;
 		}
 
-		g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
+		g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( item->GetUserDataSint32() );
 		if(g_scienceManagementDialog) {
 			g_scienceManagementDialog->Update();
 		}
@@ -473,7 +473,7 @@ sint32 sci_advancescreen_loadList( void )
 			{
 				child->SetText(str);
 			}
-			item->SetUserData((void*)i);
+			item->SetUserData(i);
 			item->SetCompareCallback(ScienceSortCallback);
 
 			s_advanceList->AddItem( item );
@@ -495,7 +495,7 @@ sint32 sci_advancescreen_loadList( void )
 		s_advanceList->SelectItem(index);
 		ctp2_ListItem *	item =
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
-		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
+		isIndexOk = (research == item->GetUserDataSint32());
 	}
 
 	s_sci_advanceScreen->ShouldDraw(TRUE);
@@ -532,9 +532,9 @@ sint32 sci_advancescreen_updateData( const MBCHAR *messageText, BOOL defaultMess
 		return 0;
 	}
 
-	sci_advancescreen_setStatsInfo( (long)item->GetUserData(), g_selected_item->GetVisiblePlayer());
+	sci_advancescreen_setStatsInfo( item->GetUserDataSint32(), g_selected_item->GetVisiblePlayer());
 
-	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
+	advanceTurns = p->m_advances->TurnsToNextAdvance(item->GetUserDataSint32());
 
 	if ( advanceTurns == -1 )
 	{
@@ -730,8 +730,8 @@ sint32 sci_advancescreen_isOnScreen()
 sint32 ScienceSortCallback(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
 	sint32 turns1,turns2;
-	turns1 = g_theAdvanceDB->Get((long)item1->GetUserData())->GetCost();
-	turns2 = g_theAdvanceDB->Get((long)item2->GetUserData())->GetCost();
+	turns1 = g_theAdvanceDB->Get(item1->GetUserDataSint32())->GetCost();
+	turns2 = g_theAdvanceDB->Get(item2->GetUserDataSint32())->GetCost();
 	return turns1-turns2;
 }
 

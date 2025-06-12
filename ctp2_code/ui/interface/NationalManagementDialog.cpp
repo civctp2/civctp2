@@ -494,9 +494,9 @@ void NationalManagementDialog::UpdateBuildQueue()
 
 		if(item) {
 
-			delete static_cast<BuildQueueDropdownItem*>(item->GetUserData());
+			delete static_cast<BuildQueueDropdownItem*>(item->GetUserDataPtr());
 
-			item->SetUserData(NULL);
+			item->SetUserData((void*)NULL);
 		}
 	}
 
@@ -611,7 +611,7 @@ ctp2_ListItem *NationalManagementDialog::CreateResourceItem(const Unit &city)
 	if(!item)
 		return(NULL);
 
-	item->SetUserData(reinterpret_cast<void*>(city.m_id));
+	item->SetUserData(city.m_id);
 
 	item->SetCompareCallback(CompareResources);
 
@@ -747,7 +747,7 @@ ctp2_ListItem *NationalManagementDialog::CreateStatusItem(const Unit &city)
 	if(!item)
 		return(NULL);
 
-	item->SetUserData(reinterpret_cast<void*>(city.m_id));
+	item->SetUserData(city.m_id);
 	item->SetCompareCallback(CompareStatus);
 
 	UpdateStatusItem(item, city);
@@ -854,7 +854,7 @@ ctp2_ListItem *NationalManagementDialog::CreateSpecialistItem(const Unit &city)
 	if(!item)
 		return(NULL);
 
-	item->SetUserData(reinterpret_cast<void*>(city.m_id));
+	item->SetUserData(city.m_id);
 
 	item->SetCompareCallback(CompareSpecialists);
 
@@ -1097,8 +1097,8 @@ sint32 NationalManagementDialog::CompareStatus(ctp2_ListItem *item1,
 											   ctp2_ListItem *item2,
 											   sint32 column)
 {
-	Unit city1(reinterpret_cast<uint32>(item1->GetUserData()));
-	Unit city2(reinterpret_cast<uint32>(item2->GetUserData()));
+	Unit city1(item1->GetUserDataUint32());
+	Unit city2(item2->GetUserDataUint32());
 	CityData * cityData1 = city1.GetCityData();
 	CityData * cityData2 = city2.GetCityData();
 
@@ -1328,7 +1328,7 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 				selectedList->GetAtIndex(selectIndex)));
 
 			Unit city;
-			city.m_id = reinterpret_cast<uint32>(item->GetUserData());
+			city.m_id = item->GetUserDataUint32();
 
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
 		}
@@ -1366,7 +1366,7 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 	{
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(selectedList->GetAtIndex(selectIndex2)));
-		Unit city(reinterpret_cast<uint32>(item->GetUserData()));
+		Unit city(item->GetUserDataUint32());
 		city.GetCityData()->SetUseGovernor(!governorStatus);
 		dialog->UpdateStatusItem(item, city);
 	}
@@ -1391,7 +1391,7 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(
 			dialog->m_statusList->GetItemByIndex(selectedList->GetAtIndex(selectIndex)));
-		Unit city(reinterpret_cast<uint32>(item->GetUserData()));
+		Unit city(item->GetUserDataUint32());
 		city.GetCityData()->SetBuildListSequenceIndex(static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
 		dialog->UpdateStatusItem(item, city);
 	}
@@ -1418,7 +1418,7 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 			dialog->m_statusList->GetItemByIndex(
 			selectedList->GetAtIndex(selectIndex)));
 
-		Unit city(reinterpret_cast<uint32>(item->GetUserData()));
+		Unit city(item->GetUserDataUint32());
 		CityData * cityData = city.GetCityData();
 		if (!cityData->AlreadyBoughtFront() && city.GetOwner() == g_selected_item->GetCurPlayer()) {
 			cityData->AddBuyFront();
@@ -1558,7 +1558,7 @@ Unit NationalManagementDialog::GetSelectedCity()
 
 	if(!item) return city;
 
-	city.m_id = (uint32)item->GetUserData();
+	city.m_id = item->GetUserDataUint32();
 	return city;
 }
 
@@ -1621,16 +1621,16 @@ void NationalManagementDialog::MirrorSelectedCities()
 
 	for (uint32 selectIndex = 0; selectIndex < selectedList->L(); selectIndex++)
 	{
-		uint32 cityId   = reinterpret_cast<uint32>(
+		uint32 cityId   =
 				static_cast<ctp2_ListItem*>(visList->GetItemByIndex(selectedList->GetAtIndex(selectIndex)))
-				->GetUserData());
+				->GetUserDataUint32();
 
 		for(std::vector<ctp2_ListBox *>::iterator p = invisibleList.begin(); p != invisibleList.end(); ++p)
 		{
 			for (sint32 i = 0; i < (*p)->NumItems(); ++i)
 			{
-				uint32 invisibleId  = reinterpret_cast<uint32>(
-						static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))->GetUserData());
+				uint32 invisibleId  = 
+						static_cast<ctp2_ListItem *>((*p)->GetItemByIndex(i))->GetUserDataUint32();
 
 				if (invisibleId == cityId) {
 					(*p)->SelectItem(i);
@@ -1656,5 +1656,5 @@ void NationalManagementDialog::GotoSelectedCity()
 
 Unit NationalManagementDialog::GetCityAtIndex(ctp2_ListBox * listbox, uint32 index)
 {
-	return Unit(reinterpret_cast<uint32>(static_cast<ctp2_ListItem*>(listbox->GetItemByIndex(index))->GetUserData()));
+	return Unit(static_cast<ctp2_ListItem*>(listbox->GetItemByIndex(index))->GetUserDataUint32());
 }

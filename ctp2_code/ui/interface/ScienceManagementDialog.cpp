@@ -335,7 +335,7 @@ ctp2_ListItem *ScienceManagementDialog::CreateAdvanceItem(const AdvanceRecord *a
 	if (!item)
 		return NULL;
 
-	item->SetUserData(reinterpret_cast<void*>(advance->GetIndex()));
+	item->SetUserData(advance->GetIndex());
 	item->SetCompareCallback(CompareAdvance);
 
 	if (UpdateAdvanceItem(item, advance))
@@ -515,9 +515,9 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	const AdvanceRecord *advance1 = g_theAdvanceDB->Get(
-		reinterpret_cast<sint32>(item1->GetUserData()));
+		item1->GetUserDataSint32());
 	const AdvanceRecord *advance2 = g_theAdvanceDB->Get(
-		reinterpret_cast<sint32>(item2->GetUserData()));
+		item2->GetUserDataSint32());
 
 
 	if(!column || ((column != g_selected_item->GetVisiblePlayer()) &&
@@ -550,13 +550,13 @@ void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
 	ScienceManagementDialog *pMe = static_cast<ScienceManagementDialog*>(cookie);
 
 	if (!(pMe && pMe->m_scienceDescription))
-        return;
+		return;
 
 	ctp2_ListBox *  listbox = static_cast<ctp2_ListBox*>(control);
 	ctp2_ListItem * item    = listbox ? (ctp2_ListItem *)listbox->GetSelectedItem() : NULL;
 	if (!item) return;
 
-	sint32          index   = reinterpret_cast<sint32>(item->GetUserData());
+	sint32          index   = item->GetUserDataSint32();
 
 	MBCHAR givesText[k_MAX_GL_ENTRY];
 	MBCHAR linkText[k_MAX_GL_ENTRY];

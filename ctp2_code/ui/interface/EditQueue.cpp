@@ -537,8 +537,8 @@ static void setIntColumn(ctp2_Static * box, sint32 column, sint32 value)
 
 sint32 EditQueue::CompareUnitItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column)
 {
-	EditItemInfo * info1 = (EditItemInfo *)item1->GetUserData();
-	EditItemInfo * info2 = (EditItemInfo *)item2->GetUserData();
+	EditItemInfo * info1 = (EditItemInfo *)item1->GetUserDataPtr();
+	EditItemInfo * info2 = (EditItemInfo *)item2->GetUserDataPtr();
 
 	if (!info1 || !info2) {
 		return 0;
@@ -576,8 +576,8 @@ sint32 EditQueue::CompareUnitItems(ctp2_ListItem * item1, ctp2_ListItem * item2,
 
 sint32 EditQueue::CompareBuildingWonderItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column)
 {
-	EditItemInfo * info1 = (EditItemInfo *)item1->GetUserData();
-	EditItemInfo * info2 = (EditItemInfo *)item2->GetUserData();
+	EditItemInfo * info1 = (EditItemInfo *)item1->GetUserDataPtr();
+	EditItemInfo * info2 = (EditItemInfo *)item2->GetUserDataPtr();
 
 	if (!info1 || !info2) {
 		return 0;
@@ -645,10 +645,10 @@ void EditQueue::AddChoiceItem(const MBCHAR * text, EditItemInfo * userData, sint
 			choiceList->AddItem(item);
 		}
 	}
-    else
-    {
-        delete userData;
-    }
+	else
+	{
+		delete userData;
+	}
 }
 
 void EditQueue::ClearChoiceList(ctp2_ListBox * choiceList)
@@ -656,9 +656,9 @@ void EditQueue::ClearChoiceList(ctp2_ListBox * choiceList)
 	for(sint32 i = 0; i < choiceList->NumItems(); i++) {
 		ctp2_ListItem * item = (ctp2_ListItem *)choiceList->GetItemByIndex(i);
 		if (item) {
-			EditItemInfo * info = (EditItemInfo *) item->GetUserData();
+			EditItemInfo * info = (EditItemInfo *) item->GetUserDataPtr();
 			delete info;
-			item->SetUserData(NULL);
+			item->SetUserData((void*)NULL);
 		}
 	}
 
@@ -1037,7 +1037,7 @@ void EditQueue::UpdateCityLists()
 
 			ctp2_Static * label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(player->m_all_cities->Access(cityIndex).GetName());
-			item->SetUserData((void *)player->m_all_cities->Access(cityIndex).m_id);
+			item->SetUserData(player->m_all_cities->Access(cityIndex).m_id);
 			m_cityDropDown->AddItem(item);
 
 			if (m_city.IsValid() && player->m_all_cities->Access(cityIndex) == m_city) {
@@ -1067,7 +1067,7 @@ void EditQueue::UpdateCityLists()
 
 			ctp2_Static * label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(cityWalk.GetObj()->m_city.GetCityData()->GetName());
-			item->SetUserData((void *)cityWalk.GetObj()->m_city.m_id);
+			item->SetUserData(cityWalk.GetObj()->m_city.m_id);
 
 			m_multiCityList->AddItem(item);
 			cityWalk.Next();
@@ -1480,7 +1480,7 @@ void EditQueue::InsertInQueue(EditItemInfo * info, bool insert, bool confirmed, 
 		for (sint32 i = checkRemoveList->NumItems() - 1; i >= 0; i--)
 		{
 			ctp2_ListItem * item     = (ctp2_ListItem *)checkRemoveList->GetItemByIndex(i);
-			EditItemInfo  * itemInfo = (EditItemInfo *)item->GetUserData();
+			EditItemInfo  * itemInfo = (EditItemInfo *)item->GetUserDataPtr();
 
 			if (category == itemInfo->m_category && type == itemInfo->m_type)
 			{
@@ -1511,7 +1511,7 @@ void EditQueue::Add(bool insert)
 		return;
 	}
 
-	EditItemInfo * info = reinterpret_cast<EditItemInfo *>(item->GetUserData());
+	EditItemInfo * info = reinterpret_cast<EditItemInfo *>(item->GetUserDataPtr());
 	Assert(info);
 	if (!info) {
 		return;
@@ -1928,7 +1928,7 @@ void EditQueue::ShowSelectedInfo()
 		}
 		else
 		{
-			EditItemInfo * info = (EditItemInfo *) item->GetUserData();
+			EditItemInfo * info = (EditItemInfo *) item->GetUserDataPtr();
 			Assert(info);
 			category = info->m_category;
 			type = info->m_type;
@@ -1942,7 +1942,7 @@ void EditQueue::ShowSelectedInfo()
 			item = (ctp2_ListItem *) visibleList->GetSelectedItem();
 			if (item)
 			{
-				EditItemInfo * info = (EditItemInfo *) item->GetUserData();
+				EditItemInfo * info = (EditItemInfo *) item->GetUserDataPtr();
 				Assert(info);
 				category = info->m_category;
 				type = info->m_type;
@@ -2071,7 +2071,7 @@ void EditQueue::CityDropDown(aui_Control * control, uint32 action, uint32 data, 
 		Assert(item);
 		if (item)
 		{
-			Unit city((uint32)item->GetUserData());
+			Unit city(item->GetUserDataUint32());
 			if (!s_editQueue->EditingCity(city)) {
 				SetCity(city);
 			}
@@ -2101,7 +2101,7 @@ void EditQueue::PreviousCity(aui_Control * control, uint32 action, uint32 data, 
 		return;
 	}
 
-	SetCity((uint32)item->GetUserData());
+	SetCity(item->GetUserDataUint32());
 }
 
 void EditQueue::NextCity(aui_Control * control, uint32 action, uint32 data, void * cookie)
@@ -2126,7 +2126,7 @@ void EditQueue::NextCity(aui_Control * control, uint32 action, uint32 data, void
 		return;
 	}
 
-	SetCity((uint32)item->GetUserData());
+	SetCity(item->GetUserDataUint32());
 }
 
 void EditQueue::CustomButton(aui_Control * control, uint32 action, uint32 data, void * cookie)
@@ -2441,7 +2441,7 @@ const MBCHAR *EditQueue::GetSelectedQueueName()
 		return NULL;
 	}
 
-	return (const MBCHAR *)item->GetUserData();
+	return (const MBCHAR *)item->GetUserDataPtr();
 }
 
 void EditQueue::QueueFileList(aui_Control * control, uint32 action, uint32 data, void * cookie)
@@ -2461,7 +2461,7 @@ void EditQueue::QueueFileList(aui_Control * control, uint32 action, uint32 data,
 	if (!item) {
 		s_editQueue->m_queueName->SetText("");
 	} else {
-		s_editQueue->DisplayQueueContents((const MBCHAR *) item->GetUserData());
+		s_editQueue->DisplayQueueContents((const MBCHAR *) item->GetUserDataPtr());
 	}
 	s_editQueue->m_deleteButton->Enable(item != NULL);
 	s_editQueue->m_loadModeLoadButton->Enable(s_editQueue->m_queueContents->NumItems() > 0);
@@ -2844,7 +2844,7 @@ bool EditQueue::IsItemInQueueList(uint32 category, sint32 type)
 		Assert(item);
 		if (item)
 		{
-			EditItemInfo * itemInfo = (EditItemInfo *)item->GetUserData();
+			EditItemInfo * itemInfo = (EditItemInfo *)item->GetUserDataPtr();
 			if (itemInfo && itemInfo->m_category == category && itemInfo->m_type == type) {
 				return true;
 			}

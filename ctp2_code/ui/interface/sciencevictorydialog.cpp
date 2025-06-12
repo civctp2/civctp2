@@ -302,7 +302,7 @@ ctp2_ListItem *ScienceVictoryDialog::CreateMainframeItem(const Unit &city,
 	if(!item)
 		return(NULL);
 
-	item->SetUserData(reinterpret_cast<void*>(city.m_id));
+	item->SetUserData(city.m_id);
 
 	item->SetCompareCallback(CompareMainframeCities);
 
@@ -459,8 +459,8 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 {
 
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = item1->GetUserDataUint32();
+	city2.m_id = item2->GetUserDataUint32();
 
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());

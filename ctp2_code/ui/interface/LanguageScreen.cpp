@@ -84,7 +84,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 		if(!item)
 			return;
 
-		item->SetUserData((void *)i);
+		item->SetUserData(i);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -213,7 +213,7 @@ void LanguageScreen::SetLanguageDescription()
 
 	if(!item) return;
 
-	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 lan = item->GetUserDataSint32();
 	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
 
 	Ok()->Enable(!g_theLanguageDB->Get(lan)->GetDisabled());
@@ -230,7 +230,7 @@ void LanguageScreen::ApplyLanguage()
 
 	if(!item) return;
 
-	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 lan = item->GetUserDataSint32();
 
 	const LanguageRecord* lanRec = g_theLanguageDB->Get(lan);
 	g_theProfileDB->SetLanguageDirectory(lanRec->GetDirectory());
@@ -255,7 +255,7 @@ void LanguageScreen::SelectLocLanguage()
 	{
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(m_LanguageListBox->GetItemByIndex(i));
 
-		if(reinterpret_cast<sint32>(item->GetUserData()) == lanRec->GetIndex())
+		if(item->GetUserDataSint32() == lanRec->GetIndex())
 		{
 			m_LanguageListBox->SelectItem(item);
 			return;
