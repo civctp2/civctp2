@@ -58,9 +58,7 @@ public:
 	virtual void Update(void) {}
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
-	void SetUserData(void   *data) { m_userData.m_voidPtr   = data; }
-	void SetUserData(sint32  data) { m_userData.m_sin32Type = data; }
-	void SetUserData(uint32  data) { m_userData.m_uin32Type = data; }
+	void SetUserData(Cookie data) { m_userData = data; }
 
 	void  *GetUserDataPtr()    { return m_userData.m_voidPtr;   }
 	sint32 GetUserDataSint32() { return m_userData.m_sin32Type; }

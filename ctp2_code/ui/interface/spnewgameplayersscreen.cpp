@@ -334,7 +334,7 @@ void spnewgameplayersscreen_Cleanup()
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //
@@ -381,7 +381,7 @@ void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers)
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : s_num_player_spinner
 //
@@ -410,7 +410,7 @@ void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : s_max_player_spinner
 //
@@ -436,7 +436,7 @@ void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : s_player_spinner
 //

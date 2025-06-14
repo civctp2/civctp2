@@ -1868,7 +1868,7 @@ void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, u
 
 
 
-void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
+void DipWizard::ProcessMenuSelection(sint32 itemIndex, Cookie cookie)
 {
 	bool isExchange = GetStage() == DIP_WIZ_STAGE_EXCHANGE;
 	sint32 prop = isExchange ? m_menuExchange : m_menuProposal;
@@ -1881,7 +1881,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 		switch(rec->GetArg1()) {
 			case k_DiplomacyProposal_Arg1_OwnCity_Bit:
 			case k_DiplomacyProposal_Arg1_HisCity_Bit:
-				arg.cityId = (sint32)cookie;
+				arg.cityId = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
 				break;
@@ -1893,7 +1893,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 			case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
 			case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
 			case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
-				arg.advanceType = (sint32)cookie;
+				arg.advanceType = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 				break;
@@ -1903,13 +1903,13 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			case k_DiplomacyProposal_Arg1_HisGold_Bit:
-				arg.gold = (sint32)cookie;
+				arg.gold = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
-				arg.playerId = (sint32)cookie;
+				arg.playerId = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_Percent_Bit:
-				arg.percent = (double) ((sint32) cookie) / 100.0;
+				arg.percent = (double) (cookie.m_sin32Type / 100.0);
 				break;
 			default:
 
@@ -1933,7 +1933,7 @@ void DipWizard::ProcessMenuCancel()
 	}
 }
 
-void DipWizard::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DipWizard::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	Assert(menu == m_curMenu);
 	if(menu != m_curMenu)
@@ -2068,7 +2068,7 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())))
 				continue;
 		}
-		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
+		menu->AddItem(city.GetName(), NULL, city.m_id);
 	}
 }
 
@@ -2156,7 +2156,7 @@ void DipWizard::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 receiver)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, a);
 	}
 }
 
@@ -2178,7 +2178,7 @@ void DipWizard::AddStopResearchItems(ctp2_Menu *menu, sint32 playerId)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, a);
 	}
 }
 
@@ -2194,7 +2194,7 @@ void DipWizard::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiv
 
 		MBCHAR civName[k_MAX_NAME_LEN];
 		g_player[p]->GetCivilisation()->GetPluralCivName(civName);
-		menu->AddItem(civName, NULL, (void *)p);
+		menu->AddItem(civName, NULL, p);
 	}
 }
 
@@ -2438,7 +2438,7 @@ void DipWizard::RequestPercentValue()
 	m_proposalDataPending = true;
 }
 
-void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if((action != CTP2_MENU_ACTION_CANCEL) &&
 	   (action != CTP2_MENU_ACTION_SELECT))
@@ -2461,13 +2461,13 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 					switch(rec->GetArg1()) {
 						case k_DiplomacyThreat_Arg1_HisCity_Bit:
 						case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-							m_threatArg.cityId = (sint32)cookie;
+							m_threatArg.cityId = cookie.m_sin32Type;
 							break;
 						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-							m_threatArg.playerId = (sint32)cookie;
+							m_threatArg.playerId = cookie.m_sin32Type;
 							break;
 						case k_DiplomacyThreat_Arg1_AgreementId_Bit:
-							m_threatArg.agreementId = (sint32)cookie;
+							m_threatArg.agreementId = cookie.m_sin32Type;
 							break;
 						default:
 

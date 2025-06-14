@@ -2655,13 +2655,13 @@ void ScenarioEditor::LoadClip(aui_Control *control, uint32 action, uint32 data, 
 	s_scenarioEditor->m_fileDialog->Open(FILE_DIALOG_LOAD, FileAction, (void *)k_SCEN_FILE_LOAD_CLIP, path);
 }
 
-void ScenarioEditor::FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, void *cookie)
+void ScenarioEditor::FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, Cookie cookie)
 {
 	Assert(s_scenarioEditor);
 	if(!s_scenarioEditor) return;
 
 	Assert(dialog == s_scenarioEditor->m_fileDialog);
-	uint32 mode = (uint32)cookie;
+	uint32 mode = cookie.m_uin32Type;
 
 	if(action == k_FILE_DIALOG_CANCEL) return;
 

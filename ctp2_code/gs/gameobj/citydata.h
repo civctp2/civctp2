@@ -93,6 +93,7 @@ class CivArchive;
 class Happy;
 class SlicObject;
 class Cell;
+union Cookie;
 
 #define k_PEOPLE_PER_POPULATION 10000
 //#define NEW_RESOURCE_PROCESS 1
@@ -847,7 +848,7 @@ public:
 
 	void AddImprovement(sint32 type);
 
-	static bool FindGoodDistancesCallback(const MapPoint &pos, Cell *cell, void *cookie);
+	static bool FindGoodDistancesCallback(const MapPoint &pos, Cell *cell, Cookie cookie);
 	void FindGoodDistances();
 	sint32 GetDistanceToGood(sint32 good);
 

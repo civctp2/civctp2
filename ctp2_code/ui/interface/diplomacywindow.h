@@ -139,7 +139,7 @@ class DiplomacyWindow {
 
 	bool ThreatContextMenu         (sint32 threat);
 	static void ThreatList         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
-	static void ThreatMenuCallback (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
+	static void ThreatMenuCallback (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
 	static void MakeThreat         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void CancelThreat       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	void SendThreat();
@@ -156,9 +156,9 @@ class DiplomacyWindow {
 	void RequestPercentValue();
 
 	bool ProposalContextMenu(sint32 proposal);
-	void ProcessMenuSelection(sint32 itemIndex, void *cookie);
+	void ProcessMenuSelection(sint32 itemIndex, Cookie cookie);
 	void ProcessMenuCancel();
-	static void MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
+	static void MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
 
 	static void GoldSpinner    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void GoldOk         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);

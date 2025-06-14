@@ -46,7 +46,7 @@ FileDialog::~FileDialog()
 	m_list = NULL;
 }
 
-void FileDialog::Open(FILE_DIALOG_MODE mode, FileDialogCallback *cb, void *cookie, const MBCHAR *dirPath)
+void FileDialog::Open(FILE_DIALOG_MODE mode, FileDialogCallback *cb, Cookie cookie, const MBCHAR *dirPath)
 {
 	Assert(m_window);
 	if(!m_window) return;
@@ -85,7 +85,7 @@ void FileDialog::Close()
 	g_c3ui->RemoveWindow(m_window->Id());
 }
 
-void FileDialog::AddFile(const MBCHAR *path, void *cookie)
+void FileDialog::AddFile(const MBCHAR *path, Cookie cookie)
 {
 	Assert(m_list);
 	if(!m_list) return;

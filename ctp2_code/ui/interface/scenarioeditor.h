@@ -269,7 +269,7 @@ class ScenarioEditor {
 	static void SaveClip(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void LoadClip(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, void *cookie);
+	static void FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, Cookie cookie);
 
 	static void Rules(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void MapSize(aui_Control *control, uint32 action, uint32 data, Cookie cookie);

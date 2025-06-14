@@ -169,9 +169,9 @@ class DipWizard
 	static void CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void CheckIntelligence        (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void ProcessMenuSelection     (sint32 itemIndex, void *cookie);
+	static void ProcessMenuSelection     (sint32 itemIndex, Cookie cookie);
 	static void ProcessMenuCancel();
-	static void MenuCallback             (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
+	static void MenuCallback             (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
 
 	static bool ProposalContextMenu      (sint32 proposal);
 	static void AddCityItems             (ctp2_Menu *menu, sint32 player);
@@ -190,7 +190,7 @@ class DipWizard
 	static void RequestPollutionValue    (sint32 player);
 	static void RequestPercentValue      ();
 
-	static void ThreatMenuCallback       (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
+	static void ThreatMenuCallback       (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
 	static bool ThreatContextMenu        (sint32 threat);
 	static void ThreatListCallback       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 

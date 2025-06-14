@@ -40,7 +40,7 @@ class DiplomacyDetails
 
 	static void CancelCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void SelectItem    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
-	static void ClickTreaties (ctp2_Static *control, aui_MouseEvent *mouseData, void *cookie);
+	static void ClickTreaties (ctp2_Static *control, aui_MouseEvent *mouseData, Cookie cookie);
 
 	static AUI_ERRCODE DrawPlayerColor(ctp2_Static *control, aui_Surface *surface,
 									   RECT &rect, Cookie cookie);

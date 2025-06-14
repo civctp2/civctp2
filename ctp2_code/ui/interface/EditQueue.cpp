@@ -2686,7 +2686,7 @@ void EditQueue::GotoCity(aui_Control * control, uint32 action, uint32 data, Cook
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //

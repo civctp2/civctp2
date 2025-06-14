@@ -255,7 +255,7 @@ AUI_ERRCODE UnitManager::Hide()
 	return g_c3ui->RemoveWindow(s_unitManager->m_window->Id());
 }
 
-void UnitManager::TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, void *cookie)
+void UnitManager::TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, Cookie cookie)
 {
 	UnitManager::UpdateAdviceText();
 }

@@ -9446,13 +9446,13 @@ void CityData::AddImprovement(sint32 type)
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
-bool CityData::FindGoodDistancesCallback(const MapPoint &pos, Cell *cell, void *cookie)
+bool CityData::FindGoodDistancesCallback(const MapPoint &pos, Cell *cell, Cookie cookie)
 {
 	sint32 good;
 	if(!g_theWorld->GetGood(pos, good))
 		return false;
 
-	CityData *cd = (CityData *)cookie;
+	CityData *cd = (CityData *)cookie.m_voidPtr;
 
 	if(cd->m_distanceToGood[good] > 0)
 		return false;

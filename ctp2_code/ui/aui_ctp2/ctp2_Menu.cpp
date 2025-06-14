@@ -40,9 +40,9 @@ class CleanupMenuWindowAction : public aui_Action
 {
 public:
 	CleanupMenuWindowAction(aui_Window * window)
-    :   aui_Action  (),
-        m_window    (window)
-    { ; };
+	:   aui_Action  (),
+	    m_window    (window)
+	{ ; };
 
 	virtual void	Execute
 	(
@@ -50,13 +50,13 @@ public:
 		uint32			action,
 		uint32			data
 	)
-    {
-        if (m_window)
-        {
-            delete m_window->GetChildByIndex(0);
-            delete m_window;
-        }
-    };
+	{
+		if (m_window)
+		{
+			delete m_window->GetChildByIndex(0);
+			delete m_window;
+		}
+	};
 
 protected:
 	aui_Window *    m_window;
@@ -174,7 +174,7 @@ void ctp2_Menu::Reformat(ctp2_Menu::Item *menuItem)
 }
 
 ctp2_Menu::Item *ctp2_Menu::CreateItem(const MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut,
-									   const MBCHAR *icon, void *cookie)
+									   const MBCHAR *icon, Cookie cookie)
 {
 	ctp2_ListItem *item = (ctp2_ListItem *)aui_Ldl::BuildHierarchyFromRoot(block);
 	Assert(item);
@@ -291,13 +291,13 @@ ctp2_Menu::Item *ctp2_Menu::CreateItem(const MBCHAR *block, const MBCHAR *text, 
 	return menuItem;
 }
 
-void ctp2_Menu::AddItem(const MBCHAR *text, const MBCHAR *shortcut, void *cookie)
+void ctp2_Menu::AddItem(const MBCHAR *text, const MBCHAR *shortcut, Cookie cookie)
 {
 	ctp2_Menu::Item *item = CreateItem("PlainMenuListItem", text, shortcut, NULL, cookie);
 	Assert(item);
 }
 
-void ctp2_Menu::AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, void *cookie)
+void ctp2_Menu::AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, Cookie cookie)
 {
 	ctp2_Menu::Item *item = CreateItem("IconMenuListItem", text, shortcut, icon, cookie);
 	Assert(item);
@@ -328,7 +328,6 @@ void ctp2_Menu::Resize()
 
 void ctp2_Menu::Open()
 {
-
 	if (m_atMouse)
 		m_window->Move(g_c3ui->TheMouse()->X(), g_c3ui->TheMouse()->Y());
 
@@ -362,11 +361,6 @@ void ctp2_Menu::Open()
 
 	g_c3ui->AddWindow(m_window);
 	m_window->ResetCurrentMouseState();
-
-
-
-
-
 }
 
 void ctp2_Menu::Close()
@@ -462,9 +456,9 @@ bool ctp2_Menu::HandleShortcut(const MBCHAR *shortcut)
 	return false;
 }
 
-void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, void *cookie, bool &passEventOn)
+void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, Cookie cookie, bool &passEventOn)
 {
-	ctp2_Menu *menu = (ctp2_Menu *)cookie;
+	ctp2_Menu *menu = (ctp2_Menu *)cookie.m_voidPtr;
 	Assert(menu);
 
 	if(menu) {
@@ -472,7 +466,7 @@ void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, vo
 			if((event->position.x >= menu->m_siblingArea->X()) &&
 			   (event->position.x <= menu->m_siblingArea->X() + menu->m_siblingArea->Width()) &&
 			   (event->position.y >= menu->m_siblingArea->Y()) &&
-		       (event->position.y <= menu->m_siblingArea->Y() + menu->m_siblingArea->Height())) {
+			   (event->position.y <= menu->m_siblingArea->Y() + menu->m_siblingArea->Height())) {
 				passEventOn = true;
 			}
 		}
@@ -484,9 +478,6 @@ void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, vo
 	}
 
 }
-
-
-
 
 void
 ctp2_Menu::Clear()

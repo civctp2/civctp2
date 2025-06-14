@@ -1,10 +1,11 @@
 #ifndef FILE_DIALOG_H__
 #define FILE_DIALOG_H__
 
+#include "aui_control.h"
+
 class ctp2_Window;
 class ctp2_ListBox;
 class ctp2_TextField;
-union Cookie;
 
 #define k_FILE_DIALOG_SAVE 1
 #define k_FILE_DIALOG_LOAD 2
@@ -18,7 +19,7 @@ enum FILE_DIALOG_MODE {
 class FileDialog;
 class aui_Control;
 
-typedef void (FileDialogCallback)(FileDialog *dialog, uint32 action, const MBCHAR *path, void *cookie);
+typedef void (FileDialogCallback)(FileDialog *dialog, uint32 action, const MBCHAR *path, Cookie cookie);
 
 class FileDialog {
   private:
@@ -29,16 +30,16 @@ class FileDialog {
 	ctp2_TextField *m_field;
 
 	FileDialogCallback *m_callback;
-	void *m_cookie;
+	Cookie m_cookie;
 
   public:
 	FileDialog();
 	~FileDialog();
 
-	void Open(FILE_DIALOG_MODE mode, FileDialogCallback *cb, void *cookie, const MBCHAR *dirPath);
+	void Open(FILE_DIALOG_MODE mode, FileDialogCallback *cb, Cookie cookie, const MBCHAR *dirPath);
 	void Close();
 
-	void AddFile(const MBCHAR *path, void *cookie);
+	void AddFile(const MBCHAR *path, Cookie cookie);
 	void Fill();
 
 	const MBCHAR *GetSelectedFile();

@@ -47,7 +47,7 @@ extern sint32 g_ScreenHeight;
 
 extern aui_UI *g_ui;
 
-void DefaultCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DefaultCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 }
 
@@ -175,7 +175,7 @@ AUI_ERRCODE ctp2_MenuBar::AddChild(aui_Region *in_child)
 
 		m_runningWidth += width;
 
-		ctp2_Menu *menu=new ctp2_Menu(false,DefaultCallback);
+		ctp2_Menu *menu=new ctp2_Menu(false, DefaultCallback);
 		menu->SetSiblingArea(this);
 
 		child->SetActionFuncAndCookie (ButtonCallback, menu);

@@ -468,7 +468,7 @@ void controlpanelwindow_DisbandCity(bool response, Cookie userData)
 	}
 }
 
-void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -492,7 +492,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		}
 	}
 
-	switch((sint32)cookie)
+	switch(cookie.m_sin32Type)
 	{
 		case k_CONTEXT_CITY_VIEW:
 			if(haveCity) CityWindow::Display(city);
@@ -550,7 +550,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				}
 			}
 
-			sint32 orderIndex = (sint32)cookie;
+			sint32 orderIndex = cookie.m_sin32Type;
 			if(orderIndex >= 0 && orderIndex < g_theOrderDB->NumRecords())
 			{
 				const OrderRecord *order=g_theOrderDB->Get(orderIndex);
@@ -632,7 +632,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	}
 }
 
-void CivMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void CivMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
@@ -662,7 +662,7 @@ void CivMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 	}
 }
 
-void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -729,7 +729,7 @@ void CityMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 	}
 }
 
-void UnitMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void UnitMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -754,7 +754,7 @@ void UnitMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex
 	}
 }
 
-void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -791,7 +791,7 @@ void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 item
 	}
 }
 
-void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -811,7 +811,7 @@ void SciMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex,
 	}
 }
 
-void TradeMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void TradeMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -827,7 +827,7 @@ void TradeMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 	}
 }
 
-void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -837,7 +837,7 @@ void GLMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, 
 	open_GreatLibrary();
 }
 
-void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -861,12 +861,12 @@ void StatsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemInde
 	}
 }
 
-void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
 
-	switch ((sint32)cookie)
+	switch (cookie.m_sin32Type)
 	{
 	case	CP_MENU_ITEM_0:
 			gameplayoptions_displayMyWindow();
@@ -935,7 +935,7 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 	}
 }
 
-void EspionageMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void EspionageMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if (action!= (uint32)CTP2_MENU_ACTION_SELECT)
 		return;
@@ -2722,7 +2722,7 @@ void ControlPanelWindow::BuildUnitList()
 				strcpy(order, "  ");
 				strcat(order, g_theStringDB->GetNameStr(string_index));
 
-				m_contextMenu->AddItem(order, NULL,(void *)i);
+				m_contextMenu->AddItem(order, NULL, i);
 			}
 		}
 	}

@@ -1088,7 +1088,7 @@ void DiplomacyWindow::AddCityItems(ctp2_Menu *menu, sint32 player)
 	sint32 i;
 	for(i = 0; i < g_player[player]->m_all_cities->Num(); i++) {
 		Unit city = g_player[player]->m_all_cities->Access(i);
-		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
+		menu->AddItem(city.GetName(), NULL, city.m_id);
 	}
 }
 
@@ -1124,7 +1124,7 @@ void DiplomacyWindow::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 rec
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, a);
 	}
 }
 
@@ -1140,7 +1140,7 @@ void DiplomacyWindow::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 
 
 		MBCHAR civName[k_MAX_NAME_LEN];
 		g_player[p]->GetCivilisation()->GetPluralCivName(civName);
-		menu->AddItem(civName, NULL, (void *)p);
+		menu->AddItem(civName, NULL, p);
 	}
 }
 
@@ -1348,7 +1348,7 @@ bool DiplomacyWindow::ProposalContextMenu(sint32 proposal)
 	return true;
 }
 
-void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
+void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, Cookie cookie)
 {
 	sint32 prop = m_getRequest ? m_sendProposal : m_sendExchange;
 
@@ -1360,7 +1360,7 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 		switch(rec->GetArg1()) {
 			case k_DiplomacyProposal_Arg1_OwnCity_Bit:
 			case k_DiplomacyProposal_Arg1_HisCity_Bit:
-				arg.cityId = (sint32)cookie;
+				arg.cityId = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
 				break;
@@ -1372,7 +1372,7 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 			case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
 			case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
 			case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
-				arg.advanceType = (sint32)cookie;
+				arg.advanceType = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 				break;
@@ -1382,13 +1382,13 @@ void DiplomacyWindow::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			case k_DiplomacyProposal_Arg1_HisGold_Bit:
-				arg.gold = (sint32)cookie;
+				arg.gold = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
-				arg.playerId = (sint32)cookie;
+				arg.playerId = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_Percent_Bit:
-				arg.percent = (double) ((sint32) cookie) / 100.0;
+				arg.percent = (double) (cookie.m_sin32Type) / 100.0;
 				break;
 			default:
 
@@ -1404,7 +1404,7 @@ void DiplomacyWindow::ProcessMenuCancel()
 
 }
 
-void DiplomacyWindow::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DiplomacyWindow::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	Assert(s_dipWindow);
 	if(!s_dipWindow)
@@ -1734,7 +1734,7 @@ void DiplomacyWindow::ThreatList(aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void DiplomacyWindow::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DiplomacyWindow::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if((action != CTP2_MENU_ACTION_CANCEL) &&
 	   (action != CTP2_MENU_ACTION_SELECT))
@@ -1764,10 +1764,10 @@ void DiplomacyWindow::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION actio
 					switch(rec->GetArg1()) {
 						case k_DiplomacyThreat_Arg1_HisCity_Bit:
 						case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-							s_dipWindow->m_threatArg.cityId = (sint32)cookie;
+							s_dipWindow->m_threatArg.cityId = cookie.m_sin32Type;
 							break;
 						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-							s_dipWindow->m_threatArg.playerId = (sint32)cookie;
+							s_dipWindow->m_threatArg.playerId = cookie.m_sin32Type;
 							break;
 						default:
 
