@@ -23,7 +23,7 @@ UnitTabButton::UnitTabButton(AUI_ERRCODE *retval,
 					   uint32 id,
 					   const MBCHAR *ldlBlock,
 					   ControlActionCallback *ActionFunc,
-					   void *cookie)
+					   Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -45,7 +45,7 @@ UnitTabButton::UnitTabButton(AUI_ERRCODE *retval,
 					   const MBCHAR *pattern,
 					   sint32 barHeight,
 					   ControlActionCallback *ActionFunc,
-					   void *cookie)
+					   Cookie cookie)
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),

@@ -35,10 +35,10 @@ class IntelligenceWindow {
 	static void SetRegardTip(MBCHAR *buf, const sint32 player, const sint32 foreigner);
 	static void Update(ctp2_ListBox *list);
 
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Negotiations(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Advice(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SelectItem(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Negotiations(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Advice(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SelectItem(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static void DeclareWarOnSelected();
 	static void DeclareEmbargoOnSelected();

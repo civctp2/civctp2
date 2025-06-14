@@ -459,7 +459,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 			if (!armyAlreadyShown)
 			{
 				m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(MultiButtonActionCallback,
-						(void *) army.m_id);
+						army.m_id);
 				if (army.IsValid() && army.Num() == 1)
 				{
 					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(HealthBarActionCallback,
@@ -816,13 +816,13 @@ void UnitControlPanel::UnitDisplayGroupCallback(aui_Region * region, void * user
 	panel->SetSelectionMode(panel->m_currentMode);
 }
 
-void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void UnitControlPanel::NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie.m_voidPtr);
 	switch (panel->m_currentMode)
 	{
 		case SINGLE_SELECTION:
@@ -1052,13 +1052,13 @@ AUI_ERRCODE UnitControlPanel::FuelBarDrawCallback(ctp2_Static * control, aui_Sur
 	return AUI_ERRCODE_OK;
 }
 
-void UnitControlPanel::ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void UnitControlPanel::ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie);
+	UnitControlPanel * panel = static_cast<UnitControlPanel*>(cookie.m_voidPtr);
 	for (sint32 armyIndex = 0; armyIndex < NUMBER_OF_ARMY_SELECTION_BUTTONS; armyIndex++)
 	{
 		if (panel->m_armySelectionButton[armyIndex] == control)
@@ -1073,14 +1073,14 @@ void UnitControlPanel::ArmyButtonActionCallback(aui_Control * control, uint32 ac
 	panel->Update();
 }
 
-void UnitControlPanel::OrderButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void UnitControlPanel::OrderButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
 	std::pair<UnitControlPanel*, OrderRecord*> *orderPair =
-			static_cast<std::pair<UnitControlPanel*, OrderRecord*>*>(cookie);
+			static_cast<std::pair<UnitControlPanel*, OrderRecord*>*>(cookie.m_voidPtr);
 	orderPair->first->GiveOrder(orderPair->second);
 }
 
@@ -1151,13 +1151,13 @@ private:
 	Unit m_unit;
 };
 
-void UnitControlPanel::MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void UnitControlPanel::MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	Army army((uint32) cookie);
+	Army army(cookie.m_uin32Type);
 	if (army.IsValid())
 	{
 		Unit unit = army[0];
@@ -1283,7 +1283,7 @@ void UnitControlPanel::UpdateMultiSelectionArmySymbols()
 
 		aui_Control::ControlActionCallback * callback = m_multipleSelectionButton[index]->GetActionFunc();
 		if (callback) {
-			Army army((uint32) (m_multipleSelectionButton[index]->GetCookie()));
+			Army army(m_multipleSelectionButton[index]->GetCookie().m_uin32Type);
 			show = (army.IsValid() && army.Num() > 1);
 		}
 

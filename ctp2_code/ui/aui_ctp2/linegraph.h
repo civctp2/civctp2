@@ -89,7 +89,7 @@ public:
 	                sint32 id,
 	                const MBCHAR *ldlBlock,
 	                ControlActionCallback *ActionFunc = NULL,
-	                void *cookie = NULL,
+		Cookie cookie = NULL,
 	                EventTracker *events = NULL);
 	LineGraph(AUI_ERRCODE *retval,
 	                uint32 id,
@@ -98,7 +98,7 @@ public:
 	                sint32 width,
 	                sint32 height,
 	                ControlActionCallback *ActionFunc = NULL,
-	                void *cookie = NULL);
+		Cookie cookie = NULL);
 	virtual ~LineGraph();
 
 	void		SetXBounds(double min, double max) { m_xmin = min; m_xmax = max; }

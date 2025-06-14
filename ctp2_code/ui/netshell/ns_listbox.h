@@ -55,7 +55,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~ns_ListBox();
 
 protected:
@@ -186,7 +186,7 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),

@@ -499,7 +499,7 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 }
 
 void ScienceVictoryDialog::StartButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -517,11 +517,11 @@ void ScienceVictoryDialog::StartButtonActionCallback(aui_Control *control,
 
 	gaiaController->StartCountdown();
 
-	static_cast<ScienceVictoryDialog*>(cookie)->Update();
+	static_cast<ScienceVictoryDialog*>(cookie.m_voidPtr)->Update();
 }
 
 void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -558,11 +558,11 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 }
 
 void ScienceVictoryDialog::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<ScienceVictoryDialog*>(cookie)->Hide();
+	static_cast<ScienceVictoryDialog*>(cookie.m_voidPtr)->Hide();
 }

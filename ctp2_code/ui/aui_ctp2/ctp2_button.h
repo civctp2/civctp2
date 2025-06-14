@@ -46,7 +46,7 @@ public:
 				uint32 id,
 				const MBCHAR *ldlBlock,
 				ControlActionCallback *ActionFunc = NULL,
-				void *cookie = NULL) :
+				Cookie cookie = NULL) :
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock, (MBCHAR const *) NULL),
 		aui_Button(retval, id, ldlBlock, ActionFunc, cookie)
@@ -61,7 +61,7 @@ public:
 				sint32 width,
 				sint32 height,
 				ControlActionCallback *ActionFunc = NULL,
-				void *cookie = NULL) :
+				Cookie cookie = NULL) :
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock, (MBCHAR const *) NULL),
 		aui_Button(retval, id, ldlBlock, ActionFunc, cookie)

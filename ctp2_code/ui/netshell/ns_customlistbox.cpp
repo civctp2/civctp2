@@ -99,7 +99,7 @@ ns_PlayerSetupListBox::ns_PlayerSetupListBox (
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	const char *filename)
 
 	:
@@ -121,7 +121,7 @@ ns_GameSetupListBox::ns_GameSetupListBox (
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	const char *filename)
 
 	:
@@ -142,7 +142,7 @@ ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	const char *filename)
 
 	:
@@ -170,7 +170,7 @@ HotseatTransport::HotseatTransport()
 }
 
 ns_TransportListBox::ns_TransportListBox (
-	AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, void *cookie )
+	AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -200,19 +200,12 @@ ns_TransportListBox::ns_TransportListBox (
 		}
 	}
 
-
-
-
-
-
 	sint32 lasttime = 0;
 	FILE *f = fopen( "nstrnsprt.cfg", "rb" );
 	if ( f )
 	{
-
 		sint32 test = 0;
 		fread( &test, sizeof( sint32 ), 1, f );
-
 
 		if ( test == m_version )
 		{
@@ -248,7 +241,7 @@ ns_SessionListBox::ns_SessionListBox (
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -266,7 +259,7 @@ ns_LobbyListBox::ns_LobbyListBox (
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -284,7 +277,7 @@ ns_GameListBox::ns_GameListBox (
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -302,7 +295,7 @@ ns_PlayerListBox::ns_PlayerListBox (
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -388,7 +381,7 @@ ns_RPlayerListBox::ns_RPlayerListBox (
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -406,7 +399,7 @@ ns_ServerListBox::ns_ServerListBox (
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -491,7 +484,7 @@ ns_GPlayerListBox::ns_GPlayerListBox (
 		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -822,7 +815,7 @@ ns_AIPlayerListBox::ns_AIPlayerListBox (
 		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),

@@ -48,6 +48,7 @@ class ctp2_Button;
 class ctp2_ListItem;
 class aui_Region;
 class SlicContext;
+union Cookie;
 
 enum EDIT_QUEUE_MODE {
 	EDIT_QUEUE_MODE_SINGLE,
@@ -102,9 +103,9 @@ public:
 	static void UpdateCity        (const Unit & city);
 	static void NotifyCityCaptured(const Unit & city);
 
-	static void SaveQueryCallback      (bool response, void * data);
-	static void SaveInformationCallBack(bool response, void * data);
-	static void SaveNameResponse       (bool response, const char * text, void * data);
+	static void SaveQueryCallback      (bool response, Cookie data);
+	static void SaveInformationCallBack(bool response, Cookie data);
+	static void SaveNameResponse       (bool response, const char * text, Cookie data);
 
 	void InsertInQueue(EditItemInfo * info, bool insert, bool confirm = false, bool confirmSwitch = false);
 	void Down(bool confirmSwitch = false);
@@ -132,42 +133,42 @@ private:
 	static sint32 CompareUnitItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column);
 	static sint32 CompareBuildingWonderItems(ctp2_ListItem * item1, ctp2_ListItem * item2, sint32 column);
 
-	static void ToggleUnits        (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ToggleBuildings    (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ToggleWonders      (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void AddItem            (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void InsertItem         (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void SuggestItem        (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void RemoveItem         (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ItemUp             (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ItemDown           (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ListCallback       (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ClearButton        (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void Close              (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void ToggleUnits        (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ToggleBuildings    (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ToggleWonders      (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void AddItem            (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void InsertItem         (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void SuggestItem        (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void RemoveItem         (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ItemUp             (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ItemDown           (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ListCallback       (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ClearButton        (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void Close              (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
-	static void CityDropDown       (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void PreviousCity       (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void NextCity           (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void CityDropDown       (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void PreviousCity       (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void NextCity           (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
-	static void RushBuyCallback    (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void Library            (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void RushBuyCallback    (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void Library            (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
-	static void GotoCity           (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void OpenNationalManager(aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void GotoCity           (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void OpenNationalManager(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
-	static void LoadModeCallback   (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void LoadCallback       (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void DeleteCallback     (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void CustomButton       (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void SaveButton         (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void MultiActionButton  (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void QueueFileList      (aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void QueueListCallback  (aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void LoadModeCallback   (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void LoadCallback       (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void DeleteCallback     (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void CustomButton       (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void SaveButton         (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void MultiActionButton  (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void QueueFileList      (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void QueueListCallback  (aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
-	static void LoadQueryCallback   (bool response, void * data);
-	static void DeleteQueryCallback (bool response, void * data);
-	static void ClearMessageCallback(bool response, void * data);
-	static void ConfirmOverwrite    (bool response, void * data);
+	static void LoadQueryCallback   (bool response, Cookie data);
+	static void DeleteQueryCallback (bool response, Cookie data);
+	static void ClearMessageCallback(bool response, Cookie data);
+	static void ConfirmOverwrite    (bool response, Cookie data);
 
 	static void SetItemDescription(
 			const IconRecord  * icon,

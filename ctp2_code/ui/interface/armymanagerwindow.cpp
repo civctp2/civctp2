@@ -571,7 +571,7 @@ void ArmyManagerWindow::FillArmies()
 	UpdateList();
 }
 
-void ArmyManagerWindow::NewArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::NewArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -588,7 +588,7 @@ void ArmyManagerWindow::NewArmy(aui_Control *control, uint32 action, uint32 data
 	s_armyWindow->Update();
 }
 
-void ArmyManagerWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -603,7 +603,7 @@ void ArmyManagerWindow::Close(aui_Control *control, uint32 action, uint32 data, 
 	Hide();
 }
 
-void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT) return;
 	Assert(s_armyWindow);
@@ -646,7 +646,7 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-void ArmyManagerWindow::Add(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::Add(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -656,7 +656,7 @@ void ArmyManagerWindow::Add(aui_Control *control, uint32 action, uint32 data, vo
 	s_armyWindow->AddSelectedUnits();
 }
 
-void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -677,7 +677,7 @@ void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data,
 	s_armyWindow->AddSelectedUnits();
 }
 
-void ArmyManagerWindow::RemoveAll(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::RemoveAll(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -789,7 +789,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	Update();
 }
 
-void ArmyManagerWindow::Remove(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::Remove(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -861,7 +861,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 	NotifySelection();
 }
 
-void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_SWITCH_ACTION_DOUBLECLICK)
 	{
@@ -891,7 +891,7 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.RemoveAllButton")))->Enable(enableRemoveAllButton);
 }
 
-void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_SWITCH_ACTION_DOUBLECLICK)
 	{
@@ -924,13 +924,13 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.AddAllButton")))->Enable(enableAddAllButton);
 }
 
-void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_TEXTFIELD_ACTION_EXECUTE) {
 		return;
 	}
 
-	ArmyManagerWindow * armyManagerWindow = static_cast<ArmyManagerWindow *>(cookie);
+	ArmyManagerWindow * armyManagerWindow = static_cast<ArmyManagerWindow *>(cookie.m_voidPtr);
 	Assert(armyManagerWindow);
 	if (!armyManagerWindow) {
 		return;

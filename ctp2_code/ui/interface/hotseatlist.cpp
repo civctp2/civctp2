@@ -85,7 +85,7 @@ bool        *s_legalCivList = NULL;
 bool         s_playerCivsLocked;
 
 
-void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -375,38 +375,38 @@ HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
 }
 
 void HotseatAIToggleCallback(aui_Control *control, uint32 action, uint32 data,
-							 void *cookie)
+							 Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->SetHuman(!item->IsHuman());
 }
 
 void HotseatCivCallback(aui_Control *control, uint32 action, uint32 data,
-						void *cookie)
+						Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->ChooseCiv();
 }
 
 void HotseatEmailCallback(aui_Control *control, uint32 action, uint32 data,
-						void *cookie)
+						Cookie cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->EnterEmail();
 }
 
 void HotseatNameCallback(aui_Control *control, uint32 action, uint32 data,
-						void *cookie)
+						Cookie cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->Update();
 }
 

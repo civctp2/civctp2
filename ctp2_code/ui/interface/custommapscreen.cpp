@@ -316,7 +316,7 @@ AUI_ACTION_BASIC(SetupMapEditorAction);
 void SetupMapEditorAction::Execute(aui_Control *, uint32, uint32)
 { ; }
 
-void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {// This fires when you hover over the close button.
 	if(custommapscreen_removeMyWindow(action)) {// This fires when you press close.
 
@@ -331,8 +331,7 @@ void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data,
 	}
 }
 
-// This is not used.
-void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action == (sint32)AUI_BUTTON_ACTION_EXECUTE ) {
 		s_wetdry->SetValue(g_theProfileDB->GetWetDry(), 0);
@@ -345,46 +344,36 @@ void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 dat
 
 	custommapscreen_removeMyWindow(action);
 }
-void custommapscreen_wetdrySlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+
+void custommapscreen_wetdrySlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
-
-	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
-}
-void custommapscreen_warmcoldSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-
-
-	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
-}
-void custommapscreen_oceanlandSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-
-
-	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
-}
-void custommapscreen_islandcontinentSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-
-
-	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
-}
-void custommapscreen_homodiverseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-
-
-	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
-}
-void custommapscreen_goodcountSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
-{
-
-
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 }
 
+void custommapscreen_warmcoldSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
+{
+	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
+}
 
+void custommapscreen_oceanlandSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
+{
+	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
+}
 
+void custommapscreen_islandcontinentSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
+{
+	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
+}
 
+void custommapscreen_homodiverseSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
+{
+	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
+}
+
+void custommapscreen_goodcountSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
+{
+	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
+}
 
 void custommapscreen_getValues(
 	sint32 &wetdry,
@@ -514,11 +503,11 @@ void custommapscreen_setValues(
 	g_theProfileDB->SetPercentRichness( sint32(richness / 10) );
 }
 
-void custommapscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void custommapscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
-	uint32 checkbox = *((uint32*)cookie);
+	uint32 checkbox = *((uint32*)cookie.m_voidPtr);
 	void (ProfileDB::*func)(BOOL) = 0;
 	uint32 state = data;
 

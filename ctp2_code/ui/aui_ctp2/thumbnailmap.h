@@ -82,7 +82,7 @@ public:
 					sint32 id,
 					const MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL);
+					Cookie cookie = NULL);
 	ThumbnailMap(AUI_ERRCODE *retval,
 					uint32 id,
 					sint32 x,
@@ -91,7 +91,7 @@ public:
 					sint32 height,
 					const MBCHAR *pattern,
 					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL);
+					Cookie cookie = NULL);
 
 	virtual ~ThumbnailMap();
 

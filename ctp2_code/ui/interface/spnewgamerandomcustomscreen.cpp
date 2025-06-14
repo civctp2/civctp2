@@ -182,7 +182,7 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Cleanup()
 
 
 
-void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerandomcustomscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

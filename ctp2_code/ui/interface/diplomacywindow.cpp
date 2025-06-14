@@ -797,14 +797,14 @@ bool DiplomacyWindow::AddThreatData(SlicObject &so, sint32 threat, const Diploma
 	}
 }
 
-void DiplomacyWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	DiplomacyWindow::Hide();
 }
 
-void DiplomacyWindow::ProposalsReceived(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::ProposalsReceived(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT) return;
 
@@ -819,7 +819,7 @@ void DiplomacyWindow::ShowReceivedProposalDetails()
 
 }
 
-void DiplomacyWindow::Respond(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Respond(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -834,22 +834,22 @@ void DiplomacyWindow::Respond(RESPONSE_TYPE disposition)
 
 }
 
-void DiplomacyWindow::Accept(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Accept(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Reject(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Reject(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Counter(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Counter(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Create(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Create(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
@@ -864,7 +864,7 @@ void DiplomacyWindow::SendCounter()
 
 }
 
-void DiplomacyWindow::Send(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Send(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
@@ -989,21 +989,19 @@ STDEHANDLER(DipWinNewNegotiationEvent)
 
 void DiplomacyWindow::InitializeEvents()
 {
-
 }
 
 void DiplomacyWindow::CleanupEvents()
 {
 }
 
-void DiplomacyWindow::Civ(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Civ(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
-
 }
 
-AUI_ERRCODE DiplomacyWindow::DrawCivColor(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie )
+AUI_ERRCODE DiplomacyWindow::DrawCivColor(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie )
 {
-	sint32 player = (sint32)cookie;
+	sint32 player = cookie.m_sin32Type;
 	Assert(g_colorSet);
 	if(!g_colorSet)
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -1016,27 +1014,27 @@ AUI_ERRCODE DiplomacyWindow::DrawCivColor(ctp2_Static *control, aui_Surface *sur
 	return g_ui->TheBlitter()->ColorBlt16(surface, &rect, g_colorSet->GetPlayerColor(player), 0);
 }
 
-void DiplomacyWindow::Tone(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Tone(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Request(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Request(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Treaty(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Treaty(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Gift(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Gift(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::Exchange(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Exchange(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
@@ -1066,12 +1064,12 @@ void DiplomacyWindowChangeModeAction::Execute(aui_Control *control,
 
 }
 
-void DiplomacyWindow::CreateList(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::CreateList(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::ClearForm(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::ClearForm(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
@@ -1426,12 +1424,12 @@ void DiplomacyWindow::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 	s_dipWindow->m_curMenu = NULL;
 }
 
-void DiplomacyWindow::GoldSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::GoldSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 }
 
-void DiplomacyWindow::GoldOk(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::GoldOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1454,7 +1452,7 @@ void DiplomacyWindow::GoldOk(aui_Control *control, uint32 action, uint32 data, v
 	s_dipWindow->UpdateSendProposalDetails();
 }
 
-void DiplomacyWindow::GoldCancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::GoldCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1469,7 +1467,7 @@ void DiplomacyWindow::GoldCancel(aui_Control *control, uint32 action, uint32 dat
 	s_dipWindow->ProcessMenuCancel();
 }
 
-void DiplomacyWindow::PollutionOk(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::PollutionOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1492,7 +1490,7 @@ void DiplomacyWindow::PollutionOk(aui_Control *control, uint32 action, uint32 da
 	s_dipWindow->UpdateSendProposalDetails();
 }
 
-void DiplomacyWindow::PollutionCancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::PollutionCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1507,7 +1505,7 @@ void DiplomacyWindow::PollutionCancel(aui_Control *control, uint32 action, uint3
 	s_dipWindow->ProcessMenuCancel();
 }
 
-void DiplomacyWindow::PercentOk(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::PercentOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1530,7 +1528,7 @@ void DiplomacyWindow::PercentOk(aui_Control *control, uint32 action, uint32 data
 	s_dipWindow->UpdateSendProposalDetails();
 }
 
-void DiplomacyWindow::PercentCancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::PercentCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1545,7 +1543,7 @@ void DiplomacyWindow::PercentCancel(aui_Control *control, uint32 action, uint32 
 	s_dipWindow->ProcessMenuCancel();
 }
 
-void DiplomacyWindow::ProposalsMade(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::ProposalsMade(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
@@ -1574,7 +1572,7 @@ void DiplomacyWindow::ProposalsMade(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void DiplomacyWindow::ResponseOK(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::ResponseOK(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1590,7 +1588,7 @@ void DiplomacyWindow::ResponseOK(aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void DiplomacyWindow::ThreatenCounter(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::ThreatenCounter(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1611,7 +1609,7 @@ void DiplomacyWindow::ThreatenCounter(aui_Control *control, uint32 action, uint3
 	}
 }
 
-void DiplomacyWindow::AcceptCounter(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::AcceptCounter(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1640,7 +1638,7 @@ void DiplomacyWindow::AcceptCounter(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void DiplomacyWindow::RejectCounter(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::RejectCounter(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1706,7 +1704,7 @@ bool DiplomacyWindow::ThreatContextMenu(sint32 threat)
 	return true;
 }
 
-void DiplomacyWindow::ThreatList(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::ThreatList(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
@@ -1788,7 +1786,7 @@ void DiplomacyWindow::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION actio
 	}
 }
 
-void DiplomacyWindow::MakeThreat(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::MakeThreat(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1801,7 +1799,7 @@ void DiplomacyWindow::MakeThreat(aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void DiplomacyWindow::CancelThreat(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::CancelThreat(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1822,7 +1820,7 @@ void DiplomacyWindow::SendThreat()
 	Diplomat::GetDiplomat(m_viewResponseSender).ExecuteResponse(response);
 }
 
-void DiplomacyWindow::Intelligence(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Intelligence(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1831,13 +1829,13 @@ void DiplomacyWindow::Intelligence(aui_Control *control, uint32 action, uint32 d
 }
 
 void DiplomacyWindow::TabPanelActionCallback(aui_Control *control, uint32 action,
-											 uint32 data, void *cookie)
+											 uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(ctp2_Tab::ACTION_ACTIVATED))
 		return;
 
-	sint32 section = (sint32)cookie;
+	sint32 section = cookie.m_sin32Type;
 
 	if(section != k_DIPWIN_CREATE_PROPOSAL) {
 
@@ -1929,28 +1927,28 @@ void DiplomacyWindow::EnableRequests(bool enable)
 
 }
 
-void DiplomacyWindow::DeclareWar(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::DeclareWar(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::DeclareWarOnSelected();
 }
 
-void DiplomacyWindow::DeclareEmbargo(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::DeclareEmbargo(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::DeclareEmbargoOnSelected();
 }
 
-void DiplomacyWindow::SendMessage(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::SendMessage(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	IntelligenceWindow::SendMessageToSelected();
 }
 
-void DiplomacyWindow::Details(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyWindow::Details(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 

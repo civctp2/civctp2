@@ -1185,7 +1185,7 @@ sint32 NationalManagementDialog::CompareSpecialists(ctp2_ListItem *item1,
 }
 
 void NationalManagementDialog::StatusListSelectActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		GotoSelectedCity();
@@ -1195,7 +1195,7 @@ void NationalManagementDialog::StatusListSelectActionCallback(aui_Control *contr
 	if(action != (uint32)(AUI_LISTBOX_ACTION_SELECT))
 		return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	if(dialog->m_mirroring)
 		return;
@@ -1209,23 +1209,23 @@ void NationalManagementDialog::StatusListSelectActionCallback(aui_Control *contr
 }
 
 void NationalManagementDialog::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<NationalManagementDialog*>(cookie)->Hide();
+	static_cast<NationalManagementDialog*>(cookie.m_voidPtr)->Hide();
 }
 
 void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	ctp2_ListBox *visibleList = dialog->m_resourceList;
 	if(visibleList->IsHidden())
@@ -1240,17 +1240,17 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 	}
 
 	if (g_network.IsClient() && g_network.GetSensitiveUIBlocked())
-    {
-        // No action: display is locked
-    }
-    else
-    {
-	    if (cities.Num() == 1)
-        {
+	{
+		// No action: display is locked
+	}
+	else
+	{
+		if (cities.Num() == 1)
+		{
 			EditQueue::Display(cities.Access(0));
 		}
-        else
-        {
+		else
+		{
 			EditQueue::Display(cities);
 		}
 	}
@@ -1275,13 +1275,13 @@ void NationalManagementDialog::BuildQueueButtonActionCallback(aui_Control *contr
 //
 //----------------------------------------------------------------------------
 void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	ctp2_ListBox *visibleList = dialog->m_resourceList;
 	if(visibleList->IsHidden())
@@ -1297,7 +1297,7 @@ void NationalManagementDialog::CityManagerButtonActionCallback(aui_Control *cont
 }
 
 void NationalManagementDialog::DisbandButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -1307,13 +1307,12 @@ void NationalManagementDialog::DisbandButtonActionCallback(aui_Control *control,
 		cookie);
 }
 
-void NationalManagementDialog::DisbandCallback(bool response, void *userData)
+void NationalManagementDialog::DisbandCallback(bool response, Cookie userData)
 {
-
-	if(response) {
-
+	if(response)
+	{
 		NationalManagementDialog *dialog =
-			static_cast<NationalManagementDialog*>(userData);
+			static_cast<NationalManagementDialog*>(userData.m_voidPtr);
 
 		ctp2_ListBox *visibleList = dialog->m_resourceList;
 		if(visibleList->IsHidden())
@@ -1339,13 +1338,13 @@ void NationalManagementDialog::DisbandCallback(bool response, void *userData)
 }
 
 void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	bool governorStatus = false;
 
@@ -1377,13 +1376,13 @@ void NationalManagementDialog::ToggleGovernorButtonActionCallback(aui_Control *c
 }
 
 void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
@@ -1402,13 +1401,13 @@ void NationalManagementDialog::SelectGovernorActionCallback(aui_Control *control
 }
 
 void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	tech_WLList<sint32> *selectedList = dialog->m_statusList->GetSelectedList();
 
@@ -1434,7 +1433,7 @@ void NationalManagementDialog::RushBuyButtonActionCallback(aui_Control *control,
 }
 
 void NationalManagementDialog::ResourceListSelectActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		GotoSelectedCity();
@@ -1443,7 +1442,7 @@ void NationalManagementDialog::ResourceListSelectActionCallback(aui_Control *con
 
 	if(action != AUI_LISTBOX_ACTION_SELECT) return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	if(dialog->m_mirroring)
 		return;
@@ -1473,7 +1472,7 @@ void NationalManagementDialog::ResourceListSelectActionCallback(aui_Control *con
 //
 //----------------------------------------------------------------------------
 void NationalManagementDialog::SpecialistListSelectActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		GotoSelectedCity();
@@ -1482,7 +1481,7 @@ void NationalManagementDialog::SpecialistListSelectActionCallback(aui_Control *c
 
 	if(action != AUI_LISTBOX_ACTION_SELECT) return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	if(dialog->m_mirroring)
 		return;
@@ -1505,21 +1504,21 @@ void NationalManagementDialog::UpdateMainButtons(ctp2_ListBox *box)
 		m_buildQueueButton->Enable(TRUE);
 	}
 
-    if (m_cityManagerButton)
-    {
-        m_cityManagerButton->Enable(1 == box->GetSelectedList()->L());
-    }
+	if (m_cityManagerButton)
+	{
+		m_cityManagerButton->Enable(1 == box->GetSelectedList()->L());
+	}
 }
 
 void NationalManagementDialog::TabActionCallback(aui_Control *control,
 												 uint32 action,
 												 uint32 data,
-												 void *cookie)
+												 Cookie cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED)
 		return;
 
-	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie);
+	NationalManagementDialog *dialog = static_cast<NationalManagementDialog*>(cookie.m_voidPtr);
 
 	if(dialog->m_resourceTab == (ctp2_Tab *)control) {
 		dialog->UpdateMainButtons(dialog->m_resourceList);
@@ -1543,9 +1542,9 @@ Unit NationalManagementDialog::GetSelectedCity()
 	} else if (!g_nationalManagementDialog->m_statusList->IsHidden()) {
 		visList = g_nationalManagementDialog->m_statusList;
 	} else if (g_nationalManagementDialog->m_specialistList &&
-               !g_nationalManagementDialog->m_specialistList->IsHidden()
-              )
-    {
+	           !g_nationalManagementDialog->m_specialistList->IsHidden()
+	          )
+	{
 		visList = g_nationalManagementDialog->m_specialistList;
 	} else {
 		Assert(false);

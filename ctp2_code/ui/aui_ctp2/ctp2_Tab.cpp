@@ -9,7 +9,7 @@
 #include "ctp2_TabGroup.h"
 
 ctp2_Tab::ctp2_Tab(AUI_ERRCODE *retval, uint32 id, const  MBCHAR *ldlBlock,
-				   ControlActionCallback *ActionFunc, void *cookie) :
+				   ControlActionCallback *ActionFunc, Cookie cookie) :
 aui_ImageBase(ldlBlock),
 aui_TextBase(ldlBlock, (MBCHAR const *) NULL),
 aui_Control(retval, id, ldlBlock, ActionFunc, cookie),
@@ -77,13 +77,12 @@ bool ctp2_Tab::IsPanelActive()
 }
 
 void ctp2_Tab::TabButtonActionCallback(aui_Control *control, uint32 action,
-									   uint32 data, void *cookie)
+									   uint32 data, Cookie cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	ctp2_Tab *tab = static_cast<ctp2_Tab*>(cookie);
+	ctp2_Tab *tab = static_cast<ctp2_Tab*>(cookie.m_voidPtr);
 
 	if(tab->m_tabGroup)
 		tab->m_tabGroup->SelectTab(tab);

@@ -32,7 +32,7 @@ c3_FancyWindow::c3_FancyWindow
 	const MBCHAR *ldlTitle,
 	AUI_WINDOW_TYPE type,
 	bool bevel,
-	void (*exitCallBack)( aui_Control *, uint32, uint32, void *)
+	void (*exitCallBack)( aui_Control *, uint32, uint32, Cookie )
 )
 :
     C3Window    (retval, id, ldlBlock, bpp, type, bevel),
@@ -43,15 +43,6 @@ c3_FancyWindow::c3_FancyWindow
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-
-
-
-
-
-
-
-
-
 
 	m_originalDimensions.x = k_ORIGINAL_UNIT_STATUS_WIDTH;
 	m_originalDimensions.y = k_ORIGINAL_UNIT_STATUS_HEIGHT;
@@ -97,19 +88,14 @@ c3_FancyWindow::c3_FancyWindow
 		AddControl( m_ok );
 
 	}
-
-
 }
-
-
-
 
 c3_FancyWindow::~c3_FancyWindow()
 {
-    for (size_t i = 0; i < k_NUM_C3_FANCYBORDERS; ++i)
-    {
-        delete m_border[i];
-    }
+	for (size_t i = 0; i < k_NUM_C3_FANCYBORDERS; ++i)
+	{
+		delete m_border[i];
+	}
 	delete m_title;
 	delete m_cancel;
 	delete m_ok;
@@ -128,7 +114,6 @@ void c3_FancyWindow::MakeDraggable( BOOL draggable )
 	}
 }
 
-
 void c3_FancyWindow::MouseLGrabInside (aui_MouseEvent *mouseData)
 {
 	if (IsDisabled()) return;
@@ -136,7 +121,6 @@ void c3_FancyWindow::MouseLGrabInside (aui_MouseEvent *mouseData)
 	C3Window::MouseLGrabInside(mouseData);
 
 	BringBorderToTop();
-
 }
 
 void c3_FancyWindow::MouseLDragAway (aui_MouseEvent *mouseData)
@@ -153,21 +137,11 @@ void c3_FancyWindow::MouseLDragAway (aui_MouseEvent *mouseData)
 
 void c3_FancyWindow::BringBorderToTop()
 {
-
-
-
-
-
 }
 
 AUI_ERRCODE c3_FancyWindow::AddBordersToUI()
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-
-
-
-
 
 	return errcode;
 }
@@ -176,25 +150,15 @@ AUI_ERRCODE c3_FancyWindow::RemoveBordersFromUI()
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-
-
-
-
-
 	return errcode;
 }
-
-
-
-
-
 
 AUI_ERRCODE	c3_FancyWindow::Resize( sint32 width, sint32 height )
 {
 	C3Window::Resize(width, height);
 
 	sint32 lx = 0;
-    sint32 rx = width - m_originalDimensions.x;
+	sint32 rx = width - m_originalDimensions.x;
 	sint32 ty = 0;
 
 #if 0
@@ -213,7 +177,7 @@ AUI_ERRCODE	c3_FancyWindow::Resize( sint32 width, sint32 height )
 #endif
 
 	m_originalDimensions.x = width;
-    m_originalDimensions.y = height;
+	m_originalDimensions.y = height;
 
 	return AUI_ERRCODE_OK;
 }

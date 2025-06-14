@@ -19,7 +19,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	c3_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -30,7 +30,7 @@ public:
 		const MBCHAR *text,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		sint32 state = 0,
 		sint32 numStates = k_C3_HEADERSWITCH_DEFAULTNUMSTATES );
 	virtual ~c3_HeaderSwitch();

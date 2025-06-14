@@ -277,7 +277,7 @@ void DomesticControlPanel::Update()
 }
 
 void DomesticControlPanel::EditResearchButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))

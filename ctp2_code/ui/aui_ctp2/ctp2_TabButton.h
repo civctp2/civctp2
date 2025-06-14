@@ -18,7 +18,7 @@ public:
 	};
 
 	ctp2_TabButton(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
-		ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
+		ControlActionCallback *ActionFunc = NULL, Cookie cookie = NULL);
 
 	virtual ~ctp2_TabButton();
 

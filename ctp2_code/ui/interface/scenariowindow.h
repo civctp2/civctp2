@@ -77,18 +77,18 @@ public:
 	static void			SetExitCallback(aui_Control::ControlActionCallback *callback);
 	aui_Control::ControlActionCallback *GetExitCallback(void) { return m_exitCallback; }
 
-	static void ScenarioSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void CancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void OkPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void SavePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void NewPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void BackPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ScenarioSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void CancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void OkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void SavePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void NewPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void BackPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void NewPackOk(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void NewPackCancel(aui_Control *control, uint32 action, uint32 data, void *cookie );
+	static void NewPackOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void NewPackCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-	static void NewScenOk(aui_Control *control, uint32 action, uint32 data, void *cookie );
-	static void NewScenCancel(aui_Control *control, uint32 action, uint32 data, void *cookie );
+	static void NewScenOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+	static void NewScenCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 	static void SetProfileFromScenario( void );
 	static void LoadScenarioGame( void );

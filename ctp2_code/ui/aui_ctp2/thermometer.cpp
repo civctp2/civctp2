@@ -23,7 +23,7 @@ Thermometer::Thermometer(
 	const MBCHAR *pattern,
 	sint32 percentFilled,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase((sint32)0),
 	aui_TextBase((MBCHAR *)NULL),
@@ -38,7 +38,7 @@ Thermometer::Thermometer(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL),
@@ -62,10 +62,6 @@ AUI_ERRCODE Thermometer::InitCommonLdl( const MBCHAR *ldlBlock )
 
 AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -94,14 +90,15 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	COLOR		color;
 
-    Assert(m_percentFilled >= 0);
+	Assert(m_percentFilled >= 0);
 
-    if (m_percentFilled < 0)
-        m_percentFilled=0;
-    Assert(m_percentFilled <= 100);
+	if (m_percentFilled < 0)
+		m_percentFilled=0;
 
-    if (100 < m_percentFilled)
-        m_percentFilled=100;
+	Assert(m_percentFilled <= 100);
+
+	if (100 < m_percentFilled)
+		m_percentFilled=100;
 
 	if (m_percentFilled < 25) {
 		color = COLOR_RED;
@@ -130,6 +127,6 @@ AUI_ERRCODE Thermometer::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 void Thermometer::SetPercentFilled( sint32 percentFilled )
 {
-    m_percentFilled = std::min<sint32>(100, percentFilled);
-    m_draw         |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
+	m_percentFilled = std::min<sint32>(100, percentFilled);
+	m_draw         |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 }

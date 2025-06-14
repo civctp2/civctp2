@@ -332,14 +332,14 @@ void IntelligenceWindow::Update(ctp2_ListBox *theList)
 	}
 }
 
-void IntelligenceWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void IntelligenceWindow::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	Hide();
 }
 
-void IntelligenceWindow::Negotiations(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void IntelligenceWindow::Negotiations(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -347,7 +347,7 @@ void IntelligenceWindow::Negotiations(aui_Control *control, uint32 action, uint3
 	DiplomacyWindow::Display();
 }
 
-void IntelligenceWindow::Advice(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void IntelligenceWindow::Advice(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -649,13 +649,13 @@ void IntelligenceWindow::InitImageTables()
 	}
 }
 
-void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != k_CTP2_STATIC_ACTION_LMOUSE) return;
 
 	if(!sm_list) return;
 
-	ctp2_ListItem *item = (ctp2_ListItem *)cookie;
+	ctp2_ListItem *item = (ctp2_ListItem *)cookie.m_voidPtr;
 
 	if(sm_list->GetSelectedItem() == item) {
 		sm_list->DeselectItem(item);
@@ -667,22 +667,22 @@ void IntelligenceWindow::SelectItem(aui_Control *control, uint32 action, uint32 
 
 }
 
-void intelligence_DeclareWarCallback(bool response, void *cookie)
+void intelligence_DeclareWarCallback(bool response, Cookie cookie)
 {
 	if(response) {
 		if(g_network.IsClient()) {
-			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, (sint32)cookie));
+			g_network.SendAction(new NetAction(NET_ACTION_DECLARE_WAR, cookie.m_sin32Type));
 		}
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar((sint32)cookie);
-		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DeclareWar(cookie.m_sin32Type);
+		DiplomacyWindow::EnableButtons(TRUE, cookie.m_sin32Type);
 	}
 }
 
-void intelligence_DeclarEmbargoCallback(bool response, void *cookie)
+void intelligence_DeclarEmbargoCallback(bool response, Cookie cookie)
 {
 	if(response) {
-		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo((sint32)cookie, 1);
-		DiplomacyWindow::EnableButtons(TRUE, reinterpret_cast<sint32>(cookie));
+		Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).SetEmbargo(cookie.m_sin32Type, 1);
+		DiplomacyWindow::EnableButtons(TRUE, cookie.m_sin32Type);
 	}
 }
 
@@ -705,7 +705,7 @@ void IntelligenceWindow::DeclareWarOnSelected()
 	so.AddPlayer(player);
 	stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_IW_CONFIRM_WAR"), so, buf, k_MAX_NAME_LEN);
 
-	MessageBoxDialog::Query(buf, "QueryDeclareWar", intelligence_DeclareWarCallback, (void *)player);
+	MessageBoxDialog::Query(buf, "QueryDeclareWar", intelligence_DeclareWarCallback, player);
 }
 
 void IntelligenceWindow::DeclareEmbargoOnSelected()
@@ -727,7 +727,7 @@ void IntelligenceWindow::DeclareEmbargoOnSelected()
 	so.AddPlayer(player);
 	stringutils_Interpret(g_theStringDB->GetNameStr("str_ldl_IW_CONFIRM_EMBARGO"), so, buf, k_MAX_NAME_LEN);
 
-	MessageBoxDialog::Query(buf, "QueryDeclareEmbargo", intelligence_DeclarEmbargoCallback, (void *)player);
+	MessageBoxDialog::Query(buf, "QueryDeclareEmbargo", intelligence_DeclarEmbargoCallback, player);
 }
 
 void IntelligenceWindow::SendMessageToSelected()

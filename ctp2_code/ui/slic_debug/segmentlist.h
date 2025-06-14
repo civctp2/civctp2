@@ -63,7 +63,7 @@ private:
 
 	SegmentListCallback *           m_callback;
 
-    friend void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+    friend void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 };
 
 

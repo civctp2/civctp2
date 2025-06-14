@@ -84,7 +84,7 @@
 
 extern C3UI *g_c3ui;
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 const uint32 NetAction::m_args[NET_ACTION_NULL] = {
 	2,

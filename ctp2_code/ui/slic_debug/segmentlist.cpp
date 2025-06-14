@@ -133,14 +133,14 @@ SegmentList::~SegmentList(void)
 	delete m_window;
 }
 
-void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
-	SegmentList *list = (SegmentList *)cookie;
+	SegmentList *list = (SegmentList *)cookie.m_voidPtr;
 
 	SegmentListItem *item = (SegmentListItem *)list->GetList()->GetSelectedItem();
 
@@ -158,7 +158,7 @@ void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data,
 	return;
 }
 
-void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_BUTTON_ACTION_EXECUTE) {
 		if(control == g_segmentList->m_watchButton) {

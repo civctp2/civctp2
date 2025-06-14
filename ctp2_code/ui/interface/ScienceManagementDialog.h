@@ -84,13 +84,13 @@ private:
 	ctp2_Static *GetListItemColumn(ctp2_ListItem *item, sint32 column);
 
 	static void CloseButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void HyperlinkActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void EditResearchButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE DrawScienceBar(ctp2_Static *control,
 									  aui_Surface *surface,
@@ -98,7 +98,7 @@ private:
 									  Cookie cookie );
 
 	static void AdvanceListCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE ColorBoxActionCallback(ctp2_Static *control,
 		aui_Surface *surface, RECT &rect, Cookie cookie);

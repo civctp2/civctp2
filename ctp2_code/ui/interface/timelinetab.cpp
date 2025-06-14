@@ -78,12 +78,12 @@ TimelineTab::TimelineTab(ctp2_Window *parent) :
 	m_currentWonderDisplay=0;
 }
 
-void TimelineTab::EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TimelineTab::EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	TimelineTab *tab = (TimelineTab *)cookie;
+	TimelineTab *tab = (TimelineTab *)cookie.m_voidPtr;
 	tab->doButtonCallback((ctp2_Button *)control);
 }
 

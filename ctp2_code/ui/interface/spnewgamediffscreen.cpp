@@ -117,7 +117,7 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	if(reinit)
 	{
-		s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(spnewgamediffscreen_backPress,NULL);
+		s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(spnewgamediffscreen_backPress, NULL);
 	}
 
 	AUI_ERRCODE auiErr;
@@ -295,7 +295,7 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-void spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	spnewgamediffscreen_removeMyWindow(action) ;
 }

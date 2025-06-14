@@ -63,7 +63,7 @@ public:
 private:
 
 	static void EditResearchButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	void UpdateScience();
 

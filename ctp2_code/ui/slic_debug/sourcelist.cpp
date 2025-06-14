@@ -76,22 +76,22 @@ class SourceListItemContinueAction : public aui_Action
 {
 public:
 	SourceListItemContinueAction(SourceListItem *item)
-    :   aui_Action  (),
-        m_item      (item)
-    { ; };
-    virtual ~SourceListItemContinueAction(void) { ; };
+	:   aui_Action  (),
+	    m_item      (item)
+	{ ; };
+	virtual ~SourceListItemContinueAction(void) { ; };
 
 	virtual void Execute
-    (
-        aui_Control *   control,
+	(
+	    aui_Control *   control,
 	    uint32          action,
 	    uint32          data
-    )
+	)
 	{
-        if (m_item)
-        {
-		    m_item->Continue();
-        }
+		if (m_item)
+		{
+			m_item->Continue();
+		}
 	}
 
 private:
@@ -153,10 +153,10 @@ SourceList::SourceList(SourceListCallback *callback, const MBCHAR *ldlBlock)
 
 SourceList::~SourceList(void)
 {
-    if (g_c3ui && m_window)
-    {
-	    g_c3ui->RemoveWindow(m_window->Id());
-    }
+	if (g_c3ui && m_window)
+	{
+		g_c3ui->RemoveWindow(m_window->Id());
+	}
 
 	delete m_continue;
 	delete m_list;
@@ -169,14 +169,14 @@ SourceList::~SourceList(void)
 	// m_segment  : reference only
 }
 
-void SourceListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SourceListActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
-	SourceList *list = (SourceList *)cookie;
+	SourceList *list = (SourceList *)cookie.m_voidPtr;
 
 	SourceListItem *item = (SourceListItem *)list->GetList()->GetSelectedItem();
 
@@ -194,7 +194,7 @@ void SourceListActionCallback(aui_Control *control, uint32 action, uint32 data, 
 	return;
 }
 
-void SourceListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SourceListButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_BUTTON_ACTION_EXECUTE) {
 		if(control == g_sourceList->m_continue) {
@@ -220,9 +220,6 @@ sint32 SourceList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-
-
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "SourceList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, SourceListActionCallback, this);
@@ -269,18 +266,18 @@ sint32 SourceList::Initialize(const MBCHAR *windowBlock)
 
 void SourceList::Cleanup(void)
 {
-    if (g_c3ui && m_window)
-    {
-        g_c3ui->RemoveWindow(m_window->Id());
-    }
+	if (g_c3ui && m_window)
+	{
+		g_c3ui->RemoveWindow(m_window->Id());
+	}
 
 #define mycleanup(mypointer) delete mypointer; mypointer = NULL;
-    mycleanup(m_continue);
-    mycleanup(m_list);
-    mycleanup(m_window);
+	mycleanup(m_continue);
+	mycleanup(m_list);
+	mycleanup(m_window);
 #undef mycleanup
 
-    m_callback = NULL;
+	m_callback = NULL;
 }
 
 void SourceList::DisplayWindow(SlicSegment *segment)
@@ -403,9 +400,6 @@ void SourceList::StepInto()
 	Continue();
 }
 
-
-
-
 SourceListItem::SourceListItem(AUI_ERRCODE *retval, sint32 index,
 							   SlicSegment *segment, MBCHAR *line,
 							   sint32 lineNumber, const MBCHAR *ldlBlock) :
@@ -429,13 +423,13 @@ SourceListItem::SourceListItem(AUI_ERRCODE *retval, sint32 index,
 	if(!AUI_SUCCESS(*retval)) return;
 }
 
-void SourceBreakItemCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SourceBreakItemCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == k_C3_STATIC_ACTION_LMOUSE) {
-		SourceListItem *item = (SourceListItem *)cookie;
+		SourceListItem *item = (SourceListItem *)cookie.m_voidPtr;
 		item->ToggleBreak();
 	} else if(action == k_C3_STATIC_ACTION_RMOUSE) {
-		SourceListItem *item = (SourceListItem *)cookie;
+		SourceListItem *item = (SourceListItem *)cookie.m_voidPtr;
 		item->EditConditional();
 	}
 }
@@ -572,11 +566,11 @@ void SourceListItemConditionalCallback(MBCHAR const *text, sint32 val2, void *da
 
 	SlicConditional *cond = item->GetSegment()->GetConditional(item->GetLineNumber());
 	if (cond)
-    {
+	{
 		cond->SetExpression(text);
-    }
-    else
-    {
+	}
+	else
+	{
 		cond = item->GetSegment()->NewConditional(item->GetLineNumber(), text);
 		Assert(cond);
 	}

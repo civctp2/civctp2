@@ -23,7 +23,7 @@ class EffectActor;
 class aui_Image;
 class c3_Icon;
 class Battle;
-
+union Cookie;
 
 
 
@@ -35,7 +35,7 @@ struct SortedActor {
 };
 
 void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action,
-											uint32 data, void *cookie );
+											uint32 data, Cookie cookie );
 
 class BattleView
 {
@@ -43,16 +43,10 @@ public:
 	BattleView();
 	~BattleView();
 
-
-
-
 	bool IsProcessing() const
-    {
-        return(!m_activeEvents->IsEmpty() || !m_eventQueue->IsEmpty());
-    }
-
-
-
+	{
+		return(!m_activeEvents->IsEmpty() || !m_eventQueue->IsEmpty());
+	}
 
 	bool IsCurrentBattle(const Battle *battle) const
 	{

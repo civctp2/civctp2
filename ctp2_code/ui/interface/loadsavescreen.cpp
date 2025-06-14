@@ -115,7 +115,7 @@ static aui_StringTable *    s_nameString		= NULL;
 
 
 
-void loadsavescreen_deleteDialog( bool response, void *data )
+void loadsavescreen_deleteDialog( bool response, Cookie data )
 {
 	if ( !response ) return;
 
@@ -203,15 +203,15 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 void loadsavescreen_Cleanup()
 {
 	if (g_loadsaveWindow)
-    {
-        if (g_c3ui)
-        {
-	        g_c3ui->RemoveWindow(g_loadsaveWindow->Id());
-        }
-	    keypress_RemoveHandler(g_loadsaveWindow);
+	{
+		if (g_c3ui)
+		{
+			g_c3ui->RemoveWindow(g_loadsaveWindow->Id());
+		}
+		keypress_RemoveHandler(g_loadsaveWindow);
 
-        allocated::clear(g_loadsaveWindow);
-    }
+		allocated::clear(g_loadsaveWindow);
+	}
 }
 
 void loadsavescreen_PostCleanupAction(void)
@@ -270,7 +270,7 @@ void loadsavescreen_SetupHotseatOrEmail(void)
 
 
 
-void loadsavescreen_DifficultyScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void loadsavescreen_DifficultyScreenActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -291,7 +291,7 @@ void loadsavescreen_DifficultyScreenActionCallback(aui_Control *control, uint32 
 
 
 
-void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -370,7 +370,7 @@ void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 actio
 
 
 
-void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -1023,7 +1023,7 @@ BOOL loadsavescreen_CheckOverwrite( void );
 // CallBacks
 /////////////////////////////////////////////////////////////
 
-void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	// calling function should do what ever necessary to continue game state
 	// this is all this callback should do
@@ -1065,7 +1065,7 @@ void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 dat
 
 /////////////////////////////////////////////////////////////
 
-void loadsavescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -1153,7 +1153,7 @@ void loadsavescreen_delete( void )
 	}
 }
 
-void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -1168,7 +1168,7 @@ void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data
 
 /////////////////////////////////////////////////////////////
 
-void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	// We only care about select actions
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -1217,7 +1217,7 @@ void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 d
 
 /////////////////////////////////////////////////////////////
 
-void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	// We only care about select actions
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -1298,7 +1298,7 @@ void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 d
 
 /////////////////////////////////////////////////////////////
 
-void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT )
 		return;
@@ -1307,7 +1307,7 @@ void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 d
 /////////////////////////////////////////////////////////////
 
 /////////////////////////////////////////////////////////////
-void loadsavescreen_OverwriteCallback( bool response, void *data )
+void loadsavescreen_OverwriteCallback( bool response, Cookie data )
 {
 	if ( response ) {
 

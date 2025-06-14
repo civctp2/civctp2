@@ -28,7 +28,7 @@ ColorIconSwitch::ColorIconSwitch(
 	const MBCHAR *pattern,
 	const MBCHAR *icon,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH ),
 	aui_TextBase(NULL),
@@ -47,7 +47,7 @@ ColorIconSwitch::ColorIconSwitch(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),

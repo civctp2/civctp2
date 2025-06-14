@@ -626,7 +626,7 @@ AUI_ERRCODE DiplomacyDetails::Hide()
 	return g_c3ui->RemoveWindow(s_DiplomacyDetails->m_window->Id());
 }
 
-void DiplomacyDetails::CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyDetails::CancelCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -680,10 +680,10 @@ AUI_ERRCODE DiplomacyDetails::DrawPlayerFlag(ctp2_Static *control,
 	return g_c3ui->TheBlitter()->ColorBlt16(surface, &rect, g_colorSet->GetPlayerColor(player), 0);
 }
 
-void DiplomacyDetails::SelectItem(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyDetails::SelectItem(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != k_CTP2_STATIC_ACTION_LMOUSE) return;
-	ctp2_ListItem *item = (ctp2_ListItem *)cookie;
+	ctp2_ListItem *item = (ctp2_ListItem *)cookie.m_voidPtr;
 
 	if(!sm_list) return;
 

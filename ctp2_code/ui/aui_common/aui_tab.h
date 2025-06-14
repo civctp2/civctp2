@@ -44,7 +44,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	aui_Tab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -55,7 +55,7 @@ public:
 		sint32 paneWidth,
 		sint32 paneHeight,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		sint32 state = 0,
 		sint32 numStates = k_AUI_SWITCH_DEFAULTNUMSTATES );
 	virtual ~aui_Tab();

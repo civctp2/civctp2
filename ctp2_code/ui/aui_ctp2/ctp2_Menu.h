@@ -63,7 +63,7 @@ class ctp2_Menu {
 	void Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callback);
 
 	void ListCallback(aui_Control *control, uint32 action, uint32 data);
-	static void StaticListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void StaticListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	void Resize();
 

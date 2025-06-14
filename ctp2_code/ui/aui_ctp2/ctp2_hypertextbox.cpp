@@ -287,7 +287,7 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 
 	aui_ImageBase( ldlBlock ),
@@ -332,7 +332,7 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 	sint32 height,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -383,7 +383,7 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommon( void )
 ctp2_HyperTextBox::~ctp2_HyperTextBox()
 {
 	if (m_hyperLinkList)
-    {
+	{
 		RemoveHyperLinks();
 		delete m_hyperLinkList;
 	}

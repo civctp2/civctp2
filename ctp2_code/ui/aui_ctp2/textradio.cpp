@@ -19,7 +19,7 @@ TextRadio::TextRadio(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -39,7 +39,7 @@ TextRadio::TextRadio(
 	const MBCHAR *pattern,
 	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 	:
 	aui_ImageBase( (sint32)0 ),

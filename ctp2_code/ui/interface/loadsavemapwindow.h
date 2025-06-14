@@ -87,12 +87,12 @@ AUI_ERRCODE loadsavemapscreen_Initialize(
 	aui_Control::ControlActionCallback *callback = NULL );
 void loadsavemapscreen_Cleanup(void);
 
-void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 //----------------------------------------------------------------------------
 // Class declarations

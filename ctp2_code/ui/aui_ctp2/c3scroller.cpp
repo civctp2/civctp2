@@ -25,7 +25,7 @@ C3Scroller::C3Scroller
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
     aui_ImageBase( ldlBlock ),
@@ -84,7 +84,7 @@ C3Scroller::C3Scroller
 	bool isVertical,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
     aui_ImageBase( (sint32)0 ),

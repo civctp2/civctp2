@@ -186,7 +186,7 @@ extern ChatBox *g_chatBox;
 
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 void network_AbortCallback( sint32 type )
 {

@@ -148,14 +148,14 @@ WatchList::~WatchList(void)
 	delete m_window;
 }
 
-void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
-	WatchList *list = (WatchList *)cookie;
+	WatchList *list = (WatchList *)cookie.m_voidPtr;
 
 	WatchListItem *item = (WatchListItem *)list->GetList()->GetSelectedItem();
 
@@ -173,7 +173,7 @@ void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, v
 	return;
 }
 
-void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -199,9 +199,6 @@ sint32 WatchList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-
-
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "WatchList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, WatchListActionCallback, this);
@@ -312,18 +309,18 @@ WatchListItem::~WatchListItem()
 	}
 }
 
-void WatchExpressionItemCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchExpressionItemCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) {
-		WatchListItem *item = (WatchListItem *)cookie;
+		WatchListItem *item = (WatchListItem *)cookie.m_voidPtr;
 		item->Update();
 	}
 }
 
-void WatchBreakItemCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchBreakItemCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) {
-		WatchListItem *item = (WatchListItem *)cookie;
+		WatchListItem *item = (WatchListItem *)cookie.m_voidPtr;
 		item->ToggleBreak();
 		item->Update();
 	}

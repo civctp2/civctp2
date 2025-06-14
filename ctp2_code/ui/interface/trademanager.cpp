@@ -114,20 +114,20 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 
 	Assert(m_createList);
 
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market", TabCallback, (void *)0);
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary", TabCallback, (void *)1);
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import", TabCallback, (void *)2);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market", TabCallback, (sint32)0);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary", TabCallback, (sint32)1);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import", TabCallback, (sint32)2);
 
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, NULL);
 	
 	m_createButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton");
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton", CreateRoute, (void *)0);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton", CreateRoute, (sint32)0);
 
 	m_breakButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton");
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton", CreateRoute, (void *)1);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary.TabPanel.BreakRouteButton", CreateRoute, (sint32)1);
 
 	m_breakImpBut = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton");
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton", CreateRoute, (void *)2);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton", CreateRoute, (sint32)2);
 
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "ShowAdviceButton", ShowAdvice, NULL);
 
@@ -156,9 +156,9 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	m_friendlyCitiesButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.Filters.FriendlyButton");
 	m_allCitiesButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.Filters.AllButton");
 
-	m_ownCitiesButton->SetActionFuncAndCookie(CityFilterButton, (void *)TRADE_CITIES_OWN);
-	m_friendlyCitiesButton->SetActionFuncAndCookie(CityFilterButton, (void *)TRADE_CITIES_FRIENDLY);
-	m_allCitiesButton->SetActionFuncAndCookie(CityFilterButton, (void *)TRADE_CITIES_ALL);
+	m_ownCitiesButton->SetActionFuncAndCookie(CityFilterButton, (sint32)TRADE_CITIES_OWN);
+	m_friendlyCitiesButton->SetActionFuncAndCookie(CityFilterButton, (sint32)TRADE_CITIES_FRIENDLY);
+	m_allCitiesButton->SetActionFuncAndCookie(CityFilterButton, (sint32)TRADE_CITIES_ALL);
 
 	m_showCities = TRADE_CITIES_OWN;
 	m_ownCitiesButton->SetToggleState(true);
@@ -173,13 +173,14 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	*err = AUI_ERRCODE_OK;
 }
 
-void TradeManager::TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::TabCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
 	
-	if(sint32(cookie) > 0){ // avoid updating market tab, which can take very long and only needs to be updated in case of cancelling a route
-	    s_tradeManager->Update();
-	    }
+	if(cookie.m_sin32Type > 0)  // avoid updating market tab, which can take very long and only needs to be updated in case of cancelling a route
+	{
+		s_tradeManager->Update();
+	}
 }
 
 TradeManager::~TradeManager()
@@ -815,14 +816,14 @@ void TradeManager::UpdateSummaryList(ctp2_ListBox *summaryList, bool source)
 	m_breakImpBut->Enable(FALSE);
 }
 
-void TradeManager::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	TradeManager::Hide();
 }
 
-void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidata, void *cookie)
+void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidata, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -830,7 +831,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 	if(!s_tradeManager) return;
 
 //	ctp2_Static *market = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "Market");
-	switch(sint32(cookie)) {
+	switch(cookie.m_sin32Type) {
 	case 0: {
 		Assert(s_tradeManager->m_createList);
 		if(!s_tradeManager->m_createList) return;
@@ -861,7 +862,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 	    }
 	case 1:
 	case 2: {
-		bool source = sint32(cookie) == 1;
+		bool source = cookie.m_sin32Type == 1;
 		ctp2_ListBox *summaryList;
 		summaryList= source ? s_tradeManager->m_summaryList : s_tradeManager->m_importList;
 
@@ -889,7 +890,7 @@ void TradeManager::CreateRoute(aui_Control *control, uint32 action, uint32 uidat
 	} //switch
 }
 
-void TradeManager::ShowAdvice(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::ShowAdvice(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -903,7 +904,7 @@ void TradeManager::ShowAdvice(aui_Control *control, uint32 action, uint32 data, 
 	s_tradeManager->UpdateAdviceWindow();
 }
 
-void TradeManager::Summary(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::Summary(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1089,7 +1090,7 @@ AUI_ERRCODE TradeManager::DrawPiracyColumn(ctp2_Static *control,
 	return g_c3ui->TheBlitter()->ColorBlt16(surface, &rect, color, 0);
 }
 
-void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		return;
@@ -1125,7 +1126,7 @@ void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		return;
@@ -1239,7 +1240,7 @@ void TradeManager::FilterButtonActivated(aui_Control *control)
 	UpdateCreateList(g_selected_item->GetVisiblePlayer());
 }
 
-void TradeManager::CityFilterButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::CityFilterButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1257,7 +1258,7 @@ void TradeManager::SetNumCities(sint32 num)
 	m_numCitiesLabel->SetText(buf);
 }
 
-void TradeManager::NumCitiesSlider(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TradeManager::NumCitiesSlider(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(!s_tradeManager) return;
 	switch(action) {

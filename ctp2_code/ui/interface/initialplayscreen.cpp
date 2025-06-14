@@ -190,7 +190,7 @@ void initialplayscreen_Cleanup(void)
 
 
 void
-spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+spritetest_spPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -216,7 +216,7 @@ spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cooki
 }
 
 void
-initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -225,7 +225,7 @@ initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, void
 	NetShell::Enter( k_NS_FLAGS_CREATE );
 }
 
-void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -235,7 +235,7 @@ void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -246,19 +246,19 @@ void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 da
 }
 
 void
-initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 		loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 }
 void
-initialplayscreen_continuePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_continuePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 }
 void
-initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -266,13 +266,13 @@ initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data,
 	g_civApp->PostStartGameAction();
 }
 void
-initialplayscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 }
 
 void
-initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -281,7 +281,7 @@ initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, vo
 	ExitGame();
 }
 void
-initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -289,21 +289,21 @@ initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data,
 }
 
 // Code for new buttons taked from spscreen.cpp (and altered)
-void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	if(initialplayscreen_removeMyWindow(action))
 		spnewgamescreen_displayMyWindow();
 }
 
-void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 }
 
-void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -320,7 +320,7 @@ void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32
 	}
 }
 
-void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

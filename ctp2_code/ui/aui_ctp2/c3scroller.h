@@ -23,7 +23,7 @@ public:
 	    uint32 id,
 	    const MBCHAR *ldlBlock,
 	    ControlActionCallback *ActionFunc = NULL,
-	    void *cookie = NULL
+		Cookie cookie = NULL
 	);
 	C3Scroller
 	(
@@ -36,7 +36,7 @@ public:
 		bool   isVertical,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL
+		Cookie cookie = NULL
 	);
 
 	virtual AUI_ERRCODE DrawThis

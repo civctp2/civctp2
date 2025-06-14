@@ -62,10 +62,10 @@ public:
     {};
 
 	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, const MBCHAR *ldlBlock,
-							ControlActionCallback *ActionFunc=NULL, void *cookie=NULL );
+							ControlActionCallback *ActionFunc = NULL, Cookie cookie = NULL );
 	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 							const MBCHAR *pattern, sint32 bevelwidth = 0, sint32 beveltype = 0,
-							ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
+							ControlActionCallback *ActionFunc = NULL, Cookie cookie = NULL);
 
 	virtual ~ctp2_ListBox();
 

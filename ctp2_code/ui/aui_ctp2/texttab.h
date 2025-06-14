@@ -17,7 +17,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL);
+		Cookie cookie = NULL);
 	TextTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -30,7 +30,7 @@ public:
 		const MBCHAR *pattern = NULL,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		BOOL selected = FALSE );
 	virtual ~TextTab() {}
 

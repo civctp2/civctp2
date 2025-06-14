@@ -20,7 +20,7 @@ c3_Switch::c3_Switch(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -44,7 +44,7 @@ c3_Switch::c3_Switch(
 	sint32 height,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:

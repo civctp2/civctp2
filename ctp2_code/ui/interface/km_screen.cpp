@@ -521,14 +521,14 @@ void km_screen_Cleanup()
 
 
 
-void km_screen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void km_screen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(km_screen_removeMyWindow(action))
 	{
 	}
 }
 
-void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -537,7 +537,7 @@ void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void
 	km_screen_loadKeyList();
 }
 
-void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (AUI_SWITCH_ACTION_ON == action)
 	{

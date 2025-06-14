@@ -250,14 +250,14 @@ void TurnYearStatus::Update()
 }
 
 void TurnYearStatus::TurnYearStatusActionCallback(aui_Control *control, uint32 action,
-												  uint32 data, void *cookie)
+												  uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
 
-	TurnYearStatus *turnYearStatus = static_cast<TurnYearStatus*>(cookie);
+	TurnYearStatus *turnYearStatus = static_cast<TurnYearStatus*>(cookie.m_voidPtr);
 
 	turnYearStatus->m_displayType = static_cast<DisplayType>(
 		(turnYearStatus->m_displayType + 1) % NUMBER_OF_DISPLAY_TYPES);

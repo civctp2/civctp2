@@ -119,7 +119,7 @@ static ctp2_Static              *s_wonderBlock;
 static ctp2_Static              **s_wonderIcons;
 
 
-void VictoryWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void VictoryWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -137,7 +137,7 @@ void VictoryWindowButtonActionCallback( aui_Control *control, uint32 action, uin
 	}
 }
 
-void LineOrZeroSumButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LineOrZeroSumButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -147,11 +147,11 @@ void LineOrZeroSumButtonActionCallback(aui_Control *control, uint32 action, uint
 	g_victoryWindow->m_window->Draw();
 }
 
-void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void HighScoreWinButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	HighScoreWindowPopup *popup = (HighScoreWindowPopup *)cookie;
+	HighScoreWindowPopup *popup = (HighScoreWindowPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_continueButton)

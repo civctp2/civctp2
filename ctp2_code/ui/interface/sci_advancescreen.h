@@ -7,14 +7,15 @@
 #define k_SCI_INCLUDE_CANCEL		1
 
 class aui_Control;
+union Cookie;
 
 sint32 sci_advancescreen_displayMyWindow( const MBCHAR *messageText = NULL, sint32 from = 0);
 sint32 sci_advancescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE sci_advancescreen_Initialize( const MBCHAR *messageText = NULL );
 void sci_advancescreen_Cleanup(void);
 
-void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 sint32 sci_advancescreen_loadList( void );
 sint32 sci_advancescreen_updateData( const MBCHAR *messageText = NULL, BOOL defaultMessage = TRUE );

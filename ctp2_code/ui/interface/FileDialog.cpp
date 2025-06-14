@@ -171,11 +171,11 @@ const MBCHAR *FileDialog::GetSelectedFile()
 	return file;
 }
 
-void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	if(di->m_callback) {
 		MBCHAR full[_MAX_PATH];
 		sprintf(full, "%s%s%s", di->m_dirPath, FILE_SEP, di->GetSelectedFile());
@@ -184,10 +184,10 @@ void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, 
 	di->Close();
 }
 
-void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	if(di->m_callback) {
 		MBCHAR full[_MAX_PATH];
 		sprintf(full, "%s%s%s", di->m_dirPath, FILE_SEP, di->GetSelectedFile());
@@ -196,10 +196,10 @@ void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, 
 	di->Close();
 }
 
-void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	if(di->m_callback) {
 		di->m_callback(di, k_FILE_DIALOG_CANCEL, NULL, di->m_cookie);
 	}
@@ -207,13 +207,13 @@ void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data
 
 }
 
-void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		return;
 	}
 
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	Assert(di);
 	if(!di) return;
 
@@ -241,10 +241,10 @@ void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void FileDialog::NameCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::NameCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_TEXTFIELD_ACTION_EXECUTE) return;
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	Assert(di);
 	if(!di) return;
 

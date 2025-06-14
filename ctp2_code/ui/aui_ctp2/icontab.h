@@ -27,7 +27,7 @@ public:
 		Icon *icon = NULL,
 		uint16 color = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		BOOL selected = FALSE );
 	virtual ~IconTab() {}
 

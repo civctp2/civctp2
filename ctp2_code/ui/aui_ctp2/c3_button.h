@@ -35,7 +35,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	c3_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -45,7 +45,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~c3_Button() {}
 
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };
@@ -57,12 +57,12 @@ public:
 
 protected:
 	c3_Button()
-    :
-        aui_Button      (),
-        PatternBase     (),
-        m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
-        m_bevelType     (0)
-    {};
+	:
+	    aui_Button      (),
+	    PatternBase     (),
+	    m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
+	    m_bevelType     (0)
+	{};
 
 	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 
@@ -80,7 +80,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	c3_EditButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -90,7 +90,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~c3_EditButton();
 
 	sint32		GetValue( void ) const { return m_val; }
@@ -105,15 +105,15 @@ public:
 
 protected:
 	c3_EditButton()
-    :
-        c3_Button       (),
+	:
+	    c3_Button       (),
 	    m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
 	    m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
 	    m_max           (k_C3_EDITBUTTON_DEFAULTMAX),
-        m_field         (NULL),
-        m_origAction    (NULL),
+	    m_field         (NULL),
+	    m_origAction    (NULL),
 	    m_origCallback  (NULL)
-    {};
+	{};
 
 	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 
@@ -127,14 +127,14 @@ private:
 	union
 	{
 		aui_Action *m_origAction;
-		void *m_origCookie;
+		Cookie m_origCookie;
 	};
 	ControlActionCallback * m_origCallback;
 
 	AUI_ERRCODE CreateFieldAndActions( const MBCHAR *ldlBlock = NULL );
 };
 
-void c3_EditButtonCallback( aui_Control *, uint32, uint32, void * );
-void c3_EditButtonFieldCallback( aui_Control *, uint32, uint32, void * );
+void c3_EditButtonCallback( aui_Control *, uint32, uint32, Cookie);
+void c3_EditButtonFieldCallback( aui_Control *, uint32, uint32, Cookie);
 
 #endif

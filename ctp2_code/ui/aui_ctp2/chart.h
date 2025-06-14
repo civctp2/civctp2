@@ -29,7 +29,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	Chart(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -39,7 +39,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	AUI_ERRCODE InitCommon( const MBCHAR *ldlBlock );
 
@@ -105,9 +105,9 @@ private:
 	sint32	m_distFromSide;
 };
 
-void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void ChartEitherPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void ChartCenterActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void ChartEitherPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void ChartCenterActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 #endif

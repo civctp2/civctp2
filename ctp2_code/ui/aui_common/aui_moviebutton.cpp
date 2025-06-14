@@ -19,7 +19,7 @@ aui_MovieButton::aui_MovieButton(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -45,7 +45,7 @@ aui_MovieButton::aui_MovieButton(
 	sint32 height,
 	const MBCHAR *movie,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),

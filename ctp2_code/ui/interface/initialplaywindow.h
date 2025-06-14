@@ -63,6 +63,7 @@ class c3_Button;
 class c3_Static;
 class ctp2_Button;
 class ctp2_Static;
+union Cookie;
 
 //----------------------------------------------------------------------------
 // Class declarations
@@ -72,14 +73,14 @@ class InitPlayWindow : public C3Window
 {
 public:
 	InitPlayWindow
-    (
+	(
 		AUI_ERRCODE *   retval,
 		uint32          id,
 		MBCHAR *        ldlBlock,
 		sint32          bpp,
 		AUI_WINDOW_TYPE type    = AUI_WINDOW_TYPE_STANDARD,
 		bool            bevel   = true
-    );
+	);
 
 private:
     std::unique_ptr<ctp2_Button>  m_spriteTest;
@@ -107,29 +108,29 @@ AUI_ERRCODE initialplayscreen_Initialize( void );
 void initialplayscreen_Cleanup(void);
 
 void
-spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+spritetest_spPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 void
-initialplayscreen_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_spPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_continuePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_continuePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void
-initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 #endif

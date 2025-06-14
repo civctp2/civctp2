@@ -42,7 +42,7 @@ Chart::Chart( AUI_ERRCODE *retval,
 			 uint32 id,
 			 const MBCHAR *ldlBlock,
 			 ControlActionCallback *ActionFunc,
-			 void *cookie )
+			 Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -59,7 +59,7 @@ Chart::Chart( AUI_ERRCODE *retval,
 			 sint32 height,
 			 const MBCHAR *pattern,
 			 ControlActionCallback *ActionFunc,
-			 void *cookie )
+			 Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -734,11 +734,11 @@ AUI_ERRCODE Chart::Update( sint32 index )
 	return AUI_ERRCODE_OK;
 }
 
-void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numPreReq = chart->GetNumPreReq();
 
 	for ( sint32 i = 0;i < numPreReq;i++ )
@@ -750,11 +750,11 @@ void ChartPreReqActionCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void ChartEitherPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ChartEitherPreReqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numEitherPreReq = chart->GetNumEitherPreReq();
 
 	for ( sint32 i = 0;i < numEitherPreReq;i++ )
@@ -766,11 +766,11 @@ void ChartEitherPreReqActionCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numLeadsTo = chart->GetNumLeadsTo();
 
 	for ( sint32 i = 0;i < numLeadsTo;i++ )
@@ -782,7 +782,7 @@ void ChartLeadsToActionCallback( aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void ChartCenterActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ChartCenterActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;

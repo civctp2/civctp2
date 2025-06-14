@@ -35,7 +35,7 @@ extern sint32	g_modalWindow;
 BattleViewWindow			*g_battleViewWindow = NULL;
 
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -51,7 +51,7 @@ void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, u
 }
 
 void battleview_RetreatButtonActionCallback(aui_Control *control, uint32 action,
-											uint32 data, void *cookie)
+											uint32 data, Cookie cookie)
 {
 
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE)

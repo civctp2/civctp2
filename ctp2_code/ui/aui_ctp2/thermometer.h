@@ -19,7 +19,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	Thermometer(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -30,7 +30,7 @@ public:
 		const MBCHAR *pattern,
 		sint32 percentFilled = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~Thermometer() {}
 
 	virtual AUI_ERRCODE DrawThis(

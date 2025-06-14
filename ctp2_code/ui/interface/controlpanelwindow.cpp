@@ -241,13 +241,13 @@ extern Network              g_network;
 extern FilenameDB           *g_theMessageIconFileDB;
 extern BOOL                 g_toeMode;
 
-void TileImpSelectionCallback (aui_Control *control, uint32 action, uint32 data, void *cookie);
+void TileImpSelectionCallback (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-void CityPanelDropDownCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void CityPanelNextCityCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+void CityPanelDropDownCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void CityPanelNextCityCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-void UnitPanelNextUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void UnitPanelListBoxCallback (aui_Control *control, uint32 action, uint32 data, void *cookie);
+void UnitPanelNextUnitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void UnitPanelListBoxCallback (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 #define k_CPW_THOUSAND  1000
 #define k_CPW_MILLION   1000000
@@ -258,14 +258,14 @@ void UnitPanelListBoxCallback (aui_Control *control, uint32 action, uint32 data,
 #define k_CPW_TRILLION  1000000000000ULL
 #endif
 
-void TurnNextUnitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TurnNextUnitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_selected_item->NextUnmovedUnit();
 }
 
-void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	if ( g_selected_item->GetState() == SELECT_TYPE_LOCAL_CITY )
@@ -292,7 +292,7 @@ void TurnNextCityButtonActionCallback( aui_Control *control, uint32 action, uint
 	controlpanelwindow_Update();
 }
 
-void CityPanelDropDownCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CityPanelDropDownCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT )
 		return;
@@ -300,7 +300,7 @@ void CityPanelDropDownCallback( aui_Control *control, uint32 action, uint32 data
 	g_controlPanel->CityPanelRedisplay();
 }
 
-void CityPanelNextCityCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CityPanelNextCityCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE )
 		return;
@@ -308,17 +308,17 @@ void CityPanelNextCityCallback( aui_Control *control, uint32 action, uint32 data
 	g_controlPanel->CityPanelNextCity();
 }
 
-void UnitPanelNextUnitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void UnitPanelNextUnitCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE )
 		return;
 
-	TurnNextUnitButtonActionCallback(control,action,data,cookie);
+	TurnNextUnitButtonActionCallback(control, action, data, cookie);
 
 	g_controlPanel->UnitPanelRedisplay();
 }
 
-void UnitPanelListBoxCallback ( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void UnitPanelListBoxCallback ( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT)
 		return;
@@ -327,12 +327,12 @@ void UnitPanelListBoxCallback ( aui_Control *control, uint32 action, uint32 data
 	g_controlPanel->UnitPanelRedisplay();
 }
 
-void TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != (uint32)AUI_SWITCH_ACTION_ON)
 		return;
 
-	uint32 index=(uint32)cookie;
+	uint32 index = cookie.m_uin32Type;
 
 	if (index>=CP_TILEIMP_MAX)
 		return;
@@ -340,17 +340,17 @@ void TileImpSelectionCallback(aui_Control *control, uint32 action, uint32 data, 
 	g_controlPanel->ActivateTileImpBank(index);
 }
 
-void TerraformToggleCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void TerraformToggleCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE )
 		return;
 }
 
-void TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, void *cookie)  //emod1 tileimps
+void TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, Cookie cookie)  //emod1 tileimps
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(sint32(cookie));
+	const TerrainImprovementRecord *rec =g_theTerrainImprovementDB->Get(cookie.m_sin32Type);
 
 	if (rec==NULL)
 		return;
@@ -358,7 +358,7 @@ void TileImpButtonCallback2(aui_Control *control, uint32 action, uint32 data, vo
 	g_controlPanel->BeginImprovementCycle((void *)rec);
 }
 
-void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ((action != AUI_LISTBOX_ACTION_SELECT) &&
 	    (action != AUI_LISTBOX_ACTION_RMOUSESELECT)
@@ -373,7 +373,7 @@ void controlpanelwindow_MessageListCallback(aui_Control *control, uint32 action,
 
 	if (item)
 	{
-		Message theMessage((uint32)item->GetCookie());
+		Message theMessage(item->GetCookie().m_uin32Type);
 
 		if (g_theMessagePool->IsValid(theMessage))
 		{
@@ -456,11 +456,11 @@ void HideControlPanel()
 	HideElement((aui_Window*)g_controlPanel->GetWindow());
 }
 
-void controlpanelwindow_DisbandCity(bool response, void *userData)
+void controlpanelwindow_DisbandCity(bool response, Cookie userData)
 {
 	if(response)
 	{
-		Unit city(reinterpret_cast<uint32>(userData));
+		Unit city(userData.m_sin32Type);
 		if(city.IsValid())
 		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_DisbandCity, GEA_City, city, GEA_End);
@@ -521,7 +521,7 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				}
 				else
 				{
-					MessageBoxDialog::Query("str_ldl_ND_VERIFY_DISBAND", "VerifyDisbandCity", controlpanelwindow_DisbandCity, (void *)city.m_id);
+					MessageBoxDialog::Query("str_ldl_ND_VERIFY_DISBAND", "VerifyDisbandCity", controlpanelwindow_DisbandCity, city.m_id);
 				}
 				break;
 			}
@@ -966,7 +966,7 @@ void cpw_DisbandCallback( sint32 val )
 	}
 }
 
-void controlPanel_popupPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void controlPanel_popupPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT )
 		return;
@@ -1594,13 +1594,13 @@ void ControlPanelWindow::BeginOrderDelivery(OrderRecord *rec)
 	}
 }
 
-void ControlPanelWindow::PerformOrderAfterConfirmation(bool response, void *userData)
+void ControlPanelWindow::PerformOrderAfterConfirmation(bool response, Cookie userData)
 {
 	if(response)
 	{
-		((OrderDataRec*)userData)->data->PerformOrder(((OrderDataRec*)userData)->rec);
+		((OrderDataRec*)userData.m_voidPtr)->data->PerformOrder(((OrderDataRec*)userData.m_voidPtr)->rec);
 	}
-	delete (OrderDataRec*) userData;
+	delete (OrderDataRec*) userData.m_voidPtr;
 }
 
 void ControlPanelWindow::BeginImprovementCycle(void *rawrec)  //emod2 what does this do?
@@ -1980,11 +1980,11 @@ void ControlPanelWindow::ClearTargetingMode()
 
 void ControlPanelWindow::CreateTabGroup(const MBCHAR *ldlBlock)
 {
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab", TabCallback, (void *)CP_TAB_CIV);
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab",     TabCallback, (void *)CP_TAB_CITY);
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab",     TabCallback, (void *)CP_TAB_UNIT);
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.MessageTab",  TabCallback, (void *)CP_TAB_MSGLOG);
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab",    TabCallback, (void *)CP_TAB_TILEIMP);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab", TabCallback, (sint32)CP_TAB_CIV);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab",     TabCallback, (sint32)CP_TAB_CITY);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab",     TabCallback, (sint32)CP_TAB_UNIT);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.MessageTab",  TabCallback, (sint32)CP_TAB_MSGLOG);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.TilesTab",    TabCallback, (sint32)CP_TAB_TILEIMP);
 
 	CreateTab(CP_TAB_CIV,    "CivTabWindow"     );
 	CreateTab(CP_TAB_MSGLOG, "MsgLogTabWindow"  );
@@ -2038,12 +2038,12 @@ void ControlPanelWindow::InitCivTab(void)
 	target = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.UnitStatusButton");
 
 	if (target!=NULL)
-		target->SetActionFuncAndCookie(TurnNextUnitButtonActionCallback,NULL);
+		target->SetActionFuncAndCookie(TurnNextUnitButtonActionCallback, NULL);
 
 	target = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.CityStatusButton");
 
 	if (target!=NULL)
-		target->SetActionFuncAndCookie(TurnNextCityButtonActionCallback,NULL);
+		target->SetActionFuncAndCookie(TurnNextCityButtonActionCallback, NULL);
 
 	target = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.AdvanceButton");
 
@@ -2061,7 +2061,7 @@ void ControlPanelWindow::InitMessageTab(void)
 	m_messageList->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, NULL);
 }
 
-void ControlPanelWindow::AddMessage(Message &message,bool initializing)
+void ControlPanelWindow::AddMessage(Message &message, bool initializing)
 {
 	if (!m_messageList)
 		return;
@@ -2133,7 +2133,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 
 	tabLabel->ShouldDraw(TRUE);
 
-	item->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, (void *)(uint32)message);
+	item->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, (uint32)message);
 
 	bool const 	isAddBottom	= !g_theProfileDB->GetValueByName("RecentAtTop");
 	m_messageList->InsertItem(item, isAddBottom ? m_messageList->NumItems() : 0);
@@ -2166,7 +2166,7 @@ void ControlPanelWindow::SetMessageRead(Message const & msg)
 		if(!item)
 			break;
 
-		Message imsg; imsg.m_id = (uint32)item->GetCookie();
+		Message imsg; imsg.m_id = item->GetCookie().m_uin32Type;
 		if(imsg.m_id == msg.m_id)
 		{
 			ctp2_Static *staticContainer = (ctp2_Static *)item->GetChildByIndex(0);
@@ -2194,7 +2194,7 @@ void ControlPanelWindow::RemoveMessage(Message &message)
 	for (sint32 i = 0; i < numItems; i++)
 	{
 		listItem = (ctp2_ListItem *)m_messageList->GetItemByIndex(i);
-		if (listItem->GetCookie() == (void *)(uint32)message)
+		if (listItem->GetCookie().m_uin32Type == (uint32)message)
 		{
 			m_messageList->RemoveItemByIndex(i);
 			delete listItem;
@@ -2250,8 +2250,8 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 
 void ControlPanelWindow::InitCityTab(void)
 {
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.MainDropdown"  ,CityPanelDropDownCallback,NULL);
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.NextCityButton",CityPanelNextCityCallback,NULL);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.MainDropdown"  , CityPanelDropDownCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.NextCityButton", CityPanelNextCityCallback, NULL);
 
 	m_mainDropDown = (ctp2_DropDown *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel", "MainDropdown");
 
@@ -2264,7 +2264,7 @@ void ControlPanelWindow::InitCityTab(void)
 
 void ControlPanelWindow::InitUnitTab(void)
 {
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel.NextUnit",UnitPanelNextUnitCallback,NULL);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel.NextUnit", UnitPanelNextUnitCallback, NULL);
 
 	m_unitImage   = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","UnitIcon");
 
@@ -2276,7 +2276,7 @@ void ControlPanelWindow::InitUnitTab(void)
 	m_unitOrders  = (ctp2_ListBox*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","OrderListBox");
 	// Added by E: unitaction here?
 	if (m_unitOrders!=NULL)
-		m_unitOrders->SetActionFuncAndCookie(UnitPanelListBoxCallback,NULL);
+		m_unitOrders->SetActionFuncAndCookie(UnitPanelListBoxCallback, NULL);
 }
 
 void ControlPanelWindow::InitTileImpTab(void)
@@ -2335,7 +2335,7 @@ void ControlPanelWindow::CreateTileImpBanks()
 	for(sint32 i = 0; i < CP_TILEIMP_MAX; i++)
 	{
 		if ((m_activatorButtons[i]!=NULL)&&(i<CP_TILEIMP_MAX))
-			m_activatorButtons[i]->SetActionFuncAndCookie(TileImpSelectionCallback,(void *)i);
+			m_activatorButtons[i]->SetActionFuncAndCookie(TileImpSelectionCallback, i);
 
 		if (m_tileImpPanes[i]!=NULL)
 			m_tileImpPanes[i]->Hide();
@@ -2492,7 +2492,7 @@ void ControlPanelWindow::CreateTileImpBanks()
 			}
 			else
 			{
-				a_button->SetActionFuncAndCookie(TileImpButtonCallback2,(void *)current);
+				a_button->SetActionFuncAndCookie(TileImpButtonCallback2, current);
 
 				irec = timpRec->GetIcon();
 
@@ -2561,7 +2561,7 @@ void ControlPanelWindow::CreateTileImpBanks()
 			}
 			else
 			{
-				a_button->SetActionFuncAndCookie(TileImpButtonCallback2,(void *)terraRec->GetIndex());
+				a_button->SetActionFuncAndCookie(TileImpButtonCallback2, terraRec->GetIndex());
 
 				irec = timpRec->GetIcon();
 
@@ -3300,7 +3300,7 @@ void ControlPanelWindow::TileImpButtonRedisplay(uint32 player_id,uint32 button)
 	const	TerrainImprovementRecord *rec;
 	bool	show_button,grey_button;
 
-	rec = g_theTerrainImprovementDB->Get((sint32)m_tileImpButtons[button]->GetCookie());
+	rec = g_theTerrainImprovementDB->Get(m_tileImpButtons[button]->GetCookie().m_sin32Type);
 
 	Assert(rec != NULL);
 
@@ -3352,7 +3352,7 @@ void ControlPanelWindow::TerraformButtonRedisplay(uint32 player_id,uint32 button
 	if (m_terraFormButtons[button]==NULL)
 		return;
 
-	const	TerrainRecord *rec = g_theTerrainDB->Get(sint32(m_terraFormButtons[button]->GetCookie()));
+	const	TerrainRecord *rec = g_theTerrainDB->Get(m_terraFormButtons[button]->GetCookie().m_sin32Type);
 
 	Assert(rec != NULL);
 
@@ -3488,9 +3488,9 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 }
 
 void ControlPanelWindow::TabCallback(aui_Control *control, uint32 action,
-									 uint32 data, void *cookie)
+									 uint32 data, Cookie cookie)
 {
-	CP_TAB tab = (CP_TAB)(sint32)cookie;
+	CP_TAB tab = (CP_TAB)cookie.m_sin32Type;
 
 	if(action == ctp2_Tab::ACTION_ACTIVATED)
 	{

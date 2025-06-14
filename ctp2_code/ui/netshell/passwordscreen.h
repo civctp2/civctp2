@@ -4,6 +4,7 @@
 #ifndef __PASSWORDSCREEN_H__
 #define __PASSWORDSCREEN_H__
 
+union Cookie;
 
 enum PASSWORDSCREEN_MODE
 {
@@ -24,6 +25,6 @@ sint32 passwordscreen_removeMyWindow( void );
 AUI_ERRCODE passwordscreen_Initialize( void );
 AUI_ERRCODE passwordscreen_Cleanup( void );
 
-void PasswordScreenCallback( aui_Control *, uint32, uint32, void *);
+void PasswordScreenCallback( aui_Control *, uint32, uint32, Cookie );
 
 #endif

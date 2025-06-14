@@ -25,14 +25,14 @@ public:
 		const MBCHAR *icon,
 		uint16 color,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	IconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	virtual AUI_ERRCODE	InitCommon( const MBCHAR *ldlBlock, BOOL isLDL = FALSE);
 

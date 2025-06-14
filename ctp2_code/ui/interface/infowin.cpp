@@ -194,7 +194,7 @@ void InfoCleanupAction::Execute(aui_Control *control,
 	infowin_Cleanup();
 }
 
-void InfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void InfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -231,7 +231,7 @@ void InfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data,
 	}
 }
 
-void EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -254,14 +254,14 @@ void EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32
 	}
 }
 
-void InfoExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void InfoExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_c3ui->AddAction(new InfoCleanupAction());
 }
 
-void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void InfoBigListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;

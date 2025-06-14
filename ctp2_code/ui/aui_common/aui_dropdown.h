@@ -68,7 +68,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	aui_DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -79,7 +79,7 @@ public:
 		sint32 buttonSize = 0,
 		sint32 windowSize = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~aui_DropDown();
 
 protected:

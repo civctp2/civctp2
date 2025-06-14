@@ -476,7 +476,7 @@ void close_CreditsScreen(void)
 	creditsscreen_Cleanup();
 }
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 //----------------------------------------------------------------------------
 //

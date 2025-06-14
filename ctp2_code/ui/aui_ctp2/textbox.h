@@ -22,7 +22,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL);
+		Cookie cookie = NULL);
 	TextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -33,7 +33,7 @@ public:
 		const MBCHAR *pattern,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL);
+		Cookie cookie = NULL);
 	virtual ~TextBox() {}
 
 	AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock );

@@ -416,7 +416,7 @@ int GreatLibrary::Get_Object_Index_From_Name
 	return index;
 }
 
-void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -425,7 +425,7 @@ void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 d
 
 }
 
-void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -440,14 +440,14 @@ void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Back();
 }
 
-void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -459,14 +459,14 @@ void GreatLibrary::kh_Close()
 	close_GreatLibrary();
 }
 
-void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	if ( g_greatLibrary ) g_greatLibrary->HandleIndexButton( (ctp2_Button *)control );
 }
 
-void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
@@ -477,18 +477,18 @@ void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, ui
 	}
 }
 
-void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Force_A_Search();
 }
 
-void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numPreReq = chart ? chart->GetNumPreReq() : 0;
 
 	for ( sint32 i = 0;i < numPreReq;i++ )
@@ -500,11 +500,11 @@ void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uin
 	}
 }
 
-void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numEitherPreReq = chart ? chart->GetNumEitherPreReq() : 0;
 
 	for ( sint32 i = 0;i < numEitherPreReq;i++ )
@@ -516,11 +516,11 @@ void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 actio
 	}
 }
 
-void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numLeadsTo = chart ? chart->GetNumLeadsTo() : 0;
 
 	for ( sint32 i = 0;i < numLeadsTo;i++ )
@@ -537,13 +537,13 @@ void GreatLibrary_Topics_List_Callback
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie
+	Cookie cookie
 )
 {
 	g_greatLibrary->HandleListButton(control, action, data, cookie);
 }
 
-void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) {
 		return;
@@ -552,7 +552,7 @@ void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint3
 	ctp2_Button * sortByAgeButton = static_cast<ctp2_Button*>(control);
 	sortByAgeButton->SetToggleState(!sortByAgeButton->GetToggleState());
 
-	GreatLibrary * greatLibrary = static_cast<GreatLibrary*>(cookie);
+	GreatLibrary * greatLibrary = static_cast<GreatLibrary*>(cookie.m_voidPtr);
 	greatLibrary->UpdateList(greatLibrary->m_listDatabase);
 }
 
@@ -1672,7 +1672,7 @@ void GreatLibrary::HandleListButton
 	aui_Control *   control,
 	uint32          action,
 	uint32          data,
-	void *          cookie
+	Cookie          cookie
 )
 {
 	if (AUI_LISTBOX_ACTION_SELECT == action)

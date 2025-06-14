@@ -31,7 +31,7 @@ aui_Ranger::aui_Ranger(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -59,7 +59,7 @@ aui_Ranger::aui_Ranger(
 	AUI_RANGER_TYPE type,
 	AUI_RANGER_ORIENTATION orientation,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -79,7 +79,7 @@ aui_Ranger::aui_Ranger(
 
 AUI_ERRCODE aui_Ranger::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -229,7 +229,7 @@ aui_Button *aui_Ranger::CreateArrowButton(const MBCHAR *ldlBlock,
 
 			sprintf(block, "%s.%s", ldlBlock, ldlName);
 
-            if (aui_Ldl::FindDataBlock(block))
+			if (aui_Ldl::FindDataBlock(block))
 				arrowButton = new aui_Button(&errcode, aui_UniqueId(),
 				block, RangerButtonActionCallback, this);
 		}
@@ -264,7 +264,7 @@ AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(const MBCHAR *ldlBlock)
 
 		if(!m_rangeContainer) {
 			sprintf(block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_DISPLAY);
-            if (aui_Ldl::FindDataBlock(block))
+			if (aui_Ldl::FindDataBlock(block))
 				m_rangeContainer = new aui_Static(&errcode,
 				aui_UniqueId(), block);
 		}
@@ -279,7 +279,7 @@ AUI_ERRCODE aui_Ranger::CreateButtonsAndThumb(const MBCHAR *ldlBlock)
 		if(ldlBlock) {
 			sprintf( block, "%s.%s", ldlBlock, k_AUI_RANGER_LDL_THUMB );
 
-            if (aui_Ldl::FindDataBlock(block))
+			if (aui_Ldl::FindDataBlock(block))
 				m_thumb = new aui_Thumb(&errcode, aui_UniqueId(), block,
 				RangerThumbActionCallback, this);
 		}
@@ -347,10 +347,11 @@ aui_Ranger::~aui_Ranger()
 	delete m_decXButton;
 	delete m_decYButton;
 	delete m_rangeContainer;
-        if (this == ms_mouseFocusRanger)
-            {
-            ms_mouseFocusRanger = NULL;
-            }
+
+	if (this == ms_mouseFocusRanger)
+	{
+		ms_mouseFocusRanger = NULL;
+	}
 }
 
 
@@ -1100,10 +1101,10 @@ void aui_Ranger::MouseRGrabInside( aui_MouseEvent *mouseData )
 
 
 
-void RangerThumbActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void RangerThumbActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
-	aui_Ranger *ranger = (aui_Ranger *)cookie;
+	aui_Ranger *ranger = (aui_Ranger *)cookie.m_voidPtr;
 
 	switch ( action )
 	{
@@ -1121,12 +1122,12 @@ void RangerThumbActionCallback( aui_Control *control, uint32 action, uint32 data
 }
 
 
-void RangerButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void RangerButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_PRESS ) return;
 
-	aui_Ranger *ranger = (aui_Ranger *)cookie;
+	aui_Ranger *ranger = (aui_Ranger *)cookie.m_voidPtr;
 	aui_Button *button = (aui_Button *)control;
 
 	if ( button == ranger->GetIncrementXButton() )
@@ -1140,10 +1141,11 @@ void RangerButtonActionCallback( aui_Control *control, uint32 action, uint32 dat
 }
 
 
-void aui_Ranger::ForceScroll(sint32 deltaX, sint32 deltaY){
-
-    if (ms_mouseFocusRanger){
+void aui_Ranger::ForceScroll(sint32 deltaX, sint32 deltaY)
+{
+	if (ms_mouseFocusRanger)
+	{
 	(deltaX == 0) ? 0 : ((deltaX < 0) ? ms_mouseFocusRanger->IncrementDownX() : ms_mouseFocusRanger->IncrementUpX());
 	(deltaY == 0) ? 0 : ((deltaY < 0) ? ms_mouseFocusRanger->IncrementDownY() : ms_mouseFocusRanger->IncrementUpY());
 	}
-    }
+}

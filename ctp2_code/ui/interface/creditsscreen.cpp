@@ -102,20 +102,20 @@ void RemoveCreditsAction::Execute(aui_Control *control, uint32 action, uint32 da
 	creditsscreen_Cleanup();
 }
 
-void creditsscreen_ExitButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void creditsscreen_ExitButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action == (uint32)AUI_BUTTON_ACTION_EXECUTE)
-    {
+	{
 		AUI_ERRCODE auiErr = g_c3ui->RemoveWindow(g_creditsWindow->Id());
 		Assert(auiErr == AUI_ERRCODE_OK);
 		if (auiErr == AUI_ERRCODE_OK)
-        {
-    		g_c3ui->AddAction(new RemoveCreditsAction());
-        }
+		{
+			g_c3ui->AddAction(new RemoveCreditsAction());
+		}
 	}
 }
 
-void creditsscreen_PauseButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void creditsscreen_PauseButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action == (uint32)AUI_BUTTON_ACTION_EXECUTE) {
@@ -123,7 +123,7 @@ void creditsscreen_PauseButtonActionCallback(aui_Control *control, uint32 action
 	}
 }
 
-void creditsscreen_SecretButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void creditsscreen_SecretButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action == (uint32)AUI_BUTTON_ACTION_EXECUTE) {
@@ -134,43 +134,40 @@ void creditsscreen_SecretButtonActionCallback(aui_Control *control, uint32 actio
 sint32 creditsscreen_Initialize()
 {
 	if (!g_creditsWindow)
-    {
-	    AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+	{
+		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-	    g_creditsWindow = new CreditsWindow
-            (&errcode, aui_UniqueId(), k_LDL_CREDITS_WINDOW,
+		g_creditsWindow = new CreditsWindow
+		    (&errcode, aui_UniqueId(), k_LDL_CREDITS_WINDOW,
 		     k_CREDITS_BITS_PER_PIXEL, AUI_WINDOW_TYPE_FLOATING
-            );
-	    Assert(AUI_SUCCESS(errcode));
-	    if (!AUI_SUCCESS(errcode)) return -1;
+		     );
+		Assert(AUI_SUCCESS(errcode));
+		if (!AUI_SUCCESS(errcode)) return -1;
 
-	    TestControl(g_creditsWindow);
+		TestControl(g_creditsWindow);
 
-        g_creditsWindow->Move((g_ScreenWidth - g_creditsWindow->Width()) / 2,
+		g_creditsWindow->Move((g_ScreenWidth - g_creditsWindow->Width()) / 2,
 		    (g_ScreenHeight - g_creditsWindow->Height()) / 2);
 
-	    Assert(AUI_SUCCESS(errcode));
-	    if (!AUI_SUCCESS(errcode)) return -1;
-    }
+		Assert(AUI_SUCCESS(errcode));
+		if (!AUI_SUCCESS(errcode)) return -1;
+	}
 
-    return 0;
+	return 0;
 }
 
 void creditsscreen_Cleanup()
 {
 	if (g_creditsWindow)
-    {
-        if (g_c3ui)
-        {
-            g_c3ui->RemoveWindow(g_creditsWindow->Id());
-        }
+	{
+		if (g_c3ui)
+		{
+			g_c3ui->RemoveWindow(g_creditsWindow->Id());
+		}
 
-        allocated::clear(g_creditsWindow);
-    }
+		allocated::clear(g_creditsWindow);
+	}
 }
-
-
-
 
 class c3_SimpleAnimation : public aui_Static {
 public:

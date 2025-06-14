@@ -390,18 +390,18 @@ ctp2_Static *ScienceManagementDialog::GetListItemColumn(ctp2_ListItem *item,
 }
 
 void ScienceManagementDialog::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<ScienceManagementDialog*>(cookie)->Hide();
+	static_cast<ScienceManagementDialog*>(cookie.m_voidPtr)->Hide();
 }
 
 
 void ScienceManagementDialog::HyperlinkActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(CTP2_HYPERLINK_ACTION_EXECUTE))
@@ -418,7 +418,7 @@ void ScienceManagementDialog::HyperlinkActionCallback(aui_Control *control,
 }
 
 void ScienceManagementDialog::EditResearchButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -538,12 +538,12 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 
 
 void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_LISTBOX_ACTION_SELECT)
 		return;
 
-	ScienceManagementDialog *pMe = static_cast<ScienceManagementDialog*>(cookie);
+	ScienceManagementDialog *pMe = static_cast<ScienceManagementDialog*>(cookie.m_voidPtr);
 
 	if (!(pMe && pMe->m_scienceDescription))
 		return;

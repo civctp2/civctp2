@@ -6,6 +6,7 @@
 
 class aui_Control;
 class ctp2_Button;
+union Cookie;
 
 class ShortcutPad {
 public:
@@ -32,7 +33,7 @@ public:
 private:
 
 	static void ShortcutButtonActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	ctp2_Button *m_cityManagementButton;
 	ctp2_Button *m_civilizationManagementButton;

@@ -308,7 +308,7 @@ void spnewgamemapshapescreen_Cleanup()
 	}
 }
 
-void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 

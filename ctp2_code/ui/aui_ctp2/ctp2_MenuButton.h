@@ -39,7 +39,7 @@ class ctp2_MenuButton : public c3_Button
 					uint32 id,
 					const MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
-					void *cookie = NULL );
+					Cookie cookie = NULL );
 
 	virtual ~ctp2_MenuButton();
 	virtual BOOL IsThisA(uint32 classId)

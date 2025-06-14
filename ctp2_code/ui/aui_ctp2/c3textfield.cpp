@@ -20,7 +20,7 @@ C3TextField::C3TextField(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -44,7 +44,7 @@ C3TextField::C3TextField(
 	const MBCHAR *pattern,
 	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
@@ -60,7 +60,7 @@ C3TextField::C3TextField(
 
 AUI_ERRCODE C3TextField::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

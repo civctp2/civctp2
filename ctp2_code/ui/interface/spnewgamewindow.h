@@ -120,61 +120,61 @@ sint32      spnewgamescreen_update( void );
 
 
 
-void spnewgamescreen_instaPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_startPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_quitPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_instaPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_startPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_returnPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_quitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 
 
 
 
 
-void spnewgamescreen_tribePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_malePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_femalePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_difficultyPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_tribePress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_malePress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_femalePress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_difficultyPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void spnewgamescreen_mapSizePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_playersPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_mapSizePress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_playersPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void spnewgamescreen_mapPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_rulesPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-
-
-
-
-
-void spnewgamescreen_mapTypePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_worldShapePress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-
-void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-
-void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_mapPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_rulesPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 
 
 
 
-void spnewgamescreen_clanSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_genderSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_preferencePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_pCustomPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_mapTypePress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_worldShapePress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void spnewgamescreen_mapSizeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_worldTypeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_worldShapeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_difficultySelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_riskLevelSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_opponentSelect(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_wCustomPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void spnewgamescreen_genocidePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_tradePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_combatPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_pollutionPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamescreen_scenarioPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
+
+
+
+
+void spnewgamescreen_clanSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_genderSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_preferencePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_pCustomPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+
+void spnewgamescreen_mapSizeSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_worldTypeSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_worldShapeSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_difficultySelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_riskLevelSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_opponentSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_wCustomPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+
+void spnewgamescreen_genocidePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_tradePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_combatPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamescreen_pollutionPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+
+void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 
 class TwoChoiceButton : public ctp2_Button
@@ -186,7 +186,7 @@ public:
 		const MBCHAR *ldlBlock,
 		const MBCHAR *choiceOff, const MBCHAR *choiceOn, uint32 onoff = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	~TwoChoiceButton() {};
 
 	uint32	GetChoice() { return m_choice; };
@@ -367,36 +367,36 @@ private:
 };
 
 
-sint32				callbackSetSelected(aui_Control *control, void *cookie);
+sint32				callbackSetSelected(aui_Control *control, Cookie cookie);
 
 aui_StringTable		*spNewStringTable(AUI_ERRCODE *errcode, const MBCHAR *ldlme);
 c3_Button			*spNew_c3_Button(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*));
+									void (*callback)(aui_Control*,uint32,uint32, Cookie));
 ctp2_Button			*spNew_ctp2_Button(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									   void (*callback)(aui_Control*,uint32,uint32,void*));
+									   void (*callback)(aui_Control*,uint32,uint32, Cookie));
 c3_Switch			*spNew_c3_Switch(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
-									void *cookie=NULL );
+									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL,
+									Cookie cookie = NULL );
 aui_Switch			*spNew_aui_Switch(
 									AUI_ERRCODE *errcode,
 									const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL,
-									void *cookie=NULL );
+									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL,
+									Cookie cookie = NULL );
 c3_Static			*spNew_c3_Static(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe);
 C3TextField			*spNewTextEntry(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*)=NULL ,void *cookie=NULL );
+									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL , Cookie cookie = NULL );
 c3_ListBox			*spNew_c3_ListBox(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32,void*) = NULL,
-									void *cookie = NULL);
-c3_DropDown			*spNew_c3_DropDown(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe, void (*callback)(aui_Control*,uint32,uint32,void*));
+									void (*callback)(aui_Control*,uint32,uint32, Cookie) = NULL,
+									Cookie cookie = NULL);
+c3_DropDown			*spNew_c3_DropDown(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe, void (*callback)(aui_Control*,uint32,uint32, Cookie));
 void				spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *mytable, const MBCHAR *listitemparent, const MBCHAR *listitemme);
 void				spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable, const MBCHAR *listitemparent, const MBCHAR *listitemme);
 TwoChoiceButton		*spNewTwoChoiceButton(AUI_ERRCODE *errcode, const MBCHAR* ldlParent, const MBCHAR *ldlMe, const MBCHAR *ldlstringtable,
-									uint32 state,void (*callback)(aui_Control*,uint32,uint32,void*) = NULL);
+									uint32 state,void (*callback)(aui_Control*,uint32,uint32, Cookie) = NULL);
 C3Slider			*spNew_C3Slider(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-	 								void (*callback)(aui_Control*,uint32,uint32,void*));
+	 								void (*callback)(aui_Control*,uint32,uint32, Cookie));
 c3_CheckBox			*spNew_c3_CheckBox(AUI_ERRCODE *errcode, const MBCHAR* ldlParent, const MBCHAR *ldlMe,
-									uint32 state,void (*callback)(aui_Control*,uint32,uint32,void*) = NULL, void *cookie = NULL);
+									uint32 state,void (*callback)(aui_Control*,uint32,uint32, Cookie) = NULL, Cookie cookie = NULL);
 aui_SwitchGroup		*spNew_aui_SwitchGroup( AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe );
 
 
@@ -407,7 +407,7 @@ spNew_ctp2_Button(AUI_ERRCODE *errcode,
 				  const MBCHAR *ldlParent,
 				  const MBCHAR *ldlMe,
 				  const MBCHAR *default_text,
-				  void (*callback)(aui_Control*,uint32,uint32,void*),
+				  void (*callback)(aui_Control*,uint32,uint32, Cookie),
 				  const MBCHAR *buttonFlavor);
 
 #endif

@@ -315,7 +315,7 @@ void agesscreen_startDropDownCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT ) return;
 
@@ -347,7 +347,7 @@ void agesscreen_endDropDownCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_DROPDOWN_ACTION_SELECT ) return;
 
@@ -375,7 +375,7 @@ void agesscreen_endDropDownCallback(
 #endif
 
 }
-void agesscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void agesscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 

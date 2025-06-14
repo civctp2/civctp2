@@ -131,7 +131,7 @@ sint32 removeTileWindow(uint32 action)
 	return 1;
 }
 
-void bExitPress(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void bExitPress(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	removeTileWindow(action);
 }

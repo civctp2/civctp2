@@ -19,6 +19,7 @@ class ctp2_Button;
 class MessageWindow;
 class MessageResponseAction;
 class MessageResponseSubmitAction;
+union Cookie;
 // MBCHAR
 
 class MessageResponseListItem : public c3_ListItem
@@ -62,7 +63,7 @@ public:
 	virtual AUI_ERRCODE InitCommon( const MBCHAR *ldlBlock, MessageWindow *window );
 
 	static void DontShowButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 private:
 	tech_WLList<ctp2_Button *>				*m_messageResponseButton;

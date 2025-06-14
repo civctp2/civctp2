@@ -17,7 +17,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	c3_Thumb(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -27,7 +27,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~c3_Thumb() {}
 
 	virtual AUI_ERRCODE DrawThis(

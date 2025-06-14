@@ -313,12 +313,12 @@ void CityEspionage::CancelCallback
     aui_Control *   control,
     uint32          action,
     uint32          data,
-    void *          cookie
+    Cookie          cookie
 )
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	Assert(s_CityEspionage == static_cast<CityEspionage const *>(cookie));
+	Assert(s_CityEspionage == static_cast<CityEspionage const *>(cookie.m_voidPtr));
 	if (s_CityEspionage)
 	{
 		s_CityEspionage->HideWindow();

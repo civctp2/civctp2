@@ -58,6 +58,7 @@
 #define k_CONTROLPANEL_CIVTAB_MODE          8
 
 class ControlPanelWindow;
+union Cookie;
 
 enum CP_SELECT
 {
@@ -267,7 +268,7 @@ public:
 	void    InitCivTab();
 
 	static void TabCallback(aui_Control *control, uint32 action,
-	                        uint32 data, void *cookie);
+	                        uint32 data, Cookie cookie);
 
 	void    InitMessageTab();
 	void    AddMessage(Message &message,bool initializing=false);
@@ -301,7 +302,7 @@ public:
 	void    TerraformButtonRedisplay    (uint32 player_id,uint32 index);
 
 	void    BeginOrderDelivery();
-	static void PerformOrderAfterConfirmation(bool response, void *userData);
+	static void PerformOrderAfterConfirmation(bool response, Cookie userData);
 
 	void    BeginOrderDelivery(OrderRecord *rec);
 

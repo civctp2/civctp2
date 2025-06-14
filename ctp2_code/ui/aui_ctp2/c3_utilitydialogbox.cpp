@@ -76,12 +76,12 @@ c3_UtilityAbortPopup *          g_utilityAbort          = NULL;
 c3_UtilityTextMessagePopup *    g_utilityTextMessage    = NULL;
 
 
-void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	c3_UtilityCityListPopup *popup = (c3_UtilityCityListPopup *)cookie;
+	c3_UtilityCityListPopup *popup = (c3_UtilityCityListPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_window->Ok())
@@ -112,23 +112,15 @@ void C3UtilityCityListButtonActionCallback( aui_Control *control, uint32 action,
 	}
 }
 
-void C3PiracyButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3PiracyButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	c3_PiracyPopup *popup = (c3_PiracyPopup *)cookie;
+	c3_PiracyPopup *popup = (c3_PiracyPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((c3_Button*)control == popup->m_pirate)
 	{
-
-
-
-
-
-
-
 		if (popup->m_callback)
 		{
 
@@ -137,20 +129,16 @@ void C3PiracyButtonCallback( aui_Control *control, uint32 action, uint32 data, v
 	}
 	if ((c3_Button*)control == popup->m_cancel)
 	{
-
-
-
-
 		popup->RemoveWindow();
 	}
 }
 
-void C3ExpelButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3ExpelButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	c3_ExpelPopup *popup = (c3_ExpelPopup *)cookie;
+	c3_ExpelPopup *popup = (c3_ExpelPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((c3_Button*)control == popup->m_attack)
@@ -180,13 +168,13 @@ void C3ExpelButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 }
 
 
-void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE &&
 		action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) return;
 
-	c3_UtilityTextFieldPopup *popup = (c3_UtilityTextFieldPopup *)cookie;
+	c3_UtilityTextFieldPopup *popup = (c3_UtilityTextFieldPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_window->Ok() ||
@@ -225,12 +213,12 @@ void C3UtilityTextFieldButtonActionCallback( aui_Control *control, uint32 action
 	}
 }
 
-void C3UtilityTextMessageButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3UtilityTextMessageButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	c3_UtilityTextMessagePopup *popup = (c3_UtilityTextMessagePopup *)cookie;
+	c3_UtilityTextMessagePopup *popup = (c3_UtilityTextMessagePopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_window->Ok())
@@ -254,12 +242,12 @@ void C3UtilityTextMessageButtonActionCallback( aui_Control *control, uint32 acti
 	}
 }
 
-void C3AbortButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3AbortButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	c3_UtilityAbortPopup *popup = (c3_UtilityAbortPopup *)cookie;
+	c3_UtilityAbortPopup *popup = (c3_UtilityAbortPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_abort)
@@ -272,12 +260,12 @@ void C3AbortButtonActionCallback( aui_Control *control, uint32 action, uint32 da
 	}
 }
 
-void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3UtilityPlayerListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	c3_UtilityPlayerListPopup *popup = (c3_UtilityPlayerListPopup *)cookie;
+	c3_UtilityPlayerListPopup *popup = (c3_UtilityPlayerListPopup *)cookie.m_voidPtr;
 	if (!popup) return;
 
 	if ((ctp2_Button*)control == popup->m_kick)

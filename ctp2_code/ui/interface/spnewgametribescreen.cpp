@@ -181,7 +181,7 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 	}
 }
 
-sint32	spnewgametribescreen_displayMyWindow( void *cookie, BOOL edit )
+sint32	spnewgametribescreen_displayMyWindow( Cookie cookie, BOOL edit )
 {
 	sint32 retval = g_spNewGameTribeScreen ? 0 : spnewgametribescreen_Initialize();
 
@@ -348,17 +348,17 @@ GENDER spnewgametribescreen_getGender(void)
 }
 
 //action buttons
-void spnewgametribescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	spnewgametribescreen_removeMyWindow(action);
 }
 
-void spnewgametribescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	spnewgametribescreen_removeMyWindow(action);
 }
 
-void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	const sint32 size = 100;
 	MBCHAR lname[ size + 1 ];
@@ -367,7 +367,7 @@ void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 
 	spnewgametribescreen_removeMyWindow(action, lname);
 }
 
-void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	//this is for the text boxes and updated once selected
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -384,7 +384,7 @@ void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint3
 	s_leaderNameTextField->SetFieldText( g_theStringDB->GetNameStr(nameString) );
 }
 
-void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
@@ -400,7 +400,7 @@ void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 

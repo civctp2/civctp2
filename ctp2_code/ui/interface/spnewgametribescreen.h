@@ -57,22 +57,22 @@ extern sint32 const         INDEX_TRIBE_INVALID;
 //----------------------------------------------------------------------------
 
 sint32 spnewgametribescreen_displayMyWindow(
-	void *cookie = NULL,
+	Cookie cookie = NULL,
 	BOOL edit = FALSE );
 sint32 spnewgametribescreen_removeMyWindow(uint32 action, MBCHAR *lname = NULL);
 
 AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
 AUI_ERRCODE spnewgametribescreen_Cleanup();
 
-void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamescreen_scenarioPress       (aui_Control *control, uint32 action, uint32 data, void *cookie) ;
+void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgamescreen_scenarioPress       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-void spnewgametribescreen_acceptPress    (aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgametribescreen_cancelPress    (aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgametribescreen_backPress      (aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgametribescreen_switchPress    (aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgametribescreen_malePress      (aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgametribescreen_femalePress    (aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgametribescreen_acceptPress    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgametribescreen_cancelPress    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgametribescreen_backPress      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgametribescreen_switchPress    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgametribescreen_malePress      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgametribescreen_femalePress    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 sint32 spnewgametribescreen_getTribeIndex( void );
 GENDER spnewgametribescreen_getGender(void);

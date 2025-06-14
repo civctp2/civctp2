@@ -87,7 +87,7 @@ aui_Control::aui_Control
 	uint32                  id,
 	const MBCHAR *          ldlBlock,
 	ControlActionCallback * ActionFunc,
-	void *                  cookie
+	Cookie                  cookie
 )
 :
 	aui_ImageBase           (ldlBlock),
@@ -119,7 +119,7 @@ aui_Control::aui_Control
 	sint32                  width,
 	sint32                  height,
 	ControlActionCallback * ActionFunc,
-	void *                  cookie
+	Cookie                  cookie
 )
 :
 	aui_ImageBase           ((sint32) 0),
@@ -146,7 +146,7 @@ aui_Control::aui_Control
 AUI_ERRCODE aui_Control::InitCommonLdl(
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -226,7 +226,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 
 AUI_ERRCODE aui_Control::InitCommon(
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 {
 	m_window = NULL,
 	m_allocatedTip = FALSE,
@@ -268,7 +268,7 @@ aui_Control::~aui_Control()
 
 AUI_ERRCODE aui_Control::SetActionFuncAndCookie(
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 {
 	m_ActionFunc = ActionFunc;
 

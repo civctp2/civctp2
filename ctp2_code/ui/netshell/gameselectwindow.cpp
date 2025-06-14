@@ -832,7 +832,7 @@ void StartSelectingWindow::SavedButtonAction::Execute(
 void gameselectwindow_scenarioExitCallback(aui_Control *control,
 										   uint32 action,
 										   uint32 data,
-										   void *cookie )
+										   Cookie cookie )
 {
 
 	GameSelectWindow *w = g_gameSelectWindow;
@@ -906,17 +906,9 @@ void StartSelectingWindow::ScenarioButtonAction::Execute(
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-
-
-
-
-
-
-
 	scenarioscreen_displayMyWindow();
 	scenarioscreen_SetExitCallback(gameselectwindow_scenarioExitCallback);
 }
-
 
 void StartSelectingWindow::CancelButtonAction::Execute(
 	aui_Control *control,
@@ -928,14 +920,11 @@ void StartSelectingWindow::CancelButtonAction::Execute(
 	g_netshell->GotoScreen( NetShell::SCREEN_LOBBY );
 }
 
-
-
-
 void StartSelectingLoadSaveCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

@@ -165,13 +165,9 @@ static c3_HyperTextBox	*s_givesBox;
 static c3_Static		*s_civBox;
 static c3_Static		*s_civText;
 
-
-
-
-void sciencewin_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_ExitCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
-	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+		if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	close_ScienceStatus();
 }
@@ -181,19 +177,18 @@ void ScienceWin::kh_Close()
 	close_ScienceStatus();
 }
 
-void sciencewin_LibraryButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_LibraryButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 
-	Chart *tree = (Chart *)cookie;
+	Chart *tree = (Chart *)cookie.m_voidPtr;
 
 	open_GreatLibrary( tree->GetCenterIndex(), TRUE );
 	close_ScienceStatus();
 }
 
-void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -202,7 +197,7 @@ void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint3
 	close_ScienceStatus();
 }
 
-void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -228,18 +223,13 @@ void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 d
 	p->SetTaxes( taxRate );
 
 	g_scienceWin->UpdateData( SCI_UPDATE_NOCHART );
-
-
-
-
 }
 
-void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numPreReq = chart->GetNumPreReq();
 
 	for ( sint32 i = 0;i < numPreReq;i++ ) {
@@ -250,12 +240,11 @@ void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numLeadsTo = chart->GetNumLeadsTo();
 
 	for ( sint32 i = 0;i < numLeadsTo;i++ ) {
@@ -264,10 +253,9 @@ void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint
 			chart->Update( chart->GetLeadsToIndex(i) );
 		}
 	}
-
 }
 
-void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT &&

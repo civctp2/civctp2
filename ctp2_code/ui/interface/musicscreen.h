@@ -5,6 +5,8 @@
 #ifndef MUSICSCREEN_H_
 #define MUSICSCREEN_H_
 
+union Cookie;
+
 enum MS_STRING {
 	MS_STRING_AUTO_ON,
 	MS_STRING_AUTO_OFF,
@@ -21,8 +23,8 @@ sint32 musicscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE musicscreen_Initialize( void );
 void musicscreen_Cleanup();
 
-void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void musicscreen_selectTrackPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void musicscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void musicscreen_selectTrackPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void musicscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 #endif

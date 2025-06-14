@@ -21,7 +21,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	c3_Ranger(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -33,7 +33,7 @@ public:
 		AUI_RANGER_ORIENTATION orientation,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~c3_Ranger();
 
 protected:

@@ -21,7 +21,7 @@ c3_CheckBox::c3_CheckBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR const *) NULL ),
@@ -46,7 +46,7 @@ c3_CheckBox::c3_CheckBox(
 	const MBCHAR *text,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 :

@@ -21,7 +21,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~ns_ChatBox();
 
 	NETFunc::Player *GetPlayer();

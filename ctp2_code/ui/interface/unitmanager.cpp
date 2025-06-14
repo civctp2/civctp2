@@ -260,7 +260,7 @@ void UnitManager::TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, void *co
 	UnitManager::UpdateAdviceText();
 }
 
-void UnitManager::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 	UnitManager::Hide();
@@ -892,7 +892,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	return err;
 }
 
-void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -910,7 +910,7 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 	UpdateUpkeepButton(butt, pl, useTotalFormat);
 }
 
-void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -929,7 +929,7 @@ void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void 
 	}
 }
 
-void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) return;
 
@@ -962,7 +962,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	g_director->AddCenterMap(u.RetPos());
 }
 
-void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -976,14 +976,14 @@ void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data
 
 }
 
-void UnitManager::TabChanged(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::TabChanged(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	UnitManager::sm_statsTabVisible =
 	    (control == aui_Ldl::GetObject(s_unitManagerBlock, "Tabs.Stats"));
 	UnitManager::UpdateAdviceText();
 }
 
-void UnitManager::DisbandQuery(bool response, void *data)
+void UnitManager::DisbandQuery(bool response, Cookie data)
 {
 	if(response) {
 		Assert(s_unitManager);
@@ -1112,7 +1112,7 @@ void UnitManager::CleanupEvents()
 
 void UnitManager::ReadinessActionCallback(aui_Control *control,
 													 uint32 action, uint32 data,
-													 void *cookie)
+													 Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;

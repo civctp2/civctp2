@@ -19,7 +19,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	ns_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -31,7 +31,7 @@ public:
 		const MBCHAR *icon,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		sint32 state = 0,
 		sint32 numStates = k_NS_HEADERSWITCH_DEFAULTNUMSTATES );
 	virtual ~ns_HeaderSwitch();

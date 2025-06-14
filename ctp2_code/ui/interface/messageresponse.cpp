@@ -121,12 +121,12 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( const MBCHAR *ldlBlock, Message
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode         = AUI_ERRCODE_OK;
 	ctp2_Button	*   lastbutton      = NULL;
-    sint32			responseCount   = 0;
+	sint32			responseCount   = 0;
 
 	while (SlicButton * sButton =
-            window->GetMessage()->AccessData()->GetButton(responseCount)
-          )
-    {
+	        window->GetMessage()->AccessData()->GetButton(responseCount)
+	      )
+	{
 		MBCHAR const *  text    = sButton->GetName();
 
 		sprintf(buttonBlock, "%s.%s", ldlBlock, "StandardResponseButton");
@@ -138,8 +138,8 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( const MBCHAR *ldlBlock, Message
 
 		aui_BitmapFont * font   = button->GetTextFont();
 		Assert(font);
-        uint32  textlength      =
-            std::max<uint32>(font->GetStringWidth(text), g_messageRespButtonWidth);
+		uint32  textlength      =
+		    std::max<uint32>(font->GetStringWidth(text), g_messageRespButtonWidth);
 
 		button->Resize( ( textlength + ( g_messageRespTextPadding << 1 )), button->Height() );
 
@@ -160,7 +160,7 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( const MBCHAR *ldlBlock, Message
 		}
 
 		MessageResponseAction * action =
-            new MessageResponseAction(window, responseCount);
+		    new MessageResponseAction(window, responseCount);
 		Assert( action != NULL );
 		if ( action == NULL ) return AUI_ERRCODE_MEMALLOCFAILED;
 
@@ -353,14 +353,14 @@ MessageResponseDropdown::~MessageResponseDropdown()
 }
 
 void MessageResponseStandard::DontShowButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
 	MessageResponseStandard *dialog =
-		static_cast<MessageResponseStandard*>(cookie);
+		static_cast<MessageResponseStandard*>(cookie.m_voidPtr);
 
 	dialog->m_dontShowButton->SetToggleState(!dialog->m_dontShowButton->GetToggleState());
 	g_theCriticalMessagesPrefs->SetEnabled(dialog->m_identifier,!dialog->m_dontShowButton->GetToggleState());

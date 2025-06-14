@@ -37,8 +37,8 @@ sint32 graphicsresscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE graphicsresscreen_Initialize( void );
 AUI_ERRCODE graphicsresscreen_Cleanup();
 
-void graphicsscreen_unitSpeedSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void graphicsscreen_unitSpeedSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 class ScreenResListItem : public c3_ListItem
 {

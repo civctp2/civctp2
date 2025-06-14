@@ -124,7 +124,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	aui_Ranger(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -135,7 +135,7 @@ public:
 		AUI_RANGER_TYPE type = AUI_RANGER_TYPE_SCROLLER,
 		AUI_RANGER_ORIENTATION orientation = AUI_RANGER_ORIENTATION_BIDIRECTIONAL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~aui_Ranger();
 
 protected:

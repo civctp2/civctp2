@@ -417,9 +417,9 @@ void ctp2_Menu::ListCallback(aui_Control *control, uint32 action, uint32 data)
 	inCallback = false;
 }
 
-void ctp2_Menu::StaticListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ctp2_Menu::StaticListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
-	ctp2_Menu *menu = (ctp2_Menu *)cookie;
+	ctp2_Menu *menu = (ctp2_Menu *)cookie.m_voidPtr;
 	menu->ListCallback(control, action, data);
 }
 

@@ -179,7 +179,7 @@ AUI_ERRCODE optionwarningscreen_Cleanup()
 #undef mycleanup
 }
 
-void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -228,7 +228,7 @@ void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 d
 	};
 }
 
-void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -246,7 +246,7 @@ void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 d
 	}
 
 }
-void optionwarningscreen_nevermindPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionwarningscreen_nevermindPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	optionwarningscreen_removeMyWindow(action);
 }

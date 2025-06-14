@@ -20,7 +20,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	C3TextField(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -31,7 +31,7 @@ public:
 		const MBCHAR *pattern,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~C3TextField() {}
 
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };

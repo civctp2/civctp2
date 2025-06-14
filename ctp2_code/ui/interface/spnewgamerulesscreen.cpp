@@ -301,7 +301,7 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 #undef mycleanup
 }
 
-void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (m_ruleDetails && m_ruleDetailsStrings)
 	{
@@ -320,9 +320,9 @@ void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 
 	agesscreen_displayMyWindow(0);
 }
 
-void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
-	uint32 checkbox = *((uint32*)cookie);
+	uint32 checkbox = *((uint32*)cookie.m_voidPtr);
 
 	sint32 rule = -1;
 
@@ -396,7 +396,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
 
-void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	g_theProfileDB->Save();
 

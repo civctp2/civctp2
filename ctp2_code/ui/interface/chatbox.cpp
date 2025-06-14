@@ -254,12 +254,12 @@ void ChatWindow::ColorizeString(MBCHAR *destString, const MBCHAR *srcString, COL
 	strcat(destString, colorString);
 }
 
-void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE)
 		return;
 
-	ChatWindow		*chatWindow = (ChatWindow *)cookie;
+	ChatWindow		*chatWindow = (ChatWindow *)cookie.m_voidPtr;
 
 	MBCHAR			str[k_CHATBOX_LINE_LENGTH];
 

@@ -63,7 +63,7 @@ aui_ListBox::aui_ListBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -89,7 +89,7 @@ aui_ListBox::aui_ListBox(
 	sint32 width,
 	sint32 height,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -1986,11 +1986,11 @@ void ListBoxRangerActionCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action == (uint32)AUI_RANGER_ACTION_VALUECHANGE )
 	{
-		aui_ListBox *listbox = (aui_ListBox *)cookie;
+		aui_ListBox *listbox = (aui_ListBox *)cookie.m_voidPtr;
 
 		listbox->RangerMoved();
 	}

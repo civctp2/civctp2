@@ -344,7 +344,7 @@ void spnewgameplayersscreen_Cleanup()
 //              back button is pressed
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	spnewgameplayersscreen_removeMyWindow(action);
 }
@@ -391,7 +391,7 @@ void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers)
 //              s_num_player_spinner
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
 
@@ -420,7 +420,7 @@ void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action
 //              s_max_player_spinner changes
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
 
@@ -446,7 +446,7 @@ void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action
 //               s_player_spinner changes
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
 

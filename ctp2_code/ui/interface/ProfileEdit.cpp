@@ -225,7 +225,7 @@ void ProfileEdit::FillList()
 	m_list->BuildListEnd();
 }
 
-void ProfileEdit::ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::ListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT)
 		return;
@@ -235,11 +235,11 @@ void ProfileEdit::ListCallback(aui_Control *control, uint32 action, uint32 data,
 
 }
 
-void ProfileEdit::ToggleBoolVar(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::ToggleBoolVar(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	ProfileVar *var = (ProfileVar *)cookie;
+	ProfileVar *var = (ProfileVar *)cookie.m_voidPtr;
 	Assert(g_theProfileDB);
 	if(g_theProfileDB) {
 		*var->m_numValue = !*var->m_numValue;
@@ -252,18 +252,18 @@ void ProfileEdit::ToggleBoolVar(aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void ProfileEdit::SetNumVar(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::SetNumVar(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_TEXTFIELD_ACTION_EXECUTE || action == AUI_TEXTFIELD_ACTION_DISMISS) {
 		ctp2_TextField *field = (ctp2_TextField *)control;
 		char buf[50];
 		field->GetFieldText(buf, 50);
-		ProfileVar *var = (ProfileVar *)cookie;
+		ProfileVar *var = (ProfileVar *)cookie.m_voidPtr;
 		*var->m_numValue = atoi(buf);
 	}
 }
 
-void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_BUTTON_ACTION_EXECUTE) {
 
@@ -273,7 +273,7 @@ void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void ProfileEdit::EnableMessages(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::EnableMessages(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action== AUI_BUTTON_ACTION_EXECUTE) {
 		g_theCriticalMessagesPrefs->EnableAll();

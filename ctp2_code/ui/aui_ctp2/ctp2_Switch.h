@@ -46,7 +46,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	ctp2_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -56,7 +56,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		sint32 state = 0,
 		sint32 numStates = k_CTP2_SWITCH_DEFAULTNUMSTATES );
 	virtual ~ctp2_Switch() {}

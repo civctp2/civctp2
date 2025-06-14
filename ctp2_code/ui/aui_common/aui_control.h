@@ -58,8 +58,8 @@ class aui_StringTable;
 union Cookie
 {
 	Cookie(void* ptr = NULL) : m_voidPtr(ptr) {};
-	Cookie(sint32 data)      : m_sin32Type(data) {};
-	Cookie(uint32 data)      : m_uin32Type(data) {};
+	Cookie(sint32 data)      : m_voidPtr(NULL), m_sin32Type(data) {};
+	Cookie(uint32 data)      : m_voidPtr(NULL), m_uin32Type(data) {};
 
 	Cookie& operator=(void* ptr) { m_voidPtr = ptr; return *this; }
 
@@ -80,14 +80,14 @@ public:
 		aui_Control *control,
 		uint32 state,
 		uint32 data,
-		void *cookie );
+		Cookie cookie );
 
 	aui_Control(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	aui_Control(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -96,7 +96,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~aui_Control();
 
 	virtual BOOL IsThisA( uint32 classId )
@@ -136,10 +136,10 @@ protected:
 	AUI_ERRCODE InitCommonLdl(
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie );
+		Cookie cookie );
 	AUI_ERRCODE InitCommon(
 		ControlActionCallback *ActionFunc,
-		void *cookie );
+		Cookie cookie );
 
 public:
 
@@ -192,12 +192,12 @@ public:
 
 	AUI_ERRCODE SetActionFuncAndCookie(
 		ControlActionCallback *ActionFunc,
-		void *cookie );
+		Cookie cookie );
 
 	ControlActionCallback *GetActionFunc( void ) const
 	{ return m_ActionFunc; }
 
-	void *GetCookie( void ) const
+	Cookie GetCookie( void ) const
 	{ Assert( m_ActionFunc != NULL ); return m_cookie; }
 
 	aui_Action *SetAction( aui_Action *action );
@@ -251,7 +251,7 @@ protected:
 
 	union
 	{
-		void *m_cookie;
+		Cookie m_cookie;
 		aui_Action *m_action;
 	};
 	ControlActionCallback *m_ActionFunc;
@@ -308,7 +308,7 @@ public:
 		const MBCHAR *imageName);
 
 
-	virtual AUI_ERRCODE	Resize(sint32 width, sint32 height);
+	virtual AUI_ERRCODE Resize(sint32 width, sint32 height);
 
 	virtual void SendKeyboardAction();
 	virtual bool HandleKey(uint32 wParam);
@@ -356,9 +356,9 @@ private:
 	static const sint32 k_AUI_CONTROL_LAYER_FLAG_ENABLED;
 
 	static uint32           s_controlClassId;
-    /// The control that owns the mouse
+	/// The control that owns the mouse
 	static aui_Control *    s_whichOwnsMouse;
-    /// The control that has the focus
+	/// The control that has the focus
 	static aui_Control *    s_whichHasFocus;
 
 	void InitializeLayerFlags(ldl_datablock *theBlock,

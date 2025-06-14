@@ -50,7 +50,7 @@ ns_ChatBox::ns_ChatBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -172,10 +172,10 @@ ns_ChatBox::~ns_ChatBox()
 	if (m_inputField)
 	{
 		delete m_inputField->GetAction();
-        delete m_inputField;
+		delete m_inputField;
 	}
 
-    delete m_textstyleSystem;
+	delete m_textstyleSystem;
 	delete m_textstyleChat;
 	delete m_textstyleWhisper;
 }

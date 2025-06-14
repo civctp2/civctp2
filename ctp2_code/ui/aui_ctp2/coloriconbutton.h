@@ -60,14 +60,14 @@ public:
 		const MBCHAR *pattern,
 		const MBCHAR *icon,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	ColorIconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	virtual AUI_ERRCODE	InitCommon( const MBCHAR *ldlBlock, BOOL isLDL = FALSE);
 

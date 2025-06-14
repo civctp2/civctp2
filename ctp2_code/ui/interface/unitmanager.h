@@ -42,7 +42,7 @@ class UnitManager {
 	static void UpdateAdviceText();
 
 	static void TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, void *cookie);
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static sint32 CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 	static sint32 CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
@@ -51,17 +51,17 @@ class UnitManager {
 	static AUI_ERRCODE DrawHealthBar(ctp2_Static *control, aui_Surface *surface,
 									 RECT &rect, Cookie cookie);
 
-	static void UpkeepButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Advice(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void UpkeepButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Advice(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void TacticalList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DisbandButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void TabChanged(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void TacticalList(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void DisbandButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void TabChanged(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static void ReadinessActionCallback(aui_Control *control,
-					uint32 action, uint32 data, void *cookie);
+					uint32 action, uint32 data, Cookie cookie);
 
-	static void DisbandQuery(bool response, void *data);
+	static void DisbandQuery(bool response, Cookie data);
 
 	static void InitializeEvents();
 	static void CleanupEvents();

@@ -11,6 +11,7 @@ class ctp2_Button;
 class ctp2_DropDown;
 class ctp2_Static;
 class GovernmentRecord;
+union Cookie;
 
 class GovernmentTab {
 public:
@@ -51,12 +52,12 @@ private:
 		ctp2_Static **information);
 
 	static void CompareGovernmentActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void EnactGovernmentActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
-	static void ConfirmGovernmentChange(bool result, void *data);
+	static void ConfirmGovernmentChange(bool result, Cookie data);
 
 
 

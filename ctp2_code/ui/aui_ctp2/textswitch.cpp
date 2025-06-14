@@ -21,7 +21,7 @@ TextSwitch::TextSwitch(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -29,7 +29,6 @@ TextSwitch::TextSwitch(
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 }
-
 
 TextSwitch::TextSwitch(
 	AUI_ERRCODE *retval,
@@ -41,7 +40,7 @@ TextSwitch::TextSwitch(
 	const MBCHAR *pattern,
 	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 	:
 	aui_ImageBase( (sint32)0 ),
@@ -51,13 +50,8 @@ TextSwitch::TextSwitch(
 {
 }
 
-
 AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();
@@ -71,18 +65,6 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	primitives_FrameRect16(surface, &rect, g_colorSet->GetColor(COLOR_BLACK));
 
-
-
-
-
-
-
-
-
-
-
-
-
 	if ( IsOn() )
 		primitives_BevelRect16( surface, &rect, 2, 1, 16, 16 );
 	else
@@ -90,34 +72,23 @@ AUI_ERRCODE TextSwitch::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	if ( IsActive() )
 	{
-
 		if ( IsOn() )
 		{
-
 		}
 		else
 		{
-
 		}
 
-		if (m_text) {
-
-
-
-
+		if (m_text)
+		{
 			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_HILITE, 0);
 		}
 	}
 	else
 	{
-
-		if (m_text) {
-
-
-
-
+		if (m_text)
+		{
 			textutils_CenteredDropString(surface, m_text, &rect, 9, COLOR_BUTTON_TEXT_PLAIN, 0);
-
 		}
 	}
 

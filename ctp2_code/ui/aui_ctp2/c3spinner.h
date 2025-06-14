@@ -17,7 +17,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	C3Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -28,7 +28,7 @@ public:
 		BOOL isVertical,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~C3Spinner() {}
 
 protected:

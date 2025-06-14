@@ -57,11 +57,11 @@ public:
 	static void DisplayWindow();
 	static void RemoveWindow(uint32 action);
 
-	static void AcceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ItemSelected(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static sint32 CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
+	static void AcceptPress      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CancelPress      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ItemSelected     (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static sint32 CompareItems   (ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 
 	void SetLanguageDescription();
 	void ApplyLanguage();

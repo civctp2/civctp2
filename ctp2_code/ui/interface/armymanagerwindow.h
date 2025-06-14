@@ -72,16 +72,16 @@ class ArmyManagerWindow {
 
 	void FillArmies();
 
-	static void NewArmy(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void List(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Add(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddAll(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Remove(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void RemoveAll(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void InArmy(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void OutOfArmy(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ArmyNameChanged(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void NewArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void List(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Add(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AddAll(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Remove(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void RemoveAll(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void InArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void OutOfArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ArmyNameChanged(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie);
 	static AUI_ERRCODE DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie);

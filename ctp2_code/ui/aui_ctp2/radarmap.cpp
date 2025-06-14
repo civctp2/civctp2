@@ -1752,7 +1752,7 @@ void RadarRenderOverlay::RenderTradeRoute(aui_Surface & surface, const RECT & re
 //
 //---------------------------------------------------------------------------
 RadarMap::RadarMap(AUI_ERRCODE * errCode, sint32 id, const MBCHAR * ldlBlock, ControlActionCallback * ActionFunc,
-		void * cookie)
+		Cookie cookie)
 	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
@@ -1768,7 +1768,7 @@ RadarMap::RadarMap(AUI_ERRCODE * errCode, sint32 id, const MBCHAR * ldlBlock, Co
 //
 //---------------------------------------------------------------------------
 RadarMap::RadarMap(AUI_ERRCODE * errCode, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-		const MBCHAR * pattern, ControlActionCallback * ActionFunc, void * cookie)
+		const MBCHAR * pattern, ControlActionCallback * ActionFunc, Cookie cookie)
 	:
 		aui_ImageBase(0),
 		aui_TextBase(NULL),

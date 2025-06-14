@@ -94,7 +94,7 @@ sint32 graphicsresscreen_removeMyWindow(uint32 action)
 }
 
 
-void ScreenResListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScreenResListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -208,7 +208,7 @@ AUI_ERRCODE graphicsresscreen_Cleanup()
 
 
 
-void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( graphicsresscreen_removeMyWindow(action) ) {
 		if (s_selectedDisplayMode) {

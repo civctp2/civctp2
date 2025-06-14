@@ -327,11 +327,11 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	Assert(m_multiButtonGroup);
 
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "MultiGroup.InsertButton", EditQueue::MultiActionButton,
-			(void *)EDIT_QUEUE_MULTI_ACTION_INSERT);
+			EDIT_QUEUE_MULTI_ACTION_INSERT);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "MultiGroup.AppendButton", EditQueue::MultiActionButton,
-			(void *)EDIT_QUEUE_MULTI_ACTION_APPEND);
+			EDIT_QUEUE_MULTI_ACTION_APPEND);
 	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "MultiGroup.OverwriteButton", EditQueue::MultiActionButton,
-			(void *)EDIT_QUEUE_MULTI_ACTION_OVERWRITE);
+			EDIT_QUEUE_MULTI_ACTION_OVERWRITE);
 
 	m_queueName = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.QueueName");
 
@@ -1294,11 +1294,11 @@ struct CapitolConfirmData {
 	bool insert;
 };
 
-static void ConfirmRebuildCapitol(bool confirm, void * data)
+static void ConfirmRebuildCapitol(bool confirm, Cookie data)
 {
 	if (confirm)
 	{
-		CapitolConfirmData * confirmData = (CapitolConfirmData *)data;
+		CapitolConfirmData * confirmData = (CapitolConfirmData *)data.m_voidPtr;
 		Assert(confirmData && confirmData->info);
 		Assert(s_editQueue);
 		if (!s_editQueue || !confirmData || !confirmData->info) {
@@ -1314,11 +1314,11 @@ struct SwitchProductionConfirmData {
 	bool insert;
 };
 
-static void ConfirmSwitchProduction(bool confirm, void * data)
+static void ConfirmSwitchProduction(bool confirm, Cookie data)
 {
 	if (confirm)
 	{
-		SwitchProductionConfirmData *confirmData = (SwitchProductionConfirmData *)data;
+		SwitchProductionConfirmData *confirmData = (SwitchProductionConfirmData *)data.m_voidPtr;
 		Assert(confirmData && confirmData->info);
 		Assert(s_editQueue);
 		if (!s_editQueue || !confirmData || !confirmData->info) {
@@ -1540,7 +1540,7 @@ void EditQueue::Suggest(bool insert)
 	}
 }
 
-static void ConfirmRemoveProduction(bool confirm, void * data)
+static void ConfirmRemoveProduction(bool confirm, Cookie data)
 {
 	if (confirm)
 	{
@@ -1619,7 +1619,7 @@ void EditQueue::Remove(bool confirmedSwitch)
 	}
 }
 
-static void ConfirmMoveUpProduction(bool confirm, void * data)
+static void ConfirmMoveUpProduction(bool confirm, Cookie data)
 {
 	if (confirm)
 	{
@@ -1698,7 +1698,7 @@ void EditQueue::Up(bool confirmedSwitch)
 	}
 }
 
-static void ConfirmMoveDownProduction(bool confirm, void * data)
+static void ConfirmMoveDownProduction(bool confirm, Cookie data)
 {
 	if (confirm)
 	{
@@ -1775,7 +1775,7 @@ void EditQueue::Down(bool confirmedSwitch)
 	}
 }
 
-void EditQueue::ToggleUnits(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ToggleUnits(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1784,7 +1784,7 @@ void EditQueue::ToggleUnits(aui_Control * control, uint32 action, uint32 data, v
 	s_editQueue->SelectChoiceList(s_editQueue->m_unitList);
 }
 
-void EditQueue::ToggleBuildings(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ToggleBuildings(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1793,7 +1793,7 @@ void EditQueue::ToggleBuildings(aui_Control * control, uint32 action, uint32 dat
 	s_editQueue->SelectChoiceList(s_editQueue->m_buildingList);
 }
 
-void EditQueue::ToggleWonders(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ToggleWonders(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1802,7 +1802,7 @@ void EditQueue::ToggleWonders(aui_Control * control, uint32 action, uint32 data,
 	s_editQueue->SelectChoiceList(s_editQueue->m_wonderList);
 }
 
-void EditQueue::Library(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::Library(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1827,7 +1827,7 @@ void EditQueue::Library(aui_Control * control, uint32 action, uint32 data, void 
 	}
 }
 
-void EditQueue::AddItem(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::AddItem(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1836,7 +1836,7 @@ void EditQueue::AddItem(aui_Control * control, uint32 action, uint32 data, void 
 	s_editQueue->Add(false);
 }
 
-void EditQueue::InsertItem(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::InsertItem(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1845,7 +1845,7 @@ void EditQueue::InsertItem(aui_Control * control, uint32 action, uint32 data, vo
 	s_editQueue->Add(true);
 }
 
-void EditQueue::SuggestItem(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::SuggestItem(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1854,7 +1854,7 @@ void EditQueue::SuggestItem(aui_Control * control, uint32 action, uint32 data, v
 	s_editQueue->Suggest(false);
 }
 
-void EditQueue::RemoveItem(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::RemoveItem(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1863,7 +1863,7 @@ void EditQueue::RemoveItem(aui_Control * control, uint32 action, uint32 data, vo
 	s_editQueue->Remove();
 }
 
-void EditQueue::ItemUp(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ItemUp(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1872,7 +1872,7 @@ void EditQueue::ItemUp(aui_Control * control, uint32 action, uint32 data, void *
 	s_editQueue->Up();
 }
 
-void EditQueue::ItemDown(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ItemDown(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1881,7 +1881,7 @@ void EditQueue::ItemDown(aui_Control * control, uint32 action, uint32 data, void
 	s_editQueue->Down();
 }
 
-void EditQueue::ListCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ListCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT) {
 		return;
@@ -1996,7 +1996,7 @@ void EditQueue::ShowSelectedInfo()
 	s_editQueue->m_libraryButton->Enable(s_editQueue->m_itemCategory != -1 && s_editQueue->m_itemType != -1);
 }
 
-void EditQueue::Close(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::Close(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2031,7 +2031,7 @@ void EditQueue::ExitLoadMode()
 	s_editQueue->SelectChoiceList(s_editQueue->m_listBeforeLoadSaveMode);
 }
 
-void EditQueue::LoadModeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::LoadModeCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2054,7 +2054,7 @@ void EditQueue::LoadModeCallback(aui_Control * control, uint32 action, uint32 da
 	}
 }
 
-void EditQueue::CityDropDown(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::CityDropDown(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_DROPDOWN_ACTION_SELECT) {
 		return;
@@ -2079,7 +2079,7 @@ void EditQueue::CityDropDown(aui_Control * control, uint32 action, uint32 data, 
 	}
 }
 
-void EditQueue::PreviousCity(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::PreviousCity(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2104,7 +2104,7 @@ void EditQueue::PreviousCity(aui_Control * control, uint32 action, uint32 data, 
 	SetCity(item->GetUserDataUint32());
 }
 
-void EditQueue::NextCity(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::NextCity(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2129,7 +2129,7 @@ void EditQueue::NextCity(aui_Control * control, uint32 action, uint32 data, void
 	SetCity(item->GetUserDataUint32());
 }
 
-void EditQueue::CustomButton(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::CustomButton(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2152,7 +2152,7 @@ void EditQueue::CustomButton(aui_Control * control, uint32 action, uint32 data, 
 	}
 }
 
-void EditQueue::ClearMessageCallback(bool response, void * data)
+void EditQueue::ClearMessageCallback(bool response, Cookie data)
 {
 	Assert(s_editQueue);
 	if (!s_editQueue || !s_editQueue->m_city.IsValid()) {
@@ -2173,7 +2173,7 @@ void EditQueue::ClearMessageCallback(bool response, void * data)
 	}
 }
 
-void EditQueue::ClearButton(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::ClearButton(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2195,15 +2195,15 @@ void EditQueue::ClearButton(aui_Control * control, uint32 action, uint32 data, v
 	}
 }
 
-void EditQueue::ConfirmOverwrite(bool response, void * data)
+void EditQueue::ConfirmOverwrite(bool response, Cookie data)
 {
 	if (response) {
 		EditQueue::MultiActionButton(NULL, AUI_BUTTON_ACTION_EXECUTE, 0,
-				(void *)EDIT_QUEUE_MULTI_ACTION_OVERWRITE_CONFIRMED);
+				EDIT_QUEUE_MULTI_ACTION_OVERWRITE_CONFIRMED);
 	}
 }
 
-void EditQueue::MultiActionButton(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::MultiActionButton(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2214,7 +2214,7 @@ void EditQueue::MultiActionButton(aui_Control * control, uint32 action, uint32 d
 		return;
 	}
 
-	EDIT_QUEUE_MULTI_ACTION eqAction = (EDIT_QUEUE_MULTI_ACTION)(sint32)cookie;
+	EDIT_QUEUE_MULTI_ACTION eqAction = (EDIT_QUEUE_MULTI_ACTION)cookie.m_sin32Type;
 	Assert(s_editQueue->m_mode == EDIT_QUEUE_MODE_MULTI);
 	if (eqAction == EDIT_QUEUE_MULTI_ACTION_OVERWRITE)
 	{
@@ -2319,7 +2319,7 @@ void EditQueue::Save(const MBCHAR * saveFileName)
 	}
 }
 
-void EditQueue::LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void EditQueue::LoadCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2365,13 +2365,13 @@ void EditQueue::LoadCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-void EditQueue::LoadQueryCallback(bool response, void * data)
+void EditQueue::LoadQueryCallback(bool response, Cookie data)
 {
 	if (!response) {
 		return;
 	}
 
-	const MBCHAR * loadName = (const MBCHAR *)data;
+	const MBCHAR * loadName = (const MBCHAR *)data.m_voidPtr;
 
 	char loadFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, loadFileName);
@@ -2444,7 +2444,7 @@ const MBCHAR *EditQueue::GetSelectedQueueName()
 	return (const MBCHAR *)item->GetUserDataPtr();
 }
 
-void EditQueue::QueueFileList(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::QueueFileList(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_LISTBOX_ACTION_SELECT) {
 		return;
@@ -2517,7 +2517,7 @@ void EditQueue::DisplayQueueContents(const MBCHAR * queueName)
 	m_queueName->SetText(queueName);
 }
 
-void EditQueue::DeleteCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::DeleteCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2538,13 +2538,13 @@ void EditQueue::DeleteCallback(aui_Control * control, uint32 action, uint32 data
 	MessageBoxDialog::Query(buffer, "QueryDeleteQueue", DeleteQueryCallback, (void *)queueName);
 }
 
-void EditQueue::DeleteQueryCallback(bool response, void * data)
+void EditQueue::DeleteQueryCallback(bool response, Cookie data)
 {
 	if (!response) {
 		return;
 	}
 
-	const MBCHAR * queueName = (const MBCHAR *)data;
+	const MBCHAR * queueName = (const MBCHAR *)data.m_voidPtr;
 
 	char deleteFileName[_MAX_PATH];
 	g_civPaths->GetSavePath(C3SAVEDIR_QUEUES, deleteFileName);
@@ -2624,7 +2624,7 @@ void EditQueue::RushBuy(bool pay)
 	m_queueList->SelectItem(0);
 }
 
-void EditQueue::RushBuyCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::RushBuyCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2638,7 +2638,7 @@ void EditQueue::RushBuyCallback(aui_Control * control, uint32 action, uint32 dat
 	NationalManagementDialog::UpdateCity(s_editQueue->m_city);
 }
 
-void EditQueue::QueueListCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::QueueListCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT && action != AUI_LISTBOX_ACTION_SELECT) {
 		return;
@@ -2664,7 +2664,7 @@ void EditQueue::QueueListCallback(aui_Control * control, uint32 action, uint32 d
 	}
 }
 
-void EditQueue::GotoCity(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::GotoCity(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2695,7 +2695,7 @@ void EditQueue::GotoCity(aui_Control * control, uint32 action, uint32 data, void
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void EditQueue::OpenNationalManager(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::OpenNationalManager(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2759,7 +2759,7 @@ void QuerySaveNameAction::Execute(aui_Control * control, uint32 action, uint32 d
 		NULL, "str_ldl_MB_OK", "str_ldl_MB_CANCEL", m_defaultSaveName);
 }
 
-void EditQueue::SaveQueryCallback(bool response, void * data)
+void EditQueue::SaveQueryCallback(bool response, Cookie data)
 {
 	if (!s_editQueue) {
 		return;
@@ -2783,7 +2783,7 @@ void EditQueue::SaveQueryCallback(bool response, void * data)
 	}
 }
 
-void EditQueue::SaveNameResponse(bool response, const char * text, void * data)
+void EditQueue::SaveNameResponse(bool response, const char * text, Cookie data)
 {
 	if (!s_editQueue) {
 		return;
@@ -2822,7 +2822,7 @@ void EditQueue::SaveNameResponse(bool response, const char * text, void * data)
 	}
 }
 
-void EditQueue::SaveButton(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void EditQueue::SaveButton(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -2831,7 +2831,7 @@ void EditQueue::SaveButton(aui_Control * control, uint32 action, uint32 data, vo
 	g_c3ui->AddAction(new QuerySaveNameAction(""));
 }
 
-void EditQueue::SaveInformationCallBack(bool response, void * data)
+void EditQueue::SaveInformationCallBack(bool response, Cookie data)
 {
 	g_c3ui->AddAction(new QuerySaveNameAction(""));
 }

@@ -105,27 +105,27 @@ static MBCHAR	s_buttonName[k_STATS_NUM_BUTTONS][256] ={
 static aui_StringTable *s_statsString;
 #endif
 
-void SpriteEditSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void SpriteEditSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 }
 
-void FileButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void FileButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_spriteEditWindow->m_loopInProgress = false;
 
-	if ((int)cookie)
+	if (cookie.m_sin32Type)
 		g_spriteEditWindow->LoadSprite();
 	else
 		g_spriteEditWindow->SaveSprite();
 }
 
-void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void AnimCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->SetAnimation((sint32)cookie);
+	g_spriteEditWindow->SetAnimation(cookie.m_sin32Type);
 	g_spriteEditWindow->m_frame             = 0;
 	g_spriteEditWindow->m_facing            = k_DEFAULTSPRITEFACING;
 	g_spriteEditWindow->m_loopInProgress    = false;;
@@ -133,34 +133,34 @@ void AnimCallback( aui_Control *control, uint32 action, uint32 data, void *cooki
 	g_spriteEditWindow->BeginAnimation();
 }
 
-void StepCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void StepCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->AddFrame((sint32)cookie);
+	g_spriteEditWindow->AddFrame(cookie.m_sin32Type);
 	g_spriteEditWindow->m_loopInProgress = false;
 
 }
 
-void PlayCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void PlayCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_spriteEditWindow->m_loopInProgress = !g_spriteEditWindow->m_loopInProgress;
 	g_spriteEditWindow->m_stopAfterLoop  = false;
 
-	if ((int)cookie)
+	if (cookie.m_sin32Type)
 		g_spriteEditWindow->m_stopAfterLoop = true;
 
 	if (g_spriteEditWindow->m_loopInProgress)
 		g_spriteEditWindow->BeginAnimation();
 }
 
-void FacingCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void FacingCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	g_spriteEditWindow->AddFacing((sint32)cookie);
+	g_spriteEditWindow->AddFacing(cookie.m_sin32Type);
 }
 
 int SpriteEditWindow_Initialize( void )
@@ -375,11 +375,11 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 	m_VICTORYAnim   = spNew_ctp2_Button(errcode, windowBlock, "STVICTORYAnim","No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_WORKAnim      = spNew_ctp2_Button(errcode, windowBlock, "STWORKAnim"   ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 
-	m_MOVEAnim      ->SetActionFuncAndCookie(AnimCallback, (void *)GOODACTION_MAX );
-	m_ATTACKAnim    ->SetActionFuncAndCookie(AnimCallback, (void *)GOODACTION_MAX );
-	m_IDLEAnim      ->SetActionFuncAndCookie(AnimCallback, (void *)GOODACTION_IDLE);
-	m_VICTORYAnim   ->SetActionFuncAndCookie(AnimCallback, (void *)GOODACTION_MAX );
-	m_WORKAnim      ->SetActionFuncAndCookie(AnimCallback, (void *)GOODACTION_MAX );
+	m_MOVEAnim      ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+	m_ATTACKAnim    ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+	m_IDLEAnim      ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_IDLE);
+	m_VICTORYAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+	m_WORKAnim      ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
 
 	m_stepPlus      = spNew_ctp2_Button(errcode, windowBlock, "STPlayStepPlus"  ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_stepMinus     = spNew_ctp2_Button(errcode, windowBlock, "STPlayStepMinus" ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
@@ -388,14 +388,14 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 	m_facingPlus    = spNew_ctp2_Button(errcode, windowBlock, "STFacingPlus"    ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_facingMinus   = spNew_ctp2_Button(errcode, windowBlock, "STFacingMinus"   ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 
-	m_Load         ->SetActionFuncAndCookie(FileButtonActionCallback, (void *)true );
-	m_Save         ->SetActionFuncAndCookie(FileButtonActionCallback, (void *)false);
-	m_stepPlus     ->SetActionFuncAndCookie(StepCallback            , (void *) 1);
-	m_stepMinus    ->SetActionFuncAndCookie(StepCallback            , (void *)-1);
-	m_playOnce     ->SetActionFuncAndCookie(PlayCallback            , (void *)true);
-	m_playLoop     ->SetActionFuncAndCookie(PlayCallback            , (void *)false);
-	m_facingPlus   ->SetActionFuncAndCookie(FacingCallback          , (void *) 1);
-	m_facingMinus  ->SetActionFuncAndCookie(FacingCallback          , (void *)-1);
+	m_Load         ->SetActionFuncAndCookie(FileButtonActionCallback, (sint32) 1);
+	m_Save         ->SetActionFuncAndCookie(FileButtonActionCallback, (sint32) 0);
+	m_stepPlus     ->SetActionFuncAndCookie(StepCallback            , (sint32) 1);
+	m_stepMinus    ->SetActionFuncAndCookie(StepCallback            , (sint32)-1);
+	m_playOnce     ->SetActionFuncAndCookie(PlayCallback            , (sint32) 1);
+	m_playLoop     ->SetActionFuncAndCookie(PlayCallback            , (sint32) 0);
+	m_facingPlus   ->SetActionFuncAndCookie(FacingCallback          , (sint32) 1);
+	m_facingMinus  ->SetActionFuncAndCookie(FacingCallback          , (sint32)-1);
 
 	m_largeImage = new C3Window(errcode, aui_UniqueId(), "STLargeImage", 16 );
 

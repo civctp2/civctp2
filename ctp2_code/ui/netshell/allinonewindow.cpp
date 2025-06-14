@@ -3944,7 +3944,7 @@ void AllinoneWindow::PlayStyleDropDownAction::Execute(
 	}
 }
 
-void AllinoneWindow::PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void AllinoneWindow::PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE)
 		return;
@@ -4172,7 +4172,7 @@ void AllinoneAgesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4227,7 +4227,7 @@ void AllinoneMapSizeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4247,7 +4247,7 @@ void AllinoneWorldShapeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4268,14 +4268,14 @@ void AllinoneTribeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	spnewgametribescreen_removeMyWindow(
 		action,
@@ -4392,7 +4392,7 @@ void AllinoneWorldTypeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4435,7 +4435,7 @@ void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4466,7 +4466,7 @@ void AllinoneMoreRulesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4622,13 +4622,13 @@ void TribesButtonCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	if ( item->IsAI() )
 	{
@@ -4653,7 +4653,7 @@ void CivPointsButtonCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4663,7 +4663,7 @@ void CivPointsButtonCallback(
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	if ( item->IsAI() )
 	{
@@ -4697,7 +4697,7 @@ void PwPointsButtonCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4707,7 +4707,7 @@ void PwPointsButtonCallback(
 	c3_EditButton *button = (c3_EditButton *)control;
 	sint32 value = button->GetValue();
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	if ( item->IsAI() )
 	{

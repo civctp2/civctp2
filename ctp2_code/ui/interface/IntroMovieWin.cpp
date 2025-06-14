@@ -105,7 +105,7 @@ void intromoviewin_Cleanup()
 }
 
 
-void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
+void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

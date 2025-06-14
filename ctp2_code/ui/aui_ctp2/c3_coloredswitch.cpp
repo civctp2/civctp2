@@ -22,7 +22,7 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR  const *) NULL),
@@ -46,7 +46,7 @@ c3_ColoredSwitch::c3_ColoredSwitch(
 	sint32 height,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:

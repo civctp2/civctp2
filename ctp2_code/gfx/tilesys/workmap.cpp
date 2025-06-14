@@ -71,7 +71,7 @@ WorkMap::WorkMap(AUI_ERRCODE *retval,
 							sint32 id,
 							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
-							void *cookie)
+							Cookie cookie)
 	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
@@ -89,7 +89,7 @@ WorkMap::WorkMap(AUI_ERRCODE *retval,
 							sint32 height,
 							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
-							void *cookie)
+							Cookie cookie)
 	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),

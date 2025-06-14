@@ -1165,12 +1165,12 @@ AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
 void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
                                                      uint32 action,
                                                      uint32 data,
-                                                     void *cookie)
+                                                     Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1193,12 +1193,12 @@ void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1222,12 +1222,12 @@ void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1247,12 +1247,12 @@ void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1275,12 +1275,12 @@ void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1301,15 +1301,15 @@ void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<CauseAndEffectTab*>(cookie)->DisplayDetails(
-		!(static_cast<CauseAndEffectTab*>(cookie)->m_displayDetails));
+	static_cast<CauseAndEffectTab*>(cookie.m_voidPtr)->DisplayDetails(
+		!(static_cast<CauseAndEffectTab*>(cookie.m_voidPtr)->m_displayDetails));
 
-	static_cast<CauseAndEffectTab*>(cookie)->m_tabPanel->ShouldDraw(TRUE);
+	static_cast<CauseAndEffectTab*>(cookie.m_voidPtr)->m_tabPanel->ShouldDraw(TRUE);
 }
 
 //----------------------------------------------------------------------------
@@ -1331,7 +1331,7 @@ void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
 //
 //----------------------------------------------------------------------------
 void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
@@ -1355,7 +1355,7 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 	UpdateCities();
 
 	// Update tab
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	tab->UpdateFoodValues();
 	tab->UpdateFoodSpinners();
 	tab->UpdateProductionValues();
@@ -1383,9 +1383,9 @@ void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
 void CauseAndEffectTab::CauseAndEffectTabActionCallback(aui_Control *control,
                                                         uint32 action,
                                                         uint32 data,
-                                                        void *cookie)
+                                                        Cookie cookie)
 {
-	CauseAndEffectTab * tab = reinterpret_cast<CauseAndEffectTab *>(cookie);
+	CauseAndEffectTab * tab = static_cast<CauseAndEffectTab *>(cookie.m_voidPtr);
 
 	if (action == ctp2_Tab::ACTION_ACTIVATED)
 	{

@@ -64,7 +64,7 @@ public:
 
 	void				ColorizeString(MBCHAR *destString, const MBCHAR *srcString, COLORREF colorRef);
 
-	static void ChatCallback(aui_Control *control, uint32 action, uint32 data, void *cookie) ;
+	static void ChatCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie) ;
 
 private:
 	c3_HyperTextBox		*m_textBox;

@@ -131,7 +131,7 @@ public:
 
 SciAdvanceScreenKeyboardHandler s_keyboardHandler;
 
-void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
@@ -143,14 +143,14 @@ void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	open_GreatLibrary();
 }
 
-void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	switch ( action )
 	{
@@ -360,7 +360,7 @@ void sci_advancescreen_Cleanup(void)
 	s_scienceGoalTree = NULL;
 }
 
-void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -385,7 +385,7 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

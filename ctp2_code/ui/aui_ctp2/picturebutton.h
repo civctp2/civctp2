@@ -23,14 +23,14 @@ public:
 		const MBCHAR *upPicture,
 		const MBCHAR *downPicture,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	PictureButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 
 	virtual ~PictureButton();
 

@@ -60,10 +60,10 @@ private:
 	void UpdateMultiSelectionArmySymbols();
 
 	static void UnitDisplayGroupCallback(aui_Region * region, void * userData);
-	static void NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void OrderButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void OrderButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE HealthBarActionCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
 			Cookie cookie);

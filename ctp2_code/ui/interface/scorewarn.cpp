@@ -57,7 +57,7 @@ c3_PopupWindow	*   g_scorewarn = NULL;
 
 static c3_Static *  s_message   = NULL;
 
-void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -65,7 +65,7 @@ void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint
 }
 
 
-void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(optionsscreen_removeMyWindow(action)) {
 		AUI_ERRCODE auiErr = g_c3ui->RemoveWindow( g_scorewarn->Id() );
@@ -83,7 +83,7 @@ void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -153,7 +153,7 @@ void DisclaimerCloseAction::Execute(aui_Control *control, uint32 action, uint32 
 	disclaimer_Cleanup();
 }
 
-void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -163,7 +163,7 @@ void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, 
 		s_disclaimerCallback(control, action, data, cookie);
 }
 
-void disclaimer_DeclineButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void disclaimer_DeclineButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 

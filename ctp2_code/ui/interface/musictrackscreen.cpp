@@ -98,7 +98,7 @@ sint32 musictrackscreen_removeMyWindow(uint32 action)
 }
 
 
-void MusicTrackListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void MusicTrackListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -180,7 +180,7 @@ void musictrackscreen_Cleanup()
 
 
 
-void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( musictrackscreen_removeMyWindow(action) ) {
 

@@ -21,7 +21,7 @@ PictureSwitch::PictureSwitch(
 	Picture *pictureActiveOn,
 	Picture *pictureActiveOff,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 :
 	aui_ImageBase( (sint32)0 ),

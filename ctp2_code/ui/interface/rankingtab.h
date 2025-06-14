@@ -44,6 +44,7 @@ class ctp2_Window;
 class ctp2_DropDown;
 class ctp2_ListBox;
 class LineGraph;
+union Cookie;
 
 class RankingTab
 {
@@ -99,10 +100,10 @@ private:
 	void CleanupGraph();
 
 	static void SelectRankingActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void LineOrZeroSumButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 };
 

@@ -65,7 +65,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	aui_TextField(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -75,7 +75,7 @@ public:
 		sint32 height,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~aui_TextField();
 
 protected:

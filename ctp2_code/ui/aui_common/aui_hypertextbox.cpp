@@ -16,7 +16,7 @@ aui_HyperTextBox::aui_HyperTextBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -43,7 +43,7 @@ aui_HyperTextBox::aui_HyperTextBox(
 	sint32 width,
 	sint32 height,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -481,11 +481,11 @@ void HyperTextBoxRangerActionCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action == (uint32)AUI_RANGER_ACTION_VALUECHANGE )
 	{
-		aui_HyperTextBox *hypertextbox = (aui_HyperTextBox *)cookie;
+		aui_HyperTextBox *hypertextbox = (aui_HyperTextBox *)cookie.m_voidPtr;
 
 		hypertextbox->RangerMoved();
 	}

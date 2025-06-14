@@ -15,7 +15,7 @@ ctp2_MenuButton::ctp2_MenuButton(AUI_ERRCODE *retval,
 								 uint32 id,
 								 const MBCHAR *ldlBlock,
 								 ControlActionCallback *ActionFunc,
-								 void *cookie)
+								 Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),

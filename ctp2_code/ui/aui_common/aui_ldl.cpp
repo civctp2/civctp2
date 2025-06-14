@@ -818,7 +818,7 @@ AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 (
     const MBCHAR *                          ldlBlock,
     aui_Control::ControlActionCallback *    actionFunc,
-    void *                                  cookie
+    Cookie                                  cookie
 )
 {
 	aui_Control	*   control = (aui_Control *) aui_Ldl::GetObject(ldlBlock);
@@ -835,7 +835,7 @@ AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 	const MBCHAR *                          parentBlock,
 	const MBCHAR *                          regionBlock,
 	aui_Control::ControlActionCallback *    actionFunc,
-	void *                                  cookie
+	Cookie                                  cookie
 )
 {
 	Assert(parentBlock && regionBlock);

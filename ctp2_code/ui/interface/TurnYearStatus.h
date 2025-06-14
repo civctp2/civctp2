@@ -68,7 +68,7 @@ public:
 private:
 
 	static void TurnYearStatusActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	ctp2_Button *m_turnYearStatus;
 	ctp2_Static *m_dougsProgress;

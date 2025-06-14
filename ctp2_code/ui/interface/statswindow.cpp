@@ -276,7 +276,7 @@ void statswindow_ShowButtons( void )
 	}
 }
 
-void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	switch ( action ) {
@@ -296,7 +296,7 @@ void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;

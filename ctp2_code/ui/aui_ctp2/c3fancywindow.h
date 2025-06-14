@@ -58,7 +58,7 @@ public:
 		MBCHAR ldlBorder[k_NUM_BORDERS][ k_AUI_LDL_MAXBLOCK + 1 ] = NULL,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND,
 		bool bevel = true,
-		void (*exitCallBack)( aui_Control *, uint32, uint32, void *) = NULL);
+		void (*exitCallBack)( aui_Control *, uint32, uint32, Cookie) = NULL);
 
 	virtual ~C3FancyWindow();
 	virtual AUI_ERRCODE Resize( sint32 width, sint32 height );

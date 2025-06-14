@@ -58,7 +58,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	aui_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -67,7 +67,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~aui_Button() {}
 
 	virtual AUI_ERRCODE ResetThis( void );
@@ -81,11 +81,11 @@ public:
 
 protected:
 	aui_Button()
-    :
-        aui_Control     (),
-        m_isRepeating   (false),
-        m_repeatCount   (0)
-    {};
+	:
+	    aui_Control     (),
+	    m_isRepeating   (false),
+	    m_repeatCount   (0)
+	{};
 
 	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 

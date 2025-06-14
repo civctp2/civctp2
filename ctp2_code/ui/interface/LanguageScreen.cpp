@@ -165,7 +165,7 @@ void LanguageScreen::RemoveWindow(uint32 action)
 	keypress_RemoveHandler(s_languageScreen);
 }
 
-void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -173,14 +173,14 @@ void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 dat
 	LanguageScreen::RemoveWindow(action);
 }
 
-void LanguageScreen::CancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::CancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
 	LanguageScreen::RemoveWindow(action);
 }
 
-void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -197,7 +197,7 @@ sint32 LanguageScreen::CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, 
 	return _stricoll(text1->GetText(), text2->GetText());
 }
 
-void LanguageScreen::ItemSelected(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::ItemSelected(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	// This is for the text boxes and updated once selected
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;

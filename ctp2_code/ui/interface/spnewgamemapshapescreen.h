@@ -40,9 +40,9 @@ sint32 spnewgamemapshapescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
 void    spnewgamemapshapescreen_Cleanup();
 
-void spnewgamemapshapescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamemapshapescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamemapshapescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamemapshapescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamemapshapescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 size_t  spnewgamemapshapescreen_getMapShapeIndex(void);
 void    spnewgamemapshapescreen_setMapShapeIndex(size_t);

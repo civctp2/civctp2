@@ -84,7 +84,7 @@ CityManagerWindow::~CityManagerWindow()
 	}
 }
 
-void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 	if(s_cityManagerWindow)
@@ -93,8 +93,8 @@ void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32
 
 AUI_ERRCODE CityManagerWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-    if (!aui_Ldl::IsValid(ldlBlock))
-    {
+	if (!aui_Ldl::IsValid(ldlBlock))
+	{
 		return AUI_ERRCODE_HACK;
 	}
 

@@ -30,7 +30,7 @@ void EndTurnButton::UpdatePlayer(PLAYER_INDEX player)
 	g_attractWindow->RemoveRegion(m_endTurn);
 }
 
-void EndTurnButton::EndTurnButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void EndTurnButton::EndTurnButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;

@@ -298,7 +298,7 @@ AUI_ERRCODE spnewgamemapsizescreen_Cleanup()
 }
 
 
-void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 

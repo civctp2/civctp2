@@ -37,7 +37,7 @@ public:
 		AUI_ERRCODE *retval,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = NULL );
 	virtual ~ns_TribesDropDown();
 };
 

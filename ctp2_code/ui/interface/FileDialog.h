@@ -4,6 +4,7 @@
 class ctp2_Window;
 class ctp2_ListBox;
 class ctp2_TextField;
+union Cookie;
 
 #define k_FILE_DIALOG_SAVE 1
 #define k_FILE_DIALOG_LOAD 2
@@ -42,11 +43,11 @@ class FileDialog {
 
 	const MBCHAR *GetSelectedFile();
 
-	static void LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SaveCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NameCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void LoadCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SaveCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CancelCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void NameCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 };
 
 #endif

@@ -24,7 +24,7 @@ IconTab::IconTab(
 	Icon *icon,
 	uint16 color,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 :
 	aui_ImageBase( (sint32)0 ),

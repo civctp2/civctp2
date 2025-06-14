@@ -204,7 +204,7 @@ public:
 		aui_Control *control,
 		uint32 action,
 		uint32 data,
-		void *cookie
+		Cookie cookie
 	);
 
 	void UpdateList(DATABASE database);
@@ -238,7 +238,7 @@ public:
 	bool IsHidden(sint32 index, DATABASE theDatabase) const;
 
 private:
-	static void SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
 	void Initialize(MBCHAR const * windowBlock);
 	template <class T>

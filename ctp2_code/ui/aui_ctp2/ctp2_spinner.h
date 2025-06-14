@@ -45,19 +45,19 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = NULL,
 		bool displayValue = true );
 
 protected:
 	ctp2_Spinner() : aui_Ranger(), m_displayValue(true) {}
 
 public:
-	static void ActionCallback(aui_Control *control, uint32 state, uint32 data, void *cookie);
+	static void ActionCallback(aui_Control *control, uint32 state, uint32 data, Cookie cookie);
 
 	void SetDisplay();
 	void SetDispalyValue(bool displayValue){ m_displayValue = displayValue; };
 
-	AUI_ERRCODE SetSpinnerCallback(ControlActionCallback *actionFunc, void *cookie) {
+	AUI_ERRCODE SetSpinnerCallback(ControlActionCallback *actionFunc, Cookie cookie) {
 		m_spinnerActionFunc = actionFunc;
 		m_spinnerCookie = cookie;
 		return AUI_ERRCODE_OK;
@@ -65,7 +65,7 @@ public:
 
 protected:
 	ControlActionCallback  *m_spinnerActionFunc;
-	void                   *m_spinnerCookie;
+	Cookie                  m_spinnerCookie;
 	bool                    m_displayValue;
 };
 
