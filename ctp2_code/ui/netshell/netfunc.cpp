@@ -820,7 +820,7 @@ NETFunc::Transport::TYPE NETFunc::IPX::GetType(void) {
 NETFunc::Modem::Modem(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k):Transport(d, t, k) {
 
 	m_parameters.hwirq = 12345;
-	m_parameters.swint = (long) &NETFunc::s_cancelDial;
+	m_parameters.swint = (size_t) &NETFunc::s_cancelDial;
 
 }
 

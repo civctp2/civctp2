@@ -210,7 +210,7 @@ static struct {
 	jfieldID dialingMethod;
 } cfid;
 
-static long stop; //set to 1 to stop dial/answer; reset to 0 before dpCreate
+static size_t stop; //set to 1 to stop dial/answer; reset to 0 before dpCreate
 
 /* Initialize the field id's in cfid for use by commInitReq_CtoJava() and
  * commInitReq_JavatoC().  Must call often for now.
@@ -377,7 +377,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_create
 		cparams.sessionId = rand() | (rand() << 16) | time(0) | eclock();
 #endif
 		cparams.hwirq = 12345;   //enable stopping dial/answer
-		cparams.swint = (long)&stop;
+		cparams.swint = (size_t)&stop;
 		stop = 0;
 		pparams = &cparams;
 	}

@@ -361,7 +361,7 @@ static int notifystub(HANDLE hser)
  Time is in clock ticks, unlike the Greenleaf function of the similar name.
 -------------------------------------------------------------------------*/
 
-static int myHMInputLine(ser_t *ser, int timeout, char *buf, size_t buflen, long *stop)
+static int myHMInputLine(ser_t *ser, int timeout, char *buf, size_t buflen, size_t *stop)
 {
 	DWORD	dwReadLength;
 	int	tStartTime = clock();
@@ -451,7 +451,7 @@ int cdecl my_ddprintf(const char *	__format,  ...)
 // Send a command and get OK.
 // Returns zero on success.
 
-static int MyHMSendString(ser_t *ser, char *s, long *stop)
+static int MyHMSendString(ser_t *ser, char *s, size_t *stop)
 {
   char response[256];
   int ok = FALSE;
@@ -546,7 +546,7 @@ static int MyHMDial(ser_t *ser, char *s, int dialing_method)
 // Reset the modem.
 // Tries ntries times.
 // Returns zero on success.
-static int MyHMReset(ser_t *ser, int ntries, long *stop)
+static int MyHMReset(ser_t *ser, int ntries, size_t *stop)
 
 {
 	int i;
@@ -654,7 +654,7 @@ static void HangUp(void)
 DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 
 {
-	long *stop;
+	size_t *stop;
 	commInitResp_t  respDummy;
 	int				timeout;
 	char            response[256];
@@ -792,23 +792,23 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 
 	/* Set up a variable to look at if the user wants to stop dialing or answering */
 	if (12345 == req->hwirq)
-		stop = (long *) req->swint;
+		stop = (size_t *) req->swint;
 	else
 		stop = 0;
 
-    /* Don't check result of reset, since some modems don't return result
+	/* Don't check result of reset, since some modems don't return result
 	 * codes by default (e.g. USRobotics that have dipswitches)
 	 */
 	MyHMReset(ser, 2, stop);
 	if (stop && *stop) {
 		resp->status = comm_STATUS_NO_RESPONSE;
-	    ser_destroy(ser);
-	    ser = NULL;
+		ser_destroy(ser);
+		ser = NULL;
 		fdclose();
 		return FALSE;
 	}
 
-    /* Send an init string that hopefully gets the modem to do status codes */
+	/* Send an init string that hopefully gets the modem to do status codes */
 	DPRINT(("commInit: about to send init strings... regmo.Init[0] = %s\n", regmo.Init[0]));
 	for (i=0; (i<regmo_N_INIT) && regmo.Init[i][0]; i++) {
 		fdprint("sending '");

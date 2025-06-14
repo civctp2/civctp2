@@ -326,12 +326,12 @@ typedef struct {			/* Request (filled in by caller) */
 	long	baud;
 	long	baseadr;		/* ignored by Windows */
 	long	hwirq;			/* ignored by Windows */
-	long	swint;			/* ignored by Windows */
+	size_t	swint;			/* ignored by Windows */
 	char	*phonenum;
 	char	*modeministr;
 	long	flags;			/* controls whether to dial and/or test */
 	long	dialing_method;	/* parameter to HMSetDialingMethod */
-} commInitReq_t;
+} commInitReq_t;			/* Copy of commInitReq_t in anet.h */
 
 typedef struct {
 	int portnum;			/* Value for commInitReq->portnum (e.g. 0) */
