@@ -94,10 +94,10 @@ sint32 GetCombinedStrength(Strengths const & a_Strengths, sint32 a_Turn, sint32 
 		{
 			return a_Strengths.GetTurnStrength(STRENGTH_CAT_GOLD,         a_Turn);
 		}
-/*		case kRankingPopulation:
+		case kRankingPopulation:
 		{
 			return a_Strengths.GetTurnStrength(STRENGTH_CAT_POPULATION,   a_Turn);
-		}*/
+		}
 		case kRankingCities:
 		{
 			return a_Strengths.GetTurnStrength(STRENGTH_CAT_CITIES,       a_Turn);
