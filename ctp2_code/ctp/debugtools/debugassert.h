@@ -19,17 +19,17 @@ void DebugAssert_Close (void);
 
 #undef ASSERT
 #define ASSERT(condition)													\
-	{if (! ((int) (condition))) {											\
+	{if (! ((size_t) (condition))) {											\
 		DebugAssert_Assert ( __FILE__, __LINE__, LOG_ASSERT, #condition);	\
 	}}
 
 #define ASSERT_CLASS(log_class, condition)								\
-	{if (! ((int) (condition))) {										\
+	{if (! ((size_t) (condition))) {										\
 		DebugAssert_Assert (__FILE__, __LINE__, log_class, #condition);	\
 	}}
 
 #define ASSERT_INDIRECT(module_name, module_line, condition)					\
-	{if (! ((int) (condition))) {												\
+	{if (! ((size_t) (condition))) {												\
 		DebugAssert_Assert (module_name, module_line, LOG_ASSERT, #condition);	\
 	}}
 

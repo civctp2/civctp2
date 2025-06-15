@@ -1121,10 +1121,16 @@ void aui_ListBox::SendSelectCallback(
 	AUI_LISTBOX_ACTION action,
 	uint32 data )
 {
-	if ( !data && (action == AUI_LISTBOX_ACTION_SELECT
-		|| action == AUI_LISTBOX_ACTION_RMOUSESELECT))
-		data = (uint32)m_selectedList; // Something you should not do
-		                               // It seems that we just want to have something that is not zero, but that is not clear
+	if(!data && (action == AUI_LISTBOX_ACTION_SELECT
+	|| action == AUI_LISTBOX_ACTION_RMOUSESELECT))
+	{
+		data = 1; // Unclear, whether that should be here at all
+		          // but that is better then the previous code below
+		          // There is corresponding warnig somewhere else
+		          // fo the code below.
+	//	data = (uint32)m_selectedList; // Something you should not do
+	//	                               // It seems that we just want to have something that is not zero, but that is not clear
+	}
 
 	m_selectedList->DeleteAll();
 
