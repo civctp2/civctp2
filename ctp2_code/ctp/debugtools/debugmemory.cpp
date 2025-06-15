@@ -98,7 +98,7 @@ struct MemoryHeapDescriptor
 #ifdef MEMORY_LOGGED
 
 	const char *module_name;
-	int module_line;
+	size_t module_line;
 
 	bool is_default_heap;
 
@@ -455,7 +455,7 @@ struct AllocHeader
 	AllocHeader		*next;
 
 	const char		*filename;
-	int				line_number;
+	size_t				line_number;
 	CallStack		call_stack;
 	size_t			size;
 	unsigned char	block_marker_end[HEADER_GUARD_SIZE];
@@ -491,7 +491,7 @@ static inline AllocHeader *Debug_DataToHeader (MemPtr user_data)
 	return ((AllocHeader *) ((size_t) user_data - sizeof (AllocHeader) - sizeof (AllocBuffer)));
 }
 
-bool Debug_GuardedDataTest (AllocHeader * header, const char *file, int line_number)
+bool Debug_GuardedDataTest (AllocHeader * header, const char *file, size_t line_number)
 {
 	AllocBuffer *buffer_begin = Debug_HeaderToFirstBuffer (header);
 	AllocBuffer *buffer_end   = Debug_HeaderToSecondBuffer(header);
@@ -538,7 +538,7 @@ LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
 }
 #endif
 
-bool Debug_GuardedHeaderTest (AllocHeader * header, const char *file, int line_number)
+bool Debug_GuardedHeaderTest (AllocHeader * header, const char *file, size_t line_number)
 {
 #ifdef WIN32
 	__try
@@ -611,7 +611,7 @@ bool DebugMemoryHeapValid (MemoryHeap heap)
 
 MemPtr DebugMemory_GuardedBlockAlloc (
 	const char *module_name,
-	int module_line,
+	size_t module_line,
 	MemoryHeap heap,
 	size_t size,
 	bool fill,
@@ -713,7 +713,7 @@ MemPtr DebugMemory_GuardedBlockAlloc (
 
 void DebugMemory_GuardedBlockFree    (
 	const char *module_name,
-	int module_line,
+	size_t module_line,
 	MemoryHeap heap,
 	void **memory_block_ptr)
 {
@@ -803,7 +803,7 @@ void DebugMemory_GuardedBlockFree    (
 
 MemPtr DebugMemory_GuardedBlockRealloc (
 	const char *module_name,
-	int module_line,
+	size_t module_line,
 	MemoryHeap heap,
 	MemPtr old_mem,
 	size_t new_size)
@@ -972,7 +972,7 @@ struct MemNode
 {
 	MemNode            *next;
 	const char         *filename;
-	int                 line_number;
+	size_t              line_number;
 	size_t              size;
 	int                 reference_count; // 1, or increased but never decreased, unless set to 1
 	CallStack           call_stack;
@@ -980,7 +980,7 @@ struct MemNode
 
 static MemNode *mem_node = NULL;
 
-void Debug_MemNodeAdd (const char *filename, int line_number, size_t size, CallStack call_stack)
+void Debug_MemNodeAdd (const char *filename, size_t line_number, size_t size, CallStack call_stack)
 {
 	if (!mem_node)
 	{

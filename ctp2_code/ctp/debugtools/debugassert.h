@@ -33,7 +33,7 @@ void DebugAssert_Close (void);
 		DebugAssert_Assert (module_name, module_line, LOG_ASSERT, #condition);	\
 	}}
 
-void DebugAssert_Assert (const char *module_name, int module_line, const char *log_class, const char *condition_string);
+void DebugAssert_Assert (const char *module_name, size_t module_line, const char *log_class, const char *condition_string);
 
 #ifdef __cplusplus
 }
