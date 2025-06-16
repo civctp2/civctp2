@@ -64,13 +64,13 @@ void free_crc()
    g_crcTable = NULL;
 }
 
-uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, sint32 data_blk_size)
+uint32 update_crc(uint32 crc_accum, const MBCHAR *data_blk_ptr, size_t data_blk_size)
 {
    if (!g_crcTable) {
       gen_crc_table();
    }
 
-   register int i, j;
+   size_t i, j;
 
    for ( j = 0;  j < data_blk_size;  j++ ) {
       i = ( (int) ( crc_accum >> 24) ^ tolower(*data_blk_ptr++) ) & 0xff;

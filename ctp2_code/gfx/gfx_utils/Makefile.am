@@ -22,8 +22,7 @@ libgfxgfx_utils_la_SOURCES = \
 	gfx_options.cpp \
 	pixelutils.cpp \
 	targautils.cpp \
-	tiffutils.cpp \
-	videoutils.cpp
+	tiffutils.cpp
 
 libgfxgfx_utils_la_LDFLAGS = -static
 

@@ -89,7 +89,7 @@ protected:
 
 private:
 
-	AUI_ERRCODE	StoreAppropriateData( ns_Item<T,NetShellT> *item, sint32 i );
+	AUI_ERRCODE	StoreAppropriateData( ns_Item<T,NetShellT> *item, size_t i );
 };
 
 
@@ -137,7 +137,7 @@ void ns_ListBox<T,NetShellT>::Change( T *object )
 		UpdateNetShellItem( item );
 		item->ShouldDraw();
 
-		SortByColumn( m_sortColumn, m_sortAscending );
+		SortByColumn( static_cast<sint32>(m_sortColumn), m_sortAscending );
 	}
 }
 
@@ -147,7 +147,7 @@ void ns_ListBox<T,NetShellT>::Destroy( void )
 {
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		ns_Item<T,NetShellT> *item =
 			(ns_Item<T,NetShellT> *)m_pane->ChildList()->GetNext( position );
@@ -161,7 +161,7 @@ template<class T,class NetShellT>
 ns_Item<T,NetShellT> *ns_ListBox<T,NetShellT>::FindItem( T *object )
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		ns_Item<T,NetShellT> *item =
 			(ns_Item<T,NetShellT> *)m_pane->ChildList()->GetNext( position );
@@ -241,13 +241,13 @@ ns_ListBox<T,NetShellT>::~ns_ListBox()
 {
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 
 		ListPos childPosition = item->ChildList()->GetHeadPosition();
-		for ( sint32 j = item->ChildList()->L(); j; j-- )
+		for ( size_t j = item->ChildList()->L(); j; j-- )
 		{
 			ListPos prevChildPosition = childPosition;
 			delete item->ChildList()->GetNext( childPosition );
@@ -281,9 +281,9 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::AddNetShellItem(
 
 	if ( item->GetNetShellObject() )
 	{
-		sint32 const	numProperties =
+		size_t const	numProperties =
 			item->GetNetShellObject()->list.size();
-		for ( sint32 i = 1; i < numProperties; i++ )
+		for ( size_t i = 1; i < numProperties; i++ )
 		{
 
 			AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -326,7 +326,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::RemoveNetShellItem(
 	DeselectItem( item );
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		ns_Item<T,NetShellT> *curItem =
 			(ns_Item<T,NetShellT> *)m_pane->ChildList()->GetNext( position );
@@ -336,7 +336,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::RemoveNetShellItem(
 			RemoveItem( item->Id() );
 
 			position = item->ChildList()->GetHeadPosition();
-			for ( sint32 j = item->ChildList()->L(); j; j-- )
+			for ( size_t j = item->ChildList()->L(); j; j-- )
 				delete item->ChildList()->GetNext( position );
 
 			delete item;
@@ -359,10 +359,10 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::UpdateNetShellItem(
 	if ( item->GetNetShellObject() )
 	{
 		StoreAppropriateData( item, 0 );
-		sint32 const numProperties =
+		size_t const numProperties =
 			item->GetNetShellObject()->list.size();
 		ListPos position = item->ChildList()->GetHeadPosition();
-		for ( sint32 i = 1; i < numProperties; i++ )
+		for ( size_t i = 1; i < numProperties; i++ )
 		{
 			ns_Item<T,NetShellT> *childItem =
 				(ns_Item<T,NetShellT> *)item->ChildList()->GetNext( position );
@@ -380,7 +380,7 @@ AUI_ERRCODE ns_ListBox<T,NetShellT>::UpdateNetShellItem(
 template<class T,class NetShellT>
 AUI_ERRCODE ns_ListBox<T,NetShellT>::StoreAppropriateData(
 	ns_Item<T,NetShellT> *item,
-	sint32 i )
+	size_t i )
 {
 
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];

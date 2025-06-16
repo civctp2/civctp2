@@ -133,12 +133,12 @@ sint32 scorewarn_Initialize( void )
 void scorewarn_Cleanup(void)
 {
 	if (g_scorewarn)
-    {
-    	g_c3ui->RemoveWindow( g_scorewarn->Id() );
-	    keypress_RemoveHandler(g_scorewarn);
-        RemoveControl(s_message);
-    	RemoveControl(g_scorewarn);
-    }
+	{
+		g_c3ui->RemoveWindow( g_scorewarn->Id() );
+		keypress_RemoveHandler(g_scorewarn);
+		RemoveControl(s_message);
+		RemoveControl(g_scorewarn);
+	}
 }
 
 static c3_PopupWindow	*s_disclaimerWindow = NULL;
@@ -251,7 +251,7 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 	MBCHAR		*message;
 	sint32		filesize = 0;
 
-	FILE *f = fopen("disclaimer.txt", "rb");
+	FILE *f = c3files_fopen(C3DIR_BASE, "disclaimer.txt", "rb");
 
 	if (!f)
 		goto Error;
@@ -262,18 +262,18 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 		goto Error;
 	}
 
-	fclose(f);
+	c3files_fclose(f);
 
 	message = new MBCHAR[filesize+1];
 	memset(message, 0, filesize+1);
 
-	f = fopen("disclaimer.txt", "rb");
+	f = c3files_fopen(C3DIR_BASE, "disclaimer.txt", "rb");
 	if (!f)
 		goto Error;
 
 	c3files_fread( message, 1, filesize, f );
 
-	fclose(f);
+	c3files_fclose(f);
 
 	s_disclaimerTextBox->SetHyperText(message);
 	delete [] message;
@@ -296,14 +296,14 @@ Error:
 void disclaimer_Cleanup(void)
 {
 	if (s_disclaimerWindow)
-    {
-	    g_c3ui->RemoveWindow( s_disclaimerWindow->Id() );
+	{
+		g_c3ui->RemoveWindow( s_disclaimerWindow->Id() );
 
-	    RemoveControl(s_disclaimerLabel);
-	    RemoveControl(s_disclaimerAcceptButton);
-	    RemoveControl(s_disclaimerDeclineButton);
-	    RemoveControl(s_disclaimerTextBox);
+		RemoveControl(s_disclaimerLabel);
+		RemoveControl(s_disclaimerAcceptButton);
+		RemoveControl(s_disclaimerDeclineButton);
+		RemoveControl(s_disclaimerTextBox);
 
-	    RemoveControl(s_disclaimerWindow);
-    }
+		RemoveControl(s_disclaimerWindow);
+	}
 }

@@ -63,7 +63,7 @@ CLEAN :
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /W3 /GX /O2 /I "../../../h" /I "../../../demo/utils" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_NTSDK" /D "DPRNT" /YX /c
 CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "../../../h" /I "../../../demo/utils" /D\
- "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_NTSDK" /D "DPRNT"\
+ "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "_NTSDK" /D "DPRNT" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /Fp"$(INTDIR)/rawtest.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\Release/
 CPP_SBRS=.\.
@@ -125,7 +125,7 @@ CLEAN :
 # ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "../../../h" /I "../../../demo/utils" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_NTSDK" /D "DPRNT" /YX /c
 CPP_PROJ=/nologo /MLd /W3 /Gm /GX /Zi /Od /I "../../../h" /I\
  "../../../demo/utils" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "_NTSDK" /D\
- "DPRNT" /Fp"$(INTDIR)/rawtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "DPRNT" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/rawtest.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\Debug/
 CPP_SBRS=.\.
 # ADD BASE RSC /l 0x409 /d "_DEBUG"
@@ -215,7 +215,7 @@ DEP_CPP_RAWTE=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\win\lib\dp.lib
+SOURCE=..\..\..\win\lib\dp.lib
 
 !IF  "$(CFG)" == "rawtest - Win32 Release"
 
@@ -227,7 +227,7 @@ SOURCE=\mw2\commdll\win\lib\dp.lib
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\demo\utils\rawwin.c
+SOURCE=..\..\..\demo\utils\rawwin.c
 
 "$(INTDIR)\rawwin.obj" : $(SOURCE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)

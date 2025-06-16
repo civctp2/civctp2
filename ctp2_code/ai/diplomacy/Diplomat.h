@@ -96,10 +96,10 @@ public:
 
 	static sint32 s_proposalTypeToElemIndex[PROPOSAL_MAX];
 
-	static Diplomat & GetDiplomat(const PLAYER_INDEX & playerId);
-	static bool HasDiplomat(const PLAYER_INDEX & playerId);
+	static Diplomat & GetDiplomat(const size_t & playerId);
+	static bool HasDiplomat(const size_t & playerId);
 
-	static void ResizeAll(const PLAYER_INDEX & newMaxPlayers);
+	static void ResizeAll(const size_t & newMaxPlayers);
 
 	static void CleanupAll();
 
@@ -125,7 +125,7 @@ public:
 
 	Diplomat const & operator = (Diplomat const & a_Original);
 
-	void Resize(const PLAYER_INDEX & newMaxPlayers);
+	void Resize(const size_t & newMaxPlayers);
 
 	void Load(CivArchive & archive);
 
@@ -135,7 +135,7 @@ public:
 
 	void Initialize();
 
-	void InitForeigner(const PLAYER_INDEX & foreigner);
+	void InitForeigner(const size_t & foreigner);
 
 	void DebugStatus(const PLAYER_INDEX & foreignerId = -1) const;
 
@@ -252,7 +252,7 @@ public:
 
 	void ConsiderMotivation(const Motivation & motivation);
 
-	sint32 GetMotivationCount() const;
+	size_t GetMotivationCount() const;
 
 	void SortMotivations();
 

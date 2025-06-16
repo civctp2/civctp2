@@ -1,0 +1,14 @@
+// This file is supposed to be empty.  Scenarios provide a scenario.slc
+// in their own directory which will be read instead of this one.
+
+// Unless for some outcommented code for testing slic functions.
+//HandleEvent(ArmyClicked) 'Test_ClickOnArmy' pre {
+//	unit_t testUnit;
+
+//	GetUnitFromArmy(army[0], 0, testUnit);
+//	HearGossip(testUnit);
+//}
+
+//HandleEvent(CityClicked) 'Test_ClickOnCity' pre {
+//	// do something with the city;
+//}

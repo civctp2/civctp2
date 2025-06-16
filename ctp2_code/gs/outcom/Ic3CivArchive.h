@@ -44,8 +44,8 @@ DEFINE_GUID(CLSID_IC3CivArchive,
 
 DECLARE_INTERFACE_(IC3CivArchive, IUnknown) {
 
-STDMETHOD_ (void, Store) (THIS_ uint8 *pbData, uint32 ulLen) PURE;
-STDMETHOD_ (void, Load) (THIS_ uint8 *pbData, uint32 ulLen) PURE ;
+STDMETHOD_ (void, Store) (THIS_ uint8 *pbData, size_t ulLen) PURE;
+STDMETHOD_ (void, Load) (THIS_ uint8 *pbData, size_t ulLen) PURE ;
 STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ;
 };
 #else
@@ -53,8 +53,8 @@ STDMETHOD_ (BOOL, IsStoring)(THIS) PURE ;
 
 class IC3CivArchive : public IUnknown {
 public:
-  virtual void Store(uint8 *pbData, uint32 ulLen) = 0;
-  virtual void Load(uint8 *pbData, uint32 ulLen) = 0;
+  virtual void Store(uint8 *pbData, size_t ulLen) = 0;
+  virtual void Load(uint8 *pbData, size_t ulLen) = 0;
   virtual BOOL IsStoring() = 0;
 };
 #endif// !USE_COM_REPLACEMENT

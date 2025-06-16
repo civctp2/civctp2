@@ -5,7 +5,6 @@
 
 #include <SDL2/SDL.h>
 #include "aui_sdlkeyboard.h"
-#include "aui_ui.h"
 #include "c3ui.h"
 
 extern C3UI		*g_c3ui;
@@ -51,65 +50,89 @@ AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 	SDL_Event event;
 	BOOL gotEvent = FALSE;
 
-	if (g_secondaryKeyboardEventQueueMutex != NULL) {
-		if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex)) {
+	if (g_secondaryKeyboardEventQueueMutex != NULL)
+	{
+		if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex))
+		{
 			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_LockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 		}
-		if (!g_secondaryKeyboardEventQueue.empty()) {
+
+		if (!g_secondaryKeyboardEventQueue.empty())
+		{
 			gotEvent = TRUE;
 			event = g_secondaryKeyboardEventQueue.front();
 			g_secondaryKeyboardEventQueue.pop();
 		}
 
-		if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex)) {
+		if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex))
+		{
 			fprintf(stderr, "[aui_SDLKeyboard::GetInput] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 			return AUI_ERRCODE_NODIRECTINPUTDEVICE;
 		}
 	}
 
-	if (!gotEvent) {
+	if (!gotEvent)
+	{
 		return AUI_ERRCODE_NOINPUT;
 	}
 
 	m_data.time = SDL_GetTicks();
-	switch (event.type) {
+	switch (event.type)
+	{
 		case SDL_KEYDOWN:
 		case SDL_KEYUP:
-			switch (event.key.keysym.sym) {
+			switch (event.key.keysym.sym)
+			{
 				case SDLK_LSHIFT:
-					if (g_c3ui->TheMouse()) {
-						if (event.key.state & SDL_PRESSED) {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_LSHIFT);
-						} else {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_LSHIFT);
+					if (g_c3ui->TheMouse())
+					{
+						if (event.key.state & SDL_PRESSED)
+						{
+							g_c3ui->TheMouse()->SetLeftShift();
+						}
+						else
+						{
+							g_c3ui->TheMouse()->UnsetLeftShift();
 						}
 					}
 					return AUI_ERRCODE_OK;
 				case SDLK_RSHIFT:
-					if (g_c3ui->TheMouse()) {
-						if (event.key.state & SDL_PRESSED) {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_RSHIFT);
-						} else {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_RSHIFT);
+					if (g_c3ui->TheMouse())
+					{
+						if (event.key.state & SDL_PRESSED)
+						{
+							g_c3ui->TheMouse()->SetRightShift();
+						}
+						else
+						{
+							g_c3ui->TheMouse()->UnsetRightShift();
 						}
 					}
 					return AUI_ERRCODE_OK;
 				case SDLK_LCTRL:
-					if (g_c3ui->TheMouse()) {
-						if (event.key.state & SDL_PRESSED) {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_LCONTROL);
-						} else {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_LCONTROL);
+					if (g_c3ui->TheMouse())
+					{
+						if (event.key.state & SDL_PRESSED)
+						{
+							g_c3ui->TheMouse()->SetLeftControl();
+						}
+						else
+						{
+							g_c3ui->TheMouse()->UnsetLeftControl();
 						}
 					}
 					return AUI_ERRCODE_OK;
 				case SDLK_RCTRL:
-					if (g_c3ui->TheMouse()) {
-						if (event.key.state & SDL_PRESSED) {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_RCONTROL);
-						} else {
-							g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_RCONTROL);
+					if (g_c3ui->TheMouse())
+					{
+						if (event.key.state & SDL_PRESSED)
+						{
+							g_c3ui->TheMouse()->SetRightControl();
+						}
+						else
+						{
+							g_c3ui->TheMouse()->UnsetRightControl();
 						}
 					}
 					return AUI_ERRCODE_OK;
@@ -124,9 +147,12 @@ AUI_ERRCODE aui_SDLKeyboard::GetInput( void )
 				case SDLK_DOWN:
 				case SDLK_LEFT:
 				case SDLK_RIGHT:
-					if (event.key.state & SDL_PRESSED) {
+					if (event.key.state & SDL_PRESSED)
+					{
 						g_civApp->BeginKeyboardScrolling(convertSDLKey(event.key.keysym));
-					} else {
+					}
+					else
+					{
 						g_civApp->StopKeyboardScrolling(convertSDLKey(event.key.keysym));
 					}
 					break;

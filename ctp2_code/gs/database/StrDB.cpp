@@ -72,7 +72,7 @@ namespace
 size_t ComputeHashIndex(MBCHAR const * id)
 {
 		unsigned short hash;
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 		__asm
 		{
           push eax              ; save registers
@@ -136,13 +136,13 @@ StringDB::~StringDB()
 
 StringRecord const * StringDB::GetHead(MBCHAR const * id) const
 {
-	int h = ComputeHashIndex(id);
+	size_t h = ComputeHashIndex(id);
 	return m_head[h];
 }
 
 StringRecord * & StringDB::GetHead(MBCHAR const * id)
 {
-	int h = ComputeHashIndex(id);
+	size_t h = ComputeHashIndex(id);
 	return m_head[h];
 }
 
@@ -388,7 +388,7 @@ void StringDB::AssignIndex(StringRecord * & ptr)
 		AssignIndex(ptr->m_lesser);
 	}
 
-	ptr->m_index = m_all.size();
+	ptr->m_index = static_cast<StringId>(m_all.size());
 	m_all.push_back(ptr);
 
 	if (ptr->m_greater)

@@ -143,7 +143,7 @@ aui_Header::~aui_Header()
 {
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for (size_t i = m_childList->L(); i; i--)
 	{
 		aui_Switch *theSwitch = (aui_Switch *)m_childList->GetNext( position );
 		aui_Action *action = theSwitch->GetAction();
@@ -183,7 +183,7 @@ AUI_ERRCODE aui_Header::CalculateDimensions( void )
 	m_height = 0;
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for (size_t i = m_childList->L(); i; i--)
 	{
 		aui_Switch *theSwitch = (aui_Switch *)m_childList->GetNext( position );
 
@@ -200,7 +200,7 @@ AUI_ERRCODE aui_Header::RepositionSwitches( void )
 	sint32 x = 0;
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for (size_t i = m_childList->L(); i; i--)
 	{
 		aui_Switch *theSwitch = (aui_Switch *)m_childList->GetNext( position );
 

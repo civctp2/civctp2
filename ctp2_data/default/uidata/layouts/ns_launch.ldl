@@ -726,7 +726,7 @@ ruleswindow:nswindow_popup {
 
 	int	widthpix	430
 
-	int	heightpix	380
+	int	heightpix	400
 
 	string	xanchor	"center"
 
@@ -800,7 +800,7 @@ ruleswindow:nswindow_popup {
 
 			int	xpix	30
 
-			int	ypix	-540
+			int	ypix	54
 
 			
 			stringtable {
@@ -1257,6 +1257,18 @@ ruleswindow:nswindow_popup {
 
 		}
 
+		morerulesbutton:nscommonbutton {
+
+			string	text	"str_ldl_Rules"
+			int	xpix	247
+
+			int	ypix	304
+
+			int	widthpix	123
+
+			int	heightpix	21
+
+		}
 	}
 
 }

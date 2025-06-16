@@ -17,6 +17,9 @@
 //
 // Compiler flags
 //
+// USE_SDL
+// - Compile with sdl support instead of mss (define: civsound.h)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:

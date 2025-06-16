@@ -50,7 +50,7 @@ void StatusBar::SetText(const MBCHAR *text, const aui_Control *owner)
 
 	if(text && !m_text) {
 		m_text = new char[strlen(text) + 1];
-		m_allocatedLen = strlen(text) + 1;
+		m_allocatedLen = static_cast<sint32>(strlen(text) + 1);
 		m_text[0] = 0;
 	}
 

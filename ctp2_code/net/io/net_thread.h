@@ -9,7 +9,7 @@
 #include "net_array.h"
 #include "pointerlist.h"
 #include "net_anet.h"
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
@@ -64,14 +64,14 @@ private:
 	PointerList<TPacketData> *m_outgoing[k_MAX_NETWORK_PLAYERS];
 	uint16 m_ids[k_MAX_NETWORK_PLAYERS];
 	PointerList<TPacketData> *m_incoming;
-#ifndef USE_SDL
-	DWORD m_threadId;
-	HANDLE m_threadHandle;
-	CRITICAL_SECTION m_mutex;
-#else
+#if defined(__AUI_USE_SDL__)
 	Uint32 m_threadId;
 	SDL_Thread *m_thread;
 	SDL_mutex *m_mutex;
+#else
+	DWORD m_threadId;
+	HANDLE m_threadHandle;
+	CRITICAL_SECTION m_mutex;
 #endif
 	dp_t *m_dp;
 	dp_t *m_origDP;

@@ -46,8 +46,13 @@ bool AstarPoint::Identical(const AstarPoint &rhs) const
 void AstarPoint::Clear()
 {
     m_flags = 0xcdcdcdcdu;
+#if SIZE_MAX == _UI64_MAX
+    m_parent = (AstarPoint *) 0xcdcdcdcdcdcdcdcd;
+    m_next = (AstarPoint *) 0xcdcdcdcdcdcdcdcd;
+#elif SIZE_MAX == UINT_MAX
     m_parent = (AstarPoint *) 0xcdcdcdcd;
     m_next = (AstarPoint *) 0xcdcdcdcd;
+#endif
     m_pos.x = (sint16) 0xcdcd;
     m_past_cost = (float) 0xcdcdcdcd;
     m_entry_cost = (float) 0xcdcdcdcd;

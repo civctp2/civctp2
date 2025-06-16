@@ -1,0 +1,47 @@
+# Von Visual Studio generierte .clang-format-Datei
+
+# Die Formatoptionen in dieser Datei stellen den bestmöglichen Versuch zum Replizieren der
+# aktuellen IDE-Formatierungskonfiguration aus "Extras" > "Optionen" dar. Die folgenden
+# Formatoptionen sollten jedoch überprüft werden:
+# AfterClass; AfterControlStatement; AfterEnum; AfterFunction; AfterNamespace; 
+# AfterStruct; AfterUnion
+
+BasedOnStyle: LLVM
+AccessModifierOffset: -4
+AlignAfterOpenBracket: DontAlign
+AllowShortBlocksOnASingleLine: true
+AllowShortFunctionsOnASingleLine: All
+BraceWrapping:
+  AfterClass: true
+  AfterControlStatement: true
+  AfterEnum: true
+  AfterFunction: true
+  AfterNamespace: true
+  AfterStruct: true
+  AfterUnion: true
+  BeforeCatch: true
+  BeforeElse: true
+  IndentBraces: false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+BreakBeforeBraces: Custom
+ColumnLimit: 0
+Cpp11BracedListStyle: true
+DerivePointerAlignment: true
+FixNamespaceComments: false
+IndentCaseLabels: true
+IndentPPDirectives: None
+IndentWidth: 4
+MaxEmptyLinesToKeep: 10
+NamespaceIndentation: All
+SortIncludes: false
+SortUsingDeclarations: false
+SpaceAfterCStyleCast: false
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeParens: Never
+SpaceInEmptyParentheses: false
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+TabWidth: 4
+UseTab: ForIndentation

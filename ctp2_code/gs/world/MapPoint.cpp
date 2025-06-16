@@ -945,7 +945,7 @@ MapPointData OrthogonalPoint::Step
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-SquareIterator::SquareIterator(MapPoint const & center, sint32 size)
+SquareIterator::SquareIterator(MapPoint const & center, size_t size)
 :	m_center        (center),
 	m_cur           (center),
 	m_wrappedCur    (center),
@@ -1037,13 +1037,13 @@ const MapPoint& SquareIterator::Pos() const
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size)
+RadiusIterator::RadiusIterator(MapPoint const & center, size_t size)
 :	SquareIterator  (center, size),
 	m_squaredRadius (static_cast<double>(size * size))
 {
 }
 
-RadiusIterator::RadiusIterator(MapPoint const & center, sint32 size, double squaredSize)
+RadiusIterator::RadiusIterator(MapPoint const & center, size_t size, double squaredSize)
 :	SquareIterator  (center, size),
 	m_squaredRadius (squaredSize)
 {
@@ -1071,13 +1071,13 @@ bool RadiusIterator::IsIncluded()
 //
 //----------------------------------------------------------------------------
 
-CircleIterator::CircleIterator(MapPoint const & center, sint32 outerSize, sint32 innerSize)
+CircleIterator::CircleIterator(MapPoint const & center, size_t outerSize, size_t innerSize)
 :	RadiusIterator       (center, outerSize),
 	m_innerSquaredRadius (static_cast<double>(innerSize * innerSize))
 {
 }
 
-CircleIterator::CircleIterator(MapPoint const & center, sint32 outerSize, double outerSquaredSize, sint32 innerSize)
+CircleIterator::CircleIterator(MapPoint const & center, size_t outerSize, double outerSquaredSize, size_t innerSize)
 :	RadiusIterator       (center, outerSize, outerSquaredSize),
 	m_innerSquaredRadius (static_cast<double>(innerSize * innerSize))
 {

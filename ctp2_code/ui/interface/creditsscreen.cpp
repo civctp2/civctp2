@@ -231,7 +231,7 @@ private:
 
 	aui_StringTable *m_frames;
 
-	sint32 m_currentFrame;
+	size_t m_currentFrame;
 
 	sint32 m_animationSpeed;
 
@@ -354,7 +354,7 @@ private:
 
 	aui_StringTable *m_frames;
 
-	sint32 m_currentFrame;
+	size_t m_currentFrame;
 
 	sint32 m_blendSpeed;
 

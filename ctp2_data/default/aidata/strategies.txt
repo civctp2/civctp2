@@ -3847,6 +3847,7 @@ STRATEGY_MAXIMUM_NUKES {
     SpecialUnitsCount       50
 }
 
+# Do not get more cities if we are over the city limit
 STRATEGY_TOO_MANY_CITIES {
     SettlerUnitsCount       0
 
@@ -3856,6 +3857,7 @@ STRATEGY_TOO_MANY_CITIES {
     GoalElement { Goal GOAL_HARASS_CITY         Priority        0  MaxEval   0  MaxExec   0 }
 }
 
+# Do not get more cities if we are over the city limit and have the wonder that gives us revolting cities
 STRATEGY_NO_REVOLUTON {
     GoalElement { Goal GOAL_INCITE_REVOLUTION   Priority        0  MaxEval   0  MaxExec   0 }
 }

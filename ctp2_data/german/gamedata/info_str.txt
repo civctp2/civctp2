@@ -431,9 +431,18 @@ SUE_FRANCHISE_FAILED_ATTACKER		"Obwohl sich unsere Anwälte große Mühe geben, gel
 PARTY_COMPLETE_VICTIM			"{unitrecord[0].name#UNDEF_CAPS} {player[0].civ_name_plural#ARTICLE_GEN} hat einen offiziellen Empfang in unserer Stadt {city[0].name} gegeben. Es wurde erstklassige Unterhaltung geboten, das Buffet war hervorragend und alle haben sich prächtig amüsiert. Viele unserer Beobachter waren von den {player[0].civ_name_plural#DAT} beeindruckt und sind der Meinung, dass wir versuchen sollten, unsere Differenzen beizulegen und auf partnerschaftliche Beziehungen mit diesem Volke hinzuarbeiten."
 PARTY_COMPLETE_ATTACKER			"{unitrecord[0].name#PRONOUN_OUR_PLURAL_CAPS} haben in der fremden Stadt {city[0].name} einen Empfang gegeben. Bei dieser erfolgreichen Veranstaltung waren auch {player[0].civ_name_singular#UNDEF_PLURAL_ACC} Würdenträger und Regierungsangehörige zu Gast und wir hoffen, dass die {player[0].civ_name_plural} in Zukunft bereitwilliger mit uns zusammenarbeiten werden."
 
+# Hear Gossip #
+GOSSIP_WARTIME_READINESS		"Die {player[0].civ_name_plural} befinden sich in Kriegsbereitschaft."
+GOSSIP_ALERT_READINESS			"Die {player[0].civ_name_plural} sind in Alarmbereitschaft."
+GOSSIP_PEACETIME_READINESS		"Die {player[0].civ_name_plural} befinden sich in Friedenszeiten entsprechender Militärbereitschaft."
+GOSSIP_CAPTION					"Tratsch"
+GOSSIP_BORING					"Die {player[0].civ_name_plural} sind ein bemerkenswert langweiliges Volk: Sie tratschen über nichts Interessantes."
+GOSSIP_MAP						"Wir haben den {player[0].civ_name_plural#DAT} Wissen über die Weltkarte entlockt."
+GOSSIP_COMPLETE_ATTACKER		"Unsere Diplomaten haben viel Tratsch gehört. Auf diese Weise konnten wir Erkenntnisse über {advance[0].name#ARTICLE_ACC} gewinnen."
+
 ##Disabled Screen Buttons##
 
-CIV_STATUS_DISABLED			"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
+CIV_STATUS_DISABLED				"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
 SCIENCE_STATUS_DISABLED			"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
 CITY_STATUS_DISABLED			"Dieser Bereich ist erst nach der Errichtung einer Stadt zugänglich."
 DIPLOMACY_STATUS_DISABLED		"Dieser Bereich ist erst nach der Kontaktaufnahme mit einer anderen Nation zugänglich."
@@ -559,7 +568,7 @@ HOSTILE_TERRAIN				"Extremes Wetter beeinträchtigt die Gesundheit {unitrecord[0]
 INSURGENT_SPAWN				"Bewaffnete Rebellen sind vor unserer Stadt {city[0].name} aufgetaucht."
 GUERRILLA_SPAWN				"{unitrecord[0].name#OUR_SINGULAR_CAPS} konnte Partisanenkämpfer für unsere Sache anwerben!"
 
-# New Messages # Belong to somewhere else
+# New Messages # Belong somewhere else
 # Doves and hawks there are better names for them
 ATTACK_WARNING				"Dies ist eine Kriegshandlung! Wollt Ihr wirklich den {player[0].civ_name_plural#DAT} den Krieg erklären?"
 CIV2DOVES				"Die Parzifisten haben das Sagen im Parlamente. Sie verweigerten ihre Zustimmung zu dieser Agression."
@@ -571,6 +580,17 @@ UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
 UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."
 RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
 
+# Langauages #
+INFO_CHINESE			"Die chinesische Version ist eine Fan-Übersetzung, und daher sind keine chinesische Sound- und Videodateien vorhanden. Die Übersetzung ist ziemlich komplett, es etwas fehlt Text, der von der Apolyton Edition hinzugefügt wurde. Die Textdateien sind als Unicode-Dateien gespeichert, was leider nicht kompatibel mit Call to Power II ist. Bis Call to Power 2 Unicode-Textdateien akzeptiert, oder eine andere lösung gefunden wurde, ist Chinesisch deaktiviert. Natürlich könnt Ihr helfen, wenn Ihr wisst wie."
+INFO_CZECH				"Die tschechische Version ist eine Fan-Übersetzung, deshalb gibt es keine tschechische Sound- und Videodateien. Die Übersetzung ist nur unvollständig und Ihr könnt helfen Übersetzung zu vervollständigen."
+INFO_ENGLISH			"Englisch ist eine der sechs Sprachen, in der Call to Power II ursprünglich veröffentlich wurde. Es ist die einzige Sprache, in der die Good Old Games Version veröffentlicht wurde. Die Apolyton Edition hat alle englischen Text-, Sound- und Videodateien. Die Video- und Sounddateien sind in einem gesonderten Download verfügbar, wenn Eure Originalversion nicht englisch ist. Englisch ist die Rückfallsprache, wenn die Sprcheinstellungen Eures Betriebssystem keine passende Präferenz haben."
+INFO_FRENCH				"Französisch ist eine der sechs Sprachen, in der Call to Power II ursprünglsich veröffentlich wurde. Es gibt keine französische Version von Good Old Games. Die Apolyton Edition hat alle französichen Text-, Sound- und Videodateien.  Die Video- und Sounddateien sind in einem gesonderten download verfügbar. Nicht der ganze Text, der durch die Apolyton-Edition hinzugefügt wurde, wurde ins Französische übersetzt. Ihr könnt helfen indem Ihr übersetzt."
+INFO_GERMAN				"Deutsch ist eine der sechs Sprachen, in der Call to Power II ursprünglich veröffentlich wurde. Es gibt keine deutsche Version von Good Old Games. Die Apolyton Edition hat alle deutschen Text-, Sound- und Videodateien. Die Video- und Sounddateien sind in einem gesonderten Download verfügbar."
+INFO_ITALIAN			"Italienisch ist eine der sechs Sprachen, in der Call to Power II ursprünglich veröffentlich wurde. Es gibt keine italienische Version von Good Old Games. Die Apolyton Edition hat alle italienischen Textadateien, aber keine Sound- und Videodateien. Ihr könnt diese Datein dem Projekt geben, wenn Ihr eine italienische CD besizt. Nicht der ganze Text, der durch die Apolyton-Edition hinzugefügt wurde, wurde ins Italienische übersetzt. Ihr könnt helfen indem Ihr übersetzt."
+INFO_JAPANESE			"Japanisch ist eine der sechs Sprachen, in der Call to Power II ursprünglsich veröffentlich wurde. Es gibt keine japanische Version von Good Old Games. Die Apolyton Edition hat nur einige japanische Textdaten, jedoch keine Sound- und Videodateien. Ihr könnt diese Datein dem Projekt geben, wenn Ihr eine japanische CD-Version besizt. Nicht der ganze Text, der durch die Apolyton-Edition hinzugefügt wurde, wurde ins Japanische übersetzt. Ihr könnt helfen indem Ihr übersetzt. Da Textdateien fehlen, wurde diese Sprache deaktiviert. Call to Power II würde auch nicht ohne Problem starten."
+INFO_POLISH				"Die polnische Version ist eine Fan-Übersetzung, deshalb gibt es keine polnischen Sound- und Videodateien. Die Übersetzung ist nur unvollständig und Ihr könnt bei der Übersetzung helfen."
+INFO_SPANISH			"Spanisch ist eine der sechs Sprachen, in der Call to Power II ursprünglsich veröffentlich wurde. Es gibt keine spanische Version von Good Old Games. Die Apolyton Edition hat alle spanischen Text- und Sounddateien aber keine Videodateien. Die Sounddateien sind in einem gesonderten Downlaod verfürgbar. Ihr könnt diese Datein dem Projekt geben, wenn Ihr eine spanische CD besizt. Nicht der ganze Text, der durch die Apolyton-Edition hinzugefügt wurde, wurde ins Spanische übersetzt. Ihr könnt helfen indem Ihr übersetzt."
+
 
 ###############
 ##           ##
@@ -579,26 +599,26 @@ RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawless
 ###############
 
 # Common buttons
-BUTTON_ACCEPT				"Akzeptieren"
-BUTTON_CANCEL				"Zurück"
-BUTTON_CLOSE				"OK"
+BUTTON_ACCEPT			"Akzeptieren"
+BUTTON_CANCEL			"Zurück"
+BUTTON_CLOSE			"OK"
 BUTTON_GOAL				"Ziel"
-BUTTON_LIBRARY				"Große Bibliothek"
-BUTTON_MAYBE				"Vielleicht"
+BUTTON_LIBRARY			"Große Bibliothek"
+BUTTON_MAYBE			"Vielleicht"
 BUTTON_YES				"Ja"
 BUTTON_NO				"Nein"
 BUTTON_OK				"OK"
-BUTTON_RANDOM				"Zufällig"
-BUTTON_READY				"OK"
-BUTTON_REJECT				"Ablehnen"
-BUTTON_RESEARCH				"Erforschen"
-BUTTON_SET_PRICE			"Preis festlegen"
-BUTTON_STEAL_THIS			"<- Stehlen"
-BUTTON_EXPEL				"Vertreiben"
+BUTTON_RANDOM			"Zufällig"
+BUTTON_READY			"OK"
+BUTTON_REJECT			"Ablehnen"
+BUTTON_RESEARCH			"Erforschen"
+BUTTON_SET_PRICE		"Preis festlegen"
+BUTTON_STEAL_THIS		"<- Stehlen"
+BUTTON_EXPEL			"Vertreiben"
 
 # Network buttons
-BUTTON_EJECT				"Rauswerfen"
-BUTTON_LET_THEM_STAY			"Teilnehmen lassen"
+BUTTON_EJECT			"Rauswerfen"
+BUTTON_LET_THEM_STAY	"Teilnehmen lassen"
 
 # Buttons for quitting the game
 BUTTON_CONTINUE				"Fortfahren"

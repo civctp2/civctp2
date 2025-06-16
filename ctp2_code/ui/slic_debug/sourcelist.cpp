@@ -117,7 +117,7 @@ void sourcelist_Remove()
 	}
 }
 
-void sourcelist_RegisterBreak(SlicSegment *segment, sint32 offset)
+void sourcelist_RegisterBreak(SlicSegment *segment, size_t offset)
 {
 	sourcelist_Display(segment);
 	g_sourceList->ShowBreak(offset);
@@ -352,7 +352,7 @@ sint32 SourceList::UpdateData(void)
 	return 0;
 }
 
-void SourceList::ShowBreak(sint32 offset)
+void SourceList::ShowBreak(size_t offset)
 {
 	sint32 lineNumber;
 	lineNumber = m_segment->FindLineNumber(offset);

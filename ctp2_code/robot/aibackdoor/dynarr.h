@@ -74,27 +74,27 @@ public:
 		m_array = NULL;
 	}
 
-    T & operator [] (const sint32 i) {
+    T & operator [] (const size_t i) {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; } ;
 
-    const T & operator [] (const sint32 i) const {
+    const T & operator [] (const size_t i) const {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; } ;
 
     DynamicArray<T> & operator = (const DynamicArray<T> &copyme);
 
 
-	const T & Get(const sint32 i) const {
+	const T & Get(const size_t i) const {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; } ;
 
-	T & Access(const sint32 i) const {
+	T & Access(const size_t i) const {
 		Assert(0 <= i);
-		Assert(i < m_nElements);
+		Assert(i < static_cast<size_t>(m_nElements));
 		return m_array[i]; }
 
 	sint32 Find(const T & me) const;

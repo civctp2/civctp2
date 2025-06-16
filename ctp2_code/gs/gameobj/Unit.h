@@ -141,7 +141,7 @@ public:
 	double GetHappyImprovement() const;
 	double GetHappyWonders() const;
 	double GetHappyCrime() const;
-	void CalcHappiness(sint32 &virtualGoldSpent, bool firstPass);
+	void CalcHappiness(bool firstPass = false);
 	sint32 PayWages(sint32 w);
 	sint32 GetWagesNeeded() const;
 

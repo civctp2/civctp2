@@ -1689,8 +1689,8 @@ SFN_ERROR Slic_GetPersonalityType::Call(SlicArgList *args)
 {
 	m_result.m_int = -1;
 
-	sint32 argNum = args->Count();
-    if(argNum < 1
+	size_t argNum = args->Count();
+	if(argNum < 1
 	|| argNum > 2)
 		return SFN_ERROR_NUM_ARGS;
 
@@ -2233,9 +2233,9 @@ SFN_ERROR Slic_DeclareWar::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    Diplomat::GetDiplomat(player).DeclareWar(foreigner);
+	Diplomat::GetDiplomat(player).DeclareWar(foreigner);
 
-    DPRINTF(k_DBG_SLIC, ("Slic_DeclareWar:player %d, foreigner %d\n",player,foreigner));
+	DPRINTF(k_DBG_SLIC, ("Slic_DeclareWar:player %d, foreigner %d\n",player,foreigner));
 
 	return SFN_ERROR_OK;
 }

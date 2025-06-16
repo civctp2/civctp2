@@ -21,24 +21,30 @@ public:
 	virtual AUI_ERRCODE HandleAnim();
 	virtual void SetAnimIndexes(sint32 firstIndex, sint32 lastIndex);
 
-	virtual AUI_ERRCODE	BltWindowToPrimary(aui_Window *window);
-	virtual AUI_ERRCODE	BltDirtyRectInfoToPrimary();
-	virtual AUI_ERRCODE	BltBackgroundColorToPrimary(COLORREF color, aui_DirtyList *colorAreas);
-	virtual AUI_ERRCODE	BltBackgroundImageToPrimary(aui_Image *image, RECT *imageRect, aui_DirtyList *imageAreas);
+	virtual AUI_ERRCODE BltWindowToPrimary(aui_Window *window);
+	virtual AUI_ERRCODE BltDirtyRectInfoToPrimary();
+	virtual AUI_ERRCODE BltBackgroundColorToPrimary(COLORREF color, aui_DirtyList *colorAreas);
+	virtual AUI_ERRCODE BltBackgroundImageToPrimary(aui_Image *image, RECT *imageRect, aui_DirtyList *imageAreas);
+
+	virtual sint32 ManipulateInputs(aui_MouseEvent *data, BOOL add);
+	virtual void GetInput(SDL_Event* event);
 
 protected:
-	aui_SDLMouse();
+	aui_SDLMouse() {}
 
 	virtual void ActivateCursor(aui_Cursor *cursor);
+	virtual AUI_ERRCODE Acquire(void) { return AUI_ERRCODE_OK; }
+	virtual AUI_ERRCODE Unacquire(void) { return AUI_ERRCODE_OK; }
 
-	virtual AUI_ERRCODE GetInput() { return AUI_ERRCODE_OK; }
+	virtual AUI_ERRCODE GetInput() { return AUI_ERRCODE_OK; };
 	virtual AUI_ERRCODE ReactToInput() { return AUI_ERRCODE_OK; }
-	virtual sint32 ManipulateInputs(aui_MouseEvent *data, BOOL add);
 
 private:
-	aui_Cursor *m_currentCursor;
+	aui_Cursor* m_currentCursor;
 	SDL_TimerID m_animationTimer;
-	uint32 m_lastFrameTick;
+	uint32      m_lastFrameTick;
+
+	static SDL_mutex* s_cs;
 };
 
 typedef aui_SDLMouse aui_NativeMouse;

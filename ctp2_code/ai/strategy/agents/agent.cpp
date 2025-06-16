@@ -519,7 +519,7 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 
 	size_t move_type_bonus = transport->m_army->CountMovementTypeSea() * 1000;
 
-	utility = move_type_bonus + (trans_rounds * -100) - tile_count /*+ cargoCapacity*100*/; // Could be added, but not needed
+	utility = static_cast<sint32>(move_type_bonus + (trans_rounds * -100) - tile_count) /*+ cargoCapacity*100*/; // Could be added, but not needed
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), Get_Goal_Type(), -1,
 	("\t\t%9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d,\t%8d\t%20s\t%20s\n",

@@ -93,7 +93,7 @@ CLEAN :
 # ADD CPP /nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /FR /YX /c
 CPP_PROJ=/nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D\
- "dp_ANET2" /FR"$(INTDIR)/" /Fp"$(INTDIR)/winets.pch" /YX /Fo"$(INTDIR)/"\
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/" /Fp"$(INTDIR)/winets.pch" /YX /Fo"$(INTDIR)/"\
  /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\winets2d/
 CPP_SBRS=.\winets2d/
@@ -189,7 +189,7 @@ CLEAN :
 # ADD CPP /nologo /Zp1 /MD /W3 /GX /Ot /Oi /I "..\h" /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /FAcs /Fr /YX /c
 CPP_PROJ=/nologo /Zp1 /MD /W3 /GX /Ot /Oi /I "..\h" /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D\
- "dp_ANET2" /FAcs /Fa"$(INTDIR)/" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/winets.pch" /YX\
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FAcs /Fa"$(INTDIR)/" /Fr"$(INTDIR)/" /Fp"$(INTDIR)/winets.pch" /YX\
  /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\winets2/
 CPP_SBRS=.\winets2/
@@ -287,7 +287,7 @@ CLEAN :
 # ADD CPP /nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /D "TCP_LAN" /FR /YX /c
 CPP_PROJ=/nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D\
- "dp_ANET2" /D "TCP_LAN" /FR"$(INTDIR)/" /Fp"$(INTDIR)/winets.pch" /YX\
+ "dp_ANET2" /D "TCP_LAN" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/" /Fp"$(INTDIR)/winets.pch" /YX\
  /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\wudpland/
 CPP_SBRS=.\wudpland/
@@ -383,7 +383,7 @@ CLEAN :
 # ADD CPP /nologo /Zp1 /MD /W3 /GX /Ot /Oi /I "..\h" /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /D "TCP_LAN" /FAcs /Fr /YX /c
 CPP_PROJ=/nologo /Zp1 /MD /W3 /GX /Ot /Oi /I "..\h" /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D\
- "dp_ANET2" /D "TCP_LAN" /FAcs /Fa"$(INTDIR)/" /Fr"$(INTDIR)/"\
+ "dp_ANET2" /D "TCP_LAN" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FAcs /Fa"$(INTDIR)/" /Fr"$(INTDIR)/"\
  /Fp"$(INTDIR)/winets.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\wudplan/
 CPP_SBRS=.\wudplan/

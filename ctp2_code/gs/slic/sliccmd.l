@@ -14,7 +14,7 @@
 #undef min
 #define min(a,b) ((a) < (b) ? (a) : (b))
 
-int my_scinput(char *buf, int max_size);
+size_t my_scinput(char *buf, size_t max_size);
 
 #undef YY_INPUT
 #define YY_INPUT(b, r, ms) (r = my_scinput(b, ms))
@@ -92,11 +92,11 @@ int yywrap() { return 1; }
 
 extern char *sliccmd_input;
 extern char *sliccmd_input_ptr;
-extern int sliccmd_input_len;
+extern size_t sliccmd_input_len;
 
-int my_scinput(char *buf, int max_size)
+size_t my_scinput(char *buf, size_t max_size)
 {
-	int n = min(max_size, (sliccmd_input + sliccmd_input_len) - sliccmd_input_ptr);
+	size_t n = min(max_size, (size_t)((sliccmd_input + sliccmd_input_len) - sliccmd_input_ptr));
 	if(n > 0) {
 		memcpy(buf, sliccmd_input_ptr, n);
 		sliccmd_input_ptr += n;

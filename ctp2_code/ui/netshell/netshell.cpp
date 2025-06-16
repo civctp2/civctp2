@@ -61,7 +61,6 @@ nf_GameSetup        g_gamesetup;
 nf_PlayerSetup      g_playersetup;
 nf_PlayerSetup      g_rplayersetup;
 
-
 AUI_ERRCODE NetShell::Enter( uint32 flags )
 {
 	if ( (flags & k_NS_FLAGS_CREATE) || !g_netshell || !g_netfunc )
@@ -84,11 +83,11 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 	if (aui_Control * bg = g_netshell->m_bg)
 	{
 		aui_Image * image    = g_ui->LoadImage(bg->GetImage()->GetFilename());
-		aui_Image *	oldImage = g_ui->SetBackgroundImage
-			(image,
-			 (g_ui->Width() - image->TheSurface()->Width()) / 2,
+		aui_Image * oldImage = g_ui->SetBackgroundImage
+		    (image,
+		     (g_ui->Width() - image->TheSurface()->Width()) / 2,
 		     (g_ui->Height() - image->TheSurface()->Height()) / 2
-			);
+		    );
 		if (oldImage)
 		{
 			g_ui->UnloadImage(oldImage);
@@ -96,10 +95,6 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 	}
 
 	g_ui->Invalidate();
-
-
-
-
 
 	if (flags & k_NS_FLAGS_RETURN)
 	{
@@ -121,7 +116,7 @@ AUI_ERRCODE NetShell::Enter( uint32 flags )
 			g_netshell->GotoScreen( SCREEN_ALLINONE );
 			w->Update();
 		} else {
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 			PostMessage( g_ui->TheHWND(), WM_CLOSE, 0, 0 );
 #endif
 		}
@@ -139,20 +134,19 @@ class EnterMainMenuAction : public aui_Action
 public:
 	virtual void	Execute
 	(
-		aui_Control	*	control,
-		uint32			action,
-		uint32			data
+	    aui_Control *   control,
+	    uint32          action,
+	    uint32          data
 	)
-    {
-        EnterMainMenu();
-    };
+	{
+		EnterMainMenu();
+	};
 };
 
 void NetShell::Leave( uint32 flags, BOOL safe )
 {
 	if ( g_netshell )
 	{
-
 		g_ui->Draw();
 		g_ui->SetBackgroundColor( k_AUI_UI_NOCOLOR );
 		aui_Image *prev = g_ui->SetBackgroundImage( NULL );
@@ -162,10 +156,14 @@ void NetShell::Leave( uint32 flags, BOOL safe )
 		g_netshell->LeaveCurrentScreen();
 	}
 
-	if ( flags & k_NS_FLAGS_MAINMENU ) {
-		if(safe) {
+	if ( flags & k_NS_FLAGS_MAINMENU )
+	{
+		if(safe)
+		{
 			g_ui->AddAction(new EnterMainMenuAction);
-		} else {
+		}
+		else
+		{
 			EnterMainMenu();
 		}
 	}
@@ -190,7 +188,6 @@ void NetShell::Leave( uint32 flags, BOOL safe )
 		LaunchGame();
 	}
 }
-
 
 NetShell::NetShell()
 :
@@ -225,7 +222,6 @@ NetShell::NetShell()
 	}
 
 }
-
 
 AUI_ERRCODE NetShell::CreateScreens( void )
 {
@@ -309,9 +305,6 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 			AddWindow( m_windows[ WINDOW_LOBBYCHANGE ] );
 	}
 
-
-
-
 	screen = new aui_Screen( &errcode, SCREEN_GAMESELECT );
 	Assert( AUI_NEWOK(screen,errcode) );
 	if ( !AUI_NEWOK(screen,errcode) ) return errcode;
@@ -321,9 +314,6 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 		m_screens[ SCREEN_GAMESELECT ]->
 			AddWindow( m_windows[ WINDOW_GAMESELECT ] );
 	}
-
-
-
 
 	screen = new aui_Screen( &errcode, SCREEN_STARTSELECTING );
 	Assert( AUI_NEWOK(screen,errcode) );
@@ -356,7 +346,6 @@ AUI_ERRCODE NetShell::CreateScreens( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 NetShell::~NetShell()
 {
 	DestroyScreens();
@@ -371,25 +360,25 @@ NetShell::~NetShell()
 		delete m_bg;
 	}
 
-    if (g_netshell == this)
-    {
-        allocated::clear(g_nsUnits);
-        allocated::clear(g_nsImprovements);
-        allocated::clear(g_nsWonders);
+	if (g_netshell == this)
+	{
+		allocated::clear(g_nsUnits);
+		allocated::clear(g_nsImprovements);
+		allocated::clear(g_nsWonders);
 
-        g_netshell = NULL;
-    }
+		g_netshell = NULL;
+	}
 }
 
 void NetShell::DestroyScreens( void )
 {
-    SavePlayerSetupList();
-    SaveGameSetupList();
+	SavePlayerSetupList();
+	SaveGameSetupList();
 
-    if (GetCurrentScreen())
-    {
-        GetCurrentScreen()->Hide();
-    }
+	if (GetCurrentScreen())
+	{
+		GetCurrentScreen()->Hide();
+	}
 
 	int i;
 	for ( i = 0; i < SCREEN_MAX; i++ )

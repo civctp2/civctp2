@@ -1290,6 +1290,7 @@ UNIT_DIPLOMAT {
    IsSpecialForces
    Civilian
    InvisibleForGlobeSat
+   HearGossip
    SoundSelect1 SOUND_SELECT1_DIPLOMAT
    SoundSelect2 SOUND_SELECT2_DIPLOMAT
    SoundMove SOUND_MOVE_DIPLOMAT
@@ -1516,6 +1517,7 @@ UNIT_EMPATHIC_DIPLOMAT {
    DeathEffectsHappy
    IsSpecialForces
    Civilian
+   HearGossip
    InvisibleForGlobeSat
    SoundSelect1 SOUND_SELECT1_EMPATHIC_DIPLOMAT
    SoundSelect2 SOUND_SELECT2_EMPATHIC_DIPLOMAT

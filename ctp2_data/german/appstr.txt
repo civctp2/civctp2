@@ -1,0 +1,18 @@
+deu
+Fonts
+DirectX
+DirectMedia
+Initialisiere
+CD-ROM
+Speicher
+Das Windows-Verzeichnis konnte nicht gefunden werden.
+DirectX kann nicht aktiviert werden. Bitte führen Sie eine erneute Installation von der Call-To-Power-II-CD durch.
+Es ist erforderlich, daß Ihre Grafikkarte den 16-Bit-Anzeigemodus bei einer Auflösung von 800 x 600 oder höher unterstützt.
+Call to Power II kann ohne DirectX nicht gestartet werden.
+Eine wichtige Datei konnte nicht gefunden werden. Bitte führen Sie eine erneute Installation von der Call-To-Power-II-CD durch.
+Bitte legen Sie die Call-To-Power-II-CD in Ihr CD-ROM-Laufwerk.
+Stellen Sie bitte sicher, daß sich die Call-To-Power-II-CD in Ihrem CD-ROM-Laufwerk befindet.
+Call To Power II erfordert DirectMedia. Bitte führen Sie eine erneute Installation von der Call-To-Power-II-CD durch.
+Es steht nur wenig Speicherkapazität für den Betrieb von Call To Power II zur Verfügung. Bitte schließen Sie alle anderen Programme, und beachten Sie die Hinweise zur Erweiterung der Speicherkapazität in der README-Datei.
+Es steht äußerst wenig Speicherkapazität für den Betrieb von Call To Power II zur Verfügung. Bitte schließen Sie alle anderen Programme, und beachten Sie die Hinweise zur Erweiterung der Speicherkapazität in der README-Datei.
+Es ist nicht genügend Speicherkapazität für den Betrieb von Call To Power II verfügbar. Bitte schließen Sie alle anderen Programme, und beachten Sie die Hinweise zur Erweiterung der Speicherkapazität in der README-Datei.

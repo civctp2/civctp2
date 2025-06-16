@@ -195,7 +195,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	AddChild( m_header );
 
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
 			m_header->ChildList()->GetNext( position )->Width() );
 
@@ -203,7 +203,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERY );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_verticalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -301,7 +301,7 @@ AUI_ERRCODE ns_CivListBox::Draw(
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
+	if ( maxVertical > static_cast<sint32>(m_numRows) ) maxVertical = static_cast<sint32>(m_numRows);
 
 	RECT selectRect = rect;
 	InflateRect( &selectRect, -1, 0 );
@@ -315,7 +315,7 @@ AUI_ERRCODE ns_CivListBox::Draw(
 
 
 
-		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
+		for ( size_t i = m_visualSelectedList->L(); i; i-- )
 		{
 
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
@@ -459,7 +459,7 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 ns_HPlayerListBox::~ns_HPlayerListBox()
 {
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 		delete item;

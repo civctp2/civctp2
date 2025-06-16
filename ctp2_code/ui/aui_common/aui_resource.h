@@ -170,7 +170,7 @@ aui_Resource<T>::~aui_Resource()
 	if (!--m_resourceRefCount)
 	{
 		ListPos position = m_pathList->GetHeadPosition();
-		for ( sint32 i = m_pathList->L(); i; i-- )
+		for ( size_t i = m_pathList->L(); i; i-- )
 		{
 			MBCHAR *path = m_pathList->GetNext( position );
 			delete [] path;
@@ -216,7 +216,7 @@ template<class T>
 AUI_ERRCODE aui_Resource<T>::RemoveSearchPath( const MBCHAR *path )
 {
 	ListPos position = m_pathList->GetHeadPosition();
-	for ( sint32 i = m_pathList->L(); i; i-- )
+	for ( size_t i = m_pathList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 
@@ -254,7 +254,7 @@ T *aui_Resource<T>::Load( const MBCHAR *resName, C3DIR dir, uint32 size)
 	uint32 hash = aui_Base::CalculateHash( name );
 
 	ListPos position = m_resourceList->GetHeadPosition();
-	for ( sint32 i = m_resourceList->L(); i; i-- )
+	for ( size_t i = m_resourceList->L(); i; i-- )
 	{
 		aui_ResourceElement<T> *re = m_resourceList->GetNext( position );
 		if (((hash == re->hash) && (strcmp(name, re->name) == 0))   ||
@@ -319,7 +319,7 @@ BOOL aui_Resource<T>::FindFile( MBCHAR *fullPath, const MBCHAR *name )
 		ListPos position = m_pathList->GetHeadPosition();
 		if ( position )
 		{
-			for ( sint32 i = m_pathList->L(); i; i-- )
+			for ( size_t i = m_pathList->L(); i; i-- )
 			{
 				const MBCHAR *path = m_pathList->GetNext( position );
 				sprintf( fullPath, "%s%s%s", path, FILE_SEP, name );
@@ -346,7 +346,7 @@ template<class T>
 AUI_ERRCODE aui_Resource<T>::Unload( T *resource )
 {
 	ListPos position = m_resourceList->GetHeadPosition();
-	for ( sint32 i = m_resourceList->L(); i; i-- )
+	for ( size_t i = m_resourceList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 
@@ -371,7 +371,7 @@ AUI_ERRCODE aui_Resource<T>::Unload( const MBCHAR *name )
 	uint32 hash = aui_Base::CalculateHash( name );
 
 	ListPos position = m_resourceList->GetHeadPosition();
-	for ( sint32 i = m_resourceList->L(); i; i-- )
+	for ( size_t i = m_resourceList->L(); i; i-- )
 	{
 		ListPos prevPosition = position;
 

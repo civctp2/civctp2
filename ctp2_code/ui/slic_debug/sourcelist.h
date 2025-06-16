@@ -83,7 +83,7 @@ public:
 	void kh_Close();
 
 	c3_ListBox *GetList() { return m_list; }
-	void ShowBreak(sint32 offset);
+	void ShowBreak(size_t offset);
 	void Continue();
 	void StepInto();
 };
@@ -91,7 +91,7 @@ public:
 
 void sourcelist_Display(SlicSegment *segment);
 void sourcelist_Remove();
-void sourcelist_RegisterBreak(SlicSegment *segment, sint32 offset);
+void sourcelist_RegisterBreak(SlicSegment *segment, size_t offset);
 
 extern SourceList *g_sourceList;
 #endif // CTP2_ENABLE_SLICDEBUG

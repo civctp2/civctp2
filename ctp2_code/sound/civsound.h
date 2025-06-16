@@ -24,7 +24,7 @@
 // - Use Microsoft C++ extensions when set.
 //
 // USE_SDL
-// - Use SDL for sound, cdrom, ... (TODO)
+// - Use SDL for sound and cdrom (originally)
 //
 //----------------------------------------------------------------------------
 //

@@ -1430,7 +1430,7 @@ BOOL SlicFrame::DoInstruction(SOP op)
 			break;
 	}
 	if(calcOffset)
-		m_offset += codePtr - origCodePtr;
+		m_offset += static_cast<sint32>(codePtr - origCodePtr); // m_offset should be size_t, unless it is stored in the savegame. And of course it is legacy code.
 	return !stopped;
 }
 

@@ -43,8 +43,8 @@
 
 class SettleMap;
 
-size_t const    k_minimum_settle_city_size  = 2;
-size_t const    k_targets_per_continent     = 25;
+sint32 const    k_minimum_settle_city_size  = 2;
+sint16 const    k_targets_per_continent     = 25;
 
 #include "mapgrid.h"
 #include "MapPoint.h"

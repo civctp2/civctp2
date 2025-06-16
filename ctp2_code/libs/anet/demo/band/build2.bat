@@ -13,7 +13,7 @@ rem /MD = use MSVCRT.DLL standard C library (because that's what anet2d uses)
 
 del *.obj
 del band.exe
-cl /D DOSWIN32 /D WIN32 /I ..\..\h /I ..\utils band.c ..\utils\raw.c ..\utils\eclock.c ..\utils\assoctab.c ..\utils\dynatab.c ..\..\win\lib\anet2.lib /Fm /Oy- /Ox /W3 /WX /Gr /MD /Feband.exe
+cl /D DOSWIN32 /D WIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /I ..\..\h /I ..\utils band.c ..\utils\raw.c ..\utils\eclock.c ..\utils\assoctab.c ..\utils\dynatab.c ..\..\win\lib\anet2.lib /Fm /Oy- /Ox /W3 /WX /Gr /MD /Feband.exe
 if errorlevel 1 goto bad
 if not exist bandd.exe goto bad
 

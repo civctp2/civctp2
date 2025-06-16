@@ -61,14 +61,15 @@ protected:
 	AUI_ERRCODE InitCommon( void );
 
 public:
-	BOOL	IsRegistered( void ) const { return m_registered; }
 	const MBCHAR	*GetWindowClass( void ) const { return m_windowClass; }
 
+#if defined(__AUI_USE_DIRECTX__)
+	BOOL	IsRegistered(void) const { return m_registered; }
 	HWND	TheHWND( void ) const { return m_hwnd; }
+	static aui_Win *GetWinFromHWND(HWND hwnd);
+#endif
 
 	virtual aui_Control	*SetKeyboardFocus( void );
-
-	static aui_Win *GetWinFromHWND( HWND hwnd );
 
 	virtual AUI_ERRCODE	DrawThis(
 		aui_Surface *surface,
@@ -76,19 +77,19 @@ public:
 		sint32 y );
 
 protected:
-	static BOOL			m_registered;
 	static const MBCHAR	*m_windowClass;
+
+#if defined(__AUI_USE_DIRECTX__)
+	static BOOL			m_registered;
 	static sint32		m_winRefCount;
-
 	HWND			m_hwnd;
-
-	POINT			m_offscreen;
-
 	HDC				m_memdc;
+	static tech_WLList<aui_Win *> *m_winList;
 	HBITMAP			m_hbitmap;
 	HBITMAP			m_hbitmapOld;
 
-	static tech_WLList<aui_Win *> *m_winList;
+	POINT			m_offscreen;
+#endif
 
 	void			WinMouseMove(aui_MouseEvent * mouseData);
 	void			WinMouseLDrag(aui_MouseEvent * mouseData);

@@ -550,7 +550,7 @@ void SlicObject::Serialize(CivArchive &archive)
 	if (archive.IsStoring()) {
 		archive.PerformMagic(SLICLIST_MAGIC) ;
 
-		l = strlen(m_id) + 1;
+		l = static_cast<uint32>(strlen(m_id) + 1);
 		archive << l;
 		archive.Store((uint8 *)m_id, l);
 
@@ -561,7 +561,7 @@ void SlicObject::Serialize(CivArchive &archive)
 
 		if(m_segment) {
 
-			l = strlen(m_segment->GetName()) + 1 ;
+			l = static_cast<uint32>(strlen(m_segment->GetName()) + 1);
 		} else {
 			l = 0;
 		}

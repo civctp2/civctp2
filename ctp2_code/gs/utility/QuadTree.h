@@ -14,31 +14,11 @@ enum QUADRANT {
 
 #include "dynarr.h"
 
-
-
-
-
-
-
 #define k_MAX_DEGENERATE_COUNT 100
 
 template <class T> class QuadTree;
 template <class T>	class QuadTreeNode
 {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 #define QCX (m_x + ((m_width) / 2))
 #define QCY (m_y + ((m_height) / 2))
@@ -97,20 +77,20 @@ template <class T> class QuadTree
 public:
 	QuadTree(sint16 width, sint16 height, BOOL yWrap)
 	:
-        m_top               (NULL),
-        m_width             (width),
-		m_height            (height),
-        m_isYWrap           (yWrap),
-        m_degenerateCount   (0)
+	    m_top               (NULL),
+	    m_width             (width),
+	    m_height            (height),
+	    m_isYWrap           (yWrap),
+	    m_degenerateCount   (0)
 	{};
 
 	QuadTree()
-    :
-        m_top               (NULL),
-        m_width             (0),
-		m_height            (0),
-        m_isYWrap           (FALSE),
-        m_degenerateCount   (0)
+	:
+	    m_top               (NULL),
+	    m_width             (0),
+	    m_height            (0),
+	    m_isYWrap           (FALSE),
+	    m_degenerateCount   (0)
 	{};
 
 	virtual ~QuadTree()
@@ -137,9 +117,6 @@ public:
 		delete m_top;
 		m_top = NULL;
 	}
-
-
-
 
 	virtual MapPoint GetPos(T obj) const;
 	virtual void Convert(MapPoint &pos) const;
@@ -220,7 +197,7 @@ QuadTreeNode<T>::FindQuadrant(const MapPoint &pos) const
 	if(pos.x < QCX && pos.y >= QCY) return QUADRANT_SW;
 	if(pos.x < QCX && pos.y < QCY) return QUADRANT_NW;
 
-    Assert(false);
+	Assert(false);
 	return QUADRANT_ERROR;
 }
 
@@ -291,22 +268,18 @@ QuadTreeNode<T>::AddList(DynamicArray<T> & a_List)
 		Assert(m_array.Num() > 0);
 		MapPoint oldPos = m_tree->GetPos(m_array[0]);
 
-
-
-
-
 		if(pos.x == oldPos.x && pos.y == oldPos.y) {
 			m_array.Concat(a_List);
 		} else {
 			QUADRANT oldQuad = FindQuadrant(oldPos);
 			if (oldQuad == newQuad)
-            {
+			{
 				QuadTreeNode<T> * newNode = AddLeaf(newQuad, a_List);
 				newNode->AddList(m_array);
 				m_isLeaf = FALSE;
 			}
-            else
-            {
+			else
+			{
 				AddLeaf(newQuad, a_List);
 				AddLeaf(oldQuad, m_array);
 			}
@@ -349,13 +322,13 @@ QuadTreeNode<T>::AddObject(T obj)
 		} else {
 			QUADRANT oldQuad = FindQuadrant(oldPos);
 			if (oldQuad == newQuad)
-            {
-	            QuadTreeNode<T> * newNode = AddLeaf(newQuad, obj);
+			{
+				QuadTreeNode<T> * newNode = AddLeaf(newQuad, obj);
 				newNode->AddList(m_array);
 				m_isLeaf = FALSE;
 			}
-            else
-            {
+			else
+			{
 				AddLeaf(newQuad, obj);
 				AddLeaf(oldQuad, m_array);
 			}
@@ -427,13 +400,13 @@ template <class T> bool
 QuadTreeNode<T>::GetAt(const MapPoint &point, T &obj)
 {
 	if (m_isLeaf)
-    {
-        Assert(m_tree);
+	{
+		Assert(m_tree);
 
 		for (sint32 i = 0; i < m_array.Num(); i++)
-        {
+		{
 			if (m_tree->GetPos(m_array[i]) == point)
-            {
+			{
 				obj = m_array[i];
 				return true;
 			}
@@ -441,13 +414,13 @@ QuadTreeNode<T>::GetAt(const MapPoint &point, T &obj)
 
 		return false;
 	}
-    else
-    {
+	else
+	{
 		switch (FindQuadrant(point))
-        {
-        default:
-            Assert(false);
-            return false;
+		{
+		default:
+			Assert(false);
+			return false;
 		case QUADRANT_NE:
 			return m_ne && m_ne->GetAt(point, obj);
 		case QUADRANT_SE:
@@ -464,32 +437,32 @@ template <class T> bool
 QuadTreeNode<T>::GetAt(const MapPoint &point, DynamicArray<T> & a_Array)
 {
 	if (m_isLeaf)
-    {
+	{
 		MapPoint objPos = m_tree->GetPos(m_array[0]);
 		if (objPos.x == point.x && objPos.y == point.y)
-        {
+		{
 			a_Array.Clear();
 
-            for (sint32 i = 0; i < m_array.Num(); i++)
-            {
+			for (sint32 i = 0; i < m_array.Num(); i++)
+			{
 				if (m_tree->GetPos(m_array[i]) == point)
-                {
+				{
 					a_Array.Insert(m_array[i]);
 				}
 			}
 
-            return a_Array.Num() > 0;
+			return a_Array.Num() > 0;
 		}
 
 		return false;
 	}
-    else
-    {
+	else
+	{
 		switch (FindQuadrant(point))
-        {
-        default:
-            Assert(false);
-            return false;
+		{
+		default:
+			Assert(false);
+			return false;
 		case QUADRANT_NE:
 			return m_ne && m_ne->GetAt(point, a_Array);
 		case QUADRANT_SE:
@@ -506,32 +479,32 @@ template <class T>
 size_t QuadTreeNode<T>::GetCount(MapPoint const & point) const
 {
 	if (m_isLeaf)
-    {
+	{
 		MapPoint objPos = m_tree->GetPos(m_array[0]);
 		if (objPos.x == point.x && objPos.y == point.y)
-        {
+		{
 			return m_array.Num();
 		}
-        else
-        {
+		else
+		{
 			return 0;
 		}
 	}
-    else
-    {
+	else
+	{
 		switch (FindQuadrant(point))
-        {
-        default:
-            Assert(false);
-            return 0;
+		{
+		default:
+			Assert(false);
+			return 0;
 		case QUADRANT_NE:
-            return (m_ne) ? m_ne->GetCount(point) : 0;
+			return (m_ne) ? m_ne->GetCount(point) : 0;
 		case QUADRANT_SE:
-            return (m_se) ? m_se->GetCount(point) : 0;
+			return (m_se) ? m_se->GetCount(point) : 0;
 		case QUADRANT_SW:
-            return (m_sw) ? m_sw->GetCount(point) : 0;
+			return (m_sw) ? m_sw->GetCount(point) : 0;
 		case QUADRANT_NW:
-            return (m_nw) ? m_nw->GetCount(point) : 0;
+			return (m_nw) ? m_nw->GetCount(point) : 0;
 		}
 	}
 }
@@ -540,26 +513,26 @@ template <class T> bool
 QuadTreeNode<T>::RemoveAt(const MapPoint &point, T &removedObj)
 {
 	if (m_isLeaf)
-    {
+	{
 		MapPoint objPos = m_tree->GetPos(m_array[0]);
 		if (objPos.x != point.x || objPos.y != point.y)
 			return false;
 
 		removedObj = m_array[0];
 
-		for (size_t i = m_array.Num(); i > 0; --i)
-        {
+		for (sint32 i = static_cast<sint32>(m_array.Num()); i > 0; --i)
+		{
 			m_array.DelIndex(i - 1);
 		}
 
 		if (m_array.Num() == 0)
-        {
+		{
 			if (m_parent)
-            {
+			{
 				m_parent->RemoveBranch(this);
 			}
-            else
-            {
+			else
+			{
 				Assert(m_tree->m_top == this);
 				m_tree->RemoveTop();
 			}
@@ -567,13 +540,13 @@ QuadTreeNode<T>::RemoveAt(const MapPoint &point, T &removedObj)
 
 		return true;
 	}
-    else
-    {
+	else
+	{
 		switch (FindQuadrant(point))
-        {
-        default:
-	        Assert(false);
-	        return false;
+		{
+		default:
+			Assert(false);
+			return false;
 		case QUADRANT_NE:
 			return m_ne && m_ne->RemoveAt(point, removedObj);
 		case QUADRANT_SE:
@@ -590,30 +563,30 @@ template <class T> bool
 QuadTreeNode<T>::RemoveAt(const MapPoint &point, DynamicArray<T> & a_Array)
 {
 	if (m_isLeaf)
-    {
+	{
 		MapPoint objPos = m_tree->GetPos(m_array[0]);
 		if (objPos.x != point.x || objPos.y != point.y)
 			return false;
 
 		a_Array.Concat(m_array);
 		if (m_parent)
-        {
+		{
 			m_parent->RemoveBranch(this);
 		}
-        else
-        {
+		else
+		{
 			Assert(m_tree->m_top == this);
 			m_tree->RemoveTop();
 		}
 		return true;
 	}
-    else
-    {
+	else
+	{
 		switch (FindQuadrant(point))
-        {
-        default:
-            Assert(false);
-            return false;
+		{
+		default:
+			Assert(false);
+			return false;
 		case QUADRANT_NE:
 			return m_ne && m_ne->RemoveAt(point, a_Array);
 		case QUADRANT_SE:
@@ -830,9 +803,9 @@ template <class T> void QuadTree<T>::Insert(T newObj)
 template <class T> void QuadTree<T>::Remove(T obj)
 {
 	if (m_top)
-    {
-    	m_top->RemoveObject(obj);
-    }
+	{
+		m_top->RemoveObject(obj);
+	}
 }
 
 template <class T> bool QuadTree<T>::RemoveAt(const MapPoint &point, T &removedObj)
@@ -902,7 +875,7 @@ template <class T> MapPoint
 QuadTree<T>::GetPos(T obj) const
 {
 	MapPoint pos;
-    obj.GetPos(pos);
+	obj.GetPos(pos);
 	Convert(pos);
 	return pos;
 }
@@ -912,19 +885,6 @@ QuadTree<T>::GetFlags(T obj)
 {
 	return (1 << obj.GetOwner());
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 template <class T> void
 QuadTree<T>::SearchRect(DynamicArray<T> &array, MapPoint pos, sint16 width, sint16 height, uint32 mask)
@@ -995,9 +955,9 @@ template <class T> void
 QuadTree<T>::BuildList(DynamicArray<T> & a_Array, uint32 mask) const
 {
 	if (m_top)
-    {
-    	m_top->BuildList(a_Array, mask);
-    }
+	{
+		m_top->BuildList(a_Array, mask);
+	}
 }
 
 template <class T> void

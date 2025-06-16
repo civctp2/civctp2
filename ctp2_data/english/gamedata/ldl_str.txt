@@ -49,13 +49,15 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer				"You are already offering that good. Replace old offer?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER				"All Civilizations will now bow to a new master, {player[1].leader_name} has completed the Alien Life Project."
+ENDGAME_WON_OTHER				"All Civilizations will now bow to a new master, {player[0].leader_name} has completed the Alien Life Project."
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma					","
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE				"SCORE"
 str_ldl_POWER_GRAPH				"POWER GRAPH"
 str_ldl_DEFEAT					"DEFEAT"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"THE DESTITUTE"
 str_ldl_THE_SQUIRREL_HEARTED			"THE SQUIRREL HEARTED"
 str_ldl_THE_RED_FACED				"THE RED FACED"
@@ -866,6 +869,7 @@ str_ldl_Known_To_You_And_Others			"Known To You And Others"
 str_ldl_LABORERS				"Laborers"
 str_ldl_Land					"Land"
 str_ldl_Land_Grabber				"Land Grabber"
+str_ldl_LANGUAGE					"LANGUAGE"
 str_ldl_Large_64_x_128				"Huge"
 str_ldl_Last_Sale_Price_COLON			"Last Sale Price:"
 str_ldl_Launch					"Launch"
@@ -1182,6 +1186,7 @@ str_ldl_Unit_Help				"Unit Help"
 str_ldl_UNIT_MOVEMENT				"UNIT MOVEMENT"
 str_ldl_UNIT_STATUS				"UNIT STATUS"
 str_ldl_Units					"Units"
+str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
 str_ldl_UNLOAD_ALL				"UNLOAD ALL"
 str_ldl_Unpredictable				"Unpredictable"
 str_ldl_Untarnished				"Untarnished"
@@ -1414,6 +1419,8 @@ str_tbl_ldl_You_will_receive			"You will receive"
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"Your Intent to Purchase has been Sent."
 str_tbl_ldl_Zoom_in_one_level			"Zoom in one level"
 str_tbl_ldl_Zoom_out_one_level			"Zoom out one level"
+str_ldl_CAPS_LANGUAGE				"LANGUAGE"
+str_ldl_Use_OS_Language				"Use language from operating system"
 str_ldl_CAPS_MUSIC				"MUSIC"
 str_ldl_Select_Track				"Select Track"
 str_ldl_CAPS_SELECT_TRACK			"SELECT TRACK"
@@ -2262,6 +2269,7 @@ str_ldl_MapFilters				"Map Filters"
 str_ldl_Graphics				"Graphics"
 str_ldl_Sound					"Sound"
 str_ldl_Music					"Music"
+str_ldl_Language				"Language"
 str_ldl_Advanced				"Advanced"
 str_ldl_SaveGame				"Save Game"
 str_ldl_LoadGame				"Load Game"
@@ -2586,7 +2594,7 @@ str_ldl_SD_CURRENT_EXPENDITURE			"Current Spendings:"
 str_ldl_SD_TOTAL_COST				"Total Cost:"
 
 # Science Victory
-str_ldl_SCIENCE_VICTORY_TITLE			"SCIENCE VICTORY"
+str_ldl_SCIENCE_VICTORY_TITLE			"S C I E N C E   V I C T O R Y"
 str_ldl_SV_REQ_MAINFRAMES			"Controller Cores Required:"
 str_ldl_SV_REQ_TOWERS				"Min Obelisks Required:"
 str_ldl_SV_REQ_SATELLITES			"Min Satellites Required:"
@@ -2736,7 +2744,7 @@ str_tbl_ldl_VictoryScience			"Wonder Victory:"
 str_tbl_ldl_VictoryConquest			"Solo Victory:"
 str_tbl_ldl_InProgress				"Game in progress:"
 str_tbl_ldl_Defeat				"Defeat:"
-	
+
 # Great Library
 str_ldl_CAPS_GREAT_LIBRARY			"G R E A T    L I B R A R Y"
 str_ldl_GreatLibraryGoalSetTo			"Goal set to: %s"
@@ -2794,7 +2802,7 @@ str_ldl_DipDetails_LeaderPersonality		"Leader Personality: {player[0].leaderpero
 str_ldl_DipDetails_EmbassyMsg			"* Embassy required to access privileged information."
 str_ldl_DipDetails_NoEmbassy			"<No Embassy>"
 
-# Tile improvent panel
+# Tile improvement panel
 str_ldl_ImproveLand				"Land"
 str_ldl_ImproveOcean				"Ocean"
 str_ldl_ImproveSpecial				"Special"
@@ -3087,7 +3095,7 @@ str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
 str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "Unit upgrading"
 str_profile_SmoothBorders                       "Smooth empire borders"
 str_profile_CivFlags                            "Show Civilization Unit flags"
@@ -3112,19 +3120,22 @@ str_profile_OneCityChallenge                    "One City Challenge"            
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
 str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"                                 # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Sentineling units board automatically"         # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options			"Music options"
-str_tbl_ldl_Decend				"Decend"
+str_tbl_ldl_Music_Options				"Music options"
+str_tbl_ldl_Language_Options			"Language options"
+str_tbl_ldl_Decend						"Decend"
 str_tbl_ldl_Execute_Eyepoint			"Focus on object (eye)"
-str_tbl_ldl_Move_Order				"Move order"
-str_tbl_ldl_End_Unit_Turn			"End unit turn"
+str_tbl_ldl_Move_Order					"Move order"
+str_tbl_ldl_End_Unit_Turn				"End unit turn"
 str_tbl_ldl_Process_Unit_Orders			"Process given unit orders"
-str_tbl_ldl_Group_Army				"Group all units to army"
-str_tbl_ldl_Ungroup_Army			"Ungroup armies"
-str_tbl_ldl_Gamestate_Debug			"Debug gamestate (playtest)"
-str_tbl_ldl_Rand_Test				"Rand test (playtest)"
-str_tbl_ldl_Command_Enter			"Command enter (playtest)"
+str_tbl_ldl_Group_Army					"Group all units to army"
+str_tbl_ldl_Ungroup_Army				"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug				"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test					"Rand test (playtest)"
+str_tbl_ldl_Command_Enter				"Command enter (playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"Command enter alternate (playtest)"
 
 # New gamesetting options
@@ -3139,7 +3150,13 @@ str_ldl_SmoothBorders_On			"Smooth Icon Borders"
 str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
 str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
 str_tbl_ldl_CityCaptureOptions_On		"City Capture Options - On"
 str_tbl_ldl_CityCaptureOptions_Off		"City Capture Options - Off"
 str_tbl_ldl_OneCityChallenge_On			"One City Challenge - On"
@@ -3162,20 +3179,21 @@ str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
 str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
 str_ldl_Debug_AI_On				"Show Debug AI Text"
 str_ldl_Debug_AI_Off				"Hide Debug AI Text"
-str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations - On"
-str_tbl_ldl_NonRandomCivs_Off			"Non-Random AI Nations - Off"
-str_tbl_ldl_NoCityLimit_On			"No City Limits - On"				# No city limit for all players
-str_tbl_ldl_NoCityLimit_Off			"No City Limits - Off"				# City limit for all players
-str_tbl_ldl_NewCombat_Off			"New Combat - Off"
-str_tbl_ldl_NewCombat_On			"New Combat - On"
-str_tbl_ldl_NoGoodyHuts_Off			"No Ruins - Off"
-str_tbl_ldl_NoGoodyHuts_On			"No Ruins - On"
+str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
+str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
+str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
+str_tbl_ldl_NewCombat_Off			"Old Combat"
+str_tbl_ldl_NewCombat_On			"New Combat"
+str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
+str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
 # Custom map window (wet/dry etc.)
 str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
 str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."

@@ -785,12 +785,15 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
-	    font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
-	    }
+
+	if(font)
+	{
+		RECT rect = {x, static_cast<sint32>(y - 0.5 * font->GetLineSkip()), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+		font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -850,11 +853,14 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
-	    font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
-	    }
+
+	if(font)
+	{
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
+		font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -916,17 +922,19 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    for (sint32 i=0;i < numStrings;i++)
+
+	if(font)
+	{
+		for (sint32 i=0;i < numStrings;i++)
 		{
-		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
-		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
-		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
-		y += font->GetLineSkip();
-		
+			RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+			RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+			font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+			y += font->GetLineSkip();
 		}
-	    }
+
+		freeBitmapFont(font);
+	}
 #endif
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1109,11 +1117,12 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
-	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, color, 0); // no bg correspondence
-	    }
+
+	if(font)
+	{
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+		font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, color, 0); // no bg correspondence
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1178,11 +1187,14 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
-	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
-	    }
+
+	if(font)
+	{
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+		font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1258,18 +1270,20 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
-	aui_BitmapFont *font= getBitmapFont();
+	aui_BitmapFont *font = getBitmapFont();
 
-	if(font){
-	    for (sint32 i=0;i < numStrings;i++)
+	if(font)
+	{
+		for (sint32 i=0;i < numStrings;i++)
 		{
-		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
-		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
-		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
-		y += font->GetLineSkip();
-		
+			RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+			RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+			font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+			y += font->GetLineSkip();
 		}
-	    }
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;

@@ -269,24 +269,24 @@ void Squad_Strength::Set_Pos_Strength(const MapPoint & pos)
 
 void Squad_Strength::Set_Enemy_Grid_Strength(const MapPoint & pos, const sint32 & playerId)
 {
-	m_attack_str        = MapAnalysis::GetMapAnalysis().GetEnemyAttack     (playerId, pos);
-	m_defense_str       = MapAnalysis::GetMapAnalysis().GetEnemyDefense    (playerId, pos);
-	m_ranged_str        = MapAnalysis::GetMapAnalysis().GetEnemyRanged     (playerId, pos);
-	m_land_bombard_str  = MapAnalysis::GetMapAnalysis().GetEnemyBombardLand(playerId, pos);
-	m_water_bombard_str = MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (playerId, pos);
-	m_air_bombard_str   = MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (playerId, pos);
-	m_value             = MapAnalysis::GetMapAnalysis().GetEnemyValue      (playerId, pos);
+	m_attack_str        = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyAttack     (playerId, pos));
+	m_defense_str       = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyDefense    (playerId, pos));
+	m_ranged_str        = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyRanged     (playerId, pos));
+	m_land_bombard_str  = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyBombardLand(playerId, pos));
+	m_water_bombard_str = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyBombardSea (playerId, pos));
+	m_air_bombard_str   = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyBombardAir (playerId, pos));
+	m_value             = static_cast<float>(MapAnalysis::GetMapAnalysis().GetEnemyValue      (playerId, pos));
 }
 
 void Squad_Strength::Set_Allied_Grid_Strength(const MapPoint & pos, const sint32 & playerId)
 {
-	m_attack_str        = MapAnalysis::GetMapAnalysis().GetAlliedAttack     (playerId, pos);
-	m_defense_str       = MapAnalysis::GetMapAnalysis().GetAlliedDefense    (playerId, pos);
-	m_ranged_str        = MapAnalysis::GetMapAnalysis().GetAlliedRanged     (playerId, pos);
-	m_land_bombard_str  = MapAnalysis::GetMapAnalysis().GetAlliedBombardLand(playerId, pos);
-	m_water_bombard_str = MapAnalysis::GetMapAnalysis().GetAlliedBombardSea (playerId, pos);
-	m_air_bombard_str   = MapAnalysis::GetMapAnalysis().GetAlliedBombardAir (playerId, pos);
-	m_value             = MapAnalysis::GetMapAnalysis().GetAlliedValue      (playerId, pos);
+	m_attack_str        = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedAttack     (playerId, pos));
+	m_defense_str       = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedDefense    (playerId, pos));
+	m_ranged_str        = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedRanged     (playerId, pos));
+	m_land_bombard_str  = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedBombardLand(playerId, pos));
+	m_water_bombard_str = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedBombardSea (playerId, pos));
+	m_air_bombard_str   = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedBombardAir (playerId, pos));
+	m_value             = static_cast<float>(MapAnalysis::GetMapAnalysis().GetAlliedValue      (playerId, pos));
 }
 
 void Squad_Strength::Set_Force_Matching( const float attack_ratio,

@@ -6,11 +6,14 @@
 
 #include "aui_win.h"
 
-BOOL aui_Win::m_registered = FALSE;
 const MBCHAR *aui_Win::m_windowClass = "aui_Win";
-sint32 aui_Win::m_winRefCount = 0;
-tech_WLList<aui_Win *> *aui_Win::m_winList = 0;
 aui_Win *g_winFocus = 0;
+
+#if defined(__AUI_USE_DIRECTX__)
+sint32 aui_Win::m_winRefCount = 0;
+BOOL aui_Win::m_registered = FALSE;
+tech_WLList<aui_Win *> *aui_Win::m_winList = 0;
+#endif
 
 aui_Win::aui_Win(
 	AUI_ERRCODE *retval,
@@ -60,15 +63,16 @@ AUI_ERRCODE aui_Win::InitCommonLdl( const MBCHAR *ldlBlock )
 
 AUI_ERRCODE aui_Win::InitCommon( void )
 {
+#if defined(__AUI_USE_DIRECTX__)
 	m_hwnd = NULL;
 	m_memdc = NULL;
+
 	m_hbitmap = NULL;
 	m_hbitmapOld = NULL;
 	memset( &m_offscreen, 0, sizeof( m_offscreen ) );
 
 	if ( !m_registered )
 	{
-#ifdef __AUI_USE_DIRECTX__
 		WNDCLASSEX wcex;
 		memset( &wcex, 0, sizeof( wcex ) );
 
@@ -80,12 +84,8 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 
 		m_registered = RegisterClassEx( &wcex );
 		Assert( m_registered );
-#else
-		m_registered = TRUE;
-#endif // __AUI_USE_DIRECTX__
 	}
 
-#ifdef __AUI_USE_DIRECTX__
 	HDC hdc = GetDC( g_ui->TheHWND() );
 
 	m_memdc = CreateCompatibleDC( hdc );
@@ -102,7 +102,6 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 
 	RECT rect = { 0, 0, m_width, m_height };
 	FillRect( m_memdc, &rect, GetSysColorBrush( COLOR_WINDOW ) );
-#endif // __AUI_USE_DIRECTX__
 
 	m_offscreen.x = g_ui->Width() + 1;
 	m_offscreen.y = 0;
@@ -116,10 +115,8 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 		Assert( m_winList != NULL );
 		if ( !m_winList ) return AUI_ERRCODE_MEMALLOCFAILED;
 	}
-#ifdef __AUI_USE_DIRECTX__
 	else
 		GetClipCursor( &playground );
-#endif // __AUI_USE_DIRECTX__
 
 	m_winList->AddTail( this );
 
@@ -133,7 +130,6 @@ AUI_ERRCODE aui_Win::InitCommon( void )
 
 	Rectangle_Consolidate( &playground, &playground, &morePlayground );
 
-#ifdef __AUI_USE_DIRECTX__
 	BOOL clipped = ClipCursor( &playground );
 	Assert( clipped );
 
@@ -166,20 +162,17 @@ aui_Win::~aui_Win()
 		DestroyWindow( m_hwnd );
 		m_hwnd = NULL;
 	}
-#endif // __AUI_USE_DIRECTX__
 
-	ListPos position = m_winList->Find( GetWinFromHWND(m_hwnd) );
-	if ( position )
-		m_winList->DeleteAt( position );
+	ListPos position = m_winList->Find(GetWinFromHWND(m_hwnd));
+	if (position)
+		m_winList->DeleteAt(position);
 
 	if ( !--m_winRefCount )
 	{
-#ifdef __AUI_USE_DIRECTX__
 		ClipCursor( NULL );
 
 		if ( m_registered )
 			UnregisterClass( m_windowClass, g_ui->TheHINSTANCE() );
-#endif // __AUI_USE_DIRECTX__
 
 		if ( m_winList )
 		{
@@ -187,6 +180,7 @@ aui_Win::~aui_Win()
 			m_winList = NULL;
 		}
 	}
+#endif // __AUI_USE_DIRECTX__
 }
 
 aui_Control *aui_Win::SetKeyboardFocus( void )
@@ -201,11 +195,15 @@ aui_Control *aui_Win::SetKeyboardFocus( void )
 	return aui_Control::SetKeyboardFocus();
 }
 
+#if defined(__AUI_USE_DIRECTX__)
 aui_Win *aui_Win::GetWinFromHWND( HWND hwnd )
 {
 	aui_Win *win = NULL;
 
 	ListPos position = m_winList->GetHeadPosition();
+	if (position == NULL)
+		return win;
+
 	for ( sint32 i = m_winList->L(); i; i-- )
 	{
 		win = m_winList->GetNext( position );
@@ -215,6 +213,7 @@ aui_Win *aui_Win::GetWinFromHWND( HWND hwnd )
 
 	return win;
 }
+#endif
 
 AUI_ERRCODE aui_Win::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
@@ -226,9 +225,9 @@ AUI_ERRCODE aui_Win::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
+#ifdef __AUI_USE_DIRECTX__
 	if ( m_hwnd && m_memdc )
 	{
-#ifdef __AUI_USE_DIRECTX__
 		InvalidateRect( m_hwnd, NULL, FALSE );
 		SendMessage( m_hwnd, WM_PAINT, (WPARAM)m_memdc, 0 );
 
@@ -253,8 +252,8 @@ AUI_ERRCODE aui_Win::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 			errcode = surface->ReleaseDC( destDC );
 			Assert( errcode == AUI_ERRCODE_OK );
 		}
-#endif // __AUI_USE_DIRECTX__
 	}
+#endif // __AUI_USE_DIRECTX__
 
 	if ( surface == m_window->TheSurface() )
 		m_window->AddDirtyRect( &rect );

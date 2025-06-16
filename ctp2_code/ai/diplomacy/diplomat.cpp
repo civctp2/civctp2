@@ -115,6 +115,7 @@
 #include "gfx_options.h"
 #include "net_diplomacy.h"
 #include "RandGen.h"            // g_rand
+#include "GameSettings.h"
 
 #ifdef __linux__
 #include "../ctp/cifm.h"
@@ -206,16 +207,16 @@ Diplomat::DiplomatVector Diplomat::s_theDiplomats;
 sint32 Diplomat::s_proposalTypeToElemIndex[PROPOSAL_MAX];
 
 #define RELDBG(x) { FILE *f = fopen("reldbg.txt", "a"); fprintf x; fclose(f); }
-Diplomat & Diplomat::GetDiplomat(const PLAYER_INDEX & playerId)
+Diplomat & Diplomat::GetDiplomat(const size_t & playerId)
 {
 	Assert(playerId >= 0);
-	Assert(static_cast<size_t>(playerId) < s_theDiplomats.size());
+	Assert(playerId < s_theDiplomats.size());
 	Assert(playerId == s_theDiplomats[playerId].GetPlayerId());
 
 	return s_theDiplomats[playerId];
 }
 
-bool Diplomat::HasDiplomat(const PLAYER_INDEX & playerId)
+bool Diplomat::HasDiplomat(const size_t & playerId)
 {
 	return (playerId >= 0
 	&&      static_cast<size_t>(playerId) < s_theDiplomats.size()
@@ -223,19 +224,19 @@ bool Diplomat::HasDiplomat(const PLAYER_INDEX & playerId)
 	&&      playerId == s_theDiplomats[playerId].GetPlayerId());
 }
 
-void Diplomat::ResizeAll(const PLAYER_INDEX & newMaxPlayers)
+void Diplomat::ResizeAll(const size_t & newMaxPlayers)
 {
-	sint32 old_size = s_theDiplomats.size();
+	size_t old_size = s_theDiplomats.size();
 	s_theDiplomats.resize(newMaxPlayers);
 
-	for (sint32 playerId = 0; playerId < newMaxPlayers; playerId++)
+	for (size_t playerId = 0; playerId < newMaxPlayers; playerId++)
 	{
-		s_theDiplomats[playerId].SetPlayerId(playerId);
+		s_theDiplomats[playerId].SetPlayerId(static_cast<PLAYER_INDEX>(playerId));
 		s_theDiplomats[playerId].Resize(newMaxPlayers);
 
 		if (playerId < old_size)
 		{
-			for (sint32 foreignerId = 0; foreignerId < newMaxPlayers; ++foreignerId)
+			for (size_t foreignerId = 0; foreignerId < newMaxPlayers; ++foreignerId)
 			{
 				if (foreignerId >= old_size || g_player[foreignerId] == NULL)
 				{
@@ -495,7 +496,7 @@ Diplomat::~Diplomat()
 	std::string().swap(m_personalityName);
 }
 
-void Diplomat::Resize(const PLAYER_INDEX & newMaxPlayerId)
+void Diplomat::Resize(const size_t & newMaxPlayerId)
 {
 	m_lastMotivation.resize(newMaxPlayerId);
 	m_diplomaticStates.resize(newMaxPlayerId);
@@ -710,11 +711,11 @@ void Diplomat::Initialize()
 	ClearEffectiveRegardCache();
 }
 
-void Diplomat::InitForeigner(const PLAYER_INDEX & foreigner)
+void Diplomat::InitForeigner(const size_t & foreigner)
 {
 	m_lastMotivation[foreigner] = m_motivations.end();
 	m_foreigners[foreigner].Initialize();
-	InitDiplomaticState(foreigner);
+	InitDiplomaticState(static_cast<PLAYER_INDEX>(foreigner));
 }
 
 void Diplomat::DebugStatus(const PLAYER_INDEX & foreignerId) const
@@ -950,7 +951,7 @@ void Diplomat::BeginTurn()
 	sint32 diplomacyEndgameIndex = CtpAi::GetEndgameWorldUnionIndex();
 
 	Assert(diplomacyEndgameIndex);
-	if (diplomacyEndgameIndex >= 0)
+	if (diplomacyEndgameIndex >= 0 && !g_theGameSettings->IsGenocide())
 	{
 		double population_percent;
 		double land_percent;
@@ -2714,7 +2715,7 @@ void Diplomat::ConsiderMotivation(const Motivation & motivation)
 			m_playerId, s_motivationNames[motivation.type].c_str()));
 }
 
-sint32 Diplomat::GetMotivationCount() const
+size_t Diplomat::GetMotivationCount() const
 {
 	return (m_motivations.size());
 }
@@ -4089,7 +4090,7 @@ sint32 Diplomat::EffectiveAtWarCount() const
 	{
 		PLAYER_INDEX const  foreignerId  = static_cast<PLAYER_INDEX>(foreigner);
 		if (    (foreignerId != m_playerId)
-		     && TestEffectiveRegard(foreigner, HOTWAR_REGARD)
+		     && TestEffectiveRegard(static_cast<PLAYER_INDEX>(foreigner), HOTWAR_REGARD)
 		   )
 		{
 			++atWarCount;
@@ -4174,7 +4175,6 @@ bool Diplomat::ComputeEffectiveRegard(const PLAYER_INDEX & foreignerId, const ai
 		{
 			if (!DesireWarWith(foreignerId))
 			{
-
 				if (AgreementMatrix::s_agreements.HasAgreement(m_playerId,
 					foreignerId,
 					PROPOSAL_TREATY_CEASEFIRE))
@@ -5244,7 +5244,7 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const
 
 void Diplomat::ComputeAllDesireWarWith()
 {
-	PLAYER_INDEX const	foreignerCount	= m_desireWarWith.size();
+	PLAYER_INDEX const	foreignerCount	= static_cast<PLAYER_INDEX>(m_desireWarWith.size());
 	for (PLAYER_INDEX foreignerId = 0; foreignerId < foreignerCount; ++foreignerId)
 	{
 		m_desireWarWith[foreignerId] =
@@ -5257,7 +5257,7 @@ sint32 Diplomat::GetWeakestEnemy() const
 	sint32 weakestEnemy    = -1;
 	sint32 weakestStrength = 0x7fffffff;
 
-	for(size_t i = 1; i < m_foreigners.size(); ++i)
+	for(PLAYER_INDEX i = 1; i < static_cast<PLAYER_INDEX>(m_foreigners.size()); ++i)
 	{
 		Player *    other_ptr = g_player[i];
 		if (other_ptr == NULL)

@@ -72,7 +72,7 @@ CLEAN :
 # ADD CPP /nologo /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /I "..\..\dp" /I "..\..\aeh" /I "..\..\sbd" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "dp_ANET2" /D "aeh_IO_ONLY" /YX /c
 CPP_PROJ=/nologo /ML /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /I\
  "..\..\dp" /I "..\..\aeh" /I "..\..\sbd" /D "NDEBUG" /D "WIN32" /D "_WINDOWS"\
- /D "_WIN32" /D "dp_ANET2" /D "aeh_IO_ONLY" /Fp"$(INTDIR)/sendcrsh.pch" /YX\
+ /D "_WIN32" /D "dp_ANET2" /D "aeh_IO_ONLY" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/sendcrsh.pch" /YX\
  /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\Release/
 CPP_SBRS=.\.
@@ -150,7 +150,7 @@ CLEAN :
 # ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "..\..\..\h" /I "..\..\..\demo\utils" /I "..\..\dp" /I "..\..\aeh" /I "..\..\sbd" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "dp_ANET2" /D "aeh_IO_ONLY" /YX /c
 CPP_PROJ=/nologo /MLd /W3 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /I "..\..\dp" /I "..\..\aeh" /I "..\..\sbd" /D "_DEBUG"\
- /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "dp_ANET2" /D "aeh_IO_ONLY"\
+ /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "dp_ANET2" /D "aeh_IO_ONLY" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /Fp"$(INTDIR)/sendcrsh.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\Debug/
 CPP_SBRS=.\.
@@ -315,7 +315,7 @@ DEP_CPP_SENDBO=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\src\aeh\aehlog.c
+SOURCE=..\..\src\aeh\aehlog.c
 DEP_CPP_AEHLO=\
 	"..\..\aeh\aeh.h"\
 	"..\..\aeh\aehlog.h"\
@@ -331,7 +331,7 @@ DEP_CPP_AEHLO=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\src\aeh\aeh.c
+SOURCE=..\..\aeh\aeh.c
 DEP_CPP_AEH_C=\
 	"..\..\..\demo\utils\dpcrc32.h"\
 	"..\..\..\h\eclock.h"\
@@ -350,7 +350,7 @@ DEP_CPP_AEH_C=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\src\sbd\sbdclnt.c
+SOURCE=..\..\sbd\sbdclnt.c
 DEP_CPP_SBDCL=\
 	"..\..\..\demo\utils\logprint.h"\
 	"..\..\..\demo\utils\unistd.h"\
@@ -368,7 +368,7 @@ DEP_CPP_SBDCL=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\demo\utils\logprint.c
+SOURCE=..\..\..\demo\utils\logprint.c
 
 "$(INTDIR)\logprint.obj" : $(SOURCE) "$(INTDIR)"
    $(CPP) $(CPP_PROJ) $(SOURCE)
@@ -378,7 +378,7 @@ SOURCE=\mw2\commdll\demo\utils\logprint.c
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\demo\utils\eclock.c
+SOURCE=..\..\..\demo\utils\eclock.c
 DEP_CPP_ECLOC=\
 	"..\..\..\h\eclock.h"\
 	
@@ -391,7 +391,7 @@ DEP_CPP_ECLOC=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\src\dp\dpprivy.c
+SOURCE=..\..\dp\dpprivy.c
 DEP_CPP_DPPRI=\
 	"..\..\..\h\aneterr.h"\
 	"..\..\..\h\assoctab.h"\

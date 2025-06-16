@@ -53,6 +53,7 @@
 
 #include "World.h"
 #include "Cell.h"
+#include "GameSettings.h"
 
 #else
 
@@ -1201,7 +1202,7 @@ void CTP2Combat::DoRangedAttacks()
 
 void CTP2Combat::DoRangedCounterAttacks()
 {
-	if (g_theProfileDB->IsNewCombat()) {
+	if (g_theGameSettings->IsNewCombat()) {
 		DoRangedCounterAttacksNC(&m_defenders, &m_attackers);
 	} else {
 		DoRangedAttacks(&m_defenders, &m_attackers);
@@ -1391,7 +1392,7 @@ void CTP2Combat::DoAttacks()
 
 void CTP2Combat::DoCounterAttacks()
 {
-	if (g_theProfileDB->IsNewCombat())
+	if (g_theGameSettings->IsNewCombat())
 	{
 		DoCounterAttacksNC(&m_defenders, &m_attackers);
 	} else {

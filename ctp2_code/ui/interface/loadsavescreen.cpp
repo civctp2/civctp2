@@ -20,6 +20,10 @@
 //
 // you_want_ai_civs_from_singleplayer_saved_game_showing_up_in_netshell
 //
+// USE_SDL
+// - Compile with sdl support instead of mss (define: civsound.h)
+//
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -1129,7 +1133,7 @@ void loadsavescreen_delete( void )
 		sprintf(path, "%s%s*.*", gameInfo->path, FILE_SEP);
 
 		_finddata_t findData;
-		int fileHandle=_findfirst(path,&findData);
+		intptr_t fileHandle=_findfirst(path,&findData);
 		while(fileHandle)
 		{
 			sprintf(path, "%s%s%s", gameInfo->path, FILE_SEP, findData.name);

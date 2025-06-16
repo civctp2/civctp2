@@ -12,7 +12,7 @@
 #endif
 #define lint
 
-void yyerror(char* err);
+void yyerror(const char* err);
 
 int ldl_parser_done = 0;
 int ldl_parse_error;
@@ -96,7 +96,7 @@ const char *ldlif_get_filename()
 }
 
 extern void ldlif_report_error(char *text);
-void yyerror(char *s)
+void yyerror(const char *s)
 {
 	char buf[1024];
 	sprintf(buf, "%s:%d: %s", ldlif_get_filename(), g_ldlLineNumber, s);

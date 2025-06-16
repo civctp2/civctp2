@@ -134,7 +134,7 @@ private:
 		}
 
 		m_chunk.m_id = chunkId;
-		m_chunk.m_size = archive.StreamLen();
+		m_chunk.m_size = static_cast<uint32>(archive.StreamLen());
 
 		return m_chunk.Save(outfile) &&
                (fwrite(archive.GetStream(), 1, archive.StreamLen(), outfile) ==

@@ -76,16 +76,18 @@ AUI_ERRCODE aui_SwitchGroup::RemoveChild( uint32 switchId )
 	return aui_Control::RemoveChild( switchId );
 }
 
-sint32 aui_SwitchGroup::WhichIndexIsSelected( void )
+// This is not used, if you want to use it figure out how to handle if nothing is selected
+size_t aui_SwitchGroup::WhichIndexIsSelected( void )
 {
 	ListPos position = m_childList->GetHeadPosition();
 
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Region *region = m_childList->GetNext( position );
 		if ( region->Id() == m_whichIsSelected ) return (m_childList->L()-i);
 	}
 
+	Assert(false);
 	return -1;
 }
 
@@ -94,7 +96,7 @@ BOOL aui_SwitchGroup::MakeSureOnlyOneIsSelected( void )
 	BOOL foundSelectedSwitch = FALSE;
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Switch *theSwitch = (aui_Switch *)m_childList->GetNext( position );
 
@@ -134,7 +136,7 @@ void aui_SwitchGroup::PostChildrenCallback( aui_MouseEvent *input )
 	BOOL foundSelectedSwitch = FALSE;
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Switch *theSwitch = (aui_Switch *)m_childList->GetNext( position );
 

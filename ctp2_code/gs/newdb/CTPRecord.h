@@ -44,25 +44,27 @@ class DBLexer;
 class CTPRecord
 {
 protected:
-	sint32 m_index;
+	char *m_textID;
 	char *m_textName;
+	sint32 m_index;
 
 public:
 	StringId m_name;
 
 #if defined(HAVE_STATIC_CONST_INIT_DECL_BUG)
-    enum { INDEX_INVALID = -1 }; // Compiler bug workaround
+	enum { INDEX_INVALID = -1 }; // Compiler bug workaround
 #else
-    static sint32 const INDEX_INVALID;
+	static sint32 const INDEX_INVALID;
 #endif
 
 	CTPRecord()
-    :
-        m_index     (INDEX_INVALID),
-        m_textName  (NULL),
-        m_name      (INDEX_INVALID) // StringID is an integer
-    { };
-	virtual ~CTPRecord() { delete [] m_textName; }
+	:
+	    m_textID    (NULL),
+	    m_textName  (NULL),
+	    m_index     (INDEX_INVALID),
+	    m_name      (INDEX_INVALID) // StringID is an integer
+	{ };
+	virtual ~CTPRecord() { delete[] m_textName; delete[] m_textID; }
 
 	sint32 GetIndex() const { return m_index; }
 	void SetIndex(sint32 index) { m_index = index; }
@@ -71,16 +73,17 @@ public:
 	const char *GetIDText() const;
 	virtual const char *GetNameText() const;
 	void SetTextName(const char *text);
+	void SetTextID(const char *text);
 
 	bool ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
 	bool ParseFloatInArray(DBLexer *lex, double **array, sint32 *numElements);
 	bool ParseFileInArray(DBLexer *lex, char ***array, sint32 *numElements);
-	bool ParseStringIdInArray(DBLexer *lex, sint32 **array, sint32 *numElements);
+	bool ParseStringIdInArray(DBLexer *lex, sint32 **array, char ***sarray, sint32 *numElements);
 
 	bool ParseIntInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
 	bool ParseFloatInArray(DBLexer *lex, double *array, sint32 *numElements, sint32 maxSize);
 	bool ParseFileInArray(DBLexer *lex, char **array, sint32 *numElements, sint32 maxSize);
-	bool ParseStringIdInArray(DBLexer *lex, sint32 *array, sint32 *numElements, sint32 maxSize);
+	bool ParseStringIdInArray(DBLexer *lex, sint32 *array, char **sarray, sint32 *numElements, sint32 maxSize);
 };
 
 #endif

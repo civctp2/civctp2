@@ -137,7 +137,7 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 	{
 
 		ListPos position = GetHeadPosition();
-		for ( sint32 i = L(); i; i-- )
+		for ( size_t i = L(); i; i-- )
 		{
 			ListPos prevPosition = position;
 			RECT *rect = GetNext( position );
@@ -154,7 +154,7 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 					CopyRect( rect, moreRects );
 
 					ListPos insertPosition = prevPosition;
-					for ( sint32 j = 1; j < num; j++ )
+					for ( size_t j = 1; j < static_cast<size_t>(num); j++ )
 					{
 						RECT *r = m_rectMemory->New();
 						Assert( r != NULL );
@@ -195,14 +195,14 @@ AUI_ERRCODE aui_DirtyList::Minimize( void )
 
 		ListPos curPos = GetHeadPosition();
 
-		for ( sint32 i = L() - 1; i; i-- )
+		for ( size_t i = L() - 1; i; i-- )
 		{
 
 			RECT *curRect = GetNext( curPos );
 
 			ListPos nextPos = curPos;
 
-			for ( sint32 j = i; j; j-- )
+			for ( size_t j = i; j; j-- )
 			{
 
 				ListPos prevPos = nextPos;
@@ -234,7 +234,7 @@ void aui_DirtyList::Flush( void )
 {
 
 	ListPos position = GetHeadPosition();
-	for ( sint32 i = L(); i; i-- )
+	for ( size_t i = L(); i; i-- )
 		m_rectMemory->Delete( GetNext( position ) );
 
 

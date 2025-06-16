@@ -77,7 +77,7 @@ aui_StringTable::aui_StringTable
 	{
 		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
-			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i);
+			sprintf(temp, "%s%zu", k_AUI_STRINGTABLE_LDL_STRING, i);
 			SetString(block->GetString(temp), i);
 		}
 	}
@@ -85,7 +85,7 @@ aui_StringTable::aui_StringTable
 	{
 		for (size_t i = 0; i < m_Strings.size(); ++i)
 		{
-			sprintf(temp, "%s%d", k_AUI_STRINGTABLE_LDL_STRING, i);
+			sprintf(temp, "%s%zu", k_AUI_STRINGTABLE_LDL_STRING, i);
 			SetString(g_theStringDB->GetNameStr(block->GetString(temp)), i);
 		}
 	}
@@ -142,18 +142,18 @@ size_t aui_StringTable::FindNumStringsFromLdl(ldl_datablock * block)
 
 	return static_cast<size_t>(stringCount);
 }
-const MBCHAR * aui_StringTable::GetString( sint32 index ) const
+const MBCHAR * aui_StringTable::GetString( size_t index ) const
 {
-	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
-	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size()) return NULL;
+	Assert(index >= 0 && index < m_Strings.size());
+	if (index < 0 || index >= m_Strings.size()) return NULL;
 
 	return m_Strings[index];
 }
 
-AUI_ERRCODE aui_StringTable::SetString(const MBCHAR *text, sint32 index)
+AUI_ERRCODE aui_StringTable::SetString(const MBCHAR *text, size_t index)
 {
-	Assert(index >= 0 && static_cast<size_t>(index) < m_Strings.size());
-	if (index < 0 || static_cast<size_t>(index) >= m_Strings.size())
+	Assert(index >= 0 && index < m_Strings.size());
+	if (index < 0 || index >= m_Strings.size())
 		return AUI_ERRCODE_INVALIDPARAM;
 
 	if (text)

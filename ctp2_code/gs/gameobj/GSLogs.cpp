@@ -76,7 +76,7 @@ void gslog_print(char *fmt, ...)
 #endif
 }
 
-void gslog_dipprint(char *fmt, ...)
+void gslog_dipprint(const char *fmt, ...)
 {
 #ifndef _BFR_
 	if (!g_theProfileDB->GetEnableLogs())
@@ -184,7 +184,7 @@ void gslog_LogPlayerStats(sint32 player)
 		    (cityData->GetImprovements(), wonderReduction, cityData->GetOwner()); //EMOD added owner
 
 		totalCommerce               += cityData->GetGrossCityGold();
-		totalCommerceCrime          += cityData->GetTradeCrime();
+		totalCommerceCrime          += cityData->GetGoldCrime();
 		totalCommerceWages          += cityData->CalcWages();
 		totalCommerceBuildingUpkeep += commerceBuildingUpkeep;
 		totalCommerceScience        += cityData->GetScience();

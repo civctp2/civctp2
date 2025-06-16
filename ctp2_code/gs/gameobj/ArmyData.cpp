@@ -505,7 +505,7 @@ void ArmyData::Serialize(CivArchive &archive)
             walk.Next();
         }
 
-        sint32 len = m_name ? strlen(m_name) : 0;
+        sint32 len = m_name ? static_cast<sint32>(strlen(m_name)) : 0;
         archive << len;
         if(len > 0) {
             archive.Store((uint8*)m_name, len);
@@ -6726,8 +6726,11 @@ bool ArmyData::IsOccupiedByForeigner(const MapPoint &pos)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
+void ArmyData::CheckLoadSleepingCargoFromCity()
 {
+	if(!g_player[m_owner]->IsRobot() && !g_theProfileDB->IsSleepingUnitsBoard())
+		return;
+
 	Cell *cell = g_theWorld->GetCell(m_pos);
 	//if neither in a city nor in an airfield
 	if( cell->GetCity().m_id == 0
@@ -9164,10 +9167,12 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 			{
 				if(g_selected_item->IsAutoCenterOn() 
 				    && !g_director->TileWillBeCompletelyVisible(m_pos.x, m_pos.y)
-				    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)
-				    ){ // center on pos if generally visible but not in current view
-				    g_director->AddCenterMap(m_pos);
-				    }
+				    && g_player[visiblePlayer]->IsVisible(m_pos)
+				  )
+				{
+					// center on pos if generally visible but not in current view
+					g_director->AddCenterMap(m_pos);
+				}
 				
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y); // pos not used in SoundManager::AddSound, centering map could be implemented there, not sure though if that would cause troule for sounds not bound to a map position (e.g. click-sound)
 			}
@@ -11473,7 +11478,7 @@ void ArmyData::BarbarianSpawning()
 
 		if(
 			(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-		||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+		||  (g_theGameSettings->IsBarbarianSpawnsBarbarian())
 		){
 
 			if ( (barbhorde) >= (barbmax^2) ) {

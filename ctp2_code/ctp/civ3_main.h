@@ -59,8 +59,6 @@ void sprite_Cleanup(void);
 int tile_Initialize(BOOL isRestoring);
 void tile_Cleanup(void);
 
-int WINAPI main_filehelper_GetOS(void);
-
 int main_Restart();
 int main_RestoreGame(const MBCHAR *filename);
 
@@ -76,7 +74,7 @@ void DoFinalCleanup(int exitCode = -1);
 BOOL ExitGame(void);
 
 #ifdef __AUI_USE_SDL__
-int SDLMessageHandler(const SDL_Event &event);
+int SDLMessageHandler(void* userdata, SDL_Event* event);
 #endif
 
 #endif

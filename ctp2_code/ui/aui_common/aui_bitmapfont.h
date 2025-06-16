@@ -148,7 +148,12 @@ public:
 		const MBCHAR *string,
 		uint32 flags = 0,
 		COLORREF color = RGB(255,255,255),
-		sint32 underline = 0 );
+		sint32 underline = 0,
+		size_t selStart = 0,
+		size_t selEnd  = 0,
+		COLORREF highLightColorFG = RGB(0,0,0),
+		COLORREF highLightColorBG = RGB(0,0,0)
+	);
 
 	struct GlyphInfo
 	{
@@ -178,6 +183,10 @@ public:
 		const MBCHAR *stop,
 		COLORREF color = RGB(255,255,255),
 		sint32 underline = 0,
+		const MBCHAR * selStartPtr = NULL,
+		const MBCHAR * selEndPtr  = NULL,
+		COLORREF highLightColorFG = RGB(0,0,0),
+		COLORREF highLightColorBG = RGB(0,0,0),
 		sint32 *ascend = NULL,
 		sint32 *descend = NULL,
 		bool wrap = false,
@@ -207,7 +216,7 @@ public:
 		POINT *penPos,
 		GlyphInfo *gi,
 		COLORREF color = RGB(255,255,255),
-		sint32 underline = 0 );
+		sint32 underline = 0);
 
 	bool TruncateString( MBCHAR *name, sint32 width );
 

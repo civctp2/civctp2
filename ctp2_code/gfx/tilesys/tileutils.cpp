@@ -320,7 +320,7 @@ char tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr)
 	return empty;
 }
 
-Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 *size)
+Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, size_t *size)
 {
 	Pixel32	*               srcPixel            = buf;
 	Pixel16	*               outBuf              = new Pixel16[width * height * 2];
@@ -340,8 +340,7 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 	int                     firstNonEmpty       = -1;
 
 	for (uint16 y = 0; y < height; y++)
-    {
-
+	{
 		srcPixel = buf + width * y;
 
 		startDataPtr = dataPtr;
@@ -354,14 +353,13 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 				firstNonEmpty = 0;
 			}
 
-			*table++ = startDataPtr - startOfData;
+			*table++ = static_cast<Pixel16>(startDataPtr - startOfData);
 			lastNonEmpty = y;
 		} else {
 
 
 			if (firstNonEmpty != -1)
 				*table++ = (Pixel16) -1;
-
 		}
 	}
 
@@ -371,9 +369,9 @@ Pixel16 *tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 
 		Assert(lastNonEmpty != -1);
 	}
 
-	int tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;
+	size_t tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;
 
-	int dataSize = (dataPtr - outBuf) * 2;
+	size_t dataSize = (dataPtr - outBuf) * 2;
 
 	char *returnBuf = new char[dataSize+tableSize];
 
@@ -551,7 +549,7 @@ char tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPt
 	return empty;
 }
 
-Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint32 *size,
+Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, size_t *size,
 								sint32 pitch)
 {
 	Pixel16				*srcPixel = buf;
@@ -588,14 +586,14 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 		startDataPtr = dataPtr;
 
 		empty = tileutils_EncodeScanline16(srcPixel, width, &dataPtr, sourceDataIs565);
-	    if (!empty) {
+		if (!empty) {
 			if (firstNonEmpty == -1) {
 
 				*firstNonEmptyPtr = y;
 				firstNonEmpty = 0;
 			}
 
-			*table++ = startDataPtr - startOfData;
+			*table++ = static_cast<Pixel16>(startDataPtr - startOfData);
 			lastNonEmpty = y;
 		} else {
 
@@ -612,9 +610,9 @@ Pixel16 *tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint3
 		Assert(lastNonEmpty != -1);
 	}
 
-	int tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;
+	size_t tableSize = ((*endLinePtr-*firstNonEmptyPtr + 1 + 2)) * 2;
 
-	int dataSize = (dataPtr - outBuf) * 2;
+	size_t dataSize = (dataPtr - outBuf) * 2;
 
 	char *returnBuf = new char[dataSize+tableSize];
 
@@ -1528,7 +1526,7 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	char		*hatTif=NULL;
 	Pixel16		*hatData=NULL;
-	uint32		hatDataLen=0;
+	size_t		hatDataLen=0;
 
 	sprintf(filename, "source" FILE_SEP "hats" FILE_SEP "GTFh%.4d.tif", tileNum);
 	hatTif = tileutils_TIF2mem(filename, &width, &height);
@@ -1556,7 +1554,7 @@ uint16 tileutils_CompileImprovements(FILE *file)
 {
 	sint32		i;
 	MBCHAR		filename[_MAX_PATH];
-	uint32		dataLen;
+	size_t		dataLen;
 	char		*tif;
 	uint16		width, height, id;
 	Pixel16		*data;
@@ -1630,7 +1628,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 	sint16			*transforms[k_MAX_TRANSFORMS];
 	sint16			*riverTransforms[k_MAX_RIVER_TRANSFORMS];
 	Pixel16			*riverData[k_MAX_RIVER_TRANSFORMS];
-	uint32			riverDataLen[k_MAX_RIVER_TRANSFORMS];
+	size_t			riverDataLen[k_MAX_RIVER_TRANSFORMS];
 	uint16			megaTileLengths[k_MAX_MEGATILES];
 	MegaTileStep	megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
 
@@ -1855,7 +1853,7 @@ sint32 tileutils_ParseTileset(MBCHAR *filename)
 				sprintf(filename, "source" FILE_SEP "rivers" FILE_SEP "GTFL%.2d.tif", tmp);
 				tif = tileutils_TIF2mem(filename, &width, &height);
 
-				uint32		dataLen=0;
+				size_t		dataLen=0;
 
 				if (tif) riverData[numRiverTransforms] = (Pixel16 *)tileutils_EncodeTile((Pixel32 *)tif, width, height, &dataLen);
 				else riverData[numRiverTransforms] = NULL;

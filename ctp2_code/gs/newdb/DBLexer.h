@@ -92,12 +92,12 @@ public:
 	bool GetIntAssignment(sint32 &value);
 	bool GetFloatAssignment(double &value);
 	bool GetBitIndex(const char **bitnames, sint32 numNames, sint32 &index);
-	bool GetStringIdAssignment(sint32 &strId);
+	bool GetStringIdAssignment(sint32 &strId, char *&textID);
 	bool GetFileAssignment(char *&filename);
 
 	bool GetInt(sint32 &value);
 	bool GetFloat(double &value);
-	bool GetStringId(sint32 &strId);
+	bool GetStringId(sint32 &strId, char *&textID);
 	bool GetFile(char *&filename);
 
 	void SetTokens(const char **tokens, sint32 maxToken);
@@ -111,7 +111,7 @@ public:
 
 	const char *GetTokenText();
 
-	void ReportError(char *fmt, ...);
+	void ReportError(const char *fmt, ...);
 	sint32 GetLineNumber();
 	const char *GetFilename();
 };

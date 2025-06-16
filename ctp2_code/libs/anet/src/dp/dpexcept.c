@@ -495,7 +495,7 @@ LONG _cdecl StupidExceptionFilter (LPEXCEPTION_POINTERS ep)
   during dpReportCrash(Ex).
  See aeh.htm for more info.
 --------------------------------------------------------------------------*/
-#ifdef _WIN32
+#if defined(_WIN32) && (!defined(_M_ARM) && !defined(_M_ARM64))
 DP_API dp_result_t DP_APIX dpReportCrash(LPEXCEPTION_POINTERS pException)
 {
 	return dpReportCrashEx(pException, NULL);

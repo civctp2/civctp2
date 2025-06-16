@@ -149,6 +149,7 @@
 #include "Events.h"
 #include "gaiacontroller.h"
 #include "GameEventUser.h"
+#include "GameSettings.h"
 #include "Globals.h"
 #include "GoalRecord.h"
 #include "GovernmentRecord.h"
@@ -225,7 +226,7 @@ void Governor::ResizeAll(const PLAYER_INDEX & newMaxPlayerId)
 
 	for (size_t i = old_size; i < static_cast<size_t>(newMaxPlayerId); ++i)
 	{
-		s_theGovernors[i].SetPlayerId(i);
+		s_theGovernors[i].SetPlayerId(static_cast<PLAYER_INDEX>(i));
 	}
 }
 
@@ -394,20 +395,23 @@ sint32 Governor::ComputeBestGovernment() const
 		if (obsolete)
 			continue;
 
-		sint32 const newCityLimit = rec->GetTooManyCitiesThreshold();
-		if (player_ptr->GetNumCities() > newCityLimit)
+		if(!g_theGameSettings->IsNoCityLimit())
 		{
-			sint32 const oldCityLimit =
-				g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->
+			sint32 const newCityLimit = rec->GetTooManyCitiesThreshold();
+			if(player_ptr->GetNumCities() > newCityLimit)
+			{
+				sint32 const oldCityLimit =
+					g_theGovernmentDB->Get(player_ptr->GetGovernmentType())->
 					GetTooManyCitiesThreshold();
 
-			if (newCityLimit > oldCityLimit)
-			{
-				// Do consider upgrading, to improve the situation
-			}
-			else
-			{
-				continue;
+				if(newCityLimit > oldCityLimit)
+				{
+					// Do consider upgrading, to improve the situation
+				}
+				else
+				{
+					continue;
+				}
 			}
 		}
 
@@ -1874,8 +1878,7 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 
 	//////////////////////////////////////////////////
 	// Recalculate Happiness after specialists removal
-	sint32 vgs;
-	city->CalcHappiness(vgs, true);
+	city->CalcHappiness(false);
 
 	/////////////////////////////////////
 	// Get maximum percent of specialists
@@ -2104,12 +2107,12 @@ void Governor::AssignPopulation(CityData *city, bool hasAllAdvances) const
 		city->ChangeSpecialists(POP_MERCHANT, count);
 #else
 		tmp_city.CollectResourcesFinally();
-		tmp_city.CollectOtherTrade(TRUE);
+		tmp_city.CollectOtherGold(TRUE);
 		prev_result = tmp_city.GetGrossCityGold();
 
 		tmp_city.ChangeSpecialists(POP_MERCHANT, count);
 		tmp_city.CollectResourcesFinally();
-		tmp_city.CollectOtherTrade(TRUE);
+		tmp_city.CollectOtherGold(TRUE);
 
 		if(tmp_city.GetGrossCityGold() > prev_result)
 		{

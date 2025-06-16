@@ -52,6 +52,7 @@ FEAT_GOT_MASS_PRODUCTION	"Congratulazioni! Sei stato il primo a scoprire la prod
 FEAT_GOT_COMPUTER		"Congratulazioni! La tua nazione è stata la prima a scoprire l'informatica. Adesso i tuoi centri di ricerca possono effettuare processi più complessi, eseguire un maggior numero di esperimenti e lavorare in maniera più efficiente. Per i prossimi {FeatDB(Value[0]).Duration} turni, otterrai un aumento dei risultati scientifici pari a +{FeatDB(Value[0]).EffectIncreaseScience}%!"
 FEAT_GOT_ROBOTICS		"Congratulazioni! Sei stato il primo a scoprire la robotica. Grazie alla maggiore efficienza e alla più elevata produttività garantite dalle unità lavorative non umane, per i prossimi {FeatDB(Value[0]).Duration} turni otterrai un aumento della produzione pari a +{FeatDB(Value[0]).EffectIncreaseProduction}%!"
 FEAT_GOT_LIFE_EXTENSION		"Congratulazioni! La tua nazione è stata la prima a scoprire l'allungamento della vita. Adesso il tuo popolo può raggiungere l'immortalità sostituendo i corpi vecchi e decrepiti con altri più nuovi e in buone condizioni di salute! Per i prossimi {FeatDB(Value[0]).Duration} turni, la tua nazione riceverà un bonus nel benessere pari a +{FeatDB(Value[0]).EffectIncreaseHappiness}."
+FEAT_GOT_METALLURGY	"We have unravelled the secrets of Metallurgy! Unfortunately, older gunpowder weapons have been distributed to less advanced civilizations"
 
 ## CONSTRUCTION-RELATED FEATS
 

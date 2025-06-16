@@ -2364,6 +2364,26 @@ La scoperta della scrittura dà origine a un nuovo mondo di progressi culturali.
 Con lo sviluppo delle antiche società, i primi esseri umani avvertirono il bisogno di rappresentare visivamente il linguaggio che parlavano. Che fosse per documentare la propria storia, per registrare o semplificare le comunicazioni, la scrittura nasce comunque da una comune necessità. Nonostante il mondo sia pieno di esempi di comunicazioni preistoriche, in particolare sotto forma di dipinti nelle caverne, i sistemi di scrittura iniziarono a comparire solo nell'età antica, sviluppandosi in diversi modi. Alcune culture diedero vita a un sistema basato sui significati, con caratteri e simboli che rappresentavano parole, azioni e concetti, mentre altre elaborarono sistemi basati sul suono, in cui i caratteri rappresentavano sillabe o fonemi. Fossero essi pittografici, ideografici, alfabetici o fonetici, i sistemi di scrittura dovevano soddisfare la necessità di espressione e di comunicazione delle società. La scrittura fu un gigantesco passo avanti per la registrazione della storia e della cultura delle prime società, conducendo a un rafforzamento dell'ordine sociale, della giurisprudenza e della conservazione storica.
 [END]
 
+[ADVANCE_MIND_CONTROL_PREREQ]
+Requires:
+[END]
+
+[ADVANCE_MIND_CONTROL_STATISTICS]
+Gives:
+<L:DATABASE_BUILDINGS,IMPROVE_MIND_CONTROL_EMITTER>Mind Controller<e>
+<L:DATABASE_WONDERS,WONDER_AI_ENTITY>AI Entity<e>
+
+[END]
+
+[ADVANCE_MIND_CONTROL_GAMEPLAY]
+An advanced Medical <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>Advance<e> blending flesh and silicon, Mind Control offers Civilizations a cheap, if horrifying remedy to unhappiness. Using either Mind Controllers, which prevent L:DATABASE_CONCEPTS,CONCEPT_RIOTS>riots<e> or <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolutions<e> in a city, or the <L:DATABASE_WONDERS,WONDER_AI_ENTITY>AI Entity<e>, Mind Control can be used to end disputes and complaints - after all, without free will, complaint is not an option.
+
+[END]
+
+[ADVANCE_MIND_CONTROL_HISTORICAL]
+Although the early Technocracy produced wondrous advances, it also produced a great amount of discontent in its citizens who complained bitterly about fading personal liberty. In order to quell this unhappiness,  the government logically turned to technology - in the form of Mind Control.  Prominent scientists developed neural implants that fed off of microwave transmissions and directly stimulated the pleasure/pain regions of the brain. In Project Happiness, the government implanted these chips into every person's brain, instantly transforming a grumbling people into a pleasantly stupefied workforce.
+[END]
+
 [CONCEPT_ACTIVE_DEFENSE_GAMEPLAY]
 Esistono due tipi di difesa attiva: antiaerea e antinavale. Un'unità con la difesa attiva <L:DATABASE_ORDERS,ORDER_BOMBARD>bombarda<e> automaticamente l'unità selezionata, non appena questa entra nel suo raggio d'azione. La difesa attiva è una forma di attacco a distanza, dunque l'unità non è in una situazione di pericolo quando attua tale difesa.
 [END]
@@ -2568,6 +2588,13 @@ Se si sottopone a <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>trasformazione<e> una c
 [END]
 
 [CONCEPT_GOODS_HISTORICAL]
+[END]
+
+[CONCEPT_GOSSIP_GAMEPLAY]
+Every turn in which an <L:DATABASE_UNITS,UNIT_DIPLOMAT>Diplomat<e> or <L:DATABASE_UNITS,UNIT_EMPATHIC_DIPLOMAT>Empathic Diplomat<e> is positioned next to a foreign <L:DATABASE_BUILDINGS,IMPROVE_CAPITOL>Capital City<e>, there is a small chance of Hearing Gossip. There are several types of information that could be acquired this way, including that nation's <L:DATABASE_CONCEPTS,CONCEPT_MILITARY_READINESS>Military Readiness<e> posture, a map of an unknown region, or even an unknown <L:DATABASE_CONCEPTS,CONCEPT_ADVANCES>advance<e>.
+[END]
+
+[CONCEPT_GOSSIP_HISTORICAL]
 [END]
 
 [CONCEPT_GOVERNMENTS_GAMEPLAY]
@@ -2995,11 +3022,34 @@ I lavoratori rappresentano il potenziale di forza-lavoro degli abitanti di una <
 [CONCEPT_WORKER_HISTORICAL]
 [END]
 
+[TERRAIN_SWAMP_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_SWAMP_GOOD_ONE_GAMEPLAY]
 Gli alligatori si trovano nelle <L:DATABASE_TERRAIN,TERRAIN_SWAMP>paludi<e>. È abbastanza difficile incontrarne; sono assai ricercati per la qualità della loro carne e apprezzati per la loro pelle.
 [END]
 
 [TERRAIN_SWAMP_GOOD_ONE_HISTORICAL]
+Alligators and their relatives, crocodiles have existed for millions of years, among the last living remnants of the dinosaurs.  First hunted commercially in the 1880s, the American alligator was once at risk of extinction. In the 20th century laws regulating the hunting of these creatures helped restore the alligator population.  Since then, the business of processing alligators for their skin and meat has been carefully regulated to eliminate the export of leather made from its still endangered relatives.
+[END]
+
+[TERRAIN_FOREST_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_TWO_GAMEPLAY]
@@ -3009,11 +3059,34 @@ Reperibili esclusivamente in aree <L:DATABASE_TERRAIN,TERRAIN_FOREST>forestali<e
 [TERRAIN_FOREST_GOOD_TWO_HISTORICAL]
 [END]
 
+[TERRAIN_TUNDRA_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_TUNDRA>Tundra<e>
+[END]
+
+[TERRAIN_TUNDRA_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_TUNDRA_GOOD_ONE_GAMEPLAY]
 I caribù vivono nella <L:DATABASE_TERRAIN,TERRAIN_TUNDRA>tundra<e> e vengono cacciati per la loro carne e per le pelli.
 [END]
 
 [TERRAIN_TUNDRA_GOOD_ONE_HISTORICAL]
+The Tundra, an inhospitable terrain for most creatures, is the perfect location for caribou. Unlike coniferous forests where Caribou can also be found, the tundra has wide open spaces that allow the animals to escape from their slower enemies, wolves. Caribou hides and meat are highly prized, but their antlers are their most distinctive and valuable component. Unlike deer, both male and female caribou grow antlers that are periodically shed. For centuries, native Indians have used antler for decorations, weaponry, and religious and medicinal purposes.
+[END]
+
+[TERRAIN_HILL_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_HILL_GOOD_ONE_GAMEPLAY]
@@ -3021,6 +3094,17 @@ Il caffè viene coltivato sulle <L:DATABASE_TERRAIN,TERRAIN_HILL>colline<e>. I ch
 [END]
 
 [TERRAIN_HILL_GOOD_ONE_HISTORICAL]
+With over eight billion pounds of coffee produced every year,  some consider coffee to be the most important world commodity after oil.  The coffee tree, technically a bush, is indigenous to Ethiopia but in the 1990s,  Brazil and Colombia far surpassed the native land, producing more coffee than all the other countries combined.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_ONE_GAMEPLAY]
@@ -3028,6 +3112,21 @@ Il cotone viene coltivato nelle <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>praterie<e
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_ONE_HISTORICAL]
+Cotton is tropical in origin but is now cultivated worldwide. It has been spun, woven, and dyed since prehistoric times. Cotton is planted annually by seed. Diseases and insect pests are numerous. For example, the boll weevil is responsible for enormous crop losses, particularly of the highly susceptible, silky-fibered sea-island cotton, which was the leading type of cotton before the onset of this pest. Cotton is separated from its seeds by a cotton gin. Manufacture of cotton into cloth, textiles, and yard goods involves carding, combing, and spinning. Cotton is a source of cellulose products, fertilizer, fuel, plastic reinforcing, automobile tire cord, pressed paper, cardboard, and cottonseed oil (used in cooking, cosmetics, soaps, candles, detergents, paints, oilcloth, artificial leather, etc.), which is pressed from the seeds. Used in Egypt, China, and India in ancient times, cotton has long played a significant role in world industry. Britain's need for imported cotton dictated much of its sea-domination policy as an imperial nation, and in the U.S., cotton was one of the economic issues behind the Civil War.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_GAMEPLAY]
@@ -3035,6 +3134,18 @@ Le <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>acque basse<e> e le <L:DATABASE_TER
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_ONE_HISTORICAL]
+Throughout history, the crab has been prized as a delicacy.  In more recent times, crabs have been found to be useful in cosmetics, drugs, water treatment, even fertilizer. Chitisan, found in the crab's shell, contains DNA inhibitors that may have use as, ironically, a  cancer inhibitor.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_GAMEPLAY]
@@ -3042,6 +3153,18 @@ Uno dei minerali più rari e preziosi, il diamante viene estratto dalle <L:DATABA
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Diamond is the hardest and the most abrasive-resistant material known, making diamonds essential parts of the ceramic, electronic, and carbide valve industries. The beauty and brilliance of diamonds have made them the jewel of choice, ever since the art of cutting facets was developed in the 16th century. The South African diamond rush began in 1867 on the heels of the American gold rush and oil rush, in the appropriately named borough of Hopetown.
+[END]
+
+[TERRAIN_PLAINS_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_PLAINS_GOOD_TWO_GAMEPLAY]
@@ -3049,6 +3172,21 @@ Gli elefanti vagano per la <L:DATABASE_TERRAIN,TERRAIN_PLAINS>pianura<e> e vengo
 [END]
 
 [TERRAIN_PLAINS_GOOD_TWO_HISTORICAL]
+Although elephant meat and skin have never been very valuable, the elephant tusk, ivory, has been widely valued since the  time of the Egyptians. Greeks used ivory for their chryselephantine statues, in which ivory represented skin.  In Byzantine times, ivory book covers, boxes, and even thrones decorated the estates of the rich. Even the near extinction of the elephant only temporarily diminished the demand for ivory. It was not until the 21st century that geneticists replenished the elephant population.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
@@ -3056,6 +3194,20 @@ Gli smeraldi sono tra i più preziosi minerali del mondo reperibili in natura. Ap
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridge<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_TWO_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_TWO_GAMEPLAY]
@@ -3063,6 +3215,19 @@ Anche se raramente, i calamari giganti possono essere trovati negli <L:DATABASE_
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_TWO_HISTORICAL]
+The nemesis of Captain Nemo in Jules Verne's classic "Twenty Thousand Leagues Under the Sea," the giant squid has been a legendary creature for hundreds of years.  Occasionally reaching 60 feet long and weighing over a ton, the giant squid is found more often in the stomachs of sperm whales than alive in the ocean. It makes for unappetizing eating, but as a raw material it can be refined for everything from soap and paint to chemicals and liquid crystal.
+[END]
+
+[TERRAIN_DESERT_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_DESERT_GOOD_ONE_GAMEPLAY]
@@ -3072,11 +3237,33 @@ Le sabbie del <L:DATABASE_TERRAIN,TERRAIN_DESERT>deserto<e> e le <L:DATABASE_TER
 [TERRAIN_DESERT_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_HILL_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_TWO_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_HILL_GOOD_TWO_GAMEPLAY]
 L'uva cresce con i climi temperati delle <L:DATABASE_TERRAIN,TERRAIN_HILL>colline<e>. Anche se è possibile cibarsene allo stato naturale, essa viene molto più spesso coltivata per produrre vino, assai apprezzato tanto dai re quanto dai semplici cittadini.
 [END]
 
 [TERRAIN_HILL_GOOD_TWO_HISTORICAL]
+The drinking of wines has been a cherished pastime since the earliest days of ancient Greece.  Over the centuries the craft of winemaking or "viticulture" has been refined to a science of precise control and an art form of exquisite detail.  The essence of any fine wine is the grapes from which it is made.  Most wines are made from a mixture of several different types of grape, blended to create a specific taste.  The best wines, however, are created purely from the crop of one of the world's premier vineyards, where the richness of the soil passes its fabulous and unique qualities onto the grapes that grow there.
+[END]
+
+[TERRAIN_FOREST_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
 [END]
 
 [TERRAIN_FOREST_GOOD_ONE_GAMEPLAY]
@@ -3086,11 +3273,33 @@ I duri legni esotici crescono nelle <L:DATABASE_TERRAIN,TERRAIN_FOREST>foreste<e
 [TERRAIN_FOREST_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_JUNGLE_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_JUNGLE_GOOD_TWO_GAMEPLAY]
 La giada è assai ricercata per essere una pietra semi-preziosa utilizzata in gioielleria e per abiti cerimoniali. È reperibile esclusivamente nella <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>giungla<e> ed è estremamente rara.
 [END]
 
 [TERRAIN_JUNGLE_GOOD_TWO_HISTORICAL]
+Nephrite and jadeite, both indiscriminately called jade, have long been revered as carved ornaments. Yet the more practical ancients used the harder-than-steel stones to make weapons and axes. For eight thousand years or longer, Jade has also had religious significance for the people of China and Asia. The Emerald Buddha, for example, a two-foot statue composed of imperial jade, has for hundreds of years been considered the most holy relic in Thailand.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_JUNGLE_GOOD_ONE_GAMEPLAY]
@@ -3100,11 +3309,37 @@ Apprezzate per i loro poteri curativi, le erbe medicinali sono abbondanti dove e
 [TERRAIN_JUNGLE_GOOD_ONE_HISTORICAL]
 [END]
 
+[TERRAIN_DESERT_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
 [TERRAIN_DESERT_GOOD_TWO_GAMEPLAY]
 Una rara risorsa, il cosiddetto "oro nero" è meglio conosciuto per essere la materia prima dei carburanti. Viene trovato nei <L:DATABASE_TERRAIN,TERRAIN_DESERT>deserti<e>, tra le <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>dune<e> sabbiose.
 [END]
 
 [TERRAIN_DESERT_GOOD_TWO_HISTORICAL]
+The most important resource of the 20th century, oil and its by-products have had many uses throughout history. Oil-burning lamps are believed to have been used by the Sumerians as early as 3000 BC. Petroleum, meanwhile, was used almost exclusively as a medicine until the 19th century when its use as a clean and cheap lighting source was revealed. A decade after the 1849 gold rush, an oil boom in Pennsylvania sent prospectors east. Prospecting for oil in the  middle-eastern countries began shortly thereafter.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_TWO_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_GAMEPLAY]
@@ -3112,6 +3347,38 @@ Le <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>acque basse<e> sono l'habitat prima
 [END]
 
 [TERRAIN_WATER_SHALLOW_GOOD_TWO_HISTORICAL]
+Pearls have been treasured by most Civilizations since the dawn of time. The Shun empress of China was said to have received a tribute of pearls in 2250 BC and Cleopatra supposedly dissolved a large pearl in a glass of wine and drank it to impress Mark Antony with the limitless wealth of her kingdom. The first successful pearl farm was begun in 1906 in Espiratu Santo Island in the Mexican Gulf of California, leading to the science of pearl cultivation.
+[END]
+
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_GAMEPLAY]
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e> are prime habitat for jellyfish.
+[END]
+
+[TERRAIN_WATER_SHELF_GOOD_ONE_HISTORICAL]
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_GAMEPLAY]
@@ -3119,6 +3386,18 @@ Estratti dai siti inospitali delle <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>mo
 [END]
 
 [TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE_HISTORICAL]
+According to legend, the great serpent Naga created rubies in the third egg she laid. The first egg birthed Pyusawati, the King of Pagan. Rubies are the red variety of the mineral corundum, the second hardest natural mineral. All non-red varieties of corundum are called "sapphire." Because of their hardness and resistance to abrasion, the uses of rubies, aside from their ornamental value, are extensive.
+[END]
+
+[TERRAIN_PLAINS_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_PLAINS_GOOD_ONE_GAMEPLAY]
@@ -3126,6 +3405,19 @@ La <L:DATABASE_TERRAIN,TERRAIN_PLAINS>pianura<e> ospita un'ampia varietà di pian
 [END]
 
 [TERRAIN_PLAINS_GOOD_ONE_HISTORICAL]
+Spices are aromatic vegetable products used as a flavorings or condiments. The term was formerly also applied to pungent or aromatic foods, incense and perfume ingredients, and embalming agents. Spices include stimulating condiments (such as pepper and mustard), aromatic spices (such as cloves, nutmeg, and mace), and sweet herbs (such as thyme and mint). They are used whole, as powders, and as tinctures. 
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_ONE_GAMEPLAY]
@@ -3133,6 +3425,17 @@ Le <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>montagne alpine<e> e le <L:DATABASE_TERR
 [END]
 
 [TERRAIN_MOUNTAIN_GOOD_ONE_HISTORICAL]
+The tea plant (Thea sinensis, Camellia thea, or C. sinensis) is an evergreen related to the camellia. It is native to India and probably parts of China and Japan. In the wild it grows to about 30 feet (9.1 meters) in height, but in cultivation it is normally pruned to 3 to 5 feet (91 to 152 centimeters). Tea plants require a well-drained habitat in a warm climate with ample rainfall. The leaves are prepared by drying, rolling, and then firing. Black teas (such as pekoes), unlike green teas, are fermented before firing; oolong teas are partially fermented. Tea's stimulating properties are due to its relatively high caffeine content plus its astringency to tannin. Grown in China since prehistoric times, tea was produced on a commercial scale there by the 8th century. It was introduced into Europe by the Dutch <L:DATABASE_WONDERS,WONDER_EAST_INDIA_COMPANY>East India Company<e> in the 17th century, and its popularity helped spur the opening of Eastern Asia to western commerce. In colonial America, a tax on tea led to the Boston Tea Party in 1773. Today tea is consumed by more people and in greater quantity than any beverage except water.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_TWO_GAMEPLAY]
@@ -3140,6 +3443,20 @@ Le <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>praterie<e> sono ideali per la crescita
 [END]
 
 [TERRAIN_GRASSLAND_GOOD_TWO_HISTORICAL]
+The first European smoker of tobacco was Luis de Torres, a Spanish explorer of Cuba. The sight of smoke coming from his mouth was enough for the Spanish Inquisition to jail de Torres for seven years. When he was released, the craze for cigar smoking had taken over. Within a hundred years, tobacco smoking was prescribed as a cure for thirty-six diseases, including toothache, bad breath, and cancer.  As an economic force, tobacco was even more important. Throughout the 17th and 18th centuries tobacco was the monetary standard in the American colonies, lasting twice as long as the gold standard.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridge<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_ONE_GAMEPLAY]
@@ -3147,9 +3464,758 @@ Gli <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>oceani<e> rappresentano la dimora del
 [END]
 
 [TERRAIN_WATER_DEEP_GOOD_ONE_HISTORICAL]
+Defenders of whaling argue that every part of a whale can be used and processed to make oil, shoe polish, perfume, fertilizer, soap, shampoo, and other products. The response, since the International Whaling Commission formed in 1946, is that whales must be protected in order to prevent their extinction. Altruism was not the only inspiration for this meeting of nations. Commercial interests feared the over-exploitation, and thus the lower prices, that increased whaling might yield.
 [END]
 
-[TERRAIN_WATER_DEEP_GOOD_ONE_HISTORICAL]
+####Added for GoodMod###
+
+[TERRAIN_SWAMP_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_GAMEPLAY]
+Rice is a cereal grain (Oryza sativa) of the grass family, probably native to the Ganges, Tigris, Chang (Yangtze), and Euphrates River deltas. Growing only in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>, rice provides large amounts of <L:DATABASE_CONCEPTS,CONCEPT_FOOD>food<e> for the masses.
+[END]
+
+[TERRAIN_SWAMP_GOOD_TWO_HISTORICAL]
+Rice requires warmth and abundant moisture, the plant is an annual, from 2 to 6 feet (61 to 183 cm) tall, with a round, jointed stem, long, pointed leaves, and seeds borne in a dense head on separate stalks. Thousands of rice strains are now known, both cultivated and wild. Estimates are that half the world's population subsists wholly or partially on rice. The largest producers are China, India, Indonesia, Bangladesh, and Thailand. Most rice that is grown is also consumed domestically. Brown rice has greater food value than white, since the outer coatings (which are polished away to yield white rice) contain protein and minerals, while the white endosperm is chiefly carbohydrate. As a food, rice is low in fat and protein, as compared to other grains. The beverage sake is brewed from rice. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_GAMEPLAY]
+Chilli can be found in  <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamp<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_GAMEPLAY]
+Peat can be found in <L:DATABASE_TERRAIN,TERRAIN_SWAMP>Swamps<e>. 
+[END]
+
+[TERRAIN_SWAMP_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_GAMEPLAY]
+Beavers live in the many waterways found in <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forests<e>. People hunt the beaver for its fur.
+[END]
+
+[TERRAIN_FOREST_GOOD_FOUR_HISTORICAL]
+Essentially a large rodent, the beaver and its hunt led to fortunes in the United States and Canada and to explorations throughout the Pacific Northwest. The economic power of fur was immense in the 17th, 18th, and 19th centuries. Conconully State Park in Washington derives its name from "konekol'p": a native word meaning "money hole," referring to the abundance of beaver in the area. The wealth, though, was mainly to be had by the large-scale fur traders like John Jacob Astor, America's first millionaire.
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_GAMEPLAY]
+Cut Off!
+[END]
+
+[TERRAIN_TUNDRA_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_GAMEPLAY]
+Uranium is a dense, radioactive, silvery metal that is found on <L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e> tiles. 
+[END]
+
+[TERRAIN_HILL_GOOD_THREE_HISTORICAL]
+In 1789, the German chemist Martin Klaproth discovered the chemical element Uranium. For about 150 years following its discovery, uranium was found to have some of the most wide-reaching effects of any element. Uranium is present in only two to four parts per million in the earth's crust. Few deposits contain uranium in amounts greater the 0.2 percent. Hundreds of minerals, however, contain uranium. For example, uraninite and carnotite are abundant minerals that contain relatively high concentrations of uranium. Pitchblende, known for its use in the early research of radioactive elements, is a variety of uraninite. The U.S. and Canada contain large deposits of uranium. Australia has rich deposits of uranium in its Northern Territory. South Africa and Canada have been the chief suppliers of uranium.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_GAMEPLAY]
+Potatoes can be found in <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_GAMEPLAY]
+Salmon are fish that are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e> tiles.
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_THREE_HISTORICAL]
+Salmon are marine fish of the family Salmonidae that spawn in fresh water. The herring-like Salmonidae are characterized by soft, rayless, adipose fins and live in cold, oxygen-rich waters. They are generally a uniform silver in color. The Atlantic salmon (genus Salmo), once abundant, is threatened by pollution, damming, and over fishing. Salmon feed on crustaceans at sea and small fish while spawning and reach 15 pounds (6.8 kilograms). The Pacific salmon (genus Oncorhynchus), comprising five species, is commercially the most important. The largest, the chinook, may reach 100 pounds (45 kilograms); the blueback forms the bulk of canned salmon. Pacific salmon are famed for their grueling journeys of hundreds of miles to their headwater breeding grounds. The genus Salvelinus includes the European chars and the North American brook trout.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+Bauxite is a hydrated mixture of metal oxides that is found in <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Polar Mountain<e> tiles.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE_HISTORICAL]
+Bauxite is a mixture of hydrated aluminum oxides usually containing oxides of iron and silicon. A noncrystalline substance formerly thought to be a mineral, bauxite is claylike, ranging from white to brown or red in color. It is the chief source of aluminum and its compounds. It is widely distributed throughout the world, with important deposits in Africa, South America, France, Russia, the West Indies, and the U.S. 
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_GAMEPLAY]
+Buffalos live in the <L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>.
+[END]
+
+[TERRAIN_PLAINS_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+Coal deposits are found on <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e> tiles. Coal is burned to produce energy.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_THREE_HISTORICAL]
+Coal is a fuel substance of plant origin, composed largely of carbon with varying amounts of mineral matter. Coal belongs to a series of carbonaceous fuels that have varying compositions in the relative amounts of moisture, volatile matter, and fixed carbon. The most useful types of coal contain the largest amounts of carbon and the smallest amounts of moisture and volatile matter. The highest grade of coal is anthracite, or hard coal, which is nearly pure carbon and is used as a domestic fuel. Bituminous coal, or soft coal, with a lower carbon content, is used as an industrial fuel and in making coke. Lignite and peat are the lowest in carbon content. Large amounts of coal were formed in the Carboniferous period of geological time (approximately 280 to 345 million years ago). It is thought that great quantities of vegetable matter collected and underwent slow decomposition in swamps that were similar to present-day peat bogs and lagoons. The peat that formed was converted to lignite and coal by metamorphism. The pressure of accumulated layers of overlying sediment and rock forced out much of the volatile matter, leaving beds or seams of compact coal interstratified with shales, clays, or sandstones. Higher grades of coal were produced where the stress was greatest. Major U.S. coal fields are found in Appalachia, the Midwest, the Rocky Mountain region, and along the Gulf Coast. The chief coal-producing countries of Europe are Russia, Ukraine, Poland, Germany, Britain, France, and Belgium. Valuable coal deposits also exist in China, India, South Africa, and Australia.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_GAMEPLAY]
+Cut Off!
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_GAMEPLAY]
+Date is the name for a palm tree (Phoenix dactylifera) and for its edible fruit. Dates grow in the oasis of the <L:DATABASE_TERRAIN,TERRAIN_DESERT>Deserts<e>.
+[END]
+
+[TERRAIN_DESERT_GOOD_THREE_HISTORICAL]
+Dates are probably native to Arabia and North Africa and long a major food source in <L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e> and tropical regions. The sweet, nutritious fruits grow in heavy clusters; a tree may produce up to 200 pounds (90 kilograms) annually. Sugar and a fermented drink are made from the sap of the tree, and the seeds are sometimes used as a coffee substitute. The wood of the trunk is used in construction, and mats and baskets are woven from the leaves.
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_GAMEPLAY]
+Olives grow on <L:DATABASE_TERRAIN,TERRAIN_HILL>Hill<e>.
+[END]
+
+[TERRAIN_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_GAMEPLAY]
+Mushrooms of various types can be found on <L:DATABASE_TERRAIN,TERRAIN_FOREST>Forest<e> tiles. They can grow rapidly and -if not poisonous- serve as food. They can be traded fresh, pickled or dried and precious types can be very expensive.
+[END]
+
+[TERRAIN_FOREST_GOOD_THREE_HISTORICAL]
+A mushroom, or toadstool, is the fleshy, spore-bearing fruiting body of a fungus, typically produced above ground on soil or on its food source. The standard for the name "mushroom" is the cultivated white button mushroom, Agaricus bisporus; hence the word "mushroom" is most often applied to those fungi (Basidiomycota, Agaricomycetes) that have a stem (stipe), a cap (pileus), and gills (lamellae, sing. lamella) on the underside of the cap. "Mushroom" also describes a variety of other gilled fungi, with or without stems, therefore the term is used to describe the fleshy fruiting bodies of some Ascomycota. These gills produce microscopic spores that help the fungus spread across the ground or its occupant surface. Forms deviating from the standard morphology usually have more specific names, such as "bolete", "puffball", "stinkhorn", and "morel", and gilled mushrooms themselves are often called "agarics" in reference to their similarity to Agaricus or their order Agaricales. By extension, the term "mushroom" can also designate the entire fungus when in culture; the thallus (called a mycelium) of species forming the fruiting bodies called mushrooms; or the species itself. 
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_GAMEPLAY]
+Banana is the name for a family of tropical herbs (the Musacae), for a genus (Musa) of herbaceous plants, and for the fruits they produce. Bananas can be found only on <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e> tiles.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_THREE_HISTORICAL]
+Bananas are probably native to tropical Asia, but are widely cultivated. They are related to the economically valuable Manila Hemp and to the Bird-of-Paradise flower. Banana plants have a palm-like aspect to their physical features and large leaves, the overlapping bases of which form the so-called false trunk. Only female flowers develop into the banana fruit (botanically considered a berry). Each plant can bear fruit only once. The seeds are sterile, so propagation occurs through shoots from the rhizomes. Bananas are an important food staple in tropic regions.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_GAMEPLAY]
+Sugar grows in the <L:DATABASE_TERRAIN,TERRAIN_JUNGLE>Jungle<e>, where dense vegetation and humidity make for a perfect growing environment.
+[END]
+
+[TERRAIN_JUNGLE_GOOD_FOUR_HISTORICAL]
+Serious European harvesting and refinement of sugar from the sugar beet began during the Napoleonic wars, when sugar from sugar cane became unavailable.  But this was far from the first time that war and the fate of sugar were intertwined. More than one hundred years before, in 1764, the British decision to tax the American colonies with a new duty on molasses, the so-called Sugar Act, added fuel to the fire which would become the American Revolution.
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e>
+<L:DATABASE_TERRAIN,TERRAIN_DESERT>Sand Dunes<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_GAMEPLAY]
+Camels lives in the <L:DATABASE_TERRAIN,TERRAIN_DESERT>Desert<e> and on <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>.
+[END]
+
+[TERRAIN_DESERT_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_GAMEPLAY]
+Lobsters are large marine crustaceans that are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Water<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e> tiles. 
+[END]
+
+[TERRAIN_WATER_SHALLOW_GOOD_FOUR_HISTORICAL]
+Lobsters are a large marine crustacean with five pairs of jointed legs - the first pair bearing large pincer-like claws of unequal size adapted to crushing the shells of its prey. The dark-green common American lobsters (Homarus americanus) are found from Labrador to North Carolina, but primarily along the New England coast. When lobsters are cooked, the shell turns bright red. Lobster meat is considered a delicacy.
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+Emeralds are valuable gems that can be found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcanos<e> .
+[END]
+
+[TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plains<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_GAMEPLAY]
+Wheat is a cereal plant (genus Triticum) of the grass family, a major food and an important commodity of the world grain market. Wheat can be found on
+<L:DATABASE_TERRAIN,TERRAIN_PLAINS>Plain<e> tiles.
+[END]
+
+[TERRAIN_PLAINS_GOOD_THREE_HISTORICAL]
+Wheat is an annual (probably derived from a perennial) that grows best where the weather is cool during its early growth. Modern wheat varieties are usually classified as winter wheats (fall-planted and unusually winter-hardy) and spring wheats (spring-planted). Hard-kerneled varieties (hard wheats) yield flour with a high gluten content, used to make breads; soft-kerneled ones (soft wheats) are starchier, and their flour is used to make cakes and biscuits. Durum wheat is a very hard-kerneled wheat used in pasta products. Wheat is also used in the manufacture of beer and whiskey, and the grain, the bran (the residue from milling), and the rest of the plant are valuable livestock feed. Wheat was one of the first grains to be cultivated: bread wheat was grown in the Nile River valley by 5000 BC. Major modern wheat-producing areas include North America, China, Western Europe, Ukraine, Kazakhstan, Russia, India, Pakistan, and Australia.
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+Gold is found on <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e> tiles. 
+[END]
+
+[TERRAIN_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+Gold (Au) is a metallic element, known since prehistoric times. Chemically inactive, this very ductile and most malleable metal can be beaten into thin sheets of gold leaf. Only silver and copper conduct electricity better. Gold is usually hardened by alloying with other metals; it also often occurs in nature as an alloy. The gold content of an alloy is stated in carats. By definition, pure gold is 24 carats, and thus a 75 percent gold alloy is 18 carats. Gold is found widely distributed, mostly in metallic form as dust, grains, flakes, or nuggets. It occurs in quartz veins or lodes, usually in association with silver or other metals, and in alluvial placer deposits. Chief producers of gold are South Africa, Russia, Canada, and the U.S. Possibly the first metal used by humans, gold was valued for ornaments, and magical powers were attributed to it. Alchemists of the Middle Ages tried to transmute baser metals into gold. The search for gold stimulated European exploration of the Western Hemisphere.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grassland<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_GAMEPLAY]
+Poppies grow in the <L:DATABASE_TERRAIN,TERRAIN_GRASSLAND>Grasslands<e>, where people harvest the plant to make medicinal drugs.
+[END]
+
+[TERRAIN_GRASSLAND_GOOD_FOUR_HISTORICAL]
+There are many kinds of poppies, but one has become most infamous: papaver sominferum, also known as the opium poppy. The Chinese, who developed the unripened seed as a pain reliever in the 15th century, passed the first law against the smoking of opium in 1729. Nonetheless, the poppy fields in British India provided a profitable export to China, prompting the Opium Wars of 1839 to 1842. The wars ended with England in possession of Hong Kong and special trade privileges. By the 1990s, heroin, a drug produced from the opium poppy, was a $10 billion per year business in the U.S. alone.
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_RIFT>Submarine Ridge<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_TRENCH >Submarine Canyon<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_GAMEPLAY]
+Tuna are large fish that are found in <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>Deep Water<e> tiles. 
+[END]
+
+[TERRAIN_WATER_DEEP_GOOD_THREE_HISTORICAL]
+Tuna are the largest fish of the mackerel family. Hunted as game and for food, the family includes the little tuna (weighing 10 pounds / 4.5 kilograms) of the Atlantic, the most important commercial variety of tuna. The bluefin tuna (Thunnus thynnus) are the giant of bony fishes (200-500 pounds / 90-225 kilograms). Finally, the Pacific albacore (up to 60 pounds / 27 kilograms) are marketed as whitemeat tuna.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_GAMEPLAY]
+Copper is a metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_HILL>Sand Dunes<e>.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_ONE_HISTORICAL]
+Copper (Cu) is a metallic element known to humans since the Bronze Age. This reddish-brown, malleable, ductile metal is a very good conductor of heat and electricity. It has low chemical reactivity. In moist air it forms a patina, which is a protective, greenish surface film. The primary commercial uses of copper are in electrical apparatus and wire, roofing, utensils, coins, metalwork, plumbing, and condensing coils. Copper alloys include brass and bronze. Copper compounds are used as insecticides, fungicides, and paint pigments. They are also used in electroplating. Copper is an essential nutrient for normal human metabolism and hemoglobin synthesis in blood.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_GAMEPLAY]
+Silver is a precious metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_TWO_HISTORICAL]
+Silver (Ag) is a metallic element, one of the first metals used by humans. Pure silver is nearly white, lustrous, soft, very ductile, malleable, and an excellent conductor of heat and electricity. It is used in mirrors, coins, utensils, antiseptics, jewelry, and for electrolytic plating of tableware. Silver nitrate is its most important compound. Silver reacts with hydrogen sulfide in air to form silver sulfide (tarnish). Photographic emulsions contain silver halides, which are sensitive to light. Silver alloys are used in dentistry and electrical contacts. Sterling silver contains 92.5 percent silver and 7.5 percent copper. Silver is obtained from the ores argentite, cerarygrite, pyrargyrite, stephanite, and proustite.
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Polar Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_GOLD>Gold<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_GAMEPLAY]
+Sapphires are precious gems that can be found in <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Polar Hill<e> tiles.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_ONE_HISTORICAL]
+Sapphires are precious gems, a transparent blue variety of corundum. Sapphires are found chiefly in Thailand, India, Sri Lanka, and Myanmar. Like rubies, some sapphires show an internal star when cut with a round top. Synthetic sapphire stones are made by fusing aluminum oxide, with titanium oxide added for color.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_MOUNTAIN>Alpine Mountain<e>
+<L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hill<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_GAMEPLAY]
+Emeralds are among the most precious naturally produced stones in the world.  Prized for their deep green beauty, they are found in <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_MOUNTAIN>Alpine Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>, <L:DATABASE_TERRAIN,TERRAIN_WHITE_HILL>Alpine Hills<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_VOLCANO>Submarine Volcano<e>.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_TWO_HISTORICAL]
+Emeralds are highly valued gems. They are a green variety of the mineral beryl. The finest emeralds are found in Colombia. Other sources are Russia, Zimbabwe, and Australia. The Oriental emerald is the transparent green variety of corundum.
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_PREREQ]
+Location:
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_WHITE_HILL_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_STATISTICS]
++20 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_GAMEPLAY]
+Iron is a metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_ONE_HISTORICAL]
+Iron (Fe) is a lustrous, ductile, malleable, silver-gray metal. A good conductor of heat and electricity, it is attracted by a magnet and is itself easily magnetized. Iron is abundant throughout the universe. It is found in many stars, including the sun. It is the fourth most common element in the earth's crust, of which it constitutes about 5 percent by weight, and is believed to be the main component of the earth's core. Iron is rarely found uncombined in nature except in meteorites, and it rusts readily in moist air. Limonite and hematite are the chief iron ores; other ores include magnetite, taconite, and siderite. Iron ores are refined in a blast furnace to produce pig iron, which can be remelted and poured into molds to make cast iron, commercially purified to make wrought iron, or alloyed with carbon and other elements to make steel. Iron compounds are used as paint pigments, in dyeing, and in ink manufacture. A component of hemoglobin, the oxygen-carrying pigment of red blood cells in vertebrates, iron is important in nutrition; one cause of anemia is iron deficiency.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountain<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_GAMEPLAY]
+Silver is a precious metal that is found on <L:DATABASE_TERRAIN,TERRAIN_BROWN_MOUNTAIN>Desert Mountains<e>.
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_TWO_HISTORICAL]
+Silver (Ag) is a metallic element, one of the first metals used by humans. Pure silver is nearly white, lustrous, soft, very ductile, malleable, and an excellent conductor of heat and electricity. It is used in mirrors, coins, utensils, antiseptics, jewelry, and for electrolytic plating of tableware. Silver nitrate is its most important compound. Silver reacts with hydrogen sulfide in air to form silver sulfide (tarnish). Photographic emulsions contain silver halides, which are sensitive to light. Silver alloys are used in dentistry and electrical contacts. Sterling silver contains 92.5 percent silver and 7.5 percent copper. Silver is obtained from the ores argentite, cerarygrite, pyrargyrite, stephanite, and proustite.[END]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_THREE_HISTORICAL]
+´[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_BROWN_MOUNTAIN_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_GAMEPLAY]
+Seals are marine mammals that are found in <L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e> tiles.
+[END]
+
+[TERRAIN_GLACIER_GOOD_ONE_HISTORICAL]
+Seals are fin-footed mammals (pinnipeds) of the family Phocidae, usually marine, with front and hind feet modified as flippers. Seals have streamlined bodies with a thick, subcutaneous layer of fat, and most inhabit cold or temperate regions. All seal species leave the water at least once a year to breed; some species migrate. Seals live on fish and shellfish. Many dive deep to feed, navigating by means of echolocation. True seals lack external ears. They are polygamous and gregarious, and most live in one of four geographical regions: northern, Antarctic, and the warm waters of the Mediterranean, Caribbean, and Hawaiian seas. Seals are extensively hunted for food, fur, hides, and oil.
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_GAMEPLAY]
+Walrus can be found on <L:DATABASE_TERRAIN,TERRAIN_GLACIER>Glacier<e> tiles. Walrus blubber, hides, and ivory provide its value to these frozen, barren tiles.
+[END]
+
+[TERRAIN_GLACIER_GOOD_TWO_HISTORICAL]
+The walrus is a marine mammal (Odobenus rosmarus) that is found in  arctic seas.  Largest of the fin-footed mammals, it has long tusks, light-brown wrinkled hide, and bristly cheek pads. An adult male may weigh up to 3,000 pounds (1,400 kilograms). Walruses live on beaches near shallow water in herds of about a hundred animals and eat mainly shellfish. Hunted for blubber, hides, and ivory, they are now endangered.
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_PREREQ]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_STATISTICS]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_GAMEPLAY]
+[END]
+
+[TERRAIN_GLACIER_GOOD_THREE_HISTORICAL]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_PREREQ]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_STATISTICS]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_GAMEPLAY]
+[END]
+
+[TERRAIN_GLACIER_GOOD_FOUR_HISTORICAL]
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Ocean<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelf<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e>
+<L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Bed<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_STATISTICS]
++10 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_GAMEPLAY]
+<L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>Shallow Oceans<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beaches<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_SHELF>Continental Shelfs<e>, <L:DATABASE_TERRAIN,TERRAIN_WATER_REEF>Coral Reef<e> and <L:DATABASE_TERRAIN,TERRAIN_WATER_KELP>Kelp Beds<e> are home to crabs, which are hunted as a high-priced food source.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_ONE_HISTORICAL]
+Throughout history, the crab has been prized as a delicacy.  In more recent times, crabs have been found to be useful in cosmetics, drugs, water treatment, even fertilizer. Chitisan, found in the crab's shell, contains DNA inhibitors that may have use as, ironically, a  cancer inhibitor.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_STATISTICS]
++15 <L:DATABASE_CONCEPTS,CONCEPT_FOOD>Food<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_GAMEPLAY]
+Fish are limbless, aquatic, vertebrate animal with fins, internal gills, and skin. They are normally found in abundance in <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e> tiles.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_TWO_HISTORICAL]
+Most fish are cold-blooded, limbless, aquatic, vertebrate animals with a glandular secretion that decreases friction. Most fish have scales. A typical fish is torpedo-shaped, with a head containing a brain and sensory organs, a muscular-walled trunk with a cavity containing internal organs, and a muscular tail. Most fish propel themselves through water with weaving movements and control direction with their fins. Although some fish, such as sharks, bear live young, most fish eggs are fertilized and hatched in water. There are over 20,000 species of fish in three classes: Agnatha, the most primitive fishes, jawless and without paired pelvic and pectoral fins (such as the lamprey); Chondrichthyes, cartilaginous fishes, with skeletons of cartilage but no swim bladder or lungs (such as the shark and ray); and Osteichthyes, bony fishes, the most highly developed. Bony fishes have a bony skeleton and a swim bladder or lungs, and are divided into fleshy-finned (such as the lobefin and lungfish) and ray-finned fishes (such as BASS). The largest fish is the whale shark (Rhincodon typus), reaching 50 feet (15 meters) in length and are found worldwide in tropical seas. The smallest is the 1/2 inch (1.3 centimeter) goby (family Gobiidae) of the Philippines.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_PREREQ]
+Location:
+
+<L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_STATISTICS]
++5 <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
++10 <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>Commerce<e>
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_GAMEPLAY]
+Dye can be found on <L:DATABASE_TERRAIN,TERRAIN_WATER_BEACH>Beach<e> tiles.
+[END]
+
+[TERRAIN_WATER_BEACH_GOOD_THREE_HISTORICAL]
+Dyeing is the process of applying colors to fabrics. A human practice for over three thousand years, it enabled the natural white color of silk, wool and cotton to be enhanced with a varied spectrum of color. Natural dyes are created from a myriad of sources, including shells, animals and plants, though these were not always permanent and frequently expensive. Modern dyes are based around artificial or processed substances such as coal and other chemicals. One benefit for a nation with an extensive dye industry is that the processes involved in creating dye can be easily retooled to other purposes. Germany discovered this in World War I when it was determined that factories producing artificial dye could be easily modified to create explosives and other tools of war.
 [END]
 
 [GOVERNMENT_ANARCHY_PREREQ]
@@ -3492,9 +4558,6 @@ Le democrazie virtuali sono proprie di imperi estremamente avanzati, nei quali i
 [GOVERNMENT_VIRTUAL_DEMOCRACY_HISTORICAL]
 [END]
 
-[GOVERNMENT_VIRTUAL_DEMOCRACY_HISTORICAL]
-[END]
-
 [IMPROVE_ACADEMY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_PHILOSOPHY>Filosofia<e>
@@ -3545,6 +4608,8 @@ Gli aeroporti moderni si svilupparono negli anni 50 e 60 con la diffusione dei v
 [IMPROVE_AQUA_FILTER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NANO_MACHINES>Nanomacchine<e>
+<L:DATABASE_BUILDINGS,IMPROVE_AQUEDUCT>Aqueduct<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ARCOLOGIES>Arcologies<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3589,6 +4654,7 @@ Probabilmente, il più importante risultato raggiunto dai Romani nel campo delle 
 [IMPROVE_ARCOLOGIES_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ARCOLOGIES>Arcologie<e>
+<L:DATABASE_BUILDINGS,IMPROVE_AQUEDUCT>Aqueduct<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3654,6 +4720,7 @@ Nell'antichità, le ballistae erano macchine che lanciavano a grande distanza pro
 [IMPROVE_BANK_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_BANKING>Banca<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazaar<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3679,6 +4746,7 @@ Più o meno nella stessa epoca, nacque una nuova pratica, secondo la quale un cli
 [IMPROVE_BASCILICA_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_THEOLOGY>Teologia<e>
+<L:DATABASE_BUILDINGS,IMPROVE_SHRINE>Shrine<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3710,6 +4778,9 @@ Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD
 [IMPROVE_BATTLEMENTS_STATISTICS]
 Offre:
 +{BuildingDB(Building[0]).OffenseBonusWater / 100} attacco contro le unità navali
+
+Location:
+In coastal Cities only
 [END]
 
 [IMPROVE_BATTLEMENTS_GAMEPLAY]
@@ -3744,6 +4815,8 @@ Con l'espansione del commercio, i mercanti scoprirono la necessità di un posto d
 [IMPROVE_BEHAVIORAL_MOD_CENTER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NEURAL_REPROGRAMMING>Riprogrammazione neurale<e>
+<L:DATABASE_BUILDINGS,IMPROVE_COURTHOUSE>Courthouse<e>
+<L:DATABASE_BUILDINGS,IMPROVE_CORRECTIONAL_FACILITY>Correctional Facility<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3767,6 +4840,9 @@ Quando i sistemi di riprogrammazione neurale vennero adottati su larga scala in 
 [IMPROVE_BODY_EXCHANGE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_LIFE_EXTENSION>Allungamento della vita<e>
+<L:DATABASE_BUILDINGS,IMPROVE_DRUG_STORE>Drug Store<e>
+<L:DATABASE_BUILDINGS,IMPROVE_HOSPITAL>Hospital<e>
+<L:DATABASE_BUILDINGS,IMPROVE_INCUBATION_CENTER>Incubation Center<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3788,6 +4864,8 @@ La scoperta del sistema RapidGrow(tm) nel 2525 fu l'ultimo tassello per risolver
 [IMPROVE_BROKERAGE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ECONOMICS>Economia<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazaar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3840,6 +4918,8 @@ Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD
 [IMPROVE_CITY_WALLS_STATISTICS]
 Offre:
 +{BuildingDB(Building[0]).DefendersPercent / 100} <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>difesa<e> cittadina
+Prevent {BuildingDB(Building[0]).PreventConversion}% attacks of Conversion
+Prevent {BuildingDB(Building[0]).PreventSlavery}% attacks of Slavery
 [END]
 
 [IMPROVE_CITY_WALLS_GAMEPLAY]
@@ -3853,6 +4933,9 @@ Le civiltà hanno sempre avuto bisogno di essere protette dagli intrusi, umani o 
 [IMPROVE_COMPUTER_CENTER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_COMPUTER>Informatica<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ACADEMY>Academy<e>
+<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>University<e>
+<L:DATABASE_BUILDINGS,IMPROVE_PUBLISHING_HOUSE>Publishing House<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3874,6 +4957,8 @@ Fin dall'inizio, i computer sono stati pensati per risolvere problemi che gli sc
 [IMPROVE_CORNUCOPIC_VATS_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_GENETIC_TAILORING>Ingegneria genetica<e>
+<L:DATABASE_BUILDINGS,IMPROVE_GRANARY>Granary<e>
+<L:DATABASE_BUILDINGS,IMPROVE_FOOD_SILO>Food Silo<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3895,6 +4980,7 @@ Mentre la ricerca genetica ha concesso agli scienziati di produrre cibo genetica
 [IMPROVE_CORRECTIONAL_FACILITY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_CRIMINAL_CODE>Codice penale<e>
+<L:DATABASE_BUILDINGS,IMPROVE_COURTHOUSE>Courthouse<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3968,6 +5054,9 @@ Nel 1841, venne fondata la Società Farmaceutica della Gran Bretagna, con l'inten
 [IMPROVE_E_BANK_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_DIGITAL_ENCRYPTION>Codifica digitale<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazaar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BROKERAGE>Brokerage<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -3989,6 +5078,7 @@ Con il crescere della potenza e della velocità dei microprocessori nel tardo XX 
 [IMPROVE_ECO_TRANSIT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_FUEL_CELLS>Pile a combustibile<e>
+<L:DATABASE_BUILDINGS,IMPROVE_PUBLIC_TRANSPORTATION>Public Transportation<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4076,6 +5166,7 @@ Nell'antichità, il granaio permetteva alle città di depositare il cibo in eccess
 [IMPROVE_FORCEFIELD_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_UNIFIED_PHYSICS>Fisica unitaria<e>
+<L:DATABASE_BUILDINGS,IMPROVE_CITY_WALLS>City Wall<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4097,6 +5188,8 @@ Con la colonizzazione dello spazio e l'introduzione dei proiettori di meteoriti,
 [IMPROVE_FUSION_PLANT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_FUSION>Fusione nucleare<e>
+<L:DATABASE_BUILDINGS,IMPROVE_OIL_REFINERY>Oil Refinery<e>
+<L:DATABASE_BUILDINGS,IMPROVE_NUCLEAR_PLANT>Nuclear Plant<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4161,6 +5254,7 @@ Con lo sviluppo dell'agricoltura, le civiltà sentivano il bisogno di un posto do
 [IMPROVE_HOSPITAL_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_MEDICINE>Medicina moderna<e>
+<L:DATABASE_BUILDINGS,IMPROVE_DRUG_STORE>Drug Store<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 MAnutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4182,6 +5276,8 @@ Fra il 1850 e il 1860 circa, gli ospedali erano intasati, poco ventilati e pulit
 [IMPROVE_INCUBATION_CENTER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_HUMAN_CLONING>Clonazione umana<e>
+<L:DATABASE_BUILDINGS,IMPROVE_DRUG_STORE>Drug Store<e>
+<L:DATABASE_BUILDINGS,IMPROVE_HOSPITAL>Hospital<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4203,6 +5299,7 @@ Il 10 febbraio 2098 nacque il primo clone umano nel Centro di Creazione Genetica
 [IMPROVE_MATTER_DECOMPILER_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ECOTOPIA>Ecotopia<e>
+<L:DATABASE_BUILDINGS,IMPROVE_RECYCLING_PLANT>Recycling Plant<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4266,6 +5363,7 @@ Dal quinto al decimo secolo, i mulini ad acqua videro una fortissima crescita ne
 [IMPROVE_MOVIE_PALACE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ELECTRICITY>Elettricità<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ARENA>Arena<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4287,6 +5385,8 @@ Il Cinema Elettrico di Tally, aperto a Los Angeles nel 1902, fu la prima struttu
 [IMPROVE_NANITE_FACTORY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NANO_ASSEMBLY>Nanoassemblaggio<e>
+<L:DATABASE_BUILDINGS,IMPROVE_FACTORY>Factory<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ROBOTIC_PLANT>Robotic Plant<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4308,6 +5408,7 @@ Prima che fosse possibile realizzare nanomacchine funzionali, si scoprì un modo 
 [IMPROVE_NUCLEAR_PLANT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NUCLEAR_POWER>Energia nucleare<e>
+<L:DATABASE_BUILDINGS,IMPROVE_OIL_REFINERY>Oil Refinery<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4351,6 +5452,10 @@ La raffineria permette di trasformare i combustibili fossili in modo che sia pos
 [IMPROVE_ORBITAL_LABORATORY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_SPACE_FLIGHT>Volo spaziale<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ACADEMY>Academy<e>
+<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>University<e>
+<L:DATABASE_BUILDINGS,IMPROVE_PUBLISHING_HOUSE>Publishing House<e>
+<L:DATABASE_BUILDINGS,IMPROVE_COMPUTER_CENTER>Computer Center<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4416,6 +5521,8 @@ Un sistema di trasporti pubblici ben concepito può portare enormi benefici alle 
 [IMPROVE_PUBLISHING_HOUSE_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_PRINTING_PRESS>Stampa<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ACADEMY>Academy<e>
+<L:DATABASE_BUILDINGS,IMPROVE_UNIVERSITY>University<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4458,6 +5565,7 @@ I rifiuti hanno sempre rappresentato un problema per le società umane, ma l'incr
 [IMPROVE_ROBOTIC_PLANT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_ROBOTICS>Robotica<e>
+<L:DATABASE_BUILDINGS,IMPROVE_FACTORY>Factory<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4500,6 +5608,8 @@ Negli anni 80, il presidente americano Ronald Reagan creò l'iniziativa di difesa
 [IMPROVE_SECURITY_MONITOR_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_AI_SURVEILLANCE>Sorveglianza con IA<e>
+<L:DATABASE_BUILDINGS,IMPROVE_COURTHOUSE>Courthouse<e>
+<L:DATABASE_BUILDINGS,IMPROVE_CORRECTIONAL_FACILITY>Correctional Facility<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4543,6 +5653,8 @@ I santuari erano presenti in molte forme diverse e avevano funzioni differenti. 
 [IMPROVE_TELEVISION_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_MASS_MEDIA>Comunicazione di massa<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BAZAAR>Bazaar<e>
+<L:DATABASE_BUILDINGS,IMPROVE_BANK>Bank<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>oro<e><L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4552,6 +5664,7 @@ Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_PROD
 Offre:
 +{BuildingDB(Building[0]).HappyInc} <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>benessere<e>
 +{BuildingDB(Building[0]).GoldPerCitizen} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e> per cittadino
+Double Effect of Televangelists
 [END]
 
 [IMPROVE_TELEVISION_GAMEPLAY]
@@ -4586,6 +5699,7 @@ Il teatro greco rappresentò una dipartita dagli spettacoli tradizionali dell'epo
 [IMPROVE_UNIVERSITY_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_CLASSICAL_EDUCATION>Discipline classiche<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ACADEMY>Academy<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>oro<e><L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4609,6 +5723,8 @@ Pur nascendo, all'inizio, come strutture formative per il clero, le università s
 [IMPROVE_VR_AMUSEMENT_PARK_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_NEURAL_INTERFACE>Interfaccia neurale<e>
+<L:DATABASE_BUILDINGS,IMPROVE_ARENA>Arena<e>
+<L:DATABASE_BUILDINGS,IMPROVE_MOVIE_PALACE>Movie Palace<e>
 
 Costo: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>
 Manutenzione: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_GOLD>oro<e>
@@ -4627,10 +5743,36 @@ Il parco divertimenti virtuale offre ai cittadini una forma ultra-realistica di 
 In origine, l'unico modo a disposizione della gente per creare esperienze particolari era viverle davvero, per esempio in stati allucinatori dovuti a droghe, oppure, su scala minore, attraverso l'arte. Durante l'età digitale, gli utenti di interfacce neurali potevano stimolare ad arte alcuni centri nervosi del cervello, anche se esperienze di questo genere erano strettamente personali e spesso limitate o fugaci. Però, nel 2752, Linus Traum sviluppò il Sensorium. A differenza dei sistemi precedenti, il Sensorium era un impianto con capacità predittive, capace di generare sensazioni e "trasportare" gli utenti in qualunque ambiente desiderato. Inoltre, il Sensorium permetteva di condividere la stessa esperienza. In seguito, questa invenzione diede vita a un nuovo mercato, nel quale si cercava di fornire scenari sempre più stimolanti.
 [END]
 
+[IMPROVE_MIND_CONTROL_EMITTER_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_MIND_CONTROL>Mind Control<e>
+
+Cost: {BuildingDB(Building[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+Upkeep: {BuildingDB(Building[0]).Upkeep} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Gold<e>
+[END]
+
+[IMPROVE_MIND_CONTROL_EMITTER_STATISTICS]
+Gives:
+Locks <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Happiness<e> at 75%.
+[END]
+
+[IMPROVE_MIND_CONTROL_EMITTER_GAMEPLAY]
+Mind Controller locks <L:DATABASE_CONCEPTS,CONCEPT_HAPPINESS>Happiness<e> at 75%, eliminating <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>riots<e> and <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolutions<e> by eliminating the free will of discontented citizens. Tall, silvery, and imposing, no one hides from the emitter. <L:DATABASE_UNITS,UNIT_SLAVER>Slavers<e> and religious missionaries have little hope of penetrating this psychic barrier.
+[END]
+
+[IMPROVE_MIND_CONTROL_EMITTER_HISTORICAL]
+Throughout the 21st and 22nd centuries, crowding in arcologies and megaburbia eroded personal space. With thinner walls, smaller homes, and closer neighbors, socially rebellious behavior became dangerous and even illegal. Hi-tech companies turned their focus to new Mind Control technologies. Tested in prisons, the first Mind Controllers were described as "pacifiers" or "restraints." By 2212, food riots in Bombay prompted the installation of a citywide mind control system.  At long last, the government had made the people happy.
+[END]
+
 [TERRAIN_WATER_BEACH_PREREQ]
 Cibo: 10
 Produzione: 10
 Commercio: 10
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_ONE>Crabs<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_TWO>Fish<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_THREE>Dye<e>
 [END]
 
 [TERRAIN_WATER_BEACH_STATISTICS]
@@ -4642,6 +5784,8 @@ Difesa: +0%
 Le caselle di spiaggia sono luoghi ideali vicino a cui costruire <L:DATABASE_CONCEPTS,CONCEPT_CITY>città<e>, considerato che qualsiasi città su una casella adiacente a una casella di spiaggia può costruire unità navali. Le città vicino alle spiagge possono anche avvantaggiarsi di <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>miglioramenti di casella<e> di tipo oceanico come <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>reti<e>, <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>gallerie sottomarine<e> e <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_PORT>porti<e>.
 
 Le spiagge sono un luogo ideale per i pesci e altri frutti di mare; forniscono modeste quantità di <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e> a qualsiasi <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>rete<e> o <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>riserva di pesca<e> costruita. Forniscono anche livelli minimi di <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e> e <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e>.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_TWO>Fish<e> and<L:DATABASE_RESOURCE,TERRAIN_WATER_BEACH_GOOD_THREE>Dye<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to Beach tiles.
 [END]
 
 [TERRAIN_WATER_BEACH_HISTORICAL]
@@ -4651,6 +5795,12 @@ Le spiagge sono un luogo ideale per i pesci e altri frutti di mare; forniscono m
 Cibo: 5
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> 
 [END]
 
 [TERRAIN_WATER_SHELF_STATISTICS]
@@ -4660,6 +5810,8 @@ Difesa: +0%
 
 [TERRAIN_WATER_SHELF_GAMEPLAY]
 Le piattaforme continentali rappresentano il notevole divario tra le caselle di <L:DATABASE_TERRAIN,TERRAIN_WATER_SHALLOW>acqua bassa<e> e quelle di <L:DATABASE_TERRAIN,TERRAIN_WATER_DEEP>acqua profonda<e>. Sono ricche di <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e>, di <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e> e forniscono <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e> modesto. È possibile costruire colonie sottomarine su di esse, così come qualsiasi <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>miglioramento di casella<e> di tipo oceanico.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crabs<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> native to shelf tiles.
 [END]
 
 [TERRAIN_WATER_SHELF_HISTORICAL]
@@ -4669,6 +5821,9 @@ Le piattaforme continentali rappresentano il notevole divario tra le caselle di 
 Cibo: 0
 Produzione: 0
 Commercio: 0
+
+Goods:
+none
 [END]
 
 [TERRAIN_DEAD_STATISTICS]
@@ -4689,6 +5844,11 @@ Quando un giocatore scopre la <L:DATABASE_ADVANCES,ADVANCE_CONSERVATION>conserva
 Cibo: 10
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Tuna<e>
 [END]
 
 [TERRAIN_WATER_DEEP_STATISTICS]
@@ -4709,6 +5869,12 @@ Le <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>balene<e> e i <L:DATABASE_RE
 Cibo: 0
 Produzione: 0
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e> 
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_TWO>Oil<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_THREE>Dates<e> 
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Camels<e>
 [END]
 
 [TERRAIN_DESERT_STATISTICS]
@@ -4731,6 +5897,10 @@ Il <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>vetro<e> e l'<L:DATABASE_RESOURC
 Cibo: 0
 Produzione: 10
 Commercio: 10
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_ONE>Iron Ore<e>
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_MOUNTAIN_GOOD_TWO>Silver<e>
 [END]
 
 [TERRAIN_BROWN_MOUNTAIN_STATISTICS]
@@ -4753,6 +5923,12 @@ L'avanzamento <L:DATABASE_ADVANCES,ADVANCE_FUSION>fusione nucleare<e> permette d
 Cibo: 10
 Produzione: 5
 Commercio: 10
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>Hardwood<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_TWO>Bear<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_THREE>Apples<e>
+<L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_FOUR>Beavers<e>
 [END]
 
 [TERRAIN_FOREST_STATISTICS]
@@ -4775,6 +5951,12 @@ Il <L:DATABASE_RESOURCE,TERRAIN_FOREST_GOOD_ONE>legno duro<e> esotico e gli <L:D
 Cibo: 15
 Produzione: 5
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>Cotton<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_TWO>Tobacco<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_THREE>Potatoes<e>
+<L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_FOUR>Poppies<e>
 [END]
 
 [TERRAIN_GRASSLAND_STATISTICS]
@@ -4797,6 +5979,12 @@ Il <L:DATABASE_RESOURCE,TERRAIN_GRASSLAND_GOOD_ONE>cotone<e> e il <L:DATABASE_RE
 Cibo: 5
 Produzione: 10
 Commercio: 10
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>Coffee<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_TWO>Grapes<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_THREE>Uranium<e>
+<L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_FOUR>Olives<e>
 [END]
 
 [TERRAIN_HILL_STATISTICS]
@@ -4819,6 +6007,10 @@ Il <L:DATABASE_RESOURCE,TERRAIN_HILL_GOOD_ONE>caffè<e> e l'<L:DATABASE_RESOURCE,
 Cibo: 0
 Produzione: 0
 Commercio: 0
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_ONE>Seals<e>
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_TWO>Walrus<e>
 [END]
 
 [TERRAIN_GLACIER_STATISTICS]
@@ -4830,6 +6022,9 @@ Difesa: +0%
 Le caselle Ghiacciaio sono quasi del tutto inospitali. È possibile costruire una città su un ghiacciaio, ma sarà estremamente difficile da sostenere. La costruzione di miglioramenti di casella è impossibile. Non ci sono né <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo,<e> né <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>, né <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e>. Gli spostamenti sono pesantemente limitati e non c'è alcun bonus <L:DATABASE_CONCEPTS,CONCEPT_DEFENSE>difensivo<e> per le unità. È meglio evitare questi territori il più possibile.
 
 È necessario scoprire i <L:DATABASE_ADVANCES,ADVANCE_ADVANCED_COMPOSITES>materiali compositi avanzati<e> per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>trasformare<e> le caselle ghiacciaio.
+
+<L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_ONE>Seals<e> and <L:DATABASE_RESOURCE,TERRAIN_GLACIER_GOOD_TWO>Walrus<e> are the <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Goods<e> found on Glacier tiles.
+
 [END]
 
 [TERRAIN_GLACIER_HISTORICAL]
@@ -4839,6 +6034,11 @@ Le caselle Ghiacciaio sono quasi del tutto inospitali. È possibile costruire una
 Cibo: 5
 Produzione: 20
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> 
 [END]
 
 [TERRAIN_WATER_RIFT_STATISTICS]
@@ -4848,6 +6048,8 @@ Difesa: +0%
 
 [TERRAIN_WATER_RIFT_GAMEPLAY]
 La loro prossimità a un'intensa attività geotermica consente alle creste suboceaniche di ottenere livelli estremamente alti di <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e>. Benché procurino minime quantità di <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e> e <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e>, sono adatte per le colonie sottomarine e possono contenere qualsiasi <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>miglioramento di casella<e> di tipo oceanico.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>, <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> are the Goods to be found in Rifts.
 [END]
 
 [TERRAIN_WATER_RIFT_HISTORICAL]
@@ -4857,6 +6059,12 @@ La loro prossimità a un'intensa attività geotermica consente alle creste subocea
 Cibo: 0
 Produzione: 15
 Commercio: 10
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>Tea<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_TWO>Emeralds<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_THREE>Coal<e>
+<L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_FOUR>Gold<e>
 [END]
 
 [TERRAIN_MOUNTAIN_STATISTICS]
@@ -4879,6 +6087,10 @@ Il <L:DATABASE_RESOURCE,TERRAIN_MOUNTAIN_GOOD_ONE>tè<e> e gli <L:DATABASE_RESOUR
 Cibo: 0
 Produzione: 5
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_TWO>Emeralds<e>
 [END]
 
 [TERRAIN_WHITE_HILL_STATISTICS]
@@ -4890,6 +6102,9 @@ Difesa: +50%
 Le colline polari sono tra i luoghi meno indicati per costruirvi <L:DATABASE_CONCEPTS,CONCEPT_CITY>città<e>, a causa della mancanza di <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e>. Il <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e> è minimo, ma la <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e> è buona. È possibile costruire <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>miniere<e> e <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_ROAD>strade<e>, ma le condizioni meteorologiche imprevedibili e il freddo rigido rendono impossibile il mantenimento di <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FARMS>fattorie<e>. Gli spostamenti avvengono con lentezza ed è previsto un modesto bonus difensivo per le unità.
 
 Gli <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>esplosivi<e> sono necessari per <L:DATABASE_CONCEPTS,CONCEPT_TERRAFORM>trasformare<e> le caselle collina polare.
+
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e> and <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_TWO>Emeralds<e> are the Goods found in Polar Hills.
+
 [END]
 
 [TERRAIN_WHITE_HILL_HISTORICAL]
@@ -4899,6 +6114,12 @@ Gli <L:DATABASE_ADVANCES,ADVANCE_EXPLOSIVES>esplosivi<e> sono necessari per <L:D
 Cibo: 0
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_THREE>Bauxite<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>
 [END]
 
 [TERRAIN_WHITE_MOUNTAIN_STATISTICS]
@@ -4921,6 +6142,12 @@ I <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>rubini<e> e i <L:DATABAS
 Cibo: 5
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>Medicinal Herbs<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_TWO>Jade<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_THREE>Bananas<e>
+<L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_FOUR>Sugar<e>
 [END]
 
 [TERRAIN_JUNGLE_STATISTICS]
@@ -4943,6 +6170,12 @@ Le <L:DATABASE_RESOURCE,TERRAIN_JUNGLE_GOOD_ONE>erbe medicinali<e> e la <L:DATAB
 Cibo: 0
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_ONE>Copper<e>
+<L:DATABASE_RESOURCE,TERRAIN_BROWN_HILL_GOOD_TWO>Silver<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>Glass<e>
+<L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_FOUR>Camels<e>
 [END]
 
 [TERRAIN_BROWN_HILL_STATISTICS]
@@ -4965,6 +6198,12 @@ Il <L:DATABASE_RESOURCE,TERRAIN_DESERT_GOOD_ONE>vetro<e> e l'<L:DATABASE_RESOURC
 Cibo: 10
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>Spices<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_TWO>Elephant<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_THREE>Wheat<e>
+<L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_FOUR>Buffalo<e>
 [END]
 
 [TERRAIN_PLAINS_STATISTICS]
@@ -4988,6 +6227,12 @@ Le <L:DATABASE_RESOURCE,TERRAIN_PLAINS_GOOD_ONE>spezie<e> e gli <L:DATABASE_RESO
 Cibo: 10
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
 
 [TERRAIN_WATER_SHALLOW_STATISTICS]
@@ -5008,6 +6253,12 @@ I <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>granchi<e> e le <L:DATABAS
 Cibo: 5
 Produzione: 5
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>Alligator<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_TWO>Rice<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_THREE>Chilli<e>
+<L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_FOUR>Peat<e>
 [END]
 
 [TERRAIN_SWAMP_STATISTICS]
@@ -5030,6 +6281,11 @@ Gli <L:DATABASE_RESOURCE,TERRAIN_SWAMP_GOOD_ONE>alligatori<e> rappresentano l'un
 Cibo: 5
 Produzione: 10
 Commercio: 10
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> 
 [END]
 
 [TERRAIN_WATER_TRENCH_STATISTICS]
@@ -5039,6 +6295,9 @@ Difesa: +0%
 
 [TERRAIN_WATER_TRENCH_GAMEPLAY]
 I canyon sottomarini sono luoghi dove vita ed energia abbondano, benché entrambi difficili da procurare. Il <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e> e la <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produzione<e> sono disponibili in notevoli quantità, mentre il <L:DATABASE_CONCEPTS,CONCEPT_COMMERCE>commercio<e> è minimo. È possibile costruire qualsiasi miglioramento casella di tipo oceanico, così come <L:DATABASE_CONCEPTS,CONCEPT_CITY>città<e>.
+
+<L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_ONE>Whale<e> , <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_TWO>Giant Squid<e> and <L:DATABASE_RESOURCE,TERRAIN_WATER_DEEP_GOOD_THREE>Tuna<e> are <L:DATABASE_CONCEPTS,CONCEPT_GOODS>Good<e> found on Trenches.
+
 [END]
 
 [TERRAIN_WATER_TRENCH_HISTORICAL]
@@ -5048,6 +6307,12 @@ I canyon sottomarini sono luoghi dove vita ed energia abbondano, benché entrambi
 Cibo: 0
 Produzione: 25
 Commercio: 15
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>
+<L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e>
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>
 [END]
 
 [TERRAIN_WATER_VOLCANO_STATISTICS]
@@ -5059,6 +6324,8 @@ Difesa: +0%
 I vulcani sottomarini sono la più grande sorgente <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>produttiva<e> del pianeta. Costruire miniere è costoso e richiede parecchio tempo, ma consente di ottenere benefici consistenti. Il commercio è discreto e il cibo disponibile in quantità minime.
 
 È possibile costruire <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_MINES>miniere<e> e <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_UNDERSEA_TUNNEL>gallerie sottomarine<e>, ma non <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_NETS>reti<e> né <L:DATABASE_TILE_IMPROVEMENTS,TILEIMP_FISHERIES>riserve di pesca<e>. I <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>rubini<e> e i <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>diamanti<e>, benché rari, sono beni reperibili nei vulcani sottomarini.
+
+<L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_ONE>Rubies<e>, <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_TWO>Diamonds<e>, <L:DATABASE_RESOURCE,TERRAIN_WHITE_HILL_GOOD_ONE>Sapphires<e> and <L:DATABASE_RESOURCE,TERRAIN_ARCTIC_MOUNTAIN_GOOD_FOUR>Emeralds<e>,  though rare, are Goods found on Submarine Volcanoes.
 [END]
 
 [TERRAIN_VOLCANO_HISTORICAL]
@@ -5068,6 +6335,9 @@ I vulcani sottomarini sono la più grande sorgente <L:DATABASE_CONCEPTS,CONCEPT_P
 Cibo: 0
 Produzione: 5
 Commercio: 0
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_TUNDRA_GOOD_ONE>Caribou<e>
 [END]
 
 [TERRAIN_TUNDRA_STATISTICS]
@@ -5091,6 +6361,12 @@ I <L:DATABASE_RESOURCE,TERRAIN_TUNDRA_GOOD_ONE>caribù<e> sono l'unico <L:DATABAS
 Cibo: 10
 Produzione: 15
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>Pearls<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
 
 [TERRAIN_WATER_REEF_STATISTICS]
@@ -5113,6 +6389,12 @@ Le barriere coralline sono ricche di vita e rappresentano luoghi ideali per la r
 Cibo: 15
 Produzione: 10
 Commercio: 5
+
+Goods:
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>Crab<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHELF_GOOD_ONE>Jellyfish<e>
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_THREE>Salmon<e> 
+<L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_FOUR>Lobster<e>
 [END]
 
 [TERRAIN_WATER_KELP_STATISTICS]
@@ -5126,9 +6408,6 @@ Il <L:DATABASE_CONCEPTS,CONCEPT_FOOD>cibo<e> è abbondante nei letti di alghe, do
 È possibile costruire qualsiasi <L:DATABASE_CONCEPTS,CONCEPT_TILE_IMPROVEMENTS>miglioramento casella<e> di tipo oceanico sui letti di alghe.
 
 Presso i letti di alghe è spesso possibile trovare beni come i <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_ONE>granchi<e> e le <L:DATABASE_RESOURCE,TERRAIN_WATER_SHALLOW_GOOD_TWO>perle<e>.
-[END]
-
-[TERRAIN_WATER_KELP_HISTORICAL]
 [END]
 
 [TERRAIN_WATER_KELP_HISTORICAL]
@@ -5636,6 +6915,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_ABOLITIONIST_SUMMARY]
@@ -5671,6 +6955,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_AIRCRAFT_CARRIER_SUMMARY]
@@ -5702,6 +6991,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_ARCHER_SUMMARY]
@@ -5732,6 +7026,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_ARTILLERY_SUMMARY]
@@ -5762,6 +7061,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_BATTLESHIP_SUMMARY]
@@ -5797,6 +7101,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_BOMBER_SUMMARY]
@@ -5830,6 +7140,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CANNON_SUMMARY]
@@ -5893,6 +7208,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CARGO_HELICOPTER_SUMMARY]
@@ -5925,6 +7245,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CARRACK_SUMMARY]
@@ -5960,6 +7285,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CATAMARAN_SUMMARY]
@@ -5992,6 +7322,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CATAPULT_SUMMARY]
@@ -6021,6 +7356,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CAVALRY_SUMMARY]
@@ -6056,6 +7396,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CLERIC_SUMMARY]
@@ -6092,6 +7437,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CORPORATE_BRANCH_SUMMARY]
@@ -6126,6 +7476,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CRAWLER_SUMMARY]
@@ -6153,6 +7508,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CRUISE_MISSILE_SUMMARY]
@@ -6186,6 +7546,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_CYBER_NINJA_SUMMARY]
@@ -6225,6 +7590,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_DESTROYER_SUMMARY]
@@ -6248,9 +7618,16 @@ Richiede:
 Obsolete:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Eugenetica<e>
 
-Abilità:
-<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
-<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Dà ricevimenti<e>
+Abilities:
+<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
+<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
+[END]
+
+[UNIT_DIPLOMAT_SUMMARY]
+<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Establishes Embassies<e>
+<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Holds Receptions<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 [END]
 
 [UNIT_DIPLOMAT_STATISTICS]
@@ -6261,11 +7638,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
-[END]
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
 
-[UNIT_DIPLOMAT_SUMMARY]
-<L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
-<L:DATABASE_ORDERS,ORDER_THROW_PARTY>Dà ricevimenti<e>
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_DIPLOMAT_GAMEPLAY]
@@ -6293,6 +7670,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_DREADNAUGHT_SUMMARY]
@@ -6324,6 +7706,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_ECO_RANGER_SUMMARY]
@@ -6362,6 +7749,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_ECO_TERRORIST_SUMMARY]
@@ -6381,9 +7773,11 @@ La filosofia ecotopista dell'ambientalismo radicale, che proponeva uno stile di 
 [UNIT_EMPATHIC_DIPLOMAT_PREREQ]
 Richiede:
 <L:DATABASE_ADVANCES,ADVANCE_EUGENICS>Eugenetica<e>
+
 Abilità:
 <L:DATABASE_ORDERS,ORDER_ESTABLISH_EMBASSY>Fonda ambasciate<e>
 <L:DATABASE_ORDERS,ORDER_THROW_PARTY>Dà ricevimenti<e>
+<L:DATABASE_CONCEPTS,CONCEPT_GOSSIP>Hears Gossip<e>
 Vede le <L:DATABASE_CONCEPTS,CONCEPT_STEALTH_UNITS>unità antiradar<e>
 [END]
 
@@ -6395,6 +7789,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_EMPATHIC_DIPLOMAT_SUMMARY]
@@ -6429,6 +7828,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_FASCIST_SUMMARY]
@@ -6466,6 +7870,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_FIGHTER_SUMMARY]
@@ -6499,6 +7909,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_FIRE_TRIREME_SUMMARY]
@@ -6555,6 +7970,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_FRIGATE_SUMMARY]
@@ -6588,6 +8008,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_FUSION_TANK_SUMMARY]
@@ -6619,6 +8044,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_HOPLITE_SUMMARY]
@@ -6646,6 +8076,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_HOVER_INFANTRY_SUMMARY]
@@ -6675,6 +8110,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_INFANTRYMAN_SUMMARY]
@@ -6709,6 +8149,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_INFECTOR_SUMMARY]
@@ -6745,6 +8190,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_INTERCEPTOR_SUMMARY]
@@ -6779,6 +8230,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_IRONCLAD_SUMMARY]
@@ -6813,6 +8269,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_KNIGHT_SUMMARY]
@@ -6847,6 +8308,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_KRAKEN_SUMMARY]
@@ -6878,6 +8344,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_LAWYER_SUMMARY]
@@ -6912,6 +8383,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_LEVIATHON_SUMMARY]
@@ -6945,6 +8421,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_LONGSHIP_SUMMARY]
@@ -6974,6 +8455,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_MACHINE_GUNNER_SUMMARY]
@@ -7004,6 +8490,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_MARINE_SUMMARY]
@@ -7036,6 +8527,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_MOBILE_SAM_SUMMARY]
@@ -7066,6 +8562,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_MOREY_STRIKER_SUMMARY]
@@ -7097,6 +8598,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_MOUNTED_ARCHER_SUMMARY]
@@ -7129,6 +8635,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_NUCLEAR_SUBMARINE_SUMMARY]
@@ -7167,6 +8678,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_NUKE_SUMMARY]
@@ -7201,6 +8717,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_PARATROOPER_SUMMARY]
@@ -7233,6 +8754,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_PIKEMEN_SUMMARY]
@@ -7264,6 +8790,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_PLASMA_DESTROYER_SUMMARY]
@@ -7295,6 +8826,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SCOUT_SUB_SUMMARY]
@@ -7325,6 +8861,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SEA_ENGINEER_SUMMARY]
@@ -7355,6 +8896,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SETTLER_SUMMARY]
@@ -7389,6 +8935,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SHIP_OF_THE_LINE_SUMMARY]
@@ -7421,6 +8972,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SLAVER_SUMMARY]
@@ -7452,6 +9008,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SPACE_PLANE_SUMMARY]
@@ -7487,6 +9049,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SPY_SUMMARY]
@@ -7523,6 +9090,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SPY_PLANE_SUMMARY]
@@ -7554,6 +9127,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_STEALTH_BOMBER_SUMMARY]
@@ -7582,6 +9161,12 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento/Carburante: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000} / {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Fuel: {UnitDB(UnitRecord[0]).MaxFuel / 100}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_STEALTH_FIGHTER_SUMMARY]
@@ -7616,6 +9201,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SUBMARINE_SUMMARY]
@@ -7650,6 +9240,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_SWORDSMAN_SUMMARY]
@@ -7679,6 +9274,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_TANK_SUMMARY]
@@ -7710,6 +9310,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_TELEVANGELIST_SUMMARY]
@@ -7743,6 +9348,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_TROOP_SHIP_SUMMARY]
@@ -7773,6 +9383,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_URBAN_PLANNER_SUMMARY]
@@ -7810,6 +9425,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_WARRIOR_SUMMARY]
@@ -7841,6 +9461,11 @@ Corazza: {UnitDB(UnitRecord[0]).Armor / 100}
 Danni: {UnitDB(UnitRecord[0]).Firepower}
 Visuale: {UnitDB(UnitRecord[0]).VisionRange}
 Movimento: {UnitDB(UnitRecord[0]).MaxMovePoints / 10000}
+Max HP: {UnitDB(UnitRecord[0]).MaxHP}
+
+Costs: {UnitDB(UnitRecord[0]).ShieldCost}
+Upkeep: {UnitDB(UnitRecord[0]).ShieldHunger} Shields
+Food Hunger: {UnitDB(UnitRecord[0]).FoodHunger}
 [END]
 
 [UNIT_WAR_WALKER_SUMMARY]
@@ -8434,6 +10059,7 @@ Richiede:
 <L:DATABASE_UNITS,UNIT_SETTLER>Colono<e>
 <L:DATABASE_UNITS,UNIT_URBAN_PLANNER>Urbanista<e>
 <L:DATABASE_UNITS,UNIT_SEA_ENGINEER>Ingegnere marino<e>
+
 [END]
 
 [ORDER_SETTLE_STATISTICS]
@@ -8865,6 +10491,28 @@ Il progetto Eden rappresenta una vittoria per gli ambientalisti di tutto il mond
 
 [WONDER_THE_EDEN_PROJECT_HISTORICAL]
 Il progetto Eden nacque dal desiderio appassionato degli ambientalisti di tutto il mondo di riportare la Terra al suo stato originario. In un'epoca in cui il mondo naturale sembrava sull'orlo del collasso, gli ecotopisti partirono per una nuova crociata per salvare ciò che rimaneva delle zone incontaminate del pianeta. "La Terra," dichiararono con coraggio, "ha certi inalienabili diritti... Diritti che eccedono quelli dell'individuo e persino quelli della società umana". I politici, benché prudenti riguardo al crescente potere degli ecotopisti, furono obbligati per mezzo di una pubblica richiesta a requisire i fondi per ciò che più tardi sarebbe stato chiamato il progetto Eden. Impiegando un gruppo di nanotecnici, gli ecotopisti crearono uno strumento, l'ecoranger, con il potere di creare o distruggere su vasta scala. Tragicamente, il movimento ecotopico mantenne la promessa di affermare i "diritti naturali" su quelli degli esseri umani.
+[END]
+
+[WONDER_AI_ENTITY_PREREQ]
+Requires:
+<L:DATABASE_ADVANCES,ADVANCE_MIND_CONTROL>Mind Control<e>
+
+Costs:
+{WonderDB(Wonder[0]).ProductionCost} <L:DATABASE_CONCEPTS,CONCEPT_PRODUCTION>Production<e>
+[END]
+
+[WONDER_AI_ENTITY_STATISTICS]
+Gives:
+ Locks happiness in all <L:DATABASE_CONCEPTS,CONCEPT_CITY>cities<e> at 75%.
+Cause of <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>Revolutions<e> by the wonder.
+[END]
+
+[WONDER_AI_ENTITY_GAMEPLAY]
+By imbedding control chips into each citizen's mind, the AI Entity ends all <L:DATABASE_CONCEPTS,CONCEPT_RIOTS>riots<e> and <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolutions<e> in a Civilization. The AI Entity quiets all complaints, replacing the din of the world with a white noise of constancy. However, in time, the AI Entity may gain self-awareness and choose to leave and form its own empire. In this case, your cities will <L:DATABASE_CONCEPTS,CONCEPT_REVOLUTION>revolt<e> and splinter, following their new AI leader. 
+[END]
+
+[WONDER_AI_ENTITY_HISTORICAL]
+Although in the 26th century, the discovery of  mind control opened new avenues for governmental control, inevitably, the early projects to control human labor and productivity failed. Despite using mind control to exercise dominion over people's desires to chat, surf the Net, and sometimes just plain old goof off, mind control was not effective at maintaining productivity under more extreme conditions such as fire or physical pain.  The AI Entity solved this. With a versatile and adaptable system, the AI Entity linked each of its human cells through an embedded control chip. At the first sign of discontent, the AI Entity could send gentle electrical impulses to the chip resulting in a pleasant numbing sensation and a desire to do whatever the AI Entity deemed efficient. Productivity skyrocketed and psychiatry plummeted as happiness was just an electrical impulse away.
 [END]
 
 [WONDER_EGALITARIAN_ACT_PREREQ]
@@ -9367,7 +11015,6 @@ Nel tardo XX secolo, una sindrome di conflittualità colpì gran parte del mondo o
 [CONCEPT_CLASSIC_AGE_HISTORICAL]
 The classical period covers the epoch of the ascent Roman Republic, in particular the last 100 years. Caesar, Sallust and Augustus are only some representatives of this era. From this time many written documents were preserved for us, which differentiates this time significantly from the preceding epochs. But also the Roman Republic was a place where the learned could hold power, and the age of learning begun properly.
 [END]
-
 [CONCEPT_COMPUTER_AGE_GAMEPLAY]
 [END]
 

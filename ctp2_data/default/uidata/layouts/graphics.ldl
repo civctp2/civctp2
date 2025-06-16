@@ -37,8 +37,8 @@ GraphicsWindow {
 
 	string	xanchor	"center"
 	string	yanchor	"center"
-	int	widthpix	680
-	int	heightpix	390 #290
+	int	widthpix	700
+	int	heightpix	420
 	int	xpix	0
 	int	ypix	0
 	Name:CTP_GREY_TITLE_FONT {
@@ -111,7 +111,14 @@ GraphicsWindow {
 			string	string1	"str_ldl_Show_City_Prod_On"
 		}
 	}
-
+	WindowedModeButton:GRAPHICS_CHECKBOX {
+		int	xpix	30
+		int	ypix	310
+		stringtable {
+			string	string0	"str_ldl_Windowed_Mode_Off"
+			string	string1	"str_ldl_Windowed_Mode_On"
+		}
+	}
 
 	# Second Column of Switches
 	##############################################
@@ -164,7 +171,14 @@ GraphicsWindow {
 			string	string1	"str_ldl_Good_Animations_On"
 		}
 	}
-
+	RunInBackgroundButton:GRAPHICS_CHECKBOX {
+		int	xpix	350
+		int	ypix	310
+		stringtable {
+			string	string0	"str_ldl_Run_In_Background_Off"
+			string	string1	"str_ldl_Run_In_Background_On"
+		}
+	}
 
 	#At bottom center
 	####################################
@@ -175,7 +189,7 @@ GraphicsWindow {
 		string	imagebltflag	"chromakey"
 #		int xpix	279
 		string	xanchor	"center"
-		int	ypix	325 #225
+		int	ypix	350
 		string	text	"str_ldl_RES_CHANGE_BUTTON"
 	}
 

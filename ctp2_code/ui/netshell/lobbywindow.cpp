@@ -498,13 +498,13 @@ AUI_ERRCODE LobbyWindow::Idle( void )
 
 		((aui_Static *)m_controls[CONTROL_CURRENTLOBBYTEXTFIELD])->
 			SetText(g_netfunc->GetSession()->GetName());
-		if ( strlen( NETFunc::servername ) )
+		if ( strlen( NETFunc::s_servername ) )
 		{
 
 			aui_Control *item = m_controls[ CONTROL_CURRENTSERVERTEXTFIELD ];
 
 			MBCHAR servern[ 100 + 1 ];
-			strncpy( servern, NETFunc::servername, 100 );
+			strncpy( servern, NETFunc::s_servername, 100 );
 
 			if ( !item->GetTextFont() ) item->TextReloadFont();
 
@@ -749,27 +749,27 @@ void LobbyWindow::PlayersListBoxAction::Execute(
 	aui_Switch *ms = (aui_Switch *)(w->FindControl(LobbyWindow::CONTROL_MUTESWITCH));
 
 	ListPos position = justDeselectedList.GetHeadPosition();
-	sint32 i;
+	size_t i;
 	for (i = justDeselectedList.L(); i; i--)
-    {
+	{
 		ns_PlayerItem *     item    =
-            (ns_PlayerItem *) listbox->GetItemByIndex(justDeselectedList.GetNext(position));
+		    (ns_PlayerItem *) listbox->GetItemByIndex(justDeselectedList.GetNext(position));
 		NETFunc::Player *   player  = item->GetNetShellObject()->GetNETFuncObject();
 		if (chatbox->GetPlayer() && player->Equals(chatbox->GetPlayer()))
-        {
+		{
 			chatbox->SetPlayer(0);
 		}
 	}
 
 	position = justSelectedList.GetHeadPosition();
 	for (i = justSelectedList.L(); i; i--)
-    {
+	{
 		ns_PlayerItem *     item    =
-            (ns_PlayerItem *) listbox->GetItemByIndex(justSelectedList.GetNext(position));
+		    (ns_PlayerItem *) listbox->GetItemByIndex(justSelectedList.GetNext(position));
 		NETFunc::Player *   player  = item->GetNetShellObject()->GetNETFuncObject();
 
-        chatbox->SetPlayer(player);
-        ms->SetState(player->IsMuted() ? 1 : 0);
+		chatbox->SetPlayer(player);
+		ms->SetState(player->IsMuted() ? 1 : 0);
 	}
 
 	justSelectedList.DeleteAll();

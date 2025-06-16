@@ -33,6 +33,8 @@
 
 #ifdef __AUI_USE_SDL__
 
+#include "aui_sdlui.h"
+
 #include "civ3_main.h"
 
 #include "aui_mouse.h"
@@ -41,23 +43,18 @@
 #include "aui_sdlsurface.h"
 #include "aui_sdlmouse.h"
 #include "aui_sdlmoviemanager.h"
-
-#include "aui_sdlui.h"
-
-extern BOOL			g_exclusiveMode;
-
 #include "civapp.h"
-extern CivApp		*g_civApp;
+#include "profileDB.h"                  // g_theProfileDB
 
-#include "display.h"
+extern BOOL                 g_exclusiveMode;
+extern CivApp*              g_civApp;
+extern ProfileDB*           g_theProfileDB;
 
-extern BOOL					g_createDirectDrawOnSecondary;
-extern sint32				g_ScreenWidth;
-extern sint32				g_ScreenHeight;
-extern DisplayDevice		g_displayDevice;
+extern BOOL                 g_createDirectDrawOnSecondary;
+extern sint32               g_ScreenWidth;
+extern sint32               g_ScreenHeight;
 
-extern uint32 g_SDL_flags; //See ctp2_code/ctp/civ3_main.cpp
-extern sint32 g_is565Format;
+extern sint32               g_is565Format;
 
 aui_SDLUI::aui_SDLUI
 (
@@ -76,7 +73,6 @@ aui_SDLUI::aui_SDLUI
     m_SDLRenderer       (0),
     m_SDLTexture        (0)
 {
-
 	*retval = aui_Region::InitCommon( 0, 0, 0, width, height );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -124,28 +120,43 @@ AUI_ERRCODE aui_SDLUI::CreateNativeScreen( BOOL useExclusiveMode )
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
 	m_pixelFormat = aui_Surface::TransformBppToSurfacePixelFormat(m_bpp);
+
+	// Windows are right now not resizable, the content is also be shrunken, which should not happen.
+	uint32 sdl_flags = g_theProfileDB->IsWindowedMode() ? SDL_WINDOW_ALLOW_HIGHDPI /*| SDL_WINDOW_RESIZABLE*/ : SDL_WINDOW_FULLSCREEN_DESKTOP;
+
 	m_SDLWindow = SDL_CreateWindow("Call To Power 2", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED,
-		m_width, m_height, g_SDL_flags);
-	if (!m_SDLWindow) {
+	                               m_width, m_height, sdl_flags);
+
+	if (!m_SDLWindow)
+	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL window creation failed:\n%s\n", SDL_GetError());
 	}
+
+	if (g_theProfileDB->IsWindowedMode())
+		SDL_SetWindowMinimumSize(m_SDLWindow, 800, 600); // These numbers should be constants.
+
 	m_SDLRenderer = SDL_CreateRenderer(m_SDLWindow, -1, 0);
-	if (!m_SDLRenderer) {
+	if (!m_SDLRenderer)
+	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL renderer creation failed:\n%s\n", SDL_GetError());
 	}
+
 	SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "linear");
 	SDL_RenderSetLogicalSize(m_SDLRenderer, m_width, m_height);
 	m_SDLTexture = SDL_CreateTexture(m_SDLRenderer, aui_SDLSurface::TransformSurfacePixelFormatToSDL(m_pixelFormat),
 		SDL_TEXTUREACCESS_STREAMING, m_width, m_height);
-	if (!m_SDLTexture) {
+
+	if (!m_SDLTexture)
+	{
 		c3errors_FatalDialog("aui_SDLUI", "SDL texture creation failed:\n%s\n", SDL_GetError());
- 	}
+	}
 
 	m_primary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, TRUE);
 	Assert( AUI_NEWOK(m_primary,errcode) );
 	if ( !AUI_NEWOK(m_primary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 
-	if(!m_secondary) {
+	if(!m_secondary)
+	{
 		m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
 		Assert( AUI_NEWOK(m_secondary,errcode) );
 		if ( !AUI_NEWOK(m_secondary,errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
@@ -231,13 +242,18 @@ AUI_ERRCODE aui_SDLUI::AltTabOut( void )
 	if(m_keyboard) m_keyboard->Unacquire();
 	if ( m_joystick ) m_joystick->Unacquire();
 
-	if (m_mouse) {
-		if (g_exclusiveMode) {
+	if (m_mouse)
+	{
+		if (g_exclusiveMode)
+		{
 			TearDownMouse();
-		} else {
+		}
+		else
+		{
 			main_RestoreTaskBar();
 
-			if (!m_mouse->IsSuspended()) {
+			if (!m_mouse->IsSuspended())
+			{
 				m_mouse->Suspend(FALSE);
 				m_mouse->Unacquire();
 			}
@@ -282,9 +298,12 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	while ( ShowCursor( FALSE ) >= 0 )
 		;
 
-	if (g_exclusiveMode) {
+	if (g_exclusiveMode)
+	{
 		RestoreMouse();
-	} else {
+	}
+	else
+	{
 		if ( m_minimize || m_exclusiveMode )
 		{
 			POINT point;
@@ -314,7 +333,8 @@ AUI_ERRCODE aui_SDLUI::AltTabIn( void )
 	return FlushDirtyList();
 }
 
-aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
+aui_MovieManager* aui_SDLUI::CreateMovieManager( void )
+{
 	Assert(m_SDLWindow);
 	Assert(m_SDLRenderer);
 	Assert(m_SDLTexture);
@@ -324,23 +344,60 @@ aui_MovieManager* aui_SDLUI::CreateMovieManager( void ) {
 	return new aui_SDLMovieManager(m_SDLRenderer, m_SDLTexture, windowWidth, windowHeight);
 }
 
-AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void ) {
+AUI_ERRCODE aui_SDLUI::SDLDrawScreen( void )
+{
 	Assert(m_primary);
 	Assert(m_SDLTexture);
 	Assert(m_SDLRenderer);
 	int errcode;
 	errcode= SDL_UpdateTexture(m_SDLTexture, NULL, m_primary->Buffer(), m_primary->Pitch());
+#if !defined(WIN32)
+	// VS claims std::cerr is not there even so the right file is included
 	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+#endif
 	errcode= SDL_RenderClear(m_SDLRenderer);
+#if !defined(WIN32)
 	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+#endif
 	errcode= SDL_RenderCopy(m_SDLRenderer, m_SDLTexture, NULL, NULL);
+#if !defined(WIN32)
 	if (errcode < 0) std::cerr << "SDL error: " << SDL_GetError() << std::endl;
+#endif
 	SDL_RenderPresent(m_SDLRenderer);
 
 	if (errcode < 0)
-	  return AUI_ERRCODE_SURFACEFAILURE;
+		return AUI_ERRCODE_SURFACEFAILURE;
 	else
-	  return AUI_ERRCODE_OK;
+		return AUI_ERRCODE_OK;
 }
 
+AUI_ERRCODE aui_SDLUI::ChangeSize(sint32 width, sint32 height)
+{
+	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
+
+	// Something needs to be done here so that the screen content is not shrunken.
+/*
+	m_width  = width;
+	m_height = height;
+
+	g_ScreenWidth  = width;
+	g_ScreenHeight = height;
+
+	delete m_primary;
+	m_primary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, TRUE);
+	Assert(AUI_NEWOK(m_primary, errcode));
+	if (!AUI_NEWOK(m_primary, errcode)) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	delete m_secondary;
+	m_secondary = new aui_SDLSurface(&errcode, m_width, m_height, m_bpp, NULL, FALSE);
+		Assert(AUI_NEWOK(m_secondary, errcode));
+		if (!AUI_NEWOK(m_secondary, errcode)) return AUI_ERRCODE_MEMALLOCFAILED;
+
+	m_pixelFormat = m_primary->PixelFormat();
+*/
+	Invalidate(NULL);
+
+	return AUI_ERRCODE_OK;
+}
 #endif  // __AUI_USE_SDL__
+

@@ -31,13 +31,14 @@
 # - Keep also the indentation the same.
 # - You may add comments after the last line of strings that are specific to 
 #   one language only.
+#
 #----------------------------------------------------------------------------
 #
 # Modifications from the original Activision code:
 #
 # - Moved build list sequence strings to gl_str.txt.
 #   - April 7th 2005 Martin Gühmann
-# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann 
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin Gühmann
 # - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
 #   - April 9th 2005 Martin Gühmann
 # - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin Gühmann
@@ -49,6 +50,7 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-00
@@ -156,7 +158,7 @@ str_ldl_Pollution_Level				"Verschm.-Niveau:"
 
 str_ldl_RES_CHANGE_BUTTON			"Auflösung"
 str_ldl_RES_TITLE				"Auflösung"
-str_ldl_RES_REBOOT_WARNING			"Bitte startet Call To Power II neu!"
+str_ldl_RES_REBOOT_WARNING			"Diese Änderung erfolgt, wenn Ihr Call To Power II neu startet!"
 
 DIP_EXCHANGE_ADVANCE_NONE			"Austausch von Neuerungen nicht möglich."
 str_ldl_Cant_disband_city			"Städte mit einer Bevölkerungsgröße von 4 und mehr können nicht aufgelöst werden."
@@ -467,6 +469,7 @@ str_ldl_POPULATION_COLON			"Bevölkerung:"
 str_ldl_CIV_SCORE				"Punkte"
 str_ldl_POWER_GRAPH				"Stärkediagramm"
 str_ldl_DEFEAT					"Niederlage"
+
 # So we offend female leaders
 str_ldl_THE_DESTITUTE				"DER DÄMLICHE"
 str_ldl_THE_SQUIRREL_HEARTED			"DER ÄNGSTLICHE"
@@ -866,6 +869,7 @@ str_ldl_Known_To_You_And_Others			"Euch und anderen bekannt"
 str_ldl_LABORERS				"Fabrikarbeiter"
 str_ldl_Land					"Land"
 str_ldl_Land_Grabber				"Grundbesitzer"
+str_ldl_LANGUAGE					"Sprache"
 str_ldl_Large_64_x_128				"Groß"
 str_ldl_Last_Sale_Price_COLON			"Letzter Verkaufspreis:"
 str_ldl_Launch					"Starten"
@@ -945,6 +949,7 @@ str_ldl_Offer					"Anbieten"
 str_ldl_OFFER_A_GIFT				"Schenkung anbieten"
 str_ldl_OFFER_AN_EXCHANGE			"Gegenleistung anbieten"
 str_ldl_Offer_Good				"Gut anbieten"
+str_ldl_Routes_COLON				"Routen:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -1181,6 +1186,7 @@ str_ldl_Unit_Help				"Hilfe zu Einheiten"
 str_ldl_UNIT_MOVEMENT				"Truppenbewegung"
 str_ldl_UNIT_STATUS				"Einheitenübersicht"
 str_ldl_Units					"Einheiten"
+str_ldl_Unix_Internet			"Unix-Internet: Eure Verbindung zum Internet auf Unix-Systemen"
 str_ldl_UNLOAD_ALL				"Alle entladen"
 str_ldl_Unpredictable				"Unberechenbar"
 str_ldl_Untarnished				"Unfehlbar"
@@ -1413,6 +1419,8 @@ str_tbl_ldl_You_will_receive			"Ihr erhaltet "
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"Euer Kaufangebot wurde übermittelt."
 str_tbl_ldl_Zoom_in_one_level			"Um eine Stufe vergrößern"
 str_tbl_ldl_Zoom_out_one_level			"Um eine Stufe verkleinern"
+str_ldl_CAPS_LANGUAGE				"Sprache"
+str_ldl_Use_OS_Language				"Benutze Sprache vom Betriebssystem"
 str_ldl_CAPS_MUSIC				"Musik"
 str_ldl_Select_Track				"Track wählen"
 str_ldl_CAPS_SELECT_TRACK			"Track wählen"
@@ -2261,6 +2269,7 @@ str_ldl_MapFilters				"Karte"
 str_ldl_Graphics				"Grafik"
 str_ldl_Sound					"Sound"
 str_ldl_Music					"Musik"
+str_ldl_Language				"Sprache"
 str_ldl_Advanced				"Erweitert"
 str_ldl_SaveGame				"Spiel speichern"
 str_ldl_LoadGame				"Spiel laden"
@@ -2747,8 +2756,6 @@ str_ldl_SET_GOAL				"Projekt festlegen"
 str_ldl_SORT_BY_AGE				"Sortieren nach Ära"
 
 
-
-
 # Ranking Tab
 str_ldl_RANKING_MILITARY			"Militär"
 str_ldl_RANKING_ECONOMIC			"Wirtschaft"
@@ -3088,7 +3095,7 @@ str_profile_CityClick                           "Stadt anstatt Armee auswählen"
 str_profile_DebugSlic                           "Slic-Debug-Meldungen"
 str_profile_DebugSlicEvents                     "Slic-Ereignis-Debug-Meldungen"
 str_profile_EndTurnWithEmptyBuildQueues         "Rundenende mit leerer Bauliste"
-str_profile_RunInBackground                     "Rundenende im Hintergrund"
+str_profile_RunInBackground                     "Spiel läuft im Hintergrund"
 str_profile_Upgrade                             "Einheiten aufrüsten"
 str_profile_SmoothBorders                       "Reichsgrenzen glätten"
 str_profile_CivFlags                            "Zivilisationseinheitenflaggen ein"
@@ -3113,19 +3120,22 @@ str_profile_OneCityChallenge                    "Eine-Stadt-Herausforderung"    
 str_profile_CityCaptureOptions                  "Stadteroberungsoptionen"                       # Captured city options
 str_profile_DebugCityAstar                      "Straßenbaupfad debuggen"
 str_profile_NewCombat                           "Neues Kampfsystem"
+str_profile_WindowedMode                        "Fenstermodus"                                  # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Schlafende Einheiten gehen an Board"           # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options			"Musikeinstellungen"
-str_tbl_ldl_Decend				"Landen"
+str_tbl_ldl_Music_Options				"Musikeinstellungen"
+str_tbl_ldl_Language_Options			"Spracheinstellungen"
+str_tbl_ldl_Decend						"Landen"
 str_tbl_ldl_Execute_Eyepoint			"Fokus auf Nachrichtenobjekt (Auge)"
-str_tbl_ldl_Move_Order				"Fortbewegen"
-str_tbl_ldl_End_Unit_Turn			"Einheitenzug beenden"
+str_tbl_ldl_Move_Order					"Fortbewegen"
+str_tbl_ldl_End_Unit_Turn				"Einheitenzug beenden"
 str_tbl_ldl_Process_Unit_Orders			"Alle Einheitenbefehle ausführen"
-str_tbl_ldl_Group_Army				"Einheiten Gruppieren"
-str_tbl_ldl_Ungroup_Army			"Einheitengruppierung aufheben"
-str_tbl_ldl_Gamestate_Debug			"Debugspielstatus (Playtest)"
-str_tbl_ldl_Rand_Test				"Zufallstest (Playtest)"
-str_tbl_ldl_Command_Enter			"Kommando eingeben (Playtest)"
+str_tbl_ldl_Group_Army					"Einheiten Gruppieren"
+str_tbl_ldl_Ungroup_Army				"Einheitengruppierung aufheben"
+str_tbl_ldl_Gamestate_Debug				"Debugspielstatus (Playtest)"
+str_tbl_ldl_Rand_Test					"Zufallstest (Playtest)"
+str_tbl_ldl_Command_Enter				"Kommando eingeben (Playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"Alternativkommando eingeben (Playtest)"
 
 # New gamesetting options
@@ -3140,21 +3150,27 @@ str_ldl_SmoothBorders_On			"Reichsgrenzen glätten"
 str_ldl_SmoothBorders_Off			"Standardreichsgrenzen"
 str_ldl_Good_Animations_Off			"Güter-Animationen Aus"
 str_ldl_Good_Animations_On			"Güter-Animationen An"
+str_ldl_Windowed_Mode_Off			"Spiele im Vollbildmodus"
+str_ldl_Windowed_Mode_On			"Spiele im Festermodus"
+str_ldl_Run_In_Background_Off		"Spiel stoppt im Hintergrund"
+str_ldl_Run_In_Background_On		"Spiel läuft im Hintergrund"
 
+str_tbl_ldl_AlienLife_Off				"Siegt ohne Gaia-Controller"
+str_tbl_ldl_AlienLife_On				"Siegt mit dem Gaia-Controller"
 str_tbl_ldl_CityCaptureOptions_On		"Stadteroberungsoptionen"
 str_tbl_ldl_CityCaptureOptions_Off		"Keine Stadteroberungsoptionen"
 str_tbl_ldl_OneCityChallenge_On			"Eine-Stadt-Herausforderung"
 str_tbl_ldl_OneCityChallenge_Off		"Viele Städte"
-str_tbl_ldl_RevoltCasualties_On			"Revolting Cities lose Population"		# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltCasualties_Off		"No Revolt Casualties"				# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On			"Revolting cities create barbarians"		# Revolting city creates barbarians
-str_tbl_ldl_RevoltInsurgents_Off		"No Revolt barbarians"				# Revolting city creates barbarians
-str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians"			# Entrenched barbs create more barbs
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Don't Spawn Barbarians"		# Entrenched barbs create more barbs
-str_tbl_ldl_GoldPerUnitSupport_On		"1 Gold Per Unit Cost"				# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerUnitSupport_Off		"No Gold Per Unit Cost"				# All pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_On			"City Gold Maintenance"				# Everyone pays gold amount per city
-str_tbl_ldl_GoldPerCity_Off			"No Gold Per City Cost"				# AI pays gold amount per city
+str_tbl_ldl_RevoltCasualties_On			"Durch Aufruhr sterben Einwohner"		# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltCasualties_Off		"Keine Aufruhropfer"				# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"Aufruhr macht Barbaren"		# Revolting city creates barbarians
+str_tbl_ldl_RevoltInsurgents_Off		"Keine Barbaren durch Aufruhr"				# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbaren vermehren sich"			# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbaren vermehren sich nicht"		# Entrenched barbs create more barbs
+str_tbl_ldl_GoldPerUnitSupport_On		"Einheitenunterhalt auch durch Gold"				# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerUnitSupport_Off		"Einheitenunterhalt nur durch Production"				# All pay thins int times unit support calculation
+str_tbl_ldl_GoldPerCity_On			"Stadunterhalt durch Gold"				# Everyone pays gold amount per city
+str_tbl_ldl_GoldPerCity_Off			"Kein Stadunterhalt durch Gold"				# AI pays gold amount per city
 str_tbl_ldl_Upgrade_On				"Einheiten modernisieren"			# Units can be upgraded
 str_tbl_ldl_Upgrade_Off				"Einheiten nicht modernisieren"			# Units cannot be upgraded
 
@@ -3165,8 +3181,8 @@ str_ldl_Debug_AI_On				"Debug KI-Text Ein"
 str_ldl_Debug_AI_Off				"Debug KI-Text Aus"
 str_tbl_ldl_NonRandomCivs_On			"Gegner nach Liste wählen"
 str_tbl_ldl_NonRandomCivs_Off			"Gegner zufällig wählen"
-str_tbl_ldl_NoCityLimit_On			"Stadtlimit An"					# No city limit for all players
-str_tbl_ldl_NoCityLimit_Off			"Stadtlimit Aus"				# City limit for all players
+str_tbl_ldl_NoCityLimit_On			"Unbegrenzte Städteanzahl"					# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Städteanzahl begrenzen"				# City limit for all players
 str_tbl_ldl_NewCombat_Off			"Altes Kampfsystem"
 str_tbl_ldl_NewCombat_On			"Neues Kampfsystem"
 str_tbl_ldl_NoGoodyHuts_Off			"Ruinen An"
@@ -3177,6 +3193,7 @@ str_tbl_ldl_RandomCustomMap_On			"Zufallseinstellungen"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Vernichtung\nFür den Sieg müsst Ihr alle Gegner vernichten."
+str_tbl_ldl_RuleDetail_AlienLife		"Wissenschaftssieg\nFür den Sieg könnt ihr den Gaia-Controller errichten."
 str_tbl_ldl_RuleDetail_Pollution		"Umweltverschmutzung\nUmweltverschmutzung macht die Menschen in den Städten unzufrieden. Wenn die Umweltverschmutzung sehr schwer ist, zerstört sie das Gelände um einer Stadt. Im schlimmsten Falle lässt sie den Meeresspiegel ansteigen und verwüstet das Land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"Stadteroberungsoptionen\n Wenn Ihr eine Stadt erobert, habt Ihr drei Möglichkeiten: Befreiht Ihr eine Stadt, so wird sie den Babaren übergeben. Wenn Ihr die Stadt schleift, so wird sie bis auf die Grundmauern niedergebrannt und die Einwohner werden masakriert. Wenn ihr die Stadt besetzt, so wird sie in Euer Reich eingegliedert."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"Eine-Stadt-Herausforderung\nIhr könnt keine Einheiten bauen, die neue Städte gründen können."

@@ -101,7 +101,6 @@
 #include "UIUtils.h"
 #include "UnitRecord.h"
 #include <vector>
-#include "videoutils.h"
 #include "WonderRecord.h"
 #include "wonderutil.h"
 #include "AgeRecord.h"
@@ -1111,7 +1110,7 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		}
 
 		m_history.push_back(new_gl_page);
-		m_history_position = m_history.size() - 1;
+		m_history_position = static_cast<int>(m_history.size() - 1);
 		m_forwardButton->Enable(FALSE);
 		m_backButton->Enable(m_history_position > 0);
 	}
@@ -1880,15 +1879,15 @@ void GreatLibrary::UpdateList( DATABASE database )
 // Remark(s)  : Returns 0 if database is invalid
 //
 //----------------------------------------------------------------------------
-int GreatLibrary::Get_Database_Size(int the_database)
+size_t GreatLibrary::Get_Database_Size(int the_database)
 {
 	switch (the_database)
-    {
+	{
 	default:
-        return 0;
+		return 0;
 
 	case DATABASE_UNITS:
-        return g_theUnitDB->NumRecords();
+		return g_theUnitDB->NumRecords();
 
 	case DATABASE_SEARCH:
 		return m_search_results.size();
@@ -1945,7 +1944,7 @@ void GreatLibrary::Search_Great_Library()
 	char        search_key[MAX_SEARCH_KEY];
 	m_search_word->GetFieldText(search_key, MAX_SEARCH_KEY);
 
-    String_Search::Set_Case_Sensitive(false);
+	String_Search::Set_Case_Sensitive(false);
 	String_Search::Set_Search_Key(search_key);
 
 	Great_Library_Item  current;
@@ -1953,7 +1952,7 @@ void GreatLibrary::Search_Great_Library()
 
 	for (int i = DATABASE_UNITS; i < DATABASE_SEARCH; i++)
 	{
-		for (int j = 0; j < Get_Database_Size(i); j++)
+		for (sint32 j = 0; j < static_cast<sint32>(Get_Database_Size(i)); j++)
 		{
 			bool match = false;
 

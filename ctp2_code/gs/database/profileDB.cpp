@@ -263,6 +263,8 @@ ProfileDB::ProfileDB()
     m_spStartingAge                     (0),
     m_spEndingAge                       (-1),
     m_showCityProduction                (TRUE),
+    m_windowedMode                      (FALSE),
+    m_sleepingUnitsBoard                (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
     m_loadedFromTutorial                (FALSE)
@@ -278,12 +280,19 @@ ProfileDB::ProfileDB()
 	m_saveNote[0]           = 0;
 	m_ruleSets[0]           = 0;
 	m_gameWatchDirectory[0] = 0;
+	m_LanguageDirectory[0]  = 0;
 
 	for (size_t map_pass = 0; map_pass < k_NUM_MAP_PASSES; ++map_pass)
 	{
 		m_map_plugin_name[map_pass][0]  = 0;
 		m_map_settings[map_pass]        = NULL;
 	};
+
+#if defined(_DEBUG)
+	const bool isDebug = true;
+#else
+	const bool isDebug = false;
+#endif
 
 	Var("NumPlayers"                 , PV_NUM   , &m_nPlayers                   , NULL, false);
 	Var("AiOn"                       , PV_BOOL  , &m_ai_on                      , NULL, false);
@@ -312,13 +321,14 @@ ProfileDB::ProfileDB()
 	Var("CityLostWarning"            , PV_BOOL  , &m_cityLostWarning            , NULL, false);
 	Var("AutoCenter"                 , PV_BOOL  , &m_autocenter                 , NULL, false);
 	Var("FullScreenMovies"           , PV_BOOL  , &m_fullScreenMovies           , NULL, false);
-	Var("AutoSave"                   , PV_BOOL  , &m_autoSave					, NULL, false);
+	Var("AutoSave"                   , PV_BOOL  , &m_autoSave                   , NULL, false);
 	Var("PlayerNumber"               , PV_NUM   , (sint32 *)&m_playerNumber     , NULL, false);
 
 	Var("CivIndex"                   , PV_NUM   , (sint32 *)&m_civIndex         , NULL, false);
 
 	Var("GameName"                   , PV_STRING, NULL, (char *)m_gameName            , false);
 	Var("LeaderName"                 , PV_STRING, NULL, (char*)m_leaderName           , false);
+	Var("LanguageDirectory"          , PV_STRING, NULL, (char*)m_LanguageDirectory    , false);
 	Var("CivName"                    , PV_STRING, NULL, (char*)m_civName              , false);
 	Var("SaveNote"                   , PV_STRING, NULL, (char*)m_saveNote             , false);
 	Var("Gender"                     , PV_NUM   , (sint32 *)&m_gender           , NULL, false);
@@ -336,7 +346,7 @@ ProfileDB::ProfileDB()
 	Var("AutoDeselect"               , PV_BOOL  , &m_autoDeselect               , NULL);
 	Var("AutoSelectNext"             , PV_BOOL  , &m_autoSelectNext             , NULL);
 	Var("AutoSelectFirstUnit"        , PV_BOOL  , &m_autoSelectFirstUnit        , NULL);
-	Var("AutoTurnCycle"              , PV_BOOL  , &m_autoTurnCycle              , NULL, false);
+	Var("AutoTurnCycle"              , PV_BOOL  , &m_autoTurnCycle              , NULL);
 	Var("CombatLog"                  , PV_BOOL  , &m_combatLog                  , NULL, false);
 
 	Var("UseLeftClick"               , PV_BOOL  , &m_useLeftClick               , NULL, false);
@@ -368,6 +378,7 @@ ProfileDB::ProfileDB()
 	Var("MapSize"                    , PV_NUM   , (sint32 *)&m_mapSize          , NULL, false);
 
 	Var("AlienEndGame"               , PV_BOOL  , &m_alienEndGame               , NULL, false);
+	Var("Genocide"                   , PV_BOOL  , &m_genocide                   , NULL, false);
 	Var("UnitCompleteMessages"       , PV_BOOL  , &m_unitCompleteMessages       , NULL);
 	Var("NonContinuousUnitCompleteMessages", PV_BOOL  , &m_nonContinuousUnitCompleteMessages, NULL);
 	Var("DebugSlic"                  , PV_BOOL  , &m_debugSlic                  , NULL);
@@ -385,7 +396,7 @@ ProfileDB::ProfileDB()
 
 	Var("UnitSpeed"                  , PV_NUM   , &m_unitSpeed                  , NULL, false);
 	Var("MouseSpeed"                 , PV_NUM   , &m_mouseSpeed                 , NULL, false);
-	Var("LeftHandedMouse"            , PV_BOOL  , &m_leftHandedMouse            , NULL, false);
+	Var("LeftHandedMouse"            , PV_BOOL  , &m_leftHandedMouse            , NULL);
 
 	Var("CityBuiltMessage"           , PV_BOOL  , &m_cityBuiltMessage           , NULL, false);
 	Var("UseAttackMessages"          , PV_BOOL  , &m_useAttackMessages          , NULL, false);
@@ -432,41 +443,46 @@ ProfileDB::ProfileDB()
 	Var("RuleSets"                   , PV_STRING, NULL, m_ruleSets                    , false);
 	Var("CityClick"                  , PV_BOOL  , &m_cityClick                  , NULL, false);
 	Var("EndTurnWithEmptyBuildQueues", PV_BOOL  , &m_endTurnWithEmptyBuildQueues, NULL, false);
-	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL, false);
-	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);
-	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);
-#if defined(_DEBUG)
+	Var("RunInBackground"            , PV_BOOL  , &m_runInBackground            , NULL);
+	Var("AutoExpireTreatyBase"       , PV_NUM   , &m_autoExpireTreatyTurn       , NULL, false);   //
+	Var("CityCaptureOptions"         , PV_BOOL  , &m_cityCaptureOptions         , NULL, false);   //
 	/// @todo Move this to the scenario editor
-	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL);
-#else
-	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, false);
-#endif
+	Var("Upgrade"                    , PV_BOOL  , &m_upgrade                    , NULL, isDebug); //
 	Var("SmoothBorders"              , PV_BOOL  , &m_smoothBorders              , NULL, false);
 	// emod new profile flags // Please make sure that only those show up which are used.
 	Var("CivFlags"                   , PV_BOOL  , &m_CivFlags                   , NULL, false);
-	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);
-	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities            , NULL, false);
-	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL, false);
-	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties           , NULL, false);
-	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents           , NULL, false);
-	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL, false);
-	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL, false);
-	Var("AINoSinking"                , PV_BOOL  , &m_AINoSinking                , NULL, false);
-	Var("GoldPerUnitSupport"         , PV_BOOL  , &m_GoldPerUnitSupport         , NULL, false);
-	Var("GoldPerCity"                , PV_BOOL  , &m_GoldPerCity                , NULL, false);
-	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);
-	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);
-	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);
-	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, false);
-	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false);
-	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);
+	Var("AICityDefenderBonus"        , PV_BOOL  , &m_AICityDefenderBonus        , NULL, false);   //
+	Var("BarbarianCities"            , PV_BOOL  , &m_BarbarianCities            , NULL, false);   //
+	Var("SectarianHappiness"         , PV_BOOL  , &m_SectarianHappiness         , NULL, false);   //
+	Var("RevoltCasualties"           , PV_BOOL  , &m_RevoltCasualties           , NULL, false);   //
+	Var("RevoltInsurgents"           , PV_BOOL  , &m_RevoltInsurgents           , NULL, false);   //
+	Var("BarbarianCamps"             , PV_BOOL  , &m_BarbarianCamps	            , NULL, false);   //
+	Var("BarbarianSpawnsBarbarian"   , PV_BOOL  , &m_BarbarianSpawnsBarbarian   , NULL, false);   //
+	Var("AINoSinking"                , PV_BOOL  , &m_AINoSinking                , NULL, false);   //
+	Var("GoldPerUnitSupport"         , PV_BOOL  , &m_GoldPerUnitSupport         , NULL, false);   //
+	Var("GoldPerCity"                , PV_BOOL  , &m_GoldPerCity                , NULL, false);   //
+	Var("AIMilitiaUnit"              , PV_BOOL  , &m_AIMilitiaUnit              , NULL, false);   //
+	Var("OneCityChallenge"           , PV_BOOL  , &m_OneCityChallenge           , NULL, false);   //
+	Var("EnergySupply&DemandRatio"   , PV_BOOL  , &m_NRG                        , NULL, false);   //
+	Var("ShowDebugAI"                , PV_BOOL  , &m_debugai                    , NULL, isDebug);
+	Var("CitiesLeaveRuins"           , PV_BOOL  , &m_ruin                       , NULL, false);   //
+	Var("NoCityLimit"                , PV_BOOL  , &m_NoCityLimit                , NULL, false);   //
 	Var("DebugCityAstar"             , PV_BOOL  , &m_DebugCityAstar             , NULL);
 	Var("NewCombat"                  , PV_BOOL  , &m_newcombat                  , NULL, false);
 	Var("NoGoodyHuts"                , PV_BOOL  , &m_noGoodyHuts                , NULL, false);
 	Var("RandomCustomMap"            , PV_BOOL  , &m_randomCustomMap            , NULL, false);
 	Var("SPStartingAge"              , PV_NUM   , &m_spStartingAge              , NULL, false);
-	Var("SPEndingAge"				 , PV_NUM   , &m_spEndingAge                , NULL, false);
+	Var("SPEndingAge"                , PV_NUM   , &m_spEndingAge                , NULL, false);
 	Var("ShowCityProduction"         , PV_BOOL  , &m_showCityProduction         , NULL, false);
+
+#ifdef __AUI_USE_SDL__
+	// Only show with SDL, otherwise unknown how to do window mode
+	Var("WindowedMode"               , PV_BOOL  , &m_windowedMode               , NULL);
+#else
+	Var("WindowedMode"               , PV_BOOL  , &m_windowedMode               , NULL, false);
+#endif
+
+	Var("SleepingUnitsBoard"          , PV_BOOL  , &m_sleepingUnitsBoard         , NULL);
 }
 
 void ProfileDB::DefaultSettings(void)
@@ -553,7 +569,7 @@ BOOL ProfileDB::Parse(FILE *file)
 		if(fgets(line, k_MAX_NAME_LEN, file) == NULL)
 			return TRUE;
 		linenum++;
-		sint32 len = strlen(line);
+		size_t len = strlen(line);
 
 		while(len > 0 && isspace(line[len - 1])) {
 			line[len - 1] = 0;
@@ -661,12 +677,133 @@ void ProfileDB::SetDiplmacyLog(BOOL b)
 	}
 }
 
+void ProfileDB::SetGenocideRule(BOOL rule)
+{
+	m_genocide = rule;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetGenocide(m_genocide);
+	}
+}
+
+void ProfileDB::SetAlienEndGame(BOOL on)
+{
+	m_alienEndGame = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetAlienEndGameOn(m_alienEndGame);
+	}
+}
+
 void ProfileDB::SetPollutionRule( BOOL rule )
 {
 	m_pollution = rule;
 
-	if ( g_theGameSettings ) {
+	if (g_theGameSettings)
+	{
 		g_theGameSettings->SetPollution( m_pollution );
+	}
+}
+
+void ProfileDB::SetCityCaptureOptions(BOOL on)
+{
+	m_cityCaptureOptions = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetCityCaptureOptions(m_cityCaptureOptions);
+	}
+}
+
+void ProfileDB::SetOneCity(BOOL on)
+{
+	m_OneCityChallenge = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetOneCityChallenge(m_OneCityChallenge);
+	}
+}
+
+void ProfileDB::SetRevoltInsurgents(BOOL on)
+{
+	m_RevoltInsurgents = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetRevoltInsurgents(m_RevoltInsurgents);
+	}
+}
+
+void ProfileDB::SetRevoltCasualties(BOOL on)
+{
+	m_RevoltCasualties = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetRevoltCasualties(m_RevoltCasualties);
+	}
+}
+
+void ProfileDB::SetBarbarianSpawnsBarbarian(BOOL on)
+{
+	m_BarbarianSpawnsBarbarian = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetBarbarianSpawnsBarbarian(m_BarbarianSpawnsBarbarian);
+	}
+}
+
+void ProfileDB::SetGoldPerUnitSupport(BOOL on)
+{
+	m_GoldPerUnitSupport = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetGoldPerUnitSupport(m_GoldPerUnitSupport);
+	}
+}
+
+void ProfileDB::SetGoldPerCity(BOOL on)
+{
+	m_GoldPerCity = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetGoldPerCity(m_GoldPerCity);
+	}
+}
+
+void ProfileDB::SetNoCityLimit(BOOL on)
+{
+	m_NoCityLimit = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetNoCityLimit(m_NoCityLimit);
+	}
+}
+
+void ProfileDB::SetUpgrade(BOOL on)
+{
+	m_upgrade = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetUpgrade(m_upgrade);
+	}
+}
+
+void ProfileDB::SetNewCombat(BOOL on)
+{
+	m_newcombat = on;
+
+	if(g_theGameSettings)
+	{
+		g_theGameSettings->SetNewCombat(m_newcombat);
 	}
 }
 

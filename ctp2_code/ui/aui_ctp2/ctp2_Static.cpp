@@ -31,6 +31,8 @@ ctp2_Static::ctp2_Static(
 	m_multiImageStatic	= false;
 	m_drawCallbackExclusive	= true;
 
+	m_borderOffset      = {0, 0, 0, 0};
+
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -351,6 +353,13 @@ AUI_ERRCODE ctp2_Static::DrawThis(
 	if((m_drawFunc)&&(!m_drawCallbackExclusive))
 		m_drawFunc(this, surface, rect, m_drawCookie);
 
+	rect.top    += m_borderOffset.top;
+	rect.left   += m_borderOffset.left;
+	rect.bottom -= m_borderOffset.bottom;
+	rect.right  -= m_borderOffset.right;
+	if(m_borderOffset.left > 0)
+		rect.left += 2; // @ToDo: expose this to the ldl files
+
 	DrawThisText(surface,&rect );
 
 	return AUI_ERRCODE_OK;
@@ -465,4 +474,33 @@ void ctp2_Static::FitToBitmap(void)
 		return;
 
 	Resize(surf->Width(), surf->Height());
+}
+
+
+AUI_ERRCODE ctp2_Static::DoneInstantiatingThis(const MBCHAR *ldlBlock)
+{
+	ldl_datablock * block = aui_Ldl::FindDataBlock((MBCHAR *)ldlBlock);
+	Assert(block != NULL);
+	if(!block) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+
+	m_borderOffset.left   = block->GetAttributeType(k_AUI_LDL_BORDER_LEFT) == ATTRIBUTE_TYPE_INT ?
+		block->GetInt(k_AUI_LDL_BORDER_LEFT) : block->GetInt(k_AUI_LDL_BORDER_WIDTH);
+	m_borderOffset.right  = block->GetAttributeType(k_AUI_LDL_BORDER_RIGHT) == ATTRIBUTE_TYPE_INT ?
+		block->GetInt(k_AUI_LDL_BORDER_RIGHT) : block->GetInt(k_AUI_LDL_BORDER_WIDTH);
+	m_borderOffset.top    = block->GetAttributeType(k_AUI_LDL_BORDER_TOP) == ATTRIBUTE_TYPE_INT ?
+		block->GetInt(k_AUI_LDL_BORDER_TOP) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
+	m_borderOffset.bottom = block->GetAttributeType(k_AUI_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
+		block->GetInt(k_AUI_LDL_BORDER_BOTTOM) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
+
+	if( m_borderOffset.left   != 0
+	||  m_borderOffset.right  != 0
+	||  m_borderOffset.top    != 0
+	||  m_borderOffset.bottom != 0
+	){
+		Resize(Width() + m_borderOffset.left + m_borderOffset.right,
+			Height() + m_borderOffset.top + m_borderOffset.bottom);
+		Offset(-m_borderOffset.left, -m_borderOffset.top);
+	}
+
+	return aui_Static::DoneInstantiatingThis(ldlBlock);
 }

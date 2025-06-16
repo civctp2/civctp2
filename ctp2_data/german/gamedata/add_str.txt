@@ -22,7 +22,7 @@
 # - Removed diplomatic photo strings as they have been already moved back
 #   to civ_str.txt. - 7th April 2005 Martin Gühmann
 # - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
-#   - April 7th 2005 Martin Gühmann
+#   - 7th April 2005 Martin Gühmann
 # - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
 # - Renamed Lexikothek to Große Bibliothek
 # - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
@@ -32,6 +32,10 @@
 # # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
+
+# More Stuff for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Der Mehrspieler-Modus von Activisions Call To Power 2 eignet sich für maximal 4 Spieler."
 
 ## Stuff for LDL_STR.txt
 str_ldl_AutoCenter_On	"Autozentrieren ein"
@@ -80,6 +84,7 @@ str_ldl_RADAR_MAP_FILTER	"Gefiltert"
 # Replaces string in ldl_str.txt, changed to Status from Modifiers
 str_ldl_CityWinStatisticsTab "Status"
 
+#revised below
 # Added
 #str_code_CityWinTotalHappinessFormat "Gesamt: %d"
 
@@ -172,7 +177,11 @@ str_ldl_LoadQueueColon "Bauliste laden:"
 #Main title for Intelligence Dialog box
 str_ldl_IntelligenceTitle "G E H E I M D I E N S T"
 
-### ADDED 10-07-00 ###
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 10/01/00
+##############################################
+str_ldl_PosField "Pos:"
 
 str_ldl_CityEspionage "Stadtspionage"
 str_ldl_NatlManagerHotKey "F1"
@@ -203,6 +212,7 @@ str_ldl_RestartHotKey "Strg+z"
 str_ldl_NewGameHotKey "Strg+x"
 str_ldl_SoundHotKey "Strg+v"
 Str_ldl_MusicHotKey "Strg+m"
+str_ldl_LanguageHotKey "Ctrl+j"
 str_ldl_GraphicsHotKey "Strg+f"
 str_ldl_GameplayHotKey "Strg+p"
 str_ldl_CityEspionageHotKey "Strg+e"
@@ -326,10 +336,6 @@ CONTEXT_VIEW_CARGO "  Frachtübersicht"
 
 # For netshell list header
 str_ldl_Settlers "Siedler"
-
-# More Stuuf for LDL_STR
-# Multiplayer Disclaimer String
-str_ldl_MultiplayerDisclaimer	"Der Mehrspieler-Modus von Activisions Call To Power 2 eignet sich für maximal 4 Spieler."
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Durch den bevorstehenden Regierungswechsel werden einige Einheiten aufgelöst. Wollt Ihr dennoch diese Regierung einsetzen?"

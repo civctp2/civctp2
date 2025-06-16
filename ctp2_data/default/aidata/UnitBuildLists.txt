@@ -1,7 +1,38 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : Text file
+# Description  : The unit build lists for the AIs
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+# The AI builds the last unit in the list that it can build, all other units
+# are ignored.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Split the special unit build list into more specialized ones
+#
+#----------------------------------------------------------------------------
+
 # 27
 
 ## 0 ##########################################################
 
+# For all special units, not used
 UNIT_BUILD_LIST_SPECIAL {
   Unit UNIT_DIPLOMAT
   Unit UNIT_SLAVER
@@ -19,8 +50,10 @@ UNIT_BUILD_LIST_SPECIAL {
   Unit UNIT_ECO_RANGER
 }
 
+## Special theme unit build lists
 ## 1 ##########################################################
 
+# For diplomats units that have EstablishEmbassy, ThrowParty, HearGossip
 UNIT_BUILD_LIST_SPECIAL_DIPLOMACY {
   Unit UNIT_DIPLOMAT
   Unit UNIT_EMPATHIC_DIPLOMAT
@@ -28,6 +61,7 @@ UNIT_BUILD_LIST_SPECIAL_DIPLOMACY {
 
 ## 2 ##########################################################
 
+# For spies: Units that have InciteRevolution, InvestigateCity, PlantNuke, or StealTechnology
 UNIT_BUILD_LIST_SPECIAL_SPY {
   Unit UNIT_SPY
   Unit UNIT_CYBER_NINJA
@@ -35,23 +69,28 @@ UNIT_BUILD_LIST_SPECIAL_SPY {
 
 ## 3 ##########################################################
 
+# For slavers: Units that have SettlerSlaveRaids and SlaveRaids
 UNIT_BUILD_LIST_SPECIAL_SLAVERY {
   Unit UNIT_SLAVER
 }
 
 ## 4 ##########################################################
 
+# For abolitioniets: Units that have SlaveUprising and UndergroundRailway
 UNIT_BUILD_LIST_SPECIAL_ANTISLAVERY {
   Unit UNIT_ABOLITIONIST
 }
 
 ## 5 ##########################################################
 
+# For missionaries: Units that have CanSoothsay, CauseUnhappiness, ConvertCities, and IndulgenceSales
 UNIT_BUILD_LIST_SPECIAL_MISSIONARY {
   Unit UNIT_CLERIC
   Unit UNIT_TELEVANGELIST
 }
 
+## Special unit build lists, for the different AI personalities,
+## only add units that are not in a list above
 ## 6 ##########################################################
 
 UNIT_BUILD_LIST_SPECIAL_SCIENTIST {

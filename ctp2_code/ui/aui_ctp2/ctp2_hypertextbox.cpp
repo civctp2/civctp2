@@ -143,7 +143,7 @@ void ctp2_HyperTextBox::FormatText
 	{
 		aui_Static *	hs		=
 			CreateHyperStatic(ptr,
-							  a_TextEnd - ptr,	// may be corrected later
+							  static_cast<uint32>(a_TextEnd - ptr),	// may be corrected later
 							  m_hyperTtffile,
 							  m_hyperPointSize,
 							  m_hyperBold,
@@ -242,7 +242,7 @@ void ctp2_HyperTextBox::FormatText
 				else
 				{
 					// Put a part on this line, and continue on the next line.
-					hs->SetText(start, ptr - start);
+					hs->SetText(start, static_cast<uint32>(ptr - start));
 					hs->Move(m_curStaticPos.x, m_curStaticPos.y);
 					hs->Resize(penPos.x, hs->Height());
 
@@ -352,7 +352,7 @@ ctp2_HyperTextBox::ctp2_HyperTextBox(
 
 AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -360,8 +360,8 @@ AUI_ERRCODE ctp2_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	if(block->GetAttribute(k_CTP2_LISTBOX_LDL_BEVELWIDTH)) {
-		m_bevelWidth = block->GetInt(k_CTP2_LISTBOX_LDL_BEVELWIDTH);
+	if(block->GetAttribute(k_AUI_LDL_BEVELWIDTH)) {
+		m_bevelWidth = block->GetInt(k_AUI_LDL_BEVELWIDTH);
 	} else {
 		m_bevelWidth = k_CTP2_HYPERTEXTBOX_BEVELWIDTH;
 	}
@@ -445,7 +445,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 		hyperText = m_hyperText;
 	}
 
-	uint32 len = strlen( hyperText );
+	size_t len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
 	const MBCHAR *ptr = hyperText;
@@ -629,7 +629,7 @@ AUI_ERRCODE ctp2_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void ctp2_HyperTextBox::RemoveHyperLinks( void )
 {
-	for (sint32 i = m_hyperLinkList->L(); i; --i)
+	for (size_t i = m_hyperLinkList->L(); i; --i)
 	{
 		delete m_hyperLinkList->RemoveTail();
 	}

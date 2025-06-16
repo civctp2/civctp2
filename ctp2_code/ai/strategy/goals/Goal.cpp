@@ -1108,6 +1108,9 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 				if (cell->GetNumDBImprovements() <= 0)
 					continue;
 
+				if (cell->GetNumPillagableTerrainImprovements() <= 0)
+					continue;
+
 				if (cell->CanEnter(army->GetMovementType()))
 				{
 					sint32 tmp_squared_dist = MapPoint::GetSquaredDistance(it.Pos(), army->RetPos());
@@ -1278,14 +1281,14 @@ void Goal::Compute_Needed_Troop_Flow()
 {
 	MapAnalysis &  mapAnalysis = MapAnalysis::GetMapAnalysis();
 	const MapPoint pos         = Get_Target_Pos();
-	const float   threat      = static_cast<float>(mapAnalysis.GetThreat          (m_playerId, pos));
-	const float   attack      = static_cast<float>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
-	const float   defense     = static_cast<float>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
-	const float   ranged      = static_cast<float>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
-	const float   bombardLand = static_cast<float>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
-	const float   bombardSea  = static_cast<float>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
-	const float   bombardAir  = static_cast<float>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
-	const float   value       = static_cast<float>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
+	const float    threat      = static_cast<float>(mapAnalysis.GetThreat          (m_playerId, pos));
+	const float    attack      = static_cast<float>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
+	const float    defense     = static_cast<float>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
+	const float    ranged      = static_cast<float>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
+	const float    bombardLand = static_cast<float>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
+	const float    bombardSea  = static_cast<float>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
+	const float    bombardAir  = static_cast<float>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
+	const float    value       = static_cast<float>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
 
 	m_current_needed_strength   = Squad_Strength(1);
 		// why only one unit ? Why then zero units? - Martin Gühmann
@@ -1430,38 +1433,38 @@ void Goal::Compute_Needed_Troop_Flow()
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	const StrategyRecord::ForceMatch *force_match = NULL;
 
-	switch (goal_record->GetForceMatch())
+	switch(goal_record->GetForceMatch())
 	{
-	case k_Goal_ForceMatch_Offensive_Bit:
-		force_match = strategy.GetOffensivePtr();
-		break;
-	case k_Goal_ForceMatch_Defensive_Bit:
-		force_match = strategy.GetDefensivePtr();
-		break;
-	case k_Goal_ForceMatch_StealthAttack_Bit:
-		force_match = strategy.GetStealthAttackPtr();
-		break;
-	case k_Goal_ForceMatch_Bombard_Bit:
-		force_match = strategy.GetBombardPtr();
-		break;
-	case k_Goal_ForceMatch_Special_Bit:
-		force_match = strategy.GetSpecialPtr();
-		break;
-	case k_Goal_ForceMatch_Harass_Bit:
-		force_match = strategy.GetHarassPtr();
-		break;
-	default:
+		case k_Goal_ForceMatch_Offensive_Bit:
+			force_match = strategy.GetOffensivePtr();
+			break;
+		case k_Goal_ForceMatch_Defensive_Bit:
+			force_match = strategy.GetDefensivePtr();
+			break;
+		case k_Goal_ForceMatch_StealthAttack_Bit:
+			force_match = strategy.GetStealthAttackPtr();
+			break;
+		case k_Goal_ForceMatch_Bombard_Bit:
+			force_match = strategy.GetBombardPtr();
+			break;
+		case k_Goal_ForceMatch_Special_Bit:
+			force_match = strategy.GetSpecialPtr();
+			break;
+		case k_Goal_ForceMatch_Harass_Bit:
+			force_match = strategy.GetHarassPtr();
+			break;
+		default:
 
-		Assert(false);
+			Assert(false);
 	}
 
 	Assert(force_match);
 	m_current_needed_strength.Set_Force_Matching(
-		static_cast<float>(force_match->GetAttackMatch()),
-		static_cast<float>(force_match->GetDefenseMatch()),
-		static_cast<float>(force_match->GetRangedMatch()),
-		static_cast<float>(force_match->GetBombardMatch()),
-		static_cast<float>(force_match->GetValueMatch()));
+	    static_cast<float>(force_match->GetAttackMatch()),
+	    static_cast<float>(force_match->GetDefenseMatch()),
+	    static_cast<float>(force_match->GetRangedMatch()),
+	    static_cast<float>(force_match->GetBombardMatch()),
+	    static_cast<float>(force_match->GetValueMatch()));
 
 	// Set_Pos_Strength also retrieves the transport capacity at pos
 	// which of course need not be matched
@@ -1503,7 +1506,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	double report_garrison_bonus = bonus;
 #endif //_DEBUG
 
-
 	// This is expensive, because of pillage, get city target first.
 	dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
 
@@ -1542,27 +1544,27 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 
 		if(!agent_ptr->Get_Army()->HasCargo())
 		{
-			agent_ptr->Get_Army()->CharacterizeArmy( isspecial,
-				isstealth,
-				maxattack,
-				maxdefense,
-				cancapture,
-				haszoc,
-				canbombard,
-				canthrowparty,
-				canestablishembassy);
+			agent_ptr->Get_Army()->CharacterizeArmy(isspecial,
+			    isstealth,
+			    maxattack,
+			    maxdefense,
+			    cancapture,
+			    haszoc,
+			    canbombard,
+			    canthrowparty,
+			    canestablishembassy);
 		}
 		else
 		{
-			agent_ptr->Get_Army()->CharacterizeCargo( isspecial,
-				isstealth,
-				maxattack,
-				maxdefense,
-				cancapture,
-				haszoc,
-				canbombard,
-				canthrowparty,
-				canestablishembassy);
+			agent_ptr->Get_Army()->CharacterizeCargo(isspecial,
+			    isstealth,
+			    maxattack,
+			    maxdefense,
+			    cancapture,
+			    haszoc,
+			    canbombard,
+			    canthrowparty,
+			    canestablishembassy);
 		}
 
 		if (!isspecial || maxattack > 0 || haszoc)

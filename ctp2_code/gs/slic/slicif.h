@@ -208,7 +208,7 @@ void slicif_init();
 void slicif_cleanup();
 void slicif_set_start(int symStart);
 void slicif_start();
-void slicif_dump_code(unsigned char *code, int size);
+void slicif_dump_code(unsigned char *code, size_t size);
 void slicif_declare_sym(char *name, SLIC_SYM type);
 void slicif_declare_array(char *name, SLIC_SYM type);
 void slicif_declare_fixed_array(char *name, SLIC_SYM type, int size);

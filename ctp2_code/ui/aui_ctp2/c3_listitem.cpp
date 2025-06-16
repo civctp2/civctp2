@@ -26,7 +26,7 @@ c3_ListItem::~c3_ListItem()
 {
 	ListPos position = m_childList->GetHeadPosition();
 
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 		delete m_childList->GetNext( position );
 }
 

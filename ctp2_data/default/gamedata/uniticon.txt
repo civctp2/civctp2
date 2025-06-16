@@ -136,6 +136,7 @@ ICON_CONCEPT_FUTURE_AGE { FirstFrame "FUTURE.TGA" Movie "NULL" Gameplay "CONCEPT
 ICON_CONCEPT_GENETIC_AGE { FirstFrame "UPCP018L.TGA" Movie "NULL" Gameplay "CONCEPT_GENETIC_AGE_HISTORICAL" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }
 ICON_CONCEPT_GOLD { FirstFrame "UPCP007L.TGA" Movie "NULL" Gameplay "CONCEPT_GOLD_GAMEPLAY" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }
 ICON_CONCEPT_GOODS { FirstFrame "UPCP020L.TGA" Movie "NULL" Gameplay "CONCEPT_GOODS_GAMEPLAY" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }
+ICON_CONCEPT_GOSSIP { FirstFrame "UPCP078L.TGA" Movie "NULL" Gameplay "CONCEPT_GOSSIP_GAMEPLAY" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }
 ICON_CONCEPT_GOVERNMENTS { FirstFrame "UPCP021L.TGA" Movie "NULL" Gameplay "CONCEPT_GOVERNMENTS_GAMEPLAY" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }
 ICON_CONCEPT_GROWTH { FirstFrame "UPCP022L.TGA" Movie "NULL" Gameplay "CONCEPT_GROWTH_GAMEPLAY" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }
 ICON_CONCEPT_HAPPINESS { FirstFrame "UPCP023L.TGA" Movie "NULL" Gameplay "CONCEPT_HAPPINESS_GAMEPLAY" Historical "NULL" Prereq "NULL" Vari "NULL" Icon "NULL" LargeIcon "NULL" SmallIcon "NULL" StatText "NULL" }

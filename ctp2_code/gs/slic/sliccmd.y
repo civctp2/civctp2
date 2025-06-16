@@ -46,13 +46,13 @@
 #pragma warning( disable : 4013 )
 #define lint
 
-void yyerror(char* err);
+void yyerror(const char* err);
 
 char *sliccmd_output;
 int sliccmd_output_len;
 char *sliccmd_input;
 char *sliccmd_input_ptr;
-int sliccmd_input_len;
+size_t sliccmd_input_len;
 int sliccmd_first_token;
 int sliccmd_done;
 int sliccmd_parse_failed;
@@ -428,7 +428,7 @@ int sliccmd_parse(int action, char *cmd, char *output, int outputlen, int useDia
 	return sliccmd_parse_failed;
 }
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
 	sliccmd_error(s);
 	sliccmd_parse_failed = 1;

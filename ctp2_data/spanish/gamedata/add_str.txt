@@ -33,7 +33,7 @@
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
 
-# More Stuuf for LDL_STR
+# More Stuff for LDL_STR
 # Multiplayer Disclaimer String
 str_ldl_MultiplayerDisclaimer	"Activision recomienda un máximo de 4 jugadores para partidas en modo multijugador de Call To Power."
 
@@ -174,7 +174,6 @@ str_ldl_AddGold "Añadir oro:"
 # in Build Queue Editor Laod Screen
 str_ldl_LoadQueueColon "Cargar cola:"
 
-
 #Main title for Intelligence Dialog box
 str_ldl_IntelligenceTitle "I N T E L I G E N C I A"
 
@@ -212,8 +211,9 @@ str_ldl_RestartHotKey "Control+z"
 
 str_ldl_NewGameHotKey "Control+x"
 str_ldl_SoundHotKey "Control+v"
-str_ldl_GraphicsHotKey "Control+f"
 str_ldl_MusicHotKey "ctl+m"
+str_ldl_LanguageHotKey "Ctrl+j"
+str_ldl_GraphicsHotKey "Control+f"
 str_ldl_GameplayHotKey "Control+p"
 str_ldl_CityEspionageHotKey "Control+e"
 str_ldl_FindMeButton "¡Encontrar!"
@@ -243,16 +243,11 @@ str_tbl_ldl_Toggle_Ctl_Panel "Most./Ocul. Panel de control"
 str_tbl_ldl_Toggle_All "Most./Ocul. todo"
 str_tbl_ldl_Open_Army_Mgmt "Abrir Admón. del ejército"
 str_ldl_UNIT_CONTROLS "CONTROLES DE UNIDAD"
-
-##############################################
-## PLEASE ENTER NEW STUFF BELOW THIS LINE
-## Strings above sent to be localized 10/12/00
-##############################################
-
 str_ldl_GreatLibrary "Gran Biblioteca" 
 str_control_key "Control"
 
 str_ldl_EnableAllMessages "Activar todos los mensajes" 
+
 
 #################################
 #status text for scenario editor#
@@ -345,10 +340,6 @@ CONTEXT_VIEW_CARGO " Ver carga"
 
 # For netshell list header
 str_ldl_Settlers "Colonos"
-
-# More Stuuf for LDL_STR
-# Multiplayer Disclaimer String
-str_ldl_MultiplayerDisclaimer	"Activision recomienda un máximo de 4 jugadores para partidas en modo multijugador de Call To Power."
 
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Si formas este gobierno algunas de tus unidades quedarán disueltas, ¿estás seguro de que quieres formarlo?"

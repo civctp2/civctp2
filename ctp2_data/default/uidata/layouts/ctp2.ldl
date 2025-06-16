@@ -101,6 +101,7 @@ import "victorymovie.ldl"
 import "victoryscreen.ldl"
 import "throneroom.ldl"
 import "musicscreen.ldl"
+import "LanguageScreen.ldl"
 import "sciencevictory.ldl"
 
 import "fancy.ldl"

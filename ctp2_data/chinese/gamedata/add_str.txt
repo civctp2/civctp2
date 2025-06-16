@@ -212,6 +212,7 @@ str_ldl_RestartHotKey "ctl+z"
 str_ldl_NewGameHotKey "ctl+x"
 str_ldl_SoundHotKey "ctl+v"
 str_ldl_MusicHotKey "ctl+m"
+str_ldl_LanguageHotKey "Ctrl+j"
 str_ldl_GraphicsHotKey "ctl+f"
 str_ldl_GameplayHotKey "ctl+p"
 str_ldl_CityEspionageHotKey "ctl+e"
@@ -362,4 +363,5 @@ STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"点选此钮设立新军。"
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "地图情报"
 
+str_ldl_EditQueueReallyDelete "Permanently delete Queue %s?"
 

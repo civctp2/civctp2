@@ -347,7 +347,7 @@ bool wonderutil_IsAvailable(sint32 wonder, sint32 player)
 	if(wonderutil_IsObsolete(wonder))
 		return false;
 
-	if(rec->GetStartGaiaController() && !g_theGameSettings->GetAlienEndGame()) {
+	if(rec->GetStartGaiaController() && !g_theGameSettings->IsAlienEndGame() && !g_theGameSettings->IsGenocide()) {
 		return false;
 	}
 

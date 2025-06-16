@@ -1,0 +1,19 @@
+Bienvenue dans l'éditeur de Call to Power 2(TM) !
+
+Important - à lire attentivement avant de commencer :
+
+
+UTILITAIRES DE PROGRAMME. Ces fichiers contiennent des utilitaires de conception, de programmation et de traitement, des outils et autres ressources ("Utilitaires de programme") utilisables avec Call To Power 2 (le "Programme") permettant de créer de nouveaux niveaux de jeu personnalisés ainsi que d'autres éléments liés au jeu destinés à un usage personnel ("Nouveaux Eléments de Jeu"). Activision ne fournit aucun support technique pour les Utilitaires de programme ou les Nouveaux Eléments de Jeu créés à l'aide de ces Utilitaires de programme. L'utilisation des Utilitaires de programme est soumise aux restrictions de licence suivantes :
+
+Vous acceptez en contrepartie de l'autorisation accordée par Activision d'utiliser les Utilitaires de programme de ne pas utiliser ou de ne pas permettre à un tiers d'utiliser les Utilitaires de programme et les Nouveaux Eléments de Jeu que vous avez créés à des fins commerciales, ce qui inclut entre autres la vente, la location, le leasing, la distribution de licence ou autres moyens de transférer les droits de propriété de ces Nouveaux Eléments de Jeu, soit sous la forme d'un produit individuel, soit sous la forme d'un ensemble de produits de Nouveaux Eléments de Jeu créés par d'autres personnes ; et ce quel que soit le réseau de distribution, qu'il s'agisse entre autres de la vente au détail ou de la distribution électronique en ligne du produit.  Vous acceptez de ne pas solliciter, être à l'origine ou encourager toute proposition ou offre émanant de toute personne ou entité et visant à créer de Nouveaux Eléments de Jeu à des fins commerciales. Vous acceptez de contacter Activision dans les plus brefs délais par écrit dans le cas où de telles propositions ou offres vous auraient été faites.
+
+
+Si vous décidez de mettre les Nouveaux Eléments de Jeu que vous avez créés à la disposition de vos amis, collègues ou autres joueurs, vous n'accepterez de le faire qu'à titre gratuit. 
+
+Les Nouveaux Eléments de Jeu ne devront pas comporter des modifications des fichiers COM, EXE ou DELL ou de tout autre fichier exécutable.
+
+Vous ne serez autorisé à créer de Nouveaux Eléments de Jeu qu'à la condition exclusive que de tels Eléments ne pourront être utilisés que conjointement à la version de ce produit disponible sur le marché. Les Nouveaux Eléments de Jeu ne doivent pas être conçus de façon à pouvoir être utilisés de façon individuelle.
+
+Les Nouveaux Eléments de Jeu ne devront contenir aucun matériel de nature illégale, obscène ou diffamatoire, ou aucun matériel qui pourrait nuire au respect de la vie privée et à la publicité d'un tiers ou (sans avoir obtenu la licence irrévocable adaptée, et spécifiquement octroyée dans ce but) aux marques de fabrique, travaux protégés par les droits d'auteur ou autres propriétés des tiers.
+
+Les Nouveaux Eléments de Jeu devront inclure des éléments d'identification suffisamment importants au moins lors de la description en ligne du produit avec une durée d'affichage suffisante sur l'écran d'ouverture du : (a) nom et de l'adresse E-mail du concepteur des Nouveaux Eléments de Jeu ainsi que (b) de la mention suivante : "CE MATERIEL N'A PAS ETE CONCU PAR OU AVEC L'APPUI DE ACTIVISION".

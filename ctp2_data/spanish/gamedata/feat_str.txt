@@ -77,4 +77,3 @@ FEAT_GOT_ZOROASTER	"Zoroaster is preaching in our lands! This is part ofthe Apol
 FEAT_GOT_EGYPT2		"The first civilization that builds the Pharoah shrine wonder will be seen as a living god!  This is part ofthe Apolyton Edition sample of how religion can be added to the game. No bonuses will be given to wonder. But thewonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
 FEAT_GOT_ZOROASTER2	"The first civilization that builds the Zoroaster shrine wonder will be seen as a living god!  This is part ofthe Apolyton Edition sample of how religion can be added to the game. No bonuses will be given to wonder. But thewonder will add a religious shrine to each of your cities and display the religion icon. With Theology you will be able to build clerics of that religion and spread it to other cities."  
 
-

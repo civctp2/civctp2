@@ -31,8 +31,8 @@
 // - Enable logging facilities - even when not using the debug build.
 //
 // _BFR_
-// - Force CD checking when set (build final release).
-// - If not defined it enables some more loogs.
+// - Originally, force CD checking when set (build final release).
+// - If not defined it enables some more logs.
 //
 //----------------------------------------------------------------------------
 //
@@ -105,7 +105,6 @@
 #include "debugmemory.h"
 #include "debugwindow.h"
 #include "director.h"
-#include "ErrMsg.h"
 #include "gamefile.h"
 #include "gameinit.h"
 #include "GameOver.h"
@@ -154,15 +153,19 @@
 #include "workwindow.h"
 #include "World.h"                      // g_theWorld
 
+#if defined(__AUI_USE_SDL__)
+#include <codecvt>
+#endif
+
 #if !defined(__GNUC__) // TODO: replacement needed (wine doesnt have these headers...)
 #include "directvideo.h"
-#include "videoutils.h"
 #endif
 
 #ifdef LINUX
 #include <sys/types.h>
 #include <sys/stat.h>
 #include <time.h>
+#include <libgen.h>         // dirname
 #endif
 #ifdef HAVE_UNISTD_H
 #include <unistd.h>
@@ -170,7 +173,9 @@
 #if defined(USE_SDL)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_mixer.h>
+#if defined(__AUI_USE_SDL__)
 #include "aui_sdlkeyboard.h"
+#endif
 #endif
 
 #if defined(_DEBUG)
@@ -268,8 +273,6 @@ BOOL g_noAssertDialogs = FALSE;
 BOOL g_runInBackground = FALSE;
 BOOL g_runSpriteEditor = FALSE;
 BOOL g_eventLog = FALSE;
-
-uint32 g_SDL_flags = 0;
 
 BOOL g_use_profile_process = FALSE;
 
@@ -505,7 +508,7 @@ int ui_Initialize(void)
 	Assert(auiErr == AUI_ERRCODE_OK);
 	if ( auiErr != AUI_ERRCODE_OK ) return 14;
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 	while ( ShowCursor( FALSE ) >= 0 )
 	;
 #endif
@@ -603,8 +606,6 @@ bool ui_CheckForScroll(void)
 	static bool     isMouseScrolling            = false;
 	static sint32   smoothX                     = 0;
 	static sint32   smoothY                     = 0;
-	static sint32	lastdeltaX                  = 0;
-	static sint32	lastdeltaY                  = 0;
 	static bool     scrolled_last_time          = false;
 	static uint32   scroll_start;
 
@@ -624,28 +625,28 @@ bool ui_CheckForScroll(void)
 	if (g_civApp->IsKeyboardScrolling() &&
 		(!g_c3ui->TopWindow() || !g_c3ui->TopWindow()->GetFocusControl()))
 	{
-		switch (g_civApp->GetKeyboardScrollingKey())
+		switch(g_civApp->GetKeyboardScrollingKey())
 		{
-		case AUI_KEYBOARD_KEY_UPARROW:
-			deltaX = 0;
-			deltaY = -1;
-			scrolled = true;
-			break;
-		case AUI_KEYBOARD_KEY_LEFTARROW:
-			deltaX = -1;
-			deltaY = 0;
-			scrolled = true;
-			break;
-		case AUI_KEYBOARD_KEY_RIGHTARROW:
-			deltaX = 1;
-			deltaY = 0;
-			scrolled = true;
-			break;
-		case AUI_KEYBOARD_KEY_DOWNARROW:
-			deltaX = 0;
-			deltaY = 1;
-			scrolled = true;
-			break;
+			case AUI_KEYBOARD_KEY_UPARROW:
+				deltaX = 0;
+				deltaY = -1;
+				scrolled = true;
+				break;
+			case AUI_KEYBOARD_KEY_LEFTARROW:
+				deltaX = -1;
+				deltaY = 0;
+				scrolled = true;
+				break;
+			case AUI_KEYBOARD_KEY_RIGHTARROW:
+				deltaX = 1;
+				deltaY = 0;
+				scrolled = true;
+				break;
+			case AUI_KEYBOARD_KEY_DOWNARROW:
+				deltaX = 0;
+				deltaY = 1;
+				scrolled = true;
+				break;
 		}
 
 		if (scrolled)
@@ -666,9 +667,6 @@ bool ui_CheckForScroll(void)
 
 			if (deltaX)
 				deltaY = 0;
-
-			lastdeltaX = deltaX;
-			lastdeltaY = deltaY;
 
 			if(scrolled_last_time) {
 				scrolled_last_time = false;
@@ -741,9 +739,6 @@ bool ui_CheckForScroll(void)
 		else
 			smoothX = 0;
 
-		lastdeltaX = deltaX;
-		lastdeltaY = deltaY;
-
 		if (isMouseScrolling)
 		{
 			g_cursorManager->SaveCursor();
@@ -770,7 +765,7 @@ bool ui_CheckForScroll(void)
 		if (smoothY < -vscroll)
 			smoothY = -vscroll;
 
-		if (g_smoothScroll)
+		if (g_smoothScroll) // This is some unfinished work, but would be nice to get it working
 			g_tiledMap->ScrollMapSmooth(smoothX, smoothY);
 		else {
 			if ((s_scrollcurtick - s_lastscrolltick) > k_TICKS_PER_SCROLL) {
@@ -937,7 +932,7 @@ static HWND s_taskBar   = NULL;
 
 void main_HideTaskBar(void)
 {
-#ifndef __AUI_USE_SDL__
+#if defined(__AUI_USE_DIRECTX__)
 	if (g_hideTaskBar)
 	{
 		s_taskBar = FindWindow("Shell_TrayWnd", NULL);
@@ -947,12 +942,12 @@ void main_HideTaskBar(void)
 			ShowWindow(s_taskBar, SW_HIDE);
 		}
 	}
-#endif // !__AUI_USE_SDL__
+#endif // __AUI_USE_DIRECTX__
 }
 
 void main_RestoreTaskBar(void)
 {
-#ifndef __AUI_USE_SDL__
+#if defined(__AUI_USE_DIRECTX__)
 	if (s_taskBar)
 	{
 		ShowWindow(s_taskBar, SW_SHOWDEFAULT);
@@ -983,7 +978,7 @@ void AtExitProc(void)
 # endif
 
 	// Destroy the mutex used for the secondary keyboard event queue
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 	SDL_DestroyMutex(g_secondaryKeyboardEventQueueMutex);
 	g_secondaryKeyboardEventQueueMutex = NULL;
 #endif
@@ -1110,15 +1105,13 @@ void ParseCommandLine(PSTR szCmdLine)
 	g_runSpriteEditor = (NULL != strstr(szCmdLine, "runspriteeditor"));
 
 #if defined(__AUI_USE_SDL__)
-	if (strstr(szCmdLine, "fullscreen")) {
-        g_SDL_flags = g_SDL_flags | SDL_WINDOW_FULLSCREEN_DESKTOP;
-    }
 	if (strstr(szCmdLine, "hwsurface")) {
-        printf("SDL2 does not support hwsurface option");
+		printf("SDL2 does not support hwsurface option");
 	}
-	if (strstr(szCmdLine, "openglblit")) {
-	    printf("SDL2 uses OpenGL automatically");
-    }
+	if (strstr(szCmdLine, "openglblit"))
+	{
+		printf("SDL2 uses OpenGL automatically");
+	}
 #endif
 	
 	g_eventLog = (NULL != strstr(szCmdLine, "eventlog"));
@@ -1157,20 +1150,7 @@ void ParseCommandLine(PSTR szCmdLine)
 	}
 }
 
-#ifdef WIN32
-int WINAPI main_filehelper_GetOS(void)
-{
-	OSVERSIONINFO osvi;
-
-	osvi.dwOSVersionInfoSize = sizeof(OSVERSIONINFO);
-
-	GetVersionEx( &osvi );
-
-	return osvi.dwPlatformId;
-}
-#endif // WIN32
-
-#ifdef WIN32
+#if defined(_MSC_VER)
 static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 {
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -1227,17 +1207,17 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 		}
 	}
 
-	return EXCEPTION_EXECUTE_HANDLER;
-
 #endif // _DEBUG
+
+	return EXCEPTION_EXECUTE_HANDLER;
 }
-#endif // WIN32
+#endif // _MSC_VER
 
 #ifdef __AUI_USE_DIRECTX__
 BOOL main_CheckDirectX(void)
 {
 	BOOL found = FALSE;
-
+#if defined(_X86_)
 	HANDLE dll = LoadLibrary( "dll" FILE_SEP "util" FILE_SEP "dxver" );
 	if ( dll ) {
 
@@ -1257,6 +1237,9 @@ BOOL main_CheckDirectX(void)
 	} else {
 		c3errors_FatalDialog("DLL", "Cannot find dxver.dll");
 	}
+#else
+	found = TRUE;
+#endif
 
 	return found;
 }
@@ -1477,6 +1460,7 @@ int CivMain
 #else	// __GNUC__
 int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine, int iCmdShow)
 {
+#if defined(__AUI_USE_DIRECTX__)
 
 	HWND hwnd = FindWindow (gszMainWindowClass, gszMainWindowName);
 	if (hwnd) {
@@ -1488,9 +1472,10 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 		return FALSE;
 	}
+#endif
 #endif // __GNUC__
 
-#ifdef WIN32
+#if defined(WIN32)
 	char exepath[_MAX_PATH];
 	if (GetModuleFileName(NULL, exepath, _MAX_PATH) != 0)
 	{
@@ -1518,6 +1503,16 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 			SetCurrentDirectory(exepath);
 		}
 	}
+#elif defined(LINUX)
+	char result[PATH_MAX];
+	ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
+
+	const char *path;
+	if (count != -1) {
+		path = dirname(result);
+	}
+
+	chdir(path);
 #endif
 
 	appstrings_Initialize();
@@ -1525,7 +1520,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	std::setlocale(LC_COLLATE, appstrings_GetString(APPSTR_LOCALE));
 	std::setlocale(LC_NUMERIC, "C");
 
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	if (!main_CheckDirectX()) {
 
 		c3errors_FatalDialog(appstrings_GetString(APPSTR_DIRECTX),
@@ -1572,7 +1567,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			if (g_civScenarios->ScenarioHasSavedGame(scen))
 			{
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			}
 			else
 			{
@@ -1604,7 +1599,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 			if (g_civScenarios->ScenarioHasSavedGame(scen))
 			{
-				spnewgamescreen_scenarioExitCallback(NULL, 0, NULL, NULL);
+				spnewgamescreen_scenarioExitCallback(NULL, 0, 0, NULL);
 			}
 			else
 			{
@@ -1617,10 +1612,12 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		g_civApp->InitializeApp(hInstance, iCmdShow);
 	}
 
-#ifdef __AUI_USE_SDL__
+// ToDo: Move this below into a specialized class like aui_sdlui or aui_directui
+#if defined(__AUI_USE_SDL__)
 	g_secondaryKeyboardEventQueueMutex = SDL_CreateMutex();
+	SDL_AddEventWatch(SDLMessageHandler, NULL);
 #endif
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	MSG			msg;
 	msg.wParam  = 0;
 #endif
@@ -1630,53 +1627,63 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 		uint32 frameStartTick = GetTickCount();
 		g_civApp->Process();
 
-		//fprintf(stderr, "%s L%d: g_civApp->Process() done!\n", __FILE__, __LINE__);
-
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 		SDL_Event event;
-		while (!g_letUIProcess) { // There are breaks, too ;)
-
+		while (!g_letUIProcess) // There are breaks, too ;)
+		{
 			static const int FRAMES_PER_SECOND = 30;
 			static const int TICKS_PER_FRAME = 1000 / FRAMES_PER_SECOND;
 			const int frameTicksLeft = frameStartTick + TICKS_PER_FRAME - GetTickCount();
-			if (frameTicksLeft > 0) {
-				if (!SDL_WaitEventTimeout(NULL, frameTicksLeft)) {
+
+			if (frameTicksLeft > 0)
+			{
+				if (!SDL_WaitEventTimeout(NULL, frameTicksLeft))
+				{
 					break;
 				}
-			} else {
-				if (!SDL_PollEvent(NULL)) {
+			}
+			else
+			{
+				if (!SDL_PollEvent(NULL))
+				{
 					break;
 				}
 			}
 
+			// If you want to handle more events then update FilterEvents in aui_sdl.cpp
 			int n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_FIRSTEVENT, SDL_MOUSEMOTION-1);
-			if (0 > n) {
+
+			if(0 > n)
+			{
 				fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 				break;
 			}
 
-			if (0 == n)
+			if(0 == n)
 			{
 				n = SDL_PeepEvents(&event, 1, SDL_GETEVENT, SDL_MOUSEWHEEL+1, SDL_LASTEVENT);
-				if (0 > n) {
+
+				if(0 > n)
+				{
 					fprintf(stderr, "%s L%d: SDL_PeepEvents: Still events stored! Error?: %s\n", __FILE__, __LINE__, SDL_GetError());
 					break;
 				}
 
-				if (0 == n) {
+				if(0 == n)
+				{
 					// other events are handled in other threads
 					// or no more events
 					break;
 				}
 			}
-			if (SDL_QUIT == event.type) {
+			if(SDL_QUIT == event.type) {
 				gDone = TRUE;
 			}
 
 			// If a keyboard event then we must reenqueue it so that aui_sdlkeyboard has a chance to look at it
-			if (event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
+			if(event.type == SDL_KEYDOWN || event.type == SDL_KEYUP)
 			{
-				if (-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex))
+				if(-1==SDL_LockMutex(g_secondaryKeyboardEventQueueMutex))
 				{
 					fprintf(stderr, "[CivMain] SDL_LockMutex failed: %s\n", SDL_GetError());
 					break;
@@ -1684,19 +1691,18 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 
 				g_secondaryKeyboardEventQueue.push(event);
 
-				if (-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex))
+				if(-1==SDL_UnlockMutex(g_secondaryKeyboardEventQueueMutex))
 				{
 					fprintf(stderr, "[CivMain] SDL_UnlockMutex failed: %s\n", SDL_GetError());
 					break;
 				}
 			}
 
-			SDLMessageHandler(event);
-#else // __AUI_USE_SDL__
+#elif defined(__AUI_USE_DIRECTX__)
 
-		while (PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
+		while(PeekMessage(&msg, gHwnd, 0, 0, PM_REMOVE) && !g_letUIProcess)
 		{
-			if (WM_QUIT == msg.message)
+			if(WM_QUIT == msg.message)
 			{
 				gDone = TRUE;
 			}
@@ -1705,13 +1711,16 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 				TranslateMessage(&msg);
 				DispatchMessage(&msg);
 			}
-#endif // __AUI_USE_SDL__
+#else
+#error "Implementation missing for non-SDL and non-DirectX builds"
+// Actually move this into a specialized class like aui_sdlui or aui_directui
+#endif
 		}
 
 		g_letUIProcess = FALSE;
 	}
 
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 	return 0;
 #else
 	return msg.wParam;
@@ -1727,7 +1736,7 @@ void DoFinalCleanup(int exitCode)
 
 	static bool s_cleaningUpTheApp = false;
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 	ShowWindow(gHwnd, SW_HIDE);
 #endif
 
@@ -1755,23 +1764,23 @@ void DoFinalCleanup(int exitCode)
 
 #define k_MSWHEEL_ROLLMSG		0xC7AF
 
-#ifdef __AUI_USE_SDL__
-int SDLMessageHandler(const SDL_Event &event)
+#if defined(__AUI_USE_SDL__)
+int SDLMessageHandler(void* userdata, SDL_Event* event)
 {
 	// Merge into WndProc with keycode converter and
 	// unchanged ui_HandleKeypress(wParam, lParam)
 
 	static bool swallowNextChar = false;
 
-	switch(event.type)
+	switch(event->type)
 	{
 	case SDL_KEYDOWN:
 		{
 			// TODO: Determine what the 'swallowNextChar' variable
 			// is for, and, if necessary, implement appropriate
 			// code in the SDL sections to perform the same function.
-			SDL_Keycode key = event.key.keysym.sym;
-			Uint16 mod = event.key.keysym.mod;
+			SDL_Keycode key = event->key.keysym.sym;
+			Uint16 mod = event->key.keysym.mod;
 			WPARAM wp = '\0';
 			switch (key) {
 #define SDLKCONV(sdl_name, char) \
@@ -1782,49 +1791,31 @@ int SDLMessageHandler(const SDL_Event &event)
 			case (sdl_name): \
 				wp = ( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ); \
 				break;
-// For the purposes of this macro, shift is ignored when ctrl is pressed
+				// For the purposes of this macro, shift is ignored when ctrl is pressed
 #define SDLKCONVSHIFTCTRL(sdl_name, charWoShift, charWShift, charWCtrl) \
 			case (sdl_name): \
-				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : \
-						( (mod & KMOD_SHIFT) ? (charWShift) : (charWoShift) ) \
+				wp = ( (mod & KMOD_CTRL) ? (charWCtrl) : '\0' \
+					); \
+				break;
+#define SDLKCONVSHIFTANDCTRL(sdl_name, charWoShift, charWShift, charWCtrl, charWCtrlAndShift) \
+			case (sdl_name): \
+				wp = ( \
+						(mod & KMOD_SHIFT) ? \
+							(mod & KMOD_CTRL) ? (charWCtrlAndShift) : (charWShift) : \
+							(mod & KMOD_CTRL) ? (charWCtrl) : (charWoShift) \
 					); \
 				break;
 			SDLKCONV(SDLK_BACKSPACE, VK_BACK); // set to VK_BACK to hit escape rules in aui_textfield.cpp
 			SDLKCONV(SDLK_TAB, '\t' + 128);
-			SDLKCONV(SDLK_RETURN, VK_RETURN); // set to VK_RETURN to hit escape rules in aui_textfield.cpp
+			SDLKCONV(SDLK_RETURN, VK_RETURN + 128);
+			SDLKCONV(SDLK_KP_ENTER, VK_RETURN + 128);
 			SDLKCONV(SDLK_ESCAPE, VK_ESCAPE); // set to VK_ESCAPE to hit escape rules in keypress.cpp
-			SDLKCONV(SDLK_SPACE, ' ');
-			SDLKCONV(SDLK_EXCLAIM, '!');
-			SDLKCONV(SDLK_QUOTEDBL, '"');
-			SDLKCONVSHIFT(SDLK_HASH, '#', '~');
-			SDLKCONV(SDLK_DOLLAR, '$');
-			SDLKCONV(SDLK_AMPERSAND, '&');
-			SDLKCONVSHIFT(SDLK_QUOTE, '\'', '@');
-			SDLKCONV(SDLK_LEFTPAREN, '(');
-			SDLKCONV(SDLK_RIGHTPAREN, ')');
-			SDLKCONV(SDLK_ASTERISK, '*');
-			SDLKCONV(SDLK_PLUS, '+');
-			SDLKCONVSHIFT(SDLK_COMMA, ',', '<');
-			SDLKCONVSHIFT(SDLK_MINUS, '-', '_');
-			SDLKCONVSHIFT(SDLK_PERIOD, '.', '>');
-			SDLKCONVSHIFT(SDLK_SLASH, '/', '?');
-			SDLKCONV(SDLK_COLON, ':');
-			SDLKCONVSHIFT(SDLK_SEMICOLON, ';', ':');
-			SDLKCONV(SDLK_LESS, '<');
-			SDLKCONVSHIFT(SDLK_EQUALS, '=', '+');
-			SDLKCONV(SDLK_GREATER, '>');
-			SDLKCONV(SDLK_QUESTION, '?');
-			SDLKCONV(SDLK_AT, '@');
-			SDLKCONVSHIFT(SDLK_LEFTBRACKET, '[', '{');
-			SDLKCONVSHIFT(SDLK_RIGHTBRACKET, ']', '}');
-			SDLKCONVSHIFT(SDLK_BACKSLASH, '\\', '|');
-			SDLKCONV(SDLK_CARET, '^');
-			SDLKCONV(SDLK_UNDERSCORE, '_');
-			SDLKCONVSHIFT(SDLK_BACKQUOTE, '`', '¬');
-			SDLKCONV(SDLK_UP, SDLK_UP + 256);
-			SDLKCONV(SDLK_DOWN, SDLK_DOWN + 256);
-			SDLKCONV(SDLK_LEFT, SDLK_LEFT + 256);
-			SDLKCONV(SDLK_RIGHT, SDLK_RIGHT + 256);
+			SDLKCONVSHIFTANDCTRL(SDLK_UP, SDLK_UP + 256, SDLK_UP + 512, SDLK_UP + 768, SDLK_UP + 1024);
+			SDLKCONVSHIFTANDCTRL(SDLK_DOWN, SDLK_DOWN + 256, SDLK_DOWN + 512, SDLK_DOWN + 768, SDLK_DOWN + 1024);
+			SDLKCONVSHIFTANDCTRL(SDLK_LEFT, SDLK_LEFT + 256, SDLK_LEFT + 512, SDLK_LEFT + 768, SDLK_LEFT + 1024);
+			SDLKCONVSHIFTANDCTRL(SDLK_RIGHT, SDLK_RIGHT + 256, SDLK_RIGHT + 512, SDLK_RIGHT + 768, SDLK_RIGHT + 1024);
+			SDLKCONV(SDLK_DELETE, SDLK_DELETE);
+			SDLKCONV(SDLK_KP_PERIOD, SDLK_DELETE);
 			SDLKCONVSHIFT(SDLK_F1, '1' + 128, '\0');
 			SDLKCONVSHIFT(SDLK_F2, '2' + 128, '\0');
 			SDLKCONVSHIFT(SDLK_F3, '3' + 128, '\0');
@@ -1839,62 +1830,37 @@ int SDLMessageHandler(const SDL_Event &event)
 			SDLKCONVSHIFT(SDLK_F12, '@' + 128, '\0');
 			// Given the bizarre choices for F11 and F12, I am reluctant to
 			// extrapolate to F15
-			//SDLKCONVSHIFT(SDLK_F13, '' + 128, '\0');
-			//SDLKCONVSHIFT(SDLK_F14, '' + 128, '\0');
-			//SDLKCONVSHIFT(SDLK_F15, '' + 128, '\0');
-			SDLKCONV(SDLK_KP_0, '0');
-			SDLKCONV(SDLK_KP_1, '1');
-			SDLKCONV(SDLK_KP_2, '2');
-			SDLKCONV(SDLK_KP_3, '3');
-			SDLKCONV(SDLK_KP_4, '4');
-			SDLKCONV(SDLK_KP_5, '5');
-			SDLKCONV(SDLK_KP_6, '6');
-			SDLKCONV(SDLK_KP_7, '7');
-			SDLKCONV(SDLK_KP_8, '8');
-			SDLKCONV(SDLK_KP_9, '9');
-			SDLKCONV(SDLK_KP_PERIOD, '.');
-			SDLKCONV(SDLK_KP_DIVIDE, '/');
-			SDLKCONV(SDLK_KP_MULTIPLY, '*');
-			SDLKCONV(SDLK_KP_MINUS, '-');
-			SDLKCONV(SDLK_KP_PLUS, '+');
-			SDLKCONV(SDLK_KP_ENTER, '\r' + 128);
-			SDLKCONV(SDLK_KP_EQUALS, '=');
-			SDLKCONVSHIFT(SDLK_1, '1', '!');
-			SDLKCONVSHIFT(SDLK_2, '2', '"');
-			SDLKCONVSHIFT(SDLK_3, '3', '£');
-			SDLKCONVSHIFT(SDLK_4, '4', '$');
-			SDLKCONVSHIFT(SDLK_5, '5', '%');
-			SDLKCONVSHIFT(SDLK_6, '6', '^');
-			SDLKCONVSHIFT(SDLK_7, '7', '/');
-			SDLKCONVSHIFT(SDLK_8, '8', '*');
-			SDLKCONVSHIFT(SDLK_9, '9', '(');
-			SDLKCONVSHIFT(SDLK_0, '0', ')');
-			SDLKCONVSHIFTCTRL(SDLK_a, 'a', 'A', 'a'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_b, 'b', 'B', 'b'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_c, 'c', 'C', 'c'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_d, 'd', 'D', 'd'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_e, 'e', 'E', 'e'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_f, 'f', 'F', 'f'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_g, 'g', 'G', 'g'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_h, 'h', 'H', 'h'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_i, 'i', 'I', 'i'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_j, 'j', 'J', 'j'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_k, 'k', 'K', 'k'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_l, 'l', 'L', 'l'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_m, 'm', 'M', 'm'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_n, 'n', 'N', 'n'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_o, 'o', 'O', 'o'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_p, 'p', 'P', 'p'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_q, 'q', 'Q', 'q'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_r, 'r', 'R', 'r'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_s, 's', 'S', 's'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_t, 't', 'T', 't'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_u, 'u', 'U', 'u'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_v, 'v', 'V', 'v'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_w, 'w', 'W', 'w'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_x, 'x', 'X', 'x'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_y, 'y', 'Y', 'y'-'a'+1);
-			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z'-'a'+1);
+			// What is the problem just look where they are on an American keyboard
+			// is just the question whether they mean anything
+			SDLKCONVSHIFT(SDLK_F13, '#' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F14, '$' + 128, '\0');
+			SDLKCONVSHIFT(SDLK_F15, '%' + 128, '\0');
+			SDLKCONVSHIFTCTRL(SDLK_a, 'a', 'A', 'a' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_b, 'b', 'B', 'b' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_c, 'c', 'C', 'c' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_d, 'd', 'D', 'd' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_e, 'e', 'E', 'e' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_f, 'f', 'F', 'f' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_g, 'g', 'G', 'g' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_h, 'h', 'H', 'h' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_i, 'i', 'I', 'i' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_j, 'j', 'J', 'j' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_k, 'k', 'K', 'k' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_l, 'l', 'L', 'l' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_m, 'm', 'M', 'm' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_n, 'n', 'N', 'n' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_o, 'o', 'O', 'o' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_p, 'p', 'P', 'p' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_q, 'q', 'Q', 'q' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_r, 'r', 'R', 'r' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_s, 's', 'S', 's' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_t, 't', 'T', 't' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_u, 'u', 'U', 'u' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_v, 'v', 'V', 'v' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_w, 'w', 'W', 'w' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_x, 'x', 'X', 'x' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_y, 'y', 'Y', 'y' - 'a' + 1);
+			SDLKCONVSHIFTCTRL(SDLK_z, 'z', 'Z', 'z' - 'a' + 1);
 #undef SDLKCONV
 #undef SDLKCONVSHIFT
 #undef SDLKCONVSHIFTCTRL
@@ -1902,17 +1868,61 @@ int SDLMessageHandler(const SDL_Event &event)
 				break;
 			} // end of switch (key)
 			if (wp != '\0') {
-			  ui_HandleKeypress(wp, 0); 
+				ui_HandleKeypress(wp, 0);
 			}
 			break;
 		} // end of case SDL_KEYDOWN
+	case SDL_WINDOWEVENT:
+
+		switch (event->window.event)
+		{
+		case SDL_WINDOWEVENT_RESIZED:
+			break;
+		case SDL_WINDOWEVENT_SIZE_CHANGED:
+		{
+			g_c3ui->ChangeSize(event->window.data1, event->window.data2);
+			break;
+		}
+		case SDL_WINDOWEVENT_MAXIMIZED:
+			break;
+		case SDL_WINDOWEVENT_RESTORED:
+			break;
+		case SDL_WINDOWEVENT_MOVED:
+			break;
+		default:
+			break;
+		}
+
+		break;
+	case SDL_TEXTINPUT:
+	{
+		std::string source(event->text.text);
+		std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+		std::wstring wide_str = converter.from_bytes(source);
+
+		ui_HandleKeypress(wide_str.c_str()[0], 0);
+
+		break;
+	}
+	case SDL_MOUSEWHEEL:
+	{
+		if (event->wheel.y > 0)
+		{
+			ui_HandleMouseWheel((sint16)1);
+		}
+		else if (event->wheel.y < 0)
+		{
+			ui_HandleMouseWheel((sint16)-1);
+		}
+		break;
+	}
 	case SDL_QUIT:
 		gDone = TRUE;
 
 		DoFinalCleanup();
 
 		return 0;
-// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
+	// SDL_MOUSEBUTTONDOWN event is handled in aui_sdlmouse.cpp
 	}
 
 	//lynx: in the code without SDL the event (if not processed up to here) is passed to the OS handler with DefWindowProc()
@@ -2033,11 +2043,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
 		ui_HandleMouseWheel((sint16)HIWORD(wParam));
 		break;
 	}
-#ifdef WIN32
 	return DefWindowProc(hwnd, iMsg, wParam, lParam);
-#endif
 }
-#endif// else: Compilation error
+#else
+#error "No code for something else than DirectX or SDL"
+#endif
 
 void DisplayFrame(aui_Surface *surf)
 {
@@ -2070,7 +2080,7 @@ BOOL ExitGame(void)
 	quit.quit.type = SDL_QUIT;
 	int e = SDL_PushEvent(&quit);
 	return (e != 0);
-#elif defined(WIN32)
+#elif defined(__AUI_USE_DIRECTX__)
 	return PostMessage(gHwnd, WM_CLOSE, 0, 0);
 #else
 	return TRUE;

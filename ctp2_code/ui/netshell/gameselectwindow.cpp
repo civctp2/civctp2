@@ -411,7 +411,7 @@ void GameSelectWindow::PasswordScreenDone( MBCHAR *password )
 				strcpy( truncname, g_playersetup.GetName() );
 
 				sint32 trunclen = dp_SNAMELEN -
-					( strlen( truncname ) + ( strlen( format.GetString() ) - 2  ) );
+					static_cast<sint32>( strlen( truncname ) + ( strlen( format.GetString() ) - 2  ) );
 
 				if ( trunclen < 0 )
 				{
@@ -725,7 +725,7 @@ void StartSelectingWindow::NewButtonAction::Execute(
 		strcpy( truncname, g_playersetup.GetName() );
 
 		sint32 trunclen = dp_SNAMELEN -
-			( strlen( truncname ) + ( strlen( format.GetString() ) - 2  ) );
+			static_cast<sint32>( strlen( truncname ) + ( strlen( format.GetString() ) - 2  ) );
 
 		if ( trunclen < 0 )
 		{
@@ -766,7 +766,7 @@ void StartSelectingWindow::NewButtonAction::Execute(
 
 		s->SetName( name );
 		//Special rules
-		s->SetBloodlust(!g_theProfileDB->IsAlienEndGameOn());
+		s->SetBloodlust(g_theProfileDB->IsGenocideRule());
 		s->SetPollution(static_cast<char>(g_theProfileDB->IsPollutionRule()));
 
 		//Ages
@@ -849,7 +849,7 @@ void gameselectwindow_scenarioExitCallback(aui_Control *control,
 		strcpy( truncname, g_playersetup.GetName() );
 
 		sint32 trunclen = dp_SNAMELEN -
-			( strlen( truncname ) + ( strlen( format.GetString() ) - 2  ) );
+			static_cast<sint32>( strlen( truncname ) + ( strlen( format.GetString() ) - 2  ) );
 
 		if ( trunclen < 0 )
 		{

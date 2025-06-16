@@ -28,6 +28,7 @@ void optionsscreen_returnPress(aui_Control *control, uint32 action, uint32 data,
 void optionsscreen_gameplayPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 void optionsscreen_quitToShellPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
 
 class OptionsWindow : public c3_PopupWindow
@@ -60,6 +61,7 @@ public:
 	ctp2_Button *GamePlayButton() const { return m_gameplay; }
 	ctp2_Button *MapEditorButton() const { return m_mapeditor; }
 	ctp2_Button *KeyboardButton() const { return m_keyboard; }
+	ctp2_Button *LanguageButton() const { return m_language; }
 
 private:
 
@@ -73,6 +75,7 @@ private:
 					*m_gameplay,
 					*m_mapeditor,
 					*m_keyboard,
+					*m_language,
 					*m_quittoshell;
 
 	c3_Static		*m_configHeader;

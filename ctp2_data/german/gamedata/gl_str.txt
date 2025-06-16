@@ -552,6 +552,7 @@ CONCEPT_FUTURE_AGE				"Die Zukunft"
 CONCEPT_GENETIC_AGE				"Genetische Ära"
 CONCEPT_GOLD					"Gold"
 CONCEPT_GOODS					"Güter"
+CONCEPT_GOSSIP					"Tratsch"
 CONCEPT_GOVERNMENTS				"Regierung"
 CONCEPT_GROWTH					"Wachstum"
 CONCEPT_HAPPINESS				"Zufriedenheit"
@@ -796,14 +797,25 @@ DIFFICULTY_5					"Gottheit"
 
 ## Civlike difficulty strings ##
 DIFFICULTY_SETTLER				"Siedler"
-DIFFICULTY_CHIEFTAIN				"Häuptling"
+DIFFICULTY_CHIEFTAIN			"Häuptling"
 DIFFICULTY_WARLORD				"Kriegsherr"
 DIFFICULTY_PRINCE				"Prinz"
 DIFFICULTY_KING					"König"
 DIFFICULTY_EMPEROR				"Kaiser"
 DIFFICULTY_DEITY				"Gottheit"
 
-###Removed TileImp Strings###
+## Language strings ##
+LANGUAGE_CHINESE				"Chinesisch"
+LANGUAGE_CZECH					"Tschechisch"
+LANGUAGE_ENGLISH				"Englisch"
+LANGUAGE_FRENCH					"Französisch"
+LANGUAGE_GERMAN					"Deutsch"
+LANGUAGE_ITALIAN				"Italienisch"
+LANGUAGE_JAPANESE				"Japanisch"
+LANGUAGE_POLISH					"Polnisch"
+LANGUAGE_SPANISH				"Spanisch"
+
+### Removed TileImp Strings ###
 #TILEIMP_ROBOTIC_DOCKS				"Produktionshangars"
 #TILEIMP_ADVANCED_ROBOTIC_DOCKS			"Großproduktionshangars"
 #TILEIMP_MEGA_MANUFACTURING_BAY			"Megaproduktionshangars"

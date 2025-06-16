@@ -124,7 +124,7 @@ public:
 	AUI_IMAGEBASE_BLTTYPE GetImageBltType( void ) const { return m_imageblttype; }
 	AUI_IMAGEBASE_BLTFLAG GetImageBltFlag( void) const { return m_imagebltflag; }
 	aui_Image *GetImage(
-		sint32 state = 0,
+		size_t state = 0,
 		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE ) const;
 
 	AUI_IMAGEBASE_BLTTYPE SetImageBltType( AUI_IMAGEBASE_BLTTYPE imageblttype );
@@ -132,7 +132,7 @@ public:
 	aui_Image * SetImage
 	(
 		const MBCHAR *          image,
-		sint32                  state       = 0,
+		size_t                  state       = 0,
 		AUI_IMAGEBASE_SUBSTATE  substate    = AUI_IMAGEBASE_SUBSTATE_STATE
 	);
 
@@ -143,7 +143,7 @@ protected:
 	AUI_ERRCODE DrawImage(
 		aui_Surface *destSurf,
 		RECT *destRect,
-		sint32 state = 0,
+		size_t state = 0,
 		AUI_IMAGEBASE_SUBSTATE substate = AUI_IMAGEBASE_SUBSTATE_STATE );
 
 	AUI_IMAGEBASE_BLTTYPE	m_imageblttype;
@@ -152,7 +152,7 @@ protected:
 
 	aui_Image * LoadTheImage(const MBCHAR * name);
 
-	sint32					m_numStateImageGroups;
+	size_t					m_numStateImageGroups;
 	aui_StateImageGroup		*m_stateImageGroups;
 
 

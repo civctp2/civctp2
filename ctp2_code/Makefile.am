@@ -64,14 +64,12 @@ ctp_ctp2_LDFLAGS = \
 ctp_ctp2_SOURCES = \
 	ctp/ctp2_utils/appstrings.cpp \
 	ctp/ctp2_utils/c3cmdline.cpp \
-	ctp/ctp2_utils/c3cpu.cpp \
 	ctp/ctp2_utils/c3debug.cpp \
 	ctp/ctp2_utils/c3errors.cpp \
 	ctp/ctp2_utils/c3files.cpp \
 	ctp/ctp2_utils/c3mem.cpp \
 	ctp/ctp2_utils/cheatkey.cpp \
 	ctp/ctp2_utils/ctpregistry.cpp \
-	ctp/ctp2_utils/ddhelp.cpp \
 	ctp/ctp2_utils/netconsole.cpp \
 	ctp/ctp2_utils/tracklen.cpp \
 	ctp/debugtools/debug.c \
@@ -213,7 +211,6 @@ ctp_ctp2_SOURCES = \
 	ui/aui_common/aui_Factory.cpp \
 	ui/aui_utils/primitives.cpp \
 	ui/aui_utils/textutils.cpp \
-	ui/aui_utils/vidplay.cpp \
 	ui/aui_directx/aui_directaudiomanager.cpp \
 	ui/aui_directx/aui_directblitter.cpp \
 	ui/aui_directx/aui_directinput.cpp \
@@ -389,6 +386,7 @@ ctp_ctp2_SOURCES = \
 	ui/interface/IntroMovieWin.cpp \
 	ui/interface/IntroMovieWindow.cpp \
 	ui/interface/km_screen.cpp \
+	ui/interface/LanguageScreen.cpp \
 	ui/interface/loadsavemapscreen.cpp \
 	ui/interface/loadsavemapwindow.cpp \
 	ui/interface/loadsavescreen.cpp \

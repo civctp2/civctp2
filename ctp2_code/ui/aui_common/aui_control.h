@@ -225,7 +225,7 @@ public:
 		sint32 y = 0 );
 
 	AUI_ERRCODE DrawThisStateImage(
-		sint32 state,
+		size_t state,
 		aui_Surface *destSurf,
 		RECT *destRect );
 

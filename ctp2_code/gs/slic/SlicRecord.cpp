@@ -56,7 +56,7 @@ void SlicRecord::Serialize(CivArchive &archive)
 	if(archive.IsStoring()) {
 		archive << m_owner;
 		if(m_title) {
-			l = strlen(m_title) + 1;
+			l = static_cast<sint32>(strlen(m_title) + 1);
 			archive << l;
 			archive.Store((uint8*)m_title, l * sizeof(MBCHAR));
 		} else {
@@ -65,7 +65,7 @@ void SlicRecord::Serialize(CivArchive &archive)
 		}
 
 		if(m_text) {
-			l = strlen(m_text) + 1;
+			l = static_cast<sint32>(strlen(m_text) + 1);
 			archive << l;
 			archive.Store((uint8*)m_text, l * sizeof(MBCHAR));
 		} else {
@@ -73,7 +73,7 @@ void SlicRecord::Serialize(CivArchive &archive)
 			archive << l;
 		}
 
-		l = strlen(m_segment->GetName()) + 1;
+		l = static_cast<sint32>(strlen(m_segment->GetName()) + 1);
 		archive << l;
 		archive.Store((uint8*)m_segment->GetName(), l);
 	} else {

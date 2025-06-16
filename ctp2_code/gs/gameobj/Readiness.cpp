@@ -181,6 +181,9 @@ double MilitaryReadiness::GetSupportCost(const Unit &u)
 		return 0.0;
 	}
 
+	if(!u.IsValid())
+		return 0.0;
+
 	if(u.GetIsProfessional())
 		return 0.0;
 

@@ -1,0 +1,43 @@
+#### Message Strings for the Nuclear Detente scenario ####
+
+
+#### Button text
+
+ND_BUTTON_OK 	"OK"
+ND_BUTTON_YES 	"Oui"
+ND_BUTTON_NO 	"Non"
+ND_BUTTON_NEXT 	"Suivant->"
+ND_BUTTON_BACK 	"<-Précédent"
+ND_BUTTON_RULES	"Règles du scénario"
+
+#### Message box text
+
+#	The string of hyphens below represents the amount of text that will fit in a message box.
+# 						----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ND_START_TITLE			"Détente nucléaire"
+ND_WIN_TITLE			"Vous avez GAGNE !"
+ND_LOSE_TITLE			"Vous avez PERDU !"
+ND_START_MESSAGE_A		"Vous êtes {player[0].leader_name}. Votre pays, Eminiar, est engagé dans un bras de fer avec les Vendikari. Vos sous-marins nucléaires occupent des positions stratégiques, leurs missiles sont prêts à être envoyés vers chacune des villes vendikari. Vos propres villes sont également dans la ligne de mire des missiles nucléaires de vos adversaires."
+ND_START_MESSAGE_B		"Vous avez signé un traité visant à limiter le nombre de missiles nucléaires détenus par chacun des deux camps, mais la tension est à son comble. Le stock de missiles restants est plus que suffisant pour dévaster la planète. Vous devez trouver un moyen de mettre un terme à la menace nucléaire que les Vendikari font peser sur le monde !"
+ND_CANT_MOVE_NUKES		"Nos sous-marins nucléaires occupent des positions clés. Ils doivent rester en place si nous voulons conserver notre avantage offensif."  
+ND_DISBAND_NUKE_WARNING	"Le démantèlement de notre arsenal de missiles nucléaires sera, à long terme, indispensable à la paix. Veillez cependant à ne pas nous laisser désarmés face à nos adversaires. Etes-vous absolument certain de vouloir démanteler ?"
+ND_LOSE_NUCLEAR_WAR_A	"Vous regardez sur l'écran les points jaunes se rapprocher de leur cible. Vous n'êtes plus vraiment sûr de savoir qui a déclenché l'offensive. Après une année de tensions, rien d'étonnant à ce que l'un des responsables aux commandes ait craqué. Inutile de punir le coupable maintenant. Peut-être obtiendrez-vous le pardon de vos ancêtres."  
+ND_LOSE_NUCLEAR_WAR_B	"Un soldat vous tape sur l'épaule. 'Il est temps d'y aller.' Il vous mène à l'ascenseur descendant vers l'abri souterrain. 'Qui sait quand nous reverrons le soleil ?' s'interroge-t-il. Envahi par la terreur et la culpabilité, vous ne pouvez que répondre : 'Bien avant les pauvres innocents restés en surface...'"
+ND_DEFUSER_WARNING		"Les {player[1].civ_name_plural} ont commencé la construction du désamorceur à nanites à {city[0].name}. Cette technologie leur permettra de neutraliser notre arsenal nucléaire. C'est une grave menace contre l'équilibre des puissances mondiales. Il faut les arrêter !"
+ND_LOSE_DEFUSER			"Les {player[1].civ_name_plural} ont activé le désamorceur à nanites. Nos armes nucléaires sont réduites à un tas de ferraille inutile."  
+ND_WIN_DEFUSER			"Vous avez construit le désamorceur à nanites. En quelques instants, l'ensemble de l'armement nucléaire de la planète deviendra inutile."
+ND_LAUNCH_CODE_1		"Nous avons découvert le code de lancement de l'un des sous-marins nucléaires ennemis. Si nous nous procurons les codes de lancement des 8 sous-marins, nous pourrons mettre fin à la menace nucléaire ennemie. Cependant, le temps presse : les codes seront réinitialisés dans {codeCounter} mois{action[0].text}"
+ND_LAUNCH_CODE_2		"Nous détenons maintenant {spyCitySum} des 8 codes de lancement. Les codes seront réinitialisés dans {codeCounter} mois{action[0].text}"
+ND_LAUNCH_CODE_TURNS	"."
+ND_LAUNCH_CODE_TURNS2	"."
+ND_LAUNCH_CODE_RESET	"Les codes de lancement ont été réinitialisés. Pour nos espions, tout est à refaire."
+ND_WIN_LAUNCH_CODE		"Grâce aux codes de lancement, vous avez neutralisé tous les missiles nucléaires ennemis. Votre arsenal nucléaire toujours est dirigé vers les villes vendikari, vous appelez l'ennemi à une reddition totale et inconditionnelle. Il s'exécute rapidement !"
+ND_NUCLEAR_SUB_WARNING	"La destruction du sous-marin vendikari déclenchera presque certainement une riposte nucléaire ! Etes-vous sûr de vouloir attaquer ce sous-marin ?"
+ND_NUCLEAR_SUB_DESTROY	"L'audace de votre attaque contre le sous-marin nucléaire a pris de court les Vendikari. Cependant, selon nos services de renseignements, ils préparent une riposte nucléaire d'envergure. A moins que vous ne parveniez à éliminer l'ensemble des sous-marins ennemis restants, la planète est condamnée !"
+ND_WIN_NUCLEAR_SUB		"Votre offensive parfaitement coordonnée a éliminé la menace nucléaire vendikari. Votre arsenal nucléaire est toujours dirigé vers les villes vendikari, vous appelez l'ennemi à une reddition immédiate et inconditionnelle. Il s'exécute rapidement !"
+ND_WIN_DIPLOMACY		"Grâce à vos manoeuvres politiques habiles, vous avez écarté la menace nucléaire des Vendikari. Vous pouvez désormais démanteler votre arsenal nucléaire en toute quiétude et préparer une paix durable."
+ND_LOSE_STUPIDITY		"Vous n'auriez pas dû démanteler notre dernière arme nucléaire. Nous sommes désormais à la merci des Vendikari !"
+ND_TEMP					"Marin nucléaire = {nukeCount}"
+ND_TEMP2				"J'y suis aussi"
+

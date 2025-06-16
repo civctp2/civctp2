@@ -51,7 +51,6 @@
 
 #include "player.h"
 #include "Strengths.h"
-#include "aui.h"
 #include "aui_uniqueid.h"
 #include "aui_ldl.h"
 #include "background.h"
@@ -1661,7 +1660,7 @@ void AiDebugCommand::Execute(sint32 argc, char **argv)
 void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 {
 	sint32		i;
-	MBCHAR		*unitFileNames[] = {
+	const MBCHAR	*unitFileNames[] = {
 					"GU01.SPR",
 					"GU02.SPR",
 					"GU03.SPR",
@@ -1742,7 +1741,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 				};
 	sint32		numUnits  = 77;
 
-	MBCHAR		*cityFileNames[] = {
+	const MBCHAR	*cityFileNames[] = {
 						"GC001.SPR",
 						"GC002.SPR",
 						"GC003.SPR",
@@ -1811,7 +1810,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 				};
 	sint32		numCities = 65;
 
-	MBCHAR		*goodFileNames[] = {
+	const MBCHAR	*goodFileNames[] = {
 						"GG00.SPR",
 						"GG01.SPR",
 						"GG02.SPR",
@@ -1837,7 +1836,7 @@ void CleanSpritesCommand::Execute(sint32 argc, char **argv)
 	UnitSpriteGroup		*usg;
 	GoodSpriteGroup		*gsg;
 
-	MBCHAR *name;
+	const MBCHAR *name;
 	MBCHAR saveName[_MAX_PATH];
 
 	for (i = 0; i < numUnits; i++)
@@ -2198,7 +2197,7 @@ void FZCommentCommand::Execute(sint32 argc, char **argv)
 {
 #ifdef _DEBUG
 	MBCHAR str[_MAX_PATH];
-	sint32 pos = 0;
+	size_t pos = 0;
 
 	for(sint32 i = 1; i < argc; i++) {
 		if(pos + strlen(argv[i]) >= _MAX_PATH)
@@ -2208,10 +2207,6 @@ void FZCommentCommand::Execute(sint32 argc, char **argv)
 		str[pos++] = ' ';
 	}
 	str[pos] = 0;
-
-
-
-
 #endif
 }
 
@@ -2220,8 +2215,6 @@ void FliLogCommand::Execute(sint32 argc, char **argv)
 	Assert(argc == 2);
 	if(argc != 2)
 		return;
-
-
 }
 
 void ReloadFliCommand::Execute (sint32 argc, char **argv)
@@ -3076,7 +3069,7 @@ void ChatMaskCommand::Execute(sint32 argc, char **argv)
 void ChatCommand::Execute(sint32 argc, char **argv)
 {
 	MBCHAR str[k_MAX_CHAT_LEN];
-	sint32 pos = 0;
+	size_t pos = 0;
 
 	for(sint32 i = 1; i < argc; i++) {
 		if(pos + strlen(argv[i]) >= k_MAX_CHAT_LEN)
@@ -5663,7 +5656,7 @@ void DipLogOnCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]);
         g_theDiplomacyLog->LogPlayer(p);
     }
-#endif _DEBUG
+#endif // _DEBUG
 }
 
 void DipLogOffCommand::Execute (sint32 argc, char** argv)
@@ -5679,7 +5672,7 @@ void DipLogOffCommand::Execute (sint32 argc, char** argv)
         sint32 p = atoi(argv[1]);
         g_theDiplomacyLog->UnlogPlayer(p);
     }
-#endif _DEBUG
+#endif // _DEBUG
 }
 
 void RestartCommand::Execute(sint32 argc, char** argv)
@@ -6408,21 +6401,21 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 				l++;
 			}
 		}
-    } else if (m_display_mem) {
+	} else if (m_display_mem) {
 #ifdef _DEBUG_MEMORY
 
 		l=0;
-		sprintf (buf, "EXE total bytes: %d", DebugMemory_GetTotalFromEXE());
+		sprintf (buf, "EXE total bytes: %zu", DebugMemory_GetTotalFromEXE());
 		primitives_DrawText(surf, k_LEFT_EDGE,
 			k_TOP_EDGE + l * k_TEXT_SPACING, (MBCHAR *)buf, 0, 0);
 
 		l++;
-		sprintf (buf, "DLL total bytes: %d", DebugMemory_GetTotalFromDLL());
+		sprintf (buf, "DLL total bytes: %zu", DebugMemory_GetTotalFromDLL());
 		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 
 		l++;
-		sprintf (buf, "Combined total : %d", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
+		sprintf (buf, "Combined total : %zu", DebugMemory_GetTotalFromEXE()+DebugMemory_GetTotalFromDLL());
 		primitives_DrawText(surf, k_LEFT_EDGE, k_TOP_EDGE + l * k_TEXT_SPACING,
 			(MBCHAR *)buf, 0, 0);
 #elif defined(_DEBUG) && defined(WIN32)
@@ -6488,19 +6481,19 @@ void CommandLine::DisplayOffers(BOOL on)
 
 void CommandLine::DisplayMem()
 {
-    m_displayHelp = FALSE;
+	m_displayHelp = FALSE;
 	m_persistent = FALSE;
 	m_displayCityResources = FALSE;
 	m_displayOffers = FALSE;
-    m_display_mem = !m_display_mem;
+	m_display_mem = !m_display_mem;
 
 #if defined(_DEBUG) && defined(WIN32)
-    if (m_display_mem) {
-        _CrtMemState new_state;
-        _CrtMemCheckpoint(&new_state);
+	if (m_display_mem) {
+		_CrtMemState new_state;
+		_CrtMemCheckpoint(&new_state);
 
-        m_old_mem_count = new_state.lTotalCount;
-    }
+		m_old_mem_count = static_cast<sint32>(new_state.lTotalCount);
+	}
 #endif
 }
 

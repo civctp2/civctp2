@@ -14,7 +14,7 @@ rem
 rem /MD  = use MSVCRT.DLL standard C library (because that's what anet2 uses)
 
 del chat.exe
-cl /D DOSWIN32 /D _WIN32 /I ..\..\h /I ..\utils chat.c ..\utils\raw.c ..\utils\eclock.c ..\..\win\lib\anet2.lib /Fm /Oy- /Ox /W3 /WX /Gr /MD
+cl /D DOSWIN32 /D _WIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /I ..\..\h /I ..\utils chat.c ..\utils\raw.c ..\utils\eclock.c ..\..\win\lib\anet2.lib /Fm /Oy- /Ox /W3 /WX /Gr /MD
 if errorlevel 1 goto bad
 if not exist chat.exe goto bad
 

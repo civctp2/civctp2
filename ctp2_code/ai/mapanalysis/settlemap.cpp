@@ -147,17 +147,17 @@ void SettleMap::Cleanup()
 
 void SettleMap::Initialize()
 {
-	size_t const    x_size  = g_theWorld->GetWidth();
-	size_t const    y_size  = g_theWorld->GetHeight();
+	sint32 const    x_size  = g_theWorld->GetWidth();
+	sint32 const    y_size  = g_theWorld->GetHeight();
 	MapPoint rc_pos;
 	MapPoint xy_pos;
 
 	m_settleValues.Clear();
 	m_settleValues.Resize(x_size, y_size, 1);
 
-	for(rc_pos.x = 0; static_cast<size_t>(rc_pos.x) < x_size; rc_pos.x++)
+	for(rc_pos.x = 0; rc_pos.x < x_size; rc_pos.x++)
 	{
-		for(rc_pos.y = 0; static_cast<size_t>(rc_pos.y) < y_size; rc_pos.y++)
+		for(rc_pos.y = 0; rc_pos.y < y_size; rc_pos.y++)
 		{
 #if defined(USE_WORLDSIZE_CLASS)
 			xy_pos.rc2xy(rc_pos, g_theWorld->GetSize());

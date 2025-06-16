@@ -204,7 +204,7 @@ MessageResponseStandard::~MessageResponseStandard()
 		MessageResponseAction *action = NULL;
 		ListPos position = m_messageResponseAction->GetHeadPosition();
 
-		for ( sint32 i = m_messageResponseAction->L(); i; i-- ) {
+		for ( size_t i = m_messageResponseAction->L(); i; i-- ) {
 			action = m_messageResponseAction->GetNext( position );
 
 			if ( action ) {
@@ -222,7 +222,7 @@ MessageResponseStandard::~MessageResponseStandard()
 		ctp2_Button *button = NULL;
 		ListPos position = m_messageResponseButton->GetHeadPosition();
 
-		for ( sint32 i = m_messageResponseButton->L(); i; i-- ) {
+		for ( size_t i = m_messageResponseButton->L(); i; i-- ) {
 			button = m_messageResponseButton->GetNext( position );
 
 			if ( button ) {

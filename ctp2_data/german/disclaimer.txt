@@ -1,0 +1,17 @@
+Willkommen beim Editor von Call to Power 2(tm)!
+
+Hier sind einige Hinweise, die Sie sich durchlesen sollten, bevor Sie den Editor verwenden:
+
+BEARBEITUNGSTOOLS. Call to Power 2(tm) enthält gewisse Utilities, Tools, Daten und andere Ressourcen für das Design, die Programmierung und Bearbeitung der Software ("Bearbeitungstools"), die mit diesem Programm zu verwenden sind und Ihnen ermöglichen, neue Level und anderes Spielematerial für Ihre persönliche Verwendung zusammen mit dem Programm ("Neues Spielematerial") zu erstellen. Die Verwendung der Bearbeitungstools unterliegt den Bedingungen der folgenden zusätzlichen Lizenzbeschränkungen:
+
+Sie erklären sich einverstanden, die Bearbeitungstools und das von Ihnen erstellte Neue Spielematerial nicht für kommerzielle Zwecke verwenden und dies auch Dritten nicht zu gestatten. Dies gilt einschließlich, doch nicht beschränkt auf den Verkauf, den Verleih, das Leasing, die Lizenzierung, Distribution oder eine anderweitige Übertragung der Eigentumsrechte am Neuen Spielematerial, sei es als Einzelanwendung oder in Kombination mit von anderen erstelltem Neuen Spielematerial, über jegliche Distributionskanäle, einschließlich und nicht beschränkt auf den Einzelhandel und die elektronische Online-Distribution. Weiterhin stimmen Sie zu, keine Angebote oder Vorschläge von Privatpersonen oder Personen öffentlichen Rechts einzuholen, zu veranlassen oder anzuregen, um Neues Spielematerial zur kommerziellen Distribution zu erstellen. Sie stimmen auch zu, Activision unverzüglich schriftlich vom Erhalt eines solchen Angebots oder Vorschlags in Kenntnis zu setzen.
+
+Sollten Sie das von Ihnen erstellte Neue Spielematerial anderen zugänglich machen, so erklären Sie sich einverstanden, dies in jedem Falle unentgeltlich zu tun.
+
+Das Neue Spielematerial darf keine Veränderungen an Dateien mit den Endungen COM, EXE oder DLL oder anderen ausführbaren Programmdateien enthalten.
+
+Neues Spielematerial darf nur dann erstellt werden, wenn es ausschließlich in Verbindung mit der im Handel erhältlichen Version des Programms verwendet werden kann. Neues Spielematerial darf nicht so konzipiert sein, dass es als Einzelanwendung läuft.
+
+Neues Spielematerial darf weder illegales, anstößiges oder diffamierendes Material enthalten, noch Material, das die öffentlichen bzw. Privatrechte Dritter verletzt (ohne dass eine angemessene unwiderrufliche Lizenz speziell zu diesem Zweck gewährt wurde) oder Warenzeichen, urheberrechtlich geschützte Bestandteile oder andere Eigentumsrechte Dritter berührt.
+
+Neues Spielematerial muss unter folgenden Angaben in mindestens einer Online-Dokumentation deutlich als solches erkennbar sein, und ein Hinweis darauf muss eine angemessene Zeit lang auf dem Eröffnungsbildschirm eingeblendet werden: a) Name und E-Mail-Adresse des Erstellers des Neuen Spielematerials und b) die Worte "DIESES MATERIAL WIRD VON ACTIVISION WEDER HERGESTELLT NOCH UNTERSTÜTZT".

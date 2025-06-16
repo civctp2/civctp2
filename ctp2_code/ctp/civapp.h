@@ -58,7 +58,10 @@ class CivApp;
 #include "aui_ldl.h"
 #include "aui_action.h"     // aui_Action
 #include "ctp2_inttypes.h"  // sint32, uint32
+#include "profileDB.h"      // g_theProfileDB
+
 class CivArchive;
+extern BOOL g_runInBackground;
 
 //----------------------------------------------------------------------------
 //
@@ -78,29 +81,29 @@ public:
 	sint32		EndGame(void);
 
 	sint32		GetKeyboardScrollingKey(void) const
-    {
-        return m_keyboardScrollingKey;
-    };
+	{
+		return m_keyboardScrollingKey;
+	};
 
-    sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
+	sint32		InitializeApp(HINSTANCE hInstance, int iCmdShow);
 	bool		InitializeAppDB(void);
 	sint32		InitializeAppDB(CivArchive &archive);
 	sint32		InitializeGame(CivArchive *archive);
 
-   	bool		IsGameLoaded(void) const
-    {
-        return m_gameLoaded;
-    };
+	bool		IsGameLoaded(void) const
+	{
+		return m_gameLoaded;
+	};
 
 	bool		IsInBackground(void) const
-    {
-        return m_inBackground;
-    };
+	{
+		return m_inBackground && !g_theProfileDB->IsRunInBackground() && !g_runInBackground;
+	};
 
 	bool		IsKeyboardScrolling(void) const
-    {
-        return m_isKeyboardScrolling;
-    };
+	{
+		return m_isKeyboardScrolling;
+	};
 
 	sint32		LoadSavedGame(MBCHAR const * name);
 	sint32		LoadSavedGameMap(MBCHAR const * name);
@@ -170,17 +173,17 @@ class LoadSaveGameAction : public aui_Action
 {
 public:
 	LoadSaveGameAction(MBCHAR const * name = NULL)
-    :   aui_Action  ()
-    {
-        if (name)
-        {
-            strncpy(m_filename, name, k_AUI_LDL_MAXBLOCK);
-        }
-        else
-        {
-            m_filename[0] = 0;
-        }
-    };
+	:   aui_Action  ()
+	{
+		if (name)
+		{
+			strncpy(m_filename, name, k_AUI_LDL_MAXBLOCK);
+		}
+		else
+		{
+			m_filename[0] = 0;
+		}
+	};
 
 	virtual void	Execute
 	(
@@ -198,17 +201,17 @@ class LoadSaveGameMapAction : public aui_Action
 {
 public:
 	LoadSaveGameMapAction(MBCHAR const * name = NULL)
-    :   aui_Action  ()
-    {
-        if (name)
-        {
-            strncpy(m_filename, name, k_AUI_LDL_MAXBLOCK);
-        }
-        else
-        {
-            m_filename[0] = 0;
-        }
-    };
+	:   aui_Action  ()
+	{
+		if (name)
+		{
+			strncpy(m_filename, name, k_AUI_LDL_MAXBLOCK);
+		}
+		else
+		{
+			m_filename[0] = 0;
+		}
+	};
 
 	virtual void	Execute
 	(
@@ -226,17 +229,17 @@ class LoadScenarioGameAction : public aui_Action
 {
 public:
 	LoadScenarioGameAction(MBCHAR const * name)
-    :   aui_Action  ()
-    {
-        if (name)
-        {
-            strncpy(m_filename, name, _MAX_PATH);
-        }
-        else
-        {
-            m_filename[0] = 0;
-        }
-    };
+	:   aui_Action  ()
+	{
+		if (name)
+		{
+			strncpy(m_filename, name, _MAX_PATH);
+		}
+		else
+		{
+			m_filename[0] = 0;
+		}
+	};
 
 	virtual void	Execute
 	(

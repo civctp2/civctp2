@@ -161,12 +161,12 @@ ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 EmailTransport::EmailTransport()
 {
 	ns_String s( "strings.email" );
-	strcpy( description.name, s.GetString() );
+	strcpy( m_description.name, s.GetString() );
 }
 HotseatTransport::HotseatTransport()
 {
 	ns_String s( "strings.hotseat" );
-	strcpy( description.name, s.GetString() );
+	strcpy( m_description.name, s.GetString() );
 }
 
 ns_TransportListBox::ns_TransportListBox (
@@ -178,7 +178,7 @@ ns_TransportListBox::ns_TransportListBox (
 	retval, id, ldlBlock, ActionFunc, cookie )
 {
 
-	NETFunc::TransportList *l = &(g_netfunc->transportList);
+	NETFunc::TransportList *l = &(g_netfunc->m_transportList);
 	NETFunc::TransportList::iterator i;
 	for(i = l->begin(); i != l->end(); i++) {
 
@@ -634,7 +634,7 @@ void ns_GPlayerListBox::Delete( NETFunc::Player *player )
 	{
 		BOOL success = g_allinoneWindow->AssignTribe(
 			0,
-			*(uint16 *)player->GetKey()->buf,
+			*(uint16 *)player->GetKey()->m_buf,
 			FALSE,
 			FALSE,
 			TRUE );
@@ -696,7 +696,7 @@ ns_HPlayerItem *ns_GPlayerListBox::FindHPlayerItem( NETFunc::Player *player )
 
 	ListPos position =
 		m_hplayerlistbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		item = (ns_HPlayerItem *)
 			m_hplayerlistbox->GetPane()->ChildList()->GetNext( position );
@@ -764,7 +764,7 @@ void ns_GPlayerListBox::UpdateHPlayerItem(
 template<>
 AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 	ns_Item<NETFunc::Player, ns_Player> *item,
-	sint32 i )
+	size_t i )
 {
 
 	static MBCHAR scratch[ k_NS_ITEM_MAXTEXT + 1 ];
@@ -798,7 +798,7 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 		case ns_Accessor<NETFunc::Player>::INT:
 			item->SetTextBold(netShellObject->IsMine());
 			MBCHAR text[40];
-			sprintf(text, "%d", reinterpret_cast<sint32 const *>(dataPtr));
+			sprintf(text, "%d", *reinterpret_cast<sint32 const *>(dataPtr));
 			return item->SetText(text);
 /*			return item->SetText
 				(itoa(* reinterpret_cast<sint32 const *>(dataPtr), scratch, 10));*/
@@ -899,7 +899,7 @@ void ns_AIPlayerListBox::Delete( nf_AIPlayer *player )
 	{
 		BOOL success = g_allinoneWindow->AssignTribe(
 			0,
-			*(uint16 *)player->GetKey()->buf,
+			*(uint16 *)player->GetKey()->m_buf,
 			TRUE,
 			FALSE,
 			TRUE );
@@ -958,7 +958,7 @@ ns_HPlayerItem *ns_AIPlayerListBox::FindHPlayerItem( nf_AIPlayer *player )
 
 	ListPos position =
 		m_hplayerlistbox->GetPane()->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
+	for ( size_t i = m_hplayerlistbox->GetPane()->ChildList()->L(); i; i-- )
 	{
 		item = (ns_HPlayerItem *)
 			m_hplayerlistbox->GetPane()->ChildList()->GetNext( position );

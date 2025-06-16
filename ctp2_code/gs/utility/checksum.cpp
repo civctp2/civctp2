@@ -271,14 +271,13 @@ void Checksum::Hash ()
 
 
 
-void Checksum::AddData(void * val, const sint32 byte_count)
-
+void Checksum::AddData(void * val, const size_t byte_count)
 {
-   sint32 i;
+   size_t i;
    uint8 *p2;
 
    p2 = (uint8 *) val;
-   m_total += byte_count;
+   m_total += static_cast<uint32>(byte_count);
 
    for (i=0; i<byte_count; i++) {
       *m_p1 = *p2;

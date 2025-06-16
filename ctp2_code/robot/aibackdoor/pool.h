@@ -104,7 +104,7 @@ bool Pool<DATA_TYPE>::Prepare_New_Chunk()
 
 		for (size_t i = first_new_element + 1; i <= first_new_element + chunk_size; ++i)
 		{
-			next_free_element_list.Append_Data(i);
+			next_free_element_list.Append_Data(static_cast<int>(i));
 		}
 
 		return true;

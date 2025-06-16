@@ -1300,6 +1300,23 @@ sint32 Cell::GetNumDBImprovements() const
 	return c;
 }
 
+sint32 Cell::GetNumPillagableTerrainImprovements() const
+{
+	sint32 c = 0;
+
+	for (sint32 i = GetNumObjects() - 1; i >= 0; i--)
+	{
+		if ((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
+		{
+			const TerrainImprovementRecord *terImpRec = g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
+			if (terImpRec && !terImpRec->GetCantPillage())
+				c++;
+		}
+	}
+
+	return c;
+}
+
 sint32 Cell::GetDBImprovement(sint32 index) const
 {
 	if(!m_objects)

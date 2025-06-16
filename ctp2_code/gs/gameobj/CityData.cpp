@@ -318,7 +318,7 @@ class HackCityArchive : public CivArchive
 public:
 	void SetStoreOn() { CivArchive::SetStore(); }
 	uint8 *GetStr() { return GetStream(); }
-	uint32 StreamLen() { return CivArchive::StreamLen(); }
+	size_t StreamLen() { return CivArchive::StreamLen(); }
 };
 
 #ifdef _SLOW_BUT_SAFE
@@ -935,10 +935,10 @@ void CityData::Serialize(CivArchive &archive)
 	m_sellingResources.Serialize(archive);
 	m_happy->Serialize(archive);
 
-	sint32 len;
+	sint32 len; // Must be sint32, otherwise it breaks the savegame format
 	if(archive.IsStoring())
 	{
-		len = strlen(m_name) + 1;
+		len = static_cast<sint32>(strlen(m_name) + 1);
 		archive << len;
 		archive.Store((uint8*)m_name, len * sizeof(MBCHAR));
 
@@ -1129,8 +1129,7 @@ void CityData::Initialize(sint32 settlerType)
 	//SectarianHappiness(); //emod  - does this initialize it?
 	//m_secthappy = 0; //did not initialize
 
-	sint32 martialLaw;
-	m_happy->CalcHappiness(*this, false, martialLaw, true);
+	CalcHappiness(true);
 
 	const UnitRecord * settlerRec   = NULL;
 	sint32 numPops = 1;
@@ -2003,7 +2002,7 @@ void CityData::StopTradingWith(PLAYER_INDEX bannedRecipient)
 //----------------------------------------------------------------------------
 void CityData::CalcPollution(void)
 {
-	if (!g_theGameSettings->GetPollution())
+	if (!g_theGameSettings->IsPollution())
 	{
 		m_cityPopulationPollution   = 0;
 		m_cityIndustrialPollution   = 0;
@@ -2107,7 +2106,7 @@ void CityData::CalcPollution(void)
 //----------------------------------------------------------------------------
 void CityData::DoLocalPollution()
 {
-	if(!g_theGameSettings->GetPollution())
+	if(!g_theGameSettings->IsPollution())
 		return;
 
 	if(m_total_pollution < g_theConstDB->Get(0)->GetLocalPollutionLevel())
@@ -2296,8 +2295,8 @@ double CityData::ProjectMilitaryContribution()
 sint32 CityData::ComputeMaterialsPaid(double percent_terrain)
 {
 	return(m_contribute_materials ? (static_cast<sint32>(
-		(static_cast<double>(m_net_production) *
-		percent_terrain) + 0.000001)) : 0);
+	              (static_cast<double>(m_net_production) *
+	               percent_terrain) + 0.000001)) : 0);
 }
 
 void CityData::PayFederalProduction (double percent_military,
@@ -2335,8 +2334,10 @@ void CityData::PayFederalProductionAbs (sint32 mil_paid,
 {
 
 #ifdef _DEBUG
-	if(0 < mil_paid) {
-		if (!m_contribute_military) {
+	if(0 < mil_paid)
+	{
+		if (!m_contribute_military)
+		{
 			Assert(0);
 			return;
 		}
@@ -3653,7 +3654,7 @@ void CityData::CalculateCoeffProd()
 	}
 
 	//emod for energy impacts
-	if(g_theProfileDB->IsNRG())
+	if(g_theProfileDB->IsNRG() && !g_network.IsActive())
 	{
 		double energysupply = g_player[m_owner]->GetEnergySupply();
 		if ((energysupply < 1.0) && (energysupply > 0.0))
@@ -3741,9 +3742,16 @@ void CityData::CalculateBonusGold()
 	//////////////////////////////////
 	//EMOD - GoldPerCity but now it multiplied to the max number of cities to allow for higher gold hits to humans 3-27-2006
 	sint32 goldPerCity = buildingutil_GetGoldPerCity(GetEffectiveBuildings(), m_owner);
-	//gold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num());
-	m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num() * g_theGovernmentDB->Get(gov)->GetTooManyCitiesThreshold());
-	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	if(g_theGameSettings->IsNoCityLimit())
+	{
+		m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num());
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	}
+	else
+	{
+		m_bonusGold += static_cast<double>(goldPerCity * player_ptr->m_all_cities->Num() * g_theGovernmentDB->Get(gov)->GetTooManyCitiesThreshold());
+		DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  GetGoldPerCity                = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	}
 
 	///////////////////////////////////////////////
 	// EMOD - Add (or if negative Subtract) gold per unit
@@ -3833,7 +3841,7 @@ void CityData::CalculateCoeffGold()
 	}
 
 	//emod for energy impacts
-	if(g_theProfileDB->IsNRG())
+	if(g_theProfileDB->IsNRG() && !g_network.IsActive())
 	{
 		double energysupply = g_player[m_owner]->GetEnergySupply();
 		if(energysupply > 0.0)
@@ -4664,7 +4672,7 @@ sint32 CityData::GetSupportCityCost() const
 		return goldPerCity * PopCount();
 	}
 
-	if(g_theProfileDB->IsGoldPerCity())
+	if(g_theGameSettings->IsGoldPerCity())
 	{
 		return PopCount();
 	}
@@ -5125,7 +5133,7 @@ bool CityData::BeginTurn()
 
 	SplitScience(false);
 
-	CollectOtherTrade(false);
+	CollectOtherGold(false);
 //	DoSupport(false); // Check
 #endif
 
@@ -5270,7 +5278,7 @@ void CityData::EndTurn()
 	GenerateCityInfluence(m_home_city.RetPos(), m_sizeIndex);
 }
 
-void CityData::CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass)
+void CityData::CalcHappiness(bool isFirstPass)
 {
 	sint32 delta_martial_law;
 	m_happy->CalcHappiness(*this, false, delta_martial_law, isFirstPass);
@@ -5427,15 +5435,8 @@ bool CityData::BuildWonder(sint32 type)
 	Assert(CanBuildWonder(type));
 	if(!CanBuildWonder(type))
 	{
-#ifdef _DEBUG
-		char error_msg[300];
+		DPRINTF(k_DBG_GAMESTATE, ("Cannot build wonder: %d\n", g_theWonderDB->Get(type)->GetNameText()));
 
-		sprintf(error_msg, "Cannot build wonder %d",
-		    type);
-#ifdef WIN32
-		_RPT0(_CRT_WARN, error_msg);
-#endif
-#endif
 		return false;
 	}
 
@@ -5749,7 +5750,7 @@ double CityData::GetDefendersBonus() const
 {
 	// EMOD add population as a contributor to defense for AI, to make larger cities even tougher. It takes total population * defense coefficient * percentage of people that are happy (and most likely to resist)
 	if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAICityDefenderBonus()
-	||  g_theProfileDB->IsAICityDefenderBonus())
+	||  g_theProfileDB->IsAICityDefenderBonus() && !g_network.IsActive())
 	&& g_player[m_owner]->IsRobot()
 	){
 		return m_defensiveBonus * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef() + (PopCount() * g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetDefenseCoef()) * (m_happy->GetHappiness() * .01);
@@ -6258,16 +6259,16 @@ void CityData::DoUprising(UPRISING_CAUSE cause)
 
 	m_doUprising = UPRISING_CAUSE_NONE;
 
-	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+	MapPoint cpos;
+	m_home_city.GetPos(cpos);
+
+	sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit(cpos);
 	Assert(cheapUnit >= 0);
 	if (cheapUnit < 0)
 		return;
 
 	sint32 numSlaves = SlaveCount();
 	PLAYER_INDEX si = PLAYER_INDEX_VANDALS; // let slave army belong to vandals for the fight to avoid inappropriate "civ-conquered" event in case of failure
-
-	MapPoint cpos;
-	m_home_city.GetPos(cpos);
 
 	if(numSlaves > k_MAX_ARMY_SIZE)
 		numSlaves = k_MAX_ARMY_SIZE;
@@ -9712,7 +9713,7 @@ void CityData::SplitScience(bool projectedOnly, sint32 &gold, sint32 &science, s
 // Remark(s)  : Use this method if you want to change the gold production.
 //
 //----------------------------------------------------------------------------
-void CityData::CollectOtherTrade(const bool projectedOnly)
+void CityData::CollectOtherGold(const bool projectedOnly)
 {
 	ProcessGold(m_net_gold);
 	CalcGoldLoss(projectedOnly, m_net_gold, m_convertedGold, m_gold_lost_to_crime);
@@ -11144,7 +11145,7 @@ sint32 CityData::SectarianHappiness() const
 {
 	if(
 	  (g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetSectarianHappiness())
-	||(g_theProfileDB->IsSectarianHappiness())
+	||(g_theProfileDB->IsSectarianHappiness() && !g_network.IsActive())
 	) {
 		ProcessSectarianHappiness(m_secthappy, m_owner, m_cityStyle);
 	}
@@ -11274,8 +11275,7 @@ void CityData::ProcessAllResources()
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for nothing         = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	// Recalculation happiness as crime losses depends on happiness.
-	sint32 gold;
-	CalcHappiness(gold, false);
+	CalcHappiness(false);
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for happiness calc  = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
@@ -11305,7 +11305,7 @@ void CityData::ProcessAllResources()
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for paying scince   = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
-	CollectOtherTrade(true);
+	CollectOtherGold(true);
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for other trade     = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
@@ -11319,7 +11319,7 @@ void CityData::ProcessAllResources()
 #endif
 	// Production has an effect on pollution and polltion has an effect
 	// on happiness. Of course better would be only one recalculation.
-	CalcHappiness(gold, false);
+	CalcHappiness(false);
 
 	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  City time for happiness       = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
@@ -11517,7 +11517,7 @@ void CityData::InsurgentSpawn()
 	const RiskRecord *risk = g_theRiskDB->Get(g_theGameSettings->GetRisk());
 
 	if(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltInsurgents()
-	|| g_theProfileDB->IsRevoltInsurgents()
+	|| g_theGameSettings->IsRevoltInsurgents()
 	){
 		double barbchance   = risk->GetBarbarianChance();
 		double notFounder   = 0.0;
@@ -11560,7 +11560,7 @@ void CityData::RiotCasualties()
 	//EMOD to cut population after a revolt (adds realism and minimizes repeat revolts/ feral cities)
 	if(
 	   (      g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetRevoltCasualties()
-	      ||  g_theProfileDB->IsRevoltCasualties()
+	      ||  g_theGameSettings->IsRevoltCasualties()
 	   )
 	   &&     PopCount() >= 10
 	  )
@@ -11658,11 +11658,11 @@ void CityData::Militia()
 
 	if(g_theWorld->GetCell(cpos)->GetNumUnits() <= 0)
 	{
-		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit();
+		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit(cpos);
 
 		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
 		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
-		|| 	g_theProfileDB->IsAIMilitiaUnit())
+		|| 	g_theProfileDB->IsAIMilitiaUnit() && !g_network.IsActive())
 		&& g_player[m_owner]->IsRobot()
 		){
 			g_player[m_owner]->CreateUnit(cheapUnit, cpos, m_home_city, false, CAUSE_NEW_ARMY_CHEAT);

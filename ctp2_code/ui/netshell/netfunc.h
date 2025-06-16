@@ -19,7 +19,7 @@
 //
 // _DEBUG
 // Generate debug information.
-// USE_SDL
+// __AUI_USE_SDL__
 // Use SDL API calls
 // WIN32
 // Use MS Windows32 API calls
@@ -50,7 +50,7 @@
 #include <string.h>
 #include <list>
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
@@ -58,10 +58,14 @@
 #if defined(WIN32)
 #include <windows.h>
 #define NETFUNC_CALLBACK_RESULT(a_Type) a_Type __stdcall
+#else
+#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
+#endif
+
+#if !defined(__AUI_USE_SDL__)
 #define NETFUNC_CONNECT_RESULT          DWORD WINAPI
 #define NETFUNC_CONNECT_PARAMETER       LPVOID
 #else
-#define NETFUNC_CALLBACK_RESULT(a_Type) a_Type
 #define NETFUNC_CONNECT_RESULT          int
 #define NETFUNC_CONNECT_PARAMETER       void *
 #endif
@@ -70,15 +74,15 @@ class NETFunc
 {
 public:
 
-	static dp_species_t GameType;
+	static dp_species_t s_GameType;
 
-	static char *LobbyName;
+	static char*        s_LobbyName;
 
-	static char *DllPath;
+	static char*        s_DllPath;
 
-	static	char	servername[64];
-	static	char	playername[dp_PNAMELEN];
-	static	char	sessionname[dp_SNAMELEN];
+	static char         s_servername[64];
+	static char         s_playername[dp_PNAMELEN];
+	static char         s_sessionname[dp_SNAMELEN];
 
 
 enum STATUS
@@ -115,9 +119,9 @@ static char *StringDup(char *s);
 
 class Timer
 {
-	DWORD	start;
-	DWORD	finish;
-	bool	done;
+	DWORD   m_start;
+	DWORD   m_finish;
+	bool    m_done;
 public:
 
 	Timer(void);
@@ -126,19 +130,19 @@ public:
 
 	bool Finished(void);
 };
-Timer timer;
-Timer timeout;
+Timer m_timer;
+Timer m_timeout;
 
 struct KeyStruct
 {
-	short len;
-	char buf[dp_KEY_MAXLEN + 2];
+	short m_len;
+	char  m_buf[dp_KEY_MAXLEN + 2];
 };
 
 class Keys {
 friend class NETFunc;
 protected:
-	KeyStruct curkey;
+	KeyStruct m_curkey;
 public:
 
 	Keys(void);
@@ -149,7 +153,7 @@ class Key
 {
 friend class NETFunc;
 protected:
-	KeyStruct key;
+	KeyStruct m_key;
 public:
 
 	Key(void);
@@ -176,39 +180,39 @@ class List:public std::list<T *>
 friend class NETFunc;
 public:
 	typename List<T>::iterator Find(T *t)
-    {
+	{
 		for (typename List<T>::iterator i = this->begin(); i != this->end(); ++i)
-        {
+		{
 			if (t->Equals(*i))
-            {
+			{
 				return i;
-            }
-        }
+			}
+		}
 
 		return this->end();
 	}
 
 	void Clr(void)
-    {
+	{
 		for (typename List<T>::iterator i = this->begin(); i != this->end(); ++i)
-        {
+		{
 			delete *i;
-        }
+		}
 
 		this->clear();
 	}
 
 	T *Add(T *t)
-    {
+	{
 		typename List<T>::iterator i = Find(t);
 
-        if (i == this->end())
-        {
+		if (i == this->end())
+		{
 			this->push_back(t);
 			return t;
 		}
-        else
-        {
+		else
+		{
 			memcpy(*i, t, sizeof(T));
 			delete t;
 			return *i;
@@ -216,47 +220,47 @@ public:
 	}
 
 	void Del(T *t)
-    {
+	{
 		typename List<T>::iterator i = Find(t);
 
 		if (i != this->end())
-        {
+		{
 			delete *i;
 			this->erase(i);
 		}
 	}
 
 	T *Chg(T *t)
-    {
+	{
 		typename List<T>::iterator i = Find(t);
 
 		if (i == this->end())
-        {
+		{
 			T *n = new T(*t);
 			this->push_back(n);
 			return n;
 		}
-        else
-        {
+		else
+		{
 			memcpy(*i, t, sizeof(T));
 			return *i;
 		}
 	}
 
 	virtual ~List(void)
-    {
-        this->Clr();
+	{
+		this->Clr();
 	}
 
 	List(List<T> *l)
-    {
+	{
 		if (l)
-        {
+		{
 			for (typename List<T>::iterator i = l->begin(); i != l->end(); ++i)
-            {
+			{
 				this->Add(new T(**i));
-            }
-        }
+			}
+		}
 	}
 
 	List(void) {
@@ -268,11 +272,11 @@ class Messages;
 class Message:public Key
 {
 friend class NETFunc;
-	char *body;
-	dpid_t sender;
-	size_t size;
+	char*  m_body;
+	dpid_t m_sender;
+	size_t m_size;
 
-	bool newbody;
+	bool m_newbody;
 #define nf_PACKET_INITIALBYTE 'n'
 #define ns_PACKET_INITIALBYTE 's'
 public:
@@ -368,37 +372,37 @@ class Packet
 public:
 	typedef unsigned char SizeT;
 protected:
-	SizeT size;
+	SizeT  m_size;
 
-	char	body[nf_MAX_PACKETSIZE];
+	char   m_body[nf_MAX_PACKETSIZE];
 
-	char	*first;
+	char*  m_first;
 public:
 
 	void WriteToFile(FILE *saveFile) const;
 	void ReadFromFile(FILE *saveFile);
 
 	char *GetBody(void) {
-		return body;
+		return m_body;
 	}
 
 	size_t GetSize(void) {
-		return size;
+		return m_size;
 	}
 
 	Packet() {
 
-		size = 0;
+		m_size = 0;
 
-		first = body;
+		m_first = m_body;
 	}
 
 	void Set(size_t s, void * b)
-    {
-        Assert(s < nf_MAX_PACKETSIZE);
-		memcpy(body, b, s);
-        size = static_cast<NETFunc::Packet::SizeT>(s);
-		first = body;
+	{
+		Assert(s < nf_MAX_PACKETSIZE);
+		memcpy(m_body, b, s);
+		m_size = static_cast<NETFunc::Packet::SizeT>(s);
+		m_first = m_body;
 		Unpack();
 	}
 
@@ -414,40 +418,40 @@ public:
 	virtual void Unpack(void) = 0;
 
 	void Clear() {
-		size = 0;
-		first = body;
+		m_size = 0;
+		m_first = m_body;
 	}
 
 	void Grow(size_t s) {
-		Assert((size + s) <= nf_MAX_PACKETSIZE);
-        size = static_cast<SizeT>(size + s);
+		Assert((m_size + s) <= nf_MAX_PACKETSIZE);
+		m_size = static_cast<SizeT>(m_size + s);
 	}
 
 	template<typename type>
 	void Push(type t) {
 		Grow(sizeof(type));
-		*(type *)(body + size - sizeof(type)) = t;
+		*(type *)(m_body + m_size - sizeof(type)) = t;
 	}
 
 	template<typename type>
 	void Pop(type& t) {
 
-		t = *(type *)(first);
-		first += sizeof(type);
+		t = *(type *)(m_first);
+		m_first += sizeof(type);
 
 	}
 
 	void Push(char *c) {
 		size_t const    s = strlen(c) + 1;
 		Grow(s);
-		strcpy(body + size - s, c);
+		strcpy(m_body + m_size - s, c);
 	}
 
 	void Pop(char *c) {
-		size_t const    s = strlen(first) + 1;
+		size_t const    s = strlen(m_first) + 1;
 
-		strcpy(c, first);
-		first += s;
+		strcpy(c, m_first);
+		m_first += s;
 	}
 };
 
@@ -460,9 +464,9 @@ class MessageHandler
 {
 #define nf_MAX_HANDLERS 128
 
-	static MessageHandler *hList[nf_MAX_HANDLERS];
+	static MessageHandler *s_hList[nf_MAX_HANDLERS];
 
-	static int hCount;
+	static int s_hCount;
 
 	virtual bool Handle(Message *m) = 0;
 protected:
@@ -486,7 +490,7 @@ public:
 template<class T>
 class ListHandler:public MessageHandler, public List<T>, public Key
 {
-	STATUS status;
+	STATUS m_status;
 public:
 
 	ListHandler(void) {
@@ -499,8 +503,8 @@ public:
 	void SetKey();
 	bool Equals(KeyStruct *k) {
 
-		if(key.buf[0] == dp_KEY_PLAYERS)
-			return (k->buf[0] == dp_KEY_PLAYERS && memcmp(&key.buf[key.len - 2], &k->buf[k->len - 2], 2) == 0);
+		if(m_key.m_buf[0] == dp_KEY_PLAYERS)
+			return (k->m_buf[0] == dp_KEY_PLAYERS && memcmp(&m_key.m_buf[m_key.m_len - 2], &k->m_buf[k->m_len - 2], 2) == 0);
 		else
 			return Key::Equals(k);
 	}
@@ -510,12 +514,12 @@ public:
 			Destroy();
 			this->Clr();
 		}
-		if(key.buf[0] == dp_KEY_PLAYERS) {
+		if(m_key.m_buf[0] == dp_KEY_PLAYERS) {
 			if(k) {
-				memcpy(&key.buf[1], &k->buf[0], k->len);
-				key.len = k->len + 1;
+				memcpy(&m_key.m_buf[1], &k->m_buf[0], k->m_len);
+				m_key.m_len = k->m_len + 1;
 			} else
-				memset(&key.buf[1], 0, key.len - 1);
+				memset(&m_key.m_buf[1], 0, m_key.m_len - 1);
 		}
 	}
 
@@ -544,7 +548,7 @@ static STATUS EnumPlayers(bool b, KeyStruct *k);
 
 class Server:public Key
 {
-	dp_serverInfo_t server;
+	dp_serverInfo_t m_server;
 public:
 
 	void SetKey(void) {};
@@ -570,8 +574,8 @@ public:
 
 class Contact:public Key
 {
-	char	*name;
-	char	*number;
+	char	*m_name;
+	char	*m_number;
 public:
 
 	Contact(char *n, char *p);
@@ -600,7 +604,7 @@ public:
 
 	~ContactList(void);
 };
-ContactList	contactList;
+ContactList	m_contactList;
 
 
 
@@ -608,9 +612,9 @@ ContactList	contactList;
 class Port:public Key
 {
 #define nf_PORTINITLEN 128
-	commPortName_t port;
-	int		baud;
-	char init[nf_PORTINITLEN];
+	commPortName_t m_port;
+	int		m_baud;
+	char m_init[nf_PORTINITLEN];
 public:
 
 	Port(commPortName_t *p, int b, char *i);
@@ -644,7 +648,7 @@ public:
 	~PortList(void);
 };
 
-PortList portList;
+PortList m_portList;
 friend class PortList;
 
 
@@ -658,9 +662,9 @@ class Transport:public Key
 {
 friend class PortList;
 protected:
-	dp_transport_t		transport;
-	comm_driverInfo_t	description;
-	commInitReq_t		parameters;
+	dp_transport_t		m_transport;
+	comm_driverInfo_t	m_description;
+	commInitReq_t		m_parameters;
 
 	STATUS status;
 public:
@@ -705,8 +709,8 @@ public:
 
 class TransportSetup
 {
-	dp_transport_t		transport;
-	commInitReq_t		parameters;
+	dp_transport_t		m_transport;
+	commInitReq_t		m_parameters;
 
 	STATUS status;
 	Transport::TYPE type;
@@ -724,7 +728,7 @@ public:
 
 	commInitReq_t		*GetParams(void);
 };
-static TransportSetup *transport;
+static TransportSetup *s_transport;
 friend class TransportSetup;
 
 
@@ -793,17 +797,17 @@ friend class NullModem;
 
 class TransportList:public List<Transport>
 {
-	KeyStruct key;
+	KeyStruct m_key;
 
 	static NETFUNC_CALLBACK_RESULT(void)
-    CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
+	CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context);
 public:
 
 	TransportList(void);
 
 	~TransportList(void);
 };
-TransportList transportList;
+TransportList m_transportList;
 friend class TransportList;
 
 
@@ -819,8 +823,8 @@ class AIPlayer:public Key, public Packet
 {
 friend class NETFunc;
 protected:
-	char	name[dp_PNAMELEN];
-	unsigned char group;
+	char	m_name[dp_PNAMELEN];
+	unsigned char m_group;
 public:
 
 	AIPlayer(void);
@@ -861,7 +865,7 @@ public:
 
 	bool Handle(dp_t *p, Message *m, dpid_t from = dp_ID_BROADCAST);
 };
-AIPlayers *aiPlayers;
+AIPlayers *m_aiPlayers;
 friend class AIPlayers;
 
 class Players;
@@ -877,10 +881,10 @@ friend class Players;
 #define nf_READYLAUNCH	0x20
 #define nf_GROUPNUMBER	0x1f
 protected:
-	dp_playerId_t	player;
-	long			flags;
-	short			latency;
-	bool			muted;
+	dp_playerId_t	m_player;
+	long			m_flags;
+	short			m_latency;
+	bool			m_muted;
 
 	void SetGroupMaster(bool b);
 public:
@@ -922,8 +926,8 @@ public:
 	bool IsReadyToLaunch(void);
 };
 friend class Player;
-static Player player;
-static dp_uid_t userId;
+static Player s_player;
+static dp_uid_t s_userId;
 
 
 class Players:public List<Player>
@@ -950,10 +954,10 @@ class PlayerStat:public Key, public Packet
 {
 friend class NETFunc;
 protected:
-	char	name[dp_PNAMELEN];
-	unsigned char group;
-	bool isingame;
-	bool hasleft;
+	char	m_name[dp_PNAMELEN];
+	unsigned char m_group;
+	bool m_isingame;
+	bool m_hasleft;
 public:
 
 	void Pack(void);
@@ -1004,7 +1008,7 @@ public:
 
 	bool Handle(dp_t *p, Message *m, dpid_t from = dp_ID_BROADCAST);
 };
-PlayerStats *playerStats;
+PlayerStats *m_playerStats;
 friend class PlayerStats;
 
 class PlayerSetup:public Player, public Packet
@@ -1012,7 +1016,7 @@ class PlayerSetup:public Player, public Packet
 friend class NETFunc;
 #define nf_PLAYERDESCLEN 128
 private:
-	char description[nf_PLAYERDESCLEN];
+	char m_description[nf_PLAYERDESCLEN];
 protected:
 
 	void Pack(void);
@@ -1060,8 +1064,8 @@ friend class ListHandler<Game>;
 friend class ListHandler<Lobby>;
 friend class ListHandler<Session>;
 protected:
-	dp_session_t session;
-	long flags;
+	dp_session_t m_session;
+	long m_flags;
 public:
 
 	void SetKey(void);
@@ -1097,7 +1101,7 @@ public:
 
 	bool IsCurrentSession(void);
 };
-static Session session;
+static Session m_session;
 friend class Session;
 
 
@@ -1107,7 +1111,7 @@ friend class NETFunc;
 #define nf_LAUNCHED 0x40
 #define nf_SYNCLAUNCH 0x20
 protected:
-	bool hostile;
+	bool m_hostile;
 public:
 
 	Game(void);
@@ -1136,7 +1140,7 @@ friend class Game;
 
 class Lobby:public Session {
 friend class NETFunc;
-bool bad;
+bool m_bad;
 public:
 
 	Lobby(void);
@@ -1147,7 +1151,7 @@ public:
 
 	bool IsBad(void);
 };
-static Lobby lobby;
+static Lobby s_lobby;
 friend class Lobby;
 
 class PlayerList
@@ -1159,8 +1163,8 @@ class PlayerList
 		void Change(Player *) {};
 		void Destroy(void) {};
 	};
-	static Players *players;
-	static int count;
+	static Players *s_players;
+	static int s_count;
 
 	PlayerList(void);
 
@@ -1175,7 +1179,7 @@ class GameSetup : public Game, public Packet
 {
 friend class NETFunc;
 #define nf_GAMEDESCLEN 128
-	char	description[nf_GAMEDESCLEN];
+	char	m_description[nf_GAMEDESCLEN];
 
 public:
 	void SetLaunched(bool b);
@@ -1235,7 +1239,7 @@ friend class GameSetup;
 
 
 class Chat:public MessageHandler, public PlayerList {
-	NETFunc *netf;
+	NETFunc *m_netf;
 public:
 	enum Type {
 		PRIVATE = 'r',
@@ -1348,7 +1352,7 @@ public:
 
 	STATUS Connect(char *file);
 
-	STATUS Join(Game *g, char *password = "");
+	STATUS Join(Game *g, const char *password = "");
 
 	STATUS Join(Lobby *l);
 
@@ -1387,72 +1391,72 @@ public:
 
 
 private:
-#ifdef USE_SDL
-	SDL_Thread *threadHandle;
-	Uint32 threadId;
+#ifdef __AUI_USE_SDL__
+	SDL_Thread *m_threadHandle;
+	Uint32 m_threadId;
 #else
-	HANDLE threadHandle;
-	DWORD threadId;
+	HANDLE m_threadHandle;
+	DWORD m_threadId;
 #endif
-	static long cancelDial;
+	static long s_cancelDial;
 
-	dp_appParam_t appParam;
+	dp_appParam_t m_appParam;
 
-	static dp_t *dp;
+	static dp_t *s_dp;
 
-	static dp_result_t	result;
+	static dp_result_t	s_result;
 
-	static char buffer[dpio_MAXLEN_UNRELIABLE];
+	static char s_buffer[dpio_MAXLEN_UNRELIABLE];
 
-	static size_t size;
+	static size_t s_size;
 
-	static dpid_t source;
+	static dpid_t s_source;
 
-	static dpid_t destination;
+	static dpid_t s_destination;
 
-	static int PlayerSetupPacketKey;
+	static int s_PlayerSetupPacketKey;
 
-	static STATUS status;
+	static STATUS s_status;
 
-	STATUS nextStatus;
+	STATUS m_nextStatus;
 
-	static bool connected;
+	static bool s_connected;
 
-	static bool reconnected;
+	static bool s_reconnected;
 
-	int retries;
+	int m_retries;
 public:
 
-	static PlayerSetup playerSetup;
+	static PlayerSetup s_playerSetup;
 private:
 
-	static bool playerset;
+	static bool s_playerset;
 
-	static bool setplayerpacket;
+	static bool s_setplayerpacket;
 
-	static bool setplayer;
+	static bool s_setplayer;
 public:
 
 	static GameSetup gameSetup;
 private:
 
-	static bool	game;
+	static bool s_game;
 
-	static bool	host;
+	static bool s_theHost;
 
-	static bool	launch;
+	static bool s_launch;
 
-	static bool	launched;
+	static bool s_launched;
 
-	static bool	canlaunch;
+	static bool s_canlaunch;
 
-	static bool setgamepacket;
+	static bool s_setgamepacket;
 
-	static bool setgame;
+	static bool s_setgame;
 
-	static bool gotgamepacket;
+	static bool s_gotgamepacket;
 
-	static bool gotgame;
+	static bool s_gotgame;
 
 bool Handle(Message *m);
 
@@ -1476,7 +1480,7 @@ public:
 
 	void Reset(void);
 };
-Lobbies lobbies;
+Lobbies s_lobbies;
 friend class Lobbies;
 
 
@@ -1487,7 +1491,7 @@ public:
 
 	bool Check(Key *s);
 };
-static Hostiles hostiles;
+static Hostiles s_hostiles;
 friend class Hostiles;
 
 
@@ -1498,7 +1502,7 @@ public:
 
 	bool Check(Key *p);
 };
-static Mutes mutes;
+static Mutes s_mutes;
 friend class Mutes;
 };
 

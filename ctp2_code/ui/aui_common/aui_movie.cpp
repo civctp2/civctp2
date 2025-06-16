@@ -369,8 +369,13 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 	}
 
 	MSG msg;
-	m_windowProc = (WNDPROC)GetWindowLong( g_ui->TheHWND(), GWL_WNDPROC );
-	SetWindowLong( g_ui->TheHWND(), GWL_WNDPROC, (LONG)OnScreenMovieWindowProc );
+#if defined(_WIN64)
+	m_windowProc = (WNDPROC)GetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC );
+	SetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC, (LONG_PTR)OnScreenMovieWindowProc );
+#else
+	m_windowProc = (WNDPROC)GetWindowLong(g_ui->TheHWND(), GWL_WNDPROC);
+	SetWindowLong(g_ui->TheHWND(), GWL_WNDPROC, (LONG)OnScreenMovieWindowProc);
+#endif
 
 	m_onScreenMovie = this;
 
@@ -404,7 +409,12 @@ AUI_ERRCODE aui_Movie::PlayOnScreenMovie( void )
 
 	m_onScreenMovie = NULL;
 
-	SetWindowLong( g_ui->TheHWND(), GWL_WNDPROC, (LONG)m_windowProc );
+#if defined(_WIN64)
+	SetWindowLongPtr( g_ui->TheHWND(), GWLP_WNDPROC, (LONG_PTR)m_windowProc );
+#else
+	SetWindowLong(g_ui->TheHWND(), GWL_WNDPROC, (LONG)m_windowProc);
+#endif
+
 	m_windowProc = NULL;
 
 	if (mouse)
@@ -564,9 +574,16 @@ LRESULT CALLBACK OnScreenMovieWindowProc(
 			return 0;
 		}
 	}
-
+	// unsigned __int64
+	//__int64
+#if defined(_WIN64)
+	return CallWindowProc(
+	        (__int64(__stdcall *)(HWND, unsigned int, unsigned __int64, __int64))aui_Movie::m_windowProc,
+	         hwnd, message, wParam, lParam );
+#else
 	return CallWindowProc(
 	        (long(__stdcall *)(HWND, unsigned int, unsigned int, long))aui_Movie::m_windowProc,
 	         hwnd, message, wParam, lParam );
+#endif
 }
 #endif

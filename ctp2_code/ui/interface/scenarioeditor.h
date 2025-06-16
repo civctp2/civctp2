@@ -271,7 +271,7 @@ class ScenarioEditor {
 
 	static void FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, void *cookie);
 
-	static void Pollution(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Rules(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void MapSize(aui_Control *control, uint32 action, uint32 data, void *cookie);
 	static void ChangeMapSizeCallback(bool response, void *userData);
 	static void Year(aui_Control *control, uint32 action, uint32 data, void *cookie);

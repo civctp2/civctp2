@@ -1,1 +1,1 @@
-cl /WX /W3 /Zi seriot.c serio.c 
+cl /WX /W3 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Zi seriot.c serio.c 

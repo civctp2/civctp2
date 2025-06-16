@@ -10,6 +10,10 @@ Makefile.in
 *.ilk
 *.map
 *.user
+*.obj
+*.pdb
+*.cod
+*.sbr
 .libs
 .deps
 .vs/
@@ -102,6 +106,9 @@ ctp2_code/gs/newdb/IconRecord.stamp
 ctp2_code/gs/newdb/ImprovementListRecord.cpp
 ctp2_code/gs/newdb/ImprovementListRecord.h
 ctp2_code/gs/newdb/ImprovementListRecord.stamp
+ctp2_code/gs/newdb/LanguageRecord.cpp
+ctp2_code/gs/newdb/LanguageRecord.h
+ctp2_code/gs/newdb/LanguageRecord.stamp
 ctp2_code/gs/newdb/LeaderRecord.cpp
 ctp2_code/gs/newdb/LeaderRecord.h
 ctp2_code/gs/newdb/LeaderRecord.stamp
@@ -238,7 +245,6 @@ ctp2_code/libs/anet/src/test/load/debug/
 ctp2_code/libs/anet/src/test/load/log/
 ctp2_code/libs/anet/src/test/load/normal/
 ctp2_code/libs/anet/src/test/load/profile/
-ctp2_code/mapgen/FaultGen_geometric.cpp
 ctp2_code/os/autoconf/config/
 ctp2_code/os/include/config.h
 ctp2_code/os/include/config.h.in
@@ -741,3 +747,8 @@ ctp2_code/mapgen/fault__0/
 ctp2_code/mapgen/fault__3/
 ctp2_code/mapgen/final/
 ctp2_code/mapgen/geometr0/
+ctp2_code/mapgen/Crater/
+ctp2_code/mapgen/Plasma2/
+ctp2_code/mapgen/fault/
+ctp2_code/mapgen/geometric/
+ctp2_code/msvc/

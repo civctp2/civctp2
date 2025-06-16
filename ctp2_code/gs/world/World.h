@@ -195,9 +195,9 @@ public:
         return m_map[p.x][p.y];
     };
 
-    Cell * GetCell(const sint32 x, const sint32 y)  const {
-        Assert(0 <= x);  Assert(x < m_size.x);
-        Assert(0 <= y);  Assert(y < m_size.y);
+    Cell * GetCell(const size_t x, const size_t y)  const {
+        Assert(x < static_cast<size_t>(m_size.x));
+        Assert(y < static_cast<size_t>(m_size.y));
         return m_map[x][y];
     };
 
@@ -208,9 +208,9 @@ public:
         return m_map[p.x][p.y];
     };
 
-    Cell * AccessCell(const sint32 x, const sint32 y)  {
-        Assert(0 <= x);  Assert(x < m_size.x);
-        Assert(0 <= y);  Assert(y < m_size.y);
+    Cell * AccessCell(const size_t x, const size_t y)  {
+        Assert(x < static_cast<size_t>(m_size.x));
+        Assert(y < static_cast<size_t>(m_size.y));
         return m_map[x][y];
     };
 

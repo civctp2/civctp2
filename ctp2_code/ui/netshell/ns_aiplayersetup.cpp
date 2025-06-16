@@ -44,7 +44,7 @@ nf_AIPlayer::nf_AIPlayer(NETFunc::AIPlayer *p):NETFunc::AIPlayer(*p) {
 }
 
 void nf_AIPlayer::SetKey(NETFunc::KeyStruct *k) {
-	memcpy(&key, k, sizeof(NETFunc::KeyStruct));
+	memcpy(&m_key, k, sizeof(NETFunc::KeyStruct));
 	SetTribe(0);
 	SetCivPoints(0);
 	SetPwPoints(0);

@@ -145,6 +145,7 @@
 #include "GlobalWarmingRecord.h"
 #include "MapRecord.h"
 #include "MapIconRecord.h"
+#include "LanguageRecord.h"
 #include "SlicDBConduit.h"
 #include "SlicModFunction.h"
 #include "GameEventManager.h"
@@ -746,6 +747,8 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_AddMovement);
 	m_functionHash->Add(new Slic_ToggleVeteran);
 	m_functionHash->Add(new Slic_IsVeteran);
+	m_functionHash->Add(new Slic_ToggleElite);
+	m_functionHash->Add(new Slic_IsElite);
 
 	m_functionHash->Add(new Slic_CantAttackUnit);
 	m_functionHash->Add(new Slic_CantAttackCity);
@@ -969,6 +972,11 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_GetContinent);
 	m_functionHash->Add(new Slic_GetContinentSize);
 	m_functionHash->Add(new Slic_IsWater);
+	m_functionHash->Add(new Slic_SetVeteran);
+	m_functionHash->Add(new Slic_UnsetVeteran);
+	m_functionHash->Add(new Slic_SetElite);
+	m_functionHash->Add(new Slic_UnsetElite);
+	m_functionHash->Add(new Slic_HearGossip);
 	//Added by Solver
 	m_functionHash->Add(new Slic_IsOnSameContinent);
 	//Added by E
@@ -2741,7 +2749,7 @@ SlicStructDescription *SlicEngine::GetStructDescription(SLIC_BUILTIN which)
 	return m_builtin_desc[which];
 }
 
-void SlicEngine::Break(SlicSegment *segment, sint32 offset, SlicObject *context, SlicStack *stack,
+void SlicEngine::Break(SlicSegment *segment, size_t offset, SlicObject *context, SlicStack *stack,
 					   MessageData *message)
 {
 
@@ -3048,6 +3056,11 @@ void SlicEngine::AddDatabases()
 															   g_ConstRecord_Accessors,
 															   g_Const_Tokens,
 															   k_Num_ConstRecord_Tokens));
+	m_dbHash->Add(new SlicDBConduit<LanguageRecord,
+									LanguageRecordAccessorInfo>("LanguageDB", g_theLanguageDB,
+															   g_LanguageRecord_Accessors,
+															   g_Language_Tokens,
+															   k_Num_LanguageRecord_Tokens));
 }
 
 SlicDBInterface *SlicEngine::GetDBConduit(const char *name)

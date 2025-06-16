@@ -74,7 +74,7 @@ CLEAN :
 # ADD BASE CPP /nologo /MT /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_WINDOWS" /YX /c
 # ADD CPP /nologo /Zp1 /MD /W3 /GX /O2 /I "..\h" /I "..\main" /I "..\..\..\h" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /YX /c
 CPP_PROJ=/nologo /Zp1 /MD /W3 /GX /O2 /I "..\h" /I "..\main" /I "..\..\..\h" /D\
- "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK"\
+ "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH\
  /Fp"$(INTDIR)/wserial.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\Release/
 CPP_SBRS=.\.
@@ -150,7 +150,7 @@ CLEAN :
 # ADD BASE CPP /nologo /MTd /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_WINDOWS" /YX /c
 # ADD CPP /nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\main" /I "..\..\..\h" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /FR /YX /c
 CPP_PROJ=/nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\main" /I\
- "..\..\..\h" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK"\
+ "..\..\..\h" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /FR"$(INTDIR)/" /Fp"$(INTDIR)/wserial.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/"\
  /c 
 CPP_OBJS=.\Debug/
@@ -236,7 +236,7 @@ CLEAN :
 # ADD CPP /nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\main" /I "..\..\..\h" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /D "dp_ANET2" /FR /YX /c
 CPP_PROJ=/nologo /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\main" /I\
  "..\..\..\h" /D "_DEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /D\
- "dp_ANET2" /FR"$(INTDIR)/" /Fp"$(INTDIR)/wserial.pch" /YX /Fo"$(INTDIR)/"\
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/" /Fp"$(INTDIR)/wserial.pch" /YX /Fo"$(INTDIR)/"\
  /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\wserial2d/
 CPP_SBRS=.\wserial2d/
@@ -313,7 +313,7 @@ CLEAN :
 # ADD CPP /nologo /Zp1 /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\main" /I "..\..\..\h" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /D "dp_ANET2" /FAcs /YX /c
 CPP_PROJ=/nologo /Zp1 /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\main" /I\
  "..\..\..\h" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "_WIN32" /D "DYNALINK" /D\
- "dp_ANET2" /FAcs /Fa"$(INTDIR)/" /Fp"$(INTDIR)/wserial.pch" /YX /Fo"$(INTDIR)/"\
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FAcs /Fa"$(INTDIR)/" /Fp"$(INTDIR)/wserial.pch" /YX /Fo"$(INTDIR)/"\
  /c 
 CPP_OBJS=.\wserial2/
 CPP_SBRS=.\.

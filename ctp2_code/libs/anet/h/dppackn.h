@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Use dpunpack.h to revert to previous packing state.
 
  $Log: dppackn.h $
+ Revision 1.4  2025/04/07 23:51:34  Martin Gühmann
+ Make packing work in Visual Studio x64 builds
  Revision 1.3  1997/06/10 23:58:01  dkegel
  Define PACK if not yet defined; used to be done in anet.h.
  Revision 1.2  1997/06/01 00:00:31  dkegel
@@ -39,9 +41,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma options align=native
 
-#elif defined(_M_IX86)      /* Visual C */
+#elif defined(__GNUC__)     /* GNU C */
 
 #pragma pack(push)
+
+#elif defined(_MSC_VER)     /* Visual C*/
+
+#pragma pack(push)
+
+#else
+
+// Visual Sudio should just ignore this, but it doesn't for wipx, winits, and wudplan. Anet is fine.
+//#error "Packing not defined for this compiler"
+
 
 #endif
 

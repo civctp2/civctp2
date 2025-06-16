@@ -163,7 +163,7 @@ NetThread::~NetThread()
 	}
 }
 
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 static int NetThread_StartThread(void *obj)
 #elif defined(WIN32)
 DWORD WINAPI NetThread_StartThread(LPVOID obj)
@@ -189,7 +189,7 @@ NetThread::NetThread()
 	m_anet = NULL;
 	m_exit = m_exited = FALSE;
 
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	m_mutex = SDL_CreateMutex();
 #elif defined(WIN32)
 	InitializeCriticalSection(&m_mutex);
@@ -202,7 +202,7 @@ NET_ERR NetThread::Init(NetIOResponse *response)
 {
 	NetIO::Init(response);
 
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	if ((m_thread = SDL_CreateThread(NetThread_StartThread, "Net-start-thread", this)) == NULL) {
 #elif defined(WIN32)
 	if((m_threadHandle = CreateThread(NULL,
@@ -305,7 +305,7 @@ void NetThread::Run()
 
 void NetThread::Lock()
 {
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	SDL_mutexP(m_mutex);
 #else
 	EnterCriticalSection(&m_mutex);
@@ -314,7 +314,7 @@ void NetThread::Lock()
 
 void NetThread::Unlock()
 {
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	SDL_mutexV(m_mutex);
 #else
 	LeaveCriticalSection(&m_mutex);
@@ -654,7 +654,7 @@ void NetThread::AddPlayer(uint16 id, char* name)
 	TPacketData *packet = new TPacketData(k_RPC_ID,
 										  k_RPC_ADD_PLAYER,
 										  (uint8*)name,
-										  strlen(name) + 1 + sizeof(uint16),
+										  static_cast<sint32>(strlen(name) + 1 + sizeof(uint16)),
 										  TRUE);
 	putshort(&packet->m_buf[strlen(name) + 1], id);
 	m_incoming->AddTail(packet);

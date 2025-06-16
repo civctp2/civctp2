@@ -125,7 +125,7 @@ void NetVision::Packetize(uint8 *buf, uint16 &size)
 
 		ptr++;
 	}
-	size = ptr - buf + 1;
+	size = static_cast<uint16>(ptr - buf + 1);
 }
 
 //----------------------------------------------------------------------------

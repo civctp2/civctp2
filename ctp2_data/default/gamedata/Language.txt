@@ -1,0 +1,120 @@
+#-----------------------------------------------------------------------------
+#
+#  Project      : Call To Power 2
+#  File type    : dbgen input
+#  Description  : Language database
+#  Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+#  Disclaimer
+#
+#  THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+#  This material has been developed at apolyton.net by the Apolyton CtP2 
+#  Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#-----------------------------------------------------------------------------
+#
+# Notes
+#
+# - You can alter the order of elements, as the indeces are not saved.
+# - The only thing that is saved in UserProfile.txt is the Directory.
+# - Please update the database indeces in the comments if you insert a 
+#   language, these indeces help with debugging.
+# - Directory and its subdirectories contain the language specific files.
+# - CTP2 will try the ISO code from the system settings, if no matching ISO
+#   code is found the first entry that is marked as default is used.
+# - Description is a string that describes the state of the language, whether
+#   it is complete, a fan translation or why it is disabled.
+# - Hidden allows you to hide a language from the ingame language chooser,
+#   however its folder can still be selected from UserProfile.txt,
+#   that is also true for Disabled labguages.
+# - The Disabled keyword is there to hint potental translators that they can
+#   contribute by translating.
+#
+#-----------------------------------------------------------------------------
+#
+#  Modifications from the original Activision code:
+#
+# - Created file. (01-May-2025 Martin Gühmann)
+#
+#-----------------------------------------------------------------------------
+
+## 0 ##########################################################
+
+LANGUAGE_CHINESE {
+	IsoCode "zh"
+	Description INFO_CHINESE
+	Directory "chinese"
+	Disabled
+}
+
+## 1 ##########################################################
+
+LANGUAGE_CZECH {
+	IsoCode "cs"
+	Description INFO_CZECH
+	Directory "czech"
+}
+
+## 2 ##########################################################
+
+LANGUAGE_ENGLISH {
+	IsoCode "en"
+	Description INFO_ENGLISH
+	Directory "english"
+	Default
+}
+
+## 3 ##########################################################
+
+LANGUAGE_FRENCH {
+	IsoCode "fr"
+	Description INFO_FRENCH
+	Directory "french"
+}
+
+## 4 ##########################################################
+
+LANGUAGE_GERMAN {
+	IsoCode "de"
+	Description INFO_GERMAN
+	Directory "german"
+}
+
+## 5 ##########################################################
+
+LANGUAGE_ITALIAN {
+	IsoCode "it"
+	Description INFO_ITALIAN
+	Directory "italian"
+}
+
+## 6 ##########################################################
+
+LANGUAGE_JAPANESE {
+	IsoCode "ja"
+	Description INFO_JAPANESE
+	Directory "japanese"
+	Disabled
+}
+
+## 7 ##########################################################
+
+LANGUAGE_POLISH {
+	IsoCode "pl"
+	Description INFO_POLISH
+	Directory "polish"
+}
+
+## 8 ##########################################################
+
+LANGUAGE_SPANISH {
+	IsoCode "es"
+	Description INFO_SPANISH
+	Directory "spanish"
+}
+
+## end ##########################################################
+

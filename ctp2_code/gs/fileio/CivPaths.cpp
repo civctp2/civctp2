@@ -18,7 +18,8 @@
 //
 // Compiler flags
 //
-// - None
+// USE_SDL
+// - Use SDL for sound and cdrom (originally, now disabled)
 //
 //----------------------------------------------------------------------------
 //
@@ -34,6 +35,12 @@
 #include "c3.h"
 #include "c3files.h"
 #include "CivPaths.h"
+#include "profileDB.h"        // g_theProfileDB
+#include "LanguageRecord.h"
+#include <clocale>
+#if defined(__AUI_USE_SDL__)
+#include "SDL_locale.h"
+#endif
 
 #ifdef WIN32
 #include <shlobj.h>
@@ -52,10 +59,15 @@ extern ProjectFile *g_ImageMapPF;
 
 #define FILE_CIVPATHS_TXT "civpaths.txt"
 
+#if defined(__AUI_USE_DIRECTX__)
+#include "muiload.h"
+#endif
+
 void CivPaths_InitCivPaths()
 {
 	AUI_ERRCODE err = AUI_ERRCODE_OK;
 
+	// Now let's get the paths, so that we know were the language database is.
 	delete g_civPaths;
 	g_civPaths = new CivPaths(err);
 
@@ -73,61 +85,76 @@ void CivPaths_InitCivPaths()
 			c3errors_FatalDialog("CivPaths", "Unable to setup CTP2 paths.");
 		}
 	}
+
+	// Get the Language DB up
+	g_theLanguageDB = new CTPDatabase<LanguageRecord>;
+	if (!g_theLanguageDB->Parse(C3DIR_GAMEDATA, "Language.txt"))
+	{
+		c3errors_FatalDialog("CivApp", "Unable to init the LanguageDB.");
+	}
+
+	// Get the language directory from the user profile, or if it is not
+	// saved there, get it from the operating system. Or use the default entry
+	// in the langauage database. If this does not exsist, just stay with the 
+	// value from civpath.txt.
+	g_civPaths->FindAndSetLocalizedPath();
+
+	g_civPaths->SetLocaleFromLanguage();
 }
 
 void CivPaths_CleanupCivPaths()
 {
-	delete g_civPaths;
-	g_civPaths = NULL;
+	allocated::clear(g_civPaths);
+	allocated::clear(g_theLanguageDB);
 }
 
 CivPaths::CivPaths(AUI_ERRCODE &errcode)
-:
-    m_hdPath                (new MBCHAR[_MAX_PATH]),
+	:
+	m_hdPath(new MBCHAR[_MAX_PATH]),
 #if !defined(USE_SDL)
-    m_cdPath                (new MBCHAR[_MAX_PATH]),
+	m_cdPath(new MBCHAR[_MAX_PATH]),
 #endif
-    m_defaultPath           (new MBCHAR[_MAX_PATH]),
-    m_localizedPath         (new MBCHAR[_MAX_PATH]),
-    m_dataPath              (new MBCHAR[_MAX_PATH]),
-    m_extraDataPaths        (),
-    m_scenariosPath         (new MBCHAR[_MAX_PATH]),
-    m_savePath              (new MBCHAR[_MAX_PATH]),
-    m_saveGamePath          (new MBCHAR[_MAX_PATH]),
-    m_saveQueuePath         (new MBCHAR[_MAX_PATH]),
-    m_saveMPPath            (new MBCHAR[_MAX_PATH]),
-    m_saveSCENPath          (new MBCHAR[_MAX_PATH]),
-    m_saveMapPath           (new MBCHAR[_MAX_PATH]),
-    m_saveClipsPath         (new MBCHAR[_MAX_PATH]),
-    m_curScenarioPath       (NULL),
-    m_curScenarioPackPath   (NULL)
+	m_defaultPath(new MBCHAR[_MAX_PATH]),
+	m_localizedPath(new MBCHAR[_MAX_PATH]),
+	m_dataPath(new MBCHAR[_MAX_PATH]),
+	m_extraDataPaths(),
+	m_scenariosPath(new MBCHAR[_MAX_PATH]),
+	m_savePath(new MBCHAR[_MAX_PATH]),
+	m_saveGamePath(new MBCHAR[_MAX_PATH]),
+	m_saveQueuePath(new MBCHAR[_MAX_PATH]),
+	m_saveMPPath(new MBCHAR[_MAX_PATH]),
+	m_saveSCENPath(new MBCHAR[_MAX_PATH]),
+	m_saveMapPath(new MBCHAR[_MAX_PATH]),
+	m_saveClipsPath(new MBCHAR[_MAX_PATH]),
+	m_curScenarioPath(NULL),
+	m_curScenarioPackPath(NULL)
 {
 	std::fill(m_desktopPath, m_desktopPath + _MAX_PATH, 0);
 
 	FILE *  fin = fopen(FILE_CIVPATHS_TXT, "r");
-	if(!fin)
+	if (!fin)
 	{
 		const char *ctphome = c3files_GetCTPHomeDir();
-		if(ctphome)
+		if (ctphome)
 		{
-			char tempname[MAX_PATH] = {0};
+			char tempname[MAX_PATH] = { 0 };
 			snprintf(tempname, MAX_PATH, "%s" FILE_SEP "%s",
-					 ctphome, FILE_CIVPATHS_TXT);
+				ctphome, FILE_CIVPATHS_TXT);
 			fin = fopen(tempname, "r");
 		}
 	}
 #ifdef LINUX
-	if(!fin)
+	if (!fin)
 	{
 		fin = fopen(PACKAGE_DATADIR FILE_SEP FILE_CIVPATHS_TXT, "r");
 	}
-	if(!fin)
+	if (!fin)
 	{
 		fin = fopen(PACKAGE_SYSCONFDIR FILE_SEP FILE_CIVPATHS_TXT, "r");
 	}
 #endif
 	Assert(fin);
-	if(!fin)
+	if (!fin)
 	{
 		errcode = AUI_ERRCODE_LOADFAILED;
 		return;
@@ -168,7 +195,11 @@ CivPaths::CivPaths(AUI_ERRCODE &errcode)
 	ReplaceFileSeperator(m_saveMapPath);
 	ReplaceFileSeperator(m_saveClipsPath);
 
-	for (size_t dir = 0; dir < C3DIR_MAX; ++dir)
+	m_assetPaths[C3DIR_BASE] = new MBCHAR[2];
+	m_assetPaths[C3DIR_BASE][0] = '.';
+	m_assetPaths[C3DIR_BASE][1] = '\0';
+
+	for (size_t dir = 1; dir < C3DIR_MAX; ++dir)
 	{
 		m_assetPaths[dir] = new MBCHAR[_MAX_PATH];
 		fscanf (fin, "%s", m_assetPaths[dir]);
@@ -514,7 +545,7 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 	    ((dir == C3DIR_PATTERNS) ||
 	     (dir == C3DIR_PICTURES)))
 	{
-		uint32 len = strlen(filename);
+		size_t len = strlen(filename);
 
 		if (len > 3)
 		{
@@ -835,4 +866,149 @@ void CivPaths::ResetExtraDataPaths(void)
 		delete [] const_cast<MBCHAR *>(*p);
 	}
 	m_extraDataPaths.clear();
+
+}
+
+void CivPaths::FindAndSetLocalizedPath()
+{
+	Assert(g_theProfileDB);
+
+	// If we have a value in userprofile.txt
+	const MBCHAR* LanguageDir = g_theProfileDB ? g_theProfileDB->GetLanguageDirectory() : "";
+	if(LanguageDir[0] != '\0')
+	{
+		SetLocalizedPath(LanguageDir);
+		return;
+	}
+
+	const LanguageRecord* lanRec = FindLanguage();
+
+	if(lanRec != NULL)
+		SetLocalizedPath(lanRec->GetDirectory());
+}
+
+void CivPaths::SetLocaleFromLanguage()
+{
+	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+	{
+		const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+		if(strcmp(m_localizedPath, lanRec->GetDirectory()) == 0)
+		{
+			std::setlocale(LC_COLLATE, lanRec->GetIsoCode());
+			return;
+		}
+	}
+}
+
+const LanguageRecord* CivPaths::FindLanguage()
+{
+#if defined(__AUI_USE_SDL__)
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+
+	if(locales != NULL)
+	{
+		// Get the language that matches the IsoCode
+		for(size_t j = 0; locales[j].language != NULL; j++)
+		{
+			for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+			{
+				const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+				if(lanRec->GetDisabled())
+					continue;
+
+				if(lanRec->GetHidden())
+					continue;
+
+				if(strcmp(lanRec->GetIsoCode(), locales[j].language) == 0)
+				{
+					SDL_free(locales);
+					return lanRec;
+				}
+			}
+		}
+	}
+
+	SDL_free(locales);
+
+#elif defined(__AUI_USE_DIRECTX__)
+	ULONG size = 0;
+
+	GetUILanguageFallbackList(NULL, 0, &size);
+
+	wchar_t* buffer = new wchar_t[size];
+	GetUILanguageFallbackList(buffer, size, NULL);
+
+	// Get the language that matches the IsoCode
+	while(buffer[0] != L'\0')
+	{
+		for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+		{
+			const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+			if(lanRec->GetDisabled())
+				continue;
+
+			if(lanRec->GetHidden())
+				continue;
+
+			if(CompareLocals(lanRec->GetIsoCode(), buffer))
+			{
+				return lanRec;
+			}
+		}
+
+		while(true)
+		{
+			buffer++;
+			if(buffer[0] == L'\0')
+			{
+				buffer++;
+				break;
+			}
+		}
+	}
+#else
+#error No locale detection defined for non DX / non SDL builds
+#endif
+
+	// Get default Language from database
+	for(sint32 i = 0; i < g_theLanguageDB->NumRecords(); i++)
+	{
+		const LanguageRecord* lanRec = g_theLanguageDB->Get(i);
+
+		if(lanRec->GetDisabled())
+			continue;
+
+		if(lanRec->GetHidden())
+			continue;
+
+		if(lanRec->GetDefault())
+		{
+			return lanRec;
+		}
+	}
+
+	return NULL;
+}
+
+void CivPaths::SetLocalizedPath(const MBCHAR *path)
+{
+	sprintf(m_localizedPath, "%s", path);
+	ReplaceFileSeperator(m_localizedPath);
+	if(g_theProfileDB)
+		g_theProfileDB->SetLanguageDirectory(path);
+}
+
+bool CivPaths::CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const
+{
+	for(size_t i = 0; locale1[i] != '\0'; ++i)
+	{
+		if(locale1[i] != static_cast<MBCHAR>(locale2[i]))
+		{
+			return false;
+		}
+	}
+
+	return true;
 }

@@ -866,9 +866,9 @@ void UnseenCell::Serialize(CivArchive &archive)
 
 		if (m_cityName)
 		{
-			l = strlen(m_cityName) + 1;
+			l = static_cast<sint32>(strlen(m_cityName) + 1);
 			archive << l;
-			archive.Store((uint8*)m_cityName, (strlen(m_cityName) + 1) * sizeof(MBCHAR));
+			archive.Store((uint8*)m_cityName, static_cast<uint32>((strlen(m_cityName) + 1) * sizeof(MBCHAR)));
 		}
 		else
 		{

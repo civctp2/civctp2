@@ -378,7 +378,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 
 	Assert(m_argValue.size() == g_gevManager->GetNumArgs(ev));
 
-	for (size_t i = 0; i < Count(); ++i)
+	for (sint32 i = 0; i < static_cast<sint32>(Count()); ++i)
 	{
 		EVENTLOG(("%s ", g_gevManager->ArgCharToName(g_gevManager->ArgChar(ev, i))));
 		switch(g_gevManager->ArgChar(ev, i)) {
@@ -459,7 +459,7 @@ GameEventArgList *SlicArgList::CreateGameEventArgs(GAME_EVENT ev)
 				break;
 		}
 
-		if (i + 1 < m_argValue.size())
+		if (static_cast<size_t>(i + 1) < m_argValue.size())
 		{
 			EVENTLOG((", "));
 		}
@@ -3468,9 +3468,8 @@ SFN_ERROR Slic_AddPops::Call(SlicArgList *args)
 		}
 	}
 
-	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
-	cd->GetHappy()->CalcHappiness(*cd, false, delta_martial_law, true);
+	cd->CalcHappiness(true);
 
 	return SFN_ERROR_OK;
 }
@@ -4900,6 +4899,50 @@ SFN_ERROR Slic_IsVeteran::Call(SlicArgList *args)
 		return SFN_ERROR_OK;
 
 	if(!u.Flag(k_UDF_IS_VET))
+		m_result.m_int = 0;
+	else
+		m_result.m_int = 1;
+
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_ToggleElite::Call(SlicArgList *args)
+{
+	if(args->Count() != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 on;
+	if(!args->GetInt(1, on))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	if(on)
+		u.SetFlag(k_UDF_IS_ELITE);
+	else
+		u.ClearFlag(k_UDF_IS_ELITE);
+
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_IsElite::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	if(!u.Flag(k_UDF_IS_ELITE))
 		m_result.m_int = 0;
 	else
 		m_result.m_int = 1;
@@ -6530,7 +6573,7 @@ SFN_ERROR Slic_FinishImprovements::Call(SlicArgList *args)
 	g_gevManager->Pause();
 
 	for (sint32 i = 0; i < cell->GetNumImprovements(); i++)
-    {
+	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementComplete,
 							   GEA_Improvement, cell->AccessImprovement(i),
@@ -6594,7 +6637,7 @@ SFN_ERROR Slic_ClearBattleFlag::Call(SlicArgList *args)
 		return SFN_ERROR_TYPE_ARGS;
 
 	if (u.IsValid() && u.Flag(k_UDF_FOUGHT_THIS_TURN))
-    {
+	{
 		u.ClearFlag(k_UDF_FOUGHT_THIS_TURN);
 		u.SetMovementPoints(u.GetMaxMovePoints());
 	}
@@ -6737,8 +6780,8 @@ SFN_ERROR Slic_CityHasWonder::Call(SlicArgList *args)
 	if (city.GetCityData()->GetBuiltWonders() & ((uint64)1 << wonder)) {
 		m_result.m_int = 1;
 	} else {
-        m_result.m_int = 0;
-    }
+		m_result.m_int = 0;
+	}
 
 	return SFN_ERROR_OK;
 }
@@ -6798,8 +6841,8 @@ SFN_ERROR Slic_GetRoundsToNextDisaster::Call(SlicArgList *args)
 		return SFN_ERROR_NUM_ARGS;
 
 	m_result.m_int = (g_thePollution)
-                     ? g_thePollution->GetRoundsToNextDisaster()
-                     : Pollution::ROUNDS_COUNT_IMMEASURABLE;
+	                 ? g_thePollution->GetRoundsToNextDisaster()
+	                 : Pollution::ROUNDS_COUNT_IMMEASURABLE;
 
 	return SFN_ERROR_OK;
 }
@@ -6825,8 +6868,8 @@ SFN_ERROR Slic_GetCurrentPollutionLevel::Call(SlicArgList *args)
 	if (args->Count() != 0)
 		return SFN_ERROR_NUM_ARGS;
 
-    m_result.m_int =
-        (g_thePollution) ? g_thePollution->GetGlobalPollutionLevel() : 0;
+	m_result.m_int =
+	    (g_thePollution) ? g_thePollution->GetGlobalPollutionLevel() : 0;
 
 	return SFN_ERROR_OK;
 }
@@ -6838,7 +6881,7 @@ SFN_ERROR Slic_FreeAllSlaves::Call(SlicArgList *args)
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 	if (!city.IsValid())
-    {
+	{
 		return SFN_ERROR_OK;
 	}
 
@@ -7033,7 +7076,7 @@ SFN_ERROR Slic_CargoSize::Call(SlicArgList *args)
 //
 // Name       : Slic_GetUnitFromCargo
 //
-// Description: New function to figure out how much cargo a unit can carry.
+// Description: New function to get a unit from cargo.
 //
 // Parameters : SlicArg 0: unit
 //              SlicArg 1: int
@@ -7169,6 +7212,172 @@ SFN_ERROR Slic_IsWater::Call(SlicArgList *args)
 
 //----------------------------------------------------------------------------
 //
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_SetVeteran
+//
+// Description: Makes a unit veteran
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_SetVeteran::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	u.SetVeteran();
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_UnsetVeteran
+//
+// Description: Removes the veteran status from a unit
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_UnsetVeteran::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	u.UnVeteran();
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_SetVeteran
+//
+// Description: Makes a unit elite
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_SetElite::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	u.SetElite();
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_UnsetVeteran
+//
+// Description: Removes the veteran status from a unit
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR		: execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_UnsetElite::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	u.UnElite();
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
+// Authored   : Martin Gühmann
+//
+// Name       : Slic_HearGossip
+//
+// Description: Makes a unit hear gossip, if it can hear gossip and is in the
+//              range of a foreign capital. Quite useless as a such a units
+//              hears gossip if it is next to a foreign captal at begin turn.
+//              Unless you also wanna hear gossip while in transit. Otherwise,
+//              good for testing.
+//
+// Parameters : SlicArg 0: unit
+//
+// Globals    : -
+//
+// Returns    : SFN_ERROR       : execution result
+//
+//----------------------------------------------------------------------------
+SFN_ERROR Slic_HearGossip::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!g_theUnitPool->IsValid(u))
+		return SFN_ERROR_OK;
+
+	u->HearGossip();
+
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+//
 // Authored   : Solver
 //
 // Name       : Slic_IsOnSameContinent
@@ -7195,7 +7404,7 @@ SFN_ERROR Slic_IsOnSameContinent::Call(SlicArgList *args)
 	if (!args->GetPos(1, pos2))
 		return SFN_ERROR_TYPE_ARGS;
 
-    m_result.m_int = g_theWorld->IsOnSameContinent(pos, pos2);
+	m_result.m_int = g_theWorld->IsOnSameContinent(pos, pos2);
 
 	return SFN_ERROR_OK;
 }
@@ -7221,24 +7430,28 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 	city.GetPos(pos);
 
 	sint32 i;
-	if(count > 0) {
-		for (i=0;  i<count; i++) {
+	if(count > 0)
+	{
+		for (i=0;  i<count; i++)
+		{
 			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_MakePop,
 						   GEA_City, city.m_id,
 						   GEA_Player, victim,
 						   GEA_End);
 
 		}
-	} else {
+	}
+	else
+	{
 		// Add code to convert count slaves to normal pops here later.
-		for(i = count; i < 0; i++) {
+		for(i = count; i < 0; i++)
+		{
 			// Add pop remove code here later (KillPop event).
 		}
 	}
 
-	sint32 delta_martial_law;
 	CityData *cd = city.GetData()->GetCityData();
-	cd->GetHappy()->CalcHappiness(*cd, FALSE, delta_martial_law, TRUE);
+	cd->CalcHappiness(true);
 
 	return SFN_ERROR_OK;
 }
@@ -7246,23 +7459,26 @@ SFN_ERROR Slic_AddSlaves::Call(SlicArgList *args)
 //EMODs
 SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 	if (!city.IsValid())
-    {
+	{
 		return SFN_ERROR_OK;
 	}
 
-	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
-		if(g_network.IsClient()) {
+	if(!city.GetData()->GetCityData()->CapturedThisTurn())
+	{
+		if(g_network.IsClient())
+		{
 			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
 		}
 		return SFN_ERROR_OK;
 	}
 
-	if(g_network.IsClient()) {
+	if(g_network.IsClient())
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
 	}
 	CityData *cd = city.GetData()->GetCityData();
@@ -7270,7 +7486,7 @@ SFN_ERROR Slic_KillCity::Call(SlicArgList *args)
 	city.GetData()->GetCityData()->ChangePopulation(-PCount);
 	//city.GetData()->GetCityData()->Disband();
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
@@ -7285,14 +7501,17 @@ SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 		return SFN_ERROR_OK;
 	}
 
-	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
-		if(g_network.IsClient()) {
+	if(!city.GetData()->GetCityData()->CapturedThisTurn())
+	{
+		if(g_network.IsClient())
+		{
 			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
 		}
 		return SFN_ERROR_OK;
 	}
 
-	if(g_network.IsClient()) {
+	if(g_network.IsClient())
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
 	}
 
@@ -7314,7 +7533,8 @@ SFN_ERROR Slic_Pillage::Call(SlicArgList *args)
 	uint64 buildings = city->GetCityData()->GetEffectiveBuildings()&(((uint64)1<<(uint64)g_theBuildingDB->NumRecords())-1);
 	for(sint32 i=0; buildings!=0; i++,buildings>>=1)
 	{
-		if ((buildings&0xFF) == 0) {
+		if ((buildings&0xFF) == 0)
+		{
 			buildings>>=8;
 			i+=8;
 		}
@@ -7358,14 +7578,17 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 	if(!g_player || !g_player[pl])
 		return SFN_ERROR_DEAD_PLAYER;
 
-	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
-		if(g_network.IsClient()) {
+	if(!city.GetData()->GetCityData()->CapturedThisTurn())
+	{
+		if(g_network.IsClient())
+		{
 			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
 		}
 		return SFN_ERROR_OK;
 	}
 
-	if(g_network.IsClient()) {
+	if(g_network.IsClient())
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
 	}
 
@@ -7373,7 +7596,8 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 	uint64 buildings = city->GetCityData()->GetEffectiveBuildings()&(((uint64)1<<(uint64)g_theBuildingDB->NumRecords())-1);
 	for(sint32 i=0; buildings!=0; i++,buildings>>=1)
 	{
-		if ((buildings&0xFF) == 0) {
+		if ((buildings&0xFF) == 0)
+		{
 			buildings>>=8;
 			i+=8;
 		}
@@ -7395,24 +7619,27 @@ SFN_ERROR Slic_Plunder::Call(SlicArgList *args)
 
 SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 {
-    if (args->Count() > 0)
-        return SFN_ERROR_NUM_ARGS;
+	if (args->Count() > 0)
+		return SFN_ERROR_NUM_ARGS;
 
 	Unit city = g_slicEngine->GetContext()->GetCity(0);
 
 	if (!city.IsValid())
-    {
+	{
 		return SFN_ERROR_OK;
 	}
 
-	if(!city.GetData()->GetCityData()->CapturedThisTurn()) {
-		if(g_network.IsClient()) {
+	if(!city.GetData()->GetCityData()->CapturedThisTurn())
+	{
+		if(g_network.IsClient())
+		{
 			g_network.RequestResync(RESYNC_PROBABLE_CHEATER);
 		}
 		return SFN_ERROR_OK;
 	}
 
-	if(g_network.IsClient()) {
+	if(g_network.IsClient())
+	{
 		g_network.SendAction(new NetAction(NET_ACTION_FREE_SLAVES, city.m_id));
 	}
 
@@ -7420,24 +7647,27 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 	//	return GEV_HD_Continue;
 
 	// must be before sending armies home otherwise NearestFriendlyCityWithRoom returns the current city
-    city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
+	city.ResetCityOwner(PLAYER_INDEX_VANDALS, FALSE, CAUSE_REMOVE_CITY_DIPLOMACY);
 
-    // send conquering armies home, based on code from ArmyData::Expel
-    Cell *cell = g_theWorld->GetCell(city.RetPos());
-    sint32 i, n = cell->GetNumUnits();
+	// send conquering armies home, based on code from ArmyData::Expel
+	Cell *cell = g_theWorld->GetCell(city.RetPos());
+	sint32 i, n = cell->GetNumUnits();
 
-    bool 		foundCity	= false;
-    MapPoint 		cpos;
-    CellUnitList 	expelled;
-    for(i = 0; i < n; i++) {
-	    Unit u = cell->AccessUnit(i);	    
-	    foundCity = u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy());
-	    expelled.Insert(u);
+	bool 		foundCity	= false;
+	MapPoint 		cpos;
+	CellUnitList 	expelled;
+	for(i = 0; i < n; i++)
+	{
+		Unit u = cell->AccessUnit(i);
+		foundCity = u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy());
+		expelled.Insert(u);
 	}
 
-    n = expelled.Num();
-    if(n > 0) {
-		for(i = 0; i < n; i++) {
+	n = expelled.Num();
+	if(n > 0)
+	{
+		for(i = 0; i < n; i++)
+		{
 			if(foundCity)
 			{
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GetExpelledOrder,
@@ -7446,13 +7676,14 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 					GEA_Player, PLAYER_INDEX_VANDALS,
 					GEA_End);
 			}
-			else {
+			else
+			{
 				expelled[i].Kill(CAUSE_REMOVE_ARMY_EXPELLED_NO_CITIES, PLAYER_INDEX_VANDALS);
 			}
-	    }
+		}
 	}
 
-    return SFN_ERROR_OK;
+	return SFN_ERROR_OK;
 }
 
 SFN_ERROR Slic_AddPW::Call(SlicArgList *args)

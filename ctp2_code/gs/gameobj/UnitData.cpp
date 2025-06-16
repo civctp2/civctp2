@@ -167,6 +167,7 @@
 #include "World.h"
 #include "Wormhole.h"
 #include "GovernmentRecord.h"
+#include "GameSettings.h"
 
 #ifdef _DEBUG
 #include "aui.h"
@@ -1300,7 +1301,7 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 	}
 	base += (base * bonuses);
 	// finally add city attack buildings, so they're not subject to bonuses.
-	if (!g_theProfileDB->IsNewCombat()) {
+	if (!g_theGameSettings->IsNewCombat()) {
 		Unit	city	= g_theWorld->GetCity(m_pos);
 		if(city.IsValid()) {
 			base += city.CD()->GetOffenseBonus(defender);
@@ -2963,14 +2964,20 @@ void UnitData::CityRadiusFunc(const MapPoint &pos)
 	}
 }
 
-void UnitData::BeginTurn()
+void UnitData::HearGossip()
 {
-	bool needsEnqueue = false;
 	const UnitRecord *rec = GetDBRec();
 	if(rec->GetHearGossip())
 	{
 		AdjacentIterator(m_pos, this);
 	}
+}
+
+void UnitData::BeginTurn()
+{
+	HearGossip();
+	bool needsEnqueue = false;
+	const UnitRecord *rec = GetDBRec();
 
 #if 0
 	if(Flag(k_UDF_IS_TRAVELLING_RIFT)) {
@@ -3418,7 +3425,7 @@ double UnitData::GetOffense(const Unit &defender) const
 
 	// finally add city attack buildings, so they're not subject to bonuses.
 	// Note: This are only used with old combat.
-	if (!g_theProfileDB->IsNewCombat())
+	if (!g_theGameSettings->IsNewCombat())
 	{
 		Unit	city	= g_theWorld->GetCity(m_pos);
 		if(city.IsValid())
@@ -3466,7 +3473,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 	if(modDef != intDef)
 		base = modDef;
 
-	if (g_theProfileDB->IsNewCombat())
+	if (g_theGameSettings->IsNewCombat())
 	{// these were not in original combat for defence
 		if (IsVeteran())
 		{
@@ -4550,17 +4557,29 @@ void UnitData::HearGossip(Unit c)
 			uint8 *canSteal = g_player[m_owner]->m_advances->
 			    CanAskFor(g_player[c.GetOwner()]->m_advances, num);
 
-			for(i=0; i<num; i++) {
-				if (canSteal[i]) {
-					g_player[m_owner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
+			if(num > 0)
+			{
+				for(i = 0; i<g_theAdvanceDB->NumRecords(); i++)
+				{
+					if(canSteal[i])
+					{
+						g_player[m_owner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
 
-					so = new SlicObject("146GossipCompleteAttacker") ;
-					so->AddRecipient(m_owner) ;
-					so->AddAdvance(i) ;
-					g_slicEngine->Execute(so);
+						so = new SlicObject("146GossipCompleteAttacker");
+						so->AddRecipient(m_owner);
+						so->AddAdvance(i);
+						g_slicEngine->Execute(so);
 
-					break;
+						break;
+					}
 				}
+			}
+			else
+			{
+				so = new SlicObject("97GossipBoring");
+				so->AddCivilisation(oplayer);
+				so->AddRecipient(m_owner);
+				g_slicEngine->Execute(so);
 			}
 
 			delete [] canSteal;

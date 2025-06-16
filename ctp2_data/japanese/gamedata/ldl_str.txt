@@ -1,22 +1,66 @@
-# - Added strings for political map(Empty for all but English) - 6-Jul-2009 EPW
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Main string file (English)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Remarks
+#
+# - This file contains all the main strings.
+# - The order of the strings has been synchronized in the English, French, 
+#   German, Italian and Spanish version. This has not been done for the 
+#   Japanese version, since that file is missing from the CTP2 source 
+#   code project.
+# - If you add new strings make sure that you add them at the same location
+#   in every language version you have.
+# - For easy comparison between the languages make sure that the number
+#   of lines in each language file version is the same and that also the
+#   comments are at the same place.
+# - Keep also the indentation the same.
+# - You may add comments after the last line of strings that are specific to 
+#   one language only.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Moved build list sequence strings to gl_str.txt.
+#   - April 7th 2005 Martin G�hmann
+# - Added str_ldl_OptimizeSpecialists string - April 7th 2005 Martin G�hmann
+# - Added str_ldl_DD_OPTIMIZE_SLIDERS for sliders optimization button. 
+#   - April 9th 2005 Martin G�hmann
+# - Moved Great Libary title string from add_str.txt. - April 9th 2005 Martin G�hmann
+# - Added battleview window strings for attack building bonuses, and modified
+#   new combat names. - 07-Mar-2009 Maq
+# - Added new strings for redesigned City Window. - 28-Mar-2009 Maq
+# - Added strings for political map - 6-Jul-2009 EPW
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
+#----------------------------------------------------------------------------
 
 ##以下はハード コード ストリングです｡99/03/09
 str_ldl_Already_Offer	"もう既に提案は聞いているぞ｡それとも新しい提案かな？"
 
 ##これが最後のチャンスだ｡99/03/07
-ENDGAME_WON_OTHER	"すべての国が､新しい統治者に服従するだろう｡{player[1].leader_name}はエイリアン ライフ プロジェクトを達成した｡"
+ENDGAME_WON_OTHER	"すべての国が､新しい統治者に服従するだろう｡{player[0].leader_name}はエイリアン ライフ プロジェクトを達成した｡"
 
 ##最後の最後の最後の追加ストリング｡99/03/05 （これで最後です）
 str_ldl_comma	","
-
-###Junkから移動してきたストリング###
-
-CAPITALIZATION 	"資本化 "
-INFRASTRUCTURE 	"インフラ "
-BUILDINGNONE	"Empty"
 
 #時代の名前#	
 AGE_NAME_ANCIENT	"古代"
@@ -24,6 +68,14 @@ AGE_NAME_RENAISS	"ルネッサンス"
 AGE_NAME_MODERN		"近代"
 AGE_NAME_GENETIC	"遺伝子の時代"
 AGE_NAME_DIAMOND	"ダイヤモンドの時代"
+
+###Junkから移動してきたストリング###
+
+CAPITALIZATION 	"資本化 "
+INFRASTRUCTURE 	"インフラ "
+BUILDINGNONE	"Empty"
+
+
 
 YOU_BROKE_ALLIANCE "{player[0].civ_name_plural}との同盟を破棄しました｡"
 YOU_BROKE_CEASE_FIRE "{player[0].civ_name_plural}との平和条約を破棄しました｡"
@@ -970,6 +1022,7 @@ str_ldl_Known_To_You_And_Others	"あなたと他のプレイヤーの知識"
 str_ldl_LABORERS    "作業員"
 str_ldl_Land	"土地"
 str_ldl_Land_Grabber	"土地の略奪者"
+str_ldl_LANGUAGE					"LANGUAGE"
 str_ldl_Large_64_x_128	"巨大"
 str_ldl_Last_Sale_Price_COLON	"最終販売価格:"
 str_ldl_Launch	"起動"
@@ -1285,6 +1338,7 @@ str_ldl_Unit_Help	"ユニットのヘルプ"
 str_ldl_UNIT_MOVEMENT	"ユニットの移動"
 str_ldl_UNIT_STATUS	"ユニットの状態"
 str_ldl_Units	"ユニット"
+str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
 str_ldl_UNLOAD_ALL	"搭載物を全て降ろす"
 str_ldl_Unpredictable	"予測不能な"
 str_ldl_Untarnished	"汚れのない"
@@ -1518,6 +1572,8 @@ str_tbl_ldl_You_will_receive	"受け取るのは"
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"購入するという意思表示を送信しました｡"
 str_tbl_ldl_Zoom_in_one_level	"1レベルのズームイン"
 str_tbl_ldl_Zoom_out_one_level	"1レベルのズームアウト"
+str_ldl_CAPS_LANGUAGE				"LANGUAGE"
+str_ldl_Use_OS_Language				"Use language from operating system"
 str_ldl_CAPS_MUSIC  "音楽"
 str_ldl_Select_Track	"トラックの選択"
 str_ldl_CAPS_SELECT_TRACK	"トラックの選択"
@@ -2630,6 +2686,23 @@ str_ldl_DD_BUILDING_UPKEEP_LABEL	"保守:"
 str_ldl_DD_SCIENCE_LABEL			"科学:"
 str_ldl_DD_SAVINGS_LABEL			"備蓄:"
 str_ldl_DD_DETAILS					"詳細"
+str_ldl_DD_OPTIMIZE_SLIDERS			"Optimize Sliders"
+str_ldl_DD_TERRAIN_LABEL			"Terrain:"
+str_ldl_DD_TCOMMERCE_LABEL			"Commerce:"
+str_ldl_DD_BUILDINGS_LABEL			"Buildings:"
+str_ldl_DD_FARMERS_LABEL			"Farmers:"
+str_ldl_DD_LABORERS_LABEL			"Laborers:"
+str_ldl_DD_GOVERNMENT_LABEL			"Government:"
+str_ldl_DD_WAGES_EFFECT_LABEL			"Worker Wages:"
+str_ldl_DD_SCIENTISTS_LABEL			"Scientists:"
+str_ldl_DD_MERCHANTS_LABEL			"Merchants:"
+str_ldl_DD_FEATS_AND_WONDERS_LABEL		"Feats & Wonders:"
+str_ldl_DD_TRADE_LABEL				"Trade:"
+str_ldl_DD_CONVERSIONS_LABEL			"Conversions:"
+str_ldl_DD_UNIT_SUPPORT_LABEL			"Unit Support:"
+str_ldl_DD_ENEMY_LABEL				"Enemy:"
+str_ldl_DD_SCIENCE_TITLE			"SCIENCE"
+str_ldl_DD_GOLD_TITLE				"GOLD"
 # [政治体制]タブのパネル
 str_ldl_DD_GOV_CURRENT				"現在の政治体制"
 str_ldl_DD_GOV_COMPARE				"比較対象"
@@ -2795,6 +2868,9 @@ str_ldl_HappyPositive "ボーナス"
 str_ldl_Polluters "汚染物質排出国"
 str_ldl_Cleaners "汚染浄化国"
 
+str_ldl_CityWinSpecTabPollutionLabel		"Pollution"
+str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
+str_ldl_CityWinSpecTabCrimeLabel		"Crime"
 str_ldl_CityWinCrimeFormat "犯罪: %d%%"
 str_ldl_IW_CONFIRM_WAR "{player[0].country_name}に宣戦布告しますか？"
 
@@ -3138,59 +3214,12 @@ str_ldl_RemoveAll "全て削除 >>"
 str_ldl_CantDisbandCitySize		"都市の大きさが3を超えている場合､都市の解散はできません｡"
 str_ldl_CantDisbandLastCity		"最後の都市は解散できません｡"
 
-# プロフィールのストリング（高度なオプションのリスト）
-str_profile_UnitAnim 				"ユニット アニメーションの表示"
-str_profile_GoodAnim 				"交易品アニメーションの表示"
-str_profile_TradeAnim 				"貿易ルート アニメーションの表示"
-str_profile_WonderMovies 			"七不思議のムービーの表示"
-str_profile_EnemyMoves 				"敵国の動きの表示"
-str_profile_RevoltWarning 			"<OBS>"
-str_profile_EnemyIntrude 			"<OBS>"
-str_profile_UnitLostWarning 			"<OBS>"
-str_profile_TradeLostWarning 			"<OBS>"
-str_profile_CityLostWarning 			"<OBS>"
-str_profile_AutoCenter 				"ｱｸﾃｨﾌﾞなﾕﾆｯﾄ､都市を中心に表示"
-str_profile_AutoSave 				"自動セーブの使用"
-str_profile_AutoGroup 				"<OBS>"
-str_profile_AutoDeselect 			"ユニットの自動的な選択解除"
-str_profile_AutoSelectNext 			"次のユニットの自動選択"
-str_profile_AutoSelectFirstUnit 		"次に利用可能なユニットの自動選択"
-str_profile_AutoTurnCycle 			"ターンの自動巡回"
-str_profile_ShowZoomedCombat 			"戦闘画面の表示"
-str_profile_UseFingerPrinting 			"<OBS>"
-str_profile_UseRedbookAudio 			"CDオーディオのプレイ"
-str_profile_TryWindowsResolution 		"<OBS>"
-str_profile_ScreenResWidth 			"<OBS>"
-str_profile_ScreenResHeight 			"<OBS>"
-str_profile_ZoomedCombatAlways 			"全ての戦闘を戦闘画面で表示する"
-str_profile_AttackEveryone 			"<OBS>"
-str_profile_NonRandomCivs 			"<OBS>"
-str_profile_AutoEndMultiple 			"複数ターンの自動巡回"
-str_profile_UnitCompleteMessages 		"ユニットの生産完了メッセージの表示"
-str_profile_NonContinuousUnitCompleteMessages 	"連続的なﾕﾆｯﾄ生産完了ﾒｯｾｰｼﾞの表示"
-str_profile_ShowCityNames 			"都市名の表示"
-str_profile_ShowTradeRoutes 			"貿易ルートの表示"
-str_profile_UnitSpeed 				"ユニットアニメーションの速度"
-str_profile_MouseSpeed 				"マウスの感度"
-str_profile_LeftHandedMouse 			"左ききマウスの使用"
-str_profile_CityBuiltMessage 			"<OBS>"
-str_profile_UseAttackMessages 			"<OBS>"
-str_profile_MoveHoldTime 			"<OBS>"
-str_profile_BattleSpeed 			"戦闘画面の戦闘速度"
-str_profile_ScrollDelay 			"ﾏｳｽ ｽｸﾛｰﾙの遅延（10ths/秒）"
-str_profile_AutoSwitchTabs 			"コントロールパネル タブの自動切替"
-str_profile_AutoRenameCities 			"建設時に都市名の変更を許す"
-str_profile_AutoOpenCityWindow 			"都市建設時に生産管理画面を表示する"
-str_profile_ShowEnemyHealth 			"敵ユニットの耐久力を表示する"
-str_profile_ShowCityInfluence 			"都市の影響範囲の表示"
-str_profile_ShowPoliticalBorders 		"国境の表示"
-
-
 ############################################################################
 #                 Here after,   Added by altered source project            #
 ############################################################################
 
 str_ldl_Music	"ミュージック"
+str_ldl_Language				"Language"
 str_ldl_MUSIC_OPTIONS	"ミュージック"
 
 ### New World Shape Strings ###
@@ -3216,38 +3245,87 @@ str_ldl_Disclaimer1 "THIS MATERIAL IS NOT MADE OR SUPPORTED BY ACTIVISION."
 str_ldl_Disclaimer2 "This version of Call To Power 2 was developed at http://apolyton.net"
 str_ldl_Disclaimer3 "Contact the authors at ctp2source@apolyton.net"
 
+# プロフィールのストリング（高度なオプションのリスト）
+str_profile_UnitAnim                            "ユニット アニメーションの表示"
+str_profile_GoodAnim                            "交易品アニメーションの表示"
+str_profile_TradeAnim                           "貿易ルート アニメーションの表示"
+str_profile_WonderMovies                        "七不思議のムービーの表示"
+str_profile_EnemyMoves                          "敵国の動きの表示"
+str_profile_RevoltWarning                       "<OBS>"
+str_profile_EnemyIntrude                        "<OBS>"
+str_profile_UnitLostWarning                     "<OBS>"
+str_profile_TradeLostWarning                    "<OBS>"
+str_profile_CityLostWarning                     "<OBS>"
+str_profile_AutoCenter                          "ｱｸﾃｨﾌﾞなﾕﾆｯﾄ､都市を中心に表示"
+str_profile_AutoSave                            "自動セーブの使用"
+str_profile_AutoGroup                           "<OBS>"
+str_profile_AutoDeselect                        "ユニットの自動的な選択解除"
+str_profile_AutoSelectNext                      "次のユニットの自動選択"
+str_profile_AutoSelectFirstUnit                 "次に利用可能なユニットの自動選択"
+str_profile_AutoTurnCycle                       "ターンの自動巡回"
+str_profile_ShowZoomedCombat                    "戦闘画面の表示"
+str_profile_UseFingerPrinting                   "<OBS>"
+str_profile_UseRedbookAudio                     "CDオーディオのプレイ"
+str_profile_TryWindowsResolution                "<OBS>"
+str_profile_ScreenResWidth                      "<OBS>"
+str_profile_ScreenResHeight                     "<OBS>"
+str_profile_ZoomedCombatAlways                  "全ての戦闘を戦闘画面で表示する"
+str_profile_AttackEveryone                      "<OBS>"
+str_profile_NonRandomCivs                       "<OBS>"
+str_profile_AutoEndMultiple                     "複数ターンの自動巡回"
+str_profile_UnitCompleteMessages                "ユニットの生産完了メッセージの表示"
+str_profile_NonContinuousUnitCompleteMessages   "連続的なﾕﾆｯﾄ生産完了ﾒｯｾｰｼﾞの表示"
+str_profile_ShowCityNames                       "都市名の表示"
+str_profile_ShowTradeRoutes                     "貿易ルートの表示"
+str_profile_UnitSpeed                           "ユニットアニメーションの速度"
+str_profile_MouseSpeed                          "マウスの感度"
+str_profile_LeftHandedMouse                     "左ききマウスの使用"
+str_profile_CityBuiltMessage                    "<OBS>"
+str_profile_UseAttackMessages                   "<OBS>"
+str_profile_MoveHoldTime                        "<OBS>"
+str_profile_BattleSpeed                         "戦闘画面の戦闘速度"
+str_profile_ScrollDelay                         "ﾏｳｽ ｽｸﾛｰﾙの遅延（10ths/秒）"
+str_profile_AutoSwitchTabs                      "コントロールパネル タブの自動切替"
+str_profile_AutoRenameCities                    "建設時に都市名の変更を許す"
+str_profile_AutoOpenCityWindow                  "都市建設時に生産管理画面を表示する"
+str_profile_ShowEnemyHealth                     "敵ユニットの耐久力を表示する"
+str_profile_ShowCityInfluence                   "都市の影響範囲の表示"
+str_profile_ShowPoliticalBorders                "国境の表示"
+str_profile_EndTurnSound                        "End Turn Sound"
 str_profile_CloseOnEyepoint                     "Close Message When Clicking Eyeball"
 str_profile_ShowExpensive                       "Show Expensive Tile Improvement Effects"
 str_profile_ShowOrderUnion                      "Show All Army Orders" 
 str_profile_RecentAtTop                         "Put New Messages At Top"
 str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
+str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "Unit upgrading"
 str_profile_SmoothBorders                       "Smooth empire borders"
-str_profile_CivFlags                       	"Show Civilization Unit flags"
-str_profile_NoAIProductionDeficit 		"AI No Production Deficit"	
-str_profile_NoAIGoldDeficit			"No negative Gold for AI Cities"					# AI cities don't go negative in gold
-str_profile_AICityDefenderBonus 		"AI City Defense bonus"					# AI population adds to city defenses
-str_profile_BarbarianCities			"Entrenched Barbarians settle cities"					# Entrenched barbarians create a city
-str_profile_SectarianHappiness 			"Conflicting citystyle unhappiness"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_profile_RevoltCasualties 			"Revolting Cities lose Population"					# Revolting city loses 1/3 of population
-str_profile_RevoltInsurgents 			"Revolting cities create barbarians"					# Revolting city creates barbarians
-str_profile_BarbarianCamps			"Entrenched Barbarians create Tile Imps"		# Entrenched barbarians create an imp
-str_profile_BarbarianSpawnsBarbarian 		"Entrenched Barbarians spawn Barbarians"			# Entrenched barbs create more barbs
-str_profile_AINoSinking 			"AI ships don't sink"							# AI ships don't sink
-str_profile_AINoCityLimit 			"AI No City LImit"						# AI not affected by city limit
-str_profile_GoldPerUnitSupport 			"1 Gold Per Unit Cost"					# all pay thins int times unit support calculation
-str_profile_GoldPerCity 			"2 Gold Per City x City Limit"						# everyone pays gold amount per city
-str_profile_AINoShieldHunger 			"AI doesn't pay Shield Hunger"					# AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger			"AI doesn't pay Unit Gold"						# AI doesnt pay unit gold hunger
-str_profile_AIFreeUpgrade 			"AI Free Upgrades"						# AI doesn't pay goldfor upgrades
-str_profile_AIMilitiaUnit 			"AI Free Militia Unit"						#If city is empty at turn start AI gets cheapest unit
-str_profile_OneCityChallenge 			"One City Challenge"						#If city is empty at turn start AI gets cheapest unit
-str_profile_CityCaptureOptions 			"City Capture Options"						#If city is empty at turn start AI gets cheapest unit
+str_profile_CivFlags                            "Show Civilization Unit flags"
+str_profile_NoAIProductionDeficit               "AI No Production Deficit"
+str_profile_NoAIGoldDeficit                     "No negative Gold for AI Cities"                # AI cities don't go negative in gold
+str_profile_AICityDefenderBonus                 "AI City Defense Bonus"                         # AI population adds to city defenses
+str_profile_BarbarianCities                     "Entrenched Barbarians settle cities"           # Entrenched barbarians create a city
+str_profile_SectarianHappiness                  "Conflicting citystyle unhappiness"             # Conflicting religious, citystyles and city govts cause unhappiness
+str_profile_RevoltCasualties                    "Revolting Cities lose Population"              # Revolting city loses 1/3 of population
+str_profile_RevoltInsurgents                    "Revolting cities create barbarians"            # Revolting city creates barbarians
+str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
+str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
+str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
+str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
+str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
+str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
+str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
+str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
+str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
+str_profile_DebugCityAstar                      "Debug road build path"
 str_profile_NewCombat                           "New Combat"
-
+str_profile_WindowedMode                        "Window Mode"
 
 ### Great Libary Strings ###
 
@@ -3255,47 +3333,65 @@ str_ldl_GreatLibraryGoalKnown		"%s is already known. No goal was set."
 str_ldl_GreatLibraryNoGoalPossible	"%s cannot be researched."
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options		"Musicoptions"
-str_tbl_ldl_Decend			"Decend"
-str_tbl_ldl_Execute_Eyepoint		"Focus on object (eye)"
-str_tbl_ldl_Move_Order			"Moveorder"
-str_tbl_ldl_End_Unit_Turn		"End unit turn"
-str_tbl_ldl_Process_Unit_Orders		"Process given unit orders"
-str_tbl_ldl_Group_Army			"Group all units to army"
-str_tbl_ldl_Ungroup_Army		"Ungroup armies"
-str_tbl_ldl_Gamestate_Debug		"Debug gamestate (playtest)"
-str_tbl_ldl_Rand_Test			"Rand test (playtest)"
-str_tbl_ldl_Command_Enter		"Command enter (playtest)"
-str_tbl_ldl_Command_Enter_Alternate	"Command enter alternate (playtest)"
+str_tbl_ldl_Music_Options				"Music options"
+str_tbl_ldl_Language_Options			"Language options"
+str_tbl_ldl_Decend						"Decend"
+str_tbl_ldl_Execute_Eyepoint			"Focus on object (eye)"
+str_tbl_ldl_Move_Order					"Moveorder"
+str_tbl_ldl_End_Unit_Turn				"End unit turn"
+str_tbl_ldl_Process_Unit_Orders			"Process given unit orders"
+str_tbl_ldl_Group_Army					"Group all units to army"
+str_tbl_ldl_Ungroup_Army				"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug				"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test					"Rand test (playtest)"
+str_tbl_ldl_Command_Enter				"Command enter (playtest)"
+str_tbl_ldl_Command_Enter_Alternate		"Command enter alternate (playtest)"
 
 # New gamesetting options
+#implemented
+str_ldl_Army_Names_Off			"Army Names Off"
+str_ldl_Army_Names_On			"Army Names On"
+str_ldl_Civ_Flags_Off			"Nation Flags Off"
+str_ldl_Civ_Flags_On			"Nation Flags On"
+str_ldl_Show_City_Prod_Off		"Hide City Production"
+str_ldl_Show_City_Prod_On		"Show City Production"
+str_ldl_SmoothBorders_On			"Smooth Icon Borders"
+str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
+str_ldl_Good_Animations_Off		"Good Animations Off"
+str_ldl_Good_Animations_On		"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
-str_tbl_ldl_AICityDefenderBonus_Off "AI City Defense bonus - Off"					# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_Off	"Entrenched Barbarians settle cities - Off"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_Off "Conflicting citystyle unhappiness - Off"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_Off "Revolting Cities lose 1/3 Population - Off"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_Off "Revolting cities create barbarians - Off"					# Revolting city creates barbarians
-str_tbl_ldl_BarbarianCamps_Off	"Entrenched Barbarians create Tile Imps - Off"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_Off "Entrenched Barbarians spawn Barbarians - Off"			# Entrenched barbs create more barbs
-str_tbl_ldl_AINoSinking_Off "AI ships don't sink - Off"							# AI ships don't sink
-str_tbl_ldl_GoldPerUnitSupport_Off "1 Gold Per Unit Cost - Off"					# all pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_Off "2 Gold Per City x City Limit - Off"						# everyone pays gold amount per city
-str_tbl_ldl_OneCityChallenge_Off "One City Challenge - Off"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_Off "City Capture Options - Off"						#If city is empty at turn start AI gets cheapest unit
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
+str_tbl_ldl_CityCaptureOptions_On		"City Capture Options - On"
+str_tbl_ldl_CityCaptureOptions_Off		"City Capture Options - Off"
+str_tbl_ldl_OneCityChallenge_On			"One City Challenge - On"
+str_tbl_ldl_OneCityChallenge_Off		"One City Challenge - Off"
+str_tbl_ldl_RevoltCasualties_On			"Riots Kill Population - On"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltCasualties_Off		"Riots Kill Population - Off"			# Revolting city loses 1/3 of population
+str_tbl_ldl_RevoltInsurgents_On			"Riots Create Barbarians - On"			# Revolting city creates barbarians
+str_tbl_ldl_RevoltInsurgents_Off		"Riots Create Barbarians - Off"			# Revolting city creates barbarians
+str_tbl_ldl_BarbarianSpawnsBarbarian_On		"Barbarians Spawn Barbarians - On"		# Entrenched barbs create more barbs
+str_tbl_ldl_BarbarianSpawnsBarbarian_Off	"Barbarians Spawn Barbarians - Off"		# Entrenched barbs create more barbs
+str_tbl_ldl_GoldPerUnitSupport_On		"Unit Gold Support - On"				# All pay gold hunger unit support.
+str_tbl_ldl_GoldPerUnitSupport_Off		"Unit Gold Support - Off"				# 
+str_tbl_ldl_GoldPerCity_On			"City Maintenance Costs - On"			# Everyone pays gold amount per city
+str_tbl_ldl_GoldPerCity_Off			"City Maintenance Costs - Off"			# AI pays gold amount per city
+str_tbl_ldl_Upgrade_On				"Unit Upgrading - On"				# Units can be upgraded
+str_tbl_ldl_Upgrade_Off				"Unit Upgrading - Off"				# Units cannot be upgraded
 
-
-str_tbl_ldl_AICityDefenderBonus_On "AI City Defense bonus - On"					# AI population adds to city defenses
-str_tbl_ldl_BarbarianCities_On	"Entrenched Barbarians settle cities - On"					# Entrenched barbarians create a city
-str_tbl_ldl_SectarianHappiness_On "Conflicting citystyle unhappiness - On"					# Conflicting religious, citystyles and city govts cause unhappiness
-str_tbl_ldl_RevoltCasualties_On "Revolting Cities lose 1/3 Population - On"					# Revolting city loses 1/3 of population
-str_tbl_ldl_RevoltInsurgents_On "Revolting cities create barbarians - On"					# Revolting city creates barbarians
-str_tbl_ldl_BarbarianCamps_On	"Entrenched Barbarians create Tile Imps - On"		# Entrenched barbarians create an imp
-str_tbl_ldl_BarbarianSpawnsBarbarian_On "Entrenched Barbarians spawn Barbarians - On"			# Entrenched barbs create more barbs
-str_tbl_ldl_AINoSinking_On "AI ships don't sink - On"							# AI ships don't sink
-str_tbl_ldl_GoldPerUnitSupport_On "1 Gold Per Unit Cost - On"					# all pay thins int times unit support calculation
-str_tbl_ldl_GoldPerCity_On "2 Gold Per City x City Limit - On"						# everyone pays gold amount per city
-str_tbl_ldl_OneCityChallenge_On "One City Challenge - On"						#If city is empty at turn start AI gets cheapest unit
-str_tbl_ldl_CityCaptureOptions_On "City Capture Options - On"						#If city is empty at turn start AI gets cheapest unit
+str_ldl_DebugAI					"Debug AI"
+str_ldl_ShowEnemyHealth_On			"Show Enemy Health"
+str_ldl_ShowEnemyHealth_Off			"Hide Enemy Health"
+str_ldl_Debug_AI_On				"Show Debug AI Text"
+str_ldl_Debug_AI_Off				"Hide Debug AI Text"
+str_tbl_ldl_NonRandomCivs_On			"Non-Random AI Nations"
+str_tbl_ldl_NonRandomCivs_Off			"Random AI Nations"
+str_tbl_ldl_NoCityLimit_On			"All Players No City Limit"			# No city limit for all players
+str_tbl_ldl_NoCityLimit_Off			"Normal City Limits"				# City limit for all players
 str_tbl_ldl_NewCombat_Off			"Old Combat"
 str_tbl_ldl_NewCombat_On			"New Combat"
 str_tbl_ldl_NoGoodyHuts_Off			"Ruins On"
@@ -3304,38 +3400,9 @@ str_tbl_ldl_NoGoodyHuts_On			"Ruins Off"
 str_tbl_ldl_RandomCustomMap_Off			"Custom Settings"
 str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
-str_ldl_Army_Names_Off			"Army Names Off"
-str_ldl_Army_Names_On			"Army Names On"
-str_ldl_Civ_Flags_Off			"Nation Flags Off"
-str_ldl_Civ_Flags_On			"Nation Flags On"
-str_ldl_Show_City_Prod_Off		"Hide City Production"
-str_ldl_Show_City_Prod_On		"Show City Production"
-str_ldl_Good_Animations_Off		"Good Animations Off"
-str_ldl_Good_Animations_On		"Good Animations On"
-
-str_ldl_CityWinSpecTabPollutionLabel		"Pollution"
-str_ldl_CityWinSpecTabCrimeFormat		"%d%%"
-str_ldl_CityWinSpecTabCrimeLabel		"Crime"
-
-str_ldl_DD_TERRAIN_LABEL			"Terrain:"
-str_ldl_DD_TCOMMERCE_LABEL			"Commerce:"
-str_ldl_DD_BUILDINGS_LABEL			"Buildings:"
-str_ldl_DD_FARMERS_LABEL			"Farmers:"
-str_ldl_DD_LABORERS_LABEL			"Laborers:"
-str_ldl_DD_GOVERNMENT_LABEL			"Government:"
-str_ldl_DD_WAGES_EFFECT_LABEL			"Worker Wages:"
-str_ldl_DD_SCIENTISTS_LABEL			"Scientists:"
-str_ldl_DD_MERCHANTS_LABEL			"Merchants:"
-str_ldl_DD_FEATS_AND_WONDERS_LABEL		"Feats & Wonders:"
-str_ldl_DD_TRADE_LABEL				"Trade:"
-str_ldl_DD_CONVERSIONS_LABEL			"Conversions:"
-str_ldl_DD_UNIT_SUPPORT_LABEL			"Unit Support:"
-str_ldl_DD_ENEMY_LABEL				"Enemy:"
-str_ldl_DD_SCIENCE_TITLE			"SCIENCE"
-str_ldl_DD_GOLD_TITLE				"GOLD"
-
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."
@@ -3350,3 +3417,17 @@ str_tbl_ldl_RuleDetail_UnitGold			"Unit Gold Support\nAs well as the normal unit
 str_tbl_ldl_RuleDetail_CityMaintenance		"City Maintenance Costs\nEach city will require it's city size in commerce to maintain."
 str_tbl_ldl_RuleDetail_NoCityLimit		"No City Limits\nNo city limits will allow all players to exceed government city caps without happiness penalties."
 str_tbl_ldl_RuleDetail_Ages			"Custom Ages\nIf an advanced starting age is chosen new cities will receive all buildings up to and including the starting age for free."
+
+# Not Implemented
+str_tbl_ldl_SectarianHappiness_On		"Conflicting Citystyle Unhappiness - On"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_tbl_ldl_SectarianHappiness_Off		"Conflicting Citystyle Unhappiness - Off"		# Conflicting religious, citystyles and city govts cause unhappiness
+str_SE_DebugAI					"debug"
+str_SE_ShowEnemyHealth				"show"
+str_tbl_ldl_AICityDefenderBonus_Off		"No AI City Defense Bonus"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_Off			"Entrenched Barbarians settle cities - Off"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_Off			"Entrenched Barbarians create Tile Imps - Off"	# Entrenched barbarians create an imp
+str_tbl_ldl_AICityDefenderBonus_On		"AI City Defense bonus - On"			# AI population adds to city defenses
+str_tbl_ldl_BarbarianCities_On			"Entrenched Barbarians settle cities - On"	# Entrenched barbarians create a city
+str_tbl_ldl_BarbarianCamps_On			"Entrenched Barbarians create Tile Imps - On"	# Entrenched barbarians create an imp
+str_tbl_ldl_AINoSinking_On			"AI ships don't sink"				# AI ships don't sink
+str_tbl_ldl_AINoSinking_Off			"AI ships can sink"				# AI ships don't sink

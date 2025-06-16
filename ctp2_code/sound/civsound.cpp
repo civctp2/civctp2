@@ -24,7 +24,7 @@
 // - Use Microsoft C++ extensions when set.
 //
 // USE_SDL
-// - USE SDL for sound, cdrom, ... TODO
+// - Use SDL for sound and cdrom (originally)
 //
 //----------------------------------------------------------------------------
 //
@@ -87,7 +87,7 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     // Argh, audio format mismatch!!!
 	m_Audio = Mix_QuickLoad_RAW((Uint8 *) m_dataptr, (Uint32) m_datasize);
 # else
-    m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, m_datasize), 1);
+    m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, static_cast<int>(m_datasize)), 1);
 # endif
 #endif
 }

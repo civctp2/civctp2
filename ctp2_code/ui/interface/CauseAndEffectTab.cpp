@@ -56,6 +56,7 @@
 #include "ctp2_Tab.h"
 #include "DomesticManagementDialog.h"
 #include "FeatTracker.h"                // g_featTracker
+#include "GameSettings.h"
 #include "governor.h"                   // To allow automatic slider optimization
 #include "GovernmentRecord.h"
 #include "Happy.h"
@@ -64,7 +65,6 @@
 #include "player.h"
 #include "PopRecord.h"                  // g_thePopDB
 #include "primitives.h"
-#include "profileDB.h"                  // g_theProfileDB
 #include "SelItem.h"
 #include "StrDB.h"
 #include "UnitData.h"
@@ -894,7 +894,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		// Science and savings lost to crime
 		sint32 commerceScieCrime = cityData->GetScienceCrime();
-		sint32 commerceGoldCrime = cityData->GetTradeCrime();
+		sint32 commerceGoldCrime = cityData->GetGoldCrime();
 
 		////////////////////////////////////
 		// TOTALS:
@@ -962,7 +962,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 	totalCommerceSavings += totalWonderGold;
 
 	// Total unit gold support - deducted from savings.
-	if (g_theProfileDB->IsGoldPerUnitSupport()) {
+	if (g_theGameSettings->IsGoldPerUnitSupport()) {
 		totalUnitWages += player->CalcUnitSupportGold();
 		// Recalculate savings after unit gold support.
 		totalCommerceSavings -= totalUnitWages;

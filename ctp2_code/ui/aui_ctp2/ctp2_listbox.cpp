@@ -148,7 +148,7 @@ ctp2_ListBox::~ctp2_ListBox()
 	}
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext(position);
 		delete item;
@@ -162,8 +162,8 @@ AUI_ERRCODE ctp2_ListBox::InitCommonLdl( const MBCHAR *ldlBlock )
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	sint32 bevelWidth   = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELWIDTH );
-	sint32 bevelType    = block->GetInt( k_CTP2_LISTBOX_LDL_BEVELTYPE );
+	sint32 bevelWidth   = block->GetInt( k_AUI_LDL_BEVELWIDTH );
+	sint32 bevelType    = block->GetInt( k_AUI_LDL_BEVELTYPE );
 
 	return InitCommon(bevelWidth, bevelType);
 }
@@ -226,7 +226,7 @@ AUI_ERRCODE ctp2_ListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	AddChild( m_header );
 
 	ListPos position = m_header->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_header->ChildList()->L(); i; i-- )
+	for ( size_t i = m_header->ChildList()->L(); i; i-- )
 		m_widthList->AddTail(
 			m_header->ChildList()->GetNext( position )->Width() );
 
@@ -310,7 +310,7 @@ void ctp2_ListBox::Clear(void)
 	BuildListStart(); // Do not sort anything in the list while we are clearing it
 
 	ListPos position = m_pane->ChildList()->GetHeadPosition();
-	for ( sint32 i = m_pane->ChildList()->L(); i; i-- )
+	for ( size_t i = m_pane->ChildList()->L(); i; i-- )
 	{
 		aui_Item *item = (aui_Item *)m_pane->ChildList()->GetNext( position );
 
@@ -334,7 +334,7 @@ AUI_ERRCODE ctp2_ListBox::SortByColumn(
 	Assert( 0 <= column && column < m_numColumns );
 	if ( 0 > column || column >= m_numColumns ) return AUI_ERRCODE_INVALIDPARAM;
 
-	m_sortColumn = column;
+	m_sortColumn = static_cast<sint32>(column);
 	m_sortAscending = ascending;
 
 	if (m_numRows <= 1) return AUI_ERRCODE_OK;
@@ -387,14 +387,14 @@ AUI_ERRCODE ctp2_ListBox::Draw(aui_Surface *surf, sint32 x, sint32 y)
 	sint32 minVertical = m_verticalRanger->GetValueY();
 	sint32 maxVertical = minVertical + m_itemsPerHeight;
 
-	if ( maxVertical > m_numRows ) maxVertical = m_numRows;
+	if ( maxVertical > static_cast<sint32>(m_numRows) ) maxVertical = static_cast<sint32>(m_numRows);
 
 	RECT selectRect = rect;
 	InflateRect( &selectRect, -1, 0 );
 
 	ListPos position = m_visualSelectedList->GetHeadPosition();
 
-		for ( sint32 i = m_visualSelectedList->L(); i; i-- )
+		for ( size_t i = m_visualSelectedList->L(); i; i-- )
 		{
 			sint32 itemIndex = m_visualSelectedList->GetNext( position );
 			if ( minVertical <= itemIndex && itemIndex < maxVertical )
@@ -512,14 +512,14 @@ AUI_ERRCODE ctp2_ListBox::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	m_borderOffset.left   = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_LEFT) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_LEFT) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
-	m_borderOffset.right  = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_RIGHT) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_RIGHT) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_WIDTH);
-	m_borderOffset.top    = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_TOP) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_TOP) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
-	m_borderOffset.bottom = block->GetAttributeType(k_CTP2_LISTBOX_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
-			block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_BOTTOM) : block->GetInt(k_CTP2_LISTBOX_LDL_BORDER_HEIGHT);
+	m_borderOffset.left   = block->GetAttributeType(k_AUI_LDL_BORDER_LEFT) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_LEFT) : block->GetInt(k_AUI_LDL_BORDER_WIDTH);
+	m_borderOffset.right  = block->GetAttributeType(k_AUI_LDL_BORDER_RIGHT) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_RIGHT) : block->GetInt(k_AUI_LDL_BORDER_WIDTH);
+	m_borderOffset.top    = block->GetAttributeType(k_AUI_LDL_BORDER_TOP) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_TOP) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
+	m_borderOffset.bottom = block->GetAttributeType(k_AUI_LDL_BORDER_BOTTOM) == ATTRIBUTE_TYPE_INT ?
+			block->GetInt(k_AUI_LDL_BORDER_BOTTOM) : block->GetInt(k_AUI_LDL_BORDER_HEIGHT);
 
 	Resize(Width() + m_borderOffset.left + m_borderOffset.right,
 			Height() + m_borderOffset.top + m_borderOffset.bottom);
@@ -536,7 +536,7 @@ void ctp2_ListBox::GetDisplayRange(sint32 &top, sint32 &bottom)
 	top = m_verticalRanger->GetValueY();
 	bottom = top + m_itemsPerHeight - 1;
 	if(bottom > m_numRows)
-		bottom = m_numRows;
+		bottom = static_cast<sint32>(m_numRows);
 }
 
 void ctp2_ListBox::EnsureItemVisible(sint32 index)

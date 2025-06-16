@@ -1,0 +1,44 @@
+#### Message Strings for the Nuclear Detente scenario ####
+
+
+#### Button text
+
+ND_BUTTON_OK 	"OK"
+ND_BUTTON_YES 	"Yes"
+ND_BUTTON_NO 	"No"
+ND_BUTTON_NEXT 	"Next->"
+ND_BUTTON_BACK 	"<-Previous"
+ND_BUTTON_RULES	"Scenario Rules"
+
+
+#### Message box text
+
+#	The string of hyphens below represents the amount of text that will fit in a message box.
+# 						----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+ND_START_TITLE			"Nuclear Detente"
+ND_WIN_TITLE			"You have WON!"
+ND_LOSE_TITLE			"You have LOST!"
+ND_START_MESSAGE_A		"You are {player[0].leader_name} of Eminiar. Your race is deeply embroiled in a nuclear standoff with the Vendikari. Your nuclear submarines are placed in strategic positions with multiple missiles targeting each of the Vendikari cities, and they have your cities targeted with Nukes of their own."
+ND_START_MESSAGE_B		"You have signed a treaty to limit the number of nuclear missiles each side possesses, but tensions are running high in both countries and the remaining stock of nuclear missiles is more than enough to devastate the planet. You must find a way to eliminate the nuclear threat posed by the Vendikari!"
+ND_CANT_MOVE_NUKES		"Our Nuclear Submarines are in key offensive positions. To maintain our first strike capability, they must remain in place."  
+ND_DISBAND_NUKE_WARNING	"While disbanding our nuclear missiles will eventually be necessary for the sake of peace, be careful that you do not leave us defenseless against our rivals. Are you absolutely sure you want to disband?"
+ND_LOSE_NUCLEAR_WAR_A	"As you watch the yellow blips on the radar screen coming closer, you're not even sure who launched first. After so long a period of bitter rivalry, it should be no surprise that one of the dozens of people with launch command clearance snapped. It's pointless to assign blame now. Maybe your ancestors will forgive you."
+ND_LOSE_NUCLEAR_WAR_B	"A soldier taps you on the arm, 'Sir, we must go now.' The soldier leads you to the elevator down to the subterranean shelter. As the elevator doors close, the soldier remarks, 'I wonder when we'll see the sun again'. Overwhelmed with guilt and sorrow you reply: 'Much sooner than the poor souls trapped on the surface...'"
+ND_DEFUSER_WARNING		"The {player[1].civ_name_plural} have begun construction of the Nanite Defuser in {city[0].name}. This technology is capable of eliminating our nuclear arsenal, which will severely disrupt the balance of world power. They must be stopped!"
+ND_LOSE_DEFUSER			"The {player[1].civ_name_plural} have activated the Nanite Defuser. Our nuclear weapons are now useless for anything but scrap metal."  
+ND_WIN_DEFUSER			"You have constructed the Nanite Defuser. In moments, all nuclear armaments across the planet are rendered useless."
+ND_LAUNCH_CODE_1		"We have managed to discover the launch code to one of the enemy Nuclear Submarines. If we can secure the launch codes for all 8 Subs, we can trigger them all at once and end the nuclear threat once and for all. We must hurry though. The codes will be reset in {codeCounter} month{action[0].text}."
+ND_LAUNCH_CODE_2		"We now have {spyCitySum} of the 8 launch codes. The codes will be reset in {codeCounter} month{action[0].text}"
+ND_LAUNCH_CODE_TURNS	"s"
+ND_LAUNCH_CODE_TURNS2	""
+ND_LAUNCH_CODE_RESET	"The launch codes have reset. Our spies will have to start over again."
+ND_WIN_LAUNCH_CODE		"We have used the launch codes to trigger all enemy nuclear missiles to scuttle. With your nuclear arsenal trained on the Vendikari cities, you call for their immediate, unconditional surrender. They quickly comply!"
+ND_NUCLEAR_SUB_WARNING	"Destroying the Vendikari Nuclear Submarine will almost certainly trigger a retalitory nuclear strike!  Are you sure you want to attack the Nuclear Submarine?"
+ND_NUCLEAR_SUB_DESTROY	"Your bold assault on the Nuclear Submarine has caught the Vendikari off guard for the moment, but Intelligence reports that our rivals are already preparing a full nuclear retaliation. The world is doomed unless you can eliminate the remaining Nuclear Submarines at once!"
+ND_WIN_NUCLEAR_SUB		"Your brilliantly coordinated offensive has eliminated the nuclear threat posed by the Vendikari. With your nuclear arsenal trained on their cities, you call for their immediate, unconditional surrender. They quickly comply!"
+ND_WIN_DIPLOMACY		"Your cunning political maneuverings have resolved the nuclear threat posed by the Vendikari. Now you may safely disarm your own nuclear arsenal and pave the way for lasting peace."
+ND_LOSE_STUPIDITY		"You should not have disarmed the last of our nuclear weapons. Now we are at the mercy of the Vendikari!"
+ND_TEMP					"Nuclear Subs = {nukeCount}"
+ND_TEMP2				"Got to here..."
+

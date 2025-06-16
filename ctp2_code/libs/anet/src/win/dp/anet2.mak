@@ -108,7 +108,7 @@ CLEAN :
 # ADD CPP /nologo /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\..\..\h" /I "..\..\aeh" /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "WIN32" /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D "dp_ANET2" /FAcs /YX /c
 CPP_PROJ=/nologo /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\..\..\h" /I "..\..\aeh"\
  /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "WIN32"\
- /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D "dp_ANET2" /FAcs /Fa"$(INTDIR)/"\
+ /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FAcs /Fa"$(INTDIR)/"\
  /Fp"$(INTDIR)/anet2.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\anet2/
 CPP_SBRS=.\.
@@ -251,7 +251,7 @@ CLEAN :
 CPP_PROJ=/nologo /MDd /W2 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I\
  "..\..\aeh" /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "_DEBUG"\
  /D "DEBUG" /D "DPRNT" /D "WIN32" /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D\
- "dp_ANET2" /Fp"$(INTDIR)/anet2.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/anet2.pch" /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\anet2d/
 CPP_SBRS=.\.
 # ADD BASE MTL /nologo /D "_DEBUG" /D "DEBUG" /win32
@@ -391,7 +391,7 @@ CLEAN :
 # ADD CPP /nologo /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\..\..\h" /I "..\..\aeh" /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "DPRNT" /D "WIN32" /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D "dp_ANET2" /FAcs /YX /c
 CPP_PROJ=/nologo /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\..\..\h" /I "..\..\aeh"\
  /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "DPRNT"\
- /D "WIN32" /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D "dp_ANET2" /FAcs\
+ /D "WIN32" /D "_WIN32" /D "_WINDOWS" /D "DP_DLL" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FAcs\
  /Fa"$(INTDIR)/" /Fp"$(INTDIR)/anet2.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\anet2l/
 CPP_SBRS=.\.
@@ -959,7 +959,7 @@ DEP_CPP_ENUMA=\
 	"..\..\tca\tca.h"\
 	"..\..\tca\tcapw.h"\
 	"..\..\tca\tserv.h"\
-	"..\3rdparty\updater\update.h"\
+#	"..\3rdparty\updater\update.h"\ # Missing file, keep in case we wanna reimplment this.
 	
 
 !IF  "$(CFG)" == "anet2 - Win32 Release"

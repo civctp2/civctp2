@@ -130,21 +130,8 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 		m_tacticalList->SetMultiSelect(TRUE);
 	}
 
-
-
-
-
-
-
-
-
-
-
 	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "CloseButton", Close, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "AdviceButton", Advice, NULL);
-
-
-
 
 	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Slider", ReadinessActionCallback, NULL);
 
@@ -178,22 +165,22 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 UnitManager::~UnitManager()
 {
 	if (m_statsList)
-    {
+	{
 		m_statsList->Clear();
-    }
+	}
 
-    if (m_tacticalList)
-    {
-        m_tacticalList->Clear();
-    }
+	if (m_tacticalList)
+	{
+		m_tacticalList->Clear();
+	}
 
 	if (m_window)
-    {
+	{
 		aui_Ldl::DeleteHierarchyFromRoot(s_unitManagerBlock);
 	}
 
 	if (m_adviceWindow)
-    {
+	{
 		aui_Ldl::DeleteHierarchyFromRoot(s_unitManagerAdviceBlock);
 	}
 
@@ -241,17 +228,6 @@ AUI_ERRCODE UnitManager::Display()
 		Assert(err == AUI_ERRCODE_OK);
 
 		err = s_unitManager->m_window->Show();
-
-
-
-
-
-
-
-
-
-
-
 
 		Assert(s_unitManager->m_adviceWindow);
 		if(s_unitManager->m_adviceWindow) {
@@ -691,10 +667,10 @@ void UnitManager::UpdateAdviceText()
 
 	SlicContext sc;
 	StringId    adviceId = (sm_statsTabVisible)
-                           ? governor.GetUnitsAdvice(sc)
-                           : governor.GetTacticalAdvice(sc);
+	                       ? governor.GetUnitsAdvice(sc)
+	                       : governor.GetTacticalAdvice(sc);
 
-    if (adviceId < 0)
+	if (adviceId < 0)
 	{
 		advice->SetHyperText("");
 		return;
@@ -702,7 +678,7 @@ void UnitManager::UpdateAdviceText()
 
 	MBCHAR	strbuf[k_MAX_NAME_LEN];
 	stringutils_Interpret
-        (g_theStringDB->GetNameStr(adviceId), sc, strbuf, k_MAX_NAME_LEN);
+	    (g_theStringDB->GetNameStr(adviceId), sc, strbuf, k_MAX_NAME_LEN);
 	advice->SetHyperText(strbuf);
 }
 
@@ -787,7 +763,7 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 				}
 			}
 
-            StringId o2;
+			StringId o2;
 			if(!u2->GetCurrentOrderString(o2)) {
 				if(!g_theStringDB->GetStringID("UNIT_ORDER_NONE", o2)) {
 					return 0;
@@ -940,34 +916,18 @@ void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void 
 
 	Assert(s_unitManager && s_unitManager->m_adviceWindow);
 	if (s_unitManager && s_unitManager->m_adviceWindow)
-    {
-	    if (g_c3ui->GetWindow(s_unitManager->m_adviceWindow->Id()))
-        {
-		    g_c3ui->RemoveWindow(s_unitManager->m_adviceWindow->Id());
-	    }
-        else
-        {
-		    UnitManager::UpdateAdviceText();
-		    g_c3ui->AddWindow(s_unitManager->m_adviceWindow);
-        }
+	{
+		if (g_c3ui->GetWindow(s_unitManager->m_adviceWindow->Id()))
+		{
+			g_c3ui->RemoveWindow(s_unitManager->m_adviceWindow->Id());
+		}
+		else
+		{
+			UnitManager::UpdateAdviceText();
+			g_c3ui->AddWindow(s_unitManager->m_adviceWindow);
+		}
 	}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
@@ -975,7 +935,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
 
-    ctp2_ListItem *item = lb ? (ctp2_ListItem *)lb->GetSelectedItem() : NULL;
+	ctp2_ListItem *item = lb ? (ctp2_ListItem *)lb->GetSelectedItem() : NULL;
 	if(!item) return;
 
 	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
@@ -1019,7 +979,7 @@ void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data
 void UnitManager::TabChanged(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	UnitManager::sm_statsTabVisible =
-        (control == aui_Ldl::GetObject(s_unitManagerBlock, "Tabs.Stats"));
+	    (control == aui_Ldl::GetObject(s_unitManagerBlock, "Tabs.Stats"));
 	UnitManager::UpdateAdviceText();
 }
 
@@ -1058,7 +1018,7 @@ void UnitManager::DisbandSelected()
 
 	g_gevManager->Pause();
 	ListPos position = selList->GetHeadPosition();
-	sint32 i;
+	size_t i;
 	for(i = selList->L(); i > 0; i--) {
 		sint32 itemIndex = selList->GetNext(position);
 
@@ -1104,14 +1064,14 @@ void UnitManager::DisbandSelected()
 /// Handle disbanding of armies
 STDEHANDLER(UnitManagerArmyDisbanded)
 {
-    if (s_unitManager)
-    {
-        // Refresh all lists to remove units that have become invalid
-        s_unitManager->Update();
- 		s_unitManager->SetLastDisbandedUnit(0);
-    }
+	if (s_unitManager)
+	{
+		// Refresh all lists to remove units that have become invalid
+		s_unitManager->Update();
+		s_unitManager->SetLastDisbandedUnit(0);
+	}
 
-    return GEV_HD_Continue;
+	return GEV_HD_Continue;
 }
 
 /// Handle disbanding of individual units
@@ -1141,9 +1101,9 @@ STDEHANDLER(UnitManagerUnitDisbanded)
 void UnitManager::InitializeEvents()
 {
 	g_gevManager->AddCallback
-        (GEV_DisbandUnit, GEV_PRI_Post, &s_UnitManagerUnitDisbanded);
+	    (GEV_DisbandUnit, GEV_PRI_Post, &s_UnitManagerUnitDisbanded);
 	g_gevManager->AddCallback
-        (GEV_DisbandArmyOrder, GEV_PRI_Post, &s_UnitManagerArmyDisbanded);
+	    (GEV_DisbandArmyOrder, GEV_PRI_Post, &s_UnitManagerArmyDisbanded);
 }
 
 void UnitManager::CleanupEvents()

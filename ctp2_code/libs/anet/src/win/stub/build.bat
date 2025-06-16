@@ -14,13 +14,13 @@ rem WARNING: Compile only on appropriate machines (see above)
 rem rc anetstub.rc
 
 echo Compiling standard version
-cl /D WIN32 anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib
+cl /D WIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib
 
 echo Compiling debug version with file logging
-cl /D WIN32 /D DEBUG anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib /out:"logstub.exe"
+cl /D WIN32 /D DEBUG /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib /out:"logstub.exe"
 
 echo Compiling debug version with stdout logging
-cl /D WIN32 /D DEBUG /D PRINT_STDOUT anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib /out:"dbgstub.exe"
+cl /D WIN32 /D DEBUG /D PRINT_STDOUT /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib /out:"dbgstub.exe"
 
 echo Compiling special version for Zork - doesn't loop 
-cl /D WIN32 /D OLOOP anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib /out:"zorkstub.exe"
+cl /D WIN32 /D OLOOP /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" anetstub.c anetstub.res /link /subsystem:windows advapi32.lib user32.lib /out:"zorkstub.exe"

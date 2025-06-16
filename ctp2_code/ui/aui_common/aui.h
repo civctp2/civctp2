@@ -50,23 +50,10 @@
 #include "auitypes.h"
 #include "auidebug.h"
 
-
 #if defined(WIN32)
 #if defined(__AUI_USE_DIRECTMEDIA__) && !defined(__AUI_USE_DIRECTX__)
 #define __AUI_USE_DIRECTX__
 #endif
 #endif // WIN32
-
-#if defined(__AUI_USE_DIRECTX__)
-#include <ddraw.h>
-#include <dinput.h>
-#include <dsound.h>
-#endif // __AUI_USE_DIRECTX__
-
-#ifdef __AUI_USE_DIRECTMEDIA__
-#include <amstream.h>
-#include <ddstream.h>
-#include <mmstream.h>
-#endif // __AUI_USE_DIRECTMEDIA__
 
 #endif

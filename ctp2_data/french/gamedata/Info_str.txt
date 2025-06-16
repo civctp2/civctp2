@@ -152,6 +152,11 @@ WAR_OVER				"Les {player[0].civ_name_plural} ne sont plus en guerre avec les {pl
 
 ## Trade Messages ##
 TRADE_PIRATED				"{player[0].sir_cap}, notre route commerciale allant de {city[0].name} à {city[1].name} a été piratée par les {player[1].civ_name_plural]."
+TRADE_PIRATE_BONUS			"The trade route carrying {good[0].name} from {city[0].name} to {city[1].name} has been pirated by the {player[0].civ_name_plural} and {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold was lost."
+TRADE_PIRATE_GOLD			"{gold[0].value} gold was pirated on the trade route carrying {good[0].name} from {city[0].name} to {city[1].name} owned by {player[0].civ_name_plural}."
+TRADE_PASS				"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} brought us {gold[0].value} gold."
+TRADE_PASS_PIRATED			"The trade route passing through our city of {city[0].name} carrying {good[0].name} from {city[1].name} to {city[2].name} owned by the {player[0].civ_name_plural} was pirated by the {player[1].civ_name_plural} and {gold[0].value} gold from transit was not earned."
+SENDER_CREATED_TRADE_ROUTE			"{player[0].leader_name} has created a trade route carrying {good[0].name} from {city[0].name} to {city[1].name}, bringing {gold[0].value} food, {gold[1].value} production, {gold[2].value} gold."
 TRADE_ROUTES_BROKEN_BY_EMBARGO		"{player[0].sir_cap}, les {player[1].civ_name_plural} font peser un embargo sur notre commerce. Toutes les routes commerciales à destination de leur territoire ayant été rompues, toutes nos caravanes sont définitivement perdues."
 TRADE_ROUTES_BROKEN_BY_WAR		"Mauvaise nouvelle, {player[0].sir}. A cause du conflit avec les {player[1].civ_name_plural}, toutes nos routes commerciales à destination des villes des {player[1].civ_name_plural} ont été rompues. Toutes les caravanes affectées à ces routes sont définitivement perdues."
 SENDER_KILLED_TRADE_ROUTE		"{player[0].leader_name} a annulé la route commerciale permettant de transporter {good[0].name#SOME} de {city[0].name} à {city[1].name}."
@@ -377,6 +382,7 @@ IMMUNE_TO_PLAGUE_VICTIM			"{city[0].name} est protégée des effets dévastateurs d
 ## Reform City ##
 ## All Military Unit Action ##
 REFORM_CITY				"Nous avons réussi à réformer la ville de {city[0].name}. Ses citoyens ne sont plus sous le joug étranger."
+REFORM_CITY_VICTIM			"The citizens of the formerly converted city of {city[0].name} are no longer under our influence. They used to pay {gold[0].value} gold."
 
 ## Sell Indulgences ##
 ## Cleric Attack ##
@@ -425,9 +431,18 @@ SUE_FRANCHISE_FAILED_ATTACKER		"Malgré tous les efforts de notre avocat, la fran
 PARTY_COMPLETE_VICTIM			"Une unité type {unitrecord[0].name} des {player[0].civ_name_plural} a donné une réception solennelle dans la ville de {city[0].name}. Le spectacle était de haute volée, la nourriture excellente et tout le monde a passé une très bonne soirée. Nombre de nos représentants officiels ont été très impressionnés par les {player[0].civ_name_plural} et estiment que nous devrions faire tout notre possible pour mettre de côté nos différences afin de développer le partenariat entre nos deux nations."
 PARTY_COMPLETE_ATTACKER			"Notre {unitrecord[0].name} a donné une réception dans la ville étrangère de {city[0].name}. Les dignitaires et les représentants officiels des {player[0].civ_name_plural} y étaient conviés. Nous pouvons espérer qu'à l'avenir les {player[0].civ_name_plural} seront davantage disposés à collaborer avec nous."
 
+# Hear Gossip #
+GOSSIP_WARTIME_READINESS		"The {player[0].civ_name_plural} are at wartime readiness"
+GOSSIP_ALERT_READINESS			"The {player[0].civ_name_plural} are on alert"
+GOSSIP_PEACETIME_READINESS		"The {player[0].civ_name_plural} are at peacetime readiness"
+GOSSIP_CAPTION					"Gossip"
+GOSSIP_BORING					"The {player[0].civ_name_plural} are a remarkably boring people, and have nothing worth gossiping about"
+GOSSIP_MAP						"We have gleaned knowledge of the world map from the {player[0].civ_name_plural}"
+GOSSIP_COMPLETE_ATTACKER		"Our Diplomats have overheard gossip. We have gained {advance[0].name}."
+
 ##Disabled Screen Buttons##
 
-CIV_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
+CIV_STATUS_DISABLED				"Vous devez construire une ville avant d'accéder à cet écran."
 SCIENCE_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
 CITY_STATUS_DISABLED			"Vous devez construire une ville avant d'accéder à cet écran."
 DIPLOMACY_STATUS_DISABLED		"Vous devez entrer en contact avec un autre empire avant d'accéder à cet écran."
@@ -553,17 +568,28 @@ HOSTILE_TERRAIN				"Extreme weather has hurt the health of our {unitrecord[0].na
 INSURGENT_SPAWN				"Rebels have taken arms outside {city[0].name}."
 GUERRILLA_SPAWN				"Our {unitrecord[0].name} has raised guerrillas to aid our cause!"
 
-# New Messages # Belong to somewhere else
+# New Messages # Belong somewhere else
 # Doves and hawks there are better names for them
 ATTACK_WARNING				"This action is an act of war! Do you REALLY want to declare war on the {player[0].civ_name_plural}?"
 CIV2DOVES				"The Dove Party dominates parliament! They have vetoed this aggression."
 CIV2HAWKS				"The Hawk Party backs this war against this Axis of Evil!"
 BARBWAR					"These savages threaten our citizens. Pacification operations have begun!" 
 
-#New Messages#
+# New Messages #
 UNIT_ELITE				"Elite status has been bestowed on your {unit[0].name}."
 UNIT_LEADER				"Out of our victory, a great leader has risen to command our armies."
-RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
+RIOT_CASUALTIES			"Blood stains the streets of {city[0].name}. All this lawlessness has cost the lives of {gold[0].value} citizens! Can't we all just get along?"
+
+# Langauages #
+INFO_CHINESE			"The Chinese version is a fan translation and so there are no language specific sound files and videos in Chinese. The translation is quite complete. Just some  text from the Apolyton Edition is missing. The text files are saved as unicode, which however is not compatible with Call to Power II. Until Call to Power 2 accepts unicode text files or another soltion is found Chinese is disabled. Of course, of course you can help with this if you know how you ."
+INFO_CZECH				"The Czech version is a fan translation and so it has no language specific sound and video files. The translation is only partial and you can help completing it."
+INFO_ENGLISH			"English is one of the six languages Call to Power II was originally released in. It is the only language the Good Old Games version was released in. The Apolyton Edition has all English text, sound, and video files. The video and sound files are available via an additional download if you want to play in another language than English. English is used as a fall back language if your operating system does have a fitting language preference."
+INFO_FRENCH				"French is one of the six languages Call to Power II was originally released in. There is no French Good Old Games version. The Apolyton Edition has all French text, sound, and video files. The video and sound files are available via an additional download. However, not all text that was added by the Apolyton Edition has been translated to French, you can help by providing translations."
+INFO_GERMAN				"German is one of the six languages Call to Power II was originally released in. There is no German Good Old Games version. The Apolyton Edition has all German text, sound, and video files. The video and sound files are available via an additional download."
+INFO_ITALIAN			"Italian is one of the six languages, Call to Power II was originally released in. There is no Italian Good Old Games version. The Apolyton Edition has all Italian text files, but no sound and video. You can give them to the project if you have an Italian CD. However, not all text that was added by the Apolyton Edition has been translated to Italian, you can help by providing translations."
+INFO_JAPANESE			"Japanese is one of the six languages Call to Power II was originally released in. There is no japanese Good Old Games version. The Apolyton Edition has some text files, but no sound and video files. You can give them to the project if you have an Japanese CD. Obviously, not all text that was added by the Apolyton Edition has been translated to Japanese, you can help by providing translations. Since text files are missing, this language is disabled. Call to Power II would not start anyway, without problems."
+INFO_POLISH				"The Polish version is a fan translation and so it has no language specific sound and video files. The translation is only partial and you can help completings it."
+INFO_SPANISH			"Italian is one of the six languages Call to Power II was originally released in. There is no Spanish Good Old Games version. The Apolyton Edition has all Spanish text and sound files but no video files. The sound files are available via an additional download. You can give the video files to the project if you have a Spanish CD. However, not all text that was added by the Apolyton Edition has been translated to Italian, you can help by providing translations."
 
 
 ###############
@@ -573,26 +599,26 @@ RIOT_CASUALTIES				"Blood stains the streets of {city[0].name}. All this lawless
 ###############
 
 # Common buttons
-BUTTON_ACCEPT				"Accepter"
-BUTTON_CANCEL				"Annuler"
-BUTTON_CLOSE				"Fermer"
+BUTTON_ACCEPT			"Accepter"
+BUTTON_CANCEL			"Annuler"
+BUTTON_CLOSE			"Fermer"
 BUTTON_GOAL				"Objectif"
-BUTTON_LIBRARY				"Bibliothèque"
-BUTTON_MAYBE				"Peut-être"
+BUTTON_LIBRARY			"Bibliothèque"
+BUTTON_MAYBE			"Peut-être"
 BUTTON_YES				"Oui"
 BUTTON_NO				"Non"
 BUTTON_OK				"Fermer"
-BUTTON_RANDOM				"Aléatoire"
-BUTTON_READY				"Prêt"
-BUTTON_REJECT				"Refuser"
-BUTTON_RESEARCH				"Rechercher"
-BUTTON_SET_PRICE			"Définir prix"
-BUTTON_STEAL_THIS			"<- Voler ceci"
-BUTTON_EXPEL				"Renvoyer"
+BUTTON_RANDOM			"Aléatoire"
+BUTTON_READY			"Prêt"
+BUTTON_REJECT			"Refuser"
+BUTTON_RESEARCH			"Rechercher"
+BUTTON_SET_PRICE		"Définir prix"
+BUTTON_STEAL_THIS		"<- Voler ceci"
+BUTTON_EXPEL			"Renvoyer"
 
 # Network buttons
-BUTTON_EJECT "Renvoyer"
-BUTTON_LET_THEM_STAY "Participation autorisée"
+BUTTON_EJECT			"Renvoyer"
+BUTTON_LET_THEM_STAY	"Participation autorisée"
 
 # Buttons for quitting the game
 BUTTON_CONTINUE				"Continuer"
