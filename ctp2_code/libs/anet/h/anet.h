@@ -441,8 +441,8 @@ typedef struct {			/* Request (filled in by caller) */
 	long baseadr;          /* ignored by Windows */
 	long hwirq;            /* ignored by Windows */
 	size_t swint;          /* ignored by Windows */
-	char *phonenum;
-	char *modeministr;
+	const char *phonenum;
+	const char *modeministr;
 	long flags;			/* controls whether to dial and/or test */
 	long dialing_method;	/* parameter to HMSetDialingMethod */
 } PACK commInitReq_t;		/* Copy of commInitReq_t in commapi.h */
