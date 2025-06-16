@@ -677,7 +677,7 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 		return false;
 
 	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
+	const char *argString = desc->args;
 
 	bool done = false;
 	GAME_EVENT_ARGUMENT nextArg;
@@ -691,11 +691,6 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 
 		if(nextArg == GEA_End && *argString == 0)
 			return true;
-
-
-
-
-
 
 		if(!isOptional) {
 
@@ -853,9 +848,8 @@ void GameEventManager::Dump()
 
 		fprintf(f, "%d: GEV_%s(", (sint32)ev, g_eventDescriptions[ev].name);
 
-		char *argString = g_eventDescriptions[ev].args;
+		const char *argString = g_eventDescriptions[ev].args;
 		BOOL first = TRUE;
-
 
 		while(*argString) {
 			Assert(*argString == '%' || *argString == '&' || *argString == '$');
@@ -865,7 +859,6 @@ void GameEventManager::Dump()
 				{
 				fprintf(f, " [");
 				}
-
 
 			argString++;
 			if(!(*argString)) {
@@ -880,10 +873,9 @@ void GameEventManager::Dump()
 			argString++;
 
 			if(optional)
-				{
+			{
 				fprintf(f, "]");
-				}
-
+			}
 		}
 
 		fprintf(f, "): %s\n", g_eventDescriptions[ev].description);

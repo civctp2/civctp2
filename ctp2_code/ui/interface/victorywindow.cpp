@@ -16,30 +16,7 @@
 
 extern C3UI *g_c3ui;
 
-static MBCHAR *s_VictoryWindowBlock = "VictoryWindow";
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+static const MBCHAR *s_VictoryWindowBlock = "VictoryWindow";
 
 VictoryWindow::VictoryWindow(AUI_ERRCODE *err)
 {
@@ -50,8 +27,6 @@ VictoryWindow::VictoryWindow(AUI_ERRCODE *err)
 		*err = AUI_ERRCODE_INVALIDPARAM;
 		return;
 	}
-
-
 }
 
 VictoryWindow::~VictoryWindow()

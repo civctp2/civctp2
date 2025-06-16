@@ -92,7 +92,7 @@
 #include "ctp2_hypertextbox.h"
 
 static DiplomacyDetails     *s_DiplomacyDetails;
-static MBCHAR               *s_DiplomacyDetailsBlock = "DiplomacyDetails";
+static const MBCHAR         *s_DiplomacyDetailsBlock = "DiplomacyDetails";
 
 #define k_INT_FLAG_COL      0
 #define k_INT_NATION_COL    1

@@ -29,8 +29,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin Gühmann)
-// - Removed DoubleUp method. (Sep 9th 2005 Martin Gühmann)
+// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin GÃ¼hmann)
+// - Removed DoubleUp method. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -151,7 +151,7 @@ void CivArchive::Store(uint8 *pbData, size_t ulLen)
 {
 #ifdef ARCHIVE_TYPE_CHECK
 TypeCheck(TYPE_CHECK_ARRAY);
-#endif ARCHIVE_TYPE_CHECK
+#endif // ARCHIVE_TYPE_CHECK
 
 	Assert(m_bIsStoring);
 
@@ -167,7 +167,7 @@ void CivArchive::Load(uint8 *pbData, size_t ulLen)
 {
 #ifdef ARCHIVE_TYPE_CHECK
 	TypeCheck(TYPE_CHECK_ARRAY);
-#endif ARCHIVE_TYPE_CHECK
+#endif // ARCHIVE_TYPE_CHECK
 
 #ifdef _DEBUG
 	Assert(!m_bIsStoring);

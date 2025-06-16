@@ -114,8 +114,8 @@ enum STATUS
 	RESET
 };
 
-static void StringMix(int c, char *mix, char *msg, ...);
-static char *StringDup(char *s);
+static void StringMix(int c, char *mix, const char *msg, ...);
+static char *StringDup(const char *s);
 
 class Timer
 {
@@ -619,7 +619,7 @@ class Port:public Key
 	char m_init[nf_PORTINITLEN];
 public:
 
-	Port(commPortName_t *p, int b, char *i);
+	Port(commPortName_t *p, int b, const char *i);
 
 	Port(void);
 

@@ -16,7 +16,7 @@ union Cookie;
 class GovernmentTab {
 public:
 
-	GovernmentTab(MBCHAR *ldlBlock);
+	GovernmentTab(const MBCHAR *ldlBlock);
 
 	void Update();
 

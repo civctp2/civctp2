@@ -25,8 +25,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -786,18 +786,18 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 
 
 void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
-	{
+{
 #define MAX_MEMBERS	15
 	struct
-		{
-		MBCHAR	*sClass ;
+	{
+		const MBCHAR	*sClass ;
 
-		MBCHAR	*sMember[MAX_MEMBERS] ;
-		} varList[]={	{ "city",		{ "name", "population", "happiness", "production", "food", "pos", "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "slaves", NULL } },
-						{ "gold",		{ "amount", NULL } },
-						{ "player",		{ "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "gold", NULL } },
-						{ "advance",	{ "name", "index", "prerequisites", "leadsto", NULL } },
-						{ NULL } } ;
+		const MBCHAR	*sMember[MAX_MEMBERS] ;
+	} varList[]={	{ "city",		{ "name", "population", "happiness", "production", "food", "pos", "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "slaves", NULL } },
+					{ "gold",		{ "amount", NULL } },
+					{ "player",		{ "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "gold", NULL } },
+					{ "advance",	{ "name", "index", "prerequisites", "leadsto", NULL } },
+					{ NULL } } ;
 
 	MBCHAR	*pInput,
 			*pOutput,

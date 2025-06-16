@@ -24,17 +24,17 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin Gühmann)
+// - Added HotSeat and PBEM human-human diplomacy support. (17-Oct-2007 Martin GÃ¼hmann)
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
-// - Added GobalWarming and OzoneDepletion events. (29-Oct-2007 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin GÃ¼hmann)
+// - Added GobalWarming and OzoneDepletion events. (29-Oct-2007 Martin GÃ¼hmann)
 // - Added SendEmailAndHotSeatMessage so that this is event driven and can
-//   be executed after all the other events. (14-Nov-2007 Martin Gühmann)
-// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin Gühmann)
-// - Seperated the CheckOrders event from MoveUnits event. (13-Aug-2008 Martin Gühmann)
+//   be executed after all the other events. (14-Nov-2007 Martin GÃ¼hmann)
+// - Separated the Settle event drom the Settle in City event. (19-Feb-2008 Martin GÃ¼hmann)
+// - Seperated the CheckOrders event from MoveUnits event. (13-Aug-2008 Martin GÃ¼hmann)
 // - Moved the startegic state calculation before everthing else, so that
-//   each turn has the right startegy even after a reload. (13-Aug-2008 Martin Gühmann)
-// - Added upgrade events. (13-Sep-2008 Martin Gühmann)
+//   each turn has the right startegy even after a reload. (13-Aug-2008 Martin GÃ¼hmann)
+// - Added upgrade events. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,9 +45,9 @@
 #define __GAME_EVENT_DESCRIPTION_H__
 
 struct GameEventDescription {
-	char *name;
-	char *description;
-	char *args;
+	const char *name;
+	const char *description;
+	const char *args;
 };
 
 #ifdef EVENT

@@ -423,7 +423,7 @@ void Battle::AddEvent(BattleEvent *event)
 
 void Battle::ShowEvent(BattleEvent *event)
 {
-	MBCHAR		*s;
+	const MBCHAR		*s;
 
 	switch (event->GetType()) {
 	case BATTLE_EVENT_TYPE_PLACEMENT :

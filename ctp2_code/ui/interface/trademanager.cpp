@@ -77,8 +77,8 @@ extern C3UI *g_c3ui;
 #include "tiledmap.h"
 
 static TradeManager *   s_tradeManager      = NULL;
-static MBCHAR *         s_tradeManagerBlock = "TradeManager";
-static MBCHAR *         s_tradeAdviceBlock  = "TradeAdvice";
+static const MBCHAR *   s_tradeManagerBlock = "TradeManager";
+static const MBCHAR *   s_tradeAdviceBlock  = "TradeAdvice";
 
 #define k_MAX_CITIES_PER_GOOD 5 //make this a constDB? - it should be 6.12.2007
 

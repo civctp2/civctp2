@@ -38,8 +38,8 @@
 
 struct GameSoundData
 {
-	sint32		id;
-	MBCHAR *    name;
+	sint32        id;
+	const MBCHAR* name;
 };
 
 enum GAMESOUNDS

@@ -98,7 +98,7 @@ extern ProjectFile * g_GreatLibPF;
 
 static EditQueue * s_editQueue = NULL;
 
-static MBCHAR * s_editQueueBlock = "BuildEditorWindow";
+static const MBCHAR * s_editQueueBlock = "BuildEditorWindow";
 
 extern C3UI * g_c3ui;
 

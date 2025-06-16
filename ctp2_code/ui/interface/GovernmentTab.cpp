@@ -65,7 +65,7 @@ template <class type> COLORREF ComparisonColorOpposite(type left, type right)
 	return(g_colorSet->GetColorRef(COLOR_BLACK));
 }
 
-GovernmentTab::GovernmentTab(MBCHAR *ldlBlock) :
+GovernmentTab::GovernmentTab(const MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_enactButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"EnactGovernment"))),

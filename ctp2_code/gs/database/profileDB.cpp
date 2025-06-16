@@ -855,7 +855,7 @@ void ProfileDB::SetDifficulty(uint32 x)
 	}
 }
 
-void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
+void ProfileDB::Var(const char *name, PROF_VAR_TYPE type, sint32 *numValue,
                     char *stringValue, bool visible)
 {
 	m_vars->AddTail(new ProfileVar(name, type, numValue, stringValue, visible));

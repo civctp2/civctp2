@@ -77,9 +77,9 @@ public:
 	void	InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowsBlock);
 	void	TopLevel();
 
-	void			LoadSprite(char *name=NULL);
+	void			LoadSprite(const char *name=NULL);
 
-	void			SaveSprite(char *name=NULL);
+	void			SaveSprite(const char *name=NULL);
 
 	void			DrawSprite();
 	void			ReDrawLargeSprite();
@@ -92,7 +92,7 @@ public:
 	void	Animate();
 	void	BeginAnimation();
 
-	bool	FileExists(char *name);
+	bool	FileExists(const char *name);
 
 	bool			m_loopInProgress;
 	bool			m_stopAfterLoop;

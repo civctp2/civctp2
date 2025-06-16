@@ -143,8 +143,8 @@ extern ResourceMap                  *g_resourceMap;
 extern C3UI                         *g_c3ui;
 
 static CityWindow                   *s_cityWindow = NULL;
-static MBCHAR                       *s_cityWindowBlock = "CityWindow";
-static MBCHAR                       *s_cityStatsBlock = "CityStatisticsWindow";//advisor window
+static const MBCHAR                 *s_cityWindowBlock = "CityWindow";
+static const MBCHAR                 *s_cityStatsBlock  = "CityStatisticsWindow"; // Advisor window
 
 static sint32 s_isBuilding = 1;
 
@@ -1614,7 +1614,7 @@ void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, Coo
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::PopulateQueueList(const Unit & city, ctp2_ListBox *listBox, char * itemBlock)
+void CityWindow::PopulateQueueList(const Unit & city, ctp2_ListBox *listBox, const char * itemBlock)
 {
 	if (!city.IsValid()) {
 		return;

@@ -186,7 +186,7 @@ int adialup_willdial(void)
 	return adialup_autodial_enabled() && !adialup_is_active();
 }
 
-void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
+void NETFunc::StringMix(int c, char *mix, const char *msg, ...) {
 	va_list al;
 	va_start(al, msg);
 	strcpy(mix, msg);
@@ -211,7 +211,7 @@ void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 	va_end(al);
 }
 
-char *NETFunc::StringDup(char *s)
+char *NETFunc::StringDup(const char *s)
 {
 	return (s) ? strcpy(new char[strlen(s) + 1], s) : NULL;
 }
@@ -563,7 +563,7 @@ NETFunc::ContactList::ContactList(void) {
 NETFunc::ContactList::~ContactList(void) {
 }
 
-NETFunc::Port::Port(commPortName_t *p, int b, char *i) {
+NETFunc::Port::Port(commPortName_t *p, int b, const char *i) {
 	m_port = *p;
 	m_baud	= b;
 	strncpy(m_init, i, nf_PORTINITLEN);

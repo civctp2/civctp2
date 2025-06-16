@@ -106,7 +106,7 @@ public:
 	static void NotifyBuildChange(const Unit & city);
 	static void Project(const Unit & city);
 
-	static void PopulateQueueList(const Unit & city, ctp2_ListBox * listBox, char * itemBlock);
+	static void PopulateQueueList(const Unit & city, ctp2_ListBox * listBox, const char * itemBlock);
 
 private:
 	static void Close                (aui_Control *control, uint32 action, uint32 data, Cookie cookie);

@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
-// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
+// - Added pollution power graph (Nov 2nd 2003 Martin GÃ¼hmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -88,7 +88,7 @@ private:
 
 	void Hide();
 
-	void Add_Dropdown_Category(char * category);
+	void Add_Dropdown_Category(const char * category);
 
 	void SetLineGraph( bool line_graph );
 

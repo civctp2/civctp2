@@ -479,7 +479,7 @@ AUI_ERRCODE SpriteEditWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y
 	return AUI_ERRCODE_OK;
 }
 
-bool SpriteEditWindow::FileExists(char *name)
+bool SpriteEditWindow::FileExists(const char *name)
 {
 	if (name == NULL)
 		return false;
@@ -492,7 +492,7 @@ bool SpriteEditWindow::FileExists(char *name)
 	return c3files_PathIsValid(fullPath);
 }
 
-void SpriteEditWindow::LoadSprite(char *name)
+void SpriteEditWindow::LoadSprite(const char *name)
 {
 	char tbuffer[256];
 
@@ -607,7 +607,7 @@ void SpriteEditWindow::LoadSprite(char *name)
 	m_drawFlag      = true;
 }
 
-void SpriteEditWindow::SaveSprite(char *name)
+void SpriteEditWindow::SaveSprite(const char *name)
 {
 	char tbuffer[256];
 

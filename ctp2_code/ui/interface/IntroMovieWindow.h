@@ -39,7 +39,7 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	void SetMovie(MBCHAR *filename);
+	void SetMovie(const MBCHAR *filename);
 
 private:
 	aui_MovieButton		*m_movieButton;

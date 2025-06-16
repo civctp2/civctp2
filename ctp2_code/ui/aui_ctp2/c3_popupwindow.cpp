@@ -23,7 +23,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Added functionality to support pattern information saving
 //
 //----------------------------------------------------------------------------
@@ -223,7 +223,7 @@ sint32 c3_PopupWindow::AddTitle(const MBCHAR *titleBlock )
 		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 		m_title = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupTitle");
 		TestControl(m_title);
-		char *ldlBlock = "c3_PopupTitle.c3_PopupTitleText";
+		const char *ldlBlock = "c3_PopupTitle.c3_PopupTitleText";
 		m_titleText =
 			new c3_Static
 		        (&errcode,

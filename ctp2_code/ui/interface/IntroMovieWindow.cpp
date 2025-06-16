@@ -109,7 +109,7 @@ AUI_ERRCODE IntroMovieWindow::InitCommon(void)
 }
 
 
-void IntroMovieWindow::SetMovie(MBCHAR *filename)
+void IntroMovieWindow::SetMovie(const MBCHAR *filename)
 {
 	if (!m_movieButton) return;
 
