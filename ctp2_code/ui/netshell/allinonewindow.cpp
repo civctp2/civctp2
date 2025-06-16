@@ -684,7 +684,7 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	m_controls[ CONTROL_HPLAYERSLISTBOX ]->SetAction(new PlayersListBoxAction);
 	m_controls[ CONTROL_PLAYSTYLEDROPDOWN ]->SetAction(new PlayStyleDropDownAction);
 
-	((ctp2_Spinner *)m_controls[CONTROL_PLAYSTYLEVALUESPINNER])->SetSpinnerCallback(PlayStyleValueSpinnerCallback, NULL);
+	((ctp2_Spinner *)m_controls[CONTROL_PLAYSTYLEVALUESPINNER])->SetSpinnerCallback(PlayStyleValueSpinnerCallback, nullptr);
 
 	m_controls[ CONTROL_DYNAMICJOINSWITCH ]->SetAction(new DynamicJoinSwitchAction);
 	m_controls[ CONTROL_HANDICAPPINGSWITCH ]->SetAction(new HandicappingSwitchAction);

@@ -26,7 +26,7 @@
 //
 // - Import structure cleaned up somewhat.
 // - Tribe index handling corrected.
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ extern sint32 const         INDEX_TRIBE_INVALID;
 //----------------------------------------------------------------------------
 
 sint32 spnewgametribescreen_displayMyWindow(
-	Cookie cookie = NULL,
+	Cookie cookie = nullptr,
 	BOOL edit = FALSE );
 sint32 spnewgametribescreen_removeMyWindow(uint32 action, MBCHAR *lname = NULL);
 

@@ -26,7 +26,7 @@ public:
 		Picture *pictureActiveOn,
 		Picture *pictureActiveOff,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		BOOL selected = FALSE );
 	virtual ~PictureTab() {}
 

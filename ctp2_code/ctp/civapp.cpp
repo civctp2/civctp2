@@ -2714,7 +2714,7 @@ sint32 CivApp::RestartGameSameMap(void)
 
 	if (g_theProfileDB->IsScenario())
 	{
-		spnewgamescreen_scenarioExitCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		spnewgamescreen_scenarioExitCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 		return 0;
 	}
 	else

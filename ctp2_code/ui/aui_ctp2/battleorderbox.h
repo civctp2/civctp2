@@ -31,7 +31,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	BattleOrderBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -41,7 +41,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 
 	AUI_ERRCODE InitCommon( const MBCHAR *ldlBlock);
 

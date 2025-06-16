@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Created file. (04-May-2025 Martin Gühmann)
+// - Created file. (04-May-2025 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	m_LanguageListBox->SetForceSelect(TRUE);
 	m_LanguageListBox->SetMultiSelect(FALSE);
 
-	m_LanguageListBox->SetActionFuncAndCookie(LanguageScreen::ItemSelected, NULL);
+	m_LanguageListBox->SetActionFuncAndCookie(LanguageScreen::ItemSelected, nullptr);
 
 	ctp2_ListItem *selItem = NULL;
 

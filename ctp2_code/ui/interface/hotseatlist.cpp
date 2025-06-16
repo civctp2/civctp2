@@ -170,7 +170,7 @@ sint32 HotseatList::Initialize( const MBCHAR *windowBlock )
 	m_window->AddOk(HotseatListButtonActionCallback);
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
-	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	m_list->SetAbsorbancy(FALSE);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;

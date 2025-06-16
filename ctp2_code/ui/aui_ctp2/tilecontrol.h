@@ -13,7 +13,7 @@ class TileControl : public aui_Control
 public:
 	TileControl(AUI_ERRCODE * retval, uint32 id, MBCHAR * ldlBlock);
 	TileControl(AUI_ERRCODE * retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-			 ControlActionCallback * ActionFunc = NULL, Cookie cookie = NULL);
+			 ControlActionCallback * ActionFunc = NULL, Cookie cookie = nullptr);
 	virtual ~TileControl();
 
 	virtual AUI_ERRCODE DrawThis(aui_Surface * surface = NULL, sint32 x = 0, sint32 y = 0);

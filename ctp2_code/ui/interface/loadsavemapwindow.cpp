@@ -106,7 +106,7 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 	sprintf( block, "%s.%s", ldlBlock, "Name" );
 	AddTitle( block );
 
-	AddOk( loadsavemapscreen_executePress, NULL, "c3_PopupOk" );
+	AddOk( loadsavemapscreen_executePress, nullptr, "c3_PopupOk" );
 	AddCancel( loadsavemapscreen_backPress );
 
 	m_deleteButton = spNew_c3_Button(

@@ -25,10 +25,10 @@
 // Modifications from the original Activision code:
 //
 // - Starting and ending age selection screen now uses the age names from
-//   gl_str.txt, Martin Gühmann.
+//   gl_str.txt, Martin GÃ¼hmann.
 // - Compatibility restored.
 // - Memory leak repaired.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Added single-player start and end age. (11-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -169,7 +169,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	if ( !AUI_NEWOK(s_back,errcode) ) return errcode;
 
 	if ( !callback ) callback = agesscreen_backPress;
-	s_back->SetActionFuncAndCookie(callback, NULL);
+	s_back->SetActionFuncAndCookie(callback, nullptr);
 
 	s_name = spNew_c3_Static(&errcode,windowBlock,"NameStatic");
 	s_start = spNew_c3_Static(&errcode,windowBlock,"StartStatic");
@@ -183,7 +183,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		aui_UniqueId(),
 		controlBlock,
 		agesscreen_startDropDownCallback,
-		NULL );
+		nullptr );
 	Assert( AUI_NEWOK(s_startDropDown, errcode) );
 	if ( !AUI_NEWOK(s_startDropDown, errcode) ) return errcode;
 
@@ -194,7 +194,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		aui_UniqueId(),
 		controlBlock,
 		agesscreen_endDropDownCallback,
-		NULL );
+		nullptr );
 	Assert( AUI_NEWOK(s_endDropDown, errcode) );
 	if ( !AUI_NEWOK(s_endDropDown, errcode) ) return errcode;
 
@@ -203,7 +203,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 	bool const		isLdlUsable = s_numAges == startagestrings.GetNumStrings();
 	for (sint32 i = 0; i < s_numAges; i++)
 	{
-//Added by Martin Gühmann so that no *.ldl needs to be edited
+//Added by Martin GÃ¼hmann so that no *.ldl needs to be edited
 //anymore when new ages are added.
 		MBCHAR const *	ageId	= g_theAgeDB->GetNameStr(i);
 		MBCHAR const *	name	= g_theAgeDB->Get(i)->GetNameText();

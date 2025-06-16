@@ -45,7 +45,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 
 	virtual ~MessageIconButton();
 	virtual AUI_ERRCODE DrawThis(

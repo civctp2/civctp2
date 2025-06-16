@@ -25,9 +25,9 @@
 // Modifications from the original Activision code:
 //
 // - To display the captital of a civ and you know were it is no embassy is
-//   necessary anymore. (10-Feb-2008 Martin Gühmann)
+//   necessary anymore. (10-Feb-2008 Martin GÃ¼hmann)
 // - Instead of cities with wonders all cities are displayed if there is an
-//   embassy, otherwise only the known cities are displayed. (10-Feb-2008 Martin Gühmann)
+//   embassy, otherwise only the known cities are displayed. (10-Feb-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -125,7 +125,7 @@ DiplomacyDetails::DiplomacyDetails(AUI_ERRCODE *err)
 	}
 
 	m_cancelButton = (ctp2_Button *)aui_Ldl::GetObject(s_DiplomacyDetailsBlock, "CloseButton");
-	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, NULL);
+	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, nullptr);
 
 }
 

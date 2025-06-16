@@ -208,24 +208,24 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	MBCHAR buttonBlock[k_AUI_LDL_MAXBLOCK + 1];
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CloseButton");
-	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::Close, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::Close, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CityList.Next");
-	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::NextCity, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::NextCity, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CityList.Previous");
-	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::PreviousCity, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::PreviousCity, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Toggle", CityWindow::GovernorToggle, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Toggle", CityWindow::GovernorToggle, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Pulldown", CityWindow::GovernorPriority, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Pulldown", CityWindow::GovernorPriority, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "CityList.Pulldown", CityWindow::SelectCity, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "CityList.Pulldown", CityWindow::SelectCity, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	m_popSpinners[POP_ENTERTAINER] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.EntertainersSpinner");
@@ -248,46 +248,46 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_popSpinners[POP_MERCHANT]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 													m_popSpinners[POP_MERCHANT]);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	if (aui_Ldl::GetObject(s_cityWindowBlock, "NationalManagerButton"))
 	{
-		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "NationalManagerButton", CityWindow::OpenNationalManager, NULL);
+		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "NationalManagerButton", CityWindow::OpenNationalManager, nullptr);
 		Assert(*err == AUI_ERRCODE_OK);
 	}
 
 	if (aui_Ldl::GetObject(s_cityWindowBlock, "OptimizeSpecialistButton"))
 	{
 		// Added by Martin Gühmann for specialist optimization option:
-		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
+		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, nullptr);
 		Assert(*err == AUI_ERRCODE_OK);
 	}
 	// else No action: this button is not guaranteed to exist in mods.
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.List", CityWindow::BuildListSelect, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.List", CityWindow::BuildListSelect, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.List", CityWindow::InventoryListSelect, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.List", CityWindow::InventoryListSelect, nullptr);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.RushBuyButton", CityWindow::Buy, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.RushBuyButton", CityWindow::Buy, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.SellButton", CityWindow::Sell, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.SellButton", CityWindow::Sell, nullptr);
 
 
 
 
 	m_growthBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.GrowthBar");
 	if(m_growthBar) {
-		m_growthBar->SetDrawCallbackAndCookie(CityWindow::DrawGrowthBar, NULL);
+		m_growthBar->SetDrawCallbackAndCookie(CityWindow::DrawGrowthBar, nullptr);
 	}
 
 	m_growthDelta = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.GrowthDelta");
 
 	m_happinessBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.HappinessBar");
 	if(m_happinessBar) {
-		m_happinessBar->SetDrawCallbackAndCookie(CityWindow::DrawHappinessBar, NULL);
+		m_happinessBar->SetDrawCallbackAndCookie(CityWindow::DrawHappinessBar, nullptr);
 	}
 	m_happinessValue = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.HappinessValue");
 
@@ -296,15 +296,15 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	m_growthTurns = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "StatisticsSection.GrowthTurnsValue");
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton", CityWindow::EditQueue, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton", CityWindow::EditQueue, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton", CityWindow::EditQueue, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton", CityWindow::EditQueue, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	m_buildProgressBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.ProgressBarParent.ProgressBar");
 	if(m_buildProgressBar) {
-		m_buildProgressBar->SetDrawCallbackAndCookie(CityWindow::DrawBuildBar, NULL);
+		m_buildProgressBar->SetDrawCallbackAndCookie(CityWindow::DrawBuildBar, nullptr);
 	}
 
 	m_globalBox = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals");
@@ -319,12 +319,12 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	ctp2_Static *efficiencyBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.EfficiencyBar");
 	if(efficiencyBar) {
-		efficiencyBar->SetDrawCallbackAndCookie(CityWindow::DrawEfficiencyBar, NULL);
+		efficiencyBar->SetDrawCallbackAndCookie(CityWindow::DrawEfficiencyBar, nullptr);
 	}
 
 	ctp2_Static *mapStatic = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.ResourceMap");
 	if(mapStatic) {
-		mapStatic->SetDrawCallbackAndCookie(CityWindow::DrawResourceMap, NULL);
+		mapStatic->SetDrawCallbackAndCookie(CityWindow::DrawResourceMap, nullptr);
 	}
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_cityWindowBlock, "GovernorBox.Pulldown");
@@ -374,7 +374,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection", BuildTabCallback, (void *)CW_PANEL_GARRISON);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ShowStatisticsButton", ShowStatistics, NULL);//advisor window button
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ShowStatisticsButton", ShowStatistics, nullptr);//advisor window button
 	Assert(*err == AUI_ERRCODE_OK);
 
 	sint32 x,y;
@@ -395,10 +395,10 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	}
 
 	m_activateButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.ActivateButton");
-	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ActivateButton", ActivateUnitCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ActivateButton", ActivateUnitCallback, nullptr);
 
 	m_disbandButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.DisbandButton");
-	m_disbandButton->SetActionFuncAndCookie(DisbandUnitCallback, NULL);
+	m_disbandButton->SetActionFuncAndCookie(DisbandUnitCallback, nullptr);
 }
 
 //----------------------------------------------------------------------------

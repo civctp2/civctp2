@@ -20,7 +20,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	ns_CivListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -32,7 +32,7 @@ public:
 		sint32 bevelwidth = 0,
 		sint32 beveltype = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_CivListBox() {}
 
 	virtual AUI_ERRCODE Draw(
@@ -71,7 +71,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	ns_HPlayerListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -83,7 +83,7 @@ public:
 		sint32 bevelwidth = 0,
 		sint32 beveltype = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_HPlayerListBox();
 
 protected:

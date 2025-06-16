@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Cleanup improved.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -138,7 +138,7 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 
 	MBCHAR		controlBlock[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf( controlBlock, "%s.%s", windowBlock, "TrackList" );
-	s_trackList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, MusicTrackListCallback, NULL);
+	s_trackList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, MusicTrackListCallback, nullptr);
 	Assert( AUI_NEWOK(s_trackList, errcode) );
 	if ( !AUI_NEWOK(s_trackList, errcode) ) return errcode;
 	s_trackList->SetForceSelect(FALSE);

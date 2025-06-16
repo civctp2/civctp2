@@ -713,7 +713,7 @@ Network::Process()
 		if(battleEndedTime < 0) {
 			battleEndedTime = time(0);
 		} else if(battleEndedTime + 30 < time(0)) {
-			battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 			battleEndedTime = -1;
 		}
 	} else {

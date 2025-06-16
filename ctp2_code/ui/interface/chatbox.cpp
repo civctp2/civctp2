@@ -209,7 +209,7 @@ AUI_ERRCODE ChatWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	sprintf(controlBlock, "%s.%s", ldlBlock, "ChatTextBox");
-	m_textBox = new c3_HyperTextBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_textBox = new c3_HyperTextBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(m_textBox, errcode) );
 	if ( !AUI_NEWOK(m_textBox, errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 	AddControl(m_textBox);

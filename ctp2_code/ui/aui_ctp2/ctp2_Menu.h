@@ -32,7 +32,7 @@ private:
 	{
 	public:
 
-		Item() : m_item(NULL), m_shortcut(NULL), m_cookie(NULL) { }
+		Item() : m_item(NULL), m_shortcut(NULL), m_cookie(nullptr) { }
 		~Item() { delete m_shortcut; }
 
 		ctp2_ListItem *m_item;

@@ -26,7 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Prevented crash in destructor after using the default constructor.
-// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
+// - Added a constom status bar text for orders. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,9 +57,9 @@ class aui_StringTable;
 
 union Cookie
 {
-	Cookie(void* ptr = NULL) : m_voidPtr(ptr) {};
-	Cookie(sint32 data)      : m_voidPtr(NULL), m_sin32Type(data) {};
-	Cookie(uint32 data)      : m_voidPtr(NULL), m_uin32Type(data) {};
+	Cookie(void* ptr = nullptr) : m_voidPtr(ptr) {};
+	Cookie(sint32 data)         : m_voidPtr(nullptr) { m_sin32Type = data; }; // Make sure that the whole union is nulled
+	Cookie(uint32 data)         : m_voidPtr(nullptr) { m_uin32Type = data; }; // Make sure that the whole union is nulled
 
 	Cookie& operator=(void* ptr) { m_voidPtr = ptr; return *this; }
 
@@ -87,7 +87,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_Control(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -96,7 +96,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~aui_Control();
 
 	virtual BOOL IsThisA( uint32 classId )

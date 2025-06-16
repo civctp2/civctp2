@@ -68,7 +68,7 @@ public:
 					sint32 id,
 					const MBCHAR *ldlBlock,
 					ControlActionCallback *ActionFunc = NULL,
-					Cookie cookie = NULL);
+					Cookie cookie = nullptr);
 	WorkMap(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -78,7 +78,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~WorkMap();
 
 	void InitCommonLdl(const MBCHAR *ldlBlock);

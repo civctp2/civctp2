@@ -21,7 +21,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_Slidometer(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -33,7 +33,7 @@ public:
 		const MBCHAR *pattern,
 		sint32 percentFilled = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~c3_Slidometer() {}
 
 protected:

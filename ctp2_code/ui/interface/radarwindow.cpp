@@ -309,15 +309,15 @@ sint32 radarwindow_Initialize()
 	capitolsButton->SetState( g_radarMap->IsDisplayCapitols());
 	relationsButton->SetState( g_radarMap->IsDisplayRelations());
 
-	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, NULL);
-	citiesButton->SetActionFuncAndCookie(CitiesToggleButtonActionCallback, NULL);
-	bordersButton->SetActionFuncAndCookie(BordersToggleButtonActionCallback, NULL);
-	tradeButton->SetActionFuncAndCookie(TradeToggleButtonActionCallback, NULL);
-	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, NULL);
-	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, NULL);
-	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, NULL);
-	capitolsButton->SetActionFuncAndCookie(CapitolsToggleButtonActionCallback, NULL);
-	relationsButton->SetActionFuncAndCookie(RelationsToggleButtonActionCallback, NULL);
+	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, nullptr);
+	citiesButton->SetActionFuncAndCookie(CitiesToggleButtonActionCallback, nullptr);
+	bordersButton->SetActionFuncAndCookie(BordersToggleButtonActionCallback, nullptr);
+	tradeButton->SetActionFuncAndCookie(TradeToggleButtonActionCallback, nullptr);
+	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, nullptr);
+	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, nullptr);
+	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, nullptr);
+	capitolsButton->SetActionFuncAndCookie(CapitolsToggleButtonActionCallback, nullptr);
+	relationsButton->SetActionFuncAndCookie(RelationsToggleButtonActionCallback, nullptr);
 
 	g_c3ui->AddWindow(g_radarWindow);
 

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Removed unit animations option stuff, since the option is already present
 //	 in the graphics window, and should not clutter this one. (10-Apr-2009 Maq)
 //
@@ -70,8 +70,8 @@ ProfileEdit::ProfileEdit(AUI_ERRCODE *err)
 
 	m_list->SetAbsorbancy(FALSE);
 
-	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.CloseButton", CloseWindow, NULL);
-	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.EnableMessages", EnableMessages, NULL);
+	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.CloseButton", CloseWindow, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.EnableMessages", EnableMessages, nullptr);
 }
 
 ProfileEdit::~ProfileEdit()

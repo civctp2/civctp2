@@ -130,7 +130,7 @@ AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *ca
 
 	if ( callback )
 		g_loadSaveMapWindow->GetOkButton()->SetActionFuncAndCookie(
-			callback, NULL );
+			callback, nullptr );
 
 	return AUI_ERRCODE_OK;
 }

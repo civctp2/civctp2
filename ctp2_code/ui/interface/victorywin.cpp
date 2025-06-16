@@ -368,7 +368,7 @@ sint32 victorywin_Init_Controls(const MBCHAR *windowBlock )
 	s_staticControls = new ctp2_Static *[staticNum];
 
 	s_okButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "CloseButton");
-	s_okButton->SetActionFuncAndCookie(VictoryWindowButtonActionCallback, NULL);
+	s_okButton->SetActionFuncAndCookie(VictoryWindowButtonActionCallback, nullptr);
 
 	s_staticControls[k_VICWIN_MAIN_TITLE] = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Title");
 
@@ -389,7 +389,7 @@ sint32 victorywin_Init_Controls(const MBCHAR *windowBlock )
 
 	sprintf(controlBlock, "%s.%s", tabBlock, "LineOrZeroSum");
 	s_lineOrZeroSumButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, controlBlock);
-	s_lineOrZeroSumButton->SetActionFuncAndCookie(LineOrZeroSumButtonActionCallback, NULL);
+	s_lineOrZeroSumButton->SetActionFuncAndCookie(LineOrZeroSumButtonActionCallback, nullptr);
 
 	victorywin_SetLineGraph( false );
 	s_graph->EnableYNumber(FALSE);
@@ -629,7 +629,7 @@ sint32 HighScoreWindowPopup::Initialize(const MBCHAR *windowBlock )
 	if ( !AUI_NEWOK(m_quitButton, errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "HighScoreList" );
-	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 	m_list->DoneInstantiating();

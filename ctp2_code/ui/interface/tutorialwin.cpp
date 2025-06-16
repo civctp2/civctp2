@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -172,7 +172,7 @@ sint32 TutorialWin::Initialize( const MBCHAR *windowBlock )
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "List" );
-	m_list = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ListCallback, NULL );
+	m_list = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ListCallback, nullptr );
 	TestControl( m_list );
 	m_list->Hide();
 

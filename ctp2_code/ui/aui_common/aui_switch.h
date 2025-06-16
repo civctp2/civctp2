@@ -63,7 +63,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *StateFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -72,7 +72,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *StateFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		sint32 state = 0,
 		sint32 numStates = k_AUI_SWITCH_DEFAULTNUMSTATES );
 	virtual ~aui_Switch() {}
@@ -108,7 +108,7 @@ protected:
 		m_numStates             (k_AUI_SWITCH_DEFAULTNUMSTATES),
 		m_drawCallbackExclusive (true),
 		m_drawFunc              (NULL),
-		m_drawCookie            (NULL)
+		m_drawCookie            (nullptr)
 	{};
 
 	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );

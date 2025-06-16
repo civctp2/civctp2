@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired.
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -229,7 +229,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	s_tribeIndex = INDEX_TRIBE_INVALID;
 	if ( g_spNewGameTribeScreen ) {
 		if(callback) {
-			g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+			g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie(callback, nullptr);
 		}
 		return AUI_ERRCODE_OK;
 	}
@@ -291,7 +291,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 
 	s_CivListBox->SetForceSelect(TRUE);
 	s_CivListBox->SetMultiSelect(FALSE);
-	s_CivListBox->SetActionFuncAndCookie(spnewgametribescreen_switchPress, NULL);
+	s_CivListBox->SetActionFuncAndCookie(spnewgametribescreen_switchPress, nullptr);
 
 	return AUI_ERRCODE_OK;
 }

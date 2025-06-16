@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Moved graph functionality from other places (30-Sep-2007 Martin Gühmann)
+// - Moved graph functionality from other places (30-Sep-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -89,7 +89,7 @@ public:
 	                sint32 id,
 	                const MBCHAR *ldlBlock,
 	                ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+	                Cookie cookie = nullptr,
 	                EventTracker *events = NULL);
 	LineGraph(AUI_ERRCODE *retval,
 	                uint32 id,
@@ -98,7 +98,7 @@ public:
 	                sint32 width,
 	                sint32 height,
 	                ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL);
+	                Cookie cookie = nullptr);
 	virtual ~LineGraph();
 
 	void		SetXBounds(double min, double max) { m_xmin = min; m_xmax = max; }

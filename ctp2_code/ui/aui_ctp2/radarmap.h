@@ -56,9 +56,9 @@ class RadarMap : public aui_Control, public PatternBase
 {
 public:
 	RadarMap(AUI_ERRCODE * errCode, sint32 id, const MBCHAR * ldlBlock, ControlActionCallback * ActionFunc = NULL,
-			Cookie cookie = NULL);
+			Cookie cookie = nullptr);
 	RadarMap(AUI_ERRCODE * errCode, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height, const MBCHAR * pattern,
-			ControlActionCallback * ActionFunc = NULL, Cookie cookie = NULL);
+			ControlActionCallback * ActionFunc = NULL, Cookie cookie = nullptr);
 
 	virtual ~RadarMap();
 	virtual AUI_ERRCODE	Resize(sint32 width, sint32 height);

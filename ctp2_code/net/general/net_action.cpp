@@ -356,7 +356,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					Assert(g_network.m_playerData[index]->m_createdUnits.Num() == 0);
 
 					if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) {
-						battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+						battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 					}
 
 					g_gevManager->EndTurnRequest();

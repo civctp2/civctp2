@@ -129,7 +129,7 @@ void FileDialog::Fill()
 #ifdef WIN32
 	do {
 		if(!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-			AddFile(fileData.cFileName, NULL);
+			AddFile(fileData.cFileName, nullptr);
 		}
 	} while(FindNextFile(lpFileList, &fileData));
 
@@ -140,7 +140,7 @@ void FileDialog::Fill()
 		snprintf(pattern, sizeof(pattern), "%s%s%s", m_dirPath, FILE_SEP, dent->d_name);
 		int rc = stat(pattern, &st);
 		if (!S_ISDIR(st.st_mode)) {
-			AddFile(dent->d_name, NULL);
+			AddFile(dent->d_name, nullptr);
 		}
 	}
 	closedir(dir);

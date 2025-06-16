@@ -14,8 +14,8 @@ m_zoomOut(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "ZoomPad.ZoomOu
 	Assert(m_zoomIn);
 	Assert(m_zoomOut);
 
-	m_zoomIn->SetActionFuncAndCookie(ZoomInButtonActionCallback, NULL);
-	m_zoomOut->SetActionFuncAndCookie(ZoomOutButtonActionCallback, NULL);
+	m_zoomIn->SetActionFuncAndCookie(ZoomInButtonActionCallback, nullptr);
+	m_zoomOut->SetActionFuncAndCookie(ZoomOutButtonActionCallback, nullptr);
 
 	Update();
 }

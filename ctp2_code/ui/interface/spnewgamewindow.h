@@ -21,7 +21,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Addion by Martin Gühmann: Two more world shape options,
+// - Addion by Martin GÃ¼hmann: Two more world shape options,
 //   flat world and Uranus world
 // - Improved import structure and compatibility.
 //
@@ -186,7 +186,7 @@ public:
 		const MBCHAR *ldlBlock,
 		const MBCHAR *choiceOff, const MBCHAR *choiceOn, uint32 onoff = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	~TwoChoiceButton() {};
 
 	uint32	GetChoice() { return m_choice; };
@@ -376,18 +376,18 @@ ctp2_Button			*spNew_ctp2_Button(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, 
 									   void (*callback)(aui_Control*,uint32,uint32, Cookie));
 c3_Switch			*spNew_c3_Switch(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
 									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL,
-									Cookie cookie = NULL );
+									Cookie cookie = nullptr );
 aui_Switch			*spNew_aui_Switch(
 									AUI_ERRCODE *errcode,
 									const MBCHAR *ldlParent, const MBCHAR *ldlMe,
 									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL,
-									Cookie cookie = NULL );
+									Cookie cookie = nullptr );
 c3_Static			*spNew_c3_Static(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe);
 C3TextField			*spNewTextEntry(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
-									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL , Cookie cookie = NULL );
+									void (*callback)(aui_Control*,uint32,uint32, Cookie)=NULL , Cookie cookie = nullptr );
 c3_ListBox			*spNew_c3_ListBox(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
 									void (*callback)(aui_Control*,uint32,uint32, Cookie) = NULL,
-									Cookie cookie = NULL);
+									Cookie cookie = nullptr);
 c3_DropDown			*spNew_c3_DropDown(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe, void (*callback)(aui_Control*,uint32,uint32, Cookie));
 void				spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *mytable, const MBCHAR *listitemparent, const MBCHAR *listitemme);
 void				spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable, const MBCHAR *listitemparent, const MBCHAR *listitemme);
@@ -396,7 +396,7 @@ TwoChoiceButton		*spNewTwoChoiceButton(AUI_ERRCODE *errcode, const MBCHAR* ldlPa
 C3Slider			*spNew_C3Slider(AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe,
 	 								void (*callback)(aui_Control*,uint32,uint32, Cookie));
 c3_CheckBox			*spNew_c3_CheckBox(AUI_ERRCODE *errcode, const MBCHAR* ldlParent, const MBCHAR *ldlMe,
-									uint32 state,void (*callback)(aui_Control*,uint32,uint32, Cookie) = NULL, Cookie cookie = NULL);
+									uint32 state,void (*callback)(aui_Control*,uint32,uint32, Cookie) = NULL, Cookie cookie = nullptr);
 aui_SwitchGroup		*spNew_aui_SwitchGroup( AUI_ERRCODE *errcode, const MBCHAR *ldlParent, const MBCHAR *ldlMe );
 
 

@@ -357,10 +357,10 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 		m_singleSelectionArmor->SetText("");
 		m_singleSelectionFirepower->SetText("");
 
-		m_singleSelectionHealth->SetDrawCallbackAndCookie(NULL, NULL);
-		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, NULL);
-		m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
-		m_singleSelectionFuel->SetDrawCallbackAndCookie(NULL, NULL);
+		m_singleSelectionHealth->SetDrawCallbackAndCookie(NULL, nullptr);
+		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, nullptr);
+		m_singleSelectionIcon->SetImageMapCallback(NULL, nullptr);
+		m_singleSelectionFuel->SetDrawCallbackAndCookie(NULL, nullptr);
 		return;
 	}
 
@@ -397,8 +397,8 @@ void UnitControlPanel::UpdateSingleSelectionDisplay()
 	}
 	else
 	{
-		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, NULL, false);
-		m_singleSelectionIcon->SetImageMapCallback(NULL, NULL);
+		m_singleSelectionIcon->SetDrawCallbackAndCookie(NULL, nullptr, false);
+		m_singleSelectionIcon->SetImageMapCallback(NULL, nullptr);
 	}
 }
 
@@ -466,7 +466,7 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 							army[0].m_id);
 				}
 				else {
-					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
+					m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, nullptr);
 				}
 				m_multipleSelectionButton[multiIndex]->Enable(true);
 
@@ -477,8 +477,8 @@ void UnitControlPanel::UpdateMultipleSelectionDisplay()
 		}
 		else
 		{
-			m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(NULL, NULL);
-			m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, NULL);
+			m_multipleSelectionButton[multiIndex]->SetActionFuncAndCookie(NULL, nullptr);
+			m_multipleSelectionHealth[multiIndex]->SetDrawCallbackAndCookie(NULL, nullptr);
 			m_multipleSelectionButton[multiIndex]->Enable(false);
 			m_multipleSelectionButton[multiIndex]->ExchangeImage(0, 0, NULL);
 			multiIndex++;
@@ -529,14 +529,14 @@ void UnitControlPanel::UpdateArmySelectionDisplay()
 			else
 			{
 				m_armySelectionButton[armyIndex]->ExchangeImage(0, 0, NULL);
-				m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(NULL, NULL);
+				m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(NULL, nullptr);
 			}
 			m_armySelectionButton[armyIndex]->Enable(true);
 		}
 		else
 		{
 			m_armySelectionButton[armyIndex]->ExchangeImage(0, 0, NULL);
-			m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(NULL, NULL);
+			m_armySelectionHealth[armyIndex]->SetDrawCallbackAndCookie(NULL, nullptr);
 			m_armySelectionButton[armyIndex]->Enable(false);
 		}
 	}
@@ -596,7 +596,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 			{
 				button->Hide();
 				m_transportSelectionCargo[index] = 0;
-				m_transportSelectionHealth[index]->SetDrawCallbackAndCookie(NULL, NULL);
+				m_transportSelectionHealth[index]->SetDrawCallbackAndCookie(NULL, nullptr);
 			}
 			else
 			{
@@ -609,7 +609,7 @@ void UnitControlPanel::UpdateTransportSelectionDisplay()
 						button->SetImage(NULL, 1);
 						button->Enable(FALSE);
 						m_transportSelectionCargo[index] = 0;
-						m_transportSelectionHealth[index]->SetDrawCallbackAndCookie(NULL, NULL);
+						m_transportSelectionHealth[index]->SetDrawCallbackAndCookie(NULL, nullptr);
 					}
 				}
 				else
@@ -662,7 +662,7 @@ void UnitControlPanel::UpdateOrderButtons()
 	{
 		m_orderButton[orderIndex]->ExchangeImage(4, 0, NULL);
 		m_orderButton[orderIndex]->ShouldDraw();
-		m_orderButton[orderIndex]->SetActionFuncAndCookie(NULL, NULL);
+		m_orderButton[orderIndex]->SetActionFuncAndCookie(NULL, nullptr);
 
 		enableState[orderIndex] = false;
 

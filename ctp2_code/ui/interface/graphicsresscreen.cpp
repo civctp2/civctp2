@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -140,7 +140,7 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 	s_graphicsResScreen->AddClose( graphicsresscreen_acceptPress );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResList" );
-	s_resList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, ScreenResListCallback, NULL);
+	s_resList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, ScreenResListCallback, nullptr);
 	Assert( AUI_NEWOK(s_resList, errcode) );
 	if ( !AUI_NEWOK(s_resList, errcode) ) return errcode;
 

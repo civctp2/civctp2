@@ -88,7 +88,7 @@ ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(ldlBlock);
 
 	m_available		= (ctp2_ListBox *)aui_Ldl::GetObject(ldlBlock, "AvailableListBox");
-	m_available->SetActionFuncAndCookie(ScenarioSelect, NULL);
+	m_available->SetActionFuncAndCookie(ScenarioSelect, nullptr);
 
 	m_window->SetType(AUI_WINDOW_TYPE_FLOATING);
 	m_window->SetStronglyModal(TRUE);
@@ -101,10 +101,10 @@ ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 	m_NewButton = (ctp2_Button *)aui_Ldl::GetObject(ldlBlock, "NewButton");
 	m_BackButton = (ctp2_Button *)aui_Ldl::GetObject(ldlBlock, "CancelButton");
 
-	m_LoadButton->SetActionFuncAndCookie(OkPress, NULL);
-	m_SaveButton->SetActionFuncAndCookie(SavePress, NULL);
-	m_NewButton->SetActionFuncAndCookie(NewPress, NULL);
-	m_BackButton->SetActionFuncAndCookie(BackPress, NULL);
+	m_LoadButton->SetActionFuncAndCookie(OkPress, nullptr);
+	m_SaveButton->SetActionFuncAndCookie(SavePress, nullptr);
+	m_NewButton->SetActionFuncAndCookie(NewPress, nullptr);
+	m_BackButton->SetActionFuncAndCookie(BackPress, nullptr);
 
 
 
@@ -125,13 +125,13 @@ ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 	m_exitCallback = NULL;
 
 	m_newPackWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot("NewPackWindow");
-	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.OkButton", NewPackOk, NULL);
-	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.CancelButton", NewPackCancel, NULL);
+	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.OkButton", NewPackOk, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.CancelButton", NewPackCancel, nullptr);
 	m_newPackWindow->SetType(AUI_WINDOW_TYPE_POPUP);
 
 	m_newScenWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot("NewScenWindow");
-	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.OkButton", NewScenOk, NULL);
-	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.CancelButton", NewScenCancel, NULL);
+	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.OkButton", NewScenOk, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.CancelButton", NewScenCancel, nullptr);
 	m_newScenWindow->SetType(AUI_WINDOW_TYPE_POPUP);
 }
 

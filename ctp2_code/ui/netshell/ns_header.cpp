@@ -50,7 +50,7 @@ ns_Header::ns_Header(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_Control::InitCommonLdl( ldlBlock, NULL, NULL );
+	*retval = aui_Control::InitCommonLdl( ldlBlock, NULL, nullptr );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -84,7 +84,7 @@ ns_Header::ns_Header(
 {
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-	*retval = aui_Control::InitCommon( NULL, NULL );
+	*retval = aui_Control::InitCommon( NULL, nullptr );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 

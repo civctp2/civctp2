@@ -35,7 +35,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_Button(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -45,7 +45,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~c3_Button() {}
 
 	void SetBevelWidth(uint32 w) { m_bevelWidth = w; };
@@ -80,7 +80,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_EditButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -90,7 +90,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~c3_EditButton();
 
 	sint32		GetValue( void ) const { return m_val; }

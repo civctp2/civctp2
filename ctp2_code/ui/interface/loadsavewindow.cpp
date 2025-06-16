@@ -112,7 +112,7 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
 	sprintf(block, "%s.%s", ldlBlock, "Name");
 	AddTitle(block);
 	AddCancel(loadsavescreen_backPress);
-	AddOk(loadsavescreen_executePress, NULL, "c3_PopupOk");
+	AddOk(loadsavescreen_executePress, nullptr, "c3_PopupOk");
 	Ok()->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_OK"));
 
 	m_deleteButton = spNew_ctp2_Button(

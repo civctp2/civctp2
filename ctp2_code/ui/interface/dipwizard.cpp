@@ -169,7 +169,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	}
 
 	m_nations = (ctp2_DropDown *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage0.Nations");
-	if(m_nations) m_nations->SetActionFuncAndCookie(NationCallback, NULL);
+	if(m_nations) m_nations->SetActionFuncAndCookie(NationCallback, nullptr);
 
 	for(i = 0; i < DIPLOMATIC_TONE_MAX; i++) {
 		MBCHAR buttName[k_MAX_NAME_LEN];
@@ -193,31 +193,31 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	}
 
 	m_backButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.BackButton");
-	if(m_backButton) m_backButton->SetActionFuncAndCookie(BackCallback, NULL);
+	if(m_backButton) m_backButton->SetActionFuncAndCookie(BackCallback, nullptr);
 
 	m_nextButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.NextButton");
-	if(m_nextButton) m_nextButton->SetActionFuncAndCookie(NextCallback, NULL);
+	if(m_nextButton) m_nextButton->SetActionFuncAndCookie(NextCallback, nullptr);
 
 	m_cancelButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.CancelButton");
-	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, NULL);
+	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, nullptr);
 
 	m_sendButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.SendButton");
-	if(m_sendButton) m_sendButton->SetActionFuncAndCookie(SendCallback, NULL);
+	if(m_sendButton) m_sendButton->SetActionFuncAndCookie(SendCallback, nullptr);
 
 	m_acceptButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.AcceptButton");
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.AcceptButton", AcceptCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.AcceptButton", AcceptCallback, nullptr);
 
 	m_rejectButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.RejectButton");
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.RejectButton", RejectCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.RejectButton", RejectCallback, nullptr);
 
 	m_counterOrThreatenButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.CounterOrThreatenButton");
-	if(m_counterOrThreatenButton) m_counterOrThreatenButton->SetActionFuncAndCookie(CounterOrThreatenCallback, NULL);
+	if(m_counterOrThreatenButton) m_counterOrThreatenButton->SetActionFuncAndCookie(CounterOrThreatenCallback, nullptr);
 
 	m_createButtons = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons");
 	m_viewButtons = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons");
 
 	m_intelButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CheckIntelligenceButton");
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "CheckIntelligenceButton", CheckIntelligence, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "CheckIntelligenceButton", CheckIntelligence, nullptr);
 
 	m_propList[DIP_WIZ_PROP_TAB_REQUEST] = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage1.Tabs.Request.TabPanel.List");
 	m_propList[DIP_WIZ_PROP_TAB_OFFER] = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage1.Tabs.Offer.TabPanel.List");
@@ -241,7 +241,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_emissary_photo = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Picture");
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
-	m_threatList->SetActionFuncAndCookie(ThreatListCallback, NULL);
+	m_threatList->SetActionFuncAndCookie(ThreatListCallback, nullptr);
 
 	m_window->SetStronglyModal(TRUE);
 
@@ -2364,8 +2364,8 @@ void DipWizard::RequestGoldValue(sint32 player)
 
 
 
-		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DipWizard::GoldOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DipWizard::GoldCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DipWizard::GoldOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DipWizard::GoldCancel, nullptr);
 		m_goldRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipGoldRequest.Spinner");
@@ -2391,8 +2391,8 @@ void DipWizard::RequestPollutionValue(sint32 player)
 
 
 
-		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DipWizard::PollutionOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DipWizard::PollutionCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DipWizard::PollutionOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DipWizard::PollutionCancel, nullptr);
 		m_pollutionRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPollutionRequest.Spinner");
@@ -2420,8 +2420,8 @@ void DipWizard::RequestPercentValue()
 
 
 
-		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DipWizard::PercentOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DipWizard::PercentCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DipWizard::PercentOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DipWizard::PercentCancel, nullptr);
 		m_percentRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPercentRequest.Spinner");

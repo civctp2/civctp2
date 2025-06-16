@@ -126,19 +126,19 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 	m_tacticalList = (ctp2_ListBox *)aui_Ldl::GetObject(s_unitManagerBlock, "Tabs.Tactical.TabPanel.List");
 	Assert(m_tacticalList);
 	if(m_tacticalList) {
-		m_tacticalList->SetActionFuncAndCookie(TacticalList, NULL);
+		m_tacticalList->SetActionFuncAndCookie(TacticalList, nullptr);
 		m_tacticalList->SetMultiSelect(TRUE);
 	}
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "CloseButton", Close, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "AdviceButton", Advice, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "CloseButton", Close, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "AdviceButton", Advice, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Slider", ReadinessActionCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Slider", ReadinessActionCallback, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "DisbandButton", DisbandButton, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "DisbandButton", DisbandButton, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Stats", TabChanged, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Tactical", TabChanged, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Stats", TabChanged, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Tactical", TabChanged, nullptr);
 
 	m_adviceWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_unitManagerAdviceBlock);
 	Assert(m_adviceWindow);
@@ -155,7 +155,7 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 	m_window->AddDockedWindow(m_adviceWindow);
 	m_adviceWindow->SetDock(m_window);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerAdviceBlock, "UpkeepButton", UpkeepButton, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerAdviceBlock, "UpkeepButton", UpkeepButton, nullptr);
 
 	*err = AUI_ERRCODE_OK;
 

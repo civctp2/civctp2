@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -114,7 +114,7 @@ sint32 scorewarn_Initialize( void )
 
 	g_scorewarn->SetStronglyModal( TRUE );
 
-	g_scorewarn->AddOk( scorewarn_OkButtonActionCallback, NULL, "c3_PopupOk" );
+	g_scorewarn->AddOk( scorewarn_OkButtonActionCallback, nullptr, "c3_PopupOk" );
 	g_scorewarn->AddCancel( scorewarn_CancelButtonActionCallback );
 
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -237,7 +237,7 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 
 
 	sprintf(buttonBlock, "%s.%s", windowBlock, "DisclaimerText");
-	s_disclaimerTextBox = new ctp2_HyperTextBox(&errcode, aui_UniqueId(), buttonBlock, NULL, NULL);
+	s_disclaimerTextBox = new ctp2_HyperTextBox(&errcode, aui_UniqueId(), buttonBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_disclaimerTextBox, errcode) );
 	if ( !AUI_NEWOK(s_disclaimerTextBox, errcode) ) return -1;
 

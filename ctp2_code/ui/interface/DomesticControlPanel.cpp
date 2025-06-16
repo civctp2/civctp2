@@ -212,14 +212,14 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 	m_scienceTurnButton->SetActionFuncAndCookie(
 		EditResearchButtonActionCallback, this);
 
-	m_menuHappinessValue->SetDrawCallbackAndCookie(domesticcontrolpanel_HappinessDrawCallback, NULL, false);
+	m_menuHappinessValue->SetDrawCallbackAndCookie(domesticcontrolpanel_HappinessDrawCallback, nullptr, false);
 	m_menuHappinessValue->ShouldDraw(TRUE);
 
-	m_menuPollutionValue->SetDrawCallbackAndCookie(domesticcontrolpanel_PollutionDrawCallback, NULL, false);
+	m_menuPollutionValue->SetDrawCallbackAndCookie(domesticcontrolpanel_PollutionDrawCallback, nullptr, false);
 	m_menuPollutionValue->ShouldDraw(TRUE);
 
 	if(m_scienceProgressBar) {
-		m_scienceProgressBar->SetDrawCallbackAndCookie(DomesticControlPanel::DrawScienceBar, NULL);
+		m_scienceProgressBar->SetDrawCallbackAndCookie(DomesticControlPanel::DrawScienceBar, nullptr);
 	}
 
 	m_currentResearch = -1;
@@ -231,7 +231,6 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 	m_currentGovernment = -1;
 	m_currentScience = -1;
 	m_currentPollution = -1;
-
 }
 
 //----------------------------------------------------------------------------

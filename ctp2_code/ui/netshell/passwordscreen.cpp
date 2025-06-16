@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -495,7 +495,7 @@ void PasswordScreenCallback(
 			s_okButton,
 			AUI_BUTTON_ACTION_EXECUTE,
 			0,
-			NULL );
+			nullptr );
 	}
 	else if ( control == s_okButton )
 	{

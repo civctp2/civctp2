@@ -118,7 +118,7 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Summary", TabCallback, (sint32)1);
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import", TabCallback, (sint32)2);
 
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "CloseButton", Close, nullptr);
 	
 	m_createButton = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton");
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.CreateRouteButton", CreateRoute, (sint32)0);
@@ -129,18 +129,18 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	m_breakImpBut = (ctp2_Button *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton");
 	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "TradeTabs.Import.TabPanel.BreakRouteButton", CreateRoute, (sint32)2);
 
-	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "ShowAdviceButton", ShowAdvice, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_tradeManagerBlock, "ShowAdviceButton", ShowAdvice, nullptr);
 
 	if(m_createList) {
-		m_createList->SetActionFuncAndCookie(ListSelect, NULL);
+		m_createList->SetActionFuncAndCookie(ListSelect, nullptr);
 	}
 
 	if(m_summaryList) {
-		m_summaryList->SetActionFuncAndCookie(SummaryListSelect, NULL);
+		m_summaryList->SetActionFuncAndCookie(SummaryListSelect, nullptr);
 	}
 
 	if(m_importList) {
-		m_importList->SetActionFuncAndCookie(SummaryListSelect, NULL);
+		m_importList->SetActionFuncAndCookie(SummaryListSelect, nullptr);
 	}
 
 	m_adviceWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_tradeAdviceBlock);
@@ -164,7 +164,7 @@ TradeManager::TradeManager(AUI_ERRCODE *err)
 	m_ownCitiesButton->SetToggleState(true);
 
 	m_citiesSlider = (C3Slider *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.Filters.CitiesSlider");
-	m_citiesSlider->SetActionFuncAndCookie(NumCitiesSlider, NULL);
+	m_citiesSlider->SetActionFuncAndCookie(NumCitiesSlider, nullptr);
 
 	m_numCitiesLabel = (ctp2_Static *)aui_Ldl::GetObject(s_tradeManagerBlock, "TradeTabs.Market.TabPanel.Filters.NumCities");
 
@@ -1122,7 +1122,7 @@ void TradeManager::ListSelect(aui_Control *control, uint32 action, uint32 data, 
 
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 
-		CreateRoute(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		CreateRoute(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 	}
 }
 
@@ -1158,7 +1158,7 @@ void TradeManager::SummaryListSelect(aui_Control *control, uint32 action, uint32
 	}
 	if(action == AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 
-		CreateRoute(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		CreateRoute(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 	}
 }
 

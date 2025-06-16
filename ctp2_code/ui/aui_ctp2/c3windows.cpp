@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1520,7 +1520,7 @@ int c3windows_MakeDebugWindow( BOOL make )
 			12,
 			windowWidth - 30,
 			windowHeight - 24,
-			k_PatternName, NULL, NULL, NULL);
+			k_PatternName, NULL, NULL, nullptr);
 		if ( !textbox ) return -3;
 
 

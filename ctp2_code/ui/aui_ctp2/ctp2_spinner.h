@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Allowed optional text display instead of a number (May 21th 2006 Martin Gühmann)
+// - Allowed optional text display instead of a number (May 21th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -45,7 +45,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		bool displayValue = true );
 
 protected:

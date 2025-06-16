@@ -18,7 +18,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_TextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -28,7 +28,7 @@ public:
 		sint32 height,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~aui_TextBox();
 
 protected:

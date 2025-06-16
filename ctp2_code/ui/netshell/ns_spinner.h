@@ -19,7 +19,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	ns_Spinner(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -30,7 +30,7 @@ public:
 		AUI_RANGER_ORIENTATION orientation,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_Spinner() {}
 
 protected:

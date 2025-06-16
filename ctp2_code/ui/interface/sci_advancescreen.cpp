@@ -280,7 +280,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( const MBCHAR *messageText )
 		"SciAdvanceScreen.Background.GoalButton");
 
 	if(s_goal)
-		s_goal->SetActionFuncAndCookie(sci_advancescreen_GoalCallback, NULL);
+		s_goal->SetActionFuncAndCookie(sci_advancescreen_GoalCallback, nullptr);
 
 	s_name = new ctp2_Static(&errcode, aui_UniqueId(), "SciAdvanceScreen.Background.Name");
 

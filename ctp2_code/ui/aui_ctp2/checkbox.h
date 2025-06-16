@@ -17,7 +17,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL);
+		Cookie cookie = nullptr);
 	Checkbox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -28,7 +28,7 @@ public:
 		const MBCHAR *pattern = NULL,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		BOOL selected = FALSE );
 	virtual ~Checkbox() {}
 

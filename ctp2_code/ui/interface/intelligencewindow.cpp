@@ -111,9 +111,9 @@ IntelligenceWindow::IntelligenceWindow(AUI_ERRCODE *err)
 
 	sm_list = (ctp2_ListBox *)aui_Ldl::GetObject(s_intelligenceBlock, "List");
 
-	aui_Ldl::SetActionFuncAndCookie(s_intelligenceBlock, "CloseButton", Close, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_intelligenceBlock, "NegotiationButton", Negotiations, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_intelligenceBlock, "ShowHistoryButton", Advice, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_intelligenceBlock, "CloseButton", Close, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_intelligenceBlock, "NegotiationButton", Negotiations, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_intelligenceBlock, "ShowHistoryButton", Advice, nullptr);
 
 	if(*err == AUI_ERRCODE_OK) {
 		InitImageTables();
@@ -749,7 +749,7 @@ void IntelligenceWindow::SendMessageToSelected()
 		DipWizard::SetNation(player);
 	} else {
 		Assert(g_network.IsActive());
-		MessageBoxDialog::Information("str_code_CantInitiateDiplomacyNow", "WhyNoDiplomacy", NULL, NULL, "str_ldl_MB_OK", false);
+		MessageBoxDialog::Information("str_code_CantInitiateDiplomacyNow", "WhyNoDiplomacy", NULL, nullptr, "str_ldl_MB_OK", false);
 	}
 }
 

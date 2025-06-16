@@ -26,7 +26,7 @@
 //
 // - Memory leaks repaired.
 // - Replaced old difficulty and risk level selection button banks by new
-//   list boxes. (8-Jul-2007 Martin Gühmann)
+//   list boxes. (8-Jul-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	if(reinit)
 	{
-		s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(spnewgamediffscreen_backPress, NULL);
+		s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(spnewgamediffscreen_backPress, nullptr);
 	}
 
 	AUI_ERRCODE auiErr;
@@ -161,7 +161,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 
 	if ( s_spNewGameDiffScreen ) {
 		if(callback) {
-			s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+			s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(callback, nullptr);
 		}
 		return AUI_ERRCODE_OK;
 	}

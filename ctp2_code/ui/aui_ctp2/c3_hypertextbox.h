@@ -66,7 +66,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		bool draw_frame = true
 		);
 	c3_HyperTextBox(
@@ -78,7 +78,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~c3_HyperTextBox();
 
 	virtual AUI_ERRCODE DrawThis(

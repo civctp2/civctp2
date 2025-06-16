@@ -122,22 +122,22 @@ DiplomacyWindow::DiplomacyWindow(AUI_ERRCODE *err)
 	m_sendCounter = false;
 	m_selectingProgramatically = false;
 
-	aui_Ldl::SetActionFuncAndCookie(s_dipWindowBlock, "CloseButton", DiplomacyWindow::Close, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWindowBlock, "CloseButton", DiplomacyWindow::Close, nullptr);
 
 	sm_messageButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.MessageButton");
-	sm_messageButton->SetActionFuncAndCookie(SendMessage, NULL);
+	sm_messageButton->SetActionFuncAndCookie(SendMessage, nullptr);
 	sm_messageButton->Enable(FALSE);
 
 	sm_warButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.WarButton");
-	sm_warButton->SetActionFuncAndCookie(DeclareWar, NULL);
+	sm_warButton->SetActionFuncAndCookie(DeclareWar, nullptr);
 	sm_warButton->Enable(FALSE);
 
 	sm_embargoButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.EmbargoButton");
-	sm_embargoButton->SetActionFuncAndCookie(DeclareEmbargo, NULL);
+	sm_embargoButton->SetActionFuncAndCookie(DeclareEmbargo, nullptr);
 	sm_embargoButton->Enable(FALSE);
 
 	sm_detailsButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWindowBlock, "DiplomacyTabs.Intelligence.TabPanel.DetailsButton");
-	sm_detailsButton->SetActionFuncAndCookie(Details, NULL);
+	sm_detailsButton->SetActionFuncAndCookie(Details, nullptr);
 	sm_detailsButton->Enable(FALSE);
 
 	SetSendProposal(-1);
@@ -1154,10 +1154,10 @@ void DiplomacyWindow::RequestGoldValue(sint32 player)
 		ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipGoldRequest.Spinner");
 		Assert(spinner);
 		if(spinner) {
-			spinner->SetSpinnerCallback(DiplomacyWindow::GoldSpinner, NULL);
+			spinner->SetSpinnerCallback(DiplomacyWindow::GoldSpinner, nullptr);
 		}
-		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DiplomacyWindow::GoldOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DiplomacyWindow::GoldCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DiplomacyWindow::GoldOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DiplomacyWindow::GoldCancel, nullptr);
 
 		m_goldRequestWindow->SetStronglyModal(TRUE);
 	}
@@ -1184,10 +1184,10 @@ void DiplomacyWindow::RequestPollutionValue(sint32 player)
 		ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPollutionRequest.Spinner");
 		Assert(spinner);
 		if(spinner) {
-			spinner->SetSpinnerCallback(DiplomacyWindow::GoldSpinner, NULL);
+			spinner->SetSpinnerCallback(DiplomacyWindow::GoldSpinner, nullptr);
 		}
-		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DiplomacyWindow::PollutionOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DiplomacyWindow::PollutionCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DiplomacyWindow::PollutionOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DiplomacyWindow::PollutionCancel, nullptr);
 
 		m_pollutionRequestWindow->SetStronglyModal(TRUE);
 	}
@@ -1215,10 +1215,10 @@ void DiplomacyWindow::RequestPercentValue()
 		ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPercentRequest.Spinner");
 		Assert(spinner);
 		if(spinner) {
-			spinner->SetSpinnerCallback(DiplomacyWindow::GoldSpinner, NULL);
+			spinner->SetSpinnerCallback(DiplomacyWindow::GoldSpinner, nullptr);
 		}
-		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DiplomacyWindow::PercentOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DiplomacyWindow::PercentCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DiplomacyWindow::PercentOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DiplomacyWindow::PercentCancel, nullptr);
 
 		m_percentRequestWindow->SetStronglyModal(TRUE);
 	}

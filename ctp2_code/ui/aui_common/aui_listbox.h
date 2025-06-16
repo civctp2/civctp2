@@ -81,7 +81,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -90,7 +90,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~aui_ListBox();
 
 protected:

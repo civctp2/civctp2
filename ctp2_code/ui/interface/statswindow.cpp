@@ -663,7 +663,7 @@ BOOL StatsWindow::CheckCity( void )
 	}
 	else {
 
-		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_CITIES ),"SW_NO_CITIES",NULL, NULL, "str_ldl_MB_OK", false);
+		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_CITIES ),"SW_NO_CITIES",NULL, nullptr, "str_ldl_MB_OK", false);
 		return FALSE;
 	}
 }
@@ -677,7 +677,7 @@ BOOL StatsWindow::CheckUnit( void )
 	}
 	else {
 
-		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_UNITS ),"SW_NO_UNITS",NULL, NULL, "str_ldl_MB_OK", false);
+		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_UNITS ),"SW_NO_UNITS",NULL, nullptr, "str_ldl_MB_OK", false);
 		return FALSE;
 	}
 }
@@ -698,7 +698,7 @@ BOOL StatsWindow::CheckDiplomacy( void )
 	}
 
 
-	MessageBoxDialog::Information(s_statsString->GetString( SW_NO_DIPLOMACY ),"SW_NO_DIPLOMACY",NULL, NULL, "str_ldl_MB_OK", false);
+	MessageBoxDialog::Information(s_statsString->GetString( SW_NO_DIPLOMACY ),"SW_NO_DIPLOMACY",NULL, nullptr, "str_ldl_MB_OK", false);
 	return FALSE;
 }
 

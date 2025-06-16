@@ -777,7 +777,7 @@ void DiplomacyMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 item
 			else
 			{
 				Assert(g_network.IsActive());
-				MessageBoxDialog::Information("str_code_CantInitiateDiplomacyNow", "WhyNoDiplomacy", NULL, NULL, "str_ldl_MB_OK", false);
+				MessageBoxDialog::Information("str_code_CantInitiateDiplomacyNow", "WhyNoDiplomacy", NULL, nullptr, "str_ldl_MB_OK", false);
 			}
 
 			break;
@@ -881,7 +881,7 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 			ProfileEdit::Display();
 			break;
 	case	CP_MENU_ITEM_4:
-			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 
 			break;
 	case	CP_MENU_ITEM_5:
@@ -2038,17 +2038,17 @@ void ControlPanelWindow::InitCivTab(void)
 	target = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.UnitStatusButton");
 
 	if (target!=NULL)
-		target->SetActionFuncAndCookie(TurnNextUnitButtonActionCallback, NULL);
+		target->SetActionFuncAndCookie(TurnNextUnitButtonActionCallback, nullptr);
 
 	target = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.CityStatusButton");
 
 	if (target!=NULL)
-		target->SetActionFuncAndCookie(TurnNextCityButtonActionCallback, NULL);
+		target->SetActionFuncAndCookie(TurnNextCityButtonActionCallback, nullptr);
 
 	target = (ctp2_Button *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.DomesticTab.TabPanel.AdvanceButton");
 
 	if (m_currentHappiness!=NULL)
-		m_currentHappiness->SetDrawCallbackAndCookie(controlpanelwindow_HappinessDrawCallback, NULL);
+		m_currentHappiness->SetDrawCallbackAndCookie(controlpanelwindow_HappinessDrawCallback, nullptr);
 }
 
 void ControlPanelWindow::InitMessageTab(void)
@@ -2058,7 +2058,7 @@ void ControlPanelWindow::InitMessageTab(void)
 	if (m_messageList == NULL)
 		return;
 
-	m_messageList->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, NULL);
+	m_messageList->SetActionFuncAndCookie(controlpanelwindow_MessageListCallback, nullptr);
 }
 
 void ControlPanelWindow::AddMessage(Message &message, bool initializing)
@@ -2250,8 +2250,8 @@ void ControlPanelWindow::PopulateMessageList(PLAYER_INDEX player)
 
 void ControlPanelWindow::InitCityTab(void)
 {
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.MainDropdown"  , CityPanelDropDownCallback, NULL);
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.NextCityButton", CityPanelNextCityCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.MainDropdown"  , CityPanelDropDownCallback, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel.NextCityButton", CityPanelNextCityCallback, nullptr);
 
 	m_mainDropDown = (ctp2_DropDown *)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.CityTab.TabPanel", "MainDropdown");
 
@@ -2264,7 +2264,7 @@ void ControlPanelWindow::InitCityTab(void)
 
 void ControlPanelWindow::InitUnitTab(void)
 {
-	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel.NextUnit", UnitPanelNextUnitCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel.NextUnit", UnitPanelNextUnitCallback, nullptr);
 
 	m_unitImage   = (ctp2_Static*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","UnitIcon");
 
@@ -2276,7 +2276,7 @@ void ControlPanelWindow::InitUnitTab(void)
 	m_unitOrders  = (ctp2_ListBox*)aui_Ldl::GetObject("ControlPanelWindow.ControlPanel.ControlTabPanel.UnitTab.TabPanel","OrderListBox");
 	// Added by E: unitaction here?
 	if (m_unitOrders!=NULL)
-		m_unitOrders->SetActionFuncAndCookie(UnitPanelListBoxCallback, NULL);
+		m_unitOrders->SetActionFuncAndCookie(UnitPanelListBoxCallback, nullptr);
 }
 
 void ControlPanelWindow::InitTileImpTab(void)

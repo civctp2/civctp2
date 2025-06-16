@@ -62,10 +62,10 @@ public:
     {};
 
 	ctp2_ListBox(AUI_ERRCODE *retval,	uint32 id, const MBCHAR *ldlBlock,
-							ControlActionCallback *ActionFunc = NULL, Cookie cookie = NULL );
+							ControlActionCallback *ActionFunc = NULL, Cookie cookie = nullptr );
 	ctp2_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 							const MBCHAR *pattern, sint32 bevelwidth = 0, sint32 beveltype = 0,
-							ControlActionCallback *ActionFunc = NULL, Cookie cookie = NULL);
+							ControlActionCallback *ActionFunc = NULL, Cookie cookie = nullptr);
 
 	virtual ~ctp2_ListBox();
 
@@ -91,7 +91,7 @@ public:
             {
                  T * info = static_cast<T *>(item->GetUserDataPtr());
                  delete info;
-                 item->SetUserData(NULL);
+                 item->SetUserData(nullptr);
             }
         } // for
     }

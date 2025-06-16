@@ -375,7 +375,7 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 				discovered = TRUE;
 			} else {
 
-				column->SetDrawCallbackAndCookie(NULL, NULL);
+				column->SetDrawCallbackAndCookie(NULL, nullptr);
 			}
 		}
 	}

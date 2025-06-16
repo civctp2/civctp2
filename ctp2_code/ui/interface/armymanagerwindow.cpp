@@ -93,24 +93,24 @@ ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 		return;
 	}
 
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "NewArmyButton", ArmyManagerWindow::NewArmy, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "CloseButton", ArmyManagerWindow::Close, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmiesList", ArmyManagerWindow::List, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddButton", ArmyManagerWindow::Add, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddAllButton", ArmyManagerWindow::AddAll, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveButton", ArmyManagerWindow::Remove, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveAllButton", ArmyManagerWindow::RemoveAll, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "NewArmyButton", ArmyManagerWindow::NewArmy, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "CloseButton", ArmyManagerWindow::Close, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmiesList", ArmyManagerWindow::List, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddButton", ArmyManagerWindow::Add, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddAllButton", ArmyManagerWindow::AddAll, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveButton", ArmyManagerWindow::Remove, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveAllButton", ArmyManagerWindow::RemoveAll, nullptr);
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmyName", ArmyManagerWindow::ArmyNameChanged, this);
 
 	for(sint32 i = 0; i < k_MAX_ARMY_SIZE; i++)
 	{
 		MBCHAR name[k_MAX_NAME_LEN];
 		sprintf(name, "%s.InArmyBox.Unit%d", s_armyWindowBlock, i);
-		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::InArmy, NULL);
+		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::InArmy, nullptr);
 		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy, i);
 
 		sprintf(name, "%s.OutOfArmyBox.Unit%d", s_armyWindowBlock, i);
-		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::OutOfArmy, NULL);
+		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::OutOfArmy, nullptr);
 		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy, i);
 	}
 

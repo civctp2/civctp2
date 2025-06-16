@@ -319,7 +319,7 @@ void spnewgamescreen_tribePress( aui_Control *control, uint32 action, uint32 dat
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 
-	spnewgametribescreen_displayMyWindow( NULL, TRUE );
+	spnewgametribescreen_displayMyWindow( nullptr, TRUE );
 
 	sint32 index = (sint32)g_theProfileDB->GetCivIndex();
 

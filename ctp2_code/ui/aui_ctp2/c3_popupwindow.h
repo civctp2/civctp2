@@ -97,23 +97,23 @@ public:
 	sint32 AddTitle(const MBCHAR *titleBlock = NULL );
 	sint32 AddCancel(
 		void (*actionFunc)( aui_Control *, uint32, uint32, Cookie) = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const MBCHAR *buttonBlock = "c3_PopupCancel" );
 	sint32 AddOk(
 		void (*actionFunc)( aui_Control *, uint32, uint32, Cookie) = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const MBCHAR *buttonBlock = "c3_PopupOk" );
 	sint32 AddYes(
 		void (*actionFunc)( aui_Control *, uint32, uint32, Cookie) = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const MBCHAR *buttonBlock = "c3_PopupYes" );
 	sint32 AddClose(
 		void (*actionFunc)( aui_Control *, uint32, uint32, Cookie) = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const MBCHAR *buttonBlock = "c3_PopupClose" );
 	sint32 AddNo(
 		void (*actionFunc)( aui_Control *, uint32, uint32, Cookie) = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const MBCHAR *buttonBlock = "c3_PopupNo" );
 
 	c3_Static	*TitleText( void ) { return m_titleText; }

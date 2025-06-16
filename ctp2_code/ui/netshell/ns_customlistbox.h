@@ -78,7 +78,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_TransportListBox();
 };
 
@@ -97,7 +97,7 @@ public:
 		typename ns_FileDataListBox<NFT,NST>::ControlActionCallback *ActionFunc = NULL,
 #endif
 
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const char *filename = "")
 
 		:
@@ -202,7 +202,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const char *filename = "nsplayer.cfg");
 };
 
@@ -213,7 +213,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const char *filename = "nsgame.cfg");
 };
 
@@ -224,7 +224,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		const char *filename = "nsai.cfg");
 };
 
@@ -235,7 +235,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_LobbyListBox:public ns_ListBox<NETFunc::Lobby, ns_Lobby> {
@@ -245,7 +245,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_GameListBox:public ns_ListBox<NETFunc::Game, ns_Game> {
@@ -255,7 +255,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_PlayerListBox:public ns_ListBox<NETFunc::Player, ns_Player> {
@@ -265,7 +265,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_PlayerListBox();
 
 	aui_TextBase *m_pingFastStyle;
@@ -285,7 +285,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_ServerListBox:public ns_ListBox<NETFunc::Server, ns_Server> {
@@ -295,7 +295,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_ServerListBox();
 
 	aui_TextBase *m_pingFastStyle;
@@ -317,7 +317,7 @@ public:
 		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_GPlayerListBox();
 
 	virtual void Insert( NETFunc::Player *object );
@@ -351,7 +351,7 @@ public:
 		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 
 	virtual void Insert( nf_AIPlayer *object );
 	virtual void Delete( nf_AIPlayer *object );

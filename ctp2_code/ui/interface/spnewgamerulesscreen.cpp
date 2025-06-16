@@ -28,7 +28,7 @@
 // - 7 options total needed to implement a new rule
 //
 // - Memory leaks repaired.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Removed new rules attempt - E 12.27.2006
 // - Added citycapture as an option and mapped it to gameplayoptions
 //   but appears to have no affect
@@ -42,7 +42,7 @@
 // - Added no production deficit for cities
 // - Added no gold hunger for ai
 // - Added no shield hunger for ai
-// - Added an upgrade option (13-Sep-2008 Martin Gühmann)
+// - Added an upgrade option (13-Sep-2008 Martin GÃ¼hmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added custom start/end "ages" button. (11-Apr-2009 Maq)
@@ -207,7 +207,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( aui_Control::ControlActionCallback 
 	{
 		if(callback)
 		{
-			s_spNewGameRulesScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+			s_spNewGameRulesScreen->Ok()->SetActionFuncAndCookie(callback, nullptr);
 		}
 
 		return AUI_ERRCODE_OK;

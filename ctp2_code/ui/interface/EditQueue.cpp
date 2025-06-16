@@ -230,37 +230,37 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 
 	m_unitList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsList");
 	Assert(m_unitList);
-	m_unitList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
+	m_unitList->SetActionFuncAndCookie(EditQueue::ListCallback, nullptr);
 
 	m_buildingList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingList");
 	Assert(m_buildingList);
-	m_buildingList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
+	m_buildingList->SetActionFuncAndCookie(EditQueue::ListCallback, nullptr);
 
 	m_wonderList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WonderList");
 	Assert(m_wonderList);
-	m_wonderList->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
+	m_wonderList->SetActionFuncAndCookie(EditQueue::ListCallback, nullptr);
 
 	m_queueList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.QueueList");
 	Assert(m_queueList);
-	m_queueList->SetActionFuncAndCookie(QueueListCallback, NULL);
+	m_queueList->SetActionFuncAndCookie(QueueListCallback, nullptr);
 
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.UnitsButton");
 	Assert(m_unitsButton);
-	m_unitsButton->SetActionFuncAndCookie(EditQueue::ToggleUnits, NULL);
+	m_unitsButton->SetActionFuncAndCookie(EditQueue::ToggleUnits, nullptr);
 
 	m_buildingsButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.BuildingsButton");
 	Assert(m_buildingsButton);
-	m_buildingsButton->SetActionFuncAndCookie(EditQueue::ToggleBuildings, NULL);
+	m_buildingsButton->SetActionFuncAndCookie(EditQueue::ToggleBuildings, nullptr);
 
 	m_wondersButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.WondersButton");
 	Assert(m_wondersButton);
-	m_wondersButton->SetActionFuncAndCookie(EditQueue::ToggleWonders, NULL);
+	m_wondersButton->SetActionFuncAndCookie(EditQueue::ToggleWonders, nullptr);
 	//EMOD to have button that has all units buildings, and wonders in the build box instead of sort
 	//m_AllButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AllButton");
 
 	m_libraryButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LibraryButton");
 	Assert(m_libraryButton);
-	m_libraryButton->SetActionFuncAndCookie(EditQueue::Library, NULL);
+	m_libraryButton->SetActionFuncAndCookie(EditQueue::Library, nullptr);
 
 	m_addButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.AddButton");
 	m_insertButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.InsertButton");
@@ -274,13 +274,13 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_buildingList->SetKeyboardActionControl(m_addButton);
 	m_wonderList->SetKeyboardActionControl(m_addButton);
 
-	m_addButton->SetActionFuncAndCookie(EditQueue::AddItem, NULL);
-	m_insertButton->SetActionFuncAndCookie(EditQueue::InsertItem, NULL);
-	m_suggestButton->SetActionFuncAndCookie(EditQueue::SuggestItem, NULL);
-	m_removeButton->SetActionFuncAndCookie(EditQueue::RemoveItem, NULL);
-	m_upButton->SetActionFuncAndCookie(EditQueue::ItemUp, NULL);
-	m_downButton->SetActionFuncAndCookie(EditQueue::ItemDown, NULL);
-	m_clearButton->SetActionFuncAndCookie(EditQueue::ClearButton, NULL);
+	m_addButton->SetActionFuncAndCookie(EditQueue::AddItem, nullptr);
+	m_insertButton->SetActionFuncAndCookie(EditQueue::InsertItem, nullptr);
+	m_suggestButton->SetActionFuncAndCookie(EditQueue::SuggestItem, nullptr);
+	m_removeButton->SetActionFuncAndCookie(EditQueue::RemoveItem, nullptr);
+	m_upButton->SetActionFuncAndCookie(EditQueue::ItemUp, nullptr);
+	m_downButton->SetActionFuncAndCookie(EditQueue::ItemDown, nullptr);
+	m_clearButton->SetActionFuncAndCookie(EditQueue::ClearButton, nullptr);
 
 	m_itemImageButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "ItemImage.IconBorder.IconButton");
 	Assert(m_itemImageButton);
@@ -301,27 +301,27 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 
 	m_cityDropDown = (ctp2_DropDown *)aui_Ldl::GetObject(s_editQueueBlock, "SingleCityChooser.Pulldown");
 	Assert(m_cityDropDown);
-	if(m_cityDropDown) m_cityDropDown->SetActionFuncAndCookie(CityDropDown, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "SingleCityChooser.Previous", PreviousCity, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "SingleCityChooser.Next", NextCity, NULL);
+	if(m_cityDropDown) m_cityDropDown->SetActionFuncAndCookie(CityDropDown, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "SingleCityChooser.Previous", PreviousCity, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "SingleCityChooser.Next", NextCity, nullptr);
 
 	m_rushBuyButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "RushBuyButton");
 	Assert(m_rushBuyButton);
-	m_rushBuyButton->SetActionFuncAndCookie(RushBuyCallback, NULL);
+	m_rushBuyButton->SetActionFuncAndCookie(RushBuyCallback, nullptr);
 	m_rushBuyCost = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "RushBuyCost");
 
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "NormalModeButtons.CloseButton", EditQueue::Close, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "NormalModeButtons.CloseButton", EditQueue::Close, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.LoadSaveButton", EditQueue::LoadModeCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "ItemsBox.LoadSaveButton", EditQueue::LoadModeCallback, nullptr);
 
 	m_createCustomQueueButton = (ctp2_Button *) aui_Ldl::GetObject(s_editQueueBlock, "NormalModeButtons.CustomButton");
 	Assert(m_createCustomQueueButton);
-	m_createCustomQueueButton->SetActionFuncAndCookie(EditQueue::CustomButton, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "CustomModeButtons.CancelButton", EditQueue::CustomButton, NULL);
+	m_createCustomQueueButton->SetActionFuncAndCookie(EditQueue::CustomButton, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "CustomModeButtons.CancelButton", EditQueue::CustomButton, nullptr);
 
 	m_saveQueueButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "CustomModeButtons.SaveButton");
 	Assert(m_saveQueueButton);
-	m_saveQueueButton->SetActionFuncAndCookie(EditQueue::SaveButton, NULL);
+	m_saveQueueButton->SetActionFuncAndCookie(EditQueue::SaveButton, nullptr);
 
 	m_multiButtonGroup = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "MultiGroup");
 	Assert(m_multiButtonGroup);
@@ -336,19 +336,19 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_queueName = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.QueueName");
 
 	m_queueFileList = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.QueuesList");
-	m_queueFileList->SetActionFuncAndCookie(QueueFileList, NULL);
+	m_queueFileList->SetActionFuncAndCookie(QueueFileList, nullptr);
 	m_queueContents = (ctp2_ListBox *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.Contents");
 	Assert(m_queueContents);
-	m_queueContents->SetActionFuncAndCookie(EditQueue::ListCallback, NULL);
+	m_queueContents->SetActionFuncAndCookie(EditQueue::ListCallback, nullptr);
 
 	m_loadModeLoadButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.LoadButton");
 	Assert(m_loadModeLoadButton);
-	m_loadModeLoadButton->SetActionFuncAndCookie(EditQueue::LoadCallback, NULL);
+	m_loadModeLoadButton->SetActionFuncAndCookie(EditQueue::LoadCallback, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.CancelButton", EditQueue::LoadModeCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_editQueueBlock, "LoadBox.CancelButton", EditQueue::LoadModeCallback, nullptr);
 	m_deleteButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "LoadBox.DeleteButton");
 	Assert(m_deleteButton);
-	m_deleteButton->SetActionFuncAndCookie(EditQueue::DeleteCallback, NULL);
+	m_deleteButton->SetActionFuncAndCookie(EditQueue::DeleteCallback, nullptr);
 
 	m_modeLabel = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "ItemsBox.ModeLabel");
 
@@ -358,10 +358,10 @@ EditQueue::EditQueue(AUI_ERRCODE * error)
 	m_queueLabel = (ctp2_Static *)aui_Ldl::GetObject(s_editQueueBlock, "QueueGroup.QueueLabel");
 
 	m_gotoCityButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "GotoCityButton");
-	m_gotoCityButton->SetActionFuncAndCookie(GotoCity, NULL);
+	m_gotoCityButton->SetActionFuncAndCookie(GotoCity, nullptr);
 
 	m_nationalManagerButton = (ctp2_Button *)aui_Ldl::GetObject(s_editQueueBlock, "NationalManagerButton");
-	if(m_nationalManagerButton) m_nationalManagerButton->SetActionFuncAndCookie(OpenNationalManager, NULL);
+	if(m_nationalManagerButton) m_nationalManagerButton->SetActionFuncAndCookie(OpenNationalManager, nullptr);
 
 	m_attachedToWindow = NULL;
 
@@ -2756,7 +2756,7 @@ private:
 void QuerySaveNameAction::Execute(aui_Control * control, uint32 action, uint32 data)
 {
 	MessageBoxDialog::TextQuery(g_theStringDB->GetNameStr("str_code_SaveQueueAsColon"), EditQueue::SaveNameResponse,
-		NULL, "str_ldl_MB_OK", "str_ldl_MB_CANCEL", m_defaultSaveName);
+		nullptr, "str_ldl_MB_OK", "str_ldl_MB_CANCEL", m_defaultSaveName);
 }
 
 void EditQueue::SaveQueryCallback(bool response, Cookie data)

@@ -19,7 +19,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_CheckBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -30,7 +30,7 @@ public:
 		const MBCHAR *text,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		sint32 state = 0,
 		sint32 numStates = k_C3_CHECKBOX_DEFAULTNUMSTATES );
 	virtual ~c3_CheckBox() {}

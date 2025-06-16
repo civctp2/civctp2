@@ -192,7 +192,7 @@ AUI_ERRCODE loadsavescreen_Initialize( aui_Control::ControlActionCallback *callb
 
 	if ( callback )
 		g_loadsaveWindow->GetOkButton()->SetActionFuncAndCookie(
-			callback, NULL );
+			callback, nullptr );
 
 	return AUI_ERRCODE_OK;
 }
@@ -521,7 +521,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 						}
 					}
 
-					spnewgametribescreen_displayMyWindow(NULL, TRUE);
+					spnewgametribescreen_displayMyWindow(nullptr, TRUE);
 
 					return;
 				}
@@ -537,7 +537,7 @@ void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 act
 				}
 			}
 
-			spnewgametribescreen_displayMyWindow(NULL, TRUE);
+			spnewgametribescreen_displayMyWindow(nullptr, TRUE);
 		}
 	}
 
@@ -568,7 +568,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo,  const MBCHAR *director
 				MBCHAR tempStr[_MAX_PATH];
 				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
 
-				MessageBoxDialog::Information(tempStr,"CantLoadScenario",NULL, NULL, "str_ldl_MB_OK", false);
+				MessageBoxDialog::Information(tempStr,"CantLoadScenario",NULL, nullptr, "str_ldl_MB_OK", false);
 				return;
 			}
 		} else {
@@ -604,7 +604,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo,  const MBCHAR *director
 				MBCHAR tempStr[_MAX_PATH];
 				sprintf(tempStr, "%s%s", g_theStringDB->GetNameStr("str_ERR_CANT_LOCATE_SCEN"), saveInfo->scenarioName);
 
-				MessageBoxDialog::Information(tempStr,"CantLoadScenarioData",NULL, NULL, "str_ldl_MB_OK", false);
+				MessageBoxDialog::Information(tempStr,"CantLoadScenarioData",NULL, nullptr, "str_ldl_MB_OK", false);
 				return;
 			}
 
@@ -624,7 +624,7 @@ void loadsavescreen_BeginLoadProcess(SaveInfo *saveInfo,  const MBCHAR *director
 
 		if (s_tempSaveInfo->numPositions <= 3 || saveInfo->startInfoType == STARTINFOTYPE_NOLOCS)
 		{
-			loadsavescreen_PlayersScreenActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			loadsavescreen_PlayersScreenActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 		}
 		else
 		{

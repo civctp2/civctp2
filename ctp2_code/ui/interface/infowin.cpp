@@ -423,28 +423,28 @@ sint32 infowin_Init_Controls( const MBCHAR *windowBlock )
 	if ( !AUI_NEWOK(s_pollutionTherm, errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PollutionList" );
-	s_pollutionList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	s_pollutionList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_pollutionList, errcode) );
 	if ( !AUI_NEWOK(s_pollutionList, errcode) ) return -1;
 
 	s_pollutionList->GetHeader()->Enable( FALSE );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "InfoPlayerList" );
-	s_infoPlayerList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	s_infoPlayerList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_infoPlayerList, errcode) );
 	if ( !AUI_NEWOK(s_infoPlayerList, errcode) ) return -1;
 
 	s_infoPlayerList->GetHeader()->Enable( FALSE );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "InfoBigList" );
-	s_infoBigList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, InfoBigListCallback, NULL);
+	s_infoBigList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, InfoBigListCallback, nullptr);
 	Assert( AUI_NEWOK(s_infoBigList, errcode) );
 	if ( !AUI_NEWOK(s_infoBigList, errcode) ) return -1;
 
 	s_infoBigList->GetHeader()->Enable( FALSE );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "InfoScoreList" );
-	s_infoScoreList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	s_infoScoreList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_infoScoreList, errcode) );
 	if ( !AUI_NEWOK(s_infoScoreList, errcode) ) return -1;
 
@@ -454,12 +454,12 @@ sint32 infowin_Init_Controls( const MBCHAR *windowBlock )
 	s_infoScoreListRanger->Enable(TRUE);
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "InfoWonderList" );
-	s_infoWonderList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	s_infoWonderList = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_infoWonderList, errcode) );
 	if ( !AUI_NEWOK(s_infoWonderList, errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "InfoGraph" );
-	s_infoGraph = new LineGraph(&errcode, aui_UniqueId(), controlBlock, NULL, NULL, g_eventTracker);
+	s_infoGraph = new LineGraph(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr, g_eventTracker);
 	Assert( AUI_NEWOK(s_infoGraph, errcode) );
 	if ( !AUI_NEWOK(s_infoGraph, errcode) ) return -1;
 
@@ -486,7 +486,7 @@ sint32 infowin_Init_Controls( const MBCHAR *windowBlock )
 	s_infoGraph->EnablePrecision(FALSE);
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PollutionGraph" );
-	s_pollutionGraph = new LineGraph(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	s_pollutionGraph = new LineGraph(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_pollutionGraph, errcode) );
 	if ( !AUI_NEWOK(s_pollutionGraph, errcode) ) return -1;
 

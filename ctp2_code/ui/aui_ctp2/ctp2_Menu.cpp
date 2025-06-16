@@ -401,9 +401,9 @@ void ctp2_Menu::ListCallback(aui_Control *control, uint32 action, uint32 data)
 			Assert(itemInfo);
 
 			m_list->DeselectItem(item);
-			m_callback(this, CTP2_MENU_ACTION_SELECT, index, itemInfo ? itemInfo->m_cookie : NULL);
+			m_callback(this, CTP2_MENU_ACTION_SELECT, index, itemInfo ? itemInfo->m_cookie : Cookie());
 		} else {
-			m_callback(this, CTP2_MENU_ACTION_CANCEL, -1, NULL);
+			m_callback(this, CTP2_MENU_ACTION_CANCEL, -1, nullptr);
 		}
 	}
 
@@ -472,7 +472,7 @@ void ctp2_Menu::WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, Co
 		}
 
 		if(menu->m_callback) {
-			menu->m_callback(menu, CTP2_MENU_ACTION_CANCEL, -1, NULL);
+			menu->m_callback(menu, CTP2_MENU_ACTION_CANCEL, -1, nullptr);
 
 		}
 	}

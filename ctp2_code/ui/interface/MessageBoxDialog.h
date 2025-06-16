@@ -20,20 +20,20 @@ public:
 	static void Information(const MBCHAR *message,
 		const MBCHAR *id,
 		MessageCallback callback = NULL,
-		Cookie userData = NULL,
+		Cookie userData = nullptr,
 		const MBCHAR *okText = "str_ldl_MB_OK",
 							bool allowDontShow = true);
 
 	static void Query(const MBCHAR *message,
 		const MBCHAR *id,
 		MessageCallback callback = NULL,
-		Cookie userData = NULL,
+		Cookie userData = nullptr,
 		const MBCHAR *okText = "str_ldl_MB_OK",
 		const MBCHAR *cancelText = "str_ldl_MB_CANCEL");
 
 	static void TextQuery(const MBCHAR *message,
 		MessageTextCallback callback = NULL,
-		Cookie userData = NULL,
+		Cookie userData = nullptr,
 		const MBCHAR *okText = "str_ldl_MB_OK",
 		const MBCHAR *cancelText = "str_ldl_MB_CANCEL",
 		const MBCHAR *defaultText = "");

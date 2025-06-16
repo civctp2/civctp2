@@ -366,7 +366,7 @@ sint32 c3_UtilityCityListPopup::Initialize( const MBCHAR *windowBlock )
 	m_window->AddOk(C3UtilityCityListButtonActionCallback, this);
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "CityList" );
-	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
@@ -491,7 +491,7 @@ sint32 c3_PiracyPopup::Initialize( const MBCHAR *windowBlock )
 	if ( !AUI_NEWOK(m_title_label, errcode) ) return -1;
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
-	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 
@@ -1250,7 +1250,7 @@ sint32 c3_UtilityPlayerListPopup::Initialize( const MBCHAR *windowBlock )
 	TestControl( m_close );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
-	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_list = new ctp2_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
 	m_list->DoneInstantiating();

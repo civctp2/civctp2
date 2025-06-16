@@ -23,7 +23,7 @@ public:
 		Icon *icon = NULL,
 		uint16 color = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		Cookie cookie = NULL,
+		Cookie cookie = nullptr,
 		BOOL selected = FALSE );
 	virtual ~IconSwitch() {}
 
