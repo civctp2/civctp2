@@ -290,8 +290,11 @@ void ScenarioWindow::SetMode(SCENARIO_WINDOW_MODE mode)
 			m_SaveButton->Hide();
 			m_NewButton->Show();
 			break;
-
+		default:
+			Assert(false); // Maybe fine
+			break;
 	}
+
 	m_mode = mode;
 	s_ScenarioWindow->m_window->ShouldDraw(TRUE);
 }
@@ -605,6 +608,9 @@ void ScenarioWindow::BackPress(aui_Control *control, uint32 action, uint32 data,
 			break;
 		case SCENARIO_WINDOW_MODE_LOAD_SCEN:
 			s_ScenarioWindow->SetMode(SCENARIO_WINDOW_MODE_LOAD_PACK);
+			break;
+		default:
+			Assert(false); // Maybe fine
 			break;
 	}
 }

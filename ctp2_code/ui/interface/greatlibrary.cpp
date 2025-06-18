@@ -1086,6 +1086,8 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		enableGoal = true;
 		m_itemLabel->SetText(g_theTerrainImprovementDB->Get(theMode)->GetNameText());
 		break;
+	default:
+		break;
 	}
 
 	m_setGoalButton->Enable(enableGoal);

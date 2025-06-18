@@ -3510,6 +3510,8 @@ void ControlPanelWindow::TabCallback(aui_Control *control, uint32 action,
 				tabLabel->SetTextColor(g_colorSet->GetColorRef(COLOR_BUTTON_TEXT_PLAIN));
 				tabLabel->ShouldDraw(TRUE);
 				break;
+			default:
+				break;
 		}
 	}
 }

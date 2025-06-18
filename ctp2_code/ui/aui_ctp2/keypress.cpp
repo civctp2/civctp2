@@ -778,6 +778,8 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	break;

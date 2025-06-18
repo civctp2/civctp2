@@ -191,6 +191,8 @@ void Anim::Process()
 		case ANIMTYPE_IDLE:
 			m_animPos = m_numFrames-1;
 			break;
+		default:
+			break;
 	}
 }
 

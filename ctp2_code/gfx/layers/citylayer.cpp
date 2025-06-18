@@ -61,39 +61,43 @@ void DrawTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIRECTION dir
 
 	maputils_MapXY2PixelXY(pos.x, pos.y, &x1, &y1);
 
-	switch (dir) {
-	case NORTH :
-		x2 = x1;
-		y2 = y1 - g_tiledMap->GetZoomTilePixelHeight()/2;
-		break;
-	case NORTHEAST :
-		x2 = x1 + g_tiledMap->GetZoomTilePixelWidth()/4;
-		y2 = y1 - g_tiledMap->GetZoomTilePixelHeight()/4;
-		break;
-	case EAST :
-		x2 = x1 + g_tiledMap->GetZoomTilePixelWidth()/2;
-		y2 = y1;
-		break;
-	case NORTHWEST :
-		x2 = x1 - g_tiledMap->GetZoomTilePixelWidth()/4;
-		y2 = y1 - g_tiledMap->GetZoomTilePixelHeight()/4;
-		break;
-	case SOUTHEAST :
-		x2 = x1 + g_tiledMap->GetZoomTilePixelWidth()/4;
-		y2 = y1 + g_tiledMap->GetZoomTilePixelHeight()/4;
-		break;
-	case WEST :
-		x2 = x1 - g_tiledMap->GetZoomTilePixelWidth()/2;
-		y2 = y1;
-		break;
-	case SOUTHWEST :
-		x2 = x1 - g_tiledMap->GetZoomTilePixelWidth()/4;
-		y2 = y1 + g_tiledMap->GetZoomTilePixelHeight()/4;
-		break;
-	case SOUTH :
-		x2 = x1;
-		y2 = y1 + g_tiledMap->GetZoomTilePixelHeight()/2;
-		break;
+	switch (dir)
+	{
+		case NORTH :
+			x2 = x1;
+			y2 = y1 - g_tiledMap->GetZoomTilePixelHeight()/2;
+			break;
+		case NORTHEAST :
+			x2 = x1 + g_tiledMap->GetZoomTilePixelWidth()/4;
+			y2 = y1 - g_tiledMap->GetZoomTilePixelHeight()/4;
+			break;
+		case EAST :
+			x2 = x1 + g_tiledMap->GetZoomTilePixelWidth()/2;
+			y2 = y1;
+			break;
+		case NORTHWEST :
+			x2 = x1 - g_tiledMap->GetZoomTilePixelWidth()/4;
+			y2 = y1 - g_tiledMap->GetZoomTilePixelHeight()/4;
+			break;
+		case SOUTHEAST :
+			x2 = x1 + g_tiledMap->GetZoomTilePixelWidth()/4;
+			y2 = y1 + g_tiledMap->GetZoomTilePixelHeight()/4;
+			break;
+		case WEST :
+			x2 = x1 - g_tiledMap->GetZoomTilePixelWidth()/2;
+			y2 = y1;
+			break;
+		case SOUTHWEST :
+			x2 = x1 - g_tiledMap->GetZoomTilePixelWidth()/4;
+			y2 = y1 + g_tiledMap->GetZoomTilePixelHeight()/4;
+			break;
+		case SOUTH :
+			x2 = x1;
+			y2 = y1 + g_tiledMap->GetZoomTilePixelHeight()/2;
+			break;
+		default:
+			Assert(false);
+			break;
 	}
 
 	x1 += g_tiledMap->GetZoomTilePixelWidth()/2;
@@ -162,15 +166,19 @@ void DrawReversedTradeRouteSegment(aui_Surface *surf, MapPoint &pos, WORLD_DIREC
 {
 	WORLD_DIRECTION revDir = NOWHERE;
 
-	switch (dir) {
-	case NORTH :		revDir = SOUTH;		break;
-	case NORTHEAST :	revDir = SOUTHWEST;	break;
-	case EAST :			revDir = WEST;		break;
-	case NORTHWEST :	revDir = SOUTHEAST;	break;
-	case SOUTHEAST :	revDir = NORTHWEST;	break;
-	case WEST :			revDir = EAST;		break;
-	case SOUTHWEST :	revDir = NORTHEAST;	break;
-	case SOUTH :		revDir = NORTH;		break;
+	switch (dir)
+	{
+		case NORTH :		revDir = SOUTH;		break;
+		case NORTHEAST :	revDir = SOUTHWEST;	break;
+		case EAST :			revDir = WEST;		break;
+		case NORTHWEST :	revDir = SOUTHEAST;	break;
+		case SOUTHEAST :	revDir = NORTHWEST;	break;
+		case WEST :			revDir = EAST;		break;
+		case SOUTHWEST :	revDir = NORTHEAST;	break;
+		case SOUTH :		revDir = NORTH;		break;
+		default:
+			Assert(false);
+			break;
 	}
 
 	DrawTradeRouteSegment(surf, pos, revDir, route, outline);

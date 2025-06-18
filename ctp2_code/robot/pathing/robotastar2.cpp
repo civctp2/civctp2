@@ -325,6 +325,8 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 		case PATH_TYPE_DEFENSIVE:
 			r = DefensivePathCallback(r, prev, pos, is_zoc, cost, entry);
 			break;
+		default:
+			break;
 		}
 
 		if(m_is_robot && pos != m_army->RetPos() && pos != m_dest && cost < k_ASTAR_BIG)
@@ -376,6 +378,8 @@ void RobotAstar2::RecalcEntryCost(AstarPoint *parent,
 			case PATH_TYPE_DEFENSIVE:
 				DefensivePathCallback(true, parent->m_pos, node->m_pos, new_is_zoc,
 									  new_entry_cost, new_entry);
+				break;
+			default:
 				break;
 		}
 	}

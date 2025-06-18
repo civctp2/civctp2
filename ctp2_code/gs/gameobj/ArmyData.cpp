@@ -6583,19 +6583,22 @@ void ArmyData::InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city.GetOwner());
 	switch (order_type)
 	{
-	case UNIT_ORDER_STEAL_TECHNOLOGY:
-		city_diplomat.GetCurrentDiplomacy(m_owner).GetCreateParkRegardCost(cost);
-		// CreateParkRegardCost since there's no 'StealTechologyRegardCost'
+		case UNIT_ORDER_STEAL_TECHNOLOGY:
+			city_diplomat.GetCurrentDiplomacy(m_owner).GetCreateParkRegardCost(cost);
+			// CreateParkRegardCost since there's no 'StealTechologyRegardCost'
 
-		StringId strId;
-		g_theStringDB->GetStringID("REGARD_EVENT_STEAL_TECHNOLOGY", strId);
-		city_diplomat.LogRegardEvent( m_owner,
-			cost,
-			REGARD_EVENT_MILITARY_SAFETY,
-			strId);
+			StringId strId;
+			g_theStringDB->GetStringID("REGARD_EVENT_STEAL_TECHNOLOGY", strId);
+			city_diplomat.LogRegardEvent( m_owner,
+				cost,
+				REGARD_EVENT_MILITARY_SAFETY,
+				strId);
 
-	city_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_RESEARCH_PACT);
-	break;
+		city_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_RESEARCH_PACT);
+		break;
+
+		default:
+			break;
 	}
 }
 
@@ -7510,6 +7513,8 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 			case SOUTHWEST:  dirs = N_F | NE_F | E_F; break;
 			case WEST:       dirs = N_F | NE_F | E_F | SE_F | S_F; break;
 			case NORTHWEST:  dirs = S_F | SE_F | E_F; break;
+			default:
+				break;
 		}
 
 	    DynamicArray<MapPoint> points;
@@ -9591,6 +9596,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		case ORDER_RESULT_INCOMPLETE:
 			deduct = true;
 			break;
+		default:
+			break;
 	}
 
 	if(result == ORDER_RESULT_SUCCEEDED
@@ -9603,6 +9610,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			case UNIT_ORDER_ASSASSINATE:       sText = "176AssassinationCompleteVictim"; break;
 			case UNIT_ORDER_INDULGENCE:        sText = "155IndulgenceCompleteVictim"; break;
 			case UNIT_ORDER_INJOIN:            sText = "159InjunctionCompleteVictim"; break;
+			default: break;
 		}
 
 		if (sText)

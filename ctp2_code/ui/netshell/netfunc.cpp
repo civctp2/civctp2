@@ -3353,6 +3353,8 @@ void NETFunc::Execute(void) {
 		s_connected = false;
 		s_status = START;
 		break;
+	default:
+		break;
 	}
 }
 

@@ -223,21 +223,23 @@ sint32 g_isCheatModeOn = FALSE;
 
 void scenarioeditor_SetSaveOptionsFromMode(void)
 {
-	switch (s_scenarioEditor->GetStartLocMode()) {
-	case SCEN_START_LOC_MODE_NONE:
-		g_startInfoType = STARTINFOTYPE_NOLOCS;
-
-		break;
-	case SCEN_START_LOC_MODE_PLAYER_WITH_CIV:
-		g_startInfoType = STARTINFOTYPE_CIVSFIXED;
-		break;
-	case SCEN_START_LOC_MODE_PLAYER:
-		g_startInfoType = STARTINFOTYPE_POSITIONSFIXED;
-		break;
-	case SCEN_START_LOC_MODE_CIV:
-		g_startInfoType = STARTINFOTYPE_CIVS;
-
-		break;
+	switch (s_scenarioEditor->GetStartLocMode())
+	{
+		case SCEN_START_LOC_MODE_NONE:
+			g_startInfoType = STARTINFOTYPE_NOLOCS;
+			break;
+		case SCEN_START_LOC_MODE_PLAYER_WITH_CIV:
+			g_startInfoType = STARTINFOTYPE_CIVSFIXED;
+			break;
+		case SCEN_START_LOC_MODE_PLAYER:
+			g_startInfoType = STARTINFOTYPE_POSITIONSFIXED;
+			break;
+		case SCEN_START_LOC_MODE_CIV:
+			g_startInfoType = STARTINFOTYPE_CIVS;
+			break;
+		default:
+			Assert(false);
+			break;
 	}
 }
 
@@ -2997,7 +2999,8 @@ void ScenarioEditor::SetPlayerNation(aui_Control *control, uint32 action, uint32
 
 	Player *p = g_player[g_selected_item->GetVisiblePlayer()];
 
-	switch(s_scenarioEditor->m_startLocMode) {
+	switch(s_scenarioEditor->m_startLocMode)
+	{
 		case SCEN_START_LOC_MODE_NONE:
 		case SCEN_START_LOC_MODE_PLAYER:
 		case SCEN_START_LOC_MODE_PLAYER_WITH_CIV:
@@ -3017,6 +3020,9 @@ void ScenarioEditor::SetPlayerNation(aui_Control *control, uint32 action, uint32
 			s_scenarioEditor->m_placeNationFlag = nation;
 			break;
 		}
+		default:
+			Assert(false);
+			break;
 	}
 
 	s_scenarioEditor->UpdatePlayerSelect();

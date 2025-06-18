@@ -508,13 +508,16 @@ SoundManager::TerminateAllLoopingSounds(const SOUNDTYPE &type)
 {
 	PointerList<CivSound>::PointerListNode *node = NULL;
 
-	switch (type) {
-	case SOUNDTYPE_SFX:
-			node = m_sfxSounds->GetHeadNode();
-		break;
-	case SOUNDTYPE_VOICE:
-			node = m_voiceSounds->GetHeadNode();
-		break;
+	switch (type)
+	{
+		case SOUNDTYPE_SFX:
+				node = m_sfxSounds->GetHeadNode();
+			break;
+		case SOUNDTYPE_VOICE:
+				node = m_voiceSounds->GetHeadNode();
+			break;
+		default:
+			break;
 	}
 
 	CivSound	*sound;
@@ -541,13 +544,16 @@ SoundManager::TerminateSounds(const SOUNDTYPE &type)
 {
 	PointerList<CivSound>::PointerListNode *node = NULL;
 
-	switch (type) {
-	case SOUNDTYPE_SFX:
-			node = m_sfxSounds->GetHeadNode();
-		break;
-	case SOUNDTYPE_VOICE:
-			node = m_voiceSounds->GetHeadNode();
-		break;
+	switch (type)
+	{
+		case SOUNDTYPE_SFX:
+				node = m_sfxSounds->GetHeadNode();
+			break;
+		case SOUNDTYPE_VOICE:
+				node = m_voiceSounds->GetHeadNode();
+			break;
+		default:
+			break;
 	}
 
 	CivSound	*sound;
@@ -557,9 +563,9 @@ SoundManager::TerminateSounds(const SOUNDTYPE &type)
 		if (sound) {
 #if defined(USE_SDL)
 			int channel = sound->GetChannel();
-            if (channel >= 0) {
-                Mix_HaltChannel(channel);
-            }
+			if (channel >= 0) {
+				Mix_HaltChannel(channel);
+			}
 #else // USE_SDL
 			AIL_quick_halt(sound->GetHAudio());
 #endif // USE_SDL
@@ -585,44 +591,53 @@ SoundManager::SetVolume(const SOUNDTYPE &type, const uint32 &volume)
 
 	if (m_noSound) return;
 
-	switch (type) {
-	case SOUNDTYPE_SFX:
-		m_sfxVolume = volume;
+	switch (type)
+	{
+		case SOUNDTYPE_SFX:
+			m_sfxVolume = volume;
 
-		m_soundWalker->SetList(m_sfxSounds);
-		while (m_soundWalker->IsValid()) {
-			sound = m_soundWalker->GetObj();
-			sound->SetVolume(volume);
-			m_soundWalker->Next();
-		}
-		break;
-	case SOUNDTYPE_VOICE:
-		m_voiceVolume = volume;
-
-		m_soundWalker->SetList(m_voiceSounds);
-		while (m_soundWalker->IsValid()) {
-			sound = m_soundWalker->GetObj();
-			sound->SetVolume(volume);
-			m_soundWalker->Next();
-		}
-		break;
-	case SOUNDTYPE_MUSIC:
-		m_musicVolume = volume;
-#if defined(USE_SDL)
-			if (m_useOggTracks) {
-			// Assume max volume is 10...
-			sint32 scaledVolume = (sint32)((double)volume * 12.7);
-			if (scaledVolume > MIX_MAX_VOLUME) {
-				Mix_VolumeMusic(MIX_MAX_VOLUME);
-			} else {
-				Mix_VolumeMusic(scaledVolume);
+			m_soundWalker->SetList(m_sfxSounds);
+			while (m_soundWalker->IsValid())
+			{
+				sound = m_soundWalker->GetObj();
+				sound->SetVolume(volume);
+				m_soundWalker->Next();
 			}
-		}
+			break;
+		case SOUNDTYPE_VOICE:
+			m_voiceVolume = volume;
+
+			m_soundWalker->SetList(m_voiceSounds);
+			while (m_soundWalker->IsValid())
+			{
+				sound = m_soundWalker->GetObj();
+				sound->SetVolume(volume);
+				m_soundWalker->Next();
+			}
+			break;
+		case SOUNDTYPE_MUSIC:
+			m_musicVolume = volume;
+#if defined(USE_SDL)
+			if (m_useOggTracks)
+			{
+				// Assume max volume is 10...
+				sint32 scaledVolume = (sint32)((double)volume * 12.7);
+				if (scaledVolume > MIX_MAX_VOLUME)
+				{
+					Mix_VolumeMusic(MIX_MAX_VOLUME);
+				}
+				else
+				{
+					Mix_VolumeMusic(scaledVolume);
+				}
+			}
 #else // USE_SDL
-		if (m_redbook)
-			AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
+			if (m_redbook)
+				AIL_redbook_set_volume(m_redbook, (sint32)((double)volume * 12.7));
 #endif // USE_SDL
-		break;
+			break;
+		default:
+			break;
 	}
 }
 
@@ -669,13 +684,16 @@ CivSound
 *SoundManager::FindLoopingSound(const SOUNDTYPE &type,
                                 const uint32 &associatedObject)
 {
-	switch (type) {
-	case SOUNDTYPE_SFX:
-		m_soundWalker->SetList(m_sfxSounds);
-		break;
-	case SOUNDTYPE_VOICE:
-		m_soundWalker->SetList(m_voiceSounds);
-		break;
+	switch (type)
+	{
+		case SOUNDTYPE_SFX:
+			m_soundWalker->SetList(m_sfxSounds);
+			break;
+		case SOUNDTYPE_VOICE:
+			m_soundWalker->SetList(m_voiceSounds);
+			break;
+		default:
+			break;
 	}
 
 	while (m_soundWalker->IsValid()) {
@@ -693,17 +711,22 @@ CivSound
 *SoundManager::FindSound(const SOUNDTYPE &type,
                          const uint32 &associatedObject)
 {
-	switch (type) {
-	case SOUNDTYPE_SFX:
-		m_soundWalker->SetList(m_sfxSounds);
-		break;
-	case SOUNDTYPE_VOICE:
-		m_soundWalker->SetList(m_voiceSounds);
-		break;
+	switch (type)
+	{
+		case SOUNDTYPE_SFX:
+			m_soundWalker->SetList(m_sfxSounds);
+			break;
+		case SOUNDTYPE_VOICE:
+			m_soundWalker->SetList(m_voiceSounds);
+			break;
+		default:
+			break;
 	}
 
-	while (m_soundWalker->IsValid()) {
-		if (m_soundWalker->GetObj()->GetAssociatedObject() == associatedObject) {
+	while (m_soundWalker->IsValid())
+	{
+		if (m_soundWalker->GetObj()->GetAssociatedObject() == associatedObject)
+		{
 			CivSound *sound = m_soundWalker->GetObj();
 			return sound;
 		}
@@ -716,64 +739,64 @@ CivSound
 const MUSICSTYLE
 SoundManager::GetMusicStyle() const
 {
-    return m_style;
+	return m_style;
 }
 
 const sint32
 SoundManager::GetPlayListPosition() const
 {
-    return m_playListPosition;
+	return m_playListPosition;
 }
 
 const sint32
 SoundManager::GetLastTrack() const
 {
-    return m_lastTrack;
+	return m_lastTrack;
 }
 
 const sint32
 SoundManager::GetUserTrack() const
 {
-    return m_userTrack;
+	return m_userTrack;
 }
 
 const BOOL
 SoundManager::IsAutoRepeat() const
 {
-    return m_autoRepeat;
+	return m_autoRepeat;
 }
 
 const BOOL
 SoundManager::IsMusicEnabled() const
 {
-    return m_musicEnabled;
+	return m_musicEnabled;
 }
 
 void
 SoundManager::SetAutoRepeat(const BOOL &autoRepeat)
 {
-    m_autoRepeat = autoRepeat;
-    PickNextTrack();
+	m_autoRepeat = autoRepeat;
+	PickNextTrack();
 }
 
 void
 SoundManager::SetLastTrack(const sint32 &track)
 {
-    m_lastTrack = track;
+	m_lastTrack = track;
 }
 
 void
 SoundManager::SetMusicStyle(const MUSICSTYLE &style)
 {
-    m_style = style;
-    PickNextTrack();
+	m_style = style;
+	PickNextTrack();
 }
 
 void
 SoundManager::SetPlayListPosition(const sint32 &pos)
 {
-    m_playListPosition = pos;
-    PickNextTrack();
+	m_playListPosition = pos;
+	PickNextTrack();
 }
 
 void
@@ -786,33 +809,35 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 	sint32 volume = 0;
 
 	switch (type)
-    {
-	case SOUNDTYPE_SFX:
-		node    = m_sfxSounds->GetHeadNode();
-		volume  = m_sfxVolume;
-		break;
-	case SOUNDTYPE_VOICE:
-		node    = m_voiceSounds->GetHeadNode();
-		volume  = m_voiceVolume;
-		break;
+	{
+		case SOUNDTYPE_SFX:
+			node    = m_sfxSounds->GetHeadNode();
+			volume  = m_sfxVolume;
+			break;
+		case SOUNDTYPE_VOICE:
+			node    = m_voiceSounds->GetHeadNode();
+			volume  = m_voiceVolume;
+			break;
+		default:
+			break;
 	}
 
 	while (node)
-    {
-	    CivSound *  sound = node->GetObj();
+	{
+		CivSound *  sound = node->GetObj();
 
 		if (sound && (sound->GetAssociatedObject() == associatedObject))
-        {
+		{
 #if defined(USE_SDL)
-            Mix_Chunk * myChunk = sound->GetAudio();
-            // Why set the volume again?
+			Mix_Chunk * myChunk = sound->GetAudio();
+ 			// Why set the volume again?
 #else // USE_SDL
-            sint32 panValue = 64;
+			sint32 panValue = 64;
 			HAUDIO hAudio   = sound->GetHAudio();
-            if (hAudio)
-            {
-                AIL_quick_set_volume(hAudio, volume, panValue);
-            }
+			if (hAudio)
+			{
+				AIL_quick_set_volume(hAudio, volume, panValue);
+			}
 #endif // USE_SDL
 		}
 
@@ -822,13 +847,13 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 
 void SoundManager::SetUserTrack(const sint32 &trackNum)
 {
-    m_userTrack = trackNum;
-    PickNextTrack();
+	m_userTrack = trackNum;
+	PickNextTrack();
 }
 
 void SoundManager::StartMusic()
 {
-    StartMusic(m_curTrack);
+	StartMusic(m_curTrack);
 }
 
 void SoundManager::StartMusic(const sint32 &InTrackNum)
@@ -883,17 +908,20 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 		
 	}
 #else
-    if (!m_redbook) {
-        return;
-    }
+	if (!m_redbook)
+	{
+		return;
+	}
 
 	U32 status = AIL_redbook_status(m_redbook);
 
-    if (status == REDBOOK_ERROR) {
-        return;
-    }
+	if (status == REDBOOK_ERROR)
+	{
+		return;
+	}
 
-	if (AIL_redbook_track(m_redbook)) {
+	if (AIL_redbook_track(m_redbook))
+	{
 		AIL_redbook_stop(m_redbook);
 	}
 
@@ -909,10 +937,10 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	m_curTrack = trackNum;
 
 	U32 start;
-    U32 end;
+	U32 end;
 	AIL_redbook_track_info(m_redbook, trackNum, &start, &end);
 
-    // Why?
+	// Why?
 	TerminateAllSounds();
 
 	AIL_redbook_play(m_redbook, start, end);
@@ -953,35 +981,35 @@ void SoundManager::TerminateMusic(void)
 void SoundManager::PickNextTrack(void)
 {
 	switch (m_style)
-    {
-    default:
-//	case MUSICSTYLE_PLAYLIST:
-		++m_playListPosition;
-		if (m_playListPosition >= g_thePlayListDB->GetNumSongs())
-        {
-			m_playListPosition = 0;
+	{
+		default:
+//		case MUSICSTYLE_PLAYLIST:
+			++m_playListPosition;
+			if (m_playListPosition >= g_thePlayListDB->GetNumSongs())
+			{
+				m_playListPosition = 0;
 
-			if (!m_autoRepeat)
-            {
+				if (!m_autoRepeat)
+				{
+					m_curTrack = -1;
+					return;
+				}
+			}
+			m_curTrack = s_startTrack + g_thePlayListDB->GetSong(m_playListPosition);
+			break;
+
+		case MUSICSTYLE_RANDOM:
+			m_curTrack = (1 + s_startTrack) + rand() % (m_numTracks - (1 + s_startTrack));
+			break;
+
+		case MUSICSTYLE_USER:
+			m_curTrack = (1 + s_startTrack) + m_userTrack;
+			if (!m_autoRepeat && m_curTrack >= m_lastTrack)
+			{
 				m_curTrack = -1;
 				return;
 			}
-		}
-		m_curTrack = s_startTrack + g_thePlayListDB->GetSong(m_playListPosition);
-		break;
-
-	case MUSICSTYLE_RANDOM:
-		m_curTrack = (1 + s_startTrack) + rand() % (m_numTracks - (1 + s_startTrack));
-		break;
-
-	case MUSICSTYLE_USER:
-		m_curTrack = (1 + s_startTrack) + m_userTrack;
-		if (!m_autoRepeat && m_curTrack >= m_lastTrack)
-        {
-			m_curTrack = -1;
-            return;
-		}
-		break;
+			break;
 	}
 
 	m_lastTrack = m_curTrack;
@@ -991,8 +1019,8 @@ void SoundManager::PickNextTrack(void)
 // otherwise you get intro trouble the define from windows.
 void SoundManager::StupidPlaySound(const sint32 &soundID)
 {
-    SoundRecord const * soundRecord = g_theSoundDB->Get(soundID);
-    char const *        soundValue  = soundRecord ? soundRecord->GetValue() : NULL;
+	SoundRecord const * soundRecord = g_theSoundDB->Get(soundID);
+	char const *        soundValue  = soundRecord ? soundRecord->GetValue() : NULL;
 
 	if (soundValue && (strlen(soundValue) > 0))
 	{

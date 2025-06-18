@@ -451,35 +451,40 @@ void Battle::ShowEvent(BattleEvent *event)
 
 	DPRINTF(k_DBG_FIX, ("  %d data elements.\n", list->GetCount()));
 	sint32		index = 0;
-	while (walker->IsValid()) {
+	while (walker->IsValid())
+	{
 		BattleEventData		*data = walker->GetObj();
 		DPRINTF(k_DBG_FIX, ("    Data element %d:\n", index));
 
-		switch (event->GetType()) {
-		case BATTLE_EVENT_TYPE_PLACEMENT :
-			DPRINTF(k_DBG_FIX, ("      positionActor  :  %#.8lx\n", data->positionActor));
-			DPRINTF(k_DBG_FIX, ("      positionColumn :  %d\n", data->positionColumn));
-			DPRINTF(k_DBG_FIX, ("      positionRow    :  %d\n", data->positionRow));
-			DPRINTF(k_DBG_FIX, ("      positionFacing :  %d\n", data->positionFacing));
-			DPRINTF(k_DBG_FIX, ("      positionHP     :  %#.2f\n", data->positionHP));
-			DPRINTF(k_DBG_FIX, ("      positionIsDefen:  %d\n", data->positionIsDefender));
-			break;
-		case BATTLE_EVENT_TYPE_ATTACK :
-			DPRINTF(k_DBG_FIX, ("      attackActor    :  %#.8lx\n", data->attackActor));
-			DPRINTF(k_DBG_FIX, ("      attackSoundID  :  %d\n", data->attackSoundID));
-			DPRINTF(k_DBG_FIX, ("      attackHP       :  %#.2f\n", data->attackHP));
-			break;
-		case BATTLE_EVENT_TYPE_EXPLODE :
-			DPRINTF(k_DBG_FIX, ("      explodeVictim  :  %#.8lx\n", data->explodeVictim));
-			DPRINTF(k_DBG_FIX, ("      explodeActor   :  %#.8lx\n", data->explodeActor));
-			DPRINTF(k_DBG_FIX, ("      explodeSoundID :  %d\n", data->explodeSoundID));
-			DPRINTF(k_DBG_FIX, ("      explodeHP      :  %#.2f\n", data->explodeHP));
-			break;
-		case BATTLE_EVENT_TYPE_DEATH :
-			DPRINTF(k_DBG_FIX, ("      deathVictim    :  %#.8lx\n", data->deathVictim));
-			DPRINTF(k_DBG_FIX, ("      deathSoundID   :  %d\n", data->deathSoundID));
-			DPRINTF(k_DBG_FIX, ("      deathHP        :  %#.2f\n", data->deathHP));
-			break;
+		switch (event->GetType())
+		{
+			case BATTLE_EVENT_TYPE_PLACEMENT :
+				DPRINTF(k_DBG_FIX, ("      positionActor  :  %#.8lx\n", data->positionActor));
+				DPRINTF(k_DBG_FIX, ("      positionColumn :  %d\n", data->positionColumn));
+				DPRINTF(k_DBG_FIX, ("      positionRow    :  %d\n", data->positionRow));
+				DPRINTF(k_DBG_FIX, ("      positionFacing :  %d\n", data->positionFacing));
+				DPRINTF(k_DBG_FIX, ("      positionHP     :  %#.2f\n", data->positionHP));
+				DPRINTF(k_DBG_FIX, ("      positionIsDefen:  %d\n", data->positionIsDefender));
+				break;
+			case BATTLE_EVENT_TYPE_ATTACK :
+				DPRINTF(k_DBG_FIX, ("      attackActor    :  %#.8lx\n", data->attackActor));
+				DPRINTF(k_DBG_FIX, ("      attackSoundID  :  %d\n", data->attackSoundID));
+				DPRINTF(k_DBG_FIX, ("      attackHP       :  %#.2f\n", data->attackHP));
+				break;
+			case BATTLE_EVENT_TYPE_EXPLODE :
+				DPRINTF(k_DBG_FIX, ("      explodeVictim  :  %#.8lx\n", data->explodeVictim));
+				DPRINTF(k_DBG_FIX, ("      explodeActor   :  %#.8lx\n", data->explodeActor));
+				DPRINTF(k_DBG_FIX, ("      explodeSoundID :  %d\n", data->explodeSoundID));
+				DPRINTF(k_DBG_FIX, ("      explodeHP      :  %#.2f\n", data->explodeHP));
+				break;
+			case BATTLE_EVENT_TYPE_DEATH :
+				DPRINTF(k_DBG_FIX, ("      deathVictim    :  %#.8lx\n", data->deathVictim));
+				DPRINTF(k_DBG_FIX, ("      deathSoundID   :  %d\n", data->deathSoundID));
+				DPRINTF(k_DBG_FIX, ("      deathHP        :  %#.2f\n", data->deathHP));
+				break;
+			default:
+				Assert(false);
+				break;
 		}
 		DPRINTF(k_DBG_FIX, ("--\n"));
 

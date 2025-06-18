@@ -24,15 +24,15 @@
 //
 // Modifications from the original Activision code:
 //
-// - Readded the new slicfunctions of the patch, by Martin Gühmann.
+// - Readded the new slicfunctions of the patch, by Martin GÃ¼hmann.
 // - Added FreeAllSlaves slicfunction by The Big Mc.
 // - Added PlantSpecificGood and RemoveGood slicfunctions by MrBaggins.
 // - Data blanked out at screen in between 2 players in hotseat play.
 // - Great library history cleared between 2 players in hotseat play.
 // - Corrected reported memory leak.
 // - Added database access to all databases in the new database format,
-//   even if it does not make sense, by Martin Gühmann.
-// - New slic functions added by Martin Gühmann:
+//   even if it does not make sense, by Martin GÃ¼hmann.
+// - New slic functions added by Martin GÃ¼hmann:
 //   - CargoCapacity     Gets number of additional units a unit can carry.
 //   - MaxCargoSize      Gets the maximum number of units a unit can carry.
 //   - CargoSize         Gets the current number of units a unit is carrying.
@@ -49,17 +49,17 @@
 // - Redesigned to prevent memory leaks and crashes.
 // - Reuse SlicSegment pool between SlicEngine sessions.
 // - Added slic civilisation database support.
-// - Added slic risk database support. (Sep 15th 2005 Martin Gühmann)
+// - Added slic risk database support. (Sep 15th 2005 Martin GÃ¼hmann)
 // - Added City Capture options by E 6.09.2006
 // - Added database slic access of difficulty, pollution and global warming
-//   databases. (July 15th 2006 Martin Gühmann)
+//   databases. (July 15th 2006 Martin GÃ¼hmann)
 // - PopContext refills the builtins when it restores the old context so
-//   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin Gühmann)
-// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
-// - Added slic database access to the new map icon database. (27-Mar-2007 Martin Gühmann)
-// - Added slic database access to the new map database. (27-Mar-2007 Martin Gühmann)
-// - Added slic database access to the new concept database. (31-Mar-2007 Martin Gühmann)
-// - Added slic database access to the new const database. (29-Oct-2007 Martin Gühmann)
+//   that slic does not forget the values of the builtins. (Sep 24th 2006 Martin GÃ¼hmann)
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin GÃ¼hmann)
+// - Added slic database access to the new map icon database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added slic database access to the new map database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added slic database access to the new concept database. (31-Mar-2007 Martin GÃ¼hmann)
+// - Added slic database access to the new const database. (29-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -911,7 +911,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_IsUnitAtHead);
 	m_functionHash->Add(new Slic_OpenScenarioEditor);
 
-	//Readded Slic functions of CTP2.1 by Martin Gühmann
+	//Readded Slic functions of CTP2.1 by Martin GÃ¼hmann
 	m_functionHash->Add(new Slic_DestroyBuilding);
 	m_functionHash->Add(new Slic_OpenBuildQueue);
 	m_functionHash->Add(new Slic_TileHasImprovement);
@@ -964,7 +964,7 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_RemoveGood);
 	// Added by Peter Triggs
 	m_functionHash->Add(new Slic_DeclareWar);
-	// Added by Martin Gühmann
+	// Added by Martin Gï¿½hmann
 	m_functionHash->Add(new Slic_CargoCapacity);
 	m_functionHash->Add(new Slic_MaxCargoSize);
 	m_functionHash->Add(new Slic_CargoSize);
@@ -2901,7 +2901,7 @@ void SlicEngine::AddDatabases()
 																  g_DiplomacyRecord_Accessors,
 																  g_Diplomacy_Tokens,
 																  k_Num_DiplomacyRecord_Tokens));
-	//The rest of the new databases available through slic added by Martin Gühmann
+	//The rest of the new databases available through slic added by Martin GÃ¼hmann
 	m_dbHash->Add(new SlicDBConduit<PersonalityRecord,
 									PersonalityRecordAccessorInfo>("PersonalityDB", g_thePersonalityDB,
 																  g_PersonalityRecord_Accessors,
@@ -3155,6 +3155,8 @@ sint32 SlicEngine::CallMod(MOD_FUNC modFunc, sint32 def, ...)
 				sym = new SlicSymbolData(SLIC_SYM_ARMY);
 				sym->SetArmy(a);
 				slicArgs->AddArg(SA_TYPE_INT_VAR, sym);
+				break;
+			default:
 				break;
 		}
 	}

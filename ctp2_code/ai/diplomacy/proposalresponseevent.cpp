@@ -1654,6 +1654,9 @@ STDEHANDLER(DefaultTreatyResponse_ProposalResponseEvent)
 				receiver_diplomat.ConsiderResponse(sender, RESPONSE_ACCEPT, accept_priority);
 			}
 			break;
+		default:
+			Assert(false); // Or is it just fine that the orthers are not handled
+			break;
 		}
 	}
 	return GEV_HD_Continue;

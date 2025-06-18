@@ -2065,6 +2065,9 @@ bool Diplomat::ExecuteThreat(const Threat & threat)
 		trust_cost /= 2;
 		str_buf = "Threatened to declare war.";
 		break;
+	default:
+		Assert(false);
+		break;
 	}
 
 	g_theStringDB->GetStringID("REGARD_EVENT_NEGATIVE_RECEIVER_DIPLOMACY_RESULT", strId);
@@ -2633,6 +2636,8 @@ void Diplomat::ExecuteResponse(const PLAYER_INDEX sender,
 			GEA_Player, receiver,
 			GEA_End);
 		break;
+	default:
+		Assert(false);
 	}
 }
 

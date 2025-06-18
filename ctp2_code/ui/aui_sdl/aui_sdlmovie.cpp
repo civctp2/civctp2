@@ -435,7 +435,8 @@ static int decoder_decode_frame(Decoder *d, AVFrame *frame) {
 				if (d->queue->abort_request)
 					return -1;
 
-				switch (d->avctx->codec_type) {
+				switch (d->avctx->codec_type)
+				{
 					case AVMEDIA_TYPE_VIDEO:
 						ret = avcodec_receive_frame(d->avctx, frame);
 						if (ret >= 0) {
@@ -455,6 +456,8 @@ static int decoder_decode_frame(Decoder *d, AVFrame *frame) {
 								d->next_pts_tb = tb;
 							}
 						}
+						break;
+					default:
 						break;
 				}
 				if (ret == AVERROR_EOF) {

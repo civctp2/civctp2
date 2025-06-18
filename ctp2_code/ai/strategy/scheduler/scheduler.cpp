@@ -863,6 +863,8 @@ void Scheduler::Match_Resources(const bool move_armies)
 					case GOAL_FAILED_NEEDS_TRANSPORT:
 						sprintf(buffer, "%s_TRANSPORT", buffer);
 						break;
+					default:
+						break;
 				}
 
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,

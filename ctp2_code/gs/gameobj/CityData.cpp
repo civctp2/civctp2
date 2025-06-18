@@ -6228,6 +6228,8 @@ void CityData::ModifySpecialAttackChance(UNIT_ORDER_TYPE attack,
 		case UNIT_ORDER_SLAVE_RAID:
 			chance -= buildingutil_GetPreventSlavery(GetEffectiveBuildings(), m_owner);
 			break;
+		default:
+			break;
 	}
 }
 

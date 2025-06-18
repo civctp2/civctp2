@@ -6377,6 +6377,9 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 								i, tradeOffers->Get(j).GetOfferResource(),
 								(uint32)tradeOffers->Get(j).GetFromCity());
 						break;
+					case ROUTE_TYPE_SLAVE:
+						Assert(false);
+						break;
 				}
 				switch(tradeOffers->Get(j).GetAskingType()) {
 					case ROUTE_TYPE_RESOURCE:
@@ -6390,6 +6393,9 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 					case ROUTE_TYPE_FOOD:
 						sprintf(buf2, "%d food",
 								tradeOffers->Get(j).GetAskingResource());
+						break;
+					case ROUTE_TYPE_SLAVE:
+						Assert(false);
 						break;
 				}
 				strcat(buf, buf2);
