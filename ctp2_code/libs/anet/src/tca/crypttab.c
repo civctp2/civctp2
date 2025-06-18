@@ -44,7 +44,7 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 {
 	dynatab_encrypted_freeze_t d;
 	size_t encrypted_unit;
-	int nwritten;
+	size_t nwritten;
 	int n;
 	size_t chunk;
 	char buf[crypttab_RW_BUFFER_SIZE];
@@ -106,7 +106,7 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 -------------------------------------------------------------------------*/
 void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8])
 {
-	int nread;
+	size_t nread;
 	void *p;
 	dynatab_encrypted_freeze_t d;
 	size_t encrypted_unit;
@@ -130,8 +130,8 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 	DPRINT(("dynatab_thaw_encrypted: Reading %d elements of size %d (%d encrypted).\n", d.n_used, d.unit, encrypted_unit));
 	tab->unit = d.unit;
 	if (d.n_used != 0) {
-		int n;
-		int n_end;
+		size_t n;
+		size_t n_end;
 		size_t chunk;
 		char buf[crypttab_RW_BUFFER_SIZE];
 		char *pbuf;

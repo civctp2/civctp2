@@ -364,7 +364,7 @@ dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, 
 	strncpy(pwchange->email, email, tcapw_MAXLEN_EMAIL);
 	pwchange->flags = flags;
 
-  	desDkey(oldhpw->hpw, EN0);
+	desDkey(oldhpw->hpw, EN0);
 	Ddes(challenge->challenge, buf);
 
 	MD5Init(&context);
