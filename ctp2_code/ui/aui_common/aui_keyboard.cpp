@@ -33,8 +33,8 @@
 #include <algorithm>
 
 aui_Keyboard::aui_Keyboard()
-:	aui_Base	(),
-	aui_Input	(),
+:	aui_Input	(),
+	aui_Base	(),
 	m_data	()
 {
 	std::fill(m_keyboardState, m_keyboardState + k_KEYBOARD_MAXSTATE, 0);

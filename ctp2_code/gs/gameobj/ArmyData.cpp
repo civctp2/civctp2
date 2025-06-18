@@ -349,19 +349,19 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
     {
@@ -374,19 +374,19 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
     {
@@ -399,19 +399,19 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     Insert(u);
 }
@@ -421,19 +421,19 @@ ArmyData::ArmyData(const Army &army)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
 }
 
@@ -442,19 +442,19 @@ ArmyData::ArmyData(CivArchive &archive)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     Serialize(archive);
 }

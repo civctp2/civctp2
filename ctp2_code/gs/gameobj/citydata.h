@@ -111,7 +111,7 @@ private:
 // m_name as buffer: 672 bytes
 //----------------------------------------------------------------------------
 
-	// 8 bit
+	// 8 byte
 	double            m_food_delta;
 	double            m_gross_food;
 	double            m_net_food;
@@ -164,7 +164,7 @@ private:
 	double            m_science_lost_to_crime;
 #endif
 
-	// 8 Bit
+	// 8 byte
 	uint64            m_built_improvements;
 	uint64            m_builtWonders;
 
@@ -189,7 +189,7 @@ private:
 	sint32    m_max_scie_from_terrain;
 #endif
 
-	// 4 Bit
+	// 4 byte
 	RADIUS_OP         m_cityRadiusOp;
 	UPRISING_CAUSE    m_doUprising;
 	CONVERTED_BY      m_convertedBy;
@@ -213,6 +213,7 @@ private:
 	sint32            m_luxury;
 	sint32            m_collected_production_this_turn;  // Will be unused
 	sint32            m_gross_production;
+	sint32            m_gross_prod_before_bonuses;
 	sint32            m_net_production;
 	sint32            m_production_lost_to_crime;
 	sint32            m_total_pollution;
@@ -229,6 +230,7 @@ private:
 	sint32            m_nanoInfectedBy;
 	sint32            m_convertedTo;
 	sint32            m_convertedGold;
+	sint32            m_happinessAttackedBy;
 	sint32            m_injoinedBy;
 	sint32            m_airportLastUsed;
 	sint32            m_founder;
@@ -252,8 +254,6 @@ private:
 	sint32            m_cityStyle;
 	sint32            m_build_category_before_load_queue;
 	sint32            m_scie_lost_to_crime;
-	sint32            m_gross_prod_before_bonuses;
-	sint32            m_happinessAttackedBy;
 	sint32            m_radiusNewOwner;
 	sint32            m_tilecount;
 	sint32            m_whichtile;
@@ -262,10 +262,10 @@ private:
 	sint32            m_culture;   //emod
 	sint32            m_secthappy; //emod
 
-	// 2 bit
+	// 2 byte
 	sint16            m_lastCelebrationMsg;
 
-	// 1 bit
+	// 1 byte
 	uint8             m_min_turns_revolt;        // Number of revolt risk free turns.
 	sint8             m_currentGarrison;
 	sint8             m_neededGarrison;
@@ -273,6 +273,7 @@ private:
 	bool              m_probeRecoveredHere;
 	bool              m_buyFront;
 	bool              m_sentInefficientMessageAlready;
+	bool              m_garrisonComplete;
 	bool              m_garrisonOtherCities;
 	bool              m_contribute_materials;
 	bool              m_contribute_military;
@@ -285,7 +286,6 @@ private:
 	bool              m_buildInfrastructure; // Unused, can be replace in size of BOOL for saving
 	bool              m_buildCapitalization; // Unused, can be replace in size of BOOL for saving
 	bool              m_paidForBuyFront;
-	bool              m_garrisonComplete;
 	bool              m_useGovernor;
 	bool              m_is_rioting;
 

@@ -731,6 +731,7 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	m_conceptButton          (NULL),
 	m_goodsButton            (NULL),
 	m_ordersButton           (NULL),
+	m_sortByAgeButton        (NULL),
 	m_topics_list            (NULL),
 	m_indexLeft              (NULL),
 	m_indexMiddle            (NULL),
@@ -745,8 +746,7 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	m_search_results         (),
 	m_history                (),
 	m_history_position       (0),
-	m_window                 (NULL),
-	m_sortByAgeButton        (NULL)
+	m_window                 (NULL)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 

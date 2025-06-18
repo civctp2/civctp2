@@ -742,11 +742,11 @@ private:
 	std::unordered_set<DQAction *>    m_animatingActions;
 	DQAnimationTrade                  *m_tradeAnimations;
 	DQAnimationStandby                *m_standbyAnimations;
-	uint32                            m_nextProcessTime;
 	// Optimization: keep track of latest added DQActionCenterMap
 	DQActionCenterMap                 *m_latestCenterMap;
 
 	static const int                  k_TIME_LOG_SIZE = 30;
+	uint32                            m_nextProcessTime;
 	uint32                            m_masterCurTime;
 	sint32                            m_lastTickCount;
 	sint32                            m_timeLog[k_TIME_LOG_SIZE];

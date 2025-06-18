@@ -54,11 +54,11 @@ Action::Action(
 	m_curPath          (NULL),
 	m_maxActionCounter (0),
 	m_curActionCounter (0),
-	m_finished         (false),
 	m_startMapPoint    (start),
 	m_endMapPoint      (end),
 	m_facing           (facing),
-	m_unitsVisibility  (0)
+	m_unitsVisibility  (0),
+	m_finished         (false)
 {
 	if (m_startMapPoint != m_endMapPoint) {
 		m_curPath = new ActorPath(m_startMapPoint.x, m_startMapPoint.y, m_endMapPoint.x, m_endMapPoint.y);
@@ -74,11 +74,11 @@ Action::Action(const Action & a_Original)
 	m_curPath          (NULL),
 	m_maxActionCounter (a_Original.m_maxActionCounter),
 	m_curActionCounter (a_Original.m_curActionCounter),
-	m_finished         (a_Original.m_finished),
 	m_startMapPoint    (a_Original.m_startMapPoint),
 	m_endMapPoint      (a_Original.m_endMapPoint),
 	m_facing           (a_Original.m_facing),
-	m_unitsVisibility  (a_Original.m_unitsVisibility)
+	m_unitsVisibility  (a_Original.m_unitsVisibility),
+	m_finished         (a_Original.m_finished)
 {
 	if (a_Original.m_curAnim) {
 		m_curAnim = new Anim(*a_Original.m_curAnim);

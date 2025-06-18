@@ -123,7 +123,10 @@ protected:
 		aui_Region          (),
 		aui_SoundBase       (),
 		m_stringTable       (NULL),
+		m_window            (NULL),
+		m_tip               (NULL),
 		m_allocatedTip      (false),
+		m_showingTip        (false),
 		m_statusText        (NULL),
 		m_statusTextCopy    (NULL),
 		m_numberOfLayers    (0),
@@ -142,8 +145,6 @@ protected:
 		Cookie cookie );
 
 public:
-
-	aui_StringTable *m_stringTable;
 
 	virtual AUI_ERRCODE ResetThis( void );
 
@@ -249,31 +250,6 @@ public:
 
 protected:
 
-	union
-	{
-		Cookie m_cookie;
-		aui_Action *m_action;
-	};
-	ControlActionCallback *m_ActionFunc;
-
-	aui_Window		*m_window;
-	aui_Window		*m_tip;
-	BOOL			m_allocatedTip;
-	BOOL			m_showingTip;
-
-	uint32			m_startWaitTime;
-	uint32			m_timeOut;
-
-	uint32			m_repeatTime;
-	uint32			m_lastRepeatTime;
-
-	aui_KeyboardEvent	m_keyboardEvent;
-	aui_JoystickEvent	m_joystickEvent;
-
-	uint32 m_actionKey;
-	uint32 m_keyboardAction;
-
-
 	typedef void (KeyboardEventCallback)( aui_KeyboardEvent *mouseData );
 	typedef void (JoystickEventCallback)( aui_JoystickEvent *mouseData );
 
@@ -293,16 +269,7 @@ protected:
 
 	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
 
-private:
-
-	const MBCHAR *m_statusText;
-	MBCHAR *m_statusTextCopy;
-
-
-
-
 public:
-
 
 	void ExchangeImage(sint32 layerIndex, sint32 imageIndex,
 		const MBCHAR *imageName);
@@ -451,10 +418,41 @@ private:
 
 	void InitializeImageLayers(ldl_datablock *theBlock);
 
+
+public:
+	aui_StringTable *m_stringTable;
+
+protected:
+	union
+	{
+		Cookie m_cookie;
+		aui_Action *m_action;
+	};
+	ControlActionCallback *m_ActionFunc;
+
+	aui_Window		*m_window;
+	aui_Window		*m_tip;
+	bool			m_allocatedTip;
+	bool			m_showingTip;
+
+	uint32			m_startWaitTime;
+	uint32			m_timeOut;
+
+	uint32			m_repeatTime;
+	uint32			m_lastRepeatTime;
+
+	aui_KeyboardEvent	m_keyboardEvent;
+	aui_JoystickEvent	m_joystickEvent;
+
+	uint32 m_actionKey;
+	uint32 m_keyboardAction;
+
+private:
+	const MBCHAR *m_statusText;
+	MBCHAR *m_statusTextCopy;
+
 	sint32 m_numberOfLayers;
-
 	sint32 m_imagesPerLayer;
-
 
 	aui_ImageList *m_imageLayerList;
 
@@ -463,7 +461,6 @@ private:
 	sint32 m_renderFlags;
 
 	sint32 m_focusIndex;
-
 };
 
 #endif

@@ -95,13 +95,17 @@ aui_Control::aui_Control
 	aui_Region              (retval, id, ldlBlock),
 	aui_SoundBase           (ldlBlock),
 	m_stringTable           (NULL),
+	m_window                (NULL),
+	m_tip                   (NULL),
 	m_allocatedTip          (false),
+	m_showingTip            (false),
 	m_statusText            (NULL),
+	m_statusTextCopy        (NULL),
 	m_numberOfLayers        (0),
 	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_statusTextCopy        (NULL)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 {
 	if (AUI_SUCCESS(*retval))
 	{
@@ -127,14 +131,17 @@ aui_Control::aui_Control
 	aui_Region              (retval, id, x, y, width, height),
 	aui_SoundBase           ((const MBCHAR **) NULL),
 	m_stringTable           (NULL),
+	m_window                (NULL),
+	m_tip                   (NULL),
 	m_allocatedTip          (false),
+	m_showingTip            (false),
 	m_statusText            (NULL),
+	m_statusTextCopy        (NULL),
 	m_numberOfLayers        (0),
 	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-	m_statusTextCopy        (NULL)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 {
 	if (AUI_SUCCESS(*retval))
 	{

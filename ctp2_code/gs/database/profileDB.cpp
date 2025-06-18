@@ -232,7 +232,6 @@ ProfileDB::ProfileDB()
     m_showOrderUnion                    (FALSE),
     m_recentAtTop                       (FALSE),
     m_cityClick                         (FALSE),
-    m_dontSave                          (FALSE),
     m_endTurnWithEmptyBuildQueues       (FALSE),
     m_runInBackground                   (FALSE),
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
@@ -267,7 +266,8 @@ ProfileDB::ProfileDB()
     m_sleepingUnitsBoard                (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
-    m_loadedFromTutorial                (FALSE)
+    m_loadedFromTutorial                (FALSE),
+    m_dontSave                          (FALSE)
 {
 	for (size_t player = 0; player < k_MAX_PLAYERS; ++player)
 	{

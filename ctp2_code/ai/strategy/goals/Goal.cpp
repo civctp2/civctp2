@@ -153,7 +153,6 @@ Goal::Goal()
     m_current_attacking_strength    (),
     m_matches                       (),
     m_agents                        (),
-    m_playerId                      (PLAYER_UNASSIGNED),
     m_raw_priority                  (BAD_UTILITY),
     m_combinedUtility               (0),
     m_target_pos                    (),
@@ -161,6 +160,7 @@ Goal::Goal()
     m_target_army                   (),
     m_sub_task                      (SUB_TASK_GOAL),
     m_goal_type                     (GOAL_TYPE_NULL),
+    m_playerId                      (PLAYER_UNASSIGNED),
     m_needs_sorting                 (false)
 {
 }
@@ -171,7 +171,6 @@ Goal::Goal(const Goal &goal)
     m_current_attacking_strength    (0),                         // Nothing since the agent list is not copied
     m_matches                       (),                          // Contains refernces that are invalid after copy
     m_agents                        (),                          // Agents are just pointers, which are changed on copy
-    m_playerId                      (goal.m_playerId),
     m_raw_priority                  (goal.m_raw_priority),
     m_combinedUtility               (goal.m_combinedUtility),
     m_target_pos                    (goal.m_target_pos),
@@ -179,6 +178,7 @@ Goal::Goal(const Goal &goal)
     m_target_army                   (goal.m_target_army),
     m_sub_task                      (goal.m_sub_task),
     m_goal_type                     (goal.m_goal_type),
+    m_playerId                      (goal.m_playerId),
     m_needs_sorting                 (goal.m_needs_sorting)
 {
 }

@@ -174,10 +174,10 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
     m_globalProduction      (NULL),
     m_globalTrade           (NULL),
     m_globalScience         (NULL),
+    m_globalPopulation      (NULL),
     m_globalTradeFood       (NULL),
     m_globalTradeProduction (NULL),
     m_globalTradeGold       (NULL),
-    m_globalPopulation      (NULL),
     m_activateButton        (NULL),
     m_disbandButton         (NULL)
 {
