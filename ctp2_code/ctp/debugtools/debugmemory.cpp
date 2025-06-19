@@ -1079,9 +1079,9 @@ void Debug_MemNodeList (int turn_count)
 
 	while (node)
 	{
-		fprintf(leakFile, "%7ld\t%7zu\t%7zd\t", node->reference_count, node->size,
+		fprintf(leakFile, "%7d\t%7zu\t%7zd\t", node->reference_count, node->size,
 												node->reference_count * node->size);
-		fprintf(leakAltFile, "%7ld\t%7zu\t%7zd\t", node->reference_count, node->size,
+		fprintf(leakAltFile, "%7d\t%7zu\t%7zd\t", node->reference_count, node->size,
 												node->reference_count * node->size);
 
 		DebugCallStack_ShowToFile(LOG_MEMORY_LEAK, node->call_stack.function, CALL_STACK_SIZE, leakFile);

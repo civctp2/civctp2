@@ -278,7 +278,7 @@ NetAction::NetAction(NET_ACTION action, ...)
 		for(i = 0; i < m_args[m_action]; i++) {
 			m_data[i] = va_arg( vl, uint32 );
 #ifdef _DEBUG
-			sprintf(str + strlen(str), "arg: %8d/0x%lx ", m_data[i], m_data[i]);
+			sprintf(str + strlen(str), "arg: %8d/0x%x ", m_data[i], m_data[i]);
 #endif
 		}
 		va_end(vl);
