@@ -1346,17 +1346,17 @@ void slicif_dump_code(unsigned char* code, size_t codeSize)
 			case SOP_JMP:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf(debuglog, "jmp   0x%04lx\n", ival);
+				fprintf(debuglog, "jmp   0x%04x\n", ival);
 				break;
 			case SOP_BNT:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf(debuglog, "bnt   0x%04lx\n", ival);
+				fprintf(debuglog, "bnt   0x%04x\n", ival);
 				break;
 			case SOP_BNEV:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf(debuglog, "bnev  0x%04lx\n", ival);
+				fprintf(debuglog, "bnev  0x%04x\n", ival);
 				break;
 			case SOP_BUTN:
 				ival = *((int *)codePtr);
@@ -1373,13 +1373,13 @@ void slicif_dump_code(unsigned char* code, size_t codeSize)
 					fprintf(debuglog, "Bad Mojo, button string arg doesn't have string type\n");
 					return;
 				}
-				fprintf(debuglog, "butn  0x%04lx,%d(%s)\n", ival,
+				fprintf(debuglog, "butn  0x%04x,%d(%s)\n", ival,
 						symval->GetIndex(), symval->GetName());
 				break;
 			case SOP_OCLS:
 				ival = *((int *)codePtr);
 				codePtr += sizeof(int);
-				fprintf(debuglog, "ocls  0x%04lx\n", ival);
+				fprintf(debuglog, "ocls  0x%04x\n", ival);
 				break;
 			case SOP_STOP:
 				fprintf(debuglog, "stop\n");
@@ -1935,7 +1935,7 @@ void slicif_check_event_exists(char *name)
 char *slicif_create_name(char *base)
 {
 	char *name = (char *)malloc(strlen(base) + 10);
-	sprintf(name, "%s!%08lx", base, s_temp_name_counter++);
+	sprintf(name, "%s!%08x", base, s_temp_name_counter++);
 	return name;
 }
 

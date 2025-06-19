@@ -1054,9 +1054,9 @@ void Debug_MemNodeList (int turn_count)
 	MemNode *node;
 
 	char fname[120];
-	sprintf(fname, "CTP_LEAKS_%#.3ld.TXT", turn_count);
+	sprintf(fname, "CTP_LEAKS_%.3d.TXT", turn_count);
 	FILE *leakFile = fopen(fname, "w");
-	sprintf(fname, "CTP_LEAKS_ALT_%#.3ld.TXT", turn_count);
+	sprintf(fname, "CTP_LEAKS_ALT_%.3d.TXT", turn_count);
 	FILE *leakAltFile = fopen(fname, "w");
 
 	if (!leakFile)

@@ -3094,7 +3094,7 @@ bool World::ExportMap(MBCHAR const *filename)
 			BOOL hasRiver = IsRiver(pos);
 			BOOL hasGood = GetGood(pos, good);
 
-			fprintf(outfile, "%d,%d,%d,%d,%ld\t",
+			fprintf(outfile, "%d,%d,%d,%d,%d\t",
 					cell->GetTerrain(),
 					hasHut,
 					hasRiver,
@@ -3169,7 +3169,7 @@ bool World::ImportMap(MBCHAR const * filename)
 			sint32 terrainType;
 			uint32 env;
 
-			fscanf(infile, "%d,%d,%d,%d,%ld\t",
+			fscanf(infile, "%d,%d,%d,%d,%d\t",
 					&terrainType,
 					&hasHut,
 					&hasRiver,

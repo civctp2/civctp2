@@ -1166,7 +1166,7 @@ void ShowVisCommand::Execute(sint32 argc, char **argv)
 
 		for(u = 0; u < g_player[p]->m_all_armies->Num(); u++) {
 			char buf[40];
-			sprintf(buf, "VIS: %lx", g_player[p]->m_all_armies->Access(u).Access(0).GetVisibility());
+			sprintf(buf, "VIS: %x", g_player[p]->m_all_armies->Access(u).Access(0).GetVisibility());
 			g_graphicsOptions->AddTextToArmy(g_player[p]->m_all_armies->Access(u), buf, 255, -1);
 		}
 	}
@@ -1932,14 +1932,14 @@ void SlicVariableCommand::Execute(sint32 argc, char **argv)
 				MapPoint pos;
 				char buf[1024];
 				if(sym->GetUnit(u)) {
-					sprintf(buf, "%s=Unit    %lx", sym->GetName(), u.m_id);
+					sprintf(buf, "%s=Unit    %x", sym->GetName(), u.m_id);
 					if(g_theUnitPool->IsValid(u)) {
 						sprintf(buf + strlen(buf), ", Type=%d", u.GetType());
 					} else {
 						sprintf(buf + strlen(buf), " [Invalid unit]");
 					}
 				} else if(sym->GetCity(u)) {
-					sprintf(buf, "%s=City    %lx", sym->GetName(), u.m_id);
+					sprintf(buf, "%s=City    %x", sym->GetName(), u.m_id);
 					if(!g_theUnitPool->IsValid(u)) {
 						strcat(buf, " [Invalid city]");
 					} else {

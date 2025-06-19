@@ -6647,7 +6647,7 @@ void Player::DisplayAdvances()
 
 	AdvanceType	adv ;
 
-	sprintf(s, "Advances, Player %ld:", m_owner);
+	sprintf(s, "Advances, Player %d:", m_owner);
 	g_debugWindow->AddText(s);
 
 		for (adv=0; adv<m_advances->GetNum(); adv++)

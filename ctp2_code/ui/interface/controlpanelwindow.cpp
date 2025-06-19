@@ -3467,19 +3467,19 @@ void cpw_NumberToCommas( uint64 number, MBCHAR *s )
 
 	if ( trillion )
 	{
-		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3ld%s%.3" PRIu64, trillion, c, billion, c, million, c, thousand, c, temp );
+		sprintf( s, "%d%s%.3d%s%.3d%s%.3d%s%.3" PRIu64, trillion, c, billion, c, million, c, thousand, c, temp );
 	}
 	else if ( billion )
 	{
-		sprintf( s, "%ld%s%.3ld%s%.3ld%s%.3" PRIu64, billion, c, million, c, thousand, c, temp );
+		sprintf( s, "%d%s%.3d%s%.3d%s%.3" PRIu64, billion, c, million, c, thousand, c, temp );
 	}
 	else if ( million )
 	{
-		sprintf( s, "%ld%s%.3ld%s%.3" PRIu64, million, c, thousand, c, temp );
+		sprintf( s, "%d%s%.3d%s%.3" PRIu64, million, c, thousand, c, temp );
 	}
 	else if ( thousand )
 	{
-		sprintf( s, "%ld%s%.3" PRIu64, thousand, c, temp );
+		sprintf( s, "%d%s%.3" PRIu64, thousand, c, temp );
 	}
 	else
 	{

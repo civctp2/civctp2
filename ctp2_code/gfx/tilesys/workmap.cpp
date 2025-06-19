@@ -1159,7 +1159,7 @@ void WorkMap::DrawResourceIcons(aui_Surface *surface, sint32 x, sint32 y, MapPoi
 	Assert(resourceIcon); if (!resourceIcon) return;
 	g_tiledMap->DrawColorizedOverlay(resourceIcon, surface, iconRect.left, iconRect.top, color);
 
-	sprintf(str, "%ld", prod);
+	sprintf(str, "%d", prod);
 
 	if (g_tiledMap && g_tiledMap->GetFont()) {
 		width = g_tiledMap->GetFont()->GetStringWidth(str);
@@ -1193,7 +1193,7 @@ void WorkMap::DrawResourceIcons(aui_Surface *surface, sint32 x, sint32 y, MapPoi
 	Assert(resourceIcon); if (!resourceIcon) return;
 	g_tiledMap->DrawColorizedOverlay(resourceIcon, surface, iconRect.left, iconRect.top, color);
 
-	sprintf(str, "%ld", food);
+	sprintf(str, "%d", food);
 
 	if (g_tiledMap && g_tiledMap->GetFont()) {
 		width = g_tiledMap->GetFont()->GetStringWidth(str);

@@ -528,12 +528,12 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 		}
 		pos.x++;
 	} else {
-		fscanf(uFile, "%ld\n", &n);
+		fscanf(uFile, "%d\n", &n);
 
 		sint32 *uids = new sint32[n];
 
 		for (i=0; i<n; i++) {
-			fscanf(uFile, "%ld\n", &uids[i]);
+			fscanf(uFile, "%d\n", &uids[i]);
 		}
 		fclose(uFile);
 

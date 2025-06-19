@@ -88,7 +88,7 @@ const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
 		AUI_ERRCODE         errcode         = AUI_ERRCODE_OK;
 		aui_StringTable *   table           = new aui_StringTable(&errcode, "YearStrings");
 		sint32 const        yearStringIndex = (currentYear < 0) ? 0 : 1;
-		sprintf(buf, "%ld%s", abs(currentYear), table->GetString(yearStringIndex));
+		sprintf(buf, "%d%s", abs(currentYear), table->GetString(yearStringIndex));
 		delete table;
 	}
 

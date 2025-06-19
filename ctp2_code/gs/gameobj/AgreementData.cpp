@@ -572,7 +572,7 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 			break ;
 
 		case 4 :
-			sprintf(sExpanded, "%ld", g_player[civ->GetOwner()]->GetGold()) ;
+			sprintf(sExpanded, "%d", g_player[civ->GetOwner()]->GetGold()) ;
 			break ;
 
 		default :
