@@ -216,6 +216,8 @@ void ProfileEdit::FillList()
 					}
 					break;
 				}
+				default:
+					break;
 			}
 		}
 		item->SetUserData(walk.GetObj());

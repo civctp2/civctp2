@@ -590,13 +590,15 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 
 	switch ( g_allinoneWindow->GetMode() )
 	{
-	case g_allinoneWindow->CONTINUE_CREATE:
-	case g_allinoneWindow->CONTINUE_JOIN:
-		if(!g_allinoneWindow->GetScenarioInfo() ||
-			!g_allinoneWindow->GetScenarioInfo()->isScenario) {
-			item->GetTribeButton()->Enable( FALSE );
-		}
-		break;
+		case g_allinoneWindow->CONTINUE_CREATE:
+		case g_allinoneWindow->CONTINUE_JOIN:
+			if(!g_allinoneWindow->GetScenarioInfo() ||
+				!g_allinoneWindow->GetScenarioInfo()->isScenario) {
+				item->GetTribeButton()->Enable( FALSE );
+			}
+			break;
+		default:
+			break;
 	}
 
 	ColorCodePingTime( player );
@@ -856,22 +858,21 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 	}
 	else
 	{
-
 		if ( !g_gamesetup.GetHandicapping() )
 		{
 			item->GetCivpointsButton()->Enable( FALSE );
 			item->GetPwpointsButton()->Enable( FALSE );
 		}
-
-
 	}
 
 	switch ( g_allinoneWindow->GetMode() )
 	{
-	case g_allinoneWindow->CONTINUE_CREATE:
-	case g_allinoneWindow->CONTINUE_JOIN:
-		item->GetTribeButton()->Enable( FALSE );
-		break;
+		case g_allinoneWindow->CONTINUE_CREATE:
+		case g_allinoneWindow->CONTINUE_JOIN:
+			item->GetTribeButton()->Enable( FALSE );
+			break;
+		default:
+			break;
 	}
 }
 

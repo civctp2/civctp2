@@ -2244,6 +2244,8 @@ void EditQueue::MultiActionButton(aui_Control * control, uint32 action, uint32 d
 			case EDIT_QUEUE_MULTI_ACTION_OVERWRITE_CONFIRMED:
 				insertIndex = 0;
 				break;
+			default:
+				break;
 		}
 
 		bool goodItem;

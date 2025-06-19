@@ -7545,6 +7545,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 		case NORTHEAST:  dirs = N_F | NE_F | E_F; break;
 		case EAST:       dirs = N_F | NE_F | E_F | SE_F | S_F; break;
 		case SOUTHEAST:  dirs = S_F | SE_F | E_F; break;
+		default: Assert(false); break;
 		}
 
 		for(dd = 0; dd < (sint32)NOWHERE; dd++) {

@@ -381,7 +381,8 @@ QuadTreeNode<T>::RemoveObject(T obj)
 		}
 	} else {
 		MapPoint pos = m_tree->GetPos(obj);
-		switch (FindQuadrant(pos)) {
+		switch (FindQuadrant(pos))
+		{
 			case QUADRANT_NE:
 				Assert(m_ne);
 				if(!m_ne) return;
@@ -401,6 +402,8 @@ QuadTreeNode<T>::RemoveObject(T obj)
 				Assert(m_nw);
 				if(!m_nw) return;
 				m_nw->RemoveObject(obj);
+				break;
+			default:
 				break;
 		}
 	}
