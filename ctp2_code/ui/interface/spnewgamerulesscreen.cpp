@@ -305,7 +305,7 @@ void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 
 {
 	if (m_ruleDetails && m_ruleDetailsStrings)
 	{
-		m_ruleDetails->SetText("", NULL);
+		m_ruleDetails->SetText("", 0);
 		m_ruleDetails->Hide();
 		m_ruleDetails->Show();
 
@@ -328,7 +328,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 
 	if (m_ruleDetails && m_ruleDetailsStrings)
 	{
-		m_ruleDetails->SetText("", NULL);
+		m_ruleDetails->SetText("", 0);
 		m_ruleDetails->Hide();
 
 		switch(checkbox)
@@ -354,7 +354,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		if (rule >= 0)
 		{
 			m_ruleDetails->Show();
-			m_ruleDetails->SetText("", NULL);
+			m_ruleDetails->SetText("", 0);
 
 			char buf[1024];
 			sprintf(buf, "%s", m_ruleDetailsStrings->GetString(rule));
@@ -362,7 +362,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		}
 		else
 		{
-			m_ruleDetails->SetText("", NULL);
+			m_ruleDetails->SetText("", 0);
 			m_ruleDetails->Hide();
 		}
 	}

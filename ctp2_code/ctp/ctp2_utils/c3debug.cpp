@@ -316,7 +316,7 @@ void c3debug_Assert(char const *s, char const * file, int line)
 	while (0);
 #else
 	MBCHAR str[1024];
-	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%ld\n", s, file, line);
+	sprintf(str, "Assertion (%s) Failed in File:%s, Line:%d\n", s, file, line);
 	fprintf(stderr, str);
 	sint32 result = g_noAssertDialogs ? IDIGNORE
 		: MessageBox(NULL, str, "Assert", MB_ABORTRETRYIGNORE | MB_ICONEXCLAMATION);

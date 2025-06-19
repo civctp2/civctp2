@@ -328,7 +328,6 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 {
 	sint32 player = g_selected_item->GetVisiblePlayer();
 	sint32 i;
-	bool selectedSomething = false;
 
 	Assert(propList);
 	if(propList) {
@@ -446,7 +445,6 @@ void DiplomacyWindow::UpdateProposalList(ctp2_ListBox *propList, bool toPlayer)
 					propList->AddItem(item);
 
 					if(oldSelectedPlayer == i) {
-						selectedSomething = true;
 						propList->SelectItem(item);
 					}
 				}
