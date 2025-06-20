@@ -292,7 +292,7 @@ extern sint32                   g_isTileImpPadOn;
 extern sint32                   g_isCheatModeOn;
 extern CityAstar                g_city_astar;
 #ifdef _DEBUG
-extern BOOL                     g_ai_revolt;
+BOOL                            g_ai_revolt = TRUE;
 #endif
 
 #define k_PLAYER_VERSION_MAJOR	0
@@ -2819,8 +2819,6 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 
 	max_eval = (max_eval > 0) ? std::min(max_eval, cityDistQueue.size()) : cityDistQueue.size();
 
-	CityDistQueue::iterator max_iter = cityDistQueue.begin() + max_eval;
-
 	std::sort(cityDistQueue.begin(), cityDistQueue.end(), std::less<CityDist>());
 
 	for(size_t t = 0; t < max_eval; ++t)
@@ -3424,7 +3422,8 @@ void Player::AcceptTradeBid(const Unit &fromCity, sint32 resource, const Unit &t
 										   fromCity.m_id, resource, toCity.m_id,
 										   price));
 	}
-	TradeRoute route = CreateTradeRoute(fromCity,
+
+	CreateTradeRoute(fromCity,
 					 ROUTE_TYPE_RESOURCE, resource,
 					 toCity,
 					 toCity.GetOwner(),
@@ -3741,7 +3740,7 @@ void Player::BuildResearchDialog(AdvanceType advance)
 
 		strcpy(messageStr, dstring);
 
-		sprintf(tempStr, "%#.3d", (sint32)advance);
+		sprintf(tempStr, "%.3d", (sint32)advance);
 
 		MBCHAR *p = strstr(messageStr, "000>");
 		if(p) {
@@ -8132,7 +8131,6 @@ void Player::GiveArmyCommand(Army &army,
 	if(army.GetOwner() != m_owner)
 		return;
 
-	Unit aUnit = army.Access(0);
 	MapPoint apos;
 	army.GetPos(apos);
 	Unit aCity;
