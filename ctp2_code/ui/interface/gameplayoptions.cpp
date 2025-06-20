@@ -26,7 +26,7 @@
 //
 // - 7 modifications required to add a button
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - added citycapture options
 // - added show enemy health
 // - added show debug AI text
@@ -213,7 +213,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false);
 	Assert( AUI_NEWOK(s_gameplayoptionsWindow, errcode) );
-	if ( !AUI_NEWOK(s_gameplayoptionsWindow, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_gameplayoptionsWindow, errcode) ) return errcode;
 
 	s_gameplayoptionsWindow->SetStronglyModal(TRUE);
 

@@ -159,7 +159,7 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		windowBlock,
 		NULL );
 	Assert( AUI_NEWOK(s_agesScreen, errcode) );
-	if ( !AUI_NEWOK(s_agesScreen, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_agesScreen, errcode) ) return errcode;
 
 	s_back = new aui_Button(
 		&errcode,

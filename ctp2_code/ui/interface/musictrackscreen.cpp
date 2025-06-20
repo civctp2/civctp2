@@ -126,7 +126,7 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	{
 		s_musicTrackScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicTrackScreen, errcode) );
-		if ( !AUI_NEWOK(s_musicTrackScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_musicTrackScreen, errcode) ) return errcode;
 
 		s_musicTrackScreen->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
 		s_musicTrackScreen->GrabRegion()->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());

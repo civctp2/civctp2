@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 	{
 		s_spNewGameRandomCustomScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_spNewGameRandomCustomScreen, errcode) ) return errcode;
 
 		s_spNewGameRandomCustomScreen->Resize(s_spNewGameRandomCustomScreen->Width(),s_spNewGameRandomCustomScreen->Height());
 		s_spNewGameRandomCustomScreen->GrabRegion()->Resize(s_spNewGameRandomCustomScreen->Width(),s_spNewGameRandomCustomScreen->Height());

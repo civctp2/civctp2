@@ -29,8 +29,8 @@
 //   could cause problems in the new interface (Its removal could also cause
 //   problems, but I'm not sure what it did, so I don't know...)
 //   (JJB)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Added random map settings option. (5-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -213,7 +213,7 @@ AUI_ERRCODE custommapscreen_Initialize( aui_Control::ControlActionCallback *call
 	{
 		s_customMapWindow = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_customMapWindow, errcode) );
-		if ( !AUI_NEWOK(s_customMapWindow, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_customMapWindow, errcode) ) return errcode;
 
 		s_customMapWindow->Resize(s_customMapWindow->Width(),s_customMapWindow->Height());
 		s_customMapWindow->GrabRegion()->Resize(s_customMapWindow->Width(),s_customMapWindow->Height());

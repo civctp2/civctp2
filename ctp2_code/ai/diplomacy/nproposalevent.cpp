@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -1863,7 +1863,7 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	new_proposal.detail.first_arg.cityId = city.m_id;
 
 	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ))
-		GEV_HD_Continue;
+		return GEV_HD_Continue;
 
 	sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
 

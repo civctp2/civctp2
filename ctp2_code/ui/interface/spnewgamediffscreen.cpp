@@ -171,7 +171,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 	{
 		s_spNewGameDiffScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameDiffScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) return errcode;
 
 		s_spNewGameDiffScreen->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->GrabRegion()->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());

@@ -260,7 +260,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( const MBCHAR *messageText )
 	{
 		s_sci_advanceScreen = new C3Window( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_STANDARD, false);
 		Assert( AUI_NEWOK(s_sci_advanceScreen, errcode) );
-		if ( !AUI_NEWOK(s_sci_advanceScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_sci_advanceScreen, errcode) ) return errcode;
 
 		s_sci_advanceScreen->Resize(s_sci_advanceScreen->Width(),s_sci_advanceScreen->Height());
 		s_sci_advanceScreen->GrabRegion()->Resize(s_sci_advanceScreen->Width(),20);

@@ -185,7 +185,7 @@ AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallbac
 	{
 		s_spNewGameMapSizeScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameMapSizeScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameMapSizeScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_spNewGameMapSizeScreen, errcode) ) return errcode;
 
 		s_spNewGameMapSizeScreen->Resize(s_spNewGameMapSizeScreen->Width(),s_spNewGameMapSizeScreen->Height());
 		s_spNewGameMapSizeScreen->GrabRegion()->Resize(s_spNewGameMapSizeScreen->Width(),s_spNewGameMapSizeScreen->Height());

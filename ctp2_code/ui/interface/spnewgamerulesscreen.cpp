@@ -218,7 +218,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( aui_Control::ControlActionCallback 
 	s_spNewGameRulesScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 
 	Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
-	if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) return errcode;
 
 	s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 	s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());

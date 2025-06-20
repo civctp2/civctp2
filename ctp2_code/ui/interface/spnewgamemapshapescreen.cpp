@@ -24,11 +24,11 @@
 //
 // Modifications from the original Activision code:
 //
-// - Addion by Martin Gühmann: Two more world shape options,
+// - Addion by Martin GÃ¼hmann: Two more world shape options,
 //   flat world and Uranus world.
 // - Memory leak repaired.
 // - Restored compatibility.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -88,12 +88,12 @@ static c3_PopupWindow	*s_spNewGameMapShapeScreen	= NULL;
 static aui_SwitchGroup	*s_group		= NULL;
 static c3_Static	*s_ewLabel			= NULL; // Earth world
 static c3_Static	*s_dwLabel			= NULL; // Doughnut world
-//Added by Martin Gühmann
+//Added by Martin GÃ¼hmann
 static c3_Static	*s_uwLabel			= NULL; // Uranus world
 static c3_Static	*s_fwLabel			= NULL; // Flat world
 
 static MBCHAR const	checknames[WORLD_SHAPE_COUNT][50] = {
-	//Added two more shapes for more shape options by Martin Gühmann
+	//Added two more shapes for more shape options by Martin GÃ¼hmann
 	"MapShapeOne",   //Earth world (West-East wrap world)
 	"MapShapeTwo",   //Doughnut world
 	"MapShapeThree", //Flat world
@@ -216,7 +216,7 @@ AUI_ERRCODE spnewgamemapshapescreen_Initialize( aui_Control::ControlActionCallba
 	{
 		s_spNewGameMapShapeScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameMapShapeScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameMapShapeScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_spNewGameMapShapeScreen, errcode) ) return errcode;
 
 		s_spNewGameMapShapeScreen->Resize(s_spNewGameMapShapeScreen->Width(),s_spNewGameMapShapeScreen->Height());
 		s_spNewGameMapShapeScreen->GrabRegion()->Resize(s_spNewGameMapShapeScreen->Width(),s_spNewGameMapShapeScreen->Height());
@@ -300,7 +300,7 @@ void spnewgamemapshapescreen_Cleanup()
 		mycleanup(s_group);
 		mycleanup(s_ewLabel);//Earth like world: East-West wrap world
 		mycleanup(s_dwLabel);//Doughnut world
-		// Added by Martin Gühmann
+		// Added by Martin Gï¿½hmann
 		mycleanup(s_uwLabel);//Uranus like world: North-South wrap world
 		mycleanup(s_fwLabel);//Flat world
 		mycleanup(s_spNewGameMapShapeScreen);

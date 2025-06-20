@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ AUI_ERRCODE soundscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false );
 	Assert( AUI_NEWOK(s_soundWindow, errcode) );
-	if ( !AUI_NEWOK(s_soundWindow, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_soundWindow, errcode) ) return errcode;
 
 	s_soundWindow->SetStronglyModal(TRUE);
 
