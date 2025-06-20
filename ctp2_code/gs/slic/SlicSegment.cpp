@@ -652,8 +652,6 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 		return NULL;
 	}
 
-	bool atEnd = false;
-
 	while(codePtr < m_code + m_codeSize) {
 		SOP op = (SOP)*codePtr;
 		codePtr++;
@@ -689,7 +687,6 @@ uint8 *SlicSegment::FindNextLine(uint8 *start)
 				break;
 			case SOP_STOP:
 
-				atEnd = TRUE;
 				break;
 			case SOP_END:
 			case SOP_AINDX:

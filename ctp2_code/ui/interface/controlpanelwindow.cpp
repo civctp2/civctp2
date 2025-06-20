@@ -2350,7 +2350,6 @@ void ControlPanelWindow::CreateTileImpBanks()
 	ctp2_Button  *a_button;
 	const	TerrainImprovementRecord *timpRec;
 
-	const	IconRecord *irec;
 	bool	found;
 	uint32	row = 0, column = 0, theClass = 0, group_id = 0;
 
@@ -2493,8 +2492,6 @@ void ControlPanelWindow::CreateTileImpBanks()
 			else
 			{
 				a_button->SetActionFuncAndCookie(TileImpButtonCallback2, current);
-
-				irec = timpRec->GetIcon();
 
 				a_button->SetStatusText(g_theStringDB->GetNameStr( timpRec->GetStatusbar() ));
 				aui_TipWindow *tipwin = (aui_TipWindow *)a_button->GetTipWindow();

@@ -242,9 +242,9 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 	m_miniframesSizes = new size_t[m_numFrames];
 
 	Pixel32 *image,*miniimage;
-	size_t   imageSize, miniimageSize;
+	size_t   imageSize;
 	Pixel32 *shadow,*minishadow;
-	size_t   shadowSize, minishadowSize;
+	size_t   shadowSize;
 
 	for (uint16 i=0; i<m_numFrames; i++)
 	{
@@ -255,11 +255,9 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 		image		= NULL;
 		imageSize       = 0;
 		miniimage	= NULL;
-		miniimageSize   = 0;
 		shadow		= NULL;
 		shadowSize      = 0;
 		minishadow	= NULL;
-		minishadowSize  = 0;
 
 		_splitpath(imageFiles[i],NULL,NULL,NULL,ext);
 
@@ -285,41 +283,6 @@ void Sprite::Import(size_t nframes, char **imageFiles, char **shadowFiles)
 
 		if (image)
 		{
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 			spriteutils_CreateQuarterSize(image, m_width, m_height,&miniimage, TRUE);
 
 			data = spriteutils_RGB32ToEncoded(image,shadow, m_width, m_height, &dataSize);

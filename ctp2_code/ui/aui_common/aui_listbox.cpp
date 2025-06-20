@@ -827,7 +827,7 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		if ( j + 1 > m_numColumns ) m_numColumns = j + 1;
 
 		ListPos subPosition = item->ChildList()->GetHeadPosition();
-		for ( j; j; j-- )
+		for ( ; j; j-- )
 		{
 			aui_Item *subItem =
 				(aui_Item *)item->ChildList()->GetNext( subPosition );

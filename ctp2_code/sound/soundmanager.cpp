@@ -806,17 +806,23 @@ SoundManager::SetPosition(const SOUNDTYPE &type,
 {
 	PointerList<CivSound>::PointerListNode *node = NULL;
 
+#if !defined(USE_SDL)
 	sint32 volume = 0;
+#endif
 
 	switch (type)
 	{
 		case SOUNDTYPE_SFX:
 			node    = m_sfxSounds->GetHeadNode();
+#if !defined(USE_SDL)
 			volume  = m_sfxVolume;
+#endif
 			break;
 		case SOUNDTYPE_VOICE:
 			node    = m_voiceSounds->GetHeadNode();
+#if !defined(USE_SDL)
 			volume  = m_voiceVolume;
+#endif
 			break;
 		default:
 			break;

@@ -81,11 +81,8 @@ void ctp2_TextBuffer::DrawLine(sint32 lineNum, COLOR color)
 	RECT							destRect;
 	COLORREF						colorRef = g_colorSet->GetColorRef(color);
 	sint32							col;
-	sint32							top;
 
-
-	top = destRect.top = (m_topLine - lineNum + 1) * m_charHeight - m_charHeight;
-
+	destRect.top = (m_topLine - lineNum + 1) * m_charHeight - m_charHeight;
 	destRect.bottom = destRect.top + m_charHeight;
 	destRect.left = m_rect.left;
 	destRect.right = m_rect.left + m_charWidth;

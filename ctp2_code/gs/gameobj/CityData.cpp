@@ -5581,11 +5581,6 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	const WonderRecord* wrec = NULL;
 	const BuildingRecord* irec = NULL;
 //	const EndGameRecord *egrec = NULL; // Maybe usefull later
-	sint32 oldCategory;
-	if(m_build_queue.GetHead())
-		oldCategory = m_build_queue.GetHead()->m_category;
-	else
-		oldCategory = -5;
 
 	switch(category)
 	{ // see Globals.h for k_GAME_OBJ_TYPE enum
@@ -5935,8 +5930,6 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 				Cell *cell = g_theWorld->GetCell(pos);
 				if(cell->GetCanDie())
 				{
-					MapPoint tmp = pos;
-
 					cell->Kill();
 
 					g_theWorld->CutImprovements(pos);

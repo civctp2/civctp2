@@ -2656,6 +2656,7 @@ bool Goal::IsInvalidByDiplomacy() const
 				return true;
 			}
 
+			/* disabling, see https://github.com/civctp2/civctp2/pull/217#issuecomment-565860162
 			bool iscivilian = false;
 			if(
 			       m_target_army.m_id != 0
@@ -2669,7 +2670,6 @@ bool Goal::IsInvalidByDiplomacy() const
 				iscivilian = m_target_army->IsCivilian();
 			}
 			
-			/* disabling, see https://github.com/civctp2/civctp2/pull/217#issuecomment-565860162
 			if(iscivilian &&
 			   !goal_record->GetExecute()->GetUnitPretest_CanEnslaveSettler() &&
 			   goal_record->GetTargetOwnerHotEnemy() &&
@@ -3703,8 +3703,6 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			Assert(pos.IsValid());
 			return true;
 		}
-
-		MapPoint targetPos = Get_Target_Pos();
 
 		Cell*  theCell = g_theWorld->GetCell(the_transport->Get_Pos());
 		sint32 numUnitsInCity = the_transport->GetUnitsAtPos();

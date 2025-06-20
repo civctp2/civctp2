@@ -297,11 +297,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	    (g_selected_item->GetVisiblePlayer() == g_theWorld->GetOwner(pos));
 	uint32		env                     = 0x00000000;
 	Cell *      cell                    = NULL;
-	bool		isAirfield              = false;
-    bool		isListeningPost         = false;
-    bool        isRadar                 = false;
-    bool        isHealUnits             = false;
-    bool        isFort                  = false;
 	Pixel16	 *  data                    = NULL;
 	bool		hasHut                  = false;
 
@@ -316,11 +311,6 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 	{
 		env = ucell.m_unseenCell->GetEnv();
 
-		isAirfield		= ucell.m_unseenCell->IsAirfield();
-		isListeningPost	= ucell.m_unseenCell->IsListeningPost();
-		isRadar			= ucell.m_unseenCell->IsRadar();
-		isHealUnits		= ucell.m_unseenCell->IsHealUnits();
-		isFort			= ucell.m_unseenCell->IsFort();
 		hasHut			= ucell.m_unseenCell->HasHut();
 
 		PointerList<UnseenImprovementInfo> *improvements = ucell.m_unseenCell->GetImprovements();
@@ -683,15 +673,6 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 	sint32 den = height;
 	sint32 tot = num;
 
-	sint32 startI, endI;
-	if(side == NORTHWEST || side == NORTHEAST) {
-		startI = k_TILE_PIXEL_HEADROOM;
-		endI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
-	} else {
-		startI = k_TILE_PIXEL_HEADROOM + (k_TILE_GRID_HEIGHT / 2);
-		endI = k_TILE_GRID_HEIGHT;
-	}
-
 	bool west = (side == NORTHWEST) || (side == SOUTHWEST);
 	bool north = (side == NORTHWEST) || (side == NORTHEAST);
 
@@ -733,7 +714,6 @@ void TiledMap::DrawColoredHitMaskEdge(aui_Surface *surf, const MapPoint &pos, Pi
 
 		row++;
 	}
-
 }
 
 inline void DrawNorthEastBorder(aui_Surface & surf, sint32 centerX, sint32 centerY, sint32 offsetX, sint32 offsetY,
@@ -997,8 +977,6 @@ void TiledMap::DrawDitheredTileScaled(aui_Surface *surface, const MapPoint &pos,
     if (y < 0) return;
 
 	uint8 * pSurfBase;
-	sint32  surfWidth;
-	sint32  surfHeight;
 	sint32  surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
@@ -1007,15 +985,11 @@ void TiledMap::DrawDitheredTileScaled(aui_Surface *surface, const MapPoint &pos,
     {
 		surface     = m_surface;
 		pSurfBase   = m_surfBase;
-		surfWidth   = m_surfWidth;
-		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
 	}
     else if (lock.IsValid())
     {
         pSurfBase   = lock.Base();
-		surfWidth   = surface->Width();
-		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
     else
@@ -1186,8 +1160,6 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
     if (y < 0) return;
 
 	uint8 * pSurfBase;
-	sint32  surfWidth;
-	sint32  surfHeight;
 	sint32  surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
@@ -1196,15 +1168,11 @@ void TiledMap::DrawBlendedTileScaled(aui_Surface *surface, const MapPoint &pos, 
     {
 		surface     = m_surface;
 		pSurfBase   = m_surfBase;
-		surfWidth   = m_surfWidth;
-		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
 	}
     else if (lock.IsValid())
     {
         pSurfBase   = lock.Base();
-		surfWidth   = surface->Width();
-		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
     else
@@ -1448,8 +1416,6 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
 	if (!data || (x < 0) || (y < 0)) return;
 
 	uint8 *     surfBase;
-	sint32      surfWidth;
-	sint32      surfHeight;
 	sint32      surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
@@ -1458,15 +1424,11 @@ void TiledMap::DrawBlendedOverlayScaled(aui_Surface *surface,Pixel16 *data, sint
     {
 		surface     = m_surface;
 		surfBase    = m_surfBase;
-		surfWidth   = m_surfWidth;
-		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
 	}
     else if (lock.IsValid())
     {
         surfBase    = lock.Base();
-		surfWidth   = surface->Width();
-		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
     else
@@ -1988,7 +1950,6 @@ void TiledMap::DrawDitheredOverlayScaled(aui_Surface *surface, Pixel16 *data, si
 			sint32  hend        = k_TILE_GRID_WIDTH-1;
 
 			Pixel16		pixel1, pixel2, pixel3, pixel4;
-			Pixel16		pixel;
 
 			ProcessRun(&rowData1, &rowData2, &pixel1, &pixel2, -1, 0x0000, 0, 0, 0);
 
@@ -2007,14 +1968,10 @@ void TiledMap::DrawDitheredOverlayScaled(aui_Surface *surface, Pixel16 *data, si
 
 					ProcessRun(&rowData1, &rowData2, &pixel3, &pixel4, hpos, *destPixel, 0, 0, 0);
 
-					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY) {
-
-						pixel = pixel3;
-
-
+					if (pixel1 != k_MEDIUM_KEY || pixel2 != k_MEDIUM_KEY || pixel3 != k_MEDIUM_KEY || pixel4 != k_MEDIUM_KEY)
+					{
 						if ((hdestpos+vdestpos) & 0x01)
 							*destPixel = color;
-
 					}
 
 					pixel1 = pixel3;
@@ -2030,12 +1987,6 @@ void TiledMap::DrawDitheredOverlayScaled(aui_Surface *surface, Pixel16 *data, si
 		vpos2++;
 	}
 }
-
-
-
-
-
-
 
 sint32 TiledMap::DrawTileBorder(aui_Surface *surface, sint32 x, sint32 y, Pixel16 color)
 {
@@ -2258,29 +2209,26 @@ sint32 TiledMap::DrawOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 	if (!data) return 0;
 
 	uint8 * surfBase;
-	sint32	surfWidth;
 	sint32	surfHeight;
 	sint32	surfPitch;
 
-    SurfaceLock lock    = SurfaceLock(surface);
+	SurfaceLock lock    = SurfaceLock(surface);
 
 	if (!surface)
-    {
+	{
 		surfBase    = m_surfBase;
-		surfWidth   = m_surfWidth;
 		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
-    }
-    else if (lock.IsValid())
-    {
+	}
+	else if (lock.IsValid())
+	{
 		surfBase    = lock.Base();
-		surfWidth   = surface->Width();
 		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
-    else
-    {
-        return AUI_ERRCODE_SURFACELOCKFAILED;
+	else
+	{
+		return AUI_ERRCODE_SURFACELOCKFAILED;
 	}
 
 	if ((x < 0) || (y < 0)) {
@@ -2564,7 +2512,6 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 	if (!data || (x < 0) || (y < 0)) return 0;
 
 	uint8 * surfBase;
-	sint32	surfWidth;
 	sint32	surfHeight;
 	sint32	surfPitch;
 
@@ -2573,14 +2520,12 @@ sint32 TiledMap::DrawColorizedOverlay(Pixel16 *data, aui_Surface *surface, sint3
 	if (!surface)
     {
 		surfBase    = m_surfBase;
-		surfWidth   = m_surfWidth;
 		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())
     {
 		surfBase    = lock.Base();
-		surfWidth   = surface->Width();
 		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
@@ -2840,8 +2785,6 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
     if (!data || (x < 0) || (y < 0)) return;
 
 	uint8 * surfBase;
-	sint32	surfWidth;
-	sint32	surfHeight;
 	sint32	surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
@@ -2849,16 +2792,11 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 	if (!surface)
     {
         surface     = m_surface;
-		surfBase    = m_surfBase;
-		surfWidth   = m_surfWidth;
-		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())
     {
 		surfBase    = lock.Base();
-		surfWidth   = surface->Width();
-		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
     else
@@ -3256,8 +3194,6 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
     if (y < 0) return;
 
 	uint8 * surfBase;
-	sint32	surfWidth;
-	sint32	surfHeight;
 	sint32	surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
@@ -3265,16 +3201,11 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 	if (!surface)
     {
         surface     = m_surface;
-		surfBase    = m_surfBase;
-		surfWidth   = m_surfWidth;
-		surfHeight  = m_surfHeight;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())
     {
 		surfBase    = lock.Base();
-		surfWidth   = surface->Width();
-		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
     else
@@ -4319,8 +4250,6 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
     if (!data || (x < 0) || (y < 0)) return;
 
 	uint8 * surfBase;
-	sint32	surfWidth;
-	sint32	surfHeight;
 	sint32	surfPitch;
 
 	SurfaceLock lock    = SurfaceLock(surface);
@@ -4328,15 +4257,12 @@ void TiledMap::DrawColorBlendedOverlayScaled(aui_Surface *surface, Pixel16 *data
 	if (!surface)
 	{
 		surfBase    = m_surfBase;
-		surfWidth   = m_surfWidth;
-		surfHeight  = m_surfHeight;
+
 		surfPitch   = m_surfPitch;
 	}
 	else if (lock.IsValid())
 	{
 		surfBase    = lock.Base();
-		surfWidth   = surface->Width();
-		surfHeight  = surface->Height();
 		surfPitch   = surface->Pitch();
 	}
 	else

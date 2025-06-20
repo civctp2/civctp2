@@ -997,11 +997,6 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	sprintf(str,"%i",pop);
 
     sint32  popEdgeSize = std::max<sint32>(k_POP_BOX_SIZE_MINIMUM, k_POP_BOX_SIZE);
-	sint32  nudge       = 0;
-	if (pop > 9)
-		nudge = 4;
-	if (pop > 99)
-		nudge = 2;
 
 	RECT popRect = {x,
 					 y,
@@ -1418,7 +1413,7 @@ void WorkMap::HandlePop( MapPoint point )
 /// @todo Find out what this function is supposed to do, because it is now
 ///       only updating local variables.
 
-	MapPoint mp;
+/*	MapPoint mp;
 
 	m_unit.GetData()->GetPos(mp);
 
@@ -1438,7 +1433,7 @@ void WorkMap::HandlePop( MapPoint point )
 
 	Cell *cell;
 	cell = g_theWorld->GetCell(point);
-
+*/
 
 	return;
 

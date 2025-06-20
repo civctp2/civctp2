@@ -26,7 +26,7 @@
 //
 // - Update the display (rush buy buttons) when receiving gold.
 // - Speeded up goody hut advance and unit selection.
-// - Replaced old risk database by new one. (Aug 29th 2005 Martin Gühmann)
+// - Replaced old risk database by new one. (Aug 29th 2005 Martin GÃ¼hmann)
 // - GoodyHutExcluded added to unit radomizer to prevent some units from appearing
 //   by E 8-MAR-2006
 //
@@ -536,18 +536,11 @@ void GoodyHut::OpenGoody(PLAYER_INDEX const & owner, MapPoint const & point)
 			so->AddRecipient(owner) ;
 			g_slicEngine->Execute(so) ;
 			DPRINTF(k_DBG_GAMESTATE, ("You get unit %d\n", m_value));
-			Unit u = g_player[owner]->CreateUnit(m_value,
-												 point,
-												 Unit(),
-												 FALSE,
-												 CAUSE_NEW_ARMY_GOODY_HUT);
-
-
-
-
-
-
-
+			g_player[owner]->CreateUnit(m_value,
+										point,
+										Unit(),
+										FALSE,
+										CAUSE_NEW_ARMY_GOODY_HUT);
 
 			if (g_soundManager) {
 				sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();

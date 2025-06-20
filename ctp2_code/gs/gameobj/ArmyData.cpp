@@ -2861,7 +2861,7 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos)
 	sint32 numRest = m_nElements - 1;
 
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		GetActors(top_src, restOfStack);
 	}
 
@@ -3588,7 +3588,6 @@ ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit c = GetAdjacentCity(point);
-	Unit u = m_array[uindex];
 
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
@@ -4488,8 +4487,6 @@ ORDER_RESULT ArmyData::Advertise(const MapPoint &point)
 
 	if(!CanAdvertise(uindex))
 		return ORDER_RESULT_ILLEGAL;
-
-	Unit u = m_array[uindex];
 
 	// establish that building there. Used to spread corporations
 	for (sint32 i = m_nElements - 1; i>= 0; i--) {
@@ -7730,7 +7727,7 @@ void ArmyData::MoveActors(const MapPoint &pos, bool teleport)
 
 	if (numRest > 0) {
 		sint32 n = 0;
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		for(i = 0; i < m_nElements; i++) {
 			if(!m_array[i].Flag(k_UDF_TELEPORT_DEATH) && m_array[i].m_id != top_src.m_id) {
 				restOfStack[n++] = m_array[i].GetActor();
@@ -8188,7 +8185,7 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 
 	if (numRest > 0)
 	{
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		GetActors(top_src, restOfStack);
 	}
 
@@ -8715,13 +8712,6 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 		so->AddUnit(ta);
 		so->AddUnit(td);
 		g_slicEngine->Execute(so);
-	}
-
-	double defenders_bonus = 0.0;
-
-	if (c.m_id != (0))
-	{
-		defenders_bonus = c.GetDefendersBonus();
 	}
 
 //	double amr = 1.0 / GetHPModifier();

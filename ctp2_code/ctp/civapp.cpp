@@ -2335,7 +2335,7 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 {
 	uint32          start_time_ms   = Os::GetTicks();
 	uint32          curTicks        = Os::GetTicks();
-	static uint32	lastTicks       = curTicks;
+//	static uint32	lastTicks       = curTicks;
 
 	if (g_c3ui->TheMouse()) {
 		if (g_c3ui->TheMouse()->IsSuspended() && IsInBackground())
@@ -2377,7 +2377,7 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 
 			}
 
-			lastTicks = curTicks;
+//			lastTicks = curTicks;
 		}
 	}
 

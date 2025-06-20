@@ -2081,11 +2081,8 @@ Network::IndexToId(sint32 index)
 
 void Network::SetPlayerIndex(sint32 index, uint16 id)
 {
-	BOOL sendMessage = FALSE;
 	if(id == m_pid) {
 		m_playerIndex = index;
-	} else {
-		sendMessage = TRUE;
 	}
 	m_totalTimeUsed = 0;
 

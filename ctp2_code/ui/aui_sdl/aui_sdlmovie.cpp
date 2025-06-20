@@ -1722,10 +1722,8 @@ static int read_thread(void *arg)
 	int err, ret;
 	int st_index[AVMEDIA_TYPE_NB];
 	AVPacket pkt1, *pkt = &pkt1;
-	int64_t stream_start_time;
 	SDL_mutex *wait_mutex = SDL_CreateMutex();
 	int scan_all_pmts_set = 0;
-	int64_t pkt_ts;
 
 	if (!wait_mutex) {
 		av_log(NULL, AV_LOG_FATAL, "SDL_CreateMutex(): %s\n", SDL_GetError());
@@ -1857,8 +1855,6 @@ static int read_thread(void *arg)
 			is->eof = 0;
 		}
 		/* check if packet is in play range specified by user, then queue, otherwise discard */
-		stream_start_time = ic->streams[pkt->stream_index]->start_time;
-		pkt_ts = pkt->pts == AV_NOPTS_VALUE ? pkt->dts : pkt->pts;
 		if (pkt->stream_index == is->audio_stream) {
 			packet_queue_put(&is->audioq, pkt);
 		} else if (pkt->stream_index == is->video_stream

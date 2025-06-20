@@ -732,13 +732,7 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	MBCHAR *name = cityData->GetName() ;
 
 	if (x >= 0 && yoffset >= 0 && x < surface->Width() && yoffset < surface->Height())
-    {
-	    RECT rect;
-		rect.left = x;
-		rect.top = yoffset;
-		rect.right = x+textutils_GetWidth(surface,name);
-		rect.bottom = y+textutils_GetHeight(surface,name);
-
+	{
 		textutils_ColoredDropString(
 			surface,
 			name,
@@ -756,11 +750,6 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	sprintf(str,"%i",pop);
 
     sint32  popEdgeSize = std::max(k_POP_BOX_SIZE, k_POP_BOX_SIZE_MINIMUM);
-	sint32  nudge       = 0;
-	if (pop > 9)
-		nudge = 4;
-	if (pop > 99)
-		nudge = 2;
 
 	RECT popRect = {x,
 					 y,
