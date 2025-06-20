@@ -3915,7 +3915,7 @@ StringId Diplomat::GetScienceAdvice(SlicContext & sc, StringId & advance_advice)
 
 	sint32 stop_researching_adv;
 	uint32 foreignerId;
-	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId)
+	for (foreignerId = 1; foreignerId < s_theDiplomats.size(); foreignerId++)
 	{
 		if (TestEffectiveRegard(foreignerId, ALLIED_REGARD))
 			continue;
