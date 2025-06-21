@@ -228,7 +228,7 @@ void ScienceVictoryDialog::SetSwitchState(sint32 switchState)
 	{
 		aui_Region *child = m_switch->GetChildByIndex(childIndex);
 
-		if(childIndex == switchState)
+		if(childIndex == static_cast<size_t>(switchState))
 		{
 			if(child->IsHidden())
 				child->Show();

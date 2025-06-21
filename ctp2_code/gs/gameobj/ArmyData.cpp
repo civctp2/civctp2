@@ -9677,7 +9677,7 @@ void ArmyData::GetCurrentHP
 
 	for(sint32 i = 0; i < count; ++i)
 	{
-		Assert(i < MAX_UNIT_COUNT);
+		Assert(static_cast<size_t>(i) < MAX_UNIT_COUNT);
 
 		unit_type[i]    = m_array[i].GetType();
 		unit_hp  [i]    = std::max<sint32>(static_cast<sint32>(m_array[i].GetHP()), 0);

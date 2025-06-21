@@ -3,7 +3,7 @@
 #include "SlicEngine.h"
 #include "diplomattypes.h"
 
-extern std::string s_regardEventNames[REGARD_EVENT_MAX] = {
+std::string s_regardEventNames[REGARD_EVENT_MAX] = {
 	"SCENARIO",
 	"MILITARY_POWER",
 	"MILITARY_SAFETY",
@@ -14,7 +14,7 @@ extern std::string s_regardEventNames[REGARD_EVENT_MAX] = {
 	"ALL",
 };
 
-extern std::string s_proposalNames[PROPOSAL_MAX] = {
+std::string s_proposalNames[PROPOSAL_MAX] = {
 	"NONE",
 	"OFFER_GIVE_CITY",
 	"REQUEST_GIVE_CITY",
@@ -56,7 +56,7 @@ extern std::string s_proposalNames[PROPOSAL_MAX] = {
 	"TREATY_ALLIANCE",
 };
 
-extern std::string s_threatNames[THREAT_MAX] = {
+std::string s_threatNames[THREAT_MAX] = {
 	"NONE",
 
 
@@ -66,7 +66,7 @@ extern std::string s_threatNames[THREAT_MAX] = {
 	"DECLARE_WAR"
 };
 
-extern std::string s_responseNames[RESPONSE_MAX] = {
+std::string s_responseNames[RESPONSE_MAX] = {
 	"INVALID",
 	"REJECT",
 	"ACCEPT",
@@ -74,7 +74,7 @@ extern std::string s_responseNames[RESPONSE_MAX] = {
 	"THREATEN",
 };
 
-extern std::string s_motivationNames[MOTIVATION_MAX] = {
+std::string s_motivationNames[MOTIVATION_MAX] = {
 	"NONE",
 
 	"FEAR_SCENARIO",

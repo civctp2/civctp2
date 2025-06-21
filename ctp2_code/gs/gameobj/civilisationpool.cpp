@@ -26,8 +26,8 @@
 //
 // - Prevent assigning the same civilisation index twice.
 // - Recycle civilisation indices to prevent a game crash.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -54,25 +54,10 @@ extern RandomGenerator *g_rand;
 extern ProfileDB *g_theProfileDB;
 
 
-
-
-
-
-
-
-
 CivilisationPool::CivilisationPool(void) : ObjPool(k_BIT_GAME_OBJ_TYPE_CIVILISATION)
 {
 	m_usedCivs = new SimpleDynamicArray<sint32>;
 }
-
-
-
-
-
-
-
-
 
 CivilisationPool::CivilisationPool(CivArchive &archive) : ObjPool(k_BIT_GAME_OBJ_TYPE_CIVILISATION)
 {
@@ -85,23 +70,11 @@ CivilisationPool::~CivilisationPool(void)
 	delete m_usedCivs;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void CivilisationPool::Serialize(CivArchive &archive)
 {
 	CivilisationData	*newData ;
 
-	sint32	i,
-			count = 0 ;
+	sint32 count = 0;
 
 	CHECKSERIALIZE
 
@@ -111,14 +84,15 @@ void CivilisationPool::Serialize(CivArchive &archive)
 		archive.PerformMagic(CIVPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
 
-		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if(m_table[i])
 				count++;
 
 		archive<<count;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if(m_table[i])
 				((CivilisationData *)(m_table[i]))->Serialize(archive) ;
+
 		m_usedCivs->Serialize(archive);
 	}
 	else
@@ -127,7 +101,7 @@ void CivilisationPool::Serialize(CivArchive &archive)
 		ObjPool::Serialize(archive);
 
 		archive>>count;
-		for (i=0; i<count; i++)
+		for (sint32 i = 0; i < count; i++)
 		{
 			newData = new CivilisationData(archive) ;
 			Insert(newData) ;
@@ -135,19 +109,7 @@ void CivilisationPool::Serialize(CivArchive &archive)
 
 		m_usedCivs->Serialize(archive);
 	}
-
 }
-
-
-
-
-
-
-
-
-
-
-
 
 Civilisation CivilisationPool::Create(const PLAYER_INDEX owner, sint32 requiredCiv, GENDER gender)
 {

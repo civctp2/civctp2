@@ -316,8 +316,8 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "UniversalControls.ReloadSlicButton", ReloadSlic, nullptr);
 
 	ctp2_Spinner *spin;
-	sint32 i;
-	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++)
+
+	for(size_t i = 0; i < k_NUM_PLAYER_SPINNERS; i++)
 	{
 		spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		if(spin)
@@ -2161,8 +2161,7 @@ void ScenarioEditor::NotifyPlayerChange()
 
 	sint32 player = g_selected_item->GetVisiblePlayer();
 
-	sint32 i;
-	for(i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
+	for(size_t i = 0; i < k_NUM_PLAYER_SPINNERS; i++) {
 		ctp2_Spinner *spin = (ctp2_Spinner *)aui_Ldl::GetObject(s_scenarioEditorBlock, s_playerSpinners[i]);
 		Assert(spin);
 		if(spin) {

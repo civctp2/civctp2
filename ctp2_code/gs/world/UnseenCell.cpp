@@ -885,7 +885,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 	else
 	{
 		// Needed for data padding in the original implementation
-		sint8 empty = 0;
+		sint8 empty = 0; // Needed for compatibility
 
 		m_point.Serialize(archive);
 

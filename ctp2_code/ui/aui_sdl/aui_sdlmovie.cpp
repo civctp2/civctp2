@@ -705,7 +705,8 @@ static void get_sdl_pix_fmt_and_blendmode(int format, Uint32 *sdl_pix_fmt, SDL_B
 		format == AV_PIX_FMT_BGR32   ||
 		format == AV_PIX_FMT_BGR32_1)
 		*sdl_blendmode = SDL_BLENDMODE_BLEND;
-	for (i = 0; i < FF_ARRAY_ELEMS(sdl_texture_format_map) - 1; i++) {
+
+	for (i = 0; i < FF_ARRAY_ELEMS(sdl_texture_format_map) - 1; i++) { // Not clean
 		if (format == sdl_texture_format_map[i].format) {
 			*sdl_pix_fmt = sdl_texture_format_map[i].texture_fmt;
 			return;
@@ -1028,14 +1029,6 @@ static void toggle_pause(VideoState *is)
 {
 	stream_toggle_pause(is);
 	is->step = 0;
-}
-
-static void step_to_next_frame(VideoState *is)
-{
-	/* if the stream is paused unpause it, then step */
-	if (is->paused)
-		stream_toggle_pause(is);
-	is->step = 1;
 }
 
 static double compute_target_delay(double delay, VideoState *is)

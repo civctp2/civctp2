@@ -211,7 +211,7 @@ Diplomat & Diplomat::GetDiplomat(const size_t & playerId)
 {
 	Assert(playerId >= 0);
 	Assert(playerId < s_theDiplomats.size());
-	Assert(playerId == s_theDiplomats[playerId].GetPlayerId());
+	Assert(playerId == static_cast<size_t>(s_theDiplomats[playerId].GetPlayerId()));
 
 	return s_theDiplomats[playerId];
 }
@@ -219,9 +219,9 @@ Diplomat & Diplomat::GetDiplomat(const size_t & playerId)
 bool Diplomat::HasDiplomat(const size_t & playerId)
 {
 	return (playerId >= 0
-	&&      static_cast<size_t>(playerId) < s_theDiplomats.size()
+	&&      playerId < s_theDiplomats.size()
 	&&      g_player[playerId] != NULL
-	&&      playerId == s_theDiplomats[playerId].GetPlayerId());
+	&&      playerId == static_cast<size_t>(s_theDiplomats[playerId].GetPlayerId()));
 }
 
 void Diplomat::ResizeAll(const size_t & newMaxPlayers)
@@ -315,9 +315,9 @@ void Diplomat::AddDiplomacyArgToSlicContext(SlicContext & sc, const DiplomacyArg
 {
 	if (dip_arg.playerId != -1)
 		sc.AddPlayer(dip_arg.playerId);
-	else if (dip_arg.cityId != -1)
+	else if (dip_arg.cityId != 0)
 		sc.AddCity(dip_arg.cityId);
-	else if (dip_arg.armyId != -1)
+	else if (dip_arg.armyId != 0)
 		sc.AddArmy(dip_arg.armyId);
 	else if (dip_arg.agreementId != -1)
 		sc.AddArmy(dip_arg.armyId);

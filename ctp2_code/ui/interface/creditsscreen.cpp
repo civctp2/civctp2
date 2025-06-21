@@ -651,7 +651,7 @@ public:
 			delete pFoo;
 		}
 
-		for (int i = 0; i < kCreditsTextNumFonts; i++)
+		for (size_t i = 0; i < kCreditsTextNumFonts; i++)
 		{
 			if (m_fonts[i])
 				g_c3ui->UnloadBitmapFont(m_fonts[i]);
@@ -1081,7 +1081,7 @@ c3_CreditsText * c3_CreditsText::Parse(FILE *textfile)
 	char        c;
 	eTokenType  tokenType;
 	uint32      currFont    = NUMBER_INVALID;
-	int         i;
+	size_t      i;
 	bool        done        = false;
 	bool        gettingText = false;
 

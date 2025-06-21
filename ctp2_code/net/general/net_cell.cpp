@@ -300,7 +300,7 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 			}
 
 #ifdef SEND_MOVE_COST
-			uint16 actualCost;
+			uint16 actualCost; // Is needed
 			PULLSHORT(actualCost);
 #endif
 

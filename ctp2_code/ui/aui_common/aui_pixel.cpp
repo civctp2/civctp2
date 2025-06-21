@@ -107,7 +107,7 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 
 
 
-            if ((skipb != -1) &&
+            if ((skipb != static_cast<uint32>(-1)) &&
                 (fb == skipb) && (fg == skipg) && (fr == skipr)) {
 
                 sr = fr;

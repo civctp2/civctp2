@@ -692,7 +692,7 @@ void Advances::ResetCanResearch(sint32 justGot)
 			if(numOffered + histogram[i] > minChoices)
 			{
 				sint32 howMany = minChoices - numOffered;
-				uint32 *possible = new uint32[m_size];
+				sint32 *possible = new sint32[m_size];
 				sint32 p = 0;
 
 				for(j = 0; j < m_size; j++)

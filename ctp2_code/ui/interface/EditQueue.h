@@ -67,7 +67,7 @@ class EditItemInfo {
 public:
 	static EditItemInfo * Construct(const char * string);
 
-	EditItemInfo(uint32 category, sint32 type) {
+	EditItemInfo(sint32 category, sint32 type) {
 		m_category = category;
 		m_type = type;
 	}
@@ -77,7 +77,7 @@ public:
 	const char * GetName() const;
 	sint32       GetCost() const;
 
-	uint32 m_category;
+	sint32 m_category;
 	sint32 m_type;
 };
 
@@ -204,7 +204,7 @@ private:
 
 	void RushBuy(bool pay = true);
 
-	bool IsItemInQueueList(uint32 category, sint32 type);
+	bool IsItemInQueueList(sint32 category, sint32 type);
 
 	ctp2_Window       * m_window;
 	ctp2_ListBox      * m_unitList, * m_buildingList, * m_wonderList;

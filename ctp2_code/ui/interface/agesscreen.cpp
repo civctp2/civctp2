@@ -200,11 +200,11 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 
 	aui_StringTable	startagestrings(&errcode, "strings.startagestrings");
 	s_numAges = g_theAgeDB->NumRecords();
-	bool const		isLdlUsable = s_numAges == startagestrings.GetNumStrings();
+	bool const		isLdlUsable = static_cast<size_t>(s_numAges) == startagestrings.GetNumStrings();
 	for (sint32 i = 0; i < s_numAges; i++)
 	{
-//Added by Martin Gühmann so that no *.ldl needs to be edited
-//anymore when new ages are added.
+		//Added by Martin Gühmann so that no *.ldl needs to be edited
+		//anymore when new ages are added.
 		MBCHAR const *	ageId	= g_theAgeDB->GetNameStr(i);
 		MBCHAR const *	name	= g_theAgeDB->Get(i)->GetNameText();
 
@@ -217,11 +217,6 @@ AUI_ERRCODE agesscreen_Initialize( aui_Control::ControlActionCallback *callback 
 		{
 			name = ageId;
 		}
-
-
-
-
-
 
 		{
 			ns_ListItem *item = new ns_ListItem(

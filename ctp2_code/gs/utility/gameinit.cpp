@@ -411,9 +411,6 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 		settler = 0;
 	}
 
-
-
-
 	const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theProfileDB->GetDifficulty());
 	sint32 humanStart = drec->GetHumanStartLocation();
 	if(humanStart > nPlayers - 1)
@@ -439,10 +436,12 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 			}
 		}
 		else
+		{
 			if(i == 1)
 			{
 				which = humanStart;
 			}
+		}
 
 		if(player_start_list[which].x < 0)
 			break;
@@ -463,16 +462,18 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 				nUnits = 1;
 			}
 			else
+			{
 				if (g_player[i]->IsRobot())
 				{
 					nUnits = drec->GetAIStartUnits();
 				}
+			}
 
-				if (g_player_start_score[which] < sint32(drec->GetExtraSettlerChance()))
-//add additional free start units here
-				{
-					nUnits++;
-				}
+			if (g_player_start_score[which] < sint32(drec->GetExtraSettlerChance()))
+			//add additional free start units here
+			{
+				nUnits++;
+			}
 		}
 
 		if (nUnits < 1)

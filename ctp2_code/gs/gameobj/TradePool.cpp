@@ -147,44 +147,50 @@ void TradePool::Draw(aui_Surface* surface, const RECT & paintRect)
 void TradePool::Serialize(CivArchive &archive)
 {
 	TradeRouteData *tradeData;
-	sint32	i,
-			count = 0 ;
+	sint32 count = 0;
 
 #define TRADEPOOL_MAGIC 0xFEDBACFE
 
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
-	if(archive.IsStoring()) {
+	if(archive.IsStoring())
+	{
 		archive.PerformMagic(TRADEPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
 
-		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if(m_table[i])
 				count++;
 
 		archive<<count;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+		{
 			if(m_table[i])
 				((TradeRouteData*)(m_table[i]))->Serialize(archive);
 		}
+
 		m_all_routes->Serialize(archive);
-	} else {
+	}
+	else
+	{
 		archive.TestMagic(TRADEPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
 
 		archive>>count;
-		for (i=0; i<count; i++) {
+		for (sint32 i=0; i<count; i++)
+		{
 			tradeData = new TradeRouteData(archive);
 			Insert(tradeData);
 		}
+
 		m_all_routes->Serialize(archive);
 	}
 }
 
 void TradePool::RecreateActors()
 {
-	sint32 i;
-	for(i = 0; i < m_all_routes->Num(); i++) {
+	for(sint32 i = 0; i < m_all_routes->Num(); i++)
+	{
 		g_director->AddTradeRouteAnimation(m_all_routes->Access(i));
 	}
 }

@@ -1476,7 +1476,7 @@ void EditQueue::InsertInQueue(EditItemInfo * info, bool insert, bool confirmed, 
 	if (checkRemoveList)
 	{
 		sint32 type = info->m_type;
-		uint32 category = info->m_category;
+		sint32 category = info->m_category;
 		for (sint32 i = checkRemoveList->NumItems() - 1; i >= 0; i--)
 		{
 			ctp2_ListItem * item     = (ctp2_ListItem *)checkRemoveList->GetItemByIndex(i);
@@ -2838,7 +2838,7 @@ void EditQueue::SaveInformationCallBack(bool response, Cookie data)
 	g_c3ui->AddAction(new QuerySaveNameAction(""));
 }
 
-bool EditQueue::IsItemInQueueList(uint32 category, sint32 type)
+bool EditQueue::IsItemInQueueList(sint32 category, sint32 type)
 {
 	for(sint32 i = 0; i < m_queueList->NumItems(); i++)
 	{

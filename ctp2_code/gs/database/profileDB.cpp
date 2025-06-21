@@ -665,7 +665,7 @@ void ProfileDB::SetTutorialAdvice( BOOL val )
 
 void ProfileDB::SetDiplmacyLog(BOOL b)
 {
-	if (b == m_is_diplomacy_log_on)
+	if (b == static_cast<bool>(m_is_diplomacy_log_on))
 	{
 		// No action: keep current log status
 	}

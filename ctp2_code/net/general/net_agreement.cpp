@@ -51,7 +51,7 @@ void NetAgreement::UnpacketizeData(AgreementData *data,
 
 	PULLLONGTYPE(data->m_targetCity, Unit);
 
-	sint32 goldLevel;
+	sint32 goldLevel; // Is needed
 	PULLLONG(goldLevel);
 }
 

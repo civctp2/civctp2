@@ -27,7 +27,7 @@
 // - Replaced non-standard sizeof(enum) occurrences
 // - Corrected invalid index in LoadAdvances
 // - Repaired memory leaks
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -718,7 +718,7 @@ bool MapFile::LoadMap(FILE *infile)
 #define LoadMapStop()	{ delete [] buf; return false; }
 
 		r = fread(buf, 1, chunkSize, infile);
-		if (r != chunkSize)
+		if (static_cast<sint32>(r) != chunkSize)
 		{
 
 			if (feof(infile))
@@ -1228,7 +1228,7 @@ bool MapFile::LoadCivilizations(uint8 *buf, sint32 size)
 		{
 			g_player[i]->m_civilisation->ResetCiv(currNation, g_player[i]->m_civilisation->GetGender());
 			MBCHAR name[k_MAPFILE_NAME_LEN];
-			for (int j = 0; j < k_MAPFILE_NAME_LEN; j++)
+			for (size_t j = 0; j < k_MAPFILE_NAME_LEN; j++)
 			{
 				PULLBYTE(name[j]);
 			}
@@ -1246,9 +1246,9 @@ bool MapFile::LoadCivilizations(uint8 *buf, sint32 size)
 		}
 		else
 		{
-			for (int j = 0; j < k_MAPFILE_NAME_LEN + 4; j++)
+			for (size_t j = 0; j < k_MAPFILE_NAME_LEN + 4; j++)
 			{
-				uint8 foo;
+				uint8 foo; // Needed for format compatibilty
 				PULLBYTE(foo);
 			}
 		}
