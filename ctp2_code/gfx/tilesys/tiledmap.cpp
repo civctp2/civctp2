@@ -905,19 +905,17 @@ sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs
 {
 	if (!bc) return -1;
 
-	sint16		tc, tn, tne, te, tse, ts, tsw, tw, tnw;
-
 	for (uint16 i = 0; i < m_tileSet->GetNumRiverTransforms(); i++)
 	{
-		tn =	m_tileSet->GetRiverTransform(i, 2);
-		tne =	m_tileSet->GetRiverTransform(i, 5);
-		te =	m_tileSet->GetRiverTransform(i, 6);
-		tse =	m_tileSet->GetRiverTransform(i, 7);
-		tc =	m_tileSet->GetRiverTransform(i, 4);
-		ts =	m_tileSet->GetRiverTransform(i, 6);
-		tsw =	m_tileSet->GetRiverTransform(i, 3);
-		tw =	m_tileSet->GetRiverTransform(i, 0);
-		tnw =	m_tileSet->GetRiverTransform(i, 1);
+//		sint16 tn  = m_tileSet->GetRiverTransform(i, 2);
+		sint16 tne = m_tileSet->GetRiverTransform(i, 5);
+//		sint16 te  = m_tileSet->GetRiverTransform(i, 6);
+		sint16 tse = m_tileSet->GetRiverTransform(i, 7);
+		sint16 tc  = m_tileSet->GetRiverTransform(i, 4);
+//		sint16 ts  = m_tileSet->GetRiverTransform(i, 6);
+		sint16 tsw = m_tileSet->GetRiverTransform(i, 3);
+//		sint16 tw  = m_tileSet->GetRiverTransform(i, 0);
+		sint16 tnw = m_tileSet->GetRiverTransform(i, 1);
 
 		if (	((cwater && (tc == 2)) || (bc && (tc==1)))
 			&&	((bne && tne)	|| (!bne && !tne))

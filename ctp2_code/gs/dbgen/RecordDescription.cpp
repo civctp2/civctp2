@@ -71,7 +71,9 @@
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
+#if defined(_MSC_VER)
 #pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
+#endif
 
 #include <stdio.h>
 #include <string.h>

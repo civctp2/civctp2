@@ -957,11 +957,11 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 
 GreatLibrary::~GreatLibrary( void )
 {
-    delete m_window;
-    delete m_techTree;
-    delete m_string;
+	delete m_window;
+	delete m_techTree;
+	delete m_string;
 #ifdef __AUI_USE_DIRECTX__
-    delete m_techMovie;
+	delete m_techMovie;
 #endif // __AUI_USE_DIRECTX__
 }
 
@@ -998,8 +998,8 @@ void GreatLibrary::Remove(void)
 
 sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_to_history )
 {
-    if (theMode < 0)
-        return 0;
+	if (theMode < 0)
+		return 0;
 
 	m_selectedIndex = theMode;
 

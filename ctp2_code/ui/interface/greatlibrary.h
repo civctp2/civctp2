@@ -156,7 +156,7 @@ class GreatLibrary final : public KeyboardHandler
 {
 public:
 	GreatLibrary(sint32 theMode);
-	~GreatLibrary();
+	virtual ~GreatLibrary();
 
 	static void Initialize_Great_Library_Data();
 	static void Shutdown_Great_Library_Data();

@@ -203,8 +203,6 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,
 							 uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL reverse)
 {
-	uint8			*surfBase;
-
 	Pixel16		emptyRow[2];
 
 	emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
@@ -215,8 +213,6 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
-
-	surfBase = m_surfBase + (y * surfPitch) + (x * sizeof(Pixel16));
 
 	if (destRect.left < 0) return FALSE;
 	if (destRect.top < 0) return FALSE;

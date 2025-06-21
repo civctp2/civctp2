@@ -1493,7 +1493,6 @@ bool CTP2Combat::IsDone()
 
 void CTP2Combat::Retreat()
 {
-	if(!this) return;
 	m_retreating = true;
 }
 

@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Memory leaks repaired in LoadText by Martin Gühmann.
-// - Added variable and requirement retriever methods. (Sep 13th 2005 Martin Gühmann)
+// - Memory leaks repaired in LoadText by Martin GÃ¼hmann.
+// - Added variable and requirement retriever methods. (Sep 13th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ public:
 
 	static const int GREAT_LIBRARY_PANEL_BLANK;
 	GreatLibraryWindow(AUI_ERRCODE *err);
-	~GreatLibraryWindow();
+	virtual ~GreatLibraryWindow();
 
 	virtual AUI_ERRCODE Idle (void);
 
