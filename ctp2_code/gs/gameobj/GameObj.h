@@ -52,9 +52,12 @@ public:
 
 	GameObj(uint32 i);
 	virtual ~GameObj();
-	void operator delete(void *ptr);
-	void operator delete(void *ptr, size_t size);
-	void operator delete [] (void *ptr, size_t size);
+	void* operator new(size_t size);
+	void* operator new[] (size_t size);
+
+	void operator delete(void* ptr);
+	void operator delete(void* ptr, size_t size);
+	void operator delete[] (void* ptr, size_t size);
 
 	virtual void Serialize(CivArchive &archive) ;
 
