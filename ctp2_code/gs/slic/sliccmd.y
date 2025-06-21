@@ -42,8 +42,11 @@
 #include "slicif.h"
 #include <math.h>
 
+#if defined(_MSC_VER)
 /* Avoid silly warnings */
 #pragma warning( disable : 4013 )
+#endif
+
 #define lint
 
 void yyerror(const char* err);

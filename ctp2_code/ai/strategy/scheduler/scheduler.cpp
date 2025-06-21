@@ -852,16 +852,16 @@ void Scheduler::Match_Resources(const bool move_armies)
 					case GOAL_FAILED:
 						break;
 					case GOAL_FAILED_TOO_EXPENSIVE:
-						sprintf(buffer, "%s_TOO_EXPENSIVE", buffer);
+						strcat(buffer, "_TOO_EXPENSIVE");
 						break;
 					case GOAL_FAILED_UNGROUP:
-						sprintf(buffer, "%s_UNGROUP", buffer);
+						strcat(buffer, "_UNGROUP");
 						break;
 					case GOAL_FAILED_RALLY:
-						sprintf(buffer, "%s_RALLY", buffer);
+						strcat(buffer, "_RALLY");
 						break;
 					case GOAL_FAILED_NEEDS_TRANSPORT:
-						sprintf(buffer, "%s_TRANSPORT", buffer);
+						strcat(buffer, "_TRANSPORT");
 						break;
 					default:
 						break;
@@ -1443,11 +1443,11 @@ bool Scheduler::Prune_Goals()
 		sprintf(buffer, "\t// max_eval = %3.2f, max_exec = %3.2f max_proc_eval = %i, max_proc_exec = %i ", goal_element_ptr->GetMaxEval(), goal_element_ptr->GetMaxExec(), max_eval, max_exec);
 
 		if(goal_element_ptr->GetExecPerCity())
-			sprintf(buffer, "%s (ExecPerCity)", buffer);
+			strcat(buffer, " (ExecPerCity)");
 		if(goal_element_ptr->GetEvalPerCity())
-			sprintf(buffer, "%s (EvalPerCity)", buffer);
+			strcat(buffer, " (EvalPerCity)");
 		if(goal_element_ptr->GetPerCity())
-			sprintf(buffer, "%s (PerCity)", buffer);
+			strcat(buffer, " (PerCity)");
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("%s\n", buffer));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("\t//\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("\n"));

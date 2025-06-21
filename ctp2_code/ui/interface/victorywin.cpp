@@ -400,7 +400,7 @@ sint32 victorywin_Init_Controls(const MBCHAR *windowBlock )
 
 	sprintf(controlBlock, "%s.%s", windowBlock, "TabGroup");
 	ctp2_TabGroup *tabGroup = (ctp2_TabGroup *)aui_Ldl::GetObject(controlBlock);
-	sprintf(controlBlock, "%s.%s", controlBlock, "Tab2");
+	strcat(controlBlock, ".Tab2");
 	tabGroup->SelectTab((ctp2_Tab *)aui_Ldl::GetObject(controlBlock));
 
 	victorywin_AddWonders(windowBlock);

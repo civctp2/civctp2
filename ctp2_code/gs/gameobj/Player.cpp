@@ -5261,15 +5261,18 @@ void Player::GetSingularCivName(MBCHAR *s)
 
 void Player::DumpAllies(void)
 {
-	MBCHAR	s[_MAX_PATH];
+	MBCHAR s[_MAX_PATH];
+	MBCHAR d[_MAX_PATH];
 
 	DPRINTF(k_DBG_INFO, ("Dumping alliances for Player #%d", m_owner)) ;
 	s[0] = 0;
 	for(sint32 i=0; i<k_MAX_PLAYERS; i++)
 	{
 		if ((mask_alliance & (0x01<<i)) && (i != m_owner))
-			sprintf(s, "%s P%d, ", s, i) ;
-
+		{
+			sprintf(d, " P%d, ", i);
+			strcat(s, d);
+		}
 	}
 
 	if (strlen(s))
