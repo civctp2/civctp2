@@ -1265,7 +1265,7 @@ void CityData::Initialize(sint32 settlerType)
 	{
 		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 		{
-			if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner))
 				continue;
 
 			if(!CanBuildBuilding(i))
@@ -1284,7 +1284,7 @@ void CityData::Initialize(sint32 settlerType)
 		{
 			for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 			{
-				if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
+				if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner))
 					continue;
 
 				if(!CanBuildBuilding(i))
@@ -5715,7 +5715,7 @@ void CityData::DestroyCapitol()
 {
 	if(buildingutil_GetDesignatesCapitol(m_built_improvements, m_owner))
 	{
-		for(uint64 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 		{
 			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
 			   m_built_improvements & uint64((uint64)1 << i))
