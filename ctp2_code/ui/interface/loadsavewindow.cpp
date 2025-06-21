@@ -106,7 +106,7 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
     m_deleteButton              (NULL)
     // MBCHAR m_mostRecentName[_MAX_PATH]
 {
-	sprintf(m_mostRecentName, "");
+	m_mostRecentName[0] = '\0';
 
 	MBCHAR  block[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf(block, "%s.%s", ldlBlock, "Name");

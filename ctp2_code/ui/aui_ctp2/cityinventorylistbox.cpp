@@ -351,15 +351,12 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 		bn = bq->GetHead();
 	}
 
-	if (text) {
-
-
-		sprintf(str,"");
-
+	if (text)
+	{
+		str[0] = '\0';
 	}
-
-	else if (bn) {
-
+	else if (bn)
+	{
 		sint32 govType   = g_player[unit.GetOwner()]->GetGovernmentType();
 		sint32 completed = bq->GetPercentCompleted(unit.GetData()->GetCityData()->GetStoredCityProduction());
 
@@ -371,13 +368,10 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type, govType)->m_name));
 
 		}
-
 	}
-
-	else {
-
-		sprintf(str,"");
-
+	else
+	{
+		str[0] = '\0';
 	}
 
 	return 0;
