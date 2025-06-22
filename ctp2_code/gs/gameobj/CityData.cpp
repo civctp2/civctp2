@@ -807,7 +807,7 @@ void CityData::Serialize(CivArchive &archive)
 	}
 	else
 	{
-		sint8 empty = 0;
+		sint8 empty = 0; // Needed
 
 		m_owner                          = archive.GetSINT32();
 		m_slaveBits                      = archive.GetUINT32();
