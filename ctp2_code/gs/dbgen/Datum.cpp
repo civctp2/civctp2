@@ -555,7 +555,7 @@ void Datum::ExportBitPairInitialization(FILE *outfile)
 			fprintf(outfile, "    m_%s = %lf;\n", m_bitPairDatum->m_name, m_hasValue ? val.floatValue : 0);
 			break;
 		case DATUM_STRUCT:
-			fprintf(outfile, "    memset(&m_%s, 0, sizeof(m_%s));\n", m_bitPairDatum->m_name, m_bitPairDatum->m_name);
+			fprintf(outfile, "    memset((uint8*)&m_%s, 0, sizeof(m_%s));\n", m_bitPairDatum->m_name, m_bitPairDatum->m_name);
 			break;
 		case DATUM_FILE:
 		case DATUM_STRING:
