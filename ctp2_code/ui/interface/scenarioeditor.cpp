@@ -299,7 +299,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	m_tabButton[2] = (ctp2_Button *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.CityButton");
 	m_tabButton[3] = (ctp2_Button *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.CivButton");
 
-	m_tabButton[0]->SetActionFuncAndCookie(TabCallback, (Sint32)SCEN_TAB_WORLD);
+	m_tabButton[0]->SetActionFuncAndCookie(TabCallback, (sint32)SCEN_TAB_WORLD);
 	m_tabButton[1]->SetActionFuncAndCookie(TabCallback, (sint32)SCEN_TAB_UNIT);
 	m_tabButton[2]->SetActionFuncAndCookie(TabCallback, (sint32)SCEN_TAB_CITY);
 	m_tabButton[3]->SetActionFuncAndCookie(TabCallback, (sint32)SCEN_TAB_CIV);
