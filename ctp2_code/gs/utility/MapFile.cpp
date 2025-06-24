@@ -356,7 +356,7 @@ bool MapFile::SaveCities(FILE *outfile)
 
 bool MapFile::SaveUnits(FILE *outfile)
 {
-
+	// Problem with k_UNIT_TYPES_HEADER on BigEdian machines
 	if(!(SaveDBNames(outfile, k_UNIT_TYPES_HEADER, g_theUnitDB)))
 	{
 

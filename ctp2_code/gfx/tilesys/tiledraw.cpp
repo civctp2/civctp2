@@ -1707,13 +1707,20 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 				case k_TILE_COPY_RUN_ID			: {
 						short len = (tag & 0x00FF);
 
-						for (short i=0; i<len; i++) {
-						        if (fogged)
-								*destPixel++ = pixelutils_Blend16(k_FOW_COLOR, pixelutils_Blend16(*destPixel, *rowData,
+						for (short i=0; i<len; i++)
+						{
+							if (fogged)
+							{
+								*destPixel = pixelutils_Blend16(k_FOW_COLOR, pixelutils_Blend16(*destPixel, *rowData,
 										k_FOW_BLEND_VALUE << 3, blendRgbMask), k_FOW_BLEND_VALUE << 3, blendRgbMask);
+								destPixel++;
+							}
 							else
-								*destPixel++ = pixelutils_Blend16(*destPixel, *rowData, k_FOW_BLEND_VALUE << 3,
+							{
+								*destPixel = pixelutils_Blend16(*destPixel, *rowData, k_FOW_BLEND_VALUE << 3,
 										blendRgbMask);
+								destPixel++;
+							}
 
 							hpos++;
 							rowData++;
@@ -1723,7 +1730,8 @@ sint32 TiledMap::DrawDitheredOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, B
 					break;
 				case k_TILE_SHADOW_RUN_ID		: {
 						sint32 len = (sint32)(tag & 0x00FF);
-						for (sint32 i=0; i<len; i++) {
+						for (sint32 i=0; i<len; i++)
+						{
 							*destPixel = pixelutils_Shadow16(*destPixel, shadowRgbMask);
 							destPixel++;
 							hpos++;

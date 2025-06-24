@@ -1365,16 +1365,16 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph16(
 					if ( *srcBuf )
 					{
 						if ( *srcBuf == 255 )
-							*destBuf++ = pixelColor;
+							*destBuf = pixelColor;
 						else
-							*destBuf++ = aui_Pixel::Blend555(
+							*destBuf = aui_Pixel::Blend555(
 								pixelColor,
 								*destBuf,
 								*srcBuf >> 3 );
 					}
-					else
-						destBuf++;
-				} while ( ++srcBuf != stopHorizontal );
+					destBuf++;
+				}
+				while ( ++srcBuf != stopHorizontal );
 
 				stopHorizontal += srcPitch;
 
@@ -1390,16 +1390,16 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph16(
 					if ( *srcBuf )
 					{
 						if ( *srcBuf == 255 )
-							*destBuf++ = pixelColor;
+							*destBuf = pixelColor;
 						else
-							*destBuf++ = aui_Pixel::Blend565(
+							*destBuf = aui_Pixel::Blend565(
 								pixelColor,
 								*destBuf,
 								*srcBuf >> 3 );
 					}
-					else
-						destBuf++;
-				} while ( ++srcBuf != stopHorizontal );
+					destBuf++;
+				}
+				while ( ++srcBuf != stopHorizontal );
 
 				stopHorizontal += srcPitch;
 
@@ -1504,8 +1504,9 @@ void aui_BitmapFont::DumpCachedSurfaces( aui_Surface *destSurf )
 		{
 			for ( sint32 x = k_AUI_BITMAPFONT_SURFACEWIDTH; x; x-- )
 			{
-				*destBuf++ =
+				*destBuf =
 					aui_Pixel::Get16BitRGB( *srcBuf, *srcBuf, *srcBuf );
+				destBuf++;
 				srcBuf++;
 			}
 
