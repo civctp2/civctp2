@@ -21,6 +21,7 @@ extern "C" {
 #include <SDL2/SDL.h>
 #include "profileDB.h"
 #include "aui_sdlsurface.h"
+#include "c3files.h"
 
 #define MAX_QUEUE_SIZE (15 * 1024 * 1024)
 #define MIN_FRAMES 25
@@ -1993,6 +1994,11 @@ AUI_ERRCODE aui_SDLMovie::Unload()
 
 AUI_ERRCODE aui_SDLMovie::Open(uint32 flags, aui_Surface *surface, RECT *rect)
 {
+	if(!c3files_PathIsValid(m_filename))
+	{
+		return AUI_ERRCODE_MOVIEFAILED;
+	}
+
 #if defined(USE_SDL_FFMPEG)
 	if (!m_renderer || (!(flags & k_AUI_MOVIE_PLAYFLAG_ONSCREEN) && !m_background))
 	{
