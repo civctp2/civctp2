@@ -51,8 +51,8 @@ void NetAgreement::UnpacketizeData(AgreementData *data,
 
 	PULLLONGTYPE(data->m_targetCity, Unit);
 
-	sint32 goldLevel; // Is needed
-	PULLLONG(goldLevel);
+	sint32 goldLevel; // Is this needed?
+	PULLLONG(goldLevel); // There is no PUSHLONG in PacketsizeData
 }
 
 void NetAgreement::Packetize(uint8 *buf, uint16 &size)

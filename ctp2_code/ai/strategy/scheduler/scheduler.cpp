@@ -1299,9 +1299,7 @@ bool Scheduler::Prioritize_Goals()
 	}
 
 	time_t t2 = GetTickCount();
-#if defined(_DEBUG)
-	time_t t = t2 - t1;
-#endif
+
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  Raw goal priorities calculated:\n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
 	t1 = GetTickCount();
@@ -1382,10 +1380,6 @@ bool Scheduler::Prioritize_Goals()
 	t2 = GetTickCount();
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  Goals sorted:\n"));
 	AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_type, -1, ("//  elapsed time = %d ms\n\n", (t2 - t1)  ));
-
-#if defined(_DEBUG)
-	t = t2 - t1;
-#endif
 
 	return true;
 }

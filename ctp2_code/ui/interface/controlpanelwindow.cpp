@@ -2483,7 +2483,7 @@ void ControlPanelWindow::CreateTileImpBanks()
 #if defined(_DEBUG)
 				if (row < CP_TILEIMP_MAX)
 				{
-					Assert(button_id=="Could not find button");
+					Assert(!"Could not find button"); // Implicit conversion from string literal to bool, all strings literals convert to true
 				}
 				// else: No report. Used by a lot of mods for inaccessible tile improvements.
 #endif // _DEBUG
