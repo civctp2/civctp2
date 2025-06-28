@@ -151,7 +151,6 @@ typedef struct {
 #endif
 } comm_t;
 
-
 /**
 * Macros
 */
@@ -267,7 +266,6 @@ gethostaddr(
 	return TRUE;
 }
 
-
 /*-------------------------------------------------------------------------
  Allocate a comm structure and initialize it
 -------------------------------------------------------------------------*/
@@ -286,7 +284,7 @@ int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 		resp = &respDummy;
 	}
 
-   	DPRINT(("commAlloc: allocating %d bytes for comm_t\n", sizeof (comm_t)));
+	DPRINT(("commAlloc: allocating %d bytes for comm_t\n", sizeof (comm_t)));
 
 	comm = dp_MALLOC(sizeof (comm_t));
 
@@ -302,7 +300,7 @@ int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 	 */
 	DPRINT(("commAlloc: Initializing structure\n"));
 
-   	comm->magic = COMM_MAGIC;
+	comm->magic = COMM_MAGIC;
 	comm->uudp_sock = SOCKET_ERROR;
 	comm->uudp_handles = NULL;
 	comm->uudp_secondary = NULL;
@@ -321,11 +319,10 @@ int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 	*req->ptr = comm;
 	resp->status = comm_STATUS_OK;
 
-   	assert(validateComm(*req->ptr));
+	assert(validateComm(*req->ptr));
 
 	return (TRUE);
 }
-
 
 /*-------------------------------------------------------------------------
  Initialize the communications layer.
@@ -529,15 +526,15 @@ commDriverInfo(
 	/* Protect against invalid arguments */
 	(void) req;
 	(void) resp;
-    if (NULL == resp)
+	if (NULL == resp)
 		return FALSE;
 
 	/* copy the data */
-    resp->info = &uudp_commDriverInfo;
+	resp->info = &uudp_commDriverInfo;
 
 	/* Return status */
-    resp->status = comm_STATUS_OK;
-    return (TRUE);
+	resp->status = comm_STATUS_OK;
+	return (TRUE);
 }
 
 /*-------------------------------------------------------------------------
@@ -585,7 +582,7 @@ commPlayerInfo(
 			return FALSE;
 		}
 		comm->adr = *ptr;
-   	}
+	}
 	else
 	{
 		addr_t *ptr;
@@ -1053,8 +1050,8 @@ commSayBye(
 		dcstDeleteKey(comm->uudp_secondary, req->player);
 
 	/* Return status */
-    resp->status = comm_STATUS_OK;
-    return TRUE;
+	resp->status = comm_STATUS_OK;
+	return TRUE;
 }
 
 /*-------------------------------------------------------------------------
@@ -1267,6 +1264,12 @@ commSetParam(
 
 		case comm_PARAM_FILEDESC:
 			resp->param_value = comm->uudp_sock;
+			resp->status = comm_STATUS_OK;
+			break;
+
+		case comm_PARAM_DPRINTF:
+		//  This is actually Windows only
+		//	dp_dprintf_set((dp_dprintf_t) req->param_value);
 			resp->status = comm_STATUS_OK;
 			break;
 
