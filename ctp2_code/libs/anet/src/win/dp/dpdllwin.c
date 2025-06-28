@@ -243,57 +243,62 @@ DP_API dp_result_t dpGetTransportInfo(dp_transport_t *transport, comm_driverInfo
 
 DP_API dp_result_t dpEnumTransports(dp_transport_t *tranDir, dpEnumTransportCallback_t cb, void *context)
 {
-  char fnamebuf[256];
-  dp_transport_t dllname;
-  char pathns[256];
-  HANDLE            hfind;
-  comm_driverInfo_t info;
-  WIN32_FIND_DATA   finddata;
+	char fnamebuf[256];
+	dp_transport_t dllname;
+	char pathns[256];
+	HANDLE            hfind;
+	comm_driverInfo_t info;
+	WIN32_FIND_DATA   finddata;
 
-  if (tranDir && tranDir->fname[0]) {
-    char *p;
+	if (tranDir && tranDir->fname[0])
+	{
+		char *p;
 
-    strcpy(pathns, tranDir->fname);
+		strcpy(pathns, tranDir->fname);
 
-    // Strip trailing slash from pathns, even if it is the root directory.
-    p = pathns+strlen(pathns)-1;
+		// Strip trailing slash from pathns, even if it is the root directory.
+		p = pathns+strlen(pathns)-1;
 
-    if (*p == '/' || *p == '\\') *p = 0;
+		if (*p == '/' || *p == '\\') *p = 0;
 
-    sprintf(fnamebuf, "%s/*.dll", pathns);
-  } else {
-    char filename[512];
-    char StartupName[_MAX_FNAME];
-    char StartupDrv[_MAX_DRIVE];
-    char StartupDir[_MAX_DIR];
-
-	// Get Startup Drive & Directory
-    GetModuleFileName(NULL, filename, sizeof(filename));
-    _splitpath(filename, StartupDrv, StartupDir, StartupName, NULL);
-    _makepath(fnamebuf, StartupDrv, StartupDir, "*", "DLL");
-  }
-
-  DPRINT(("dpEnumTransports: %s\n", fnamebuf));
-  hfind = FindFirstFile(fnamebuf, &finddata);
-  if (hfind == INVALID_HANDLE_VALUE)  return dp_RES_EMPTY;
-
-  // scan all DLLs found in path, get their info, and call callback funciton
-  do {
-	memset(&dllname, 0, sizeof(dllname));
-    if (tranDir && tranDir->fname[0])
-		sprintf(dllname.fname, "%s/%s", pathns, finddata.cFileName);
+		sprintf(fnamebuf, "%s/*.dll", pathns);
+	}
 	else
-		sprintf(dllname.fname, "%s", finddata.cFileName);
+	{
+		char filename[512];
+		char StartupName[_MAX_FNAME];
+		char StartupDrv[_MAX_DRIVE];
+		char StartupDir[_MAX_DIR];
 
-    if (dpGetTransportInfo(&dllname, &info) != dp_RES_OK)  continue;
+		// Get Startup Drive & Directory
+		GetModuleFileName(NULL, filename, sizeof(filename));
+		_splitpath(filename, StartupDrv, StartupDir, StartupName, NULL);
+		_makepath(fnamebuf, StartupDrv, StartupDir, "*", "DLL");
+	}
 
-    cb(&dllname, &info, context);
-  }
-  while (FindNextFile(hfind, &finddata));
+	DPRINT(("dpEnumTransports: %s\n", fnamebuf));
+	hfind = FindFirstFile(fnamebuf, &finddata);
+	if (hfind == INVALID_HANDLE_VALUE)  return dp_RES_EMPTY;
 
-  FindClose(hfind);
+	// scan all DLLs found in path, get their info, and call callback funciton
+	do
+	{
+		memset(&dllname, 0, sizeof(dllname));
+		if (tranDir && tranDir->fname[0])
+			sprintf(dllname.fname, "%s/%s", pathns, finddata.cFileName);
+		else
+			sprintf(dllname.fname, "%s", finddata.cFileName);
 
-  return(dp_RES_OK);
+		if (dpGetTransportInfo(&dllname, &info) != dp_RES_OK)  continue;
+
+		cb(&dllname, &info, context);
+	}
+
+	while (FindNextFile(hfind, &finddata));
+
+	FindClose(hfind);
+
+	return(dp_RES_OK);
 }
 
 /*-------------------------------------------------------------------------
@@ -330,9 +335,9 @@ dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 
 #endif
 
-  (void) dpio;
+	(void) dpio;
 
-  return(dp_RES_OK);
+	return(dp_RES_OK);
 }
 
 /*-------------------------------------------------------------------------
@@ -341,13 +346,14 @@ dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 
 void dpUnloadDLL(dpio_t *dpio)
 {
-  #if DYNALINK
+#if DYNALINK
 	if (hcommDLL)
 		FreeLibrary(hcommDLL);
-    hcommDLL = NULL;
-  #endif
 
-  (void) dpio;
+	hcommDLL = NULL;
+#endif
+
+	(void) dpio;
 }
 
 /*-------------------------------------------------------------------------
