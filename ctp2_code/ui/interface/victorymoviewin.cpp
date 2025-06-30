@@ -205,12 +205,4 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 	victorywin_Initialize(type);
 
 	victorywin_DisplayWindow(type);
-
-	if (s_result == GAME_OVER_WON_SCIENCE) {
-		EndGame *endGame = NULL;
-
-		sint32 p = g_selected_item->GetVisiblePlayer();
-		if (g_player[p] != NULL)
-			endGame = g_player[p]->m_endGame;
-	}
 }
