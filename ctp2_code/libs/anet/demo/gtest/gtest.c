@@ -670,7 +670,7 @@ static void dp_session_t_toString(const dp_session_t *src, char *buf)
 {
 	int i;
 
-	sprintf(buf, "session: sessType %d, name %s, k%d u%x f%x, cur %d, max %d, reserved2 %s, u ",
+	sprintf(buf, "session: sessType %d, name %s, k%d u%lx f%x, cur %d, max %d, reserved2 %s, u ",
 			src->sessionType, src->sessionName,
 			src->karma, src->dwUser1, src->flags,
 			src->currentPlayers,
@@ -797,9 +797,9 @@ int dp_PASCAL listServersEx_cb(const char *hostname, long roundtrip_ms,
 	}
 
 	if (server)
-		sprintf(buf, "Server %s: %d ms, %d%% pkt loss, species %d\n %d sesstype users, %d tot users, %d max users, %d cur games, %d sesstype games", hostname, roundtrip_ms, server->loss_percent, server->sessType, server->cur_sessTypeUsers, server->cur_users, server->max_users, server->cur_games, server->cur_sessTypeGames);
+		sprintf(buf, "Server %s: %ld ms, %d%% pkt loss, species %d\n %d sesstype users, %d tot users, %d max users, %d cur games, %d sesstype games", hostname, roundtrip_ms, server->loss_percent, server->sessType, server->cur_sessTypeUsers, server->cur_users, server->max_users, server->cur_games, server->cur_sessTypeGames);
 	else
-		sprintf(buf, "Server %s: %d ms", hostname, roundtrip_ms);
+		sprintf(buf, "Server %s: %ld ms", hostname, roundtrip_ms);
 	stuffChatText("****", buf);
 	(void) context;
 	return TRUE;
@@ -833,7 +833,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout,long flags,voi
 	n_sessions++;
 	sDesc->szPassword[dp_PASSWORDLEN-1] = 0;
 
-	sprintf(buf, "(k %d; %d/%d plrs; spec %d; fl %x; U1 %x; pw '%s') name %s",
+	sprintf(buf, "(k %d; %d/%d plrs; spec %d; fl %x; U1 %lx; pw '%s') name %s",
 		sDesc->karma & 0xffff,
 		sDesc->currentPlayers,
 		sDesc->maxPlayers,
@@ -859,7 +859,7 @@ void dp_PASCAL listPlayers_cb(dpid_t id, char_t *name, long flags, void *context
 		if (err != dp_RES_OK)
 			info.dwLatency = -1;
 
-		sprintf(buf, "Found player id %d, name %s, lag %d", id, name, info.dwLatency);
+		sprintf(buf, "Found player id %d, name %s, lag %ld", id, name, info.dwLatency);
 		stuffChatText("*****", buf);
 		n_players++;
 		if (flags & dp_EPC_FLAGS_LOCAL) {
@@ -893,7 +893,7 @@ void dp_PASCAL listPlayersEx_cb(dpid_t id, char_t *name, long flags, void *conte
 		if (err != dp_RES_OK)
 			info.dwLatency = -1;
 
-		sprintf(buf, "Found player id %d, name %s, lag %d, bloblen %d ", id, name, info.dwLatency, player->bloblen);
+		sprintf(buf, "Found player id %d, name %s, lag %ld, bloblen %d ", id, name, info.dwLatency, player->bloblen);
 		for (i=0; i<player->bloblen; i++)
 			sprintf(buf + strlen(buf), " %02x", player->blob[i]);
 		stuffChatText("*****", buf);
@@ -1022,15 +1022,15 @@ void openHdl_cb(playerHdl_t hdl, int nhdls, dp_result_t err, void *context)
 	char buf[255];
 
 	if (err == dp_RES_OPENED)
-		sprintf(buf, "Opened handle h:%x to %s, total %d", hdl, context, nhdls);
+		sprintf(buf, "Opened handle h:%lx to %s, total %d", hdl, (char*)context, nhdls);
 	else if (err == dp_RES_CLOSED)
-		sprintf(buf, "Closed handle h:%x to %s, total %d", hdl, context, nhdls);
+		sprintf(buf, "Closed handle h:%lx to %s, total %d", hdl, (char*)context, nhdls);
 	else if (err == dp_RES_OK)
-		sprintf(buf, "Called openHdl on open handle h:%x to %s", hdl, context);
+		sprintf(buf, "Called openHdl on open handle h:%lx to %s", hdl, (char*)context);
 	else if (err == dp_RES_HOST_NOT_RESPONDING)
-		sprintf(buf, "Handle h:%x host %s not responding", hdl, context);
+		sprintf(buf, "Handle h:%lx host %s not responding", hdl, (char*)context);
 	else
-		sprintf(buf, "Handle h:%x host %s, status:%d\n", hdl, context, err);
+		sprintf(buf, "Handle h:%lx host %s, status:%d\n", hdl, (char*)context, err);
     /* if (myDP) countMyPlayers(myDP); */
 	stuffChatText("*****", buf);
 	if (strcmp ((char *) context, "<INCOMING>"))
@@ -1085,7 +1085,7 @@ int dp_PASCAL join_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *c
 		theError = dp_RES_OK;
 	} else {
 		if (context)
-			sprintf(buf, "Failed to join session %s.", context);
+			sprintf(buf, "Failed to join session %s.", (char*)context);
 		else
 			sprintf(buf, "Failed to join any session.");
 		stuffChatText("*****", buf);
@@ -1140,7 +1140,7 @@ void dp_PASCAL create_player_cb(dpid_t id, char_t *name, long flags, void *conte
 		thisPlayer = id;
 		theError = dp_RES_OK;
 	} else {
-		sprintf(buf, "Failed to create player %s", context);
+		sprintf(buf, "Failed to create player %s", (char*)context);
 		stuffChatText("*****", buf);
 		theError = dp_RES_BAD;
 	}
@@ -1159,7 +1159,7 @@ void dp_PASCAL ping_callback(dp_karma_t karma, long avg_ms, int loss_pct)
 
 	DPRINT(("ping_callback: karma %d, avg_ms %d, loss_pct %d\n",
 		karma, avg_ms, loss_pct));
-	sprintf(buf, "ping: average delay: %d ms, loss: %d%%", avg_ms, loss_pct);
+	sprintf(buf, "ping: average delay: %ld ms, loss: %d%%", avg_ms, loss_pct);
 	stuffChatText("*****", buf);
 	callbacksFinished = TRUE;
 }
@@ -1711,11 +1711,11 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 		}
 		if (!arg2[0]) {
-			sprintf(buf, "busy: at %d; to change, specify duration in 10ms units (int)", busyTime);
+			sprintf(buf, "busy: at %ld; to change, specify duration in 10ms units (int)", busyTime);
 			stuffChatText("*****", buf);
 		} else {
 			busyTime = atoi(arg2);
-			sprintf (buf, "Busy time set to %d", busyTime);
+			sprintf (buf, "Busy time set to %ld", busyTime);
 			stuffChatText("*****", buf);
 			burn10msec(1);	/* calibrate */
 		}
@@ -1734,7 +1734,7 @@ int processChatCommand(const char *szChatText)
 			return TRUE;
 		}
 		x = getval(argvs[0]);
-		sprintf(buf, "the value of %s is %d (%x)", argvs[0], x, x);
+		sprintf(buf, "the value of %s is %ld (%lx)", argvs[0], x, x);
 		stuffChatText("*****", buf);
 	} else if (MATCH("spam", "Send data to node at intervals")) {
 		dpid_t dest;
@@ -1767,10 +1767,10 @@ int processChatCommand(const char *szChatText)
 		}
 		if (spam_To != dp_ID_NONE) {
 			if (thisPlayer == dp_ID_NONE)
-				sprintf(buf, "Can't spam %d bytes each %d ticks to id %d; no player created!",
+				sprintf(buf, "Can't spam %d bytes each %ld ticks to id %d; no player created!",
 					spam_pktsz, spam_time, spam_To);
 			else
-				sprintf(buf, "Spamming %d bytes each %d ticks to id %d",
+				sprintf(buf, "Spamming %d bytes each %ld ticks to id %d",
 					spam_pktsz, spam_time, spam_To);
 			stuffChatText("*****", buf);
 		}
@@ -1847,7 +1847,7 @@ int processChatCommand(const char *szChatText)
 		scanReq.address = adrBuf;
 		scanReq.size = sizeof(adrBuf);
 		if (!commScanAddr(&scanReq, &scanResp, dpio->commPtr)) {
-			sprintf(buf, "Unable to scan player address, error: %d", scanResp.status);
+			sprintf(buf, "Unable to scan player address, error: %ld", scanResp.status);
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
@@ -1860,7 +1860,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "Opened handle %d", h);
+		sprintf(buf, "Opened handle %ld", h);
 		stuffChatText("*****", buf);
 	} else if (MATCH("dpio_closeHdl", "Close a comm handle")) {
 		playerHdl_t h;
@@ -1876,11 +1876,11 @@ int processChatCommand(const char *szChatText)
 		/*  Close the comm handle */
 		err = dpio_closeHdl(dpio, h);
 		if (err != dp_RES_OK) {
-			sprintf(buf, "Unable to close handle %d; err %d", h, err);
+			sprintf(buf, "Unable to close handle %ld; err %d", h, err);
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "Closed handle %d", h);
+		sprintf(buf, "Closed handle %ld", h);
 		stuffChatText("*****", buf);
 	} else if (MATCH("dpio_findTimedOutHost", "Find closed handles")) {
 		playerHdl_t h;
@@ -1891,7 +1891,7 @@ int processChatCommand(const char *szChatText)
 #endif
 				);
 		if (h != PLAYER_NONE) {
-			sprintf(buf, "Player %d has timed out.  Calling closeHdlImmed.", h);
+			sprintf(buf, "Player %ld has timed out.  Calling closeHdlImmed.", h);
 			stuffChatText("*****", buf);
 			dpio_closeHdlImmed(dpio, h);
 			return TRUE;
@@ -1956,12 +1956,12 @@ int processChatCommand(const char *szChatText)
 		for (i=0; i<pkts; i++) {
 			err = dpio_put_reliable(dpio, &dest, 1, &pktbuf, dpio_MAXLEN_RELIABLE, &errhdl);
 			if (err != dp_RES_OK) {
-				sprintf(buf, "Error %d sending to id %d", err, dest);
+				sprintf(buf, "Error %d sending to id %ld", err, dest);
 				stuffChatText("*****", buf);
 				return TRUE;
 			}
 		}
-		sprintf(buf, "Sent %d bytes %d times to handle %d reliably", dpio_MAXLEN_RELIABLE, pkts, dest);
+		sprintf(buf, "Sent %d bytes %d times to handle %ld reliably", dpio_MAXLEN_RELIABLE, pkts, dest);
 		stuffChatText("*****", buf);
 	} else if (MATCH("dpio_freeze", "Save dpio to disk [dpio.dat]")) {
 		dp_result_t err;
@@ -2261,7 +2261,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "Created dp.", arg2);
+		sprintf(buf, "Created dp: %s", arg2);
 		stuffChatText("*****", buf);
 	} else if (MATCH("dpDestroy", "unload dp")) {
 		if (myDP) {
@@ -2346,7 +2346,7 @@ int processChatCommand(const char *szChatText)
 				sprintf(buf, "Unable to create a session, error: %d", err);
 				stuffChatText("*****", buf);
 			} else {
-				sprintf(buf, "Called dpOpen to create session; maxpl %d, flags %x, dwUser1 %x", sess.maxPlayers, sess.flags, sess.dwUser1);
+				sprintf(buf, "Called dpOpen to create session; maxpl %d, flags %x, dwUser1 %lx", sess.maxPlayers, sess.flags, sess.dwUser1);
 				stuffChatText("*****", buf);
 			}
 		}
@@ -2567,7 +2567,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "(k %d; %d/%d plrs; spec %d; fl %x; U1 %x; pw '%s') name %s",
+		sprintf(buf, "(k %d; %d/%d plrs; spec %d; fl %x; U1 %lx; pw '%s') name %s",
 			s.karma & 0xffff, s.currentPlayers, s.maxPlayers,
 			s.sessionType, s.flags, s.dwUser1, s.szPassword, s.sessionName);
 		stuffChatText("****", buf);
@@ -2920,7 +2920,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "Set player %s's var %d to %s, len %d", pname, key, val, strlen(val)+1);
+		sprintf(buf, "Set player %s's var %d to %s, len %zu", pname, key, val, strlen(val)+1);
 		stuffChatText("*****", buf);
 	} else if (MATCH("fpset", "Set a variable of a player to a given file")) {
 		dpid_t id;
@@ -2954,20 +2954,20 @@ int processChatCommand(const char *szChatText)
 		len = my_filesize(fp);
 		if (len == 0 || len > 1000000) {
 			fclose(fp);
-			sprintf(buf, "Bad size %d for file %s", len, fname);
+			sprintf(buf, "Bad size %zu for file %s", len, fname);
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
 		val = (char *) malloc(len);
 		if (!val) {
 			fclose(fp);
-			sprintf(buf, "Can't allocate %d bytes", len);
+			sprintf(buf, "Can't allocate %zu bytes", len);
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
 		if (fread(val, sizeof(char), len, fp) != len) {
 			fclose(fp);
-			sprintf(buf, "Can't read %d bytes", len);
+			sprintf(buf, "Can't read %zu bytes", len);
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
@@ -2978,7 +2978,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "Set player %s's var %d to %20.20s, len %d", pname, key, val, len);
+		sprintf(buf, "Set player %s's var %d to %20.20s, len %zu", pname, key, val, len);
 		stuffChatText("*****", buf);
 	} else if (MATCH("pget", "Get value of a variable of a player")) {
 		dpid_t id;
@@ -3022,7 +3022,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "Player %s's var %d has len %d, value %20.20s", pname, key, len, val);
+		sprintf(buf, "Player %s's var %d has len %zu, value %20.20s", pname, key, len, val);
 		stuffChatText("*****", buf);
 		free(val);
 /*---------------| misc |-----------------------*/
@@ -3057,7 +3057,7 @@ int processChatCommand(const char *szChatText)
 			stuffChatText("*****", buf);
 			return TRUE;
 		}
-		sprintf(buf, "dpGetCaps(%d): Size %d, MaxBufferSize %d, MaxPlayers %d, MaxLocalPlayers %d, Flags %x, Latency %d\n",
+		sprintf(buf, "dpGetCaps(%d): Size %ld, MaxBufferSize %ld, MaxPlayers %ld, MaxLocalPlayers %ld, Flags %lx, Latency %ld\n",
 			flags,
 			caps.dwSize,
 			caps.dwMaxBufferSize,
@@ -3605,8 +3605,8 @@ int gtest( int argc, char *argv[] )
 	if (!dontCreate) {
 		printf("Creating dp...\n");
 		/* Initialize the networking layer */
-		DPRINT(("setting sessionId to %x for benefit of serial drivers.\n", commInitReq.sessionId));
-		printf("setting sessionId to %x for benefit of serial drivers.\n", commInitReq.sessionId);
+		DPRINT(("setting sessionId to %lx for benefit of serial drivers.\n", commInitReq.sessionId));
+		printf("setting sessionId to %lx for benefit of serial drivers.\n", commInitReq.sessionId);
 		err = dpCreate(&myDP, &CommDLLName, &commInitReq, NULL);
 		if (err != dp_RES_OK) {
 			printf("Unable to start communications");
@@ -3790,7 +3790,7 @@ int gtest( int argc, char *argv[] )
 #endif
 							);
 					if (h != PLAYER_NONE) {
-						sprintf(buf, "Player %d has timed out.  Calling closeHdlImmed.", h);
+						sprintf(buf, "Player %lu has timed out.  Calling closeHdlImmed.", h);
 						stuffChatText("*****", buf);
 						dpio_closeHdlImmed(dpio, h);
 					}
@@ -3864,8 +3864,8 @@ int gtest( int argc, char *argv[] )
 				break;
 
 			case dp_USER_PLAYERDATA_PACKET_ID:
-				sprintf(buf, "New value for player %d's variable %d: len %d, value %-20.20s",
-					pkt.u.pv.id, pkt.u.pv.key, pkt.u.pv.len, pkt.u.pv.data);
+				sprintf(buf, "New value for player %d's variable %d: len %zu, value %-20.20s",
+					pkt.u.pv.id, pkt.u.pv.key, pkt.u.pv.len, (char*)pkt.u.pv.data);
 				stuffChatText("*****", buf);
 				break;
 
@@ -3882,7 +3882,7 @@ int gtest( int argc, char *argv[] )
 							errs++;
 							DPRINT(("i %d, buf[i] %d\n", i, pkt.u.buf[i]));
 						}
-					sprintf(buf, "Got %d bytes from %s; %d errors.\n", size, nameBuf, errs);
+					sprintf(buf, "Got %zu bytes from %s; %d errors.\n", size, nameBuf, errs);
 					stuffChatText("*****", buf);
 				}
 				break;
@@ -3939,19 +3939,19 @@ int gtest( int argc, char *argv[] )
 				case dp_RES_OK:       /* logged in, account is activated */
 					myUID = pkt.u.acctpkt.uid;
 					assert(myUID != dp_UID_NONE);
-					sprintf(buf, "Logged as uid %d. (account activated)\n", myUID);
+					sprintf(buf, "Logged as uid %lu. (account activated)\n", myUID);
 					stuffChatText("*****", buf);
 					break;
 				case dp_RES_NOTYET:   /* logged in, account is not activated */
 					myUID = pkt.u.acctpkt.uid;
 					assert(myUID != dp_UID_NONE);
-					sprintf(buf, "Logged as uid %d. You must activate this account now.\n", myUID);
+					sprintf(buf, "Logged as uid %lu. You must activate this account now.\n", myUID);
 					stuffChatText("*****", buf);
 					break;
 				case dp_RES_CHANGED:  /* acctchange succeeded */
 					myUID = pkt.u.acctpkt.uid;
 					assert(myUID != dp_UID_NONE);
-					sprintf(buf, "Account change successful for uid %d.", myUID);
+					sprintf(buf, "Account change successful for uid %lu.", myUID);
 					stuffChatText("*****", buf);
 					break;
 				case dp_RES_ACCESS:   /* failed, name/password incorrect */
@@ -3986,7 +3986,7 @@ int gtest( int argc, char *argv[] )
 				break;
 
 			default:
-				sprintf(buf, "Odd; got unexpected packet %2.2s, size %d.\n", &pkt.type, size);
+				sprintf(buf, "Odd; got unexpected packet %2.2s, size %zu.\n", (char*)&pkt.type, size);
 				stuffChatText("*****", buf);
 			}
 		}
