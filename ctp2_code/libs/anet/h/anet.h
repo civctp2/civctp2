@@ -584,7 +584,7 @@ typedef struct {
 	dp_result_t 	reason;
 	unsigned long	reserved;	/* for future use */
 } dp_account_packet_t;
-#endif
+#endif // dp_ANET2
 
 /*************************************************************************/
 
@@ -888,7 +888,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpGetGameServerEx(
 	dp_t *dp,
-	const char *masterHostNameBuf,
+	char *masterHostNameBuf,
 	size_t masterHostNameBufLen,
 	dp_species_t *psessionType);
 

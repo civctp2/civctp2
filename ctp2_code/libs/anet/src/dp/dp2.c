@@ -4328,7 +4328,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpGetGameServerEx(
 	dp_t *dp,
-	const char *masterHostNameBuf,
+	char *masterHostNameBuf,
 	size_t masterHostNameBufLen,
 	dp_species_t *psessionType)
 {
@@ -9299,7 +9299,7 @@ DP_API dp_result_t dpReceive(
 	dp->now = new_now;
 	orig_size = *size;
 	ptimer_Enter(PTIMER_RECEIVE, "dpReceive timer");
-	for (i = 0; (i < 25) && (err == dp_RES_AGAIN); i++) {
+	for (i = 0; (i < 25) && (err == dp_RES_AGAIN); i++) { //
 		*size = orig_size;
 		ptimer_Enter(PTIMER_RECEIVE_FINE, "dp_receive timer");
 		err = dp_receive(dp, idFrom, idTo, flags, buffer, size);
@@ -9603,7 +9603,7 @@ static dp_result_t dp_receive(
 		return dp_RES_AGAIN;
 		break;
 
-	case dp_PING_RESP_PACKET_ID:
+	case dp_PING_RESP_PACKET_ID: //
 		dpSwapPingPacket(&pkt->body.pingresp);
 		DPRINT(("ping_resp: karma %d, want karma %d, pktnum %d, len %d\n",
 				pkt->body.pingresp.karma,

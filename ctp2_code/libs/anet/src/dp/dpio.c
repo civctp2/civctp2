@@ -804,7 +804,7 @@ void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls) {
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
 -----------------------------------------------------------------------*/
-DP_API int dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
+DP_API int dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen)
 {
 	commScanAddrReq_t req;
 	commScanAddrResp_t resp;
@@ -3024,7 +3024,7 @@ static dp_result_t dpio_getReliable(
 	void *callerBuf,
 	size_t *pcallerBufLen)
 {
-	int i = dpio->conns->n_used;
+	int i = dpio->conns->n_used; // Problem
 	int flush_now = ((dpio->ackNeeded || dpio->txGatherNeeded)
 					 && ((long)(*dpio->now - dpio->nextFlush) > 0)
 					 && (dpio->rxGatherBufUsed >= dpio->rxGatherBufLen));
