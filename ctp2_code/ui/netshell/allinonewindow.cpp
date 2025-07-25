@@ -2736,7 +2736,7 @@ void AllinoneWindow::UpdateConfig( void )
 
 void AllinoneWindow::UpdateGameSetup(bool b)
 {
-		if ( g_netfunc->IsHost() )
+	if ( g_netfunc->IsHost() )
 	{
 		if(b)
 			g_netfunc->UnLaunchAll();
