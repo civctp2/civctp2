@@ -108,7 +108,7 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 	memcpy(pkt.body.data, &dp->now, sizeof(clock_t));
 
 	/* Save address for purpose of matching up with hostname later */
-	memcpy(pkt.body.data+4, adrbuf, dp->dpio->myAdrLen);
+	memcpy(pkt.body.data+sizeof(clock_t), adrbuf, dp->dpio->myAdrLen);
 
 	/* always store session type last */
 	sessbuf = SwapBytes2(sessType);
@@ -132,7 +132,7 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 			+sizeof(pkt.body.karma)
 			+sizeof(pkt.body.len)
 			+sizeof(pkt.body.pktnum)
-			+sizeof(long)
+			+sizeof(clock_t)
 			+dp->dpio->myAdrLen
 			+sizeof(dp_species_t)
 			,NULL);
