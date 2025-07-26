@@ -246,10 +246,21 @@ dpini_readParameter(
 			|| (fp = fopen(IniFileName, "rt")) == NULL)	/* Open .INI file */
 		return ("");
 
-	fseek(fp, sectionOffset, SEEK_SET);	/* Skip to place to start search from */
+	// Fix a wired problem on Windows that would keep it from opening the logs
+	// However, this seems just to fix the symptom and not the cause
+	if(sectionOffset < 0)
+	{
+		if(fgets(line, sizeof(line), fp) == NULL)
+			return "";
+	}
+	else
+	{
+		fseek(fp, sectionOffset, SEEK_SET);	/* Skip to place to start search from */
+	}
 
 									/* Strip white space off parameter name */
 	paramWant = stripSurroundingWhiteSpace(paramWant);
+
 
 	for ( ; ; ) {				/* Search for the parameter in current section */
 		valueGot = "";				/* Assume we'll read nothing */
