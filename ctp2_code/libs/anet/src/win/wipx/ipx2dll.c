@@ -736,10 +736,10 @@ DLLEXPORT int cdecl commSetParam(commSetParamReq_t *req,  commSetParamResp_t *re
 	if (req  == NULL)  req  = memset(&reqDummy, 0, sizeof(*req));
 	if (resp == NULL)  resp = &respDummy;
 
-	DPRINT(("commSetParam: num %x, value %ld, value2 %ld\n", req->param_num, req->param_value, req->param_value2));
+	DPRINT(("commSetParam: num %x, value %ld, value2 %ld, pointer %p\n", req->param_num, req->param_value, req->param_value2, req->param_pointer));
 	switch (req->param_num) {
 	case comm_PARAM_DPRINTF:
-		dp_dprintf_set((dp_dprintf_t) req->param_value);
+		dp_dprintf_set((dp_dprintf_t) req->param_pointer);
 		break;
 	default:
 		resp->status = comm_STATUS_UNIMPLEMENTED;

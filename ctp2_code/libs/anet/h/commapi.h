@@ -923,10 +923,11 @@ commGroupSubtract(
 #define comm_PARAM_SYNCJOIN 0x3001  /* 0 if dynamic, 1 if sync launch */
 
 typedef struct {
-	size_t			reqLen;		/* sizeof(commSetParamReq_t) */
+	size_t			reqLen;			/* sizeof(commSetParamReq_t) */
 	long param_num;				/* parameter to set */
-	long param_value;			/* value to set it to */
+	long param_value;				/* value to set it to */
 	long param_value2;			/* second part of value, if needed */
+	void*  param_pointer;			/* If the parameter is a pointer */
 } commSetParamReq_t;
 
 /* Note: You must set respLen before calling commSetParam!

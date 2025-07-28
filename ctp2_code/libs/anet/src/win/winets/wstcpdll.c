@@ -883,7 +883,7 @@ commSetParam(
 
 	switch (req->param_num) {
 	case comm_PARAM_DPRINTF:
-		dp_dprintf_set((dp_dprintf_t) req->param_value);
+		dp_dprintf_set((dp_dprintf_t) req->param_pointer);
 		break;
 	default:
 		resp->status = TCP_RES_UNIMPLEMENTED;

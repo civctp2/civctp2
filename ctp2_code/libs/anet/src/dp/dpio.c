@@ -1686,7 +1686,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		int ok;
 
 		paramReq.param_num = comm_PARAM_DPRINTF;
-		paramReq.param_value = (long)dp_dprintf;
+		paramReq.param_pointer = dp_dprintf;
 		paramReq.reqLen = sizeof(paramReq);
 		ok = commSetParam(&paramReq, NULL, dpio->commPtr);
 		DPRINT(("dpio_create: before commInit: commSetParam (comm_PARAM_DPRINTF,) returns ok=%d\n", ok));
@@ -1719,7 +1719,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		int ok;
 
 		paramReq.param_num = comm_PARAM_DPRINTF;
-		paramReq.param_value = (long)dp_dprintf;
+		paramReq.param_pointer = dp_dprintf;
 		paramReq.reqLen = sizeof(paramReq);
 		ok = commSetParam(&paramReq, NULL, dpio->commPtr);
 		DPRINT(("dpio_create: commSetParam (comm_PARAM_DPRINTF,) returns ok=%d\n", ok));
