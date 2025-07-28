@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <unistd.h>
 #endif
 
-static int getAppParam(aeh_appParam_t *aehapp)
+static sint32 getAppParam(aeh_appParam_t *aehapp)
 {
 	dp_result_t err;
 	char cwd[aeh_MAX_PATH];
@@ -74,9 +74,9 @@ static int getAppParam(aeh_appParam_t *aehapp)
  Gets a string describing the system into systemDesc, which has length len.
  Prepends the string crshtxt.
 --------------------------------------------------------------------------*/
-static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
+static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
 {
-	static int firstCall = TRUE;
+	static sint32 firstCall = TRUE;
 	static char buf2d[aeh_BUF_MAXLEN] = "";
 	static char buf3d[aeh_BUF_MAXLEN] = "";
 
@@ -100,7 +100,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
 	if (firstCall) {
 #if 0
 		struct display_t DispEntry[MAX_DISPLAYDEV];
-		int nDisp = MAX_DISPLAYDEV, nFound, i;
+		sint32 nDisp = MAX_DISPLAYDEV, nFound, i;
 #endif
 
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -123,7 +123,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
 		return;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (buf2d[0]) {
-		int tmplen;
+		sint32 tmplen;
 		if (crshtxt) strcat(systemDesc, "@@##");
 		tmplen = strlen(systemDesc) + 1;
 		if (len > tmplen + strlen(buf2d))
@@ -136,7 +136,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (buf3d[0]) {
-		int tmplen;
+		sint32 tmplen;
 		if (buf2d[0])
 			strcat(systemDesc, ";");
 		else if (crshtxt)
@@ -154,7 +154,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
 }
 #else
 /* not implemented */
-static void getSystemInfo(char *systemDesc, char *crshtxt, unsigned int len)
+static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
 {
 	systemDesc[0] = '\0';
 	if (crshtxt) {
@@ -192,15 +192,15 @@ static dptab_table_t *getExceptionTable(dptab_t *dptab)
 
 /*** Functions for client ***/
 
-static int dp_makeExceptionRecords(unsigned char *buf, unsigned int buflen, aehlog_t *aehlog)
+static sint32 dp_makeExceptionRecords(uint8 *buf, uint32 buflen, aehlog_t *aehlog)
 {
-	int err;
-	unsigned int ninst;
+	sint32 err;
+	uint32 ninst;
 	aeh_buf_t aehbuf;
-	int aehlog_tag = aehlog_MAGIC;
-	unsigned char *ptr = buf;
+	sint32 aehlog_tag = aehlog_MAGIC;
+	uint8 *ptr = buf;
 	while (((err = aehlog_readExceptionRecord(aehlog, &aehbuf, &ninst)) == aeh_RES_OK)&&
-		  (ptr + (aehbuf.buflen + 2 * sizeof(unsigned int)) < buf + buflen)) {
+		  (ptr + (aehbuf.buflen + 2 * sizeof(uint32)) < buf + buflen)) {
 		writeSwap((void**)&ptr, &aehlog_tag, sizeof(aehlog_tag));
 		writeSwap((void**)&ptr, &ninst, sizeof(ninst));
 		writeSwap((void**)&ptr, &aehbuf.buflen, sizeof(aehbuf.buflen));
@@ -226,8 +226,8 @@ static int dp_makeExceptionRecords(unsigned char *buf, unsigned int buflen, aehl
 --------------------------------------------------------------------------*/
 dp_result_t dp_publishExceptions(dptab_t *dptab, playerHdl_t h, aehlog_t *aehlog)
 {
-	unsigned char buf[aehlog_MAXSEND];
-	unsigned int aehsize;
+	uint8 buf[aehlog_MAXSEND];
+	uint32 aehsize;
 	dp_result_t err;
 	aehlog_t aehlogtmp;
 	aehlog_t *aehlogptr;
@@ -247,10 +247,10 @@ dp_result_t dp_publishExceptions(dptab_t *dptab, playerHdl_t h, aehlog_t *aehlog
 	aehsize = dp_makeExceptionRecords(buf, sizeof(buf), aehlogptr);
 	aehlog_close(aehlogptr);
 	if (aehsize) {
-		short randnum;
+		sint16 randnum;
 		dptab_table_t *tab;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen = 0;
+		sint32 subkeylen = 0;
 		if (!(tab = getExceptionTable(dptab))) return dp_RES_BAD;
 		err = dptab_addSubscriber(dptab, tab, h);
 		if (err != dp_RES_OK) {
@@ -258,7 +258,7 @@ dp_result_t dp_publishExceptions(dptab_t *dptab, playerHdl_t h, aehlog_t *aehlog
 			return err;
 		}
 		/* select a random subkey */
-		randnum = (short) ((eclock() + rand()) & 0xffff);
+		randnum = (sint16) ((eclock() + rand()) & 0xffff);
 		subkey[subkeylen++] = dpGETSHORT_FIRSTBYTE(randnum);
 		subkey[subkeylen++] = dpGETSHORT_SECONDBYTE(randnum);
 		err = dptab_set(dptab, tab, subkey, subkeylen, buf, aehsize, 1, PLAYER_ME);
@@ -316,14 +316,14 @@ dp_result_t dp_subscribeExceptions(dptab_t *dptab, playerHdl_t h)
  Return: dp_RES_BAD if couldn't write buf to file
          otherwise, dp_RES_OK
 --------------------------------------------------------------------------*/
-dp_result_t dp_handleExceptionRecords(unsigned char *buf, unsigned int buflen, unsigned int fmaxsize, aehlog_t *aehlog)
+dp_result_t dp_handleExceptionRecords(uint8 *buf, uint32 buflen, uint32 fmaxsize, aehlog_t *aehlog)
 {
 #if 0
 	aeh_buf_t aehbuf;
-	int aehlog_tag;
+	sint32 aehlog_tag;
 #endif
-	int err;
-	unsigned char *ptr = buf;
+	sint32 err;
+	uint8 *ptr = buf;
 	if (!aehlog || !buf) return dp_RES_BAD;
 	err = aehlog_appendMultExceptionRecords(aehlog, buf, buflen, fmaxsize);
 	if (err == aeh_RES_BUG)
@@ -353,11 +353,11 @@ dp_result_t dp_handleExceptionRecords(unsigned char *buf, unsigned int buflen, u
  hexbuf must be at least 2*len + 1 characters in length.
  Returns hexbuf.
 --------------------------------------------------------------------------*/
-static char *buf2hex(const char *buf, int len, char *hexbuf)
+static char *buf2hex(const char *buf, sint32 len, char *hexbuf)
 {
-	int i;
+	sint32 i;
 	for (i = 0; i < len; i++) {
-		sprintf(hexbuf + 2*i, "%02x", (unsigned char)buf[i]);
+		sprintf(hexbuf + 2*i, "%02x", (uint8)buf[i]);
 	}
 	hexbuf[2*len] = '\0';
 	return hexbuf;
@@ -369,10 +369,10 @@ static char *buf2hex(const char *buf, int len, char *hexbuf)
  assertion failures will be lost.
  Returns aeh_RES_OK on successful launch (but app may still fail).
 --------------------------------------------------------------------------*/
-static int sendtoserver(aeh_t *aeh)
+static sint32 sendtoserver(aeh_t *aeh)
 {
-	int err;
-	int len;
+	sint32 err;
+	sint32 len;
 	aeh_buf_t aehbuf;
 	char atvilog[aeh_BUF_MAXLEN+12];
 	char buf[2];
@@ -452,9 +452,9 @@ static int sendtoserver(aeh_t *aeh)
 	return aeh_RES_OK;
 }
 #else
-static int writetofile(aeh_t *aeh)
+static sint32 writetofile(aeh_t *aeh)
 {
-	int err;
+	sint32 err;
 	aeh_buf_t aehbuf;
 	aehlog_t aehlog;
 	aeh_SetCurrent(__LINE__, __FILE__);
@@ -503,9 +503,9 @@ DP_API dp_result_t DP_APIX dpReportCrash(LPEXCEPTION_POINTERS pException)
 
 DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char *crshtxt)
 {
-	static short bPrevExc = 0;
-	static short bPrevCall = 0;
-	int err;
+	static sint16 bPrevExc = 0;
+	static sint16 bPrevCall = 0;
+	sint32 err;
 	aeh_t aeh;
 	aeh_appParam_t aehapp;
 	char systemDesc[aeh_BUF_MAXLEN];
@@ -571,7 +571,7 @@ DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char
 		if (pException->ExceptionRecord->ExceptionCode == aeh_ASSERTION_CODE &&
 			pException->ExceptionRecord->NumberParameters == 3) {
 			const DWORD *array = pException->ExceptionRecord->ExceptionInformation;
-			err = aeh_Create(&aeh, pException, &aehapp, systemDesc, (const int *)array[0], (const char*)array[1], (const char*)array[2]);
+			err = aeh_Create(&aeh, pException, &aehapp, systemDesc, (const sint32 *)array[0], (const char*)array[1], (const char*)array[2]);
 			bPrevCall--;
 		} else
 			err = aeh_Create(&aeh, pException, &aehapp, systemDesc, NULL, NULL, NULL);
@@ -604,8 +604,8 @@ DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char
 /*--------------------------------------------------------------------------
  Records assertion failure to logfile.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt) {
-	int err = aeh_RES_OK;
+DP_API dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt) {
+	sint32 err = aeh_RES_OK;
 #ifdef _WIN32
 #ifndef LOG_CRASHES_TO_NET
 	DWORD array[3];

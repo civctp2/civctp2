@@ -18,6 +18,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <CodeFragments.h>
+#include "types.h"
+
 OSErr preloadTransport(StringPtr transportName, CFragConnectionID* connID);
 void unloadTransport(CFragConnectionID connID);
 void SetBasePath(void);
@@ -25,8 +27,8 @@ OSErr SetupData(CFragConnectionID connID);
 void CleanupTransport(CFragConnectionID connID);
 OSErr TotalHack(CFragConnectionID connID);
 Boolean InitializeCommToolBox(void);
-static short	gvRef;
-static long		gparID;
+static sint16	gvRef;
+static sint32	gparID;
 static Boolean	gCTBLoaded = false;
 #define kTransportNames		11000
 #define kTransportPath		12000

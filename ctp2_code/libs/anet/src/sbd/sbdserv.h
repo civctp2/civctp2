@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 typedef struct {
 	/* private: */
 	char buf[sbd_HEADERLEN + sbd_MAXLEN];
-	int pos;		/* current index in buf */
+	sint32 pos;		/* current index in buf */
 	size_t len;		/* length of data expected or zero if not read yet */
 	clock_t t_connect;	/* time this handle connected */
 } sbdserv_conn_t;
@@ -46,20 +46,20 @@ typedef struct {
 /* Instance data for sbdserv module */
 typedef struct {
 	/* private: */
-	int sockin;		/* socket on which to listen for connections */
+	sint32 sockin;		/* socket on which to listen for connections */
 	fd_set fds;		/* fd_set of all currently listening sockets */
-	int sockmax;	/* maximum socket in fds */
+	sint32 sockmax;	/* maximum socket in fds */
 	assoctab_t *conns;	/* sbdserv_conn_t's indexed by sockfd */
 	clock_t t_last_poll;	/* eclock() of last poll */
-	int cursock;	/* next sock to check in poll */
-	int nsocks;		/* number of socks to check in poll */
+	sint32 cursock;	/* next sock to check in poll */
+	sint32 nsocks;		/* number of socks to check in poll */
 } sbdserv_t;
 
 /*------------------------------------------------------------------------
  Create an instance of the sbdserv module, listening on port for new
  connections.
 ------------------------------------------------------------------------*/
-sbdserv_t *sbdserv_create(unsigned short port);
+sbdserv_t *sbdserv_create(uint16 port);
 
 /*------------------------------------------------------------------------
  Destroy an instance of the sbdserv module.
@@ -70,7 +70,7 @@ void sbdserv_destroy(sbdserv_t *sbdserv);
  Gets the set of sockets that need reading into *rfds.
  Returns the maximum socket set.
 ------------------------------------------------------------------------*/
-int sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds);
+sint32 sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds);
 
 /*------------------------------------------------------------------------
  Initialize sbdserv for a set of calls to sbdserv_poll.
@@ -78,7 +78,7 @@ int sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds);
 
  Call once after each select and before calling sbdserv_poll.
 ------------------------------------------------------------------------*/
-void sbdserv_startRead(sbdserv_t *sbdserv, int nsocks);
+void sbdserv_startRead(sbdserv_t *sbdserv, sint32 nsocks);
 
 /*------------------------------------------------------------------------
  Handle any new connections, data, or handle state changes.
@@ -94,6 +94,6 @@ void sbdserv_startRead(sbdserv_t *sbdserv, int nsocks);
  Returns 0 if no data is available now.
  Returns -1 on error.
 ------------------------------------------------------------------------*/
-int sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf);
+sint32 sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf);
 
 #endif

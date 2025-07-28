@@ -103,7 +103,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Implemented PLOSSCTR define to dump packet loss summary at dpDestroy
  time.  Will get common.mif to obey PLOSSCTR= switch on cmdline.
  Revision 1.4  1996/09/08 23:05:31  dkegel
- Made dp_species_t unsigned, for the benefit of game server code running on
+ Made dp_species_t uint32, for the benefit of game server code running on
  unix machines.
  Revision 1.3  1996/08/26 21:31:05  dkegel
  dp->s.maxPlayers is now updated continuously.
@@ -154,9 +154,9 @@ typedef struct {
 #define dp_PING_PACKET_ID			dppt_MAKE(dp_PACKET_INITIALBYTE,'B')
 typedef struct {
 	dp_karma_t	karma;	/* identifies a group of ping packets */
-	unsigned short	pktnum;			/* starts at 0, increments for each packet */
-	unsigned char	len;
-	unsigned char	data[dpio_MAXLEN_UNRELIABLE-5];	/* 0..len-1 */
+	uint16	pktnum;			/* starts at 0, increments for each packet */
+	uint8	len;
+	uint8	data[dpio_MAXLEN_UNRELIABLE-5];	/* 0..len-1 */
 } PACK dp_ping_packet_t;
 #define dp_PING_RESP_PACKET_ID			dppt_MAKE(dp_PACKET_INITIALBYTE,'C')
 typedef dp_ping_packet_t dp_ping_resp_packet_t;
@@ -181,8 +181,8 @@ typedef dp_session_t dp_session_packet_t;
 /*  dpEnumSessions is not NULL. */
 #define dp_ENUMSESSIONS_PACKET_ID	dppt_MAKE(dp_PACKET_INITIALBYTE,'E')
 typedef struct {
-	short sessionType;	/*  Please respond if you are a session of this type */
-	unsigned char	adr[dp_MAX_ADR_LEN];	/*  Respond to this address */
+	sint16 sessionType;	/*  Please respond if you are a session of this type */
+	uint8	adr[dp_MAX_ADR_LEN];	/*  Respond to this address */
 } PACK dp_enumSessions_packet_t;
 
 /*  A request to describe players.  Sent by client either as a result */
@@ -190,10 +190,10 @@ typedef struct {
 /*  been received that has new players. */
 #define dp_ENUMPLAYERS_PACKET_ID	dppt_MAKE(dp_PACKET_INITIALBYTE,'P')
 typedef struct {
-	short sessionType;	/*  Please respond if you are a session of this type */
-	short karma;	/*  Please respond if you are still master of this session. */
+	sint16 sessionType;	/*  Please respond if you are a session of this type */
+	sint16 karma;	/*  Please respond if you are still master of this session. */
 	dpid_t start;	/*  I want players whose dpid is this or greater */
-	unsigned char	adr[dp_MAX_ADR_LEN];	/*  Respond to this address */
+	uint8	adr[dp_MAX_ADR_LEN];	/*  Respond to this address */
 } PACK dp_enumPlayers_packet_t;
 
 /*  A request to add a player to the game.  Sent by client as a result of */
@@ -229,7 +229,7 @@ typedef struct {
 	dp_species_t	sessionType;
 	dp_karma_t		karma;
 	dpid_t			highest;		/*  Maximum dpid in use in game. */
-	short			nPlayers;		/*  Number of players in packet, not game. */
+	sint16			nPlayers;		/*  Number of players in packet, not game. */
 	dp_playerId_t	players[1 /* n_players */ ];	/*  VARIABLE LENGTH ARRAY */
 } PACK dp_playerList_packet_t;
 #define sizeof_dp_playerList_packet_t(n_players) 				\
@@ -261,8 +261,8 @@ typedef struct {
 
 typedef struct
 {
-	unsigned char	adr[dp_MAX_ADR_LEN];
-	unsigned char	adr2[dp_MAX_ADR_LEN];
+	uint8	adr[dp_MAX_ADR_LEN];
+	uint8	adr2[dp_MAX_ADR_LEN];
 } PACK dp_request_open_packet_t;
 
 /*
@@ -283,8 +283,8 @@ typedef struct
 
 typedef struct
 {
-	unsigned char	chunk1;
-	unsigned char	sessionId[dp_MAX_ADR_LEN + sizeof (dp_karma_t)];
+	uint8	chunk1;
+	uint8	sessionId[dp_MAX_ADR_LEN + sizeof (dp_karma_t)];
 } PACK dp_indirect_join_packet_t;
 #endif
 
@@ -303,20 +303,20 @@ typedef struct
 
 #define dpio_DATA_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'T')
 typedef struct {
-	unsigned short	pktnum;		/* starts at 0, increments for each packet */
-	unsigned char	len;			/* (dpio_MAXLEN_RELIABLE depends on size of these fields) */
-	unsigned char	data[dpio_MAXLEN_RELIABLE];	/* 0..len-1 */
+	uint16	pktnum;		/* starts at 0, increments for each packet */
+	uint8	len;			/* (dpio_MAXLEN_RELIABLE depends on size of these fields) */
+	uint8	data[dpio_MAXLEN_RELIABLE];	/* 0..len-1 */
 } PACK dpio_data_packet_t;
 
 /* Acknowledgement of receipt of a packet. */
 #define dpio_ACK_PACKET_ID		dppt_MAKE(dp_PACKET_INITIALBYTE,'U')
 typedef struct {
-	unsigned short	pktnum;		/* starts at 0, increments for each packet */
+	uint16	pktnum;		/* starts at 0, increments for each packet */
 #ifndef OLD_ACK
 	char gotAllUpTo_offset;		/* 0 if all earlier packets received */
 #endif
 } PACK dpio_ack_packet_t;
-#define sizeof_dpio_ack_packet_t (sizeof(unsigned short)+sizeof(char))
+#define sizeof_dpio_ack_packet_t (sizeof(uint16)+sizeof(char))
 
 /* A data packet wrapped the way dp likes it. */
 typedef struct {
@@ -349,12 +349,12 @@ typedef struct {
 	dp_karma_t	karma;				/* used to verify group identity */
 	char		name[dp_PNAMELEN];	/* name of group */
 	dp_karma_t	sessionKarma;		/* group only valid within this session */
-	short		n;					/* number of members in group */
+	sint16		n;					/* number of members in group */
 	dpid_t		members[dp_MAXREALPLAYERS];	/* dpid's of members */
 } PACK dp_group_t;
 #define sizeof_dp_group_t(n_members) 				\
 	(sizeof(dpid_t)+sizeof(dp_karma_t)+sizeof(char)*dp_PNAMELEN \
-	+sizeof(dp_karma_t) + sizeof(short) + sizeof(dpid_t)*n_members)
+	+sizeof(dp_karma_t) + sizeof(sint16) + sizeof(dpid_t)*n_members)
 
 /* dp_groupId_t in anet.h is an abbreviated version of above.  */
 
@@ -386,10 +386,10 @@ typedef struct {
  *
  */
 typedef struct dp_host_s {
-	unsigned char	iadr[dp_MAX_ADR_LEN];	/* primary interface/external address */
+	uint8	iadr[dp_MAX_ADR_LEN];	/* primary interface/external address */
 	dp_karma_t	joinKarma;				/* Changes each time host joins a session */
 	dpid_t		firstId;				/* Host can use dpid's firstId..firstId+dp_PLAYERS_PER_HOST-1 */
-	unsigned char	iadr2[dp_MAX_ADR_LEN];	/* secondary interface/internal address, NOT present in old clients */
+	uint8	iadr2[dp_MAX_ADR_LEN];	/* secondary interface/internal address, NOT present in old clients */
 } PACK dp_host_t;
 
 /*
@@ -420,22 +420,22 @@ typedef struct dp_host_s {
 /* Sizes of various versions of this packet */
 #define dp_V1_JOIN_PACKET_LEN		2 * sizeof(dp_karma_t) + dp_MAX_ADR_LEN
 #define dp_V2_JOIN_PACKET_LEN		2 * sizeof(dp_karma_t) + dp_MAX_ADR_LEN + \
- 									sizeof (dp_species_t) + 2 * sizeof(short)
+ 									sizeof (dp_species_t) + 2 * sizeof(sint16)
 #define dp_V3_JOIN_PACKET_LEN		sizeof(dp_join_packet_t)
 
 typedef struct {
 	/* V1: Original Fields */
 	dp_karma_t		joinKarma;
 	dp_karma_t		sessionKarma;
-	unsigned char	iadr[dp_MAX_ADR_LEN];
+	uint8	iadr[dp_MAX_ADR_LEN];
 
 	/* V2: Following fields added to support letting server pick session. */
 	dp_species_t	sessionType;
-	short			flags;
-	short			mask;
+	sint16			flags;
+	sint16			mask;
 
 	/* V3: Following fields added to support renumbering firewalls. */
-	unsigned char	iadr2[dp_MAX_ADR_LEN]; /* NOT present in old clients */
+	uint8	iadr2[dp_MAX_ADR_LEN]; /* NOT present in old clients */
 } PACK dp_join_packet_t;
 
 /* Request to leave a particular session
@@ -450,11 +450,11 @@ typedef dp_join_packet_t dp_leave_packet_t;
 #define dp_SELECTED_SESSION_PACKET_ID	dppt_MAKE(dp_PACKET_INITIALBYTE,'s')
 typedef struct{
 	dp_session_t sess;
-	unsigned char keylen;
+	uint8 keylen;
 	char key[1];			/* key; dummy size. */
 } PACK dp_select_sess_packet_t;
 #define sizeof_dp_select_sess_packet_t(keylen) 				\
-	(sizeof(dp_session_t)+sizeof(unsigned char)+keylen)
+	(sizeof(dp_session_t)+sizeof(uint8)+keylen)
 
 /* Our vote for who is to become master.  Packet defined in dp2.c.
  */

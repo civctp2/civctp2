@@ -166,7 +166,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -210,10 +210,10 @@ MSVC's warning level is set to 4.
 #ifdef DPRINTBUFS
 static void dprint_buf(char *buf, size_t len)
 {
-	unsigned int i;
+	uint32 i;
 	if (len > 50) len = 50;
 	for (i=0; i<len; i++) {
-		DPRINT(("%02x ", ((unsigned char *)buf)[i]));
+		DPRINT(("%02x ", ((uint8 *)buf)[i]));
 	}
 	DPRINT(("\n"));
 }
@@ -224,7 +224,7 @@ static void dprint_buf(char *buf, size_t len)
 
 /* Forward declarations */
 static dp_result_t dptab_get_bykey2(
-	dptab_table_t *table, const char *subkey, int subkeylen, void **pbuf, size_t *plen, dptab_varinfo_t *ptag);
+	dptab_table_t *table, const char *subkey, sint32 subkeylen, void **pbuf, size_t *plen, dptab_varinfo_t *ptag);
 
 /**
 * Debug-only validity checking and logging
@@ -246,7 +246,7 @@ Internal-only: is an assoctab of xfers valid?
 -------------------------------------------------------------------------*/
 void dptab_assertXfers(assoctab_t *at)
 {
-	int i;
+	sint32 i;
 	for (i=0; i<at->n_used; i++) {
 		dptab_xfer_t *xfer;
 		assoctab_item_t *pe;
@@ -262,7 +262,7 @@ Is a dptab valid?
 -------------------------------------------------------------------------*/
 void dptab_assertPeerXfers(dptab_t* dt)
 {
-	int i;
+	sint32 i;
 	for(i = 0; i < dt->peers->n_used; i++) {
 		assoctab_item_t *pe;
 		pe = assoctab_getkey(dt->peers, i);
@@ -284,7 +284,7 @@ Special debug-only logging
 #if 0 && (defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)) /* Special-debug only */
 void dumpTable(dptab_table_t *table)
 {
-	int i;
+	sint32 i;
 	DPRINT(("dumpTable: key %s: %d elements\n",
 			key2a(table->key, table->keylen), table->vars->n_used));
 	for (i=0; i<table->vars->n_used; i++) {
@@ -292,7 +292,7 @@ void dumpTable(dptab_table_t *table)
 		size_t len;
 		dptab_varinfo_t tag;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dp_result_t err;
 
 		err = dptab_get_byindex(table, i, &buf, &len, subkey, &subkeylen);
@@ -308,7 +308,7 @@ void dumpTable(dptab_table_t *table)
 
 void dumpXfers(assoctab_t *xfers, char *lab)
 {
-	int i;
+	sint32 i;
 	for (i=0; i<xfers->n_used; i++) {
 		dptab_xfer_t *xfer;
 		assoctab_item_t *pe;
@@ -328,7 +328,7 @@ void dumpXfers(assoctab_t *xfers, char *lab)
 
 void dumpAllXfers(dptab_t* dt, char* lab)
 {
-	int i;
+	sint32 i;
 	for(i = 0; i < dt->peers->n_used; i++) {
 		assoctab_item_t *pe;
 		pe = assoctab_getkey(dt->peers, i);
@@ -348,7 +348,7 @@ void dumpAllXfers(dptab_t* dt, char* lab)
 static void dumpSubscriptionsFromPeer(dptab_peer_t *peer, char *lab)
 {
 	hkeytab_t *pubs = peer->pubs;	/* dptab_table_t * pubs[remote key];  */
-	int i;
+	sint32 i;
 	for (i=0; i<pubs->n_used; i++) {
 		dptab_table_t **sub;
 		hkeytab_item_t *pe;
@@ -370,7 +370,7 @@ static void dumpSubscriptionsFromPeer(dptab_peer_t *peer, char *lab)
 static void dumpPeersWhoSubscribeToTable(dptab_table_t *tab, char *lab)
 {
 	assoctab_t *subs = tab->subscribers;	/* void subs[playerHdl_t];  */
-	int i;
+	sint32 i;
 	DPRINT(("%s: table %s is sent to ", lab, key2a(tab->key, tab->keylen)));
 	for (i=0; i<subs->n_used; i++) {
 		assoctab_item_t *pe;
@@ -441,7 +441,7 @@ DP_API dptab_t *dptab_create(struct dpio_s *dpio)
 --------------------------------------------------------------------------*/
 void dptab_destroy(dptab_t *dptab)
 {
-	int i;
+	sint32 i;
 	if (!dptab) return;
 
 	dptab_assertValid(dptab);
@@ -482,7 +482,7 @@ void dptab_destroy(dptab_t *dptab)
 DP_API dp_result_t dptab_deletePeer(dptab_t *dptab, playerHdl_t dest)
 {
 	dptab_peer_t *peer;
-	int i;
+	sint32 i;
 
 	dptab_assertValid(dptab);
 
@@ -591,7 +591,7 @@ dptab_createTable(
 	dptab_t *dptab,			/* this */
 	dptab_table_t **ptable,	/* (output) new table */
 	char *key,				/* (input) key under which table is stored */
-	int keylen,				/* (input) size of key in bytes */
+	sint32 keylen,				/* (input) size of key in bytes */
 	size_t elsize,			/* (input) size of table's elements, or 0 for variable size elements */
 	dptab_pack_fn pack,		/* (unused) must be NULL */
 	dptab_pack_fn unpack,	/* (unused) must be NULL */
@@ -716,7 +716,7 @@ DP_API dp_result_t dptab_setTableCallback(
 	dptab_status_cb cb,			/* (input) new callback; must be non-NULL */
 	void *context)				/* (input) new context */
 {
-	int i;
+	sint32 i;
 
 	precondition(tab != NULL);
 	precondition(cb != NULL);
@@ -768,7 +768,7 @@ DP_API dp_result_t dptab_clearTableCallback(
 	dptab_table_t *tab,			/* (modified) table to set callback of */
 	dptab_status_cb cb)			/* (input) callback to remove; must be non-NULL */
 {
-	int i;
+	sint32 i;
 
 	precondition(tab != NULL);
 	precondition(cb != NULL);
@@ -804,7 +804,7 @@ DP_API void* dptab_getTableContext(
 	dptab_table_t *tab,			/* (input) table to examine */
 	dptab_status_cb cb)			/* (input) return context of this callback */
 {
-	int i;
+	sint32 i;
 
 	dptab_assertValidTable(tab);
 
@@ -828,11 +828,11 @@ DP_API void* dptab_getTableContext(
 /*--------------------------------------------------------------------------
  Delete a particular table.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, int keylen)
+DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, sint32 keylen)
 {
 	dptab_table_t **htable;
 	dptab_table_t *table;
-	int i;
+	sint32 i;
 
 	precondition(dptab != NULL);
 	dptab_assertValid(dptab);
@@ -860,7 +860,7 @@ DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, int keylen)
 
 	/* If the table elements are allocated individually, delete them. */
 	if (!table->elsize) {
-		int i;
+		sint32 i;
 		for (i=table->vars->n_used-1; i>=0; i--) {
 			hkeytab_item_t *pe = hkeytab_getkey(table->vars, i);
 			dptab_var_t *var;
@@ -880,7 +880,7 @@ DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, int keylen)
 
 	/* Remove publishers of and any transfers that reference this table */
 	for(i = 0; i < dptab->peers->n_used; i++) {
-		int j;
+		sint32 j;
 		dptab_peer_t* peer;
 		assoctab_item_t* pPI = assoctab_getkey(dptab->peers, i);
 		condition(pPI != NULL, "corrupted peers table");
@@ -916,7 +916,7 @@ DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, int keylen)
  Get a pointer to the table with the given key.
  Pointer remains valid even if other tables are created or deleted.
 --------------------------------------------------------------------------*/
-DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, int keylen)
+DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, sint32 keylen)
 {
 	dptab_table_t **htable;
 
@@ -957,7 +957,7 @@ DP_API dp_result_t
 dptab_addSubscriber(
 	dptab_t *dptab, dptab_table_t *tab, playerHdl_t dest)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	dptab_assertValid(dptab);
@@ -976,7 +976,7 @@ dptab_addSubscriber(
 		void *buf;
 		size_t len;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dptab_varinfo_t tag;
 
 		err = dptab_get_byindex(tab, i, &buf, &len, subkey, &subkeylen);
@@ -989,7 +989,7 @@ dptab_addSubscriber(
 		/*DPRINT(("dptab_addSubscriber: tag@%p, subkey %s, hops %d\n",
 				((char *)buf)+len, key2a(subkey, subkeylen), tag.hops));*/
 		if (tag.hops > 0) {
-			int hops;
+			sint32 hops;
 			hops = tag.hops;
 			if (tag.src != PLAYER_ME)
 				hops--;
@@ -1101,7 +1101,7 @@ dp_result_t dptab_handleUnsubscriptionRequest(dptab_t *dptab, playerHdl_t h, dpt
  Eventually, we should have a callback here indicating whether request
  was rejected.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, int keylen, playerHdl_t h, void *cb, void *context)
+DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, sint32 keylen, playerHdl_t h, void *cb, void *context)
 {
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	struct {
@@ -1122,8 +1122,8 @@ DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, int keyl
 
 	DPRINT(("dptab_requestSubscription(table %s, h:%x)\n", key2a(key, keylen), h));
 	pkt->tag = dptab_SUBSCRIBE_PACKET_ID;
-	/* No check for keylen in valid range (pkt->body.keylen is unsigned char) */
-	pkt->body.keylen = (unsigned char) keylen;
+	/* No check for keylen in valid range (pkt->body.keylen is uint8) */
+	pkt->body.keylen = (uint8) keylen;
 	memcpy(pkt->body.key, key, keylen);
 
 	dptab_assertValid(dptab);
@@ -1139,7 +1139,7 @@ DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, int keyl
  table to stop sending it to us.  Also delete them as a publisher, so
  future packets from them will be ignored.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int keylen, playerHdl_t h)
+DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, sint32 keylen, playerHdl_t h)
 {
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	struct {
@@ -1157,8 +1157,8 @@ DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int ke
 
 	DPRINT(("dptab_requestUnsubscription(table %s, h:%x)\n", key2a(key, keylen), h));
 	pkt->tag = dptab_UNSUBSCRIBE_PACKET_ID;
-	/* No check for keylen in valid range (pkt->body.keylen is unsigned char) */
-	pkt->body.keylen = (unsigned char) keylen;
+	/* No check for keylen in valid range (pkt->body.keylen is uint8) */
+	pkt->body.keylen = (uint8) keylen;
 	memcpy(pkt->body.key, key, keylen);
 
 	dptab_deletePublisher(dptab, key, keylen, h);
@@ -1183,7 +1183,7 @@ DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int ke
 dp_result_t dptab_shutdownMatchingSubscription(dptab_t *dptab, char key, playerHdl_t h, dptab_table_t **ptable)
 {
 	dptab_peer_t *peer;
-	int j;
+	sint32 j;
 
 	*ptable = NULL;
 	if (h == PLAYER_NONE) {
@@ -1249,7 +1249,7 @@ dp_result_t dptab_shutdownMatchingSubscription(dptab_t *dptab, char key, playerH
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_addPublisher(
-	dptab_t *dptab, dptab_table_t *table, char *key, int keylen, playerHdl_t src)
+	dptab_t *dptab, dptab_table_t *table, char *key, sint32 keylen, playerHdl_t src)
 {
 	dptab_table_t **pt;
 	dptab_peer_t *peer;
@@ -1291,7 +1291,7 @@ dptab_addPublisher(
  to delete that publisher, delete the table[s] devoted to him.)
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
-dptab_deletePublisher(dptab_t *dptab, char *key, int keylen, playerHdl_t src)
+dptab_deletePublisher(dptab_t *dptab, char *key, sint32 keylen, playerHdl_t src)
 {
 	dptab_peer_t *peer;
 
@@ -1327,7 +1327,7 @@ dptab_changeSrc(
 {
 	void *varbuf;
 	size_t varlen;
-	int i;
+	sint32 i;
 
 	DPRINT(("dptab_changeSrc(h:%x h:%x):\n", oldSrc, newSrc));
 
@@ -1388,7 +1388,7 @@ DP_API dp_result_t dptab_changePublisher(dptab_t *dptab, playerHdl_t oldSrc, pla
 {
 	dptab_peer_t *oldPeer;
 	dptab_peer_t *newPeer;
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	dptab_assertValid(dptab);
@@ -1432,7 +1432,7 @@ DP_API dp_result_t dptab_changePublisher(dptab_t *dptab, playerHdl_t oldSrc, pla
 --------------------------------------------------------------------------*/
 static dptab_var_t *
 dptab_varCreate(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen, size_t len)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen, size_t len)
 {
 	dptab_var_t *var;
 
@@ -1466,9 +1466,9 @@ dptab_varCreate(
  Given a table and a subkey, delete the (variable-sized) variable.
  Returns zero on success.
 --------------------------------------------------------------------------*/
-static int
+static sint32
 dptab_varDelete(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen)
 {
 	dptab_var_t *var;
 
@@ -1499,15 +1499,15 @@ dptab_varDelete(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_set(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen,
-	void *buf, size_t len, int hops, playerHdl_t src)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen,
+	void *buf, size_t len, sint32 hops, playerHdl_t src)
 {
 	void *pe;
 	void *varbuf;
 	dptab_varinfo_t info;
-	int i;
-	int bIgnore = FALSE;
-	int bAlreadyExists;
+	sint32 i;
+	sint32 bIgnore = FALSE;
+	sint32 bAlreadyExists;
 	dp_result_t status;
 
 	dptab_assertValid(dptab);
@@ -1598,7 +1598,7 @@ dptab_set(
 	/* Inform other players of the change if there are hops left. */
 	if (hops > 0) {
 		dp_result_t err;
-		int cur_sub;
+		sint32 cur_sub;
 
 		/* Set new hop count */
 		if (src != PLAYER_ME)
@@ -1633,12 +1633,12 @@ dptab_set(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_delete(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen)
 {
 	dp_result_t err;
-	int cur_sub;
-	int failure;
-	int i;
+	sint32 cur_sub;
+	sint32 failure;
+	sint32 i;
 	void *pebuf;
 	void *varbuf;
 	size_t varlen;
@@ -1759,7 +1759,7 @@ dptab_delete(
 --------------------------------------------------------------------------*/
 dp_result_t
 dptab_deleteIfSrc(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen, playerHdl_t src)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen, playerHdl_t src)
 {
 	dptab_varinfo_t tag;
 	dp_result_t err;
@@ -1797,8 +1797,8 @@ dptab_delete_bySrc(
 {
 	void *varbuf;
 	size_t varlen;
-	int i;
-	int deleted = 0;
+	sint32 i;
+	sint32 deleted = 0;
 	char subkey[dptab_KEY_MAXLEN];
 
 	DPRINT(("dptab_delete_bySrc(h:%x):\n", src));
@@ -1865,12 +1865,12 @@ dptab_delete_bySrc(
  Returns dp_RES_OK if any were deleted; dp_RES_EMPTY if no elements matched.
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
-dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int seconds)
+dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, sint32 seconds)
 {
 	void *varbuf;
 	size_t varlen;
-	int i;
-	int deleted = 0;
+	sint32 i;
+	sint32 deleted = 0;
 	char subkey[dptab_KEY_MAXLEN];
 
 	/*DPRINT(("dptab_delete_byAge(sec %d):\n", seconds));*/
@@ -1887,7 +1887,7 @@ dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int seconds)
 	for (i=table->vars->n_used-1; i>=0; i--) {
 		dptab_varinfo_t tag;
 		hkeytab_item_t *pe;
-		int age;
+		sint32 age;
 
 		pe = hkeytab_getkey(table->vars, i);
 		if (!pe) {
@@ -1943,7 +1943,7 @@ dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int seconds)
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_get_bykey(
-	dptab_table_t *table, const char *subkey, int subkeylen, void **pbuf, size_t *plen)
+	dptab_table_t *table, const char *subkey, sint32 subkeylen, void **pbuf, size_t *plen)
 {
 	void *varbuf;
 	size_t varlen;
@@ -1994,7 +1994,7 @@ dptab_get_bykey(
 --------------------------------------------------------------------------*/
 static dp_result_t
 dptab_get_bykey2(
-	dptab_table_t *table, const char *subkey, int subkeylen, void **pbuf, size_t *plen, dptab_varinfo_t *ptag)
+	dptab_table_t *table, const char *subkey, sint32 subkeylen, void **pbuf, size_t *plen, dptab_varinfo_t *ptag)
 {
 	void *varbuf;
 	size_t varlen;
@@ -2035,7 +2035,7 @@ dptab_get_bykey2(
  retrieve the buffer and subkey of the nth item in the given table.
  Caller must have obtained 'table' via a call to dptab_getTable().
 
- On entry, psubkey should point to a single short,
+ On entry, psubkey should point to a single sint16,
  pbuf should point to a void *, and
  plen should point to a size_t *.
 
@@ -2047,8 +2047,8 @@ dptab_get_bykey2(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_get_byindex(
-	dptab_table_t *table, int n, void **pbuf, size_t *plen,
-	char *psubkey, int *psubkeylen)
+	dptab_table_t *table, sint32 n, void **pbuf, size_t *plen,
+	char *psubkey, sint32 *psubkeylen)
 {
 	hkeytab_item_t *pe;
 	void *varbuf;
@@ -2090,7 +2090,7 @@ dptab_get_byindex(
 /*--------------------------------------------------------------------------
  Get number of elements in a table.
 --------------------------------------------------------------------------*/
-DP_API int dptab_tableSize(dptab_table_t *table)
+DP_API sint32 dptab_tableSize(dptab_table_t *table)
 {
 	if (table) return table->vars->n_used;
 	return 0;	/* just in case */
@@ -2103,20 +2103,20 @@ DP_API int dptab_tableSize(dptab_table_t *table)
  first their table key, then their subkey.
 --------------------------------------------------------------------------*/
 #define dp_KEY_LOWSESSIONS 256
-static int compare_xfer_keys(dptab_xfer_t *xfer1, dptab_xfer_t *xfer2)
+static sint32 compare_xfer_keys(dptab_xfer_t *xfer1, dptab_xfer_t *xfer2)
 {
-	int diff;
-	int minlen;
-	unsigned int k1, k2;
+	sint32 diff;
+	sint32 minlen;
+	uint32 k1, k2;
 
 	/* Sort keys as if they were strings, i.e. sort by first byte, then
 	* second, etc.  They cannot be zero length, but they may have single-
 	* byte keys.
 	*/
 	/* Swizzle order so sessions have low priority. */
-	k1 = ((unsigned char *)xfer1->table->key)[0];
+	k1 = ((uint8 *)xfer1->table->key)[0];
 	if (k1 == dp_KEY_SESSIONS) k1 = dp_KEY_LOWSESSIONS;
-	k2 = ((unsigned char *)xfer2->table->key)[0];
+	k2 = ((uint8 *)xfer2->table->key)[0];
 	if (k2 == dp_KEY_SESSIONS) k2 = dp_KEY_LOWSESSIONS;
 	diff = k1 - k2;
 	if (!diff) {
@@ -2151,11 +2151,11 @@ static int compare_xfer_keys(dptab_xfer_t *xfer1, dptab_xfer_t *xfer2)
  Returns pointer to record on success,
  NULL if out of memory.
 --------------------------------------------------------------------------*/
-static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table, int hops, char *subkey, int subkeylen, int offset)
+static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table, sint32 hops, char *subkey, sint32 subkeylen, sint32 offset)
 {
 	dptab_xfer_t *xfer, temp;
-	int j;
-	int diff = 1;
+	sint32 j;
+	sint32 diff = 1;
 
 	/* Create a dptab_xfer_t. */
 	memset(&temp, 0, sizeof(temp));
@@ -2228,8 +2228,8 @@ static dptab_xfer_t *dptab_xfer_insert(dptab_peer_t *peer, dptab_table_t *table,
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_send(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen,
-	playerHdl_t dest, int hops)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen,
+	playerHdl_t dest, sint32 hops)
 {
 	dptab_xfer_t *xfer;
 	dptab_peer_t *peer;
@@ -2303,8 +2303,8 @@ dptab_send(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_send_delete(
-	dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen,
-	playerHdl_t dest, int hops)
+	dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen,
+	playerHdl_t dest, sint32 hops)
 {
 	dptab_xfer_t *xfer;
 	dptab_peer_t *peer;
@@ -2375,9 +2375,9 @@ dptab_update_send_delete(
 			key2a2(xfer->subkey, xfer->subkeylen)));
 
 	*tag = dptab_DELETE_PACKET_ID;
-	body->keylen = (unsigned char)xfer->table->keylen;
+	body->keylen = (uint8)xfer->table->keylen;
 	memcpy(body->key, xfer->table->key, xfer->table->keylen);
-	body->subkeylen = (unsigned char)xfer->subkeylen;
+	body->subkeylen = (uint8)xfer->subkeylen;
 	memcpy(body->key+xfer->table->keylen, xfer->subkey, xfer->subkeylen);
 	hdrlen = sizeof(dp_packetType_t) + sizeof_dptab_DELETE_PACKET_HDR + xfer->subkeylen + xfer->table->keylen;
 	if (dest == PLAYER_BROADCAST)
@@ -2422,7 +2422,7 @@ typedef struct {
 	size_t offset;
 
 	/* Accumulate xfer's in here for deletion if xmit goes ok */
-	int nxfers;
+	sint32 nxfers;
 	dptab_xfer_t xfers[100];
 
 	/* Keep these suckers around for the callback */
@@ -2469,9 +2469,9 @@ static void dptab_xferBuffer_flush(dptab_t *dptab, dptab_xferBuffer_t *xbuf)
 
 	/* If we were able to send it, mark the xfers as successful. */
 	if (err == dp_RES_OK) {
-		int i, j;
-		long totallen = 0;
-		int ierr;
+		sint32 i, j;
+		sint32 totallen = 0;
+		sint32 ierr;
 		for (i=0; i<xbuf->nxfers; i++) {
 			dptab_xfer_t *xfer = &xbuf->xfers[i];
 			/* Inform table callback that the vars have been sent */
@@ -2538,10 +2538,10 @@ dptab_update_send_small(
 	dptab_xfer_t *xfer,
 	void *varbuf,				/* (input) variable to send, or NULL to force a flush */
 	size_t varlen,				/* (input) size of data in varbuf */
-	int *pnpkts)
+	sint32 *pnpkts)
 {
-	unsigned char *p;
-	int is_delete = (varlen == dptab_SIZE_DELETE);
+	uint8 *p;
+	sint32 is_delete = (varlen == dptab_SIZE_DELETE);
 	size_t orig_varlen = varlen;
 
 	/* Special kludge! */
@@ -2598,23 +2598,23 @@ dptab_update_send_small(
 	if (xbuf->offset == 0) {
 		/* Fill initial part of packet */
 		(*(dp_packetType_t *)xbuf->buf) = dptab_SMALL_PACKET_ID;
-		p = ((unsigned char *)xbuf->buf) + sizeof(dp_packetType_t);
-		*p++ = (unsigned char)xfer->hops;
-		*p++ = (unsigned char)xfer->subkeylen;
-		*p++ = (unsigned char)xfer->table->keylen;
+		p = ((uint8 *)xbuf->buf) + sizeof(dp_packetType_t);
+		*p++ = (uint8)xfer->hops;
+		*p++ = (uint8)xfer->subkeylen;
+		*p++ = (uint8)xfer->table->keylen;
 		memcpy(p, xfer->table->key, xfer->table->keylen);
 		p += xfer->table->keylen;
-		xbuf->offset = p - ((unsigned char *)xbuf->buf);
+		xbuf->offset = p - ((uint8 *)xbuf->buf);
 	}
 
 	/* Fill this transfer's part of packet */
-	p = (unsigned char *) &xbuf->buf[xbuf->offset];
-	*p++ = (unsigned char) orig_varlen;
+	p = (uint8 *) &xbuf->buf[xbuf->offset];
+	*p++ = (uint8) orig_varlen;
 	memcpy(p, xfer->subkey, xfer->subkeylen);
 	p += xfer->subkeylen;
 	memcpy(p, varbuf, varlen);
 	p += varlen;
-	xbuf->offset = p - ((unsigned char *)xbuf->buf);
+	xbuf->offset = p - ((uint8 *)xbuf->buf);
 
 	/* Save vital stats of this transfer for during flush */
 	xbuf->xfers[xbuf->nxfers] = *xfer;
@@ -2650,7 +2650,7 @@ dptab_update_send_large(
 	dptab_xfer_t *xfer,
 	void *varbuf,			/* (input) variable to send */
 	size_t varlen,			/* (input) size of data in varbuf */
-	int *pnpkts)
+	sint32 *pnpkts)
 {
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	size_t hdrlen;
@@ -2695,14 +2695,14 @@ dptab_update_send_large(
 			*tag = dptab_INITIAL_PACKET_ID;
 			body->len = varlen;
 			body->crc = dp_crc32(varbuf, varlen);
-			body->xferid = (unsigned char)xfer->xferid;
-			body->hops = (unsigned char)xfer->hops;
+			body->xferid = (uint8)xfer->xferid;
+			body->hops = (uint8)xfer->hops;
 			DPRINT(("dptab_update: crc %x; len %d; hops %d; buf ", body->crc, varlen, body->hops));
 			dprint_buf(varbuf, varlen);
 
 			{
-				int i;
-				unsigned char xferid = body->xferid;
+				sint32 i;
+				uint8 xferid = body->xferid;
 
 				/* wait if active xfers that conflict with xferid */
 				for (i=0; i < peer_tx->n_used; i++) {
@@ -2716,9 +2716,9 @@ dptab_update_send_large(
 					}
 				}
 			}
-			body->keylen = (unsigned char)xfer->table->keylen;
+			body->keylen = (uint8)xfer->table->keylen;
 			memcpy(body->key, xfer->table->key, xfer->table->keylen);
-			body->subkeylen = (unsigned char)xfer->subkeylen;
+			body->subkeylen = (uint8)xfer->subkeylen;
 			memcpy(body->key+xfer->table->keylen, xfer->subkey, xfer->subkeylen);
 			//dpSwap_dptab_initial_packet(body);
 			memcpy(payload, varbuf, len);
@@ -2738,7 +2738,7 @@ dptab_update_send_large(
 			assert(len>0);
 #endif
 			*tag = dptab_BODY_PACKET_ID;
-			body->xferid = (unsigned char)xfer->xferid;
+			body->xferid = (uint8)xfer->xferid;
 			//dpSwap_dptab_packet(body);
 			memcpy(payload, (char *)(varbuf)+xfer->cur_offset, len);
 			hdrlen = sizeof(dp_packetType_t)+sizeof(dptab_body_packet_t);
@@ -2760,7 +2760,7 @@ dptab_update_send_large(
 		}
 		xfer->cur_offset += len;
 		if (xfer->cur_offset == varlen) {
-			int i;
+			sint32 i;
 			/* Now call callback and delete this xfer */
 			DPRINT(("dptab_update: large: sent table %s subkey %s t:%d; h:%x; xferid %d\n",
 				key2a(xfer->table->key, xfer->table->keylen),
@@ -2797,14 +2797,14 @@ dptab_update_destination(
 	dptab_t *dptab,			/* this */
 	dptab_peer_t *peer,		/* stuff waiting to go to destination machine */
 	const playerHdl_t dest,	/* comm handle of destination machine */
-	int* pNpktsfree)		/* current estimate of free packets left */
+	sint32* pNpktsfree)		/* current estimate of free packets left */
 {
 	dptab_xferBuffer_t xbuf;
 	dp_result_t err;
-	int n_tx;	/* how many are in the tx array */
-	int i_tx;	/* how many we've done; counts up from 0 each time */
-	int cur_tx;	/* where we are in the tx array; wraps around end */
-	short remcap;
+	sint32 n_tx;	/* how many are in the tx array */
+	sint32 i_tx;	/* how many we've done; counts up from 0 each time */
+	sint32 cur_tx;	/* where we are in the tx array; wraps around end */
+	sint16 remcap;
 
 	precondition(dptab != NULL);
 	precondition(peer != NULL);
@@ -2844,7 +2844,7 @@ dptab_update_destination(
 	for (i_tx=0; (i_tx < n_tx) && ((*pNpktsfree) > 0); i_tx++, cur_tx--) {
 		assoctab_item_t *xpe;
 		dptab_xfer_t *xfer;
-		int npkts;
+		sint32 npkts;
 
 		if (cur_tx >= peer->tx->n_used)
 			cur_tx = 0;
@@ -2910,7 +2910,7 @@ dptab_update_destination(
 			if (dptab_is_small_packet(xfer,varlen)) {
 				dptab_update_send_small(dptab, &xbuf, xfer, varbuf, varlen, pNpktsfree);
 			} else {
-				int old_npkts = npkts;
+				sint32 old_npkts = npkts;
 				dptab_update_send_large(dptab, dest, peer->tx, xfer,
 						varbuf, varlen, &npkts);
 				(*pNpktsfree) -= (old_npkts - npkts);
@@ -2995,9 +2995,9 @@ dptab_update_destination(
 DP_API dp_result_t dptab_update(dptab_t *dptab)
 {
 	dp_result_t err;
-	int cur_dest;
-	int n_dest;
-	int n_xfers_noticed = 0;		/* Increment if we see any that need work */
+	sint32 cur_dest;
+	sint32 n_dest;
+	sint32 n_xfers_noticed = 0;		/* Increment if we see any that need work */
 
 	precondition(dptab != NULL);
 
@@ -3009,7 +3009,7 @@ DP_API dp_result_t dptab_update(dptab_t *dptab)
 		*(dptab->dpio->now) - dptab->next_send));
 
 	/* Wait 'til previous transmission has had time to get sent. */
-	if ((long)(*(dptab->dpio->now) - dptab->next_send) < 0)
+	if ((sint32)(*(dptab->dpio->now) - dptab->next_send) < 0)
 		return dp_RES_OK;
 
 	/* Set next-check-time.  Don't have check terribly often,
@@ -3030,7 +3030,7 @@ DP_API dp_result_t dptab_update(dptab_t *dptab)
 		playerHdl_t dest;
 		assoctab_item_t *dpe;
 		dptab_peer_t *peer;
-		int npktsfree;
+		sint32 npktsfree;
 
 		if (cur_dest >= dptab->peers->n_used)
 			cur_dest = 0;
@@ -3088,7 +3088,7 @@ DP_API dp_result_t dptab_update(dptab_t *dptab)
 --------------------------------------------------------------------------*/
 static dptab_table_t *
 dptab_mapIncomingTable(
-	dptab_t *dptab, dptab_peer_t *peer, playerHdl_t src, char *key, int keylen)
+	dptab_t *dptab, dptab_peer_t *peer, playerHdl_t src, char *key, sint32 keylen)
 {
 	dptab_table_t **tablep;
 
@@ -3167,9 +3167,9 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 	void *payload;
 	size_t datalen;
 	char *key;
-	int keylen;
+	sint32 keylen;
 	char *subkey;
-	int subkeylen;
+	sint32 subkeylen;
 
 #if 0
 	DPRINT(("dptab_handlePacket(dptab, src h:%x...) buf: ", src));
@@ -3266,7 +3266,7 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 		dptab_body_packet_t *body = (dptab_body_packet_t *)((char *)buf + sizeof(dp_packetType_t));
 		void *payload = ((char *)body) + sizeof(dptab_body_packet_t);
 		size_t datalen = len - sizeof(dp_packetType_t) - sizeof(dptab_body_packet_t);
-		int xferid;
+		sint32 xferid;
 
 		if (datalen < 1 || datalen > dptab_BODY_MAXLEN) {
 			DPRINT(("dptab_handlePacket: datalen\n"));
@@ -3299,10 +3299,10 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 	}
 
 	case dptab_SMALL_PACKET_ID: {
-		unsigned char *p = (unsigned char *)buf + sizeof(dp_packetType_t);
+		uint8 *p = (uint8 *)buf + sizeof(dp_packetType_t);
 		char *varbuf;
-		int varlen;
-		int hops;
+		sint32 varlen;
+		sint32 hops;
 
 		/* Read shared packet header */
 		hops = *p++ & 255;
@@ -3325,8 +3325,8 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 		 * Now all we need is a version of dptab_set() that can take
 		 * a vector of variables, and we'll really be cookin' with gas.
 		 */
-		while (len > (unsigned int)1+subkeylen) {
-			int is_delete = 0;
+		while (len > (uint32)1+subkeylen) {
+			sint32 is_delete = 0;
 			varlen = *p++ & 255;	len--;
 			if (varlen == dptab_SIZE_DELETE) {
 				is_delete = 1;
@@ -3406,7 +3406,7 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 		/* The variable has arrived! Obey the value change it carries.
 		 * Don't echo to other machines!
 		 */
-		long newcrc = dp_crc32((unsigned char *)var->buf, var->len);
+		sint32 newcrc = dp_crc32((uint8 *)var->buf, var->len);
 		dptab_table_t *table;
 		if (newcrc != xfer->crc) {
 			DPRINT(("dptab_handlePacket: bad crc %x, expected %x!\n",
@@ -3474,16 +3474,16 @@ dptab_tableRef_freeze(
 
 	if(table == NULL) {
 		/* Save the special NULL value */
-		int nulVal = dptab_NULLVALUE;
+		sint32 nulVal = dptab_NULLVALUE;
 		DPRINT(("tableR ?? starts at %ld file-bytes\n", ftell(fp)));
-		if (fwrite(&nulVal, sizeof(int), 1, fp) != 1)
+		if (fwrite(&nulVal, sizeof(sint32), 1, fp) != 1)
 			return dp_RES_FULL;
 		DPRINT(("tableR ?? ends at %ld file-bytes\n", ftell(fp)));
 	} else {
 		/* Save the table's key */
 		DPRINT(("tableR %s starts at %ld file-bytes\n", key2a(table->key, table->keylen), ftell(fp)));
 		condition(table->keylen <= dptab_KEY_MAXLEN, "invalid key length");
-		if ((fwrite(&(table->keylen), sizeof(int), 1, fp) != 1) ||
+		if ((fwrite(&(table->keylen), sizeof(sint32), 1, fp) != 1) ||
 			(fwrite(table->key, sizeof(char), table->keylen, fp) !=
 						(size_t)table->keylen))
 			return dp_RES_FULL;
@@ -3506,8 +3506,8 @@ dptab_tableRef_thaw(
 	FILE *fp)				/* (modified) stream to thaw from */
 {
 	char tkey[dptab_KEY_MAXLEN];/* tables' key */
-	int tkeylen;				/* Length of tables' key */
-	long pos;
+	sint32 tkeylen;				/* Length of tables' key */
+	sint32 pos;
 
 	precondition(table != NULL);
 	precondition(fp != NULL);
@@ -3515,7 +3515,7 @@ dptab_tableRef_thaw(
 	pos = ftell(fp);
 
 	/* Read key and keylengths. */
-	if (fread(&tkeylen, sizeof(int), 1, fp) != 1) {
+	if (fread(&tkeylen, sizeof(sint32), 1, fp) != 1) {
 		DPRINT(("dptab_tableRef_thaw: can't read key length.\n"));
 		return dp_RES_BAD;
 	}
@@ -3553,8 +3553,8 @@ dptab_table_freeze(
 	dpio_t* dpio,			/* (input) context for player handles */
 	FILE *fp)				/* (modified) stream to save to */
 {
-	int i;
-	int sig = dptab_TABLE_SIGNATURE;
+	sint32 i;
+	sint32 sig = dptab_TABLE_SIGNATURE;
 	dp_result_t err;
 
 	precondition(table != NULL);
@@ -3572,12 +3572,12 @@ dptab_table_freeze(
 
 	/* Table details */
 	if ((fwrite(&(table->elsize), sizeof(size_t), 1, fp) != 1) ||
-		(fwrite(&(table->keylen), sizeof(int), 1, fp) != 1))
+		(fwrite(&(table->keylen), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_FULL;
 	if ((fwrite(table->key, sizeof(char), table->keylen, fp) !=
 									((size_t)table->keylen)) ||
-		(fwrite(&(table->vars->n_used), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(table->subscribers->n_used), sizeof(int), 1, fp) != 1))
+		(fwrite(&(table->vars->n_used), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(table->subscribers->n_used), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_FULL;
 
 	/* Variables */
@@ -3657,14 +3657,14 @@ dptab_table_thaw(
 {
 	dptab_table_t *table;
 	size_t elsize;
-	int keylen;
+	sint32 keylen;
 	char key[dptab_KEY_MAXLEN];
-	int vars_used;
-	int subs_used;
-	int i;
-	int sig;
+	sint32 vars_used;
+	sint32 subs_used;
+	sint32 i;
+	sint32 sig;
 	dp_result_t err;
-	long start;
+	sint32 start;
 
 	precondition(dptab != NULL);
 	precondition(dpio != NULL);
@@ -3684,13 +3684,13 @@ dptab_table_thaw(
 
 	/* Table details */
 	if ((fread(&elsize, sizeof(size_t), 1, fp) != 1) ||
-			(fread(&keylen, sizeof(int), 1, fp) != 1)) {
+			(fread(&keylen, sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dptab_table_thaw: can't read details\n"));
 		return dp_RES_BAD;	/* Invalid file */
 	}
 	if ((fread(key, sizeof(char), keylen, fp) != (size_t) keylen) ||
-			(fread(&vars_used, sizeof(int), 1, fp) != 1) ||
-			(fread(&subs_used, sizeof(int), 1, fp) != 1)) {
+			(fread(&vars_used, sizeof(sint32), 1, fp) != 1) ||
+			(fread(&subs_used, sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dptab_table_thaw: can't read key\n"));
 		return dp_RES_BAD;	/* Invalid file */
 	}
@@ -3806,7 +3806,7 @@ dptab_xfer_freeze(
 	dptab_xfer_t *xfer,	/* (input) xfer to save */
 	FILE *fp)			/* (modified) stream to save to */
 {
-	int sig = dptab_XFER_SIGNATURE;
+	sint32 sig = dptab_XFER_SIGNATURE;
 	dp_result_t err;
 
 	precondition(xfer != NULL);
@@ -3821,13 +3821,13 @@ dptab_xfer_freeze(
 	DPRINT(("dptab_xfer_freeze: freezing xfer %d.\n", xfer->xferid));
 
 	/* Details */
-	if ((fwrite(&(xfer->xferid), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(xfer->cur_offset), sizeof(size_t), 1, fp) != 1) ||
-		(fwrite(&(xfer->crc), sizeof(long), 1, fp) != 1) ||
-		(fwrite(&(xfer->subkeylen), sizeof(int), 1, fp) != 1) ||
+	if ((fwrite(&(xfer->xferid), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(xfer->cur_offset), sizeof(size_t), 1, fp) != 1) || // Compatibilty problem
+		(fwrite(&(xfer->crc), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(xfer->subkeylen), sizeof(sint32), 1, fp) != 1) ||
 		(fwrite(xfer->subkey, sizeof(char), xfer->subkeylen, fp) !=
 									(size_t)xfer->subkeylen) ||
-		(fwrite(&(xfer->hops), sizeof(int), 1, fp) != 1))
+		(fwrite(&(xfer->hops), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_FULL;
 	err = dptab_tableRef_freeze(xfer->table, fp);
 	if(err != dp_RES_OK)
@@ -3859,8 +3859,8 @@ dptab_xfer_thaw(
 	dptab_xfer_t *temp = &dummy;
 	dptab_xfer_t *xfer;
 	dp_result_t err;
-	int sig;
-	long pos;
+	sint32 sig;
+	sint32 pos;
 
 	precondition(tab != NULL);
 	precondition(dptab != NULL);
@@ -3880,19 +3880,19 @@ dptab_xfer_thaw(
 	}
 
 	/* Create new xfer */
-	if (fread(&(temp->xferid), sizeof(int), 1, fp) != 1) {
+	if (fread(&(temp->xferid), sizeof(sint32), 1, fp) != 1) {
 		DPRINT(("dptab_xfer_thaw: error reading id\n"));
 		return dp_RES_EMPTY;
 	}
 	DPRINT(("xfer %d starts at %ld file-bytes\n", temp->xferid, pos));
 
 	/* Remaining Details */
-	if ((fread(&(temp->cur_offset), sizeof(size_t), 1, fp) != 1) ||
-		(fread(&(temp->crc), sizeof(long), 1, fp) != 1) ||
-		(fread(&(temp->subkeylen), sizeof(int), 1, fp) != 1) ||
+	if ((fread(&(temp->cur_offset), sizeof(size_t), 1, fp) != 1) || // Compatibilty problem
+		(fread(&(temp->crc), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(temp->subkeylen), sizeof(sint32), 1, fp) != 1) ||
 		(fread(temp->subkey, sizeof(char), temp->subkeylen, fp) !=
 									(size_t)(temp->subkeylen)) ||
-		(fread(&(temp->hops), sizeof(int), 1, fp) != 1)) {
+		(fread(&(temp->hops), sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dptab_xfer_thaw: error reading details\n"));
 		return dp_RES_EMPTY;
 	}
@@ -3940,8 +3940,8 @@ dptab_peer_freeze(
 	dpio_t* dpio,		/* (input) context for player handles */
 	FILE *fp)			/* (modified) stream to save to */
 {
-	int sig = dptab_PEER_SIGNATURE;
-	int i;
+	sint32 sig = dptab_PEER_SIGNATURE;
+	sint32 i;
 	dp_result_t err;
 
 	precondition(peer != NULL);
@@ -3963,11 +3963,11 @@ dptab_peer_freeze(
 	DPRINT(("dptab_peer_freeze: freezing peer h:%x.\n", hdl));
 
 	/* Details */
-	if ((fwrite(&(peer->cur_tx), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(peer->next_xferid), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(peer->tx->n_used), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(peer->rx->n_used), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(peer->pubs->n_used), sizeof(int), 1, fp) != 1))
+	if ((fwrite(&(peer->cur_tx), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(peer->next_xferid), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(peer->tx->n_used), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(peer->rx->n_used), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(peer->pubs->n_used), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_FULL;
 	DPRINT(("dptab_peer_freeze: %d tx, %d rx, %d pubs.\n",
 			peer->tx->n_used, peer->rx->n_used, peer->pubs->n_used));
@@ -4022,13 +4022,13 @@ dptab_peer_thaw(
 	dptab_peer_t * temp = &dummy;
 	dptab_peer_t * peer;
 	playerHdl_t hdl;
-	int sig;
-	int i;
-	int tx_used;
-	int rx_used;
-	int pubs_used;
+	sint32 sig;
+	sint32 i;
+	sint32 tx_used;
+	sint32 rx_used;
+	sint32 pubs_used;
 	dp_result_t err;
-	long pos;
+	sint32 pos;
 
 	precondition(dptab != NULL);
 	precondition(dpio != NULL);
@@ -4065,11 +4065,11 @@ dptab_peer_thaw(
 	DPRINT(("dptab_peer_thaw: thawing peer h:%x\n", hdl));
 
 	/* Details */
-	if ((fread(&(temp->cur_tx), sizeof(int), 1, fp) != 1) ||
-		(fread(&(temp->next_xferid), sizeof(int), 1, fp) != 1) ||
-		(fread(&tx_used, sizeof(int), 1, fp) != 1) ||
-		(fread(&rx_used, sizeof(int), 1, fp) != 1) ||
-		(fread(&pubs_used, sizeof(int), 1, fp) != 1)) {
+	if ((fread(&(temp->cur_tx), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(temp->next_xferid), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&tx_used, sizeof(sint32), 1, fp) != 1) ||
+		(fread(&rx_used, sizeof(sint32), 1, fp) != 1) ||
+		(fread(&pubs_used, sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dptab_peer_thaw: can't read details.\n"));
 		return dp_RES_EMPTY;
 	}
@@ -4142,7 +4142,7 @@ dptab_freeze(
 	dptab_t *dptab,		/* (input) table collection to save */
 	FILE *fp)			/* (modified) stream to save to */
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	precondition(dptab != NULL);
@@ -4157,8 +4157,8 @@ dptab_freeze(
 
 	/* Header & Details*/
 	if ((fwrite(dptab_SIG_START, sizeof(dptab_SIG_START), 1, fp) != 1) ||
-		(fwrite(&(dptab->tables->n_used), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(dptab->peers->n_used), sizeof(int), 1, fp) != 1)) {
+		(fwrite(&(dptab->tables->n_used), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(dptab->peers->n_used), sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dptab_freeze: Header full.\n"));
 		return dp_RES_FULL;
 	}
@@ -4209,9 +4209,9 @@ dptab_thaw(
 	FILE *fp)			/* (modified) stream to restore from */
 {
 	char buf[sizeof(dptab_SIG_END)];
-	int i;
-	int tables_used;
-	int peers_used;
+	sint32 i;
+	sint32 tables_used;
+	sint32 peers_used;
 	dp_result_t err;
 
 	precondition(dptab != NULL);
@@ -4224,8 +4224,8 @@ dptab_thaw(
 
 	/* Header & Details */
 	if ((fread(buf, sizeof(dptab_SIG_START), 1, fp) != 1) ||
-		(fread(&tables_used, sizeof(int), 1, fp) != 1) ||
-		(fread(&peers_used, sizeof(int), 1, fp) != 1))
+		(fread(&tables_used, sizeof(sint32), 1, fp) != 1) ||
+		(fread(&peers_used, sizeof(sint32), 1, fp) != 1))
 		return dp_RES_EMPTY;
 	if (0 != memcmp(buf, dptab_SIG_START, sizeof(dptab_SIG_START))) {
 		DPRINT(("dptab_thaw: no start signature\n"));
@@ -4282,13 +4282,13 @@ dptab_thaw(
 #include <assert.h>
 #include "eclock.h"
 
-int nvars_rx;
-int nvars_tx;
-int nvars_deleted;
+sint32 nvars_rx;
+sint32 nvars_tx;
+sint32 nvars_deleted;
 
 /*-----------------------------------------------------------------------
 -----------------------------------------------------------------------*/
-int dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err)
+sint32 dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t err)
 {
 	DPRINT(("table_cb: status:%d\n", err));
 	if (err == dp_RES_CREATED) {
@@ -4353,7 +4353,7 @@ void table_test()
 	assert(tab);
 	key[0] = 1;
 	key[1] = 2;
-	err = dptab_createTable(tab, &table, key, 2, sizeof(int), NULL, NULL, table_cb, NULL);
+	err = dptab_createTable(tab, &table, key, 2, sizeof(sint32), NULL, NULL, table_cb, NULL);
 	assert(err == dp_RES_OK);
 
 #if 1
@@ -4385,19 +4385,19 @@ void build_tables(dptab_t *tab, dptab_table_t **ptable1, dptab_table_t **ptable2
 	char key[10];
 	char badkey[10];
 	char subkey[10];
-	int dummy;
-	int *pdummy;
+	sint32 dummy;
+	sint32 *pdummy;
 	size_t len;
 	size_t subkeylen;
 	char bigdata[BIGDATALEN];
 	char *pbigdata;
-	int i;
+	sint32 i;
 	dptab_table_t *table1;
 	dptab_table_t *table2;
 
 	/* Create one fixed size table and one variable sized table. */
 	key[0] = 1;
-	err = dptab_createTable(tab, &table1, key, 1, sizeof(int), NULL, NULL, table_cb, NULL);
+	err = dptab_createTable(tab, &table1, key, 1, sizeof(sint32), NULL, NULL, table_cb, NULL);
 	assert(err == dp_RES_OK);
 
 	key[0] = 2;
@@ -4557,7 +4557,7 @@ void local_test()
  Loopback networking test.  Run two of these things together.
  Hostnum should be either 1 or 2
 --------------------------------------------------------------------------*/
-void loopback_test(int hostnum)
+void loopback_test(sint32 hostnum)
 {
 	char key[10];
 	clock_t dpio_now;
@@ -4572,11 +4572,11 @@ void loopback_test(int hostnum)
 	dp_result_t dptab_status;
 	dp_result_t err;
 	dp_transport_t dll;
-	int i;
+	sint32 i;
 
-	int peernum;
+	sint32 peernum;
 	char peeradr_printable[128];
-	unsigned char peeradr[dp_MAX_ADR_LEN];
+	uint8 peeradr[dp_MAX_ADR_LEN];
 	playerHdl_t dest;
 
 	if (hostnum == 1) peernum = 2;
@@ -4624,7 +4624,7 @@ void loopback_test(int hostnum)
 	/* Create fixed table #9.1 and route peer's table #1 to it. */
 	key[0] = 9;
 	key[1] = 1;
-	err = dptab_createTable(tab, &peerTable1, key, 2, sizeof(int), NULL, NULL, table_cb, NULL);
+	err = dptab_createTable(tab, &peerTable1, key, 2, sizeof(sint32), NULL, NULL, table_cb, NULL);
 	assert(err == dp_RES_OK);
 	key[0] = 1;
 	err = dptab_addPublisher(tab, peerTable1, key, 1, dest);
@@ -4679,7 +4679,7 @@ void loopback_test(int hostnum)
 		assert(dptab_status == dp_RES_OK || dptab_status == dp_RES_EMPTY);
 
 		if (nvars_tx == 3) {
-			static int done = 0;
+			static sint32 done = 0;
 			if (!done) {
 				done = 1;
 
@@ -4782,7 +4782,7 @@ void broadcast_test(void)
 	dp_result_t dptab_status;
 	dp_result_t err;
 	dp_transport_t dll;
-	int i;
+	sint32 i;
 
 	dpio_now = eclock();
 	memset(&dll, 0, sizeof(dll));
@@ -4802,7 +4802,7 @@ void broadcast_test(void)
 	/* Create fixed table #9.1 and route PLAYER_BROADCAST's table #1 to it. */
 	key[0] = 9;
 	key[1] = 1;
-	err = dptab_createTable(tab, &peerTable1, key, 2, sizeof(int), NULL, NULL, table_cb, NULL);
+	err = dptab_createTable(tab, &peerTable1, key, 2, sizeof(sint32), NULL, NULL, table_cb, NULL);
 	assert(err == dp_RES_OK);
 	key[0] = 1;
 	err = dptab_addPublisher(tab, peerTable1, key, 1, PLAYER_BROADCAST);
@@ -4817,13 +4817,13 @@ void broadcast_test(void)
 
 	/* Loop for ten seconds, broadcasting the value of our small variable. */
 	dpio_now = eclock();
-	for (started=dpio_now; (long)(dpio_now-started)<10*ECLOCKS_PER_SEC; ) {
+	for (started=dpio_now; (sint32)(dpio_now-started)<10*ECLOCKS_PER_SEC; ) {
 		playerHdl_t src;
 		char pkt[512];
 		size_t size;
 		dpio_now = eclock();
 
-		if ((long)(dpio_now - last_sent) > ECLOCKS_PER_SEC) {
+		if ((sint32)(dpio_now - last_sent) > ECLOCKS_PER_SEC) {
 			last_sent = dpio_now;
 
 			/* Broadcast the two variables (unreliably) every second.
@@ -4876,13 +4876,13 @@ void broadcast_test(void)
 	assert(err == dp_RES_OK);
 
 	/* Loop for ten seconds and see if the other side's delete gets here */
-	for (started=dpio_now; (long)(dpio_now-started)<10*ECLOCKS_PER_SEC; ) {
+	for (started=dpio_now; (sint32)(dpio_now-started)<10*ECLOCKS_PER_SEC; ) {
 		playerHdl_t src;
 		char pkt[512];
 		size_t size;
 		dpio_now = eclock();
 
-		if ((long)(dpio_now - last_sent) > ECLOCKS_PER_SEC) {
+		if ((sint32)(dpio_now - last_sent) > ECLOCKS_PER_SEC) {
 			last_sent = dpio_now;
 
 			/* Fill output buffers once a second */
@@ -4926,10 +4926,10 @@ void broadcast_test(void)
 
 /*-----------------------------------------------------------------------
 -----------------------------------------------------------------------*/
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
-	int i;
-	int childNum;
+	sint32 i;
+	sint32 childNum;
 	char fname[128];
 
 	/* Can't really print out a good usage message, since

@@ -36,7 +36,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -48,15 +48,15 @@ dp_dprintf(
 }
 #endif
 
-int pleaseQuit;
+sint32 pleaseQuit;
 
-static void signalQuit(int sig)
+static void signalQuit(sint32 sig)
 {
 	printf("Test timed out\n");
 	pleaseQuit = 1;
 }
 
-int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf_result_t *urlResult)
+sint32 url2buf(char *context, const char *url, char *buf, sint32 buflen, bhttp_url2buf_result_t *urlResult)
 {
 	urlResult->httpResultCode = 200;
 	strcpy(urlResult->mimeType, "text/plain");
@@ -64,14 +64,14 @@ int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf
 	return sprintf(buf, "The URL is : %s", url);
 }
 
-void main (int argc, char *argv[])
+void main (sint32 argc, char *argv[])
 {
 	bhttp_t *bhttp;
-	unsigned short port;
-	int ncomplete;
-	int flags;
-	int i;
-	int timeout;
+	uint16 port;
+	sint32 ncomplete;
+	sint32 flags;
+	sint32 i;
+	sint32 timeout;
 
 	if (argc <= 2) {
 		printf("Usage: %s <port> <timeout>\n", argv[0]);
@@ -99,10 +99,10 @@ void main (int argc, char *argv[])
 		fd_set rfds;
 		fd_set wfds;
 		struct timeval tv;
-		int nsocks;
-		int sockmax;
-		int sock;
-		int len;
+		sint32 nsocks;
+		sint32 sockmax;
+		sint32 sock;
+		sint32 len;
 
 		tv.tv_sec = 10;
 		tv.tv_usec = 0;

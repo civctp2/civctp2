@@ -53,7 +53,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  *	j controls the gamepiece defined by Gamepieces[j] on all machines.
  */
 
-typedef unsigned char	userID_t;			// User ID
+typedef uint8	userID_t;			// User ID
 
 /*
  *	The node ID is any value which is pretty much guaranteed to be unique
@@ -61,7 +61,7 @@ typedef unsigned char	userID_t;			// User ID
  */
 
 typedef struct {							// Node ID
-	unsigned long	_0,
+	uint32	_0,
 					_1;
 } nodeID_t;
 

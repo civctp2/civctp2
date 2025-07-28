@@ -65,6 +65,9 @@
     <ClInclude Include="..\demo\utils\bad\unistd.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\h\types.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\src\win\wipx\wipxi.rc">

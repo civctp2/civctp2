@@ -55,12 +55,12 @@ static char *unknown = "(unknown)"; /* for when cannot determine */
 static char *bogus = "(addr too large)"; /* for when offset address is beyond reasonable function size */
 
 #ifdef DEBUG_AEHEXCP
-static int aehcurline;
+static sint32 aehcurline;
 static char aehcurfile[aeh_MAX_PATH];
 /*--------------------------------------------------------------------------
  Record current line and file.  Used to help debug aeh-caused exceptions.
 --------------------------------------------------------------------------*/
-void aeh_SetCurrent(int line, char *file)
+void aeh_SetCurrent(sint32 line, char *file)
 {
 	aehcurline = line;
 	strncpy(aehcurfile, file, aeh_MAX_PATH);
@@ -77,7 +77,7 @@ void aeh_SetCurrent(int line, char *file)
  Get most recently recorded line and file.  Used to help debug aeh-caused
  exceptions.
 --------------------------------------------------------------------------*/
-void aeh_GetCurrent(int *line, char **file)
+void aeh_GetCurrent(sint32 *line, char **file)
 {
 	*line = aehcurline;
 	*file = strdup(aehcurfile);
@@ -126,7 +126,7 @@ LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
  * list is ordered in descending order from highest load address to lowest */
 typedef struct aeh_module_entry_s{
 	aeh_modfile_t aehmod;
-	unsigned long start_addr;
+	uint32 start_addr;
 	char *path;
 	BOOLEAN bCrash;
 	struct aeh_module_entry_s *next;
@@ -141,7 +141,7 @@ static aeh_module_entry_t *firstmod = NULL;
          aeh_RES_BAD if args are bad
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-static int aehmod_add(char *mName, char *path, HMODULE hMod)
+static sint32 aehmod_add(char *mName, char *path, HMODULE hMod)
 {
 	aeh_module_entry_t *modentry;
 	aeh_SetCurrent(__LINE__, __FILE__);
@@ -164,7 +164,7 @@ static int aehmod_add(char *mName, char *path, HMODULE hMod)
 		return aeh_RES_NOMEM;
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
-	modentry->start_addr = (unsigned long)hMod;
+	modentry->start_addr = (uint32)hMod;
 	modentry->bCrash = FALSE;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!firstmod) {
@@ -196,9 +196,9 @@ static int aehmod_add(char *mName, char *path, HMODULE hMod)
 }
 
 /* get all the modules loaded by the current process */
-static int aehmod_Create()
+static sint32 aehmod_Create()
 {
-	int err;
+	sint32 err;
 	MODULEENTRY32 mod;
 	HANDLE hSnap;
 	Toolhlp tool;
@@ -271,9 +271,9 @@ void aehmod_Destroy()
 
 /* get the array index (starting from 1) in the modulelist of the module at
  * address caller; returns 0 if not found */
-static int aehmod_PosGet(unsigned caller, BOOLEAN crshadd)
+static sint32 aehmod_PosGet(uint32 caller, BOOLEAN crshadd)
 {
-	int ipos = 1;
+	sint32 ipos = 1;
 
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (caller > aeh_WIN32_ADDR_LIMIT) {
@@ -289,7 +289,7 @@ static int aehmod_PosGet(unsigned caller, BOOLEAN crshadd)
 				aeh_SetCurrent(__LINE__, __FILE__);
 				if (crshadd && modbuf->bCrash == FALSE) {
 					/* calc crc here since don't want to calc unless necessary*/
-					unsigned long crc;
+					uint32 crc;
 					FILE *f;
 
 					aeh_SetCurrent(__LINE__, __FILE__);
@@ -320,7 +320,7 @@ static int aehmod_PosGet(unsigned caller, BOOLEAN crshadd)
 }
 
 /* get the module name for the module at address caller */
-static char *aehmod_NameGet(unsigned caller)
+static char *aehmod_NameGet(uint32 caller)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (caller > aeh_WIN32_ADDR_LIMIT) return (kernel);
@@ -350,7 +350,7 @@ static char *aehmod_NameGet(unsigned caller)
  Returns aeh_RES_OK on success,
  		 aeh_RES_BAD/BUG/NOMEM on various errors.
 ------------------------------------------------------------------------*/
-static int aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, aeh_stack_entry_t *stk, int mapindex)
+static sint32 aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, aeh_stack_entry_t *stk, sint32 mapindex)
 {
 	aeh_map_t *mapbuf;
 	aeh_map_func_t *pointer;
@@ -435,7 +435,7 @@ static int aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, aeh
 }
 
 /* Given aeh and index in stack trace, return corresponding module name */
-static char *aeh_StkModName(const aeh_t *aeh, const unsigned int stk_index)
+static char *aeh_StkModName(const aeh_t *aeh, const uint32 stk_index)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || (aeh->stk[stk_index].mod_index < 0) ||
@@ -457,7 +457,7 @@ static char *aeh_StkModName(const aeh_t *aeh, const unsigned int stk_index)
 }
 
 /* Given aeh and index in stack trace, return corresponding module crc */
-static unsigned long aeh_StkModCrc(const aeh_t *aeh, const unsigned int stk_index)
+static uint32 aeh_StkModCrc(const aeh_t *aeh, const uint32 stk_index)
 {
   	if (!aeh || (aeh->stk[stk_index].mod_index < 0) ||
 		(aeh->stk[stk_index].mod_index > aeh->nmod) ||
@@ -472,10 +472,10 @@ static unsigned long aeh_StkModCrc(const aeh_t *aeh, const unsigned int stk_inde
 #ifdef _WIN32
 
 /* Set data into aeh's stack and module array list */
-static int aeh_setStackandModInfo(aeh_t *aeh)
+static sint32 aeh_setStackandModInfo(aeh_t *aeh)
 {
-	int err;
-	unsigned int i, j;
+	sint32 err;
+	uint32 i, j;
 	aeh_module_entry_t *modbuf = firstmod;
 
 	aeh_SetCurrent(__LINE__, __FILE__);
@@ -542,16 +542,16 @@ static int aeh_setStackandModInfo(aeh_t *aeh)
 }
 
 /* get stack trace and modules involved in crash */
-static int aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
+static sint32 aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
 {
 #if defined(_X86_)
-	unsigned base_pointer;   /* base of stack frame pointer */
-	unsigned frame_limit;    /* limit of this stack frame (actually start of next frame) */
-	unsigned caller;         /* address of statement to return to */
-	unsigned int mod_pos;
+	uint32 base_pointer;   /* base of stack frame pointer */
+	uint32 frame_limit;    /* limit of this stack frame (actually start of next frame) */
+	uint32 caller;         /* address of statement to return to */
+	uint32 mod_pos;
 	char *mod_name;
 	aeh_stack_entry_t *buffer;
-	int finished;
+	sint32 finished;
 	aeh->nstk = 0;
 
 	aeh_SetCurrent(__LINE__, __FILE__);
@@ -586,10 +586,10 @@ static int aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
 	while (!finished) {
 		/* find address of caller */
 		__try {
-			caller = *((unsigned *) (base_pointer + 4));
+			caller = *((uint32 *) (base_pointer + 4));
 		} __except (MemoryAccessExceptionFilter (GetExceptionInformation())) {
 			finished = 1;
-			aehDPRINT(("aeh_StackandModDump: got memory access exception for base_pointer %x\n", (unsigned long)(base_pointer + 4)));
+			aehDPRINT(("aeh_StackandModDump: got memory access exception for base_pointer %x\n", (uint32)(base_pointer + 4)));
 		}
 
 		/* we are done if caller is the windows system */
@@ -607,7 +607,7 @@ static int aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
 				mod_name = aehmod_NameGet(caller);
 				fprintf(f, "%x %s\n", caller, mod_name);
 			}
-			frame_limit = *((unsigned *)base_pointer);  /* beginning of next stack frame */
+			frame_limit = *((uint32 *)base_pointer);  /* beginning of next stack frame */
 			base_pointer = frame_limit;
 			aeh->nstk++;
 		}
@@ -624,7 +624,7 @@ static int aeh_StackandModDump(LPEXCEPTION_POINTERS ep, FILE *f, aeh_t *aeh)
 #endif
 }
 
-void getExceptionInstruction(long segreg, long pinstr, unsigned char *instr)
+void getExceptionInstruction(uint32 segreg, uint32 pinstr, uint8 *instr)
 {
 #if defined(_X86_)
 	__asm {
@@ -659,14 +659,14 @@ void getExceptionInstruction(long segreg, long pinstr, unsigned char *instr)
          aeh_RES_BAD if couldn't get call stack info
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_Create(aeh_t *aeh, const LPEXCEPTION_POINTERS ep, const aeh_appParam_t *aehapp, const char *systemDesc, const int *assertln, const char *assertfile, const char *asserttxt)
+sint32 aeh_Create(aeh_t *aeh, const LPEXCEPTION_POINTERS ep, const aeh_appParam_t *aehapp, const char *systemDesc, const sint32 *assertln, const char *assertfile, const char *asserttxt)
 
 #else  /* ifdef _WIN32 */
-int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const char *systemDesc, const int *assertln, const char *assertfile, const char *asserttxt)
+sint32 aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const char *systemDesc, const sint32 *assertln, const char *assertfile, const char *asserttxt)
 
 #endif /* if not _WIN32 */
 {
-	static short bPrevExc = 0;
+	static sint16 bPrevExc = 0;
 
 	/* see if there were any previous exceptions thrown before this one; if so,
 	 * the handler is generating an exception (possibly here) so just return */
@@ -698,8 +698,8 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 	/* find loaded module addresses and do stack trace */
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (ep) {
-		int err;
-		int infoind;
+		sint32 err;
+		sint32 infoind;
 		FILE *flog = NULL;		/* log file in ASCII form */
 		if (aehmod_Create() != aeh_RES_OK) {
 			aehDPRINT(("aeh_Create:can't find loaded modules\n"));
@@ -711,7 +711,7 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 		aeh_SetCurrent(__LINE__, __FILE__);
 		aeh->retcode = ep->ExceptionRecord->ExceptionCode;
 		aeh->retflag = ep->ExceptionRecord->ExceptionFlags;
-		aeh->retaddr = (unsigned long)ep->ExceptionRecord->ExceptionAddress;
+		aeh->retaddr = (uint32)ep->ExceptionRecord->ExceptionAddress;
 
 		if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION
 			&& ep->ExceptionRecord->NumberParameters >= 2)
@@ -729,16 +729,16 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 		infoind = 0;
 		if (ep->ExceptionRecord->ExceptionCode == EXCEPTION_ACCESS_VIOLATION
 			&& ep->ExceptionRecord->NumberParameters >= 2) {
-			unsigned char *temp;
+			uint8 *temp;
 			aeh->info[infoind].id = aeh_WIN32afl_ID;
-			temp = (unsigned char *)malloc(sizeof(unsigned char));
+			temp = (uint8 *)malloc(sizeof(uint8));
 			if (temp == NULL) {
 				aeh_SetCurrent(__LINE__, __FILE__);
 				return aeh_RES_NOMEM;
 			}
-			memset(temp, 0, sizeof(unsigned char));
-			*temp = (unsigned char)(ep->ExceptionRecord->ExceptionInformation[0] & 0xff);
-			(unsigned char *)(aeh->info[infoind].data) = temp;
+			memset(temp, 0, sizeof(uint8));
+			*temp = (uint8)(ep->ExceptionRecord->ExceptionInformation[0] & 0xff);
+			(uint8 *)(aeh->info[infoind].data) = temp;
 			infoind++;
 		}
 
@@ -774,21 +774,21 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 		/* This is buggy - crashes most of the time */
 #if 0
 		__try {
-			unsigned char *temp;
+			uint8 *temp;
 
 			aeh_SetCurrent(__LINE__, __FILE__);
 			aeh->info[infoind].id = aeh_WIN32inst_ID;
-			temp = (unsigned char *)malloc(aeh_NINSTB * sizeof(unsigned char));
+			temp = (uint8 *)malloc(aeh_NINSTB * sizeof(uint8));
 			aeh_SetCurrent(__LINE__, __FILE__);
 			if (temp == NULL) {
 				aeh_SetCurrent(__LINE__, __FILE__);
 				return aeh_RES_NOMEM;
 			}
-			memset(temp, 0, aeh_NINSTB * sizeof(unsigned char));
+			memset(temp, 0, aeh_NINSTB * sizeof(uint8));
 			aeh_SetCurrent(__LINE__, __FILE__);
 			getExceptionInstruction(ep->ContextRecord->SegCs, ep->ContextRecord->Eip, temp);
 			aeh_SetCurrent(__LINE__, __FILE__);
-			(unsigned char *)(aeh->info[infoind].data) = temp;
+			(uint8 *)(aeh->info[infoind].data) = temp;
 			aeh_SetCurrent(__LINE__, __FILE__);
 			infoind++;
 		} __except (MemoryAccessExceptionFilter (GetExceptionInformation())) {
@@ -874,7 +874,7 @@ int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const c
 --------------------------------------------------------------------------*/
 void aeh_Destroy(aeh_t *aeh)
 {
-	unsigned int i;
+	uint32 i;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (aeh->stk) {
 		if (aeh->modfunc) {
@@ -943,10 +943,10 @@ void aeh_Destroy(aeh_t *aeh)
  2^(2*12 - 1)/2^32 = 1/2^9.
  On error or empty stack, returns 0.
 --------------------------------------------------------------------------*/
-unsigned long aeh_getSignature(const aeh_t *aeh)
+uint32 aeh_getSignature(const aeh_t *aeh)
 {
-	unsigned long crc = 0xffffffff;
-	unsigned int i;
+	uint32 crc = 0xffffffff;
+	uint32 i;
 
 	if (!aeh) {
 		aehDPRINT(("aeh_getSignature: null aeh\n"));
@@ -958,7 +958,7 @@ unsigned long aeh_getSignature(const aeh_t *aeh)
 		return 0;
 	}
 	for (i = 0; i < aeh->nstk; i++) {
-		unsigned int mod_index = aeh->stk[i].mod_index;
+		uint32 mod_index = aeh->stk[i].mod_index;
 		if (mod_index == 0)
 			continue;	/* probably kernel */
 		if (mod_index > aeh->nmod) {
@@ -966,8 +966,8 @@ unsigned long aeh_getSignature(const aeh_t *aeh)
 				i, mod_index, aeh->nmod));
 			return 0;
 		}
-		crc = dp_crc32_inc((unsigned char *)&aeh->mod[mod_index-1].crc, sizeof(long), crc);
-		crc = dp_crc32_inc((unsigned char *)&aeh->stk[i].offset_addr, sizeof(long), crc);
+		crc = dp_crc32_inc((uint8 *)&aeh->mod[mod_index-1].crc, sizeof(uint32), crc);
+		crc = dp_crc32_inc((uint8 *)&aeh->stk[i].offset_addr, sizeof(uint32), crc);
 	}
 	return ~crc;	/* Return one's complement as per crc32 spec */
 }
@@ -977,16 +977,16 @@ unsigned long aeh_getSignature(const aeh_t *aeh)
  Input: signature (from getSignature)
  Output: 9 byte string plus null termination
 --------------------------------------------------------------------------*/
-void aeh_signature_toString(unsigned long crc, char *buf)
+void aeh_signature_toString(uint32 crc, char *buf)
 {
-	sprintf(buf, "%04X-%04X", (unsigned)((crc >> 16) & 0xffff), (unsigned)(crc & 0xffff));
+	sprintf(buf, "%04X-%04X", (uint32)((crc >> 16) & 0xffff), (uint32)(crc & 0xffff));
 }
 
 /*--------------------------------------------------------------------------
  Add a comment field to an aeh.
  Returns aeh_RES_OK on success.
 --------------------------------------------------------------------------*/
-int aeh_addComment(aeh_t *aeh, const char *comment)
+sint32 aeh_addComment(aeh_t *aeh, const char *comment)
 {
 	char *tmp;
 
@@ -1027,10 +1027,10 @@ int aeh_addComment(aeh_t *aeh, const char *comment)
  Returns aeh_RES_OK on success,
 		 aeh_RES_EMPTY if there is no nth comment.
 --------------------------------------------------------------------------*/
-int aeh_getComment(aeh_t *aeh, char *comment, int len, int n)
+sint32 aeh_getComment(aeh_t *aeh, char *comment, sint32 len, sint32 n)
 {
-	int i;
-	int nComments = 0;
+	sint32 i;
+	sint32 nComments = 0;
 
 	if (!aeh || !comment)
 		return aeh_RES_BAD;
@@ -1053,10 +1053,10 @@ int aeh_getComment(aeh_t *aeh, char *comment, int len, int n)
  Returns aeh_RES_OK on success,
 		 aeh_RES_EMPTY if the stack trace contains no known modules.
 --------------------------------------------------------------------------*/
-int aeh_getLastModule(aeh_t *aeh, char *name, int len)
+sint32 aeh_getLastModule(aeh_t *aeh, char *name, sint32 len)
 {
-	int i;
-	int mod_index;
+	sint32 i;
+	sint32 mod_index;
 
 	if (!aeh || !name)
 		return aeh_RES_BAD;
@@ -1089,9 +1089,9 @@ int aeh_getLastModule(aeh_t *aeh, char *name, int len)
          aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
+sint32 aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
 {
-	unsigned int i;
+	uint32 i;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !aehmapcat) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -1111,9 +1111,9 @@ int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
 	memset(aeh->modfunc, 0, aeh->nstk * sizeof(aeh_modfunc_t));
 	/* get corresponding map files and load its function info */
 	for (i = 0; i < aeh->nstk; i++) {
-		int err;
-		int index;
-		int modind = aeh->stk[i].mod_index - 1;
+		sint32 err;
+		sint32 index;
+		sint32 modind = aeh->stk[i].mod_index - 1;
 		if (modind < 0)
 			index = -1;
 		else if (modind >= aeh->nmod) {
@@ -1133,7 +1133,7 @@ int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
 	return aeh_RES_OK;
 }
 
-static int parseDispCardInfo(const char *dispCard, char *szName, char *szDriver, unsigned long *VersionMS, unsigned long *VersionLS)
+static sint32 parseDispCardInfo(const char *dispCard, char *szName, char *szDriver, uint32 *VersionMS, uint32 *VersionLS)
 {
 	const char *pbuf = dispCard;
 	const char *ptr = pbuf;
@@ -1163,7 +1163,7 @@ static int parseDispCardInfo(const char *dispCard, char *szName, char *szDriver,
 
 static char *parseSystemInfo(const char *sysDesc, char **crshtxt)
 {
-	unsigned long VersionMS, VersionLS;
+	uint32 VersionMS, VersionLS;
 	char buf[BUFFER_SIZE], buftxt[BUFFER_SIZE];
 	char szName[BUFFER_SIZE], szDriver[BUFFER_SIZE];
 	const char *pbuf = sysDesc;
@@ -1183,15 +1183,15 @@ static char *parseSystemInfo(const char *sysDesc, char **crshtxt)
 		pbuf = ptr + 4;
 	}
 	while (pbuf) {
-		int err;
+		sint32 err;
 		err = parseDispCardInfo(pbuf, szName, szDriver, &VersionMS, &VersionLS);
 		if (err != aeh_RES_OK) break;
 		if (VersionMS || VersionLS) {
 			sprintf(&buf[strlen(buf)], " %s: %s (%d.%d.%d.%d)\n",szName,szDriver,
-					(unsigned int)((VersionMS>>16)&0xffff),
-					(unsigned int)(VersionMS&0xffff),
-					(unsigned int)((VersionLS>>16)&0xffff),
-					(unsigned int)(VersionLS&0xffff));
+					(uint32)((VersionMS>>16)&0xffff),
+					(uint32)(VersionMS&0xffff),
+					(uint32)((VersionLS>>16)&0xffff),
+					(uint32)(VersionLS&0xffff));
 		} else
 			sprintf(&buf[strlen(buf)], " %s: %s (unknown version)\n", szName,
 					szDriver);
@@ -1210,7 +1210,7 @@ static char *parseSystemInfo(const char *sysDesc, char **crshtxt)
 	return retStr;	/* NULL if NOMEM */
 }
 
-void codetostring(int retcode, char *desc)
+void codetostring(sint32 retcode, char *desc)
 {
 	switch (retcode) {
 		case EXCEPTION_ACCESS_VIOLATION:
@@ -1290,11 +1290,11 @@ void codetostring(int retcode, char *desc)
          len (actual length of aehDesc)
  Return: length needed to completely write out info
 --------------------------------------------------------------------------*/
-int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
+sint32 aeh_toString(const aeh_t *aeh, char *aehDesc, uint32 *len)
 {
-	unsigned int i;
+	uint32 i;
 	char tmp[BUFFER_SIZE + 1];
-	long crc;
+	uint32 crc;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	tmp[0] = '\0';
 	aehDPRINT(("enter aeh_toString time %d\n", eclock()));
@@ -1342,7 +1342,7 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
 			if ((aeh->info[i].id == aeh_WIN32afl_ID) &&
 				(aeh->retcode == EXCEPTION_ACCESS_VIOLATION)) {
 				sprintf(&tmp[strlen(tmp)], " Access violation type: %s\n",
-					*((unsigned char *)(aeh->info[i].data)) ? "write" : "read");
+					*((uint8 *)(aeh->info[i].data)) ? "write" : "read");
 			} else if (aeh->info[i].id == aeh_WIN32info_ID) {
 				if (aeh->retcode == EXCEPTION_ACCESS_VIOLATION) {
 					sprintf(&tmp[strlen(tmp)], " Access violation addr: %lx\n",
@@ -1352,10 +1352,10 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
 				sprintf(&tmp[strlen(tmp)], "Reg: bp:%08lx sp:%08lx ip:%08lx cs:%08lx ss:%08lx\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->ebp, ((aeh_WIN32info_t *)(aeh->info[i].data))->esp, ((aeh_WIN32info_t *)(aeh->info[i].data))->eip, ((aeh_WIN32info_t *)(aeh->info[i].data))->segCs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segSs);
 				sprintf(&tmp[strlen(tmp)], "Reg: ds:%08lx es:%08lx fs:%08lx gs:%08lx ContextFlags:%08lx\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->segDs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segEs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segFs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segGs, ((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags);
 			} else if (aeh->info[i].id == aeh_WIN32inst_ID) {
-				int j;
+				sint32 j;
 				sprintf(&tmp[strlen(tmp)], "Bytes at cs:ip: ");
 				for (j = 0; j < aeh_NINSTB; j++)
-					sprintf(&tmp[strlen(tmp)], "%02x ", ((unsigned char *)(aeh->info[i].data))[j]);
+					sprintf(&tmp[strlen(tmp)], "%02x ", ((uint8 *)(aeh->info[i].data))[j]);
 				sprintf(&tmp[strlen(tmp)], "\n");
 			} else if (aeh->info[i].id == aeh_COMMENT_ID) {
 				sprintf(&tmp[strlen(tmp)], "User Comment:%s\n", (char *)aeh->info[i].data);
@@ -1389,7 +1389,7 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
 		if (strlen(tmp) + 29 < BUFFER_SIZE)
 			sprintf(&tmp[strlen(tmp)], " abs_addr  mod_off func_off\n");
 		for (i = 0; i < aeh->nstk; i++) {
-			unsigned long stkoffsetaddr, stkmodcrc;
+			uint32 stkoffsetaddr, stkmodcrc;
 			char *stkmodname;
 			stkoffsetaddr = aeh->stk[i].offset_addr;
 			stkmodname = aeh_StkModName(aeh, i);
@@ -1442,7 +1442,7 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len)
  **** Methods to convert between aeh_t and aeh_buf_t(binary stream) ****
  ***********************************************************************/
 
-static int putStream(unsigned char **p, const void *dat, unsigned int lendat, unsigned char *peos)
+static sint32 putStream(uint8 **p, const void *dat, uint32 lendat, uint8 *peos)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if ((peos < *p) || (peos - *p < lendat)) {
@@ -1454,7 +1454,7 @@ static int putStream(unsigned char **p, const void *dat, unsigned int lendat, un
 	return 0;
 }
 
-static int getStream(const unsigned char **p, void *dat, unsigned int lendat, const unsigned char *peos)
+static sint32 getStream(const uint8 **p, void *dat, uint32 lendat, const uint8 *peos)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if ((peos < *p) || (peos - *p < lendat)) {
@@ -1466,9 +1466,9 @@ static int getStream(const unsigned char **p, void *dat, unsigned int lendat, co
 	return 0;
 }
 
-static int putCharStream(unsigned char **p, const char *dat, unsigned char *peos)
+static sint32 putCharStream(uint8 **p, const char *dat, uint8 *peos)
 {
-	unsigned int lendat = 0;
+	uint32 lendat = 0;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if ((peos < *p) || (peos - *p < sizeof(lendat))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -1476,7 +1476,7 @@ static int putCharStream(unsigned char **p, const char *dat, unsigned char *peos
 	}
 	if (dat) {
 		lendat = strlen(dat);
-		if (peos - *p < (int)(lendat + sizeof(lendat)))
+		if (peos - *p < (sint32)(lendat + sizeof(lendat)))
 			lendat = (peos - *p) - sizeof(lendat);
 	}
 	writeSwap((void**)p, &lendat, sizeof(lendat));
@@ -1488,9 +1488,9 @@ static int putCharStream(unsigned char **p, const char *dat, unsigned char *peos
 	return 0;
 }
 
-static int getCharStream(const unsigned char **p, char **dat, const unsigned char *peos)
+static sint32 getCharStream(const uint8 **p, char **dat, const uint8 *peos)
 {
-	unsigned int lendat = 0;
+	uint32 lendat = 0;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if ((peos < *p) || (peos - *p < sizeof(lendat))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -1514,7 +1514,7 @@ static int getCharStream(const unsigned char **p, char **dat, const unsigned cha
 	return 0;
 }
 
-static int putStreamErrFull(unsigned char *p, aeh_buf_t *aehbuf)
+static sint32 putStreamErrFull(uint8 *p, aeh_buf_t *aehbuf)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	aehbuf->buflen = p - &(aehbuf->buf[0]);
@@ -1532,10 +1532,10 @@ static int putStreamErrFull(unsigned char *p, aeh_buf_t *aehbuf)
          aeh_RES_FULL if info is greater than aehbuf buffer size
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
+sint32 aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 {
-	unsigned int i;
-	unsigned char *pwrite, *psave, *pend;
+	uint32 i;
+	uint8 *pwrite, *psave, *pend;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !aehbuf) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -1583,7 +1583,7 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
 	for (i = 0; i < aeh->nstk; i++) {
-		unsigned char *ptr = pwrite;
+		uint8 *ptr = pwrite;
 		if (putStream(&pwrite, &aeh->stk[i].mod_index, sizeof(aeh->stk[i].mod_index), pend) || putStream(&pwrite, &aeh->stk[i].offset_addr, sizeof(aeh->stk[i].offset_addr), pend)) {
 			writeSwap((void**)&psave, (void*)&i, sizeof(aeh->nstk));
 			aeh_SetCurrent(__LINE__, __FILE__);
@@ -1598,7 +1598,7 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
 	for (i = 0; i < aeh->nmod; i++) {
-		unsigned char *ptr = pwrite;
+		uint8 *ptr = pwrite;
 		if (putStream(&pwrite, &aeh->mod[i].crc, sizeof(aeh->mod[i].crc), pend) || putCharStream(&pwrite, aeh->mod[i].name, pend)) {
 			writeSwap((void**)&psave, (void*)&i, sizeof(aeh->nstk));
 			aeh_SetCurrent(__LINE__, __FILE__);
@@ -1644,34 +1644,34 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 		switch(aeh->info[i].id) {
 			case aeh_WIN32afl_ID:
 				if (aeh->retcode == EXCEPTION_ACCESS_VIOLATION) {
-					if (putStream(&pwrite, aeh->info[i].data, sizeof(unsigned char), pend)) {
+					if (putStream(&pwrite, aeh->info[i].data, sizeof(uint8), pend)) {
 						aeh_SetCurrent(__LINE__, __FILE__);
 						return putStreamErrFull(pwrite, aehbuf);
 					}
 				}
 				break;
 			case aeh_WIN32info_ID:
-				if (putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eax), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebx), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ecx), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edx), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esi), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edi), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebp), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eip), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esp), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segCs), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segSs), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segDs), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segEs), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segFs), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segGs), sizeof(unsigned long), pend) ||
-					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags), sizeof(unsigned long), pend)) {
+				if (putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eax), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebx), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ecx), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edx), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esi), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edi), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebp), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eip), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esp), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segCs), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segSs), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segDs), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segEs), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segFs), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segGs), sizeof(uint32), pend) ||
+					putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags), sizeof(uint32), pend)) {
 					aeh_SetCurrent(__LINE__, __FILE__);
 					return putStreamErrFull(pwrite, aehbuf);
 				}
 				if (aeh->retcode == EXCEPTION_ACCESS_VIOLATION) {
-					if (putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->access_addr), sizeof(unsigned long), pend)) {
+					if (putStream(&pwrite, &(((aeh_WIN32info_t *)(aeh->info[i].data))->access_addr), sizeof(uint32), pend)) {
 						aeh_SetCurrent(__LINE__, __FILE__);
 						return putStreamErrFull(pwrite, aehbuf);
 					}
@@ -1682,7 +1682,7 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 					aeh_SetCurrent(__LINE__, __FILE__);
 					return putStreamErrFull(pwrite, aehbuf);
 				}
-				memcpy(pwrite, (unsigned char *)(aeh->info[i].data), aeh_NINSTB);
+				memcpy(pwrite, (uint8 *)(aeh->info[i].data), aeh_NINSTB);
 				pwrite += aeh_NINSTB;
 				break;
 			case aeh_COMMENT_ID:
@@ -1713,11 +1713,11 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
          aeh_RES_FULL if incomplete data read back (due to full aehbuf buffer)
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
+sint32 aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 {
-	int err, err1;
-	unsigned int i;
-	const unsigned char *pread, *pend;
+	sint32 err, err1;
+	uint32 i;
+	const uint8 *pread, *pend;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !aehbuf) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -1852,12 +1852,12 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 			switch(aeh->info[i].id) {
 				case aeh_WIN32afl_ID:
 					if (aeh->retcode == EXCEPTION_ACCESS_VIOLATION) {
-						if (!(aeh->info[i].data = (unsigned char *)malloc(sizeof(unsigned char)))) {
+						if (!(aeh->info[i].data = (uint8 *)malloc(sizeof(uint8)))) {
 							aeh_SetCurrent(__LINE__, __FILE__);
 							return aeh_RES_NOMEM;
 						}
-						memset(aeh->info[i].data, 0, sizeof(unsigned char));
-						if (getStream(&pread, aeh->info[i].data, sizeof(unsigned char), pend)) {
+						memset(aeh->info[i].data, 0, sizeof(uint8));
+						if (getStream(&pread, aeh->info[i].data, sizeof(uint8), pend)) {
 							aeh_SetCurrent(__LINE__, __FILE__);
 							return err1;
 						}
@@ -1869,43 +1869,43 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
 						return aeh_RES_NOMEM;
 					}
 					memset(aeh->info[i].data, 0, sizeof(aeh_WIN32info_t));
-					if (getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eax), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebx), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ecx), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edx), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esi), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edi), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebp), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eip), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esp), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segCs), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segSs), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segDs), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segEs), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segFs), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segGs), sizeof(unsigned long), pend) ||
-						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags), sizeof(unsigned long), pend)) {
+					if (getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eax), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebx), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ecx), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edx), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esi), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->edi), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->ebp), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->eip), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->esp), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segCs), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segSs), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segDs), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segEs), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segFs), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->segGs), sizeof(uint32), pend) ||
+						getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags), sizeof(uint32), pend)) {
 						aeh_SetCurrent(__LINE__, __FILE__);
 						return err1;
 					}
 					if (aeh->retcode == EXCEPTION_ACCESS_VIOLATION) {
-						if (getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->access_addr), sizeof(unsigned long), pend)) {
+						if (getStream(&pread, &(((aeh_WIN32info_t *)(aeh->info[i].data))->access_addr), sizeof(uint32), pend)) {
 							aeh_SetCurrent(__LINE__, __FILE__);
 							return err1;
 						}
 					}
 					break;
 				case aeh_WIN32inst_ID:
-					if (!(aeh->info[i].data = (unsigned char *)malloc(aeh_NINSTB * sizeof(unsigned char)))) {
+					if (!(aeh->info[i].data = (uint8 *)malloc(aeh_NINSTB * sizeof(uint8)))) {
 						aeh_SetCurrent(__LINE__, __FILE__);
 						return aeh_RES_NOMEM;
 					}
-					memset(aeh->info[i].data, 0, aeh_NINSTB * sizeof(unsigned char));
+					memset(aeh->info[i].data, 0, aeh_NINSTB * sizeof(uint8));
 					if (pread + aeh_NINSTB > pend) {
 						aeh_SetCurrent(__LINE__, __FILE__);
 						return err1;
 					}
-					memcpy((unsigned char *)(aeh->info[i].data), pread, aeh_NINSTB);
+					memcpy((uint8 *)(aeh->info[i].data), pread, aeh_NINSTB);
 					pread += aeh_NINSTB;
 					break;
 				case aeh_COMMENT_ID:
@@ -1941,7 +1941,7 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf)
  Return: aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_stripSysDesc(aeh_t *aeh)
+sint32 aeh_stripSysDesc(aeh_t *aeh)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh) {
@@ -1962,9 +1962,9 @@ int aeh_stripSysDesc(aeh_t *aeh)
  Return: aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[])
+sint32 aeh_stripInfoId(aeh_t *aeh, uint32 nids, uint32 stripIds[])
 {
-	unsigned int n, n_left;
+	uint32 n, n_left;
 
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aeh || !nids || !stripIds) {
@@ -1973,7 +1973,7 @@ int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[])
 	}
 	/* All id's not matching one in stripIds are moved to aeh->info[0-n_left] */
 	for (n = 0, n_left = 0; n < aeh->ninfo; n++) {
-		unsigned int j;
+		uint32 j;
 
 		for (j = 0; j < nids; j++) {
 			if (aeh->info[n].id == stripIds[j])
@@ -2013,7 +2013,7 @@ int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[])
  Return: aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_stripExceptionAddress(aeh_t *aeh)
+sint32 aeh_stripExceptionAddress(aeh_t *aeh)
 {
 	if (!aeh)
 		return aeh_RES_BAD;

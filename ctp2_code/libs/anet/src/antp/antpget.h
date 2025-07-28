@@ -33,40 +33,40 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 typedef struct {
 	char host[antpget_URL_MAXLEN];	/* host part of URL to antpget */
-	int  port;					/* port part of URL to antpget */
+	sint32  port;					/* port part of URL to antpget */
 	char path[antpget_URL_MAXLEN];	/* path part of URL to antpget */
 } antpget_url_t;
 
 typedef struct {
-	int status;						/* antp status ret'd in response header */
-	char path[antpget_URL_MAXLEN];	/* path returned in response header */
-	long offset;					/* offset returned in response header */
-	long length;					/* length returned in response header */
-	char buf[antpget_HEADER_MAXLEN];	/* buffer containing header */
-	int nlines;							/* number of lines parsed */
+	sint32 status;							/* antp status ret'd in response header */
+	char path[antpget_URL_MAXLEN];			/* path returned in response header */
+	sint32 offset;							/* offset returned in response header */
+	sint32 length;							/* length returned in response header */
+	char buf[antpget_HEADER_MAXLEN];		/* buffer containing header */
+	sint32 nlines;							/* number of lines parsed */
 	char *line[antpget_HEADER_MAXLINES];	/* pointers to lines in buf,
 											 * each terminated by a \0.
 											 */
 } antpget_header_t;
 
 typedef struct {
-	int sockfd;					/* socket file descriptor */
+	sint32 sockfd;					/* socket file descriptor */
 
 	antpget_url_t url;				/* current url */
 	struct protoent protoent;		/* current protocol info */
 	struct sockaddr_in sockaddr;	/* current socket info */
-	long offset;					/* file offset of the current request */
+	sint32 offset;					/* file offset of the current request */
 
-	int respState;	/* State of ANTP response parsing state machine */
-	int bNewLine;	/* TRUE if previous character was '\n' */
+	sint32 respState;	/* State of ANTP response parsing state machine */
+	sint32 bNewLine;	/* TRUE if previous character was '\n' */
 
 	antpget_header_t header;	/* the parsed antp header */
 	char *pbuf;		/* current location in header.buf;  points to beginning
 					 * of data when readHeader is finished.
 					 */
-	int datalen;	/* length of data remaining at the end of header.buf */
+	sint32 datalen;	/* length of data remaining at the end of header.buf */
 
-	int readLength;	/* total bytes of data read so far in this response */
+	sint32 readLength;	/* total bytes of data read so far in this response */
 } antpget_t;
 
 /*--------------------------------------------------------------------------
@@ -90,7 +90,7 @@ dp_result_t antpget_parseURL(const char *urlstr, antpget_url_t *url);
  Warning: DNS lookups may take a significant amount of time.
  Returns the socket file descriptor on success, or -1 on failure.
 --------------------------------------------------------------------------*/
-int antpget_setHost(antpget_t *antpget, const char *host, int port);
+sint32 antpget_setHost(antpget_t *antpget, const char *host, sint32 port);
 
 /*--------------------------------------------------------------------------
  Connect to the host and port specified with antpget_setHost.
@@ -103,7 +103,7 @@ dp_result_t antpget_connect(antpget_t *antpget);
  Request a partial get at byte <offset> of the file at <path>.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t antpget_requestGet(antpget_t *antpget, const char *path, long offset);
+dp_result_t antpget_requestGet(antpget_t *antpget, const char *path, sint32 offset);
 
 /*--------------------------------------------------------------------------
  Request the name of the first file on the server.
@@ -151,4 +151,4 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr);
 	dp_RES_NOTYET if the header has not been parsed,
 	dp_RES_BADSIZE if the antp server returned an invalid header.
 --------------------------------------------------------------------------*/
-dp_result_t antpget_readData(antpget_t *antpget, char *buf, int buflen, int *nread);
+dp_result_t antpget_readData(antpget_t *antpget, char *buf, sint32 buflen, sint32 *nread);

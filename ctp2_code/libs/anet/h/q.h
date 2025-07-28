@@ -47,6 +47,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <string.h>
 #include <stddef.h>
 #include <stdio.h>
+#include "types.h"
 
 /* The structures in this file are not meant to be sent over the net
  * nor written to disk.  We need to protect ourselves from programs
@@ -70,8 +71,8 @@ typedef struct {
 typedef struct {
 	/* Circular queue buffer. */
 	q_element_t	elements[q_MAXELS];
-	int			head;	/* Index into elements of place to put next message. */
-	int			tail;	/* Index into elements of place to get next message. */
+	sint32			head;	/* Index into elements of place to put next message. */
+	sint32			tail;	/* Index into elements of place to get next message. */
 } q_t;
 
 /*-----------------------------------------------------------------------
@@ -106,7 +107,7 @@ void *q_get(q_t *q, size_t *pLen);
 /*-----------------------------------------------------------------------
  Returns number of free slots in queue.
 -----------------------------------------------------------------------*/
-int q_nfree(q_t *pq);
+sint32 q_nfree(q_t *pq);
 
 /*-----------------------------------------------------------------------
  Write queue to disk.
@@ -116,7 +117,7 @@ void q_freeze(q_t *pq, FILE *fp);
 /*-----------------------------------------------------------------------
  Read queue from disk.
 -----------------------------------------------------------------------*/
-int q_thaw(q_t *pq, FILE *fp);
+sint32 q_thaw(q_t *pq, FILE *fp);
 
 #include "dpunpack.h"
 #endif

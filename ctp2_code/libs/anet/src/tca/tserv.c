@@ -143,10 +143,10 @@ void tserv_destroy(tserv_t *tserv)
 
 #if 0 && (defined(DPRNT) || defined(DEBUG) || defined(_DEBUG))
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -163,7 +163,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 
 	precondition(tserv);
 	precondition(fp);
@@ -171,7 +171,7 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 
 	/* tserv server/peer info */
 	DPRINT(("tserv_Freeze: writing %d clients and my info\n", tserv->clients->n_used));
-	if (fwrite(&(tserv->clients->n_used), sizeof(int), 1, fp) != 1)
+	if (fwrite(&(tserv->clients->n_used), sizeof(sint32), 1, fp) != 1)
 		return dp_RES_FULL;
 	for (i = 0; i < tserv->clients->n_used; i++) {
 		assoctab_item_t* item = assoctab_getkey(tserv->clients, i);
@@ -187,10 +187,10 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 		 * 			hClient, pci->logged_in, pci->activated, pci->need_send));
 		 * DPRINT(("tserv_Freeze:     challenge (uses:%d) %s\n", pci->challenge_uses, hexstring(pci->challenge.challenge, tca_LEN_CHALLENGE)));
 		 */
-		if ((fwrite(&(pci->logged_in), sizeof(int), 1, fp) != 1) ||
-			(fwrite(&(pci->activated), sizeof(int), 1, fp) != 1) ||
+		if ((fwrite(&(pci->logged_in), sizeof(sint32), 1, fp) != 1) ||
+			(fwrite(&(pci->activated), sizeof(sint32), 1, fp) != 1) ||
 			(fwrite(&(pci->challenge), sizeof(tca_challenge_t), 1, fp) != 1) ||
-			(fwrite(&(pci->challenge_uses), sizeof(int), 1, fp) != 1) ||
+			(fwrite(&(pci->challenge_uses), sizeof(sint32), 1, fp) != 1) ||
 			(fwrite(&(pci->need_send), sizeof(char), 1, fp) != 1) ||
 			(fwrite(&(pci->reason), sizeof(dp_result_t), 1, fp) != 1))
 			return dp_RES_FULL;
@@ -212,20 +212,20 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 		(fwrite(&(tserv->userinfo.uname), sizeof(tcapw_uname_t), 1, fp) != 1) ||
 		(fwrite(&(tserv->userinfo.hpw), sizeof(tcapw_hpw_t), 1, fp) != 1) ||
 		(fwrite(tserv->userinfo.email, tcapw_MAXLEN_EMAIL, 1, fp) != 1) ||
-		(fwrite(&(tserv->userinfo.flags), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->userinfo.secretcode), sizeof(short), 1, fp) != 1) ||
+		(fwrite(&(tserv->userinfo.flags), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->userinfo.secretcode), sizeof(sint16), 1, fp) != 1) ||
 		(fwrite(&(tserv->userinfo.created), sizeof(time_t), 1, fp) != 1) ||
 		(fwrite(&(tserv->userinfo.lastlogin), sizeof(time_t), 1, fp) != 1) ||
 		(fwrite(&(tserv->secretcode), sizeof(tcapw_pw_t), 1, fp) != 1) ||
-		(fwrite(&(tserv->challenge_set), sizeof(int), 1, fp) != 1) ||
+		(fwrite(&(tserv->challenge_set), sizeof(sint32), 1, fp) != 1) ||
 		(fwrite(&(tserv->challenge), sizeof(tca_challenge_t), 1, fp) != 1) ||
-		(fwrite(&(tserv->logged_in), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->activated), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->please_send_response), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->please_send_newuser), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->please_send_secretcode), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->please_send_pwchange), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(tserv->waiting_for_rx), sizeof(int), 1, fp) != 1))
+		(fwrite(&(tserv->logged_in), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->activated), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->please_send_response), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->please_send_newuser), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->please_send_secretcode), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->please_send_pwchange), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(tserv->waiting_for_rx), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_FULL;
 
 	err = tca_Freeze(tserv->tca, fp);
@@ -245,14 +245,14 @@ dp_result_t tserv_Freeze(tserv_t *tserv, FILE *fp)
 dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 {
 	dp_result_t err;
-	int i, nClients;
+	sint32 i, nClients;
 	clock_t now;
 
 	precondition(tserv);
 	precondition(fp);
 
 	/* tserv server/peer info */
-	if (fread(&nClients, sizeof(int), 1, fp) != 1)
+	if (fread(&nClients, sizeof(sint32), 1, fp) != 1)
 		return dp_RES_EMPTY;
 	DPRINT(("tserv_Thaw: reading %d clients and my info\n", nClients));
 	for (i = 0; i < nClients; i++) {
@@ -266,10 +266,10 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 		}
 		pci = (tserv_clientinfo_t *)assoctab_subscript_grow(tserv->clients, hClient);
 		assert(pci);
-		if ((fread(&(pci->logged_in), sizeof(int), 1, fp) != 1) ||
-			(fread(&(pci->activated), sizeof(int), 1, fp) != 1) ||
+		if ((fread(&(pci->logged_in), sizeof(sint32), 1, fp) != 1) ||
+			(fread(&(pci->activated), sizeof(sint32), 1, fp) != 1) ||
 			(fread(&(pci->challenge), sizeof(tca_challenge_t), 1, fp) != 1) ||
-			(fread(&(pci->challenge_uses), sizeof(int), 1, fp) != 1) ||
+			(fread(&(pci->challenge_uses), sizeof(sint32), 1, fp) != 1) ||
 			(fread(&(pci->need_send), sizeof(char), 1, fp) != 1) ||
 			(fread(&(pci->reason), sizeof(dp_result_t), 1, fp) != 1))
 			return dp_RES_EMPTY;
@@ -291,20 +291,20 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 		(fread(&(tserv->userinfo.uname), sizeof(tcapw_uname_t), 1, fp) != 1) ||
 		(fread(&(tserv->userinfo.hpw), sizeof(tcapw_hpw_t), 1, fp) != 1) ||
 		(fread(tserv->userinfo.email, tcapw_MAXLEN_EMAIL, 1, fp) != 1) ||
-		(fread(&(tserv->userinfo.flags), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->userinfo.secretcode), sizeof(short), 1, fp) != 1) ||
+		(fread(&(tserv->userinfo.flags), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->userinfo.secretcode), sizeof(sint16), 1, fp) != 1) ||
 		(fread(&(tserv->userinfo.created), sizeof(time_t), 1, fp) != 1) ||
 		(fread(&(tserv->userinfo.lastlogin), sizeof(time_t), 1, fp) != 1) ||
 		(fread(&(tserv->secretcode), sizeof(tcapw_pw_t), 1, fp) != 1) ||
-		(fread(&(tserv->challenge_set), sizeof(int), 1, fp) != 1) ||
+		(fread(&(tserv->challenge_set), sizeof(sint32), 1, fp) != 1) ||
 		(fread(&(tserv->challenge), sizeof(tca_challenge_t), 1, fp) != 1) ||
-		(fread(&(tserv->logged_in), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->activated), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->please_send_response), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->please_send_newuser), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->please_send_secretcode), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->please_send_pwchange), sizeof(int), 1, fp) != 1) ||
-		(fread(&(tserv->waiting_for_rx), sizeof(int), 1, fp) != 1))
+		(fread(&(tserv->logged_in), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->activated), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->please_send_response), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->please_send_newuser), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->please_send_secretcode), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->please_send_pwchange), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(tserv->waiting_for_rx), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_EMPTY;
 	/* DPRINT(("tserv_Thaw: uid:%d email:%s flags:%d\n", tserv->userinfo.uid, tserv->userinfo.email, tserv->userinfo.flags));
 	 * DPRINT(("tserv_Thaw: challenge_set:%d logged_in:%d activated:%d waiting_for_rx:%d\n", tserv->challenge_set, tserv->logged_in, tserv->activated, tserv->waiting_for_rx));
@@ -333,7 +333,7 @@ dp_result_t tserv_Thaw(tserv_t *tserv, FILE *fp)
 --------------------------------------------------------------------------*/
 playerHdl_t tserv_uid2hdl(tserv_t *tserv, tcapw_uid_t uid)
 {
-	int i;
+	sint32 i;
 	assoctab_item_t *pi;
 	tserv_clientinfo_t *pci;
 
@@ -423,12 +423,12 @@ dp_result_t tserv_uid2info(tserv_t *tserv, tcapw_uid_t uid, tcapw_entry_t *entry
 --------------------------------------------------------------------------*/
 static dp_result_t tserv_check_email(const char *email)
 {
-	int i, i_at = -1, i_dot = -1;
+	sint32 i, i_at = -1, i_dot = -1;
 
 	/* some basic checks: */
 	for (i = 0; email[i] && i < tcapw_MAXLEN_EMAIL; i++) {
 		/* strictly 7-bit ASCII */
-		if ((unsigned)email[i] > 0x7f) return dp_RES_BAD;
+		if ((uint32)email[i] > 0x7f) return dp_RES_BAD;
 		/* no more than one '@' */
 		if (email[i] == '@' && (i_at != -1 || i == 0)) return dp_RES_BAD;
 		if (email[i] == '@') i_at = i;
@@ -487,7 +487,7 @@ static dp_result_t tserv_send_response(tserv_t *tserv)
 {
 	dp_result_t err;
 	tserv_wrappedPacket_t pkt;
-	int len;
+	sint32 len;
 
 	precondition(tserv);
 	precondition(tserv->dpio);
@@ -560,7 +560,7 @@ static dp_result_t tserv_send_response(tserv_t *tserv)
 			break;
 		case tserv_KIND_NEWUSER:
 			tserv->please_send_newuser = FALSE;
-			DPRINT(("tserv_send_response: Sent response to server h:%x, name %s.\n", tserv->hServer, tcapw_u2ascii((short *)pkt.u.tserv.u.newuser.storage, pkt.u.tserv.u.newuser.unamelen)));
+			DPRINT(("tserv_send_response: Sent response to server h:%x, name %s.\n", tserv->hServer, tcapw_u2ascii((sint16 *)pkt.u.tserv.u.newuser.storage, pkt.u.tserv.u.newuser.unamelen)));
 			break;
 		case tserv_KIND_SECRETCODE:
 			tserv->please_send_secretcode = FALSE;
@@ -585,7 +585,7 @@ static dp_result_t tserv_send_pwchange(tserv_t *tserv)
 {
 	dp_result_t err;
 	tserv_wrappedPacket_t pkt;
-	int len;
+	sint32 len;
 
 	precondition(tserv);
 	if (!tserv->please_send_pwchange)
@@ -762,7 +762,7 @@ dp_result_t tserv_poll(tserv_t *tserv)
 	if (tserv->clients == NULL)
 		return dp_RES_BAD;
 	tserv_assertValid(tserv);
-	if ((long)(now - tserv->tnextPoll) > 0) {
+	if ((sint32)(now - tserv->tnextPoll) > 0) {
 		/* Schedule next run. */
 		tserv->tnextPoll = now + ECLOCKS_PER_SEC;
 
@@ -775,10 +775,10 @@ dp_result_t tserv_poll(tserv_t *tserv)
 			/* Time out the server if we haven't received a validate for
 			 * a response we sent in 30 seconds
 			 */
-			if (tserv->waiting_for_rx && (long)(now - tserv->rx_deadline) > 0)
+			if (tserv->waiting_for_rx && (clock_t)(now - tserv->rx_deadline) > 0)
 				return dp_RES_HOST_NOT_RESPONDING;
 		} else {
-			int i;
+			sint32 i;
 
 			/* Server - resend challenges and replies to clients if needed */
 			for (i = tserv->clients->n_used - 1; i >= 0; i--) {
@@ -824,7 +824,7 @@ static dp_result_t tserv_send_credentials1(tserv_t *tserv, playerHdl_t hFrom, pl
 	} PACK pkt;
 #include "dpunpack.h"
 
-	int len;
+	size_t len;
 	dp_uid_t uid;
 	dp_result_t err;
 
@@ -991,7 +991,7 @@ static dp_result_t tserv_handle_credentials1(tserv_t *tserv, playerHdl_t src, ts
 	 dp_RES_CHANGED password, email, and flags changed successfully
 	 dp_RES_BUG     server error, try again
 --------------------------------------------------------------------------*/
-dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, tserv_packet_t *pkt, tserv_event_t *result)
+dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, sint32 pkt_flags, tserv_packet_t *pkt, tserv_event_t *result)
 {
 	dp_result_t err;
 	tcapw_uid_t uid;
@@ -1530,7 +1530,7 @@ dp_result_t tserv_account_loginW(tserv_t *tserv, const wchar_t *username, const 
 	return dp_RES_OK;
 }
 
-dp_result_t tserv_account_createW(tserv_t *tserv, const wchar_t *username, const wchar_t *password, int flags, const wchar_t *email)
+dp_result_t tserv_account_createW(tserv_t *tserv, const wchar_t *username, const wchar_t *password, sint32 flags, const wchar_t *email)
 {
 	dp_result_t err;
 	tcapw_pw_t pw;
@@ -1616,7 +1616,7 @@ dp_result_t tserv_account_activateW(tserv_t *tserv, const wchar_t *secretcode)
   Success or failure is indicated by the return value from a later call
   to tserv_handle_packet().
 --------------------------------------------------------------------------*/
-dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, const wchar_t *newpassword, int flags, const wchar_t *email)
+dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, const wchar_t *newpassword, sint32 flags, const wchar_t *email)
 {
 	dp_result_t err;
 	tcapw_pw_t oldpw;

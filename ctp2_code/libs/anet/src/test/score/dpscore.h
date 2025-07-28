@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
-static void dumpBuf(const char *buf, int len);
+static void dumpBuf(const char *buf, sint32 len);
 #else
 #define dumpBuf(buf, len)
 #endif
@@ -80,7 +80,7 @@ dp_result_t dpscore_client_playerLeaving(dp_t *dp, dpid_t id);
 /*-------------------------------------------------------------------------
  Report the score for dpid id to the comm layer, if it cares.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, long score);
+DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, sint32 score);
 
 /*-------------------------------------------------------------------------
  Begin a score report.
@@ -91,7 +91,7 @@ DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, long score);
  call dpReportScore2 to report as many scores as you like, then finally
  call dpReportScoreEnd to finish sending the block of scores.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag);
+DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, sint32 flag);
 
 /*-------------------------------------------------------------------------
  Report that player dpId achieved a score of scoreVal in category scoreId.
@@ -101,7 +101,7 @@ DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag);
  Returns dp_RES_UNIMPLEMENTED if that score type is not supported by this
  driver; this is not really an error.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, long scoreVal);
+DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, sint32 scoreId, sint32 scoreVal);
 
 /*-------------------------------------------------------------------------
  End a score report.
@@ -114,7 +114,7 @@ DP_API dp_result_t DP_APIX dpReportScoreEnd(dp_t *dp);
  Callback for incoming score tables.  Only used if application requested
  object deltas for this session's scores.
 ----------------------------------------------------------------------*/
-int dp_PASCAL dpscores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status);
+sint32 dp_PASCAL dpscores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status);
 
 /*--------------------------------------------------------------------------
  Request that the server send us score data for the given session type.

@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Returns dp_RES_OK when finished,
          dp_RES_BUSY while still shutting down.
 ----------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_after, int flags)
+DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_after, sint32 flags)
 {
 	dp_result_t err;
 
@@ -54,7 +54,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 
 	case 1:
 		if (dp->myplayers) {
-			int i;
+			sint32 i;
 
 			DPRINT(("dpShutdown: deleting my players.\n"));
 			for (i=0; i<dp_PLAYERS_PER_HOST; i++)
@@ -65,14 +65,14 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		break;
 
 	case 2:
-		if (timeout && ((long)(dp->now - dp->quitDeadline) > 0)) {
+		if (timeout && ((sint32)(dp->now - dp->quitDeadline) > 0)) {
 			DPRINT(("dpShutdown: delete players timed out.\n"));
 		} else if (dp->players) {
-			int i;
+			sint32 i;
 			void *buf;
 			size_t len;
 			char subkey[dp_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 			dpid_t id;
 
 			for (i = 0; i < dpNumPlayers(dp); i++) {
@@ -107,7 +107,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		/* Finish closing session */
 		if (dpReadyToFreeze(dp) != dp_RES_BUSY) {
 			DPRINT(("dpShutdown: session closed.\n"));
-		} else if (timeout && ((long)(dp->now - dp->quitDeadline) > 0)) {
+		} else if (timeout && ((sint32)(dp->now - dp->quitDeadline) > 0)) {
 			DPRINT(("dpShutdown: session close timed out.\n"));
 		} else
 			break;
@@ -134,7 +134,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 		/* Finish disconnecting */
 		if (dpReadyToFreeze(dp) != dp_RES_BUSY) {
 			DPRINT(("dpShutdown: disconnected.\n"));
-		} else if (timeout && ((long)(dp->now - dp->quitDeadline) > 0)) {
+		} else if (timeout && ((sint32)(dp->now - dp->quitDeadline) > 0)) {
 			DPRINT(("dpShutdown: disconnect timed out.\n"));
 		} else
 			break;
@@ -150,7 +150,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
 
 	case 8:
 		/* Finish final wait */
-		if ((long)(dp->now - dp->quitDeadline) > 0)
+		if ((sint32)(dp->now - dp->quitDeadline) > 0)
 			dp->quitState++;
 		break;
 

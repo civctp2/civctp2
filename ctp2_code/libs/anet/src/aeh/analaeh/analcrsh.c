@@ -38,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "aehlog.h"
 
 #define BUFFER_SIZE 4096
-int bQuiet = 0;
+sint32 bQuiet = 0;
 
 void printUsage(void)
 {
@@ -83,10 +83,10 @@ static void canonicalize_path(char *path)
 }
 
 /* make this directory and all missing parents */
-static int mkdirs_to(char *path, int mode)
+static sint32 mkdirs_to(char *path, sint32 mode)
 {
 	char *p;
-	int err;
+	sint32 err;
 
 	/* easy case: all parents exist */
 	if ((0 == mkdir(path, mode)) || (errno == EEXIST))
@@ -113,19 +113,19 @@ static time_t get_mtime(char *file)
 	return st.st_mtime;
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
 	FILE *fOut;
-	int i, bDone;
-	unsigned int err, ninst, bDefaultLog = 0, bUseRelDir = 0;
-	int bReadFilesFromStdin = 0, bUpdate = 0;
+	sint32 i, bDone;
+	uint32 err, ninst, bDefaultLog = 0, bUseRelDir = 0;
+	sint32 bReadFilesFromStdin = 0, bUpdate = 0;
 	aeh_t aeh;
 	aeh_mapcat_t aehmapcat;
 	aeh_buf_t aehbuf;
 	aehlog_t aehlog;
-	unsigned int len;
+	uint32 len;
 	char dat[BUFFER_SIZE];
-	int sessType = 0;
+	sint32 sessType = 0;
 	char logpath[aeh_MAX_PATH];
 	char catpath[aeh_MAX_PATH];
 	char outpath[aeh_MAX_PATH];
@@ -252,7 +252,7 @@ int main(int argc, char **argv)
 				continue;
 			} else {
 				FILE *fp_test;
-				int ilast;
+				sint32 ilast;
 				for (ilast = strlen(logpath) - 1; isspace(logpath[ilast]); ilast--)
 					logpath[ilast] = '\0';
 				fp_test = fopen(logpath, "r");

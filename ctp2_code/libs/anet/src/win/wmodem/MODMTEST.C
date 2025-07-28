@@ -124,7 +124,7 @@ test1 ()
 
 main()
 {
-	int i;
+	sint32 i;
 	for (i=0; i<1; i++) {
 		printf("Run %d\n", i);
 		test1();

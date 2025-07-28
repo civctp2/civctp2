@@ -111,6 +111,9 @@
     <ClInclude Include="..\h\dpmem.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
+    <ClInclude Include="..\h\types.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\win\winets\wstcp.c">

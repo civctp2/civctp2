@@ -33,20 +33,22 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef __LAP_ERROR_INCLUDED__
 #define __LAP_ERROR_INCLUDED__
 
-#define LAP_NO_ERROR					(short)0x0000
+#include "types.h"
 
-#define LAP_GENERAL_FAILURE				(short)0xC000
+#define LAP_NO_ERROR					(sint16)0x0000
 
-#define LAP_NOT_INSTALLED				(short)0xC001
-#define LAP_OUT_OF_RESOURCE				(short)0xC002
-#define LAP_BAD_DRVR_DATA				(short)0xC003
-#define LAP_CORRUPTED_DATA				(short)0xC004
-#define LAP_UNSUPPORTED_HARDWARE		(short)0xC005
-#define LAP_LINK_UNAVAILABLE			(short)0xC006
-#define LAP_USING_ATALK_PHASE1			(short)0xC007
+#define LAP_GENERAL_FAILURE				(sint16)0xC000
 
-#define LAP_SELECTOR_NOT_SUPPORTED		(short)0xC008
-#define LAP_NO_ATALK_GATEWAY			(short)0xC009
-#define	LAP_WRONG_MACIPX_VERSION		(short)0xC00A
+#define LAP_NOT_INSTALLED				(sint16)0xC001
+#define LAP_OUT_OF_RESOURCE				(sint16)0xC002
+#define LAP_BAD_DRVR_DATA				(sint16)0xC003
+#define LAP_CORRUPTED_DATA				(sint16)0xC004
+#define LAP_UNSUPPORTED_HARDWARE		(sint16)0xC005
+#define LAP_LINK_UNAVAILABLE			(sint16)0xC006
+#define LAP_USING_ATALK_PHASE1			(sint16)0xC007
+
+#define LAP_SELECTOR_NOT_SUPPORTED		(sint16)0xC008
+#define LAP_NO_ATALK_GATEWAY			(sint16)0xC009
+#define	LAP_WRONG_MACIPX_VERSION		(sint16)0xC00A
 
 #endif /* __LAP_ERROR_INCLUDED__ */

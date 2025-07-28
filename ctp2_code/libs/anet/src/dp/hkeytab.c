@@ -65,7 +65,7 @@ void hkeytab_destroy(hkeytab_t *ptab)
 void *hkeytab_subscript_grow(hkeytab_t *tab, void *key, size_t keylen)
 {
 	char *p;
-	int i;
+	sint32 i;
 	hkeytab_item_t *pi;
 
 	/* Use brute force approach, and just do a linear search. */
@@ -81,7 +81,7 @@ void *hkeytab_subscript_grow(hkeytab_t *tab, void *key, size_t keylen)
 		return NULL;
 	//assert(pi[0..tab->unit-1] == 0);
 	memcpy(pi->key, (char *)key, keylen);
-	pi->keylen = (unsigned char)keylen;
+	pi->keylen = (uint8)keylen;
 	return pi->value;
 }
 
@@ -93,7 +93,7 @@ void *hkeytab_subscript_grow(hkeytab_t *tab, void *key, size_t keylen)
 void *hkeytab_subscript(hkeytab_t *tab, const void *key, size_t keylen)
 {
 	char *p;
-	int i;
+	sint32 i;
 	hkeytab_item_t *pi;
 
 	/* Use brute force approach, and just do a linear search. */
@@ -112,10 +112,10 @@ void *hkeytab_subscript(hkeytab_t *tab, const void *key, size_t keylen)
  (in the hkeytab_getkey sense).
  Returns 0 on success, 1 on failure.
 -----------------------------------------------------------------------*/
-int hkeytab_subscript_delete(hkeytab_t *tab, void *key, size_t keylen)
+sint32 hkeytab_subscript_delete(hkeytab_t *tab, void *key, size_t keylen)
 {
 	char *p;
-	int i;
+	sint32 i;
 	hkeytab_item_t *pi;
 
 	/* Use brute force approach, and just do a linear search. */
@@ -137,12 +137,12 @@ int hkeytab_subscript_delete(hkeytab_t *tab, void *key, size_t keylen)
 
 #include <stdio.h>
 
-void test1(hkeytab_t *pt, int callnum)
+void test1(hkeytab_t *pt, sint32 callnum)
 {
-	int i;
-	int errs;
-	int *p;
-	int dummy;
+	sint32 i;
+	sint32 errs;
+	sint32 *p;
+	sint32 dummy;
 	/* Try to delete something that's not there */
 	dummy = 0;
 	if (hkeytab_subscript_delete(pt, &dummy, sizeof(dummy)) == 0) {
@@ -208,7 +208,7 @@ void test1(hkeytab_t *pt, int callnum)
 	}
 	/* Delete elements, get ready for next run */
 	for (i=0; i<33; i++) {
-		int b;
+		sint32 b;
 		b = hkeytab_subscript_delete(pt, &i, sizeof(i));
 		if (b ^ (i == 16)) {
 			printf("delete2: test failed, i %d.  Expected %d, got %d\n", i==16, b);
@@ -228,12 +228,12 @@ void test1(hkeytab_t *pt, int callnum)
 #define NTABS 100
 main()
 {
-	int i;
+	sint32 i;
 	hkeytab_t *pt[NTABS];
-	int dummy;
+	sint32 dummy;
 
 	for (i=0;i<NTABS;i++) {
-		pt[i] = hkeytab_create(sizeof(int));
+		pt[i] = hkeytab_create(sizeof(sint32));
 		if (!pt[i]) {
 			printf("create: test failed\n");
 			exit(1);
@@ -245,7 +245,7 @@ main()
 		}
 	}
 	for (i=0;i<NTABS;i++) {
-		int h;
+		sint32 h;
 		h = _heapchk();
 		if (h != _HEAPOK) {
 			printf("heapchk: test failed\n");

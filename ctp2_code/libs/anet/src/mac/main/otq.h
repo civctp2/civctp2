@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define	_OTQ_
 
 #include <Types.h>
+#include "types.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -28,12 +29,12 @@ extern "C" {
 
 	typedef struct {
 		Ptr					storage;
-		unsigned long		in;				//	offset into buffer
-		unsigned long		out;			//	offset into buffer
+		uint32		in;				//	offset into buffer
+		uint32		out;			//	offset into buffer
 	} otq_t;
 
-	void otq_put(otq_t* q, unsigned char* data, unsigned long theSize);
-	Boolean otq_get(otq_t* q, unsigned char* data, unsigned long* theSize);otq_t* otq_create(void);
+	void otq_put(otq_t* q, uint8* data, uint32 theSize);
+	Boolean otq_get(otq_t* q, uint8* data, uint32* theSize);otq_t* otq_create(void);
 void otq_destroy(otq_t *otq);
 
 #ifdef __cplusplus

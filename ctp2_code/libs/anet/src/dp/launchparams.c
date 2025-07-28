@@ -28,8 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 ----------------------------------------------------------------------------*/
 dp_result_t dp_launchParams_parse(dp_launchParams_t *params, char *line)
 {
-	int c1 = line[0];
-	int c2 = line[1];
+	sint32 c1 = line[0];
+	sint32 c2 = line[1];
 	char *arg;
 
 	DPRINT(("dp_launchParams_parse: %s\n", line));
@@ -69,7 +69,7 @@ dp_result_t dp_launchParams_parse(dp_launchParams_t *params, char *line)
 	case 'v': params->EnablePlayervars=1; break;
 	case 'n': strcpy(params->Driver,arg); break;
 	case 'l': {
-				  int	i = 0;
+				  sint32	i = 0;
 				  char	*tok;
 				  char	argcopy[65];
 
@@ -133,9 +133,9 @@ dp_result_t dp_launchParams_parse(dp_launchParams_t *params, char *line)
 
 #if 0
 /* Main for testing dp_launchParams_parse() */
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
-	int		i;
+	sint32		i;
 	dp_launchParams_t	params;
 	dp_result_t	err;
 	char	*tok;

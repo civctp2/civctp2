@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if defined(logprint_ENABLED)
 
 #include <stdio.h>
+#include "types.h"
 
 static FILE *logprint_fp = NULL;
 
@@ -35,7 +36,7 @@ static FILE *logprint_fp = NULL;
  Returns 0 on success,
         -1 on failure.
 --------------------------------------------------------------------------*/
-int logprint_setFile(const char *file)
+sint32 logprint_setFile(const char *file)
 {
 	if (logprint_fp != NULL) {
 		fclose(logprint_fp);

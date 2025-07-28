@@ -28,10 +28,10 @@ dptab_table_t *myscoretab;
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -43,7 +43,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 /*----------------------------------------------------------------------
  Callback to handle score reports from client.
 ----------------------------------------------------------------------*/
-static int dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status)
+static sint32 dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dp_result_t err;
@@ -52,7 +52,7 @@ static int dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t
 	scorerep_t *srep;
 	dp_uid_t uid;
 	char sessid[dptab_KEY_MAXLEN];
-	int sessidlen;
+	sint32 sessidlen;
 	dp_species_t sessType;
 
 	if (!dp || !buf || (status != dp_RES_CREATED))
@@ -76,11 +76,11 @@ static int dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t
 	 * preceded by header:
 	 *	char sessid[8];		// inetadr + port + karma
 	 *	dp_karma_t sessType;
-	 *	unsigned short bloblen;
+	 *	uint16 bloblen;
 	 */
 	{
 		char wmqbuf[1024];
-		int wmqbuflen;
+		sint32 wmqbuflen;
 
 		memcpy(wmqbuf, sessid, sessidlen);
 		wmqbuflen = sessidlen;
@@ -112,7 +112,7 @@ void servscor_init(dp_t *dp, const char *wmqDirectory)
 	dp_result_t err;
 	char key[dptab_KEY_MAXLEN];
 	assoctab_t *types;
-	int i;
+	sint32 i;
 
 	/* Create table to receive reports from clients. */
 	key[0] = dp_KEY_MYSCORES;

@@ -60,7 +60,7 @@ typedef struct {
  If write is non-0, it will be a write queue, and pwq_get will fail.
  Returns NULL on failure.
 --------------------------------------------------------------------------*/
-pwq_t *pwq_create(tcapw_t *tcapw, const char *wmqDirectory, int write, const char *masterServerTag);
+pwq_t *pwq_create(tcapw_t *tcapw, const char *wmqDirectory, sint32 write, const char *masterServerTag);
 
 /*--------------------------------------------------------------------------
  Destroy an instance of the pwq.  Saves the password database pwq->tcapw
@@ -88,6 +88,6 @@ dp_result_t pwq_put(pwq_t *pwq, time_t now, pwq_message_t *msg);
  Get the wmq position into timestamp, offset.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t pwq_tell(pwq_t *pwq, long *poffset, time_t *ptime);
+dp_result_t pwq_tell(pwq_t *pwq, sint32 *poffset, time_t *ptime);
 
 #endif

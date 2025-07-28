@@ -42,10 +42,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if defined(_DEBUG) || defined(DPRNT)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 8; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -55,7 +55,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 
 static void sbdserv_assertValid(sbdserv_t *sbdserv)
 {
-	int h, n = 0;
+	sint32 h, n = 0;
 	for (h = 0; h <= sbdserv->sockmax; h++)
 		if (FD_ISSET(h, &sbdserv->fds))
 			n++;
@@ -73,14 +73,14 @@ static void sbdserv_assertValid(sbdserv_t *sbdserv)
  Create an instance of the sbdserv module, listening on port for new
  connections.
 ------------------------------------------------------------------------*/
-sbdserv_t *sbdserv_create(unsigned short port)
+sbdserv_t *sbdserv_create(uint16 port)
 {
 	clock_t now = eclock();
 	sbdserv_t *sbdserv;
 	struct protoent *pe;
 	struct sockaddr_in addr;
-	int sockin;
-	int flags;
+	sint32 sockin;
+	sint32 flags;
 
 	DPRINT(("sbdserv_create: creating my socket\n"));
 	pe = getprotobyname("tcp");
@@ -137,7 +137,7 @@ sbdserv_t *sbdserv_create(unsigned short port)
 ------------------------------------------------------------------------*/
 void sbdserv_destroy(sbdserv_t *sbdserv)
 {
-	int i;
+	sint32 i;
 
 	if (!sbdserv)
 		return;
@@ -156,7 +156,7 @@ void sbdserv_destroy(sbdserv_t *sbdserv)
  Returns 0 on success,
  		 -1 on failure.
 ------------------------------------------------------------------------*/
-static int sbdserv_handleOpened(sbdserv_t *sbdserv, int h)
+static sint32 sbdserv_handleOpened(sbdserv_t *sbdserv, sint32 h)
 {
 	clock_t now = eclock();
 	sbdserv_conn_t *pc;
@@ -193,10 +193,10 @@ static int sbdserv_handleOpened(sbdserv_t *sbdserv, int h)
  On completion, the length read is returned and *bufp is set to the
  address of the buffer containing the data received from that handle.
 ------------------------------------------------------------------------*/
-static int sbdserv_readData(sbdserv_t *sbdserv, int h, char **bufp)
+static sint32 sbdserv_readData(sbdserv_t *sbdserv, sint32 h, char **bufp)
 {
-	int nRecvd;
-	int nToRecv;
+	sint32 nRecvd;
+	sint32 nToRecv;
 	sbdserv_conn_t *pc;
 
 	*bufp = NULL;
@@ -265,7 +265,7 @@ static int sbdserv_readData(sbdserv_t *sbdserv, int h, char **bufp)
 /*------------------------------------------------------------------------
  Clean up any data associated with the given handle.
 ------------------------------------------------------------------------*/
-static void sbdserv_handleClosed(sbdserv_t *sbdserv, int h)
+static void sbdserv_handleClosed(sbdserv_t *sbdserv, sint32 h)
 {
 	if (!sbdserv || (h == -1)) {
 		DPRINT(("sbdserv_handleClosed: bad params (h:%d)\n", h));
@@ -288,9 +288,9 @@ static void sbdserv_handleClosed(sbdserv_t *sbdserv, int h)
  Gets the set of sockets that need reading into *rfds.
  Returns the maximum socket set.
 ------------------------------------------------------------------------*/
-int sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds)
+sint32 sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds)
 {
-	int sock;
+	sint32 sock;
 
 	FD_SET(sbdserv->sockin, rfds);	/* always listen for new connections */
 #ifdef VERBOSE
@@ -316,7 +316,7 @@ int sbdserv_getfds(sbdserv_t *sbdserv, fd_set *rfds)
 
  Call once after each select and before calling sbdserv_poll.
 ------------------------------------------------------------------------*/
-void sbdserv_startRead(sbdserv_t *sbdserv, int nsocks)
+void sbdserv_startRead(sbdserv_t *sbdserv, sint32 nsocks)
 {
 	assert(nsocks >= 0);
 	sbdserv->cursock = 0;	/* FIXME: should be min(socks) */
@@ -337,25 +337,25 @@ void sbdserv_startRead(sbdserv_t *sbdserv, int nsocks)
  Returns 0 if no data is available now.
  Returns -1 on error.
 ------------------------------------------------------------------------*/
-int sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf)
+sint32 sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf)
 {
 	clock_t now;
-	int sock;
-	int i;
+	sint32 sock;
+	sint32 i;
 
 	if (!sbdserv || !sbdserv->conns || !buf)
 		return -1;
 	sbdserv_assertValid(sbdserv);
 	if (FD_ISSET(sbdserv->sockin, rfds) && (sbdserv->nsocks > 0)) {
-		int newsock;
+		sint32 newsock;
 		struct sockaddr_in client_addr;
-		int len = sizeof(struct sockaddr_in);
+		sint32 len = sizeof(struct sockaddr_in);
 
 		newsock = accept(sbdserv->sockin, (struct sockaddr *)&client_addr,&len);
 		if (newsock == -1) {
 			DPRINT(("sbdserv_poll: accept error:%d on sock:%d\n", errno, sbdserv->sockin));
 		} else {
-			int flags;
+			sint32 flags;
 
 #ifdef VERBOSE
 			DPRINT(("sbdserv_poll: accepting connection from %s on sock:%d\n", inet_ntoa(client_addr.sin_addr), newsock));
@@ -379,7 +379,7 @@ int sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf)
 		if (FD_ISSET(sbdserv->cursock, rfds)
 		&&  FD_ISSET(sbdserv->cursock, &sbdserv->fds)) {
 			char *bufp = NULL;
-			int len;
+			sint32 len;
 
 			len = sbdserv_readData(sbdserv, sbdserv->cursock, &bufp);
 			if (len == -1) {
@@ -411,7 +411,7 @@ int sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf)
 	}
 
 	now = eclock();
-	if ((long)(now - sbdserv->t_last_poll) < 10 * ECLOCKS_PER_SEC)
+	if ((sint32)(now - sbdserv->t_last_poll) < 10 * ECLOCKS_PER_SEC)
 		return 0;	/* don't poll more than once every 10s */
 	sbdserv->t_last_poll = now;
 #ifdef VERBOSE
@@ -424,7 +424,7 @@ int sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf)
 	for (i = sbdserv->conns->n_used - 1; i >= 0; i--) {
 		assoctab_item_t *pi;
 		sbdserv_conn_t *pc;
-		int h;
+		sint32 h;
  		pi = assoctab_getkey(sbdserv->conns, i);
 		if (!pi) {
 			DPRINT(("sbdserv_poll: assoctab_getkey(%d) returns NULL?\n", i));
@@ -436,7 +436,7 @@ int sbdserv_poll(sbdserv_t *sbdserv, fd_set *rfds, char *buf)
 			DPRINT(("sbdserv_poll: conns[%d] == NULL?\n", i));
 			return -1;
 		}
-		if ((long)(now - pc->t_connect) > sbdserv_CONN_TIMEOUT * ECLOCKS_PER_SEC) {
+		if ((sint32)(now - pc->t_connect) > sbdserv_CONN_TIMEOUT * ECLOCKS_PER_SEC) {
 			DPRINT(("sbdserv_poll: h:%d timed out\n", h));
 			sbdserv_handleClosed(sbdserv, h);
 			if (-1 == close(h)) {

@@ -94,9 +94,9 @@ void antpget_destroy(antpget_t *antpget)
 dp_result_t antpget_parseURL(const char *urlstr, antpget_url_t *url)
 {
 	char *antp = "antp://";
-	int antpLen = strlen(antp);
+	sint32 antpLen = strlen(antp);
 	const char *s;
-	int hostLen;
+	sint32 hostLen;
 
 	/* Get the host name. */
 	for (s = urlstr + antpLen; *s != '\0' && *s != ':' && *s != '/'; ++s)
@@ -144,12 +144,12 @@ dp_result_t antpget_parseURL(const char *urlstr, antpget_url_t *url)
  Warning: DNS lookups may take a significant amount of time.
  Returns the socket file descriptor on success, or -1 on failure.
 --------------------------------------------------------------------------*/
-int antpget_setHost(antpget_t *antpget, const char *host, int port)
+sint32 antpget_setHost(antpget_t *antpget, const char *host, sint32 port)
 {
 	struct servent *se;
 	struct protoent *pe;
 	struct hostent *he;
-	int flags;
+	sint32 flags;
 
 	if (!antpget) {
 		DPRINT(("antpget_setHost: antpget NULL\n"));
@@ -195,8 +195,8 @@ int antpget_setHost(antpget_t *antpget, const char *host, int port)
 	antpget->url.port = port;
 
 	DPRINT(("antpget_setHost: sockfd %d -> %u.%u.%u.%u:%u\n", antpget->sockfd,
-		(unsigned char)he->h_addr[0], (unsigned char)he->h_addr[1],
-		(unsigned char)he->h_addr[2], (unsigned char)he->h_addr[3],
+		(uint8)he->h_addr[0], (uint8)he->h_addr[1],
+		(uint8)he->h_addr[2], (uint8)he->h_addr[3],
 		antpget->url.port));
 
 	return antpget->sockfd;
@@ -228,8 +228,8 @@ dp_result_t antpget_connect(antpget_t *antpget)
 static dp_result_t antpget_sendCommand(antpget_t *antpget, const char *cmd)
 {
 	char buf[antpget_URL_MAXLEN + 40];
-	int nbytes;
-	int len;
+	sint32 nbytes;
+	sint32 len;
 
 	if (!antpget)
 		return dp_RES_BUG;
@@ -283,7 +283,7 @@ static dp_result_t antpget_sendCommand(antpget_t *antpget, const char *cmd)
  Request a partial get at byte <offset> of the file at <path>.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t antpget_requestGet(antpget_t *antpget, const char *path, long offset)
+dp_result_t antpget_requestGet(antpget_t *antpget, const char *path, sint32 offset)
 {
 	char cmd[antpget_URL_MAXLEN + 20];
 
@@ -450,8 +450,8 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr)
 {
 	dp_result_t err;
 	char *c;
-	int len;
-	int nbytes;
+	sint32 len;
+	sint32 nbytes;
 
 	*phdr = NULL;
 	if (!antpget) {
@@ -499,7 +499,7 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr)
 		DPRINT(("antpget_readHeader: got line[%d]:%s\n", antpget->header.nlines, antpget->header.line[antpget->header.nlines]));
 #endif
 		if (antpget->header.line[antpget->header.nlines][0] == '\0') {
-			int n;
+			sint32 n;
 
 			/* blank line means end of header */
 			if (antpget->respState == antpget_RESPSTATE_STATUSLINE) {
@@ -580,7 +580,7 @@ dp_result_t antpget_readHeader(antpget_t *antpget, antpget_header_t **phdr)
 	dp_RES_NOTYET if the header has not been parsed,
 	dp_RES_BADSIZE if the antp server returned an invalid header.
 --------------------------------------------------------------------------*/
-dp_result_t antpget_readData(antpget_t *antpget, char *buf, int buflen, int *nread)
+dp_result_t antpget_readData(antpget_t *antpget, char *buf, sint32 buflen, sint32 *nread)
 {
 	dp_result_t err;
 

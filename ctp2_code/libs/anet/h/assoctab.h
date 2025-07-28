@@ -58,7 +58,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /*  The key is stored immediately before the value. */
 typedef struct {
-	int key;
+	sint32 key;
 	char value[1];	/*  Dummy size. */
 } assoctab_item_t;
 
@@ -89,28 +89,28 @@ void assoctab_destroy(assoctab_t *ptab);
  If the table doesn't contain that key, grow.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *assoctab_subscript_grow(assoctab_t *tab, int key);
+void *assoctab_subscript_grow(assoctab_t *tab, sint32 key);
 
 /*-----------------------------------------------------------------------
  Inserts a record into the table before the nth key/value pair.
  Assumes the key specified is not already in the table.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *assoctab_subscript_insert(assoctab_t *tab, int key, int n);
+void *assoctab_subscript_insert(assoctab_t *tab, sint32 key, sint32 n);
 
 /*-----------------------------------------------------------------------
  Delete the given key from the table, shifts higher keys down
  (in the assoctab_getkey sense).
  Returns 0 on success, 1 on failure.
 -----------------------------------------------------------------------*/
-int assoctab_subscript_delete(assoctab_t *tab, int key);
+sint32 assoctab_subscript_delete(assoctab_t *tab, sint32 key);
 
 /*-----------------------------------------------------------------------
  Return the address of the value part of the given element of the table.
  If the table doesn't contain that key, return NULL.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *assoctab_subscript(assoctab_t *tab, int key);
+void *assoctab_subscript(assoctab_t *tab, sint32 key);
 
 /*-----------------------------------------------------------------------
  Return ptr to the nth key/value pair.  N must be between 0 and tab->n_used.

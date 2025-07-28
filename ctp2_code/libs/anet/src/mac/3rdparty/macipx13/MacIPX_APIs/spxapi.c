@@ -64,19 +64,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * Prototypes
  */
 #if !defined(powerc) && !defined (__powerc)
-extern unsigned long	IpxGetRegisterA5(void);
+extern uint32	IpxGetRegisterA5(void);
 #endif
-static short			check_establish_ecb(SPX_ECB *ecb);
+static sint16			check_establish_ecb(SPX_ECB *ecb);
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxAbortConnection(unsigned short connection, SPX_ECB *ecb)
+SpxAbortConnection(uint16 connection, SPX_ECB *ecb)
 #else
-SpxAbortConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
+SpxAbortConnection(uint16 connection, SPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	SPXpb		*spx_pb;
-	short		status;
+	sint16		status;
 
 #ifndef NO_ECB_CHECKS
 	if (ecb == (SPX_ECB *)0) {
@@ -108,11 +108,11 @@ SpxAbortConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
 SpxCancelEvent(SPX_ECB *ecb)
 #else
-SpxCancelEvent(SPX_ECB *ecb, short drvRefNum)
+SpxCancelEvent(SPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -135,11 +135,11 @@ SpxCancelEvent(SPX_ECB *ecb, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxCheckSocket(unsigned short socketNetOrder)
+SpxCheckSocket(uint16 socketNetOrder)
 #else
-SpxCheckSocket(unsigned short socketNetOrder, short drvRefNum)
+SpxCheckSocket(uint16 socketNetOrder, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -153,11 +153,11 @@ SpxCheckSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxCloseSocket(unsigned short socketNetOrder)
+SpxCloseSocket(uint16 socketNetOrder)
 #else
-SpxCloseSocket(unsigned short socketNetOrder, short drvRefNum)
+SpxCloseSocket(uint16 socketNetOrder, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -171,19 +171,19 @@ SpxCloseSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxEstablishConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned char retryCount,
-			unsigned char flags, unsigned short *connection)
+SpxEstablishConnection(uint16 socketNetOrder, SPX_ECB *ecb, uint8 retryCount,
+			uint8 flags, uint16 *connection)
 #else
-SpxEstablishConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned char retryCount,
-			unsigned char flags, unsigned short *connection, short drvRefNum)
+SpxEstablishConnection(uint16 socketNetOrder, SPX_ECB *ecb, uint8 retryCount,
+			uint8 flags, uint16 *connection, sint16 drvRefNum)
 #endif
 {
 	SPXpb	*spx_pb;
-	short	err_code;
+	sint16	err_code;
 
-	if (connection == (unsigned short *)0) {
+	if (connection == (uint16 *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
 
@@ -214,19 +214,19 @@ SpxEstablishConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned cha
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxEstablishConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
-			 unsigned char retryCount, unsigned char flags, unsigned short *connection)
+SpxEstablishConnection2(uint16 socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
+			 uint8 retryCount, uint8 flags, uint16 *connection)
 #else
-SpxEstablishConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
-			 unsigned char retryCount, unsigned char flags, unsigned short *connection, short drvRefNum)
+SpxEstablishConnection2(uint16 socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
+			 uint8 retryCount, uint8 flags, uint16 *connection, sint16 drvRefNum)
 #endif
 {
 	SPXpb	*spx_pb;
-	short	err_code;
+	sint16	err_code;
 
-	if (connection == (unsigned short *)0) {
+	if (connection == (uint16 *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
 
@@ -285,7 +285,7 @@ SpxEstablishConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 #endif
 }
 
-static short
+static sint16
 check_establish_ecb(SPX_ECB *ecb)
 {
 	SPX_HEADER	*spxhdr;
@@ -307,18 +307,18 @@ check_establish_ecb(SPX_ECB *ecb)
 	 * Is this packet being sent to a broadcast address (which is illegal)?
 	 */
 	spxhdr = (SPX_HEADER *)ecb->fragList[0].fragAddress;
-	if ((*(unsigned long *)spxhdr->destNode == 0xFFFFFFFF) &&
-			(*(unsigned short *)&spxhdr->destNode[4] == 0xFFFF)) {
+	if ((*(uint32 *)spxhdr->destNode == 0xFFFFFFFF) &&
+			(*(uint16 *)&spxhdr->destNode[4] == 0xFFFF)) {
 		return (SPX_BAD_PACKET);
 	}
 	return (0);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxGetConfiguration(unsigned short *maxConn, unsigned short *availConn)
+SpxGetConfiguration(uint16 *maxConn, uint16 *availConn)
 #else
-SpxGetConfiguration(unsigned short *maxConn, unsigned short *availConn, short drvRefNum)
+SpxGetConfiguration(uint16 *maxConn, uint16 *availConn, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -337,11 +337,11 @@ SpxGetConfiguration(unsigned short *maxConn, unsigned short *availConn, short dr
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxGetConnectionStatus(unsigned short connection, SPX_SESSION *buffer)
+SpxGetConnectionStatus(uint16 connection, SPX_SESSION *buffer)
 #else
-SpxGetConnectionStatus(unsigned short connection, SPX_SESSION *buffer, short drvRefNum)
+SpxGetConnectionStatus(uint16 connection, SPX_SESSION *buffer, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -359,20 +359,20 @@ SpxGetConnectionStatus(unsigned short connection, SPX_SESSION *buffer, short drv
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxGetStatistics(SPX_STATS *buffer, unsigned long *buflen)
+SpxGetStatistics(SPX_STATS *buffer, uint32 *buflen)
 #else
-SpxGetStatistics(SPX_STATS *buffer, unsigned long *buflen, short drvRefNum)
+SpxGetStatistics(SPX_STATS *buffer, uint32 *buflen, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
 
-	if ((buffer == (SPX_STATS *)0) || (buflen == (unsigned long *)0)) {
+	if ((buffer == (SPX_STATS *)0) || (buflen == (uint32 *)0)) {
 		return (SPX_BAD_PARAMETER);
 	}
 	spx_pb.csCode = SPXGETSTATISTICS;
-	spx_pb.csParams.getstats.buffer = (unsigned char *)buffer;
+	spx_pb.csParams.getstats.buffer = (uint8 *)buffer;
 	spx_pb.csParams.getstats.buflen = buflen;
 #ifndef	COMPONENT_BUILD
 	return (call_ipx((IPXpb *)&spx_pb, FALSE));
@@ -381,11 +381,11 @@ SpxGetStatistics(SPX_STATS *buffer, unsigned long *buflen, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned short *revision)
+SpxGetVersion(uint8 *majorVersion, uint8 *minorVersion, uint16 *revision)
 #else
-SpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned short *revision, short drvRefNum)
+SpxGetVersion(uint8 *majorVersion, uint8 *minorVersion, uint16 *revision, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -405,18 +405,18 @@ SpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxListenForConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned char retryCount,
-			unsigned char flags, unsigned short *connection)
+SpxListenForConnection(uint16 socketNetOrder, SPX_ECB *ecb, uint8 retryCount,
+			uint8 flags, uint16 *connection)
 #else
-SpxListenForConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned char retryCount,
-			unsigned char flags, unsigned short *connection, short drvRefNum)
+SpxListenForConnection(uint16 socketNetOrder, SPX_ECB *ecb, uint8 retryCount,
+			uint8 flags, uint16 *connection, sint16 drvRefNum)
 #endif
 {
 	SPXpb		*spx_pb;
 
-	if (connection == (unsigned short *)0) {
+	if (connection == (uint16 *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
 
@@ -455,18 +455,18 @@ SpxListenForConnection(unsigned short socketNetOrder, SPX_ECB *ecb, unsigned cha
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxListenForConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
-			unsigned char retryCount, unsigned char flags, unsigned short *connection)
+SpxListenForConnection2(uint16 socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
+			uint8 retryCount, uint8 flags, uint16 *connection)
 #else
-SpxListenForConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
-			unsigned char retryCount, unsigned char flags, unsigned short *connection, short drvRefNum)
+SpxListenForConnection2(uint16 socketNetOrder, SPX_ECB *ecb, SPX_ECB *listen_ecb,
+			uint8 retryCount, uint8 flags, uint16 *connection, sint16 drvRefNum)
 #endif
 {
 	SPXpb		*spx_pb;
 
-	if (connection == (unsigned short *)0) {
+	if (connection == (uint16 *)0) {
 		return (SPX_BAD_PARAMETER);
 	}
 
@@ -534,15 +534,15 @@ SpxListenForConnection2(unsigned short socketNetOrder, SPX_ECB *ecb, SPX_ECB *li
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxListenForConnectionPacket(unsigned short connection, SPX_ECB *ecb)
+SpxListenForConnectionPacket(uint16 connection, SPX_ECB *ecb)
 #else
-SpxListenForConnectionPacket(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
+SpxListenForConnectionPacket(uint16 connection, SPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	SPXpb		*spx_pb;
-	short		status;
+	sint16		status;
 
 #ifndef NO_ECB_CHECKS
 	/*
@@ -582,11 +582,11 @@ SpxListenForConnectionPacket(unsigned short connection, SPX_ECB *ecb, short drvR
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags)
+SpxOpenSocket(uint16 *socketNetOrder, uint8 flags)
 #else
-SpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags, short drvRefNum)
+SpxOpenSocket(uint16 *socketNetOrder, uint8 flags, sint16 drvRefNum)
 #endif
 {
 	SPXpb		spx_pb;
@@ -608,15 +608,15 @@ SpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags, short drvRefN
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb)
+SpxSendSequencedPacket(uint16 connection, SPX_ECB *ecb)
 #else
-SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
+SpxSendSequencedPacket(uint16 connection, SPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	SPXpb		*spx_pb;
-	short		status;
+	sint16		status;
 
 #ifndef NO_ECB_CHECKS
 	/*
@@ -657,15 +657,15 @@ SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-SpxTerminateConnection(unsigned short connection, SPX_ECB *ecb)
+SpxTerminateConnection(uint16 connection, SPX_ECB *ecb)
 #else
-SpxTerminateConnection(unsigned short connection, SPX_ECB *ecb, short drvRefNum)
+SpxTerminateConnection(uint16 connection, SPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	SPXpb	*spx_pb;
-	short	status;
+	sint16	status;
 
 #ifndef NO_ECB_CHECKS
 	/*

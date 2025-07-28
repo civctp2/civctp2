@@ -136,7 +136,7 @@ static loop_hdl_t commHdl2loop(playerHdl_t h)
 
 // Return FALSE on error.
 
-DLLEXPORT int cdecl commNoOp(commNoOpReq_t *req,  commNoOpResp_t *resp)
+DLLEXPORT sint32 cdecl commNoOp(commNoOpReq_t *req,  commNoOpResp_t *resp)
 
 {
   commNoOpReq_t   reqDummy;
@@ -156,7 +156,7 @@ DLLEXPORT int cdecl commNoOp(commNoOpReq_t *req,  commNoOpResp_t *resp)
  List the available comm ports.
  Implemented only for serial and modem drivers.
 -------------------------------------------------------------------------*/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commEnumPorts(
 	commEnumPortsReq_t *	req,		/* Request (or NULL) */
 	commEnumPortsResp_t *	resp)		/* Response (or NULL) */
@@ -178,10 +178,10 @@ commEnumPorts(
 
 //  Return FALSE on error.
 
-DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
+DLLEXPORT sint32 cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 
 {
-  int             status;
+  sint32             status;
   commInitReq_t   reqDummy;
   commInitResp_t  respDummy;
 
@@ -215,7 +215,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 //  Tear down the communications driver.
 //  Return FALSE on error.
 
-DLLEXPORT int cdecl commTerm(commTermReq_t *req,  commTermResp_t *resp)
+DLLEXPORT sint32 cdecl commTerm(commTermReq_t *req,  commTermResp_t *resp)
 
 {
   commTermReq_t   reqDummy;
@@ -243,7 +243,7 @@ DLLEXPORT int cdecl commTerm(commTermReq_t *req,  commTermResp_t *resp)
 //
 //  Return TRUE if info was retrieved.
 
-DLLEXPORT int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+DLLEXPORT sint32 cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 
 {
   // dpEnumTransports scans through the DLL file looking for this signature.
@@ -298,7 +298,7 @@ DLLEXPORT int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_
 // Pointers returned in the response point to static buffers
 // which will be overwritten by the next call.
 
-DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
+DLLEXPORT sint32 cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 
 {
   commPlayerInfoReq_t   reqDummy;
@@ -342,7 +342,7 @@ DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_
 //  Return TRUE if no more packets can be queued for transmission at this
 //  time.
 
-DLLEXPORT int cdecl commTxFull(commTxFullReq_t * req, commTxFullResp_t *resp)
+DLLEXPORT sint32 cdecl commTxFull(commTxFullReq_t * req, commTxFullResp_t *resp)
 
 {
   commTxFullReq_t   reqDummy;
@@ -369,7 +369,7 @@ DLLEXPORT int cdecl commTxFull(commTxFullReq_t * req, commTxFullResp_t *resp)
 //  Return FALSE on error.  Note that a TRUE return value does not guarantee
 //  that the packet has been (or ever will be) sent.
 
-DLLEXPORT int cdecl commTxPkt(commTxPktReq_t *  req, commTxPktResp_t * resp)
+DLLEXPORT sint32 cdecl commTxPkt(commTxPktReq_t *  req, commTxPktResp_t * resp)
 
 {
   commTxPktReq_t  reqDummy;
@@ -409,7 +409,7 @@ DLLEXPORT int cdecl commTxPkt(commTxPktReq_t *  req, commTxPktResp_t * resp)
 
 //  Return TRUE if a packet was retrieved.
 
-DLLEXPORT int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
+DLLEXPORT sint32 cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
 
 {
   commPeekPktReq_t  reqDummy;
@@ -437,7 +437,7 @@ DLLEXPORT int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
 //  Return TRUE if a packet was retrieved.
 //  Status is zero on success, nonzero on error!
 
-DLLEXPORT int cdecl commRxPkt(commRxPktReq_t *req,  commRxPktResp_t *resp)
+DLLEXPORT sint32 cdecl commRxPkt(commRxPktReq_t *req,  commRxPktResp_t *resp)
 
 {
   commRxPktReq_t  reqDummy;
@@ -480,13 +480,13 @@ DLLEXPORT int cdecl commRxPkt(commRxPktReq_t *req,  commRxPktResp_t *resp)
 // support the IPX protocol.
 // Return TRUE if the string was parsed successfully.
 
-DLLEXPORT int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
+DLLEXPORT sint32 cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
 
 {
   commScanAddrReq_t   reqDummy;
   commScanAddrResp_t  respDummy;
-  int                 tmpInt[32];
-  int                 i;
+  sint32                 tmpInt[32];
+  sint32                 i;
 
   if (req  == NULL)  req  = memset(&reqDummy, 0, sizeof(*req));
   if (resp == NULL)  resp = &respDummy;
@@ -525,12 +525,12 @@ DLLEXPORT int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *res
 //  Return TRUE if the buffer was formatted successfully.
 //  Fails if input is wrong size or output buffer is null or too small.
 
-DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
+DLLEXPORT sint32 cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
 
 {
   commPrintAddrResp_t respDummy;
   char                printable[80];
-  const unsigned char *raw;
+  const uint8 *raw;
 
   DPRINT(("@LOOP commPrintAddr():\n"));
 
@@ -540,7 +540,7 @@ DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *
 	  return FALSE;
   }
 
-  raw = (unsigned char *)req->address;
+  raw = (uint8 *)req->address;
   sprintf(printable, "%d.%d.%d.%d",
             raw[0]&0xff,
             raw[1]&0xff,
@@ -572,7 +572,7 @@ DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *
 
 //  Return TRUE if the pseudo-player handle was generated.
 
-DLLEXPORT int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
+DLLEXPORT sint32 cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
 
 {
   commGroupAllocReq_t   reqDummy;
@@ -598,7 +598,7 @@ DLLEXPORT int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_
 
 //  Return TRUE if the pseudo-player handle was invalidated.
 
-DLLEXPORT int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
+DLLEXPORT sint32 cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
 
 {
   commGroupFreeReq_t  reqDummy;
@@ -624,7 +624,7 @@ DLLEXPORT int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *
 
 //  Return TRUE if the players were all added.
 
-DLLEXPORT int cdecl commGroupAdd(commGroupAddReq_t *req,  commGroupAddResp_t *resp)
+DLLEXPORT sint32 cdecl commGroupAdd(commGroupAddReq_t *req,  commGroupAddResp_t *resp)
 
 {
   commGroupAddReq_t   reqDummy;
@@ -648,7 +648,7 @@ DLLEXPORT int cdecl commGroupAdd(commGroupAddReq_t *req,  commGroupAddResp_t *re
 
 //  Set driver parameters.
 
-DLLEXPORT int cdecl commSetParam(commSetParamReq_t *req,  commSetParamResp_t *resp)
+DLLEXPORT sint32 cdecl commSetParam(commSetParamReq_t *req,  commSetParamResp_t *resp)
 
 {
   commSetParamReq_t   reqDummy;
@@ -675,7 +675,7 @@ DLLEXPORT int cdecl commSetParam(commSetParamReq_t *req,  commSetParamResp_t *re
 
 //  Return TRUE if the link was established and we shook hands.
 
-DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
+DLLEXPORT sint32 cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 
 {
   commSayHiResp_t   respDummy;
@@ -728,7 +728,7 @@ DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 
 //  Return TRUE if the link was successfully broken.
 
-DLLEXPORT int cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
+DLLEXPORT sint32 cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
 
 {
   commSayByeReq_t     reqDummy;

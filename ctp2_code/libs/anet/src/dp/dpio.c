@@ -460,7 +460,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(_WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -515,12 +515,12 @@ static dp_result_t dpio_put_unreliable_unbuffered(dpio_t *dpio, playerHdl_t dest
 #define dpio_MAX_HANDLES 2000
 
 #if defined(dpio_LOG) && (defined(DEBUG) || defined(_DEBUG))
-static void dpio_log_pkt(const unsigned char *buf, size_t len, int repeatct);
+static void dpio_log_pkt(const uint8 *buf, size_t len, sint32 repeatct);
 static void dpio_log_pkt_err(dp_result_t err);
 static void dpio_log_term();
 static void dpio_log_init();
-static int dpio_log_rx;
-static int dpio_log_dropped;
+static sint32 dpio_log_rx;
+static sint32 dpio_log_dropped;
 #else
 #define dpio_log_pkt(buf, len, repeatct)
 #define dpio_log_pkt_err(err)
@@ -532,9 +532,9 @@ static int dpio_log_dropped;
 
 /* Function to dump a block of memory in hex */
 #ifdef VERYVERBOSE
-static void dumpBuf(const char *msg, const char *buf, int len)
+static void dumpBuf(const char *msg, const char *buf, sint32 len)
 {
-	int i;
+	sint32 i;
 	DPRINT(("%s", msg));
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x", 0xff & buf[i]));
@@ -558,18 +558,18 @@ static void dumpBuf(const char *msg, const char *buf, int len)
 #else
 void dpio_dprintAdr(
 	char adr[dp_MAX_ADR_LEN],
-	int adrLen)
+	sint32 adrLen)
 {
 	char buf[256];
-	int i;
+	sint32 i;
 
-    if(adr == NULL) {
+	if(adr == NULL) {
 		DPRINT(("NULL"));
-    } else {
+	} else {
 		buf[0] = 0;
 		for (i=0; i<adrLen-1; i++)
-			sprintf(buf + 3*i, "%02x:", ((unsigned char *)adr)[i]);
-		sprintf(buf + 3*i, "%02x", ((unsigned char *)adr)[i]);
+			sprintf(buf + 3*i, "%02x:", ((uint8 *)adr)[i]);
+		sprintf(buf + 3*i, "%02x", ((uint8 *)adr)[i]);
 		DPRINT(("%s", buf));
 	}
 }
@@ -581,7 +581,7 @@ void dpio_dprintAdr(
 ------------------------------------------------------------------------*/
 static void dpio_pw(dpio_window_t *pw)
 {
-	int i;
+	sint32 i;
 	DPRINT(("dpio_pw: windowBase %d, next_pktnum %d, bAcked: ",
 		pw->windowBase, pw->next_pktnum));
 	for (i=0;i<dpio_WINDOWSIZE;i++) {
@@ -609,7 +609,7 @@ static void dpio_pc(dpio_t *dpio, dpio_conn_t *pc)
 ------------------------------------------------------------------------*/
 static void dpio_print(dpio_t *dpio)
 {
-	int i;
+	sint32 i;
 	DPRINT(("dpio_print: conns->n_used %d; enabl %d, nexttx %lx, mintx %lx, now %lx\n",
 		dpio->conns->n_used,
 		dpio->reliable_enabled,
@@ -633,8 +633,8 @@ static void dpio_print(dpio_t *dpio)
 /* Do an internal consistancy check on the reliable transport */
 void dpio_assertReliableValid(dpio_t *dpio)
 {
-	int txGatherNeeded = FALSE;
-	int i;
+	sint32 txGatherNeeded = FALSE;
+	sint32 i;
 
 	/* Make sure global txGatherNeeded accurately reflects whether any
 	 * buffered packets are ready to send.
@@ -668,12 +668,12 @@ void dpio_assertReliableValid(dpio_t *dpio)
  Results in milliseconds.
  Returns 0 upon error.
 -----------------------------------------------------------------------*/
-int dpio_get_latency (dpio_t *dpio, int flags)
+sint32 dpio_get_latency (dpio_t *dpio, sint32 flags)
 {
-	int latency;
+	sint32 latency;
 
-	long caps = dpio->driverinfo->capabilities;
-	long needs = dpio->driverinfo->needs;
+	sint32 caps = dpio->driverinfo->capabilities;
+	sint32 needs = dpio->driverinfo->needs;
 	DPRINT(("dpio_get_latency: comm_driverInfo_t: name %s, caps %x, needs %x\n",
 		dpio->driverinfo->name, caps, needs));
 
@@ -705,10 +705,10 @@ int dpio_get_latency (dpio_t *dpio, int flags)
  If ploss is not NULL, sets *ploss to round trip packet loss in percent.
  Returns 0 upon error.
 -----------------------------------------------------------------------*/
-int dpio_get_player_latency (dpio_t *dpio, playerHdl_t h, int flags, int *ploss)
+sint32 dpio_get_player_latency (dpio_t *dpio, playerHdl_t h, sint32 flags, sint32 *ploss)
 {
 	dpio_conn_t *pc;
-	int		i;
+	sint32		i;
 
 	(void) flags;
 
@@ -722,14 +722,14 @@ int dpio_get_player_latency (dpio_t *dpio, playerHdl_t h, int flags, int *ploss)
 	}
 
 	if (ploss) {
-		unsigned int	temp;
-		unsigned int	sum;
+		uint32	temp;
+		uint32	sum;
 
 		temp = pc->ping_bits;
 		for (i = 16, sum = 0; --i >= 0; temp >>= 1) {
 			if (temp & 1) sum += 100;
 		}
-		*ploss = (int) (sum/16U);
+		*ploss = (sint32) (sum/16U);
 #ifdef VERBOSE
 		DPRINT(("dpio_get_player_latency: h:%x bits:%x sum %d loss %d\n", h, pc->ping_bits, sum, *ploss));
 #endif
@@ -786,7 +786,7 @@ dpio_setIncomingCallback(
 /*-----------------------------------------------------------------------
  Set the maximum number of player handles we will allow to be created
 -----------------------------------------------------------------------*/
-void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls) {
+void dpio_setMaxPlayerHdls(dpio_t *dpio, sint32 maxHdls) {
 	dpio_assertValid(dpio);
 	if (maxHdls > dpio_MAX_HANDLES) {
 		DPRINT(("dpio_setMaxPlayerHdls: maxHdls %d exceeds defined limit %d\n", maxHdls, dpio_MAX_HANDLES));
@@ -804,7 +804,7 @@ void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls) {
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
 -----------------------------------------------------------------------*/
-DP_API int dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen)
+DP_API sint32 dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen)
 {
 	commScanAddrReq_t req;
 	commScanAddrResp_t resp;
@@ -886,7 +886,7 @@ playerHdl_t dpio_openHdlRaw(dpio_t *dpio, void *adr)
  The flags can be a combination of:
 	dpio_OPENHDL_RAW_2NDLIVE: the second address is to be treated as LIVE
 -----------------------------------------------------------------------*/
-playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, long flags)
+playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, sint32 flags)
 {
 	commSayHiReq_t		cshReq;
 	commSayHiResp_t		cshResp;
@@ -1001,7 +1001,7 @@ dpio_freezeHdl(
 		if (fwrite(resp.address, dpio->myAdrLen, 1, file) != 1)
 			return dp_RES_FULL;
 	}
-	if (fwrite(&resp.flags, sizeof (long), 1, file) != 1)
+	if (fwrite(&resp.flags, sizeof (sint32), 1, file) != 1)
 		return dp_RES_FULL;
 
 	DPRINT(("dpio_freezeHdl: handle %d, addr=", hdl));
@@ -1030,7 +1030,7 @@ dpio_thawHdl(
 {
 	char adr[dp_MAX_ADR_LEN];
 	char adr2[dp_MAX_ADR_LEN];
-	long flags;
+	sint32 flags;
 	char bTy;
 
 	precondition(dpio != NULL);
@@ -1070,7 +1070,7 @@ dpio_thawHdl(
 	}
 
 	/* read flags */
-	if (fread(&flags, sizeof(long), 1, file) != 1) {
+	if (fread(&flags, sizeof(sint32), 1, file) != 1) {
 		DPRINT(("dpio_thawHdll: could not read flags\n"));
 		return dp_RES_EMPTY;
 	}
@@ -1106,7 +1106,7 @@ dpio_thawHdl(
 -----------------------------------------------------------------------*/
 dp_result_t dpio_freeze(dpio_t *dpio, FILE *fp)
 {
-	int i;
+	sint32 i;
 
 	precondition(dpio != NULL);
 	precondition(fp != NULL);
@@ -1213,8 +1213,8 @@ static dp_result_t dpio_thaw1(dpio_t *dpio, FILE *fp)
 static dp_result_t dpio_thaw2(dpio_t *dpio, FILE *fp)
 {
 	char buf[sizeof(dpio_SIG_END)];
-	int i;
-	int	num;
+	sint32 i;
+	sint32	num;
 
 	precondition(dpio != NULL);
 	precondition(fp != NULL);
@@ -1296,7 +1296,7 @@ static dp_result_t dpio_thaw2(dpio_t *dpio, FILE *fp)
  Force dpio to drop a given percentage of all packets (randomly) on
  reception.
 -----------------------------------------------------------------------*/
-void dpio_forceRxDropPercent(dpio_t *dpio, int rxDropPercent)
+void dpio_forceRxDropPercent(dpio_t *dpio, sint32 rxDropPercent)
 {
 	dpio_assertValid(dpio);
 	DPRINT(("dpio_forceRxDropPercent: setting packet loss to %d%%\n", rxDropPercent));
@@ -1330,8 +1330,8 @@ void dpio_forceRxDropPercent(dpio_t *dpio, int rxDropPercent)
 ------------------------------------------------------------------------*/
 dp_result_t dpio_setPingIntervals(
 	dpio_t *dpio,
-	int piggybackPingIntervalMS,
-	int forcedPingIntervalMS)
+	sint32 piggybackPingIntervalMS,
+	sint32 forcedPingIntervalMS)
 {
 	if (!dpio || (piggybackPingIntervalMS < 0) || (forcedPingIntervalMS < 0))
 		return dp_RES_BAD;
@@ -1356,7 +1356,7 @@ dp_result_t dpio_setPingIntervals(
  intervals.
  Called from dpio_create; dpio is in an invalid state during this time.
 -----------------------------------------------------------------------*/
-void dpio_set_clocks(dpio_t *dpio, int clocksPerSec)
+void dpio_set_clocks(dpio_t *dpio, sint32 clocksPerSec)
 {
 #if 0
 	commSetParamReq_t req;
@@ -1398,7 +1398,7 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec)
 		dpini_findSection("Debug");
 		s = dpini_readParameter("timeout", FALSE);
 		if (s && *s) {
-			int timeout_value = atoi(s);
+			sint32 timeout_value = atoi(s);
 
 			if (timeout_value >= 10) {
 				dpio->maxRxInterval = clocksPerSec * timeout_value;
@@ -1425,16 +1425,16 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec)
 /*--------------------------------------------------------------------------
  This function has been superceeded by dpio_hdl2adr2 (below)
 --------------------------------------------------------------------------*/
-dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, int *len)
+dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, size_t *len)
 {
-  return (dpio_hdl2adr2(dpio, h, adr, NULL, len));
+	return (dpio_hdl2adr2(dpio, h, adr, NULL, len));
 }
 
 /*--------------------------------------------------------------------------
  Find out the network address for a given handle opened with dpio_openHdl2.
  Called from dpio_create; dpio is in an invalid state during this time.
 --------------------------------------------------------------------------*/
-dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, int *len)
+dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, size_t *len)
 {
 	commPlayerInfoReq_t  req;
 	commPlayerInfoResp_t resp;
@@ -1463,7 +1463,7 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
 		}
 	}
 
-	DPRINT(("dpio_hdl2adr: h:%x len:%d Adr: ", h, *len));
+	DPRINT(("dpio_hdl2adr: h:%x len:%zu Adr: ", h, *len));
 	dpio_dprintAdr((char *)adr, resp.addrLen);
 	DPRINT(("\n"));
 	(void) dpio;
@@ -1505,7 +1505,7 @@ dp_result_t dpio_hdl2name(dpio_t *dpio, playerHdl_t h, char *name, size_t name_s
  Shut down the network API.
  If flags is nonzero, and the network is a modem, don't hang up.
 -----------------------------------------------------------------------*/
-void dpio_destroy(dpio_t *dpio, long flags)
+void dpio_destroy(dpio_t *dpio, sint32 flags)
 {
 	commTermReq_t req;
 
@@ -1603,7 +1603,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		dpini_findSection("Debug");
 		s = dpini_readParameter("portnum", FALSE);
 		if (s && *s) {
-			unsigned short portnum = atoi(s);
+			sint32 portnum = atoi(s);
 
 			if (portnum < 1024) {
 				DPRINT(("dpio_create: [DEBUG]/portnum must be >= 1024, was %s\n", s));
@@ -1654,7 +1654,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 			DPRINT(("dpio_create: Driver failed to allocate instance data!\n"));
 			return dp_RES_BAD;
 		}
-	   	DPRINT(("dpio_create: comm magic : %x\n", (unsigned long *) dpio->commPtr));
+		DPRINT(("dpio_create: comm magic : %x\n", (uint32 *) dpio->commPtr));
 	}
 #endif
 
@@ -1683,7 +1683,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	 */
 	{
 		commSetParamReq_t paramReq;
-		int ok;
+		sint32 ok;
 
 		paramReq.param_num = comm_PARAM_DPRINTF;
 		paramReq.param_pointer = dp_dprintf;
@@ -1716,7 +1716,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	/* tell driver where our dp_dprintf is */
 	{
 		commSetParamReq_t paramReq;
-		int ok;
+		sint32 ok;
 
 		paramReq.param_num = comm_PARAM_DPRINTF;
 		paramReq.param_pointer = dp_dprintf;
@@ -1788,7 +1788,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		dpini_findSection("Debug");
 		s = dpini_readParameter("pktloss", FALSE);
 		if (s && *s) {
-			int percent;
+			sint32 percent;
 
 			if ((1==sscanf(s, "%d", &percent))
 			&& (percent >= 0)
@@ -1800,9 +1800,9 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 		s = dpini_readParameter("fault", FALSE);
 		if (s && *s) {
 			if (atoi(s)) {
-				long *x;
+				sint32 *x;
 				DPRINT(("dpio_create: generating null pointer fault\n"));
-				x = (long *)NULL;
+				x = (sint32 *)NULL;
 				*x = 0x12345678;
 			}
 		}
@@ -1817,8 +1817,8 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	/* Get delay parameters from .ini file */
 	{
 		const char *s;
-		int bps;
-		int backbone_ms;
+		sint32 bps;
+		sint32 backbone_ms;
 
 		dpini_findSection("Debug");
 		/* Load-dependant delay - a modem delays data by an amount
@@ -1937,12 +1937,12 @@ dp_result_t dpio_q_packet(
 	void *buffer,
 	size_t size)
 {
-	int winpos;
+	sint32 winpos;
 	dpio_window_t *pw;
 	dpio_wrapped_data_packet_t *p;
 	dp_result_t err;
-	unsigned short nq;
-	unsigned short pktnum;
+	uint16 nq;
+	uint16 pktnum;
 
 	dpio_assertValid(dpio);
 	if (!pc)
@@ -1985,7 +1985,7 @@ dp_result_t dpio_q_packet(
 	p = &pw->outstanding[winpos];
 	p->tag = tag;
 	assert(size <= UCHAR_MAX);
-	p->body.len = (unsigned char) size;
+	p->body.len = (uint8) size;
 	pktnum = pw->next_pktnum++;
 	nq++;
 	p->body.pktnum = SwapBytes2(pktnum);
@@ -2022,11 +2022,11 @@ dp_result_t dpio_q_packet(
  Get the remaining number of packets free in the TX queue for a handle.
  Returns -1 on error.
 -----------------------------------------------------------------------*/
-int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h)
+sint32 dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h)
 {
 	dpio_conn_t *pc;
 	dpio_window_t *pw;
-	unsigned short nq;
+	uint16 nq;
 
 	dpio_assertValid(dpio);
 
@@ -2044,7 +2044,7 @@ int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h)
 	}
 	pw = &pc->tx;
 	assert((pw->next_pktnum - pw->windowBase) <= SHRT_MAX);	/* protect conversion */
-	nq = (short)(pw->next_pktnum - pw->windowBase);
+	nq = (sint16)(pw->next_pktnum - pw->windowBase);
 	dpio_assertValid(dpio);
 	return dpio_WINDOWSIZE - nq;
 }
@@ -2052,7 +2052,7 @@ int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h)
 /*-----------------------------------------------------------------------
  Get the current state of a connection by player handle
 -----------------------------------------------------------------------*/
-short dpio_getHdlState(dpio_t *dpio, playerHdl_t h)
+sint16 dpio_getHdlState(dpio_t *dpio, playerHdl_t h)
 {
 	dpio_conn_t *pc;
 
@@ -2110,10 +2110,10 @@ clock_t dpio_getHdlAge(dpio_t *dpio, playerHdl_t h)
  handle the new style of dptab_delete.
  The return value is a bitfield full of dpio_REMCAP_*.
 -----------------------------------------------------------------------*/
-short dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h)
+sint16 dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h)
 {
 	dpio_conn_t *pc;
-	short remcap = 0;
+	sint16 remcap = 0;
 
 	dpio_assertValid(dpio);
 
@@ -2163,9 +2163,9 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 	playerHdl_t h;
 	dpio_conn_t *pc;
 	dpio_window_t *pw;
-	unsigned char data[dpio_MAXLEN_RELIABLE];
+	uint8 data[dpio_MAXLEN_RELIABLE];
 	dp_result_t err;
-	int pktlen;
+	sint32 pktlen;
 	char mycap;
 
 	/* precondition(cb == NULL); */
@@ -2248,10 +2248,10 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 
 	/* Choose an initial packet number at random.  Hope this *is* random. */
 #ifdef UNIX
-	pw->next_pktnum = (unsigned short)((eclock()^getpid()^(long)pw)
+	pw->next_pktnum = (uint16)((eclock()^getpid()^(sint32)pw)
 #else
 	/* WARNING:  This relies on srand() called by the application */
- 	pw->next_pktnum = (unsigned short)((rand() + (short) (*dpio->now) + (short) time(NULL))
+ 	pw->next_pktnum = (uint16)((rand() + (sint16) (*dpio->now) + (sint16) time(NULL))
 #endif
 
 #if 0
@@ -2284,7 +2284,7 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 	 */
 	data[0] = 5;	/* version */
 	assert(UCHAR_MAX >= dpio->myAdrLen);
-	data[1] = (unsigned char) dpio->myAdrLen;
+	data[1] = (uint8) dpio->myAdrLen;
 	memcpy(&data[2], dpio->myAdr, dpio->myAdrLen);
 	memcpy(&data[2+dpio->myAdrLen], adr, dpio->myAdrLen);
 	mycap = dpio_REMCAP_NEWTAB | dpio_REMCAP_GATHER;
@@ -2365,8 +2365,8 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 {
 	dpio_conn_t *pc;
 	dp_result_t err;
-   	unsigned char data[4] = "FIN";
-	int oldstate;
+	uint8 data[4] = "FIN";
+	sint32 oldstate;
 
 	DPRINT(("dpio_closeHdl: h:%x\n", h));
 	precondition(dpio != NULL);
@@ -2390,7 +2390,7 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 	if (pc->state & dpio_STATE_FIN_SENT) {
 		DPRINT(("dpio_closeHdl: t:%d already closing; h:%x state:%x\n", *dpio->now, h, pc->state));
 	} else {
-		int pktlen = 3;
+		size_t pktlen = 3;
 		err = dpio_q_packet(dpio, h, pc, dpio_FIN_PACKET_ID, data, pktlen);
 
 		if (err == dp_RES_FULL) {
@@ -2470,11 +2470,11 @@ dp_result_t dpio_closeHdlImmed(dpio_t *dpio, playerHdl_t h)
 	 */
 	{
 		dpio_window_t *txw = &pc->tx;
-		short windowUsed = (short) (txw->next_pktnum - txw->windowBase);	/* careful to wrap around right */
-		int i;
+		uint16 windowUsed = txw->next_pktnum - txw->windowBase;	/* careful to wrap around right */
+		uint16 i;
 
 		for (i=0; i<windowUsed; i++) {
-			unsigned short winpos = (txw->windowBase + i) % dpio_WINDOWSIZE;
+			uint16 winpos = (txw->windowBase + i) % dpio_WINDOWSIZE;
 			if (!txw->bAcked[winpos]) {
 				dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting--;
 				dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting -= txw->outstanding[winpos].body.len;
@@ -2506,7 +2506,7 @@ dp_result_t dpio_ReadyToFreeze(
 	dpio_conn_t *pc;
 	dpio_window_t *pw;
 	assoctab_item_t *pe;
-	int i;
+	sint32 i;
 
 #ifdef VERYVERBOSE
 	DPRINT(("dpio_ReadyToFreeze: conns->n_used:%d\n", dpio->conns->n_used));
@@ -2639,10 +2639,10 @@ static clock_t dpio_current_pingInterval(const dpio_t *dpio, const dpio_conn_t *
  Returns dp_RES_OK if the latency of the player was calculated,
          dp_RES_EMPTY if not.
 -------------------------------------------------------------------------*/
-static dp_result_t dpio_handle_ping_response(dpio_t *dpio, dpio_conn_t *pc, playerHdl_t h, unsigned char *buffer, int len)
+static dp_result_t dpio_handle_ping_response(dpio_t *dpio, dpio_conn_t *pc, playerHdl_t h, uint8 *buffer, sint32 len)
 {
-	unsigned char pktnum = buffer[2];
-	unsigned char age_in_pktnums = (pc->ping_current_pktnum - pktnum - 1);
+	uint8 pktnum = buffer[2];
+	uint8 age_in_pktnums = (pc->ping_current_pktnum - pktnum - 1);
 	clock_t thisTrip;
 	clock_t timeSent;
 
@@ -2689,10 +2689,10 @@ static dp_result_t dpio_handle_ping_response(dpio_t *dpio, dpio_conn_t *pc, play
 static dp_result_t dpio_gotAck(
 	dpio_t *dpio,
 	dpio_conn_t *pc,
-	int pktnum,
+	sint32 pktnum,
 	playerHdl_t h
 #ifndef OLD_ACK
-	, int synthesized 	/* true if ack was dropped and has been reconstructed */
+	, sint32 synthesized 	/* true if ack was dropped and has been reconstructed */
 #endif
 	)
 {
@@ -2701,7 +2701,7 @@ static dp_result_t dpio_gotAck(
 
 	dpio_assertValid(dpio);
 
-	if ((short)(pw->windowBase+dpio_WINDOWSIZE - pktnum) <= 0) {
+	if ((sint16)(pw->windowBase+dpio_WINDOWSIZE - pktnum) <= 0) {
 		/* pktnum was beyond end of window! */
 		/* somehow the sender sent a ack he wasn't supposed to yet. */
 		DPRINT(("dpio_gotAck: got ack %d, at windowBase %d, beyond end of window\n",
@@ -2711,9 +2711,9 @@ static dp_result_t dpio_gotAck(
 	}
 	/* If the packet is within the window, note that it has been acked. */
 	/* If the packet is the earliest packet in the window, advance the window. */
-	if ((short)(pw->windowBase - pktnum) <= 0) {
-		int winpos = pktnum % dpio_WINDOWSIZE;
-		int thisTrip = *dpio->now - pw->pktQTime[winpos];
+	if ((sint16)(pw->windowBase - pktnum) <= 0) {
+		sint32 winpos = pktnum % dpio_WINDOWSIZE;
+		sint32 thisTrip = *dpio->now - pw->pktQTime[winpos];
 		if (!pw->bAcked[winpos]) {
 #ifdef dp_STATS
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting--;
@@ -2849,14 +2849,14 @@ static dp_result_t dpio_gotAck(
 dp_result_t dpio_higherLevelBlanketAck(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	char *tag,
 	size_t taglen)
 {
 	dpio_window_t *pw;
-	int iDest;
-	unsigned short pktnum;	/* type very important, must match pw->pktnum for proper rollover */
-	int nAcked = 0;
+	sint32 iDest;
+	uint16 pktnum;	/* type very important, must match pw->pktnum for proper rollover */
+	sint32 nAcked = 0;
 
 	/*DPRINT(("dpio_higherLevelBlanketAck(%p,%p,%d,%x)\n", dpio, dests, nDests, tag));*/
 	precondition(dpio != NULL);
@@ -2876,7 +2876,7 @@ dp_result_t dpio_higherLevelBlanketAck(
 
 		/* Loop over packet numbers modulo 65536 */
 		for (pktnum=pw->windowBase; pktnum!=pw->next_pktnum; pktnum++) {
-			int winpos = pktnum % dpio_WINDOWSIZE;
+			sint32 winpos = pktnum % dpio_WINDOWSIZE;
 			dpio_wrapped_data_packet_t *p;
 
 			/* Skip already ack'd packets */
@@ -2909,13 +2909,13 @@ dp_result_t dpio_higherLevelBlanketAck(
     If window is empty, use windowbase.
  2. the most recent packet we have gotten, so peer can judge round trip time.
 --------------------------------------------------------------------------*/
-static dp_result_t dpio_sendAck(dpio_t *dpio, dpio_conn_t *conn, playerHdl_t h, unsigned short last_rx_pktnum)
+static dp_result_t dpio_sendAck(dpio_t *dpio, dpio_conn_t *conn, playerHdl_t h, uint16 last_rx_pktnum)
 {
 	dp_result_t err;
-	int i;
-	short offset;
-	unsigned short oldest_nonrx_pktnum;
-	unsigned short windowUsed;
+	sint32 i;
+	sint16 offset;
+	uint16 oldest_nonrx_pktnum;
+	uint16 windowUsed;
 #include "dppack1.h"
 	struct {
 		dp_packetType_t tag;
@@ -2926,7 +2926,7 @@ static dp_result_t dpio_sendAck(dpio_t *dpio, dpio_conn_t *conn, playerHdl_t h, 
 
 	/* Find oldest packet not yet received */
 	oldest_nonrx_pktnum = rxw->windowBase;
-	windowUsed = (unsigned short) (rxw->next_pktnum - rxw->windowBase);
+	windowUsed = (uint16) (rxw->next_pktnum - rxw->windowBase);
 	for (i=0; i<windowUsed; i++, oldest_nonrx_pktnum++) {
 		if (!rxw->bAcked[(oldest_nonrx_pktnum) % dpio_WINDOWSIZE])
 			break;
@@ -2964,7 +2964,7 @@ static void dpio_sendAckLater(dpio_t *dpio, dpio_conn_t *conn)
 }
 
 /* simpler ping packet used to implement silent piggyback pings */
-#define sizeof_dpio_ping_packet_t (sizeof(unsigned char))
+#define sizeof_dpio_ping_packet_t (sizeof(uint8))
 #define sizeof_dpio_ping (sizeof(dp_packetType_t) + sizeof_dpio_ping_packet_t)
 
 /*----------------------------------------------------------------------
@@ -2972,7 +2972,7 @@ static void dpio_sendAckLater(dpio_t *dpio, dpio_conn_t *conn)
 ----------------------------------------------------------------------*/
 dp_result_t dpio_flush(dpio_t *dpio)
 {
-	int i;
+	sint32 i;
 	playerHdl_t		h;
 	dpio_conn_t     *pc;
 
@@ -2990,7 +2990,7 @@ dp_result_t dpio_flush(dpio_t *dpio)
 		pc = (dpio_conn_t *) &ip->value;
 
 		if (pc->ackNeeded) {
-			dpio_sendAck(dpio, pc, h, (unsigned short)(pc->rx.next_pktnum - 1));
+			dpio_sendAck(dpio, pc, h, (uint16)(pc->rx.next_pktnum - 1));
 			pc->ackNeeded = FALSE;
 		}
 		if (pc->txGatherBufLen > sizeof(dp_packetType_t)) {
@@ -3024,9 +3024,9 @@ static dp_result_t dpio_getReliable(
 	void *callerBuf,
 	size_t *pcallerBufLen)
 {
-	int i = dpio->conns->n_used; // Problem
-	int flush_now = ((dpio->ackNeeded || dpio->txGatherNeeded)
-					 && ((long)(*dpio->now - dpio->nextFlush) > 0)
+	sint32 i = dpio->conns->n_used; // Problem
+	sint32 flush_now = ((dpio->ackNeeded || dpio->txGatherNeeded)
+					 && ((sint32)(*dpio->now - dpio->nextFlush) > 0)
 					 && (dpio->rxGatherBufUsed >= dpio->rxGatherBufLen));
 
 #if 0
@@ -3088,7 +3088,7 @@ static dp_result_t dpio_getReliable(
 		 */
 		if (flush_now) {
 			if (pc->ackNeeded) {
-				dpio_sendAck(dpio, pc, pe->key, (unsigned short)(pc->rx.next_pktnum - 1));
+				dpio_sendAck(dpio, pc, pe->key, (uint16)(pc->rx.next_pktnum - 1));
 				pc->ackNeeded = FALSE;
 			}
 			if (pc->txGatherBufLen > sizeof(dp_packetType_t)) {
@@ -3132,7 +3132,7 @@ static dp_result_t dpio_getRaw(
 
 	/* Check gather buf. */
 	if (dpio->rxGatherBufUsed < dpio->rxGatherBufLen) {
-		rxPktResp.length = ((unsigned char *)dpio->rxGatherBuf)[dpio->rxGatherBufUsed++];
+		rxPktResp.length = ((uint8 *)dpio->rxGatherBuf)[dpio->rxGatherBufUsed++];
 		rxPktReq.buffer = dpio->rxGatherBuf + dpio->rxGatherBufUsed;
 		dpio->rxGatherBufUsed += rxPktResp.length;
 		DPRINT(("dpio_getRaw: gathered; tag %2.2s, ln %d\n", rxPktReq.buffer, rxPktResp.length));
@@ -3160,7 +3160,7 @@ static dp_result_t dpio_getRaw(
 		/* Drop packets if desired for debugging. */
 		if ((rxPktResp.status == comm_STATUS_OK)
 		&&  dpio->rxDropPercent
-		&&  ((dpio->rxDropPercent*(int)(RAND_MAX / 100)) > rand())) {
+		&&  ((dpio->rxDropPercent*(sint32)(RAND_MAX / 100)) > rand())) {
 			DPRINT(("dpio_getRaw: t:%d Dropping tag %2.2s from h:%x, ln %d\n",
 			*dpio->now, dpio->rxGatherBuf, rxPktResp.src, rxPktResp.length));
 			rxPktResp.status = dp_RES_EMPTY;
@@ -3170,7 +3170,7 @@ static dp_result_t dpio_getRaw(
 		if (dpio->delay_q) {
 			size_t msgLen;
 			char dbuf[dpio_MAXLEN_GATHER + sizeof(rxPktResp)];
-			int derr;
+			sint32 derr;
 
 			/* Store into delay queue if not empty */
 			if (rxPktResp.status != comm_STATUS_EMPTY) {
@@ -3279,9 +3279,9 @@ dp_result_t dpio_get(
 	playerHdl_t *psrc,
 	void *buffer,
 	size_t *psize,
-	int *flags)
+	sint32 *flags)
 {
-	unsigned short pktnum;	/* type very important, must match pw->pktnum for proper rollover */
+	uint16 pktnum;	/* type very important, must match pw->pktnum for proper rollover */
 	commRxPktResp_t	rxPktResp;
 	void			*localMsg;
 	size_t			localMsgLen;
@@ -3301,7 +3301,7 @@ dp_result_t dpio_get(
 	dpio_conn_t *pc;
 	size_t orig_size = *psize;
 	playerHdl_t h;
-	int handleRegenerated;
+	sint32 handleRegenerated;
 
 	dpio_assertValid(dpio);
 	if (flags)
@@ -3412,10 +3412,10 @@ dp_result_t dpio_get(
 			/* synthesize any acks that were dropped */
 			if ((rxPktResp.length >= (sizeof_dpio_ack_packet_t + sizeof(dp_packetType_t)))
 			&& ((pAck->gotAllUpTo_offset&0xff) != 128)) {
-				int i;
-				unsigned short synpktnum = pw->windowBase;
-				unsigned short oldest_nonrx_pktnum = pktnum + pAck->gotAllUpTo_offset;
-				short pkts2check = (oldest_nonrx_pktnum - pw->windowBase);	/* careful to wrap around right */
+				sint32 i;
+				uint16 synpktnum = pw->windowBase;
+				uint16 oldest_nonrx_pktnum = pktnum + pAck->gotAllUpTo_offset;
+				sint16 pkts2check = (oldest_nonrx_pktnum - pw->windowBase);	/* careful to wrap around right */
 
 				DPRINT(("dpio_get: pktnum %d, correction %d, oldest %d, wb %d, checking %d through %d\n", pktnum, pAck->gotAllUpTo_offset, oldest_nonrx_pktnum, pw->windowBase, synpktnum, synpktnum + pkts2check));
 				if ((pkts2check > -dpio_WINDOWSIZE) && (pkts2check <= dpio_WINDOWSIZE)) {
@@ -3760,8 +3760,8 @@ dp_result_t dpio_get(
 			 */
 			pw->origWindowBase = SwapBytes2(pDat->pktnum);
 			/* Let the window base wrap around if it wants to */
-			pw->next_pktnum = (unsigned short) (pw->origWindowBase + 1);
-			pw->windowBase = (unsigned short) (pw->origWindowBase + 1);
+			pw->next_pktnum = (uint16) (pw->origWindowBase + 1);
+			pw->windowBase = (uint16) (pw->origWindowBase + 1);
 			memset(pw->bAcked, 0, sizeof(pw->bAcked));
 			DPRINT(("dpio_get: New handle or repeat SYN.  Initialize but don't resend SYN.  OrigWindowBase %d\n", pw->origWindowBase));
 		} else if (pw->origWindowBase != SwapBytes2(pDat->pktnum)) {
@@ -3913,7 +3913,7 @@ dp_result_t dpio_get(
 			 * This fixes a bug encountered by tservt's speed login test.
 			 */
 			return dp_RES_AGAIN;
-		} else if ((unsigned short)(SwapBytes2(pDat->pktnum) - pw->windowBase) >= dpio_WINDOWSIZE) {
+		} else if ((uint16)(SwapBytes2(pDat->pktnum) - pw->windowBase) >= dpio_WINDOWSIZE) {
 			/* pktnum was beyond end of window! */
 			/* somehow the sender sent a packet we wasn't supposed to yet. */
 			DPRINT(("dpio_get: got FIN pktnum %d, at windowBase %d, outside window?\n",
@@ -3962,7 +3962,7 @@ dp_result_t dpio_get(
 			DPRINT(("dpio_get: t:%d got data packet while disabled: pktnum %d from src h:%x tag %2.2s\n",
 				*dpio->now, pktnum, h, pDat->data));
 			/* Ignore new packets. */
-			if ((short)(pw->windowBase - pktnum) <= 0) {
+			if ((sint16)(pw->windowBase - pktnum) <= 0) {
 				dpio_assertValid(dpio);
 				return dp_RES_EMPTY;
 			}
@@ -3992,7 +3992,7 @@ dp_result_t dpio_get(
 			*dpio->now, pktnum, h, pDat->data));
 		/*DPRINT(("dpio_get: ")); dpio_pw(pw); */
 #endif
-		if ((short)(pw->windowBase+dpio_WINDOWSIZE - pktnum) <= 0) {
+		if ((sint16)(pw->windowBase+dpio_WINDOWSIZE - pktnum) <= 0) {
 			/* pktnum was beyond end of window! */
 			/* somehow the sender sent a packet we wasn't supposed to yet. */
 			DPRINT(("dpio_get: got pktnum %d, at windowBase %d, beyond end of window\n",
@@ -4000,7 +4000,7 @@ dp_result_t dpio_get(
 			dpio_assertValid(dpio);
 			return dp_RES_BUG;
 		}
-		if ((short)(pw->windowBase - pktnum) <= 0) {
+		if ((sint16)(pw->windowBase - pktnum) <= 0) {
 			/* packet is within the window */
 			/* Put it in the window buffer for eventual delivery to the user. */
 			dpio_wrapped_data_packet_t *p = &pw->outstanding[(pktnum) % dpio_WINDOWSIZE];
@@ -4009,9 +4009,9 @@ dp_result_t dpio_get(
 			memcpy(p, buffer, sizeof_dpio_wdp(pDat->len));
 			pw->bAcked[(pktnum) % dpio_WINDOWSIZE] = TRUE;
 			/* Indicate one plus the highest packet outstanding in the window... */
-			if ((short)(pw->next_pktnum - pktnum) <= 0) {
+			if ((sint16)(pw->next_pktnum - pktnum) <= 0) {
 				/* let the packet number wrap around if necessary */
-				pw->next_pktnum = (unsigned short) (pktnum+1);
+				pw->next_pktnum = (uint16) (pktnum+1);
 			}
 		} else {
 			DPRINT(("dpio_get: ignoring pktnum %d because it's outside window; windowbase %d\n",
@@ -4183,9 +4183,9 @@ static dp_result_t dpio_flushPacketsForHandle(dpio_t *dpio, dpio_conn_t *pc, pla
 	 */
 	if ((pc->options & (dpio_OPTION_PIGGYBACK_PING | dpio_OPTION_FORCED_PING
 	                    | dpio_OPTION_KEEPALIVE))
-	&&  ((long)(*dpio->now - pc->ping_next_piggyback) > 0)
+	&&  ((sint32)(*dpio->now - pc->ping_next_piggyback) > 0)
 	&&  !put_would_flush(pc, sizeof_dpio_ping)) {
-		unsigned char pkt[sizeof(char) + sizeof_dpio_ping];
+		uint8 pkt[sizeof(char) + sizeof_dpio_ping];
 
 		/* Simulate dpio_put_unreliable_buffered(dpio, h, new ping pkt); */
 		pkt[0] = sizeof_dpio_ping;
@@ -4209,7 +4209,7 @@ static dp_result_t dpio_flushPacketsForHandle(dpio_t *dpio, dpio_conn_t *pc, pla
 	}
 
 	/* strip off gather header if only one packet */
-	if ((pc->txGatherBufLen - 3) == (unsigned char)(pc->txGatherBuf[2])) {
+	if ((pc->txGatherBufLen - 3) == (uint8)(pc->txGatherBuf[2])) {
 		err = dpio_put_unreliable_unbuffered(dpio, h, pc->txGatherBuf + 3, pc->txGatherBufLen - 3);
 	} else {
 		err = dpio_put_unreliable_unbuffered(dpio, h, pc->txGatherBuf, pc->txGatherBufLen);
@@ -4250,7 +4250,7 @@ static dp_result_t dpio_put_unreliable_buffered(dpio_t *dpio, dpio_conn_t *pc, p
 
 	}
 	/* Copy packet into gather buffer */
-	pc->txGatherBuf[pc->txGatherBufLen++] = (unsigned char) size;
+	pc->txGatherBuf[pc->txGatherBufLen++] = (uint8) size;
 	memcpy(pc->txGatherBuf + pc->txGatherBufLen, buffer, size);
 	pc->txGatherBufLen += size;
 
@@ -4280,12 +4280,12 @@ static dp_result_t dpio_put_unreliable_buffered(dpio_t *dpio, dpio_conn_t *pc, p
 dp_result_t dpio_put_unreliable(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest)   /* If error occurs, dest with error indicated here */
 {
-	int i;
+	sint32 i;
 	dp_result_t err=dp_RES_OK;
 
 	dpio_assertValid(dpio);
@@ -4350,16 +4350,16 @@ dp_result_t dpio_put_unreliable(
 dp_result_t dpio_put_reliable2(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest,  /* If error occurs, dest with error indicated here */
-	int flags)
+	sint32 flags)
 {
 	dpio_conn_t *cdests[dpio_MAX_HANDLES];
 	dpio_conn_t *pc;
-	int i;
-	int reserve_entries;
+	sint32 i;
+	sint32 reserve_entries;
 
 	dpio_assertValid(dpio);
 
@@ -4390,7 +4390,7 @@ dp_result_t dpio_put_reliable2(
 	 */
 	reserve_entries = (((flags & 0x6) >> 1) * dpio_WINDOWSIZE) / 4;
 	for (i=0; i<nDests; i++) {
-		unsigned short nq;
+		uint16 nq;
 
 		cdests[i] = NULL;
 		if (dests[i] == PLAYER_ME) continue;
@@ -4407,7 +4407,7 @@ dp_result_t dpio_put_reliable2(
 			DPRINT(("dpio_put_reliable: no connection for peer h:%x\n", dests[i]));
 			continue;
 		}
-		nq = (unsigned short) (pc->tx.next_pktnum - pc->tx.windowBase);
+		nq = (uint16) (pc->tx.next_pktnum - pc->tx.windowBase);
 		if (nq >= (dpio_WINDOWSIZE-reserve_entries)) {
 			/* Tell caller he should delete this destination, and retry,
 			 * or throttle back his transmissions; his choice.
@@ -4469,7 +4469,7 @@ dp_result_t dpio_put_reliable2(
 /*--------------------------------------------------------------------------
  Returns the number of packets in the local message queue.
 --------------------------------------------------------------------------*/
-int dpio_localQ_npkts(dpio_t *dpio)
+sint32 dpio_localQ_npkts(dpio_t *dpio)
 {
 	return (q_MAXELS - 1 - q_nfree(dpio->localMsgQ));
 }
@@ -4479,9 +4479,9 @@ int dpio_localQ_npkts(dpio_t *dpio)
  Returns number of handles.  Will not overflow buffer; if buffer size is
  returned, call again with a larger buffer.
 --------------------------------------------------------------------------*/
-int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls)
+sint32 dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], sint32 max_nhdls)
 {
-	int i, nhdls;
+	sint32 i, nhdls;
 
 	dpio_assertValid(dpio);
 
@@ -4489,7 +4489,7 @@ int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls)
 	for (i=0, nhdls=0; nhdls < max_nhdls && i < dpio->conns->n_used; i++) {
 		assoctab_item_t	*ip;
 		dpio_conn_t     *pc;
-		unsigned short nq;
+		uint16 nq;
 
 		ip = assoctab_getkey(dpio->conns, i);
 		if (!ip) continue;
@@ -4537,7 +4537,7 @@ int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls)
 playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 	playerHdl_t		h;
 	dpio_conn_t     *pc;
 
@@ -4569,9 +4569,9 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 			DPRINT(("dpio_findTimedOutHost: attempting to close h:%x state:%x\n", h, pc->state));
 		if (((pc->state & dpio_STATE_CLOSED) == dpio_STATE_CLOSED)
 		&&  (txw->windowBase == txw->next_pktnum)) { /* No tx waiting */
-			int i;
-			int no_unacked_pkts = TRUE;
-			unsigned short windowUsed = (unsigned short) (rxw->next_pktnum - rxw->windowBase);	/* careful to wrap around right */
+			sint32 i;
+			sint32 no_unacked_pkts = TRUE;
+			uint16 windowUsed = (uint16) (rxw->next_pktnum - rxw->windowBase);	/* careful to wrap around right */
 
 			DPRINT(("dpio_findTimedOutHost: h:%x, no tx waiting\n", h));
 			for (i=0; i<windowUsed; i++) {
@@ -4590,7 +4590,7 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 		/* Optional Checks */
 		if (pc->options & dpio_OPTION_KEEPALIVE) {
 			/* Have they timed out? */
-			long rxidle = (long)(*dpio->now - rxw->PktTime);
+			sint32 rxidle = (sint32)(*dpio->now - rxw->PktTime);
 			if (rxidle >= dpio->maxRxInterval) {
 				DPRINT(("dpio_findTimedOutHost: t:%d host timed out: pLastRxTime:%d h:%x maxRxInterval:%d cb:%p\n",
 					*dpio->now, rxw->PktTime, h, dpio->maxRxInterval, dpio->callback));
@@ -4605,8 +4605,8 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 				return h;	/* Caller must call dpio_closeHdl on this handle */
 			}
 			if (txw->windowBase != txw->next_pktnum) {   /* tx waiting */
-				int winpos = txw->windowBase % dpio_WINDOWSIZE;
-				int maxretries = dpio_MAX_RETRIES;
+				sint32 winpos = txw->windowBase % dpio_WINDOWSIZE;
+				sint32 maxretries = dpio_MAX_RETRIES;
 				if (pc->RTT_nsamp == 0) maxretries = dpio_MAX_RETRIES_GUESS;
 				if (txw->nRetries[winpos] > maxretries) {
 					DPRINT(("dpio_findTimedOutHost: t:%d too many retries h:%x\n",
@@ -4624,12 +4624,12 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 		 * ping interval, then send it out now.
 		 */
 		if (((pc->options & dpio_OPTION_FORCED_PING)
-			 && ((long)(*dpio->now - pc->ping_next_forced) > 0))
+			 && ((sint32)(*dpio->now - pc->ping_next_forced) > 0))
 		||  ((pc->options & dpio_OPTION_KEEPALIVE)
 			 && (pc->tx.windowBase == pc->tx.next_pktnum) /* No tx waiting*/
-			 && ((long)(*dpio->now - pc->ping_next_keepalive) > 0)
-			 && ((long)(*dpio->now - pc->rx.PktTime) > dpio_keepaliveInterval(dpio)))) {
-			unsigned char pkt[sizeof_dpio_ping];
+			 && ((sint32)(*dpio->now - pc->ping_next_keepalive) > 0)
+			 && ((sint32)(*dpio->now - pc->rx.PktTime) > dpio_keepaliveInterval(dpio)))) {
+			uint8 pkt[sizeof_dpio_ping];
 
 			*((dp_packetType_t *)pkt) = dp_PING_PACKET_ID;
 			pkt[2] = pc->ping_current_pktnum;
@@ -4646,7 +4646,7 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
 			 */
 			pc->ping_next_keepalive += dpio_keepaliveInterval(dpio);
 			/* If that would result in a keepalive storm, back off */
-			if ((long)(*dpio->now - pc->ping_next_keepalive) > 0)
+			if ((sint32)(*dpio->now - pc->ping_next_keepalive) > 0)
 				pc->ping_next_keepalive = *dpio->now + dpio_keepaliveInterval(dpio);
 #endif
 			pc->ping_time_sent[pc->ping_current_pktnum & (dpio_PING_TIME_SENT_N-1)] = *dpio->now;
@@ -4690,7 +4690,7 @@ playerHdl_t dpio_findTimedOutHost(dpio_t *dpio)
    dp_RES_BUG if option invalid,
    dp_RES_OK on success.
 -----------------------------------------------------------------------*/
-dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, int options)
+dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, sint32 options)
 {
 	dpio_conn_t     *pc;
 
@@ -4734,7 +4734,7 @@ dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, int options)
 		pc->ping_next_keepalive = *dpio->now;
 	}
 
-	pc->options = (short) options;
+	pc->options = (sint16) options;
 	dpio_assertValid(dpio);
 	return dp_RES_OK;
 }
@@ -4750,12 +4750,12 @@ dp_result_t dpio_update(dpio_t *dpio)
 	assoctab_item_t *pe;
 	playerHdl_t dest;
 	dp_result_t err;
-	int curTx;
+	sint32 curTx;
 
 	dpio_assertValid(dpio);
 
 	/* Obey throttling. */
-	if ((long)(*dpio->now - dpio->nextTxTime) < 0)
+	if ((sint32)(*dpio->now - dpio->nextTxTime) < 0)
 		return dp_RES_OK;
 
 #ifdef VERYVERBOSE
@@ -4763,7 +4763,7 @@ dp_result_t dpio_update(dpio_t *dpio)
 #endif
 	dpio->nextTxTime += dpio->minTxInterval;
 	/* Keep the throttling beacon from falling too far behind */
-	if ((long)(dpio->nextTxTime - (*dpio->now + dpio->minTxInterval / 2)) < 0)
+	if ((sint32)(dpio->nextTxTime - (*dpio->now + dpio->minTxInterval / 2)) < 0)
 		dpio->nextTxTime = *dpio->now + dpio->minTxInterval / 2;
 
 #ifdef dp_STATS
@@ -4785,7 +4785,7 @@ dp_result_t dpio_update(dpio_t *dpio)
 		 * already data queued up in the gather buffer, we might as well
 		 * fill the existing packet and send one more.
 		 */
-		int flush_would_send;
+		sint32 flush_would_send;
 
 		pe = assoctab_getkey(dpio->conns, curTx);
 		if (!pe) {
@@ -4808,12 +4808,12 @@ dp_result_t dpio_update(dpio_t *dpio)
 		 */
 		if ((pw->windowBase != pw->next_pktnum)
 		&&  ((pc->state & dpio_STATE_ESTABLISHED) != (dpio_STATE_SYN_SENT | dpio_STATE_SYN_RCVDACK))
-		&&  ((long)(*dpio->now - pw->PktTime) > 0)) {
+		&&  ((sint32)(*dpio->now - pw->PktTime) > 0)) {
 			dpio_wrapped_data_packet_t *p;
-			unsigned short pktnum;
+			uint16 pktnum;
 
 			for (pktnum = pw->windowBase; pktnum != pw->next_pktnum; pktnum++) {
-				int winpos = pktnum % dpio_WINDOWSIZE;
+				sint32 winpos = pktnum % dpio_WINDOWSIZE;
 				size_t size;
 
 #ifdef VERYVERBOSE
@@ -4869,16 +4869,16 @@ dp_result_t dpio_update(dpio_t *dpio)
 /* Packet histogram stuff.
  * Storage should be part of dpio_t, but is static for now.
  */
-static long dpio_pkts=0;
-static long dpio_pkts_tx_full=0;
-static long **dpio_hist_pkts=NULL;
-static long **dpio_hist_bytes=NULL;
-static long dpio_bytes=0;
-static long start_time;
+static sint32 dpio_pkts=0;
+static sint32 dpio_pkts_tx_full=0;
+static sint32 **dpio_hist_pkts=NULL;
+static sint32 **dpio_hist_bytes=NULL;
+static sint32 dpio_bytes=0;
+static sint32 start_time;
 static char bGotDatapacket=0;
 
-static void free_2dArray(long **toFree, int outer) {
-	int i;
+static void free_2dArray(sint32 **toFree, sint32 outer) {
+	sint32 i;
 
 	for (i=0; i<outer; i++)
 		if (toFree[i]) dp_FREE(toFree[i]);
@@ -4886,18 +4886,18 @@ static void free_2dArray(long **toFree, int outer) {
 	dp_FREE(toFree);
 }
 
-static long **alloc_2dArray(int outer, int inner) {
-	int 	i;
-	long 	**newArray;
+static sint32 **alloc_2dArray(sint32 outer, sint32 inner) {
+	sint32 	i;
+	sint32 	**newArray;
 
-	if (!(newArray = (long **)(dp_MALLOC(outer * sizeof(long *)))))
+	if (!(newArray = (sint32 **)(dp_MALLOC(outer * sizeof(sint32 *)))))
 		return NULL;
 
 	for (i=0; i<outer; i++)
 		newArray[i]=0;
 
 	for (i=0; i<outer; i++) {
-		newArray[i] = (long *)(dp_MALLOC(inner * sizeof(long)));
+		newArray[i] = (sint32 *)(dp_MALLOC(inner * sizeof(sint32)));
 		if (!newArray[i]) {
 			free_2dArray(newArray, outer);
 			return NULL;
@@ -4907,8 +4907,8 @@ static long **alloc_2dArray(int outer, int inner) {
 	return (newArray);
 }
 
-static void zero_2dArray(long **toZero, int outer, int inner) {
-	int i, j;
+static void zero_2dArray(sint32 **toZero, sint32 outer, sint32 inner) {
+	sint32 i, j;
 
 	for (i=0; i<outer; i++)
 		for (j=0; j<inner; j++)
@@ -4917,7 +4917,7 @@ static void zero_2dArray(long **toZero, int outer, int inner) {
 
 static void dpio_log_init()
 {
-	int idx, idy;
+	sint32 idx, idy;
 
 	/* Allocate histogram arrays */
 	if (!(dpio_hist_pkts = alloc_2dArray(256, 256)))
@@ -4942,10 +4942,10 @@ static void dpio_log_init()
 
 static void dpio_log_term()
 {
-	int idx, idy;
-	long elapsed;
-	long bps;
-	long bpp;
+	sint32 idx, idy;
+	sint32 elapsed;
+	sint32 bps;
+	sint32 bpp;
 	float pps;
 
 	if (!dpio_hist_pkts) return;
@@ -4977,10 +4977,10 @@ dpio_STATS:	Errors:   tx full=%ld\n\
 dpio_STATS:	RX total, dropped:  %ld, %ld = %d%%\n\
 ",
 		pps, bps, bpp,
-		(int)(bps + 8 * 33 * pps), bpp + 33, /* 33 is sizeof UDP+IP+PPP headers */
+		(sint32)(bps + 8 * 33 * pps), bpp + 33, /* 33 is sizeof UDP+IP+PPP headers */
 		dpio_pkts, dpio_bytes, elapsed, dpio_pkts_tx_full,
 		dpio_log_rx,
-		dpio_log_dropped, dpio_log_rx ? (int)(100.0*dpio_log_dropped/dpio_log_rx) : 0));
+		dpio_log_dropped, dpio_log_rx ? (sint32)(100.0*dpio_log_dropped/dpio_log_rx) : 0));
 
 	/* Free Arrays */
 	free_2dArray(dpio_hist_pkts, 256);
@@ -4993,9 +4993,9 @@ static void dpio_log_pkt_err(dp_result_t err)
 		dpio_pkts_tx_full++;
 }
 
-static void dpio_log_pkt(const unsigned char *pkt, size_t len, int repeatct)
+static void dpio_log_pkt(const uint8 *pkt, size_t len, sint32 repeatct)
 {
-	unsigned int idx, idy;
+	uint32 idx, idy;
 
 	if (!dpio_hist_pkts) return;
 	len *= repeatct;

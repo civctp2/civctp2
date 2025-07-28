@@ -25,13 +25,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "detect.h"
 #define MAXLEN 256
 
-void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
+void GetPrimaryDisplayDesc(char *desc, uint32 *len)
 {
 //Most reliable routine to find description of Video Card from Registry
 //	Does NOT check for or check info from DirectX!
 //Bonus: It's not recursive
 	HKEY hKey1, hKey2, hSubKey1, hSubKey2 = NULL;
-	int i, returnVal, found_it;
+	sint32 i, returnVal, found_it;
 	DWORD valueSize, valueType, value;
    char keyName[128];
 
@@ -67,7 +67,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
          //
          valueSize = sizeof(DWORD);
          valueType = REG_DWORD;
-         returnVal = RegQueryValueEx(hSubKey1, "Problem", NULL, &valueType, (unsigned char *)&value, &valueSize);
+         returnVal = RegQueryValueEx(hSubKey1, "Problem", NULL, &valueType, (uint8 *)&value, &valueSize);
          if ( (returnVal == ERROR_SUCCESS) && (value == 0) )
          {
             //
@@ -77,7 +77,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
             valueSize = sizeof(keyName);
             valueType = REG_SZ;
             memset(keyName, 0, sizeof(keyName));
-            returnVal = RegQueryValueEx(hSubKey1, "HardwareKey", NULL, &valueType, (unsigned char *)keyName, &valueSize);
+            returnVal = RegQueryValueEx(hSubKey1, "HardwareKey", NULL, &valueType, (uint8 *)keyName, &valueSize);
             if ( returnVal == ERROR_SUCCESS )
             {
                //
@@ -89,7 +89,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
                   valueSize = sizeof(keyName);
                   valueType = REG_SZ;
                   memset(keyName, 0, sizeof(keyName));
-                  returnVal = RegQueryValueEx(hSubKey2, "Driver", NULL, &valueType, (unsigned char *)keyName, &valueSize);
+                  returnVal = RegQueryValueEx(hSubKey2, "Driver", NULL, &valueType, (uint8 *)keyName, &valueSize);
                   if ( (returnVal == ERROR_SUCCESS) && (strstr(strupr(keyName), "DISPLAY") != NULL) )
                   {
                      //
@@ -99,7 +99,7 @@ void GetPrimaryDisplayDesc(char *desc, unsigned int *len)
                      //
                      valueSize = *len;
                      valueType = REG_SZ;
-                     returnVal = RegQueryValueEx(hSubKey2, "DeviceDesc", NULL, &valueType, (unsigned char *)desc, &valueSize);
+                     returnVal = RegQueryValueEx(hSubKey2, "DeviceDesc", NULL, &valueType, (uint8 *)desc, &valueSize);
                      if ( returnVal == ERROR_SUCCESS ) {
                         found_it = 1;
 						*len = valueSize - 1;
@@ -131,7 +131,7 @@ BOOL FindDeviceInRegistry(LPSTR szStartKey, LPSTR szSearchStr)
 	DWORD dwTypeCode, dwSizeOfDataBuffer;
 	char szValueBuffer[MAX_PATH];
 	char szNewKeyName[MAX_PATH];
-	long i;
+	sint32 i;
 
 	dwTypeCode = REG_SZ;
 //	szDest[0] = '\0';
@@ -178,7 +178,7 @@ BOOL WINAPI FindRendition()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	int len = MAXLEN;
+	sint32 len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -193,7 +193,7 @@ BOOL WINAPI FindATI()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	int len = MAXLEN;
+	sint32 len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -208,7 +208,7 @@ BOOL WINAPI FindMystique()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	int len = MAXLEN;
+	sint32 len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -234,7 +234,7 @@ BOOL WINAPI FindS3ViRGE()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	int len = MAXLEN;
+	sint32 len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -249,7 +249,7 @@ BOOL WINAPI FindSTB()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	int len = MAXLEN;
+	sint32 len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -287,7 +287,7 @@ BOOL WINAPI FindPowerVR()
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
-void Get3DHardware(char *sz3DCard, unsigned int stringlen)
+void Get3DHardware(char *sz3DCard, uint32 stringlen)
 {
 	char *Monst3D = "Monster 3D";
 	char *Right3D = "Righteous 3D";
@@ -297,7 +297,7 @@ void Get3DHardware(char *sz3DCard, unsigned int stringlen)
 	char *STBBit  = "STB Bitro 3D";
 	char *Midas   = "Midas PCI or Apocalypse 3D";
 	char *Matrox  = "Matrox MGA Mystique";
-	unsigned int len = stringlen;
+	uint32 len = stringlen;
 
 #if 0
 	return

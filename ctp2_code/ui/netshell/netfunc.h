@@ -66,7 +66,7 @@
 #define NETFUNC_CONNECT_RESULT          DWORD WINAPI
 #define NETFUNC_CONNECT_PARAMETER       LPVOID
 #else
-#define NETFUNC_CONNECT_RESULT          int
+#define NETFUNC_CONNECT_RESULT          sint32
 #define NETFUNC_CONNECT_PARAMETER       void *
 #endif
 
@@ -114,7 +114,7 @@ enum STATUS
 	RESET
 };
 
-static void StringMix(int c, char *mix, const char *msg, ...);
+static void StringMix(sint32 c, char *mix, const char *msg, ...);
 static char *StringDup(const char *s);
 
 class Timer
@@ -126,7 +126,7 @@ public:
 
 	Timer(void);
 
-	void Start(int d);
+	void Start(sint32 d);
 
 	bool Finished(void);
 };
@@ -135,7 +135,7 @@ Timer m_timeout;
 
 struct KeyStruct
 {
-	short m_len;
+	sint16 m_len;
 	char  m_buf[dp_KEY_MAXLEN + 2];
 };
 
@@ -372,7 +372,7 @@ class Packet
 {
 #define nf_MAX_PACKETSIZE dpio_MAXLEN_RELIABLE - sizeof(Message::CODE)
 public:
-	typedef unsigned char SizeT;
+	typedef uint8 SizeT;
 protected:
 	SizeT  m_size;
 
@@ -468,7 +468,7 @@ class MessageHandler
 
 	static MessageHandler *s_hList[nf_MAX_HANDLERS];
 
-	static int s_hCount;
+	static sint32 s_hCount;
 
 	virtual bool Handle(Message *m) = 0;
 protected:
@@ -557,15 +557,15 @@ public:
 
 	Server(void);
 
-	Server(dp_object_t *o, KeyStruct *k, long f);
+	Server(dp_object_t *o, KeyStruct *k, sint32 f);
 
 	virtual ~Server(void);
 
 	char *GetName(void);
 
-	int GetPlayers(void);
+	sint32 GetPlayers(void);
 
-	int GetPing(void);
+	sint32 GetPing(void);
 
 	dp_serverInfo_t *GetServer(void);
 };
@@ -615,11 +615,11 @@ class Port:public Key
 {
 #define nf_PORTINITLEN 128
 	commPortName_t m_port;
-	int		m_baud;
+	sint32		m_baud;
 	char m_init[nf_PORTINITLEN];
 public:
 
-	Port(commPortName_t *p, int b, const char *i);
+	Port(commPortName_t *p, sint32 b, const char *i);
 
 	Port(void);
 
@@ -627,11 +627,11 @@ public:
 
 	commPortName_t *GetPort(void);
 
-	int GetNumber(void);
+	sint32 GetNumber(void);
 
 	char *GetName(void);
 
-	int GetBaud(void);
+	sint32 GetBaud(void);
 
 	char *GetInit(void);
 };
@@ -698,7 +698,7 @@ public:
 
 	char *GetFileName(void);
 
-	virtual STATUS SetPort(long p);
+	virtual STATUS SetPort(sint32 p);
 
 	virtual STATUS SetPort(Port *p);
 
@@ -745,7 +745,7 @@ public:
 
 	~Internet(void);
 
-	STATUS SetPort(long p);
+	STATUS SetPort(sint32 p);
 
 	TYPE GetType(void);
 };
@@ -826,7 +826,7 @@ class AIPlayer:public Key, public Packet
 friend class NETFunc;
 protected:
 	char	m_name[dp_PNAMELEN];
-	unsigned char m_group;
+	uint8 m_group;
 public:
 
 	AIPlayer(void);
@@ -837,9 +837,9 @@ public:
 
 	void SetName(const char *name);
 
-	unsigned char GetGroup(void);
+	uint8 GetGroup(void);
 
-	void SetGroup(unsigned char group);
+	void SetGroup(uint8 group);
 
 	void SetKey(KeyStruct *k);
 
@@ -884,8 +884,8 @@ friend class Players;
 #define nf_GROUPNUMBER	0x1f
 protected:
 	dp_playerId_t	m_player;
-	long			m_flags;
-	short			m_latency;
+	sint32			m_flags;
+	sint16			m_latency;
 	bool			m_muted;
 
 	void SetGroupMaster(bool b);
@@ -895,7 +895,7 @@ public:
 
 	Player(void);
 
-	Player(dp_object_t *o, KeyStruct *k, long f, short l = 0);
+	Player(dp_object_t *o, KeyStruct *k, sint32 f, sint16 l = 0);
 
 	void Set(dp_playerId_t *p);
 
@@ -905,13 +905,13 @@ public:
 
 	char *GetName(void);
 
-	unsigned char *GetBlob(void);
+	uint8 *GetBlob(void);
 
-	unsigned char GetBlobLen(void);
+	uint8 GetBlobLen(void);
 
-	unsigned char GetGroup(void);
+	uint8 GetGroup(void);
 
-	short GetLatency(void);
+	sint16 GetLatency(void);
 
 	bool IsMe(void);
 
@@ -957,7 +957,7 @@ class PlayerStat:public Key, public Packet
 friend class NETFunc;
 protected:
 	char	m_name[dp_PNAMELEN];
-	unsigned char m_group;
+	uint8 m_group;
 	bool m_isingame;
 	bool m_hasleft;
 public:
@@ -974,9 +974,9 @@ public:
 
 	char *GetName(void);
 
-	void SetGroup(unsigned char group);
+	void SetGroup(uint8 group);
 
-	unsigned char GetGroup(void);
+	uint8 GetGroup(void);
 
 	void SetId(dpid_t id);
 
@@ -1038,7 +1038,7 @@ public:
 
 	void SetBlob(void *b, size_t s);
 
-	void SetBlobLen(unsigned char l);
+	void SetBlobLen(uint8 l);
 
 	char *GetDescription(void);
 
@@ -1067,14 +1067,14 @@ friend class ListHandler<Lobby>;
 friend class ListHandler<Session>;
 protected:
 	dp_session_t m_session;
-	long m_flags;
+	sint32 m_flags;
 public:
 
 	void SetKey(void);
 
 	Session(void);
 
-	Session(dp_object_t *o, KeyStruct *k, long f);
+	Session(dp_object_t *o, KeyStruct *k, sint32 f);
 
 	virtual ~Session(){}
 
@@ -1085,11 +1085,11 @@ public:
 
 	char *GetPassword(void);
 
-	short GetPlayers(void);
+	sint16 GetPlayers(void);
 
-	short GetMaxPlayers(void);
+	sint16 GetMaxPlayers(void);
 
-	short GetFree();
+	sint16 GetFree();
 
 	char *GetUserField();
 
@@ -1120,7 +1120,7 @@ public:
 
 	Game(void);
 
-	Game(dp_object_t *o, KeyStruct *k, long f);
+	Game(dp_object_t *o, KeyStruct *k, sint32 f);
 
 	Game(Session *s);
 
@@ -1151,7 +1151,7 @@ public:
 
 	Lobby(void);
 
-	Lobby(dp_object_t *o, KeyStruct *k, long f);
+	Lobby(dp_object_t *o, KeyStruct *k, sint32 f);
 
 	virtual ~Lobby(){}
 
@@ -1172,7 +1172,7 @@ class PlayerList
 		void Destroy(void) {};
 	};
 	static Players *s_players;
-	static int s_count;
+	static sint32 s_count;
 
 	PlayerList(void);
 
@@ -1217,7 +1217,7 @@ public:
 
 	void SetPassword(char *p);
 
-	void SetSize(short s);
+	void SetSize(sint16 s);
 
 	void SetUserField(char *u);
 
@@ -1406,7 +1406,7 @@ private:
 	HANDLE m_threadHandle;
 	DWORD m_threadId;
 #endif
-	static long s_cancelDial;
+	static sint32 s_cancelDial;
 
 	dp_appParam_t m_appParam;
 
@@ -1422,7 +1422,7 @@ private:
 
 	static dpid_t s_destination;
 
-	static int s_PlayerSetupPacketKey;
+	static sint32 s_PlayerSetupPacketKey;
 
 	static STATUS s_status;
 
@@ -1432,7 +1432,7 @@ private:
 
 	static bool s_reconnected;
 
-	int m_retries;
+	sint32 m_retries;
 public:
 
 	static PlayerSetup s_playerSetup;
@@ -1472,7 +1472,7 @@ void Execute(void);
 
 STATUS Close(void);
 
-static NETFUNC_CALLBACK_RESULT(int)
+static NETFUNC_CALLBACK_RESULT(sint32)
 SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *context);
 
 static NETFUNC_CALLBACK_RESULT(void)

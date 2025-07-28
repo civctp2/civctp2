@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Peer literals
 #define MAX_PEERS          100
 
-typedef int           IPXHANDLE;  // Peer handle
+typedef sint32        IPXHANDLE;  // Peer handle
 typedef SOCKADDR_IPX  IPXPEER;    // Winsock's address of peer
 
 // Predefined Peer Handles
@@ -52,14 +52,14 @@ typedef struct _IPXINSTANCE       // IPX Instance Struct  (Gee, in C++, this wou
 {
   SOCKET        socket;           // WinSock socket
 
-  int           nexthandle;       // next available peer handle (next unused peers[] element)
+  sint32        nexthandle;       // next available peer handle (next unused peers[] element)
   IPXPEER       peers[MAX_PEERS]; // Peer info (indexed with peer handle)
 }
 IPXINSTANCE;
 
 // substitution literals for DOS IPX types
 #define ipx2_hdl_t    IPXHANDLE
-#define ipx2_result_t int
+#define ipx2_result_t sint32
 #define ipx2_t        IPXINSTANCE
 
 // IPXWIN Function Result Codes.  same as interface our caller inherits from...
@@ -70,17 +70,17 @@ IPXINSTANCE;
 
 // IPXWIN Functions
 
-IPXINSTANCE * IPXWIN_Create(int socket, int *status);
+IPXINSTANCE * IPXWIN_Create(sint32 socket, sint32 *status);
 
 void          IPXWIN_Destroy(IPXINSTANCE *ipx);
 
-IPXHANDLE     IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, int insert);
+IPXHANDLE     IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, sint32 insert);
 
-int           IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr);
+sint32        IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr);
 
-int           IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest);
+sint32        IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest);
 
-int           IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *len, IPXHANDLE *hsrc, IPXPEER *srcaddr);
+sint32        IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *len, IPXHANDLE *hsrc, IPXPEER *srcaddr);
 
 #define ipx2_create(socket, stat)               IPXWIN_Create(socket, stat)
 

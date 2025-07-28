@@ -58,7 +58,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*
  * Prototypes
  */
-static prog_res_t progAddLine(prog_t *prog, prog_cmd_t *cmd, const char *params, unsigned long flags);
+static prog_res_t progAddLine(prog_t *prog, prog_cmd_t *cmd, const char *params, uint32 flags);
 
 /*
  * Define the built in commands.  Note that the cmd_t's are function pointers.
@@ -102,20 +102,20 @@ static prog_internal_fn_t	*progInternalFunctions = &progInternalExit;
 
 typedef struct prog_integer_set_s
 {
-	int	var;
-	int	value;
+	sint32	var;
+	sint32	value;
 } prog_integer_set_t;
 
 typedef struct prog_string_set_s
 {
-	int	var;
+	sint32	var;
 	char value[PROG_MAX_STRINGLEN];
 } prog_string_set_t;
 
 typedef struct prog_integer_add_s
 {
-	int	var1;
-	int	var2;
+	sint32	var1;
+	sint32	var2;
 } prog_integer_add_t;
 
 typedef enum
@@ -128,8 +128,8 @@ typedef enum
 
 typedef struct prog_integer_if_s
 {
-	int var1;
-	int	var2;
+	sint32 var1;
+	sint32	var2;
 	prog_integer_if_type	type;
 	prog_line_t	*line;
 	char labeltext[PROG_MAX_STRINGLEN];
@@ -231,7 +231,7 @@ prog_res_t prog_syntax_AddCmd(prog_syntax_t *syntax, const char *name, prog_cmd_
  * out <- prog_RES_OK
  *
  */
-prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, int verbose)
+prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, sint32 verbose)
 {
 	prog_fn_t	*fn;
 
@@ -275,10 +275,10 @@ prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, int verbose)
  *        prog_RES_SYNTAX: there was a syntactic error in the program
  *        prog_RES_FILE: file error
  */
-prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int argc, char **argv)
+prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, sint32 argc, char **argv)
 {
 	FILE		*fp;
-	int			line = 0;
+	sint32			line = 0;
 	prog_line_t	*lptr;
 
 	ASSERT(prog);
@@ -304,7 +304,7 @@ prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int 
 		char				*params;
 		prog_internal_fn_t	*internalfn;
 		prog_fn_t			*fn;
-		int					found = FALSE;
+		sint32					found = FALSE;
 
 		if (!fgets(buffer, PROG_MAX_LINE_LENGTH, fp) && !feof(fp))
 		{
@@ -344,7 +344,7 @@ prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int 
 		while (params)
 		{
 			char buffer2[PROG_MAX_LINE_LENGTH];
-			int	 arg;
+			sint32	 arg;
 
 			/* Terminate string at parameter */
 			*params = '\0';
@@ -605,7 +605,7 @@ prog_res_t prog_process_Step(prog_process_t *process, void *context)
  * out <- value
  *
  */
-int prog_process_GetInteger(prog_process_t *process, int index)
+sint32 prog_process_GetInteger(prog_process_t *process, sint32 index)
 {
 	ASSERT(process);
 	ASSERT(index < PROG_MAX_INT && index >= 0);
@@ -622,7 +622,7 @@ int prog_process_GetInteger(prog_process_t *process, int index)
  *        index: index of integer value
  *        value: value to set
  */
-void prog_process_SetInteger(prog_process_t *process, int index, int value)
+void prog_process_SetInteger(prog_process_t *process, sint32 index, sint32 value)
 {
 	ASSERT(process);
 	ASSERT(index < PROG_MAX_INT && index >= 0);
@@ -640,7 +640,7 @@ void prog_process_SetInteger(prog_process_t *process, int index, int value)
  * out <- value
  *
  */
-char *prog_process_GetString(prog_process_t *process, int index)
+char *prog_process_GetString(prog_process_t *process, sint32 index)
 {
 	ASSERT(process);
 	ASSERT(index < PROG_MAX_STRING && index >= 0);
@@ -657,7 +657,7 @@ char *prog_process_GetString(prog_process_t *process, int index)
  *        index: index of string value
  *        value: value to set
  */
-void prog_process_SetString(prog_process_t *process, int index, const char *value)
+void prog_process_SetString(prog_process_t *process, sint32 index, const char *value)
 {
 	ASSERT(process);
 	ASSERT(index < PROG_MAX_STRING && index >= 0);
@@ -675,7 +675,7 @@ void prog_process_SetString(prog_process_t *process, int index, const char *valu
  * out <- exit code of process or -1 if process has not exited
  *
  */
-int prog_process_GetExitCode(prog_process_t *process)
+sint32 prog_process_GetExitCode(prog_process_t *process)
 {
 	ASSERT(process);
 
@@ -688,7 +688,7 @@ int prog_process_GetExitCode(prog_process_t *process)
  * Adds a line to a program
  *
  */
-prog_res_t progAddLine(prog_t *prog, prog_cmd_t *cmd, const char *params, unsigned long flags)
+prog_res_t progAddLine(prog_t *prog, prog_cmd_t *cmd, const char *params, uint32 flags)
 {
 	prog_line_t	*line;
 
@@ -778,7 +778,7 @@ prog_res_t progInternalFunctionOnError(prog_t *prog, char *params)
  */
 prog_res_t progInternalFunctionSet(prog_t *prog, char *params)
 {
-	int		argc;
+	sint32		argc;
 	char	*argv[PROG_MAX_PARAM];
 
 	prog_Char2Args(params, &argc, argv);
@@ -840,7 +840,7 @@ prog_res_t progInternalFunctionAdd(prog_t *prog, char *params)
 {
 	prog_integer_add_t	add;
 
-	int		argc;
+	sint32		argc;
 	char	*argv[PROG_MAX_PARAM];
 
 	prog_Char2Args(params, &argc, argv);
@@ -877,7 +877,7 @@ prog_res_t progInternalFunctionDiv(prog_t *prog, char *params)
 {
 	prog_integer_add_t	add;
 
-	int		argc;
+	sint32		argc;
 	char	*argv[PROG_MAX_PARAM];
 
 	prog_Char2Args(params, &argc, argv);
@@ -913,9 +913,9 @@ prog_res_t progInternalFunctionDiv(prog_t *prog, char *params)
 prog_res_t progInternalFunctionIf(prog_t *prog, char *params)
 {
 	prog_integer_if_t	i;
-	int		argc;
+	sint32		argc;
 	char	*argv[PROG_MAX_PARAM];
-	int flags;
+	sint32 flags;
 
 	prog_Char2Args(params, &argc, argv);
 
@@ -1187,7 +1187,7 @@ prog_line_t *prog_Resolv(const char *label, prog_t *prog)
  *        argc  : pointer to variable which will hold the number of arguments
  *        argv  : pointer to pointer array
  */
-void prog_Char2Args(char *string, int *argc, char **argv)
+void prog_Char2Args(char *string, sint32 *argc, char **argv)
 {
 	char *ptr;
 
@@ -1284,7 +1284,7 @@ prog_cmd_res_t func4(const char *params, void *context)
 	return (prog_cmd_RES_CONTINUE);
 }
 
-int main(void)
+sint32 main(void)
 {
 	prog_syntax_t	syntax;
 	prog_t			program;

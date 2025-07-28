@@ -57,8 +57,8 @@ typedef struct {
 	ListHandle hndl;
 	Rect bounds,scroll,content,dataBounds;
 	Point cSize,cell;
-	short currentRow;
-	short nCells;
+	sint16 currentRow;
+	sint16 nCells;
 } UserList;
 
 #define thisDialogID 1000
@@ -112,35 +112,35 @@ static enum {
 DialogPtr OpenThisDialog(void);
 void      CloseThisDialog(DialogPtr dlog);
 void      DoDialogUpdate(DialogPtr dlog);
-void      DoDialogActivate(DialogPtr dlog, int activ);
+void      DoDialogActivate(DialogPtr dlog, sint32 activ);
 void      DoDialogContent(DialogPtr dlog, EventRecord *evt);
-int       DoDialogItem(DialogPtr dlog, short itemHit);
+sint32       DoDialogItem(DialogPtr dlog, sint16 itemHit);
 
-pascal  Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHit);
-Boolean CheckUserItems(Point where, short *itemHit);
-int     AnyBadValues(DialogPtr dlog);
+pascal  Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, sint16 *itemHit);
+Boolean CheckUserItems(Point where, sint16 *itemHit);
+sint32     AnyBadValues(DialogPtr dlog);
 
-void    CenterWindow(WindowPtr w, int top);
-//long    strlen(char *);
+void    CenterWindow(WindowPtr w, sint32 top);
+//size_t    strlen(char *);
 //char   *strcpy(char *dst, char *src);
-char   *PascalToC(unsigned char *pstr);
-unsigned char   *CToPascal(char *cstr);
-void    PutDlgString(DialogPtr dlog, int item, unsigned char *str, int sel);
-void    PutDlgWord(DialogPtr dlog, int item, int val, int sel);
-void    PutDlgLong(DialogPtr dlog, int item, long val, int sel);
-void    PutDlgChkRadio(DialogPtr dlog, int item, int val);
-int     GetDlgString(DialogPtr dlog, int item, unsigned char *str);
-int     GetDlgWord(DialogPtr dlog, int item, short *val);
-int     GetDlgLong(DialogPtr dlog, int item, long *val);
-int     GetDlgChkRadio(DialogPtr dlog, int item);
-int     TextSelected(DialogPtr dlog);
-OSType  CanPaste(int n, ...);
-void    FrameDefault(DialogPtr dlog, int item, int frame);
-void    GetDlgPanel(DialogPtr dlog, int item, Rect *panel);
+char   *PascalToC(uint8 *pstr);
+uint8   *CToPascal(char *cstr);
+void    PutDlgString(DialogPtr dlog, sint32 item, uint8 *str, sint32 sel);
+void    PutDlgWord(DialogPtr dlog, sint32 item, sint32 val, sint32 sel);
+void    PutDlgLong(DialogPtr dlog, sint32 item, sint32 val, sint32 sel);
+void    PutDlgChkRadio(DialogPtr dlog, sint32 item, sint32 val);
+sint32     GetDlgString(DialogPtr dlog, sint32 item, uint8 *str);
+sint32     GetDlgWord(DialogPtr dlog, sint32 item, sint16 *val);
+sint32     GetDlgLong(DialogPtr dlog, sint32 item, sint32 *val);
+sint32     GetDlgChkRadio(DialogPtr dlog, sint32 item);
+sint32     TextSelected(DialogPtr dlog);
+OSType  CanPaste(sint32 n, ...);
+void    FrameDefault(DialogPtr dlog, sint32 item, sint32 frame);
+void    GetDlgPanel(DialogPtr dlog, sint32 item, Rect *panel);
 
-int     BuildList(DialogPtr dlog, int item, int csize, UserList *l);
-void	GetCellData(UserList *l, short i, short *len);
-int     GetLengthList(UserList *l);
+sint32     BuildList(DialogPtr dlog, sint32 item, sint32 csize, UserList *l);
+void	GetCellData(UserList *l, sint16 i, sint16 *len);
+sint32     GetLengthList(UserList *l);
 
 //	prefs functions
 
@@ -150,12 +150,12 @@ void AddHostToPrefs(StringPtr hostName, StringPtr description);
 void CheckList(void);
 
 static Point where;
-static int modifiers;
+static sint32 modifiers;
 
 /* Lists and/or popups */
 
 static UserList list4;
-short	gPrefsResFile = -1;
+sint16	gPrefsResFile = -1;
 
 #pragma export on
 Str255	gSavedSelection;
@@ -168,9 +168,9 @@ Str255	gSavedSelection;
  *	bring them in and pass them to OpenThisDialog(), DoDialogItem(), etc.
  */
 
-int DoHostListDialog()
+sint32 DoHostListDialog()
 	{
-		short itemHit,okay=FALSE,keepGoing=TRUE;
+		sint16 itemHit,okay=FALSE,keepGoing=TRUE;
 		DialogPtr dlog=NIL; GrafPtr oldPort;
 		ModalFilterUPP MyFilterUPP;
 
@@ -202,7 +202,7 @@ int DoHostListDialog()
 
 		if (itemHit == OK_ITEM) {
 			Point	theCell;
-			short	dataLen;
+			sint16	dataLen;
 			OSErr	anErr;
 			Handle	aHand;
 
@@ -269,12 +269,12 @@ cleanUp:
  *	in your dialog item list.
  */
 
-static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHit)
+static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, sint16 *itemHit)
 	{
 		Boolean ans=FALSE,doHilite=FALSE; WindowPtr w;
-		short type,ch; Handle hndl; Rect box;
-		static long then; static Point clickPt;
-		static short lastItem = -1;
+		sint16 type,ch; Handle hndl; Rect box;
+		static sint32 then; static Point clickPt;
+		static sint16 lastItem = -1;
 
 		w = (WindowPtr)(evt->message);
 		switch(evt->what) {
@@ -283,7 +283,7 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
 				//	set the help string based on which item is under the menubar
 
 				{
-					short	dItem;
+					sint16	dItem;
 					Str255	theString;
 					Point	thePoint;
 
@@ -339,10 +339,10 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
 				ans = CheckUserItems(where,itemHit);
 				break;
 			case keyDown:
-				if ((ch=(unsigned char)evt->message)=='\r' || ch==ENTERkey) {
+				if ((ch=(uint8)evt->message)=='\r' || ch==ENTERkey) {
 
 					{
-						short type; Handle hndl; Rect box;
+						sint16 type; Handle hndl; Rect box;
 						Point appCell;
 						Boolean anyCell;
 
@@ -356,7 +356,7 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
 
 					}
 				 else if (evt->modifiers & cmdKey) {
-					ch = (unsigned char)evt->message;
+					ch = (uint8)evt->message;
 					switch(ch) {
 						case 'x':
 						case 'X':
@@ -405,7 +405,7 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
 			GetDialogItem(dlog,*itemHit,&type,&hndl,&box);
 			/* Reality check */
 			if (type == (btnCtrl+ctrlItem)) {
-				long soon = TickCount() + 7;		/* Or whatever feels right */
+				sint32 soon = TickCount() + 7;		/* Or whatever feels right */
 				HiliteControl((ControlHandle)hndl,1);
 				while (TickCount() < soon) ;		/* Leave hilited for a bit */
 				}
@@ -418,7 +418,7 @@ static pascal Boolean MyFilterHD(DialogPtr dlog, EventRecord *evt, short *itemHi
  * Check if it's in some user item, and convert to itemHit if appropriate.
  */
 
-static Boolean CheckUserItems(Point where, short *itemHit)
+static Boolean CheckUserItems(Point where, sint16 *itemHit)
 	{
 		return(FALSE);
 	}
@@ -431,9 +431,9 @@ static Boolean CheckUserItems(Point where, short *itemHit)
 
 static void DoDialogUpdate(DialogPtr dlog) {
 	GrafPtr oldPort;
-    short fontID = 0;
-	short saveFont;
-	short saveSize;
+    sint16 fontID = 0;
+	sint16 saveFont;
+	sint16 saveSize;
 	Style saveStyle;
 
 	GetPort(&oldPort); SetPort(dlog);
@@ -468,10 +468,10 @@ static void DoDialogUpdate(DialogPtr dlog) {
  * Activate event: Activate or deactivate this dialog and any items in it
  */
 
-static void DoDialogActivate(DialogPtr dlog, int activ) {
-    short fontID;
-	short saveFont;
-	short saveSize;
+static void DoDialogActivate(DialogPtr dlog, sint32 activ) {
+    sint16 fontID;
+	sint16 saveFont;
+	sint16 saveSize;
 	Style saveStyle;
 
 	SetPort(dlog);
@@ -499,8 +499,8 @@ static void DoDialogActivate(DialogPtr dlog, int activ) {
 
 static DialogPtr OpenThisDialog()
 	{
-		short type; Handle hndl; Rect box; GrafPtr oldPort;
-		DialogPtr dlog; unsigned char *p,str[256];
+		sint16 type; Handle hndl; Rect box; GrafPtr oldPort;
+		DialogPtr dlog; uint8 *p,str[256];
 		Str255		theString;
 		OSStatus	status;
 		extern InetInterfaceInfo	gInetInfo;
@@ -561,15 +561,15 @@ static void CloseThisDialog(DialogPtr dlog)
 	}
 
 void AddNewEntry(DialogPtr dlog, char* theName, char* theDesc, Boolean checkOriginalName, char* theOriginalName) {
-	short		result;
+	sint16		result;
 
 	result = DoEnterNewAddressDialog(theName, theDesc);
 	if (result) {
 
-		short saveFont;
-		short saveSize;
+		sint16 saveFont;
+		sint16 saveSize;
 		Style saveStyle;
-        short fontID;
+        sint16 fontID;
 
 		saveFont = dlog->txFont;
 		saveSize = dlog->txSize;
@@ -680,7 +680,7 @@ void AddNewEntry(DialogPtr dlog, char* theName, char* theDesc, Boolean checkOrig
 		{
 			Handle hndl;
 			Rect box;
-			short type;
+			sint16 type;
 
 			GetDialogItem(dlog, LIST4, &type, &hndl, &box);
 			InvalRect(&box);
@@ -692,7 +692,7 @@ void AddNewEntry(DialogPtr dlog, char* theName, char* theDesc, Boolean checkOrig
 void EditEntry(DialogPtr dlog) {
 	Point		theCell = {0, 0};
 	Boolean		anyCell;
-	short		dataLen;
+	sint16		dataLen;
 	Str255		theName = "\pNew Warrior Location";
 	Str255		theDesc = "\pAnother Mech To Destroy!";
 	Str255		theOriginalName = "\p";
@@ -722,12 +722,12 @@ void EditEntry(DialogPtr dlog) {
 
 }
 
-static int DoDialogItem(DialogPtr dlog, short itemHit)
+static sint32 DoDialogItem(DialogPtr dlog, sint16 itemHit)
 	{
-		short type,okay=FALSE,keepGoing=TRUE,val;
+		sint16 type,okay=FALSE,keepGoing=TRUE,val;
 		Handle hndl; Rect box; Point pt;
-		unsigned char *p,str[256];
-		short		aShort;
+		uint8 *p,str[256];
+		sint16		aShort;
 		Str255		theName = "\pNew Warrior Location";
 		Str255		theDesc = "\pAnother Mech To Destroy!";
 
@@ -751,7 +751,7 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 						{
 							Boolean	anyCell;
 							Point	theCell = {0, 0};
-							short	dataLen;
+							sint16	dataLen;
 							Handle	aHand;
 
 							//	if there is a current selection, remove it
@@ -782,10 +782,10 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 									//	remove the resource from the list
 
 									{
-										short saveFont;
-										short saveSize;
+										sint16 saveFont;
+										sint16 saveSize;
 										Style saveStyle;
-                                        short fontID;
+                                        sint16 fontID;
 
 										saveFont = dlog->txFont;
 										saveSize = dlog->txSize;
@@ -873,7 +873,7 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
 		//	change the hilite state of the default button
 
 		{
-			short type; Handle hndl; Rect box;
+			sint16 type; Handle hndl; Rect box;
 			Point appCell;
 			Boolean anyCell;
 
@@ -914,9 +914,9 @@ static int DoDialogItem(DialogPtr dlog, short itemHit)
  * If any items are missing values, this is the place to assign any defaults.
  */
 
-static int AnyBadValues(DialogPtr dlog)
+static sint32 AnyBadValues(DialogPtr dlog)
 	{
-		unsigned char str[256]; short val,len; Cell cell;
+		uint8 str[256]; sint16 val,len; Cell cell;
 
 		return(FALSE);
 	}
@@ -938,10 +938,10 @@ static int AnyBadValues(DialogPtr dlog)
  *	the top, or centered vertically if top is 0.  The window should be invisible.
  */
 
-static void CenterWindow(WindowPtr w, int top)
+static void CenterWindow(WindowPtr w, sint32 top)
 	{
 		Rect scr; Point p;
-		int rsize,size,margin,xoff,yoff;
+		sint32 rsize,size,margin,xoff,yoff;
 
 		scr = qd.screenBits.bounds;
 		SetPort(w);
@@ -967,9 +967,9 @@ static void CenterWindow(WindowPtr w, int top)
 
 /* Convert in place a Pascal string to C string, and deliver its address */
 
-static char *PascalToC(unsigned char *str)
+static char *PascalToC(uint8 *str)
 	{
-		register unsigned char *p,*q,*end;
+		register uint8 *p,*q,*end;
 
 		end = str + *str;
 		q = (p=str) + 1;
@@ -984,10 +984,10 @@ static char *PascalToC(unsigned char *str)
  *	resulting Pascal string will be truncated to 255 chars.
  */
 
-static unsigned char *CToPascal(char *str)
+static uint8 *CToPascal(char *str)
 	{
 		register char *p,*q;
-		register long len;
+		register sint32 len;
 
 		len = strlen(str);
 		if (len > 255) len = 255;
@@ -995,7 +995,7 @@ static unsigned char *CToPascal(char *str)
 		q = p-1;
 		while (p != str) *p-- = *q--;
 		*str = len;
-		return((unsigned char *)str);
+		return((uint8 *)str);
 	}
 
 /* Dialog Item Stuffers */
@@ -1006,9 +1006,9 @@ static unsigned char *CToPascal(char *str)
  *	text selected or not according to the value of sel (TRUE or FALSE).
  */
 
-static void PutDlgString(DialogPtr dlog, int item, unsigned char *str, int sel)
+static void PutDlgString(DialogPtr dlog, sint32 item, uint8 *str, sint32 sel)
 	{
-		short type; Handle hndl; Rect box;
+		sint16 type; Handle hndl; Rect box;
 
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		SetDialogItemText(hndl,str);
@@ -1023,21 +1023,21 @@ static void PutDlgString(DialogPtr dlog, int item, unsigned char *str, int sel)
  *	text for the number selected or not according to sel (TRUE or FALSE).
  */
 
-static void PutDlgLong(DialogPtr dlog, int item, long val, int sel)
+static void PutDlgLong(DialogPtr dlog, sint32 item, sint32 val, sint32 sel)
 	{
-		unsigned char str[32];
+		uint8 str[32];
 
 		NumToString(val,str);
 		PutDlgString(dlog,item,str,sel);
 	}
 
 /*
- *	Same as above, only for an int (word) decimal number.
+ *	Same as above, only for an sint32 (word) decimal number.
  */
 
-static void PutDlgWord(DialogPtr dlog, int item, int val, int sel)
+static void PutDlgWord(DialogPtr dlog, sint32 item, sint32 val, sint32 sel)
 	{
-		PutDlgLong(dlog,item,(long)val,sel);
+		PutDlgLong(dlog,item,(sint32)val,sel);
 	}
 
 /*
@@ -1045,9 +1045,9 @@ static void PutDlgWord(DialogPtr dlog, int item, int val, int sel)
  *	on or off, according to val.
  */
 
-static void PutDlgChkRadio(DialogPtr dlog, int item, int val)
+static void PutDlgChkRadio(DialogPtr dlog, sint32 item, sint32 val)
 	{
-		short type; Handle hndl; Rect box;
+		sint16 type; Handle hndl; Rect box;
 
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		SetControlValue((ControlHandle)hndl,val!=0);
@@ -1057,9 +1057,9 @@ static void PutDlgChkRadio(DialogPtr dlog, int item, int val)
  *	Deliver the value of the checkbox or radio button item of the given dialog.
  */
 
-static int GetDlgChkRadio(DialogPtr dlog, int item)
+static sint32 GetDlgChkRadio(DialogPtr dlog, sint32 item)
 	{
-		short type; Handle hndl; Rect box;
+		sint16 type; Handle hndl; Rect box;
 
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		return(GetControlValue((ControlHandle)hndl) != 0);
@@ -1075,13 +1075,13 @@ static int GetDlgChkRadio(DialogPtr dlog, int item)
  *	whether or not the text so delivered was empty.
  */
 
-static int GetDlgString(DialogPtr dlog, int item, unsigned char *str)
+static sint32 GetDlgString(DialogPtr dlog, sint32 item, uint8 *str)
 	{
-		short type; Handle hndl; Rect box;
+		sint16 type; Handle hndl; Rect box;
 
 		GetDialogItem(dlog,item,&type,&hndl,&box);
 		if (type == editText) GetDialogItemText(hndl,str);
-		 else                 *str = 0;
+		else                 *str = 0;
 		return(*str != 0);
 	}
 
@@ -1093,38 +1093,38 @@ static int GetDlgString(DialogPtr dlog, int item, unsigned char *str)
  *	value is, even if the text contains non-numerical characters.
  */
 
-static int GetDlgLong(DialogPtr dlog, int item, long *val)
-	{
-		int ans; unsigned char str[256];
+static sint32 GetDlgLong(DialogPtr dlog, sint32 item, sint32 *val)
+{
+	sint32 ans; uint8 str[256];
 
-		*val = 0;
-		ans = GetDlgString(dlog,item,str);
-		if (ans)
-			StringToNum(str,val);
-		return(ans);
-		}
+	*val = 0;
+	ans = GetDlgString(dlog,item,str);
+	if (ans)
+		StringToNum(str,val);
+	return(ans);
+}
 
 /* Same as above, only delivers the value of a word */
 
-static int GetDlgWord(DialogPtr dlog, int item, short *val)
-	{
-		int ans; long num;
+static sint32 GetDlgWord(DialogPtr dlog, sint32 item, sint16 *val)
+{
+	sint32 ans; sint32 num;
 
-		*val = 0;
-		ans = GetDlgLong(dlog,item,&num);
-		if (ans)
-			*val = num;
-		return(ans);
-	}
+	*val = 0;
+	ans = GetDlgLong(dlog,item,&num);
+	if (ans)
+		*val = num;
+	return(ans);
+}
 
 /*
  *	Deliver the number of the current editText item in given dialog if any text
  *	is selected in it, or 0 if none selected.
  */
 
-int TextSelected(DialogPtr dlog)
+sint32 TextSelected(DialogPtr dlog)
 	{
-		register TEHandle textH; int item = 0;
+		register TEHandle textH; sint32 item = 0;
 
 		textH = ((DialogPeek)dlog)->textH;
 		if (*textH)
@@ -1143,10 +1143,10 @@ int TextSelected(DialogPtr dlog)
  *  is correct.
  */
 
-static OSType CanPaste(int n, ...)
+static OSType CanPaste(sint32 n, ...)
 	{
 		register OSType nextType,ans = 0L;
-		long err,offset;
+		sint32 err,offset;
 		va_list nextArg;
 
 		va_start(nextArg,n);
@@ -1171,16 +1171,16 @@ static OSType CanPaste(int n, ...)
  *	are doing some sort of non-standard default highlighting (not recommended).
  */
 
-void FrameDefault(DialogPtr dlog, int item, int frame)
+void FrameDefault(DialogPtr dlog, sint32 item, sint32 frame)
 	{
-		short type; Handle hndl; Rect box;
+		sint16 type; Handle hndl; Rect box;
 		GrafPtr oldPort; PenState oldPen;
 
 		Pattern			bPat, wPat;
-		short			i;
+		sint16			i;
 
 		if (frame) {
-			short type; Handle hndl; Rect box;
+			sint16 type; Handle hndl; Rect box;
 			Point appCell;
 
 			SetPt(&appCell, 0, 0);
@@ -1220,9 +1220,9 @@ void FrameDefault(DialogPtr dlog, int item, int frame)
  *	returns itemHits.
  */
 
-static void GetDlgPanel(DialogPtr dlog, int item, Rect *panel)
+static void GetDlgPanel(DialogPtr dlog, sint32 item, Rect *panel)
 	{
-		short type; Handle hndl;
+		sint16 type; Handle hndl;
 
 		GetDialogItem(dlog,item,&type,&hndl,panel);
 		HideDialogItem(dlog,item);
@@ -1233,7 +1233,7 @@ static void GetDlgPanel(DialogPtr dlog, int item, Rect *panel)
  *	its data to be inserted into screen cells.
  */
 
-static int GetLengthList(UserList *l) {
+static sint32 GetLengthList(UserList *l) {
 
 	//	each 'STR ' resource contains a host name. We need to return the count
 
@@ -1249,12 +1249,12 @@ static int GetLengthList(UserList *l) {
  *	here should be replaced with your content-specific instructions.
  */
 
-static void GetCellData(UserList *l, short i, short *len) {
+static void GetCellData(UserList *l, sint16 i, sint16 *len) {
 	Handle		theStringHandle;
 	StringPtr	theString;
 	Point		theCell;
 	Str255		name;
-	short		theID;
+	sint16		theID;
 	OSType		theType;
 
 	//	get the next string and return a pointer to it. In order to do this
@@ -1289,16 +1289,16 @@ static void GetCellData(UserList *l, short i, short *len) {
  *	allocate ListMgr list (no more memory or whatever), delivers FALSE.
  */
 
-static int BuildList(DialogPtr dlog, int item, int csize, UserList *l)
+static sint32 BuildList(DialogPtr dlog, sint32 item, sint32 csize, UserList *l)
 	{
-		short i,len,type;
+		sint16 i,len,type;
         Rect box;
         Handle hndl;
-        unsigned char *data;
-		short saveFont;
-		short saveSize;
+        uint8 *data;
+		sint16 saveFont;
+		sint16 saveSize;
 		Style saveStyle;
-        short fontID;
+        sint16 fontID;
 
 		saveFont = dlog->txFont;
 		saveSize = dlog->txSize;
@@ -1451,7 +1451,7 @@ void ClosePrefsFile(void) {
 #define	kMaxHostResID	10000
 
 void AddHostToPrefs(StringPtr hostName, StringPtr description) {
-	unsigned short	resID;
+	uint16	resID;
 	OSErr				err;
 	Handle				descHandle = nil;
 

@@ -92,7 +92,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Returns the new value upon success.
  You can query the old value by trying to set to -1.
 -----------------------------------------------------------------------*/
-int delay_setBytesPerSec(delay_t *q, int bytesPerSec)
+sint32 delay_setBytesPerSec(delay_t *q, sint32 bytesPerSec)
 {
 	if (bytesPerSec > 0)
 		q->bytes_per_sec = bytesPerSec;
@@ -107,7 +107,7 @@ int delay_setBytesPerSec(delay_t *q, int bytesPerSec)
  Returns the new value upon success.
  You can query the old value by trying to set to -1.
 -----------------------------------------------------------------------*/
-int delay_setDelayMillisec(delay_t *q, int invariantDelay)
+sint32 delay_setDelayMillisec(delay_t *q, sint32 invariantDelay)
 {
 	if (invariantDelay >= 0)
 		q->invariant_delay = ((invariantDelay * ECLOCKS_PER_SEC) / 1000);
@@ -141,9 +141,9 @@ void delay_destroy(delay_t *pq)
 /*-----------------------------------------------------------------------
  How many slots are free in the queue.
 -----------------------------------------------------------------------*/
-int delay_avail(delay_t *q)
+sint32 delay_avail(delay_t *q)
 {
-	int avail;
+	sint32 avail;
 
 	/* Measure distance between head and tail */
 	avail = q->head - q->tail;
@@ -160,7 +160,7 @@ int delay_avail(delay_t *q)
  Caller should provide current value of clock().
  Returns 0 on success, nonzero on discard.
 -----------------------------------------------------------------------*/
-int delay_put(delay_t *q, void *buf, size_t len, clock_t now)
+sint32 delay_put(delay_t *q, void *buf, size_t len, clock_t now)
 {
 	delay_pkt_t *pkt;
 	clock_t entry_start;
@@ -191,7 +191,7 @@ int delay_put(delay_t *q, void *buf, size_t len, clock_t now)
 		delay_pkt_t *pktAheadOfUs;
 		pktAheadOfUs = (q->tail == 0) ? q->q : &q->q[q->tail-1];
 		/* If there's a packet still entering the pipe, wait for it. */
-		if ((long)(pktAheadOfUs->entry_done - now) > 0)
+		if ((sint32)(pktAheadOfUs->entry_done - now) > 0)
 			entry_start = pktAheadOfUs->entry_done;
 	}
 	if (!q->bytes_per_sec)
@@ -200,7 +200,7 @@ int delay_put(delay_t *q, void *buf, size_t len, clock_t now)
 		pkt->entry_done = entry_start + ((len + delay_HEADER_BYTES) * ECLOCKS_PER_SEC) / q->bytes_per_sec;
 	/*printf("delay_put: entry_done %d + ((%d + %d) * %d) / %d\n",
 			entry_start, len, delay_HEADER_BYTES, ECLOCKS_PER_SEC, q->bytes_per_sec);*/
-    /* set exit time to the transit durations plus the 'input free' time. */
+	/* set exit time to the transit durations plus the 'input free' time. */
 	/*printf("delay_put: exit_done %d + %d\n", q->invariant_delay, pkt->entry_done);*/
 	pkt->exit_done = q->invariant_delay + pkt->entry_done;
 
@@ -227,7 +227,7 @@ size_t delay_get(delay_t *q, void *buf, size_t buflen, clock_t now)
 
 	pkt = &q->q[q->head];
 	/*printf("delay_get: exit_done %d, now %d\n", pkt->exit_done, now);*/
-	if ((long)(pkt->exit_done - now) >= 0)
+	if ((sint32)(pkt->exit_done - now) >= 0)
 		return 0;			/* not out of the pipe yet */
 
 	/* Packet out of the pipe- remove it from queue */
@@ -248,12 +248,12 @@ size_t delay_get(delay_t *q, void *buf, size_t buflen, clock_t now)
 
 test(delay_t *q)
 {
-	int i;
+	sint32 i;
 	size_t len;
 	char buf[256];
 	clock_t now;
 	clock_t start;
-	long bytes;
+	size_t bytes;
 
 	/* Make sure you can't overempty it. */
 	assert(!delay_get(q, buf, sizeof(buf), clock()));
@@ -266,7 +266,7 @@ test(delay_t *q)
 	now = start;
 	bytes = 0;
 	for (i=0; i<delay_QSIZE-1; i++) {
-		int res;
+		sint32 res;
 
 		/* Put in ten at a time */
 		if ((i % 10) == 9) now = clock();
@@ -301,7 +301,7 @@ test(delay_t *q)
 main()
 {
 	delay_t *q;
-	int i;
+	sint32 i;
 	q = delay_create();
 	assert(q);
 

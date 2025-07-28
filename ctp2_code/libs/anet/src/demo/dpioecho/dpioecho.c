@@ -38,7 +38,7 @@ clock_t	now;
 
 /* globals for use by main, ProcessCommandLine */
 char commDLLName[256];
-int server;
+sint32 server;
 char servername[256];
 commInitReq_t commInitReq; /*  Parameters needed by some comm drivers. */
 char phonenum[256];
@@ -48,10 +48,10 @@ char modeministr[256];
 #ifdef SIMNET
 /* There are two addresses: 0 and 1.  All packets are from the other address. */
 struct {
-	int len;
+	sint32 len;
 	char buf[256];
 } simnetbuf[2];			/* receive buffer */
-int sim_my_rx = 0;		/* offset I receive into */
+sint32 sim_my_rx = 0;		/* offset I receive into */
 
 /* Get a packet, if there is one */
 dp_result_t dpio_get(
@@ -59,7 +59,7 @@ dp_result_t dpio_get(
 	playerHdl_t *psrc,
 	void *buffer,
 	size_t *psize,
-	int *flags)
+	sint32 *flags)
 {
 	(void) dpio; (void) flags;
 	if (simnetbuf[sim_my_rx].len) {
@@ -77,14 +77,14 @@ dp_result_t dpio_get(
 dp_result_t dpio_put_reliable2(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest,  /* If error occurs, dest with error indicated here */
-	int flags)
+	sint32 flags)
 {
-	printf("sim dpio_put: %d sending packet of size %d to %d\n", sim_my_rx, size, (int)(*dests));
-	if ((int)(*dests) != (1 - sim_my_rx)) {
+	printf("sim dpio_put: %d sending packet of size %d to %d\n", sim_my_rx, size, (sint32)(*dests));
+	if ((sint32)(*dests) != (1 - sim_my_rx)) {
 		printf("dpio_put_reliable: bad dest\n");
 		exit(1);
 	}
@@ -106,14 +106,14 @@ dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char 
 	sprintf(buf, "%d", *adrbuf);
 	return dp_RES_OK;
 }
-int dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
+sint32 dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
 {
-	int adr;
+	sint32 adr;
 	sscanf(hostname, "%d", &adr);
 	*adrbuf = adr;
 	return 1;
 }
-dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, int *len)
+dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, sint32 *len)
 {
 	if (h != PLAYER_ME) {
 		printf("dpio_hdl2adr: bad\n");
@@ -133,10 +133,10 @@ dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, int *len)
   directly by this routine.  Others simply result in an update to
   the global switches data structure.
 ----------------------------------------------------------------------------*/
-void ProcessCommandLine(int argc, char **argv)
+void ProcessCommandLine(sint32 argc, char **argv)
 {
 	char *chptr;
-	int   i;
+	sint32   i;
 
 	servername[0] = '\0';
 	commDLLName[0] = '\0';
@@ -242,11 +242,11 @@ out the network address for clients to connect to.\n");
 	charFromUser = 0 or an ASCII keystroke
 	serverhdl = where to send chat packets to
 ----------------------------------------------------------------------------*/
-void echo_client(playerHdl_t serverhdl, int init, int charFromUser)
+void echo_client(playerHdl_t serverhdl, sint32 init, sint32 charFromUser)
 {
 	dp_result_t err;
 	playerHdl_t phdl;
-	int flags;
+	sint32 flags;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
 
@@ -298,7 +298,7 @@ void echo_server()
 {
 	dp_result_t err;
 	playerHdl_t phdl;
-	int flags;
+	sint32 flags;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
 
@@ -326,7 +326,7 @@ void echo_server()
 
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
 	dp_result_t err;
 	dp_transport_t transport;
@@ -380,7 +380,7 @@ out the network address for clients to connect to.\n");
 #endif
 	{
 		char serveraddr[dp_MAX_ADR_LEN];
-		int addrlen;
+		sint32 addrlen;
 
 		addrlen = dpio_scanAdr(dpio, servername, serveraddr, dp_MAX_ADR_LEN);
 		if (addrlen == 0) {
@@ -399,7 +399,7 @@ out the network address for clients to connect to.\n");
 #endif
 	{
 		char serveraddr[dp_MAX_ADR_LEN];
-		int addrlen = dp_MAX_ADR_LEN;
+		sint32 addrlen = dp_MAX_ADR_LEN;
 		char printable[50];
 
 		/* print my address if I am server, so clients can connect */
@@ -415,7 +415,7 @@ out the network address for clients to connect to.\n");
 
 	raw_init();
 	while (1) {
-		int charFromUser = 0;
+		sint32 charFromUser = 0;
 		if (raw_kbhit()) {
 			charFromUser = raw_getc();
 			if (charFromUser == 27 /* Esc */) {

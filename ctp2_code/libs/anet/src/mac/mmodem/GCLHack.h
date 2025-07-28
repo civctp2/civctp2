@@ -18,10 +18,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include <Types.h>
+#include "types.h"
 
 typedef struct {
-	short	status;
-	short	count;
+	sint16	status;
+	sint16	count;
 } PORT;
 #define PULSE	0
 #define TONE	1
@@ -29,24 +30,24 @@ typedef struct {
 #define DEFAULT_DIALING_METHOD TONE
 #define OFF	false
 #define ON	true
-OSErr WriteBuffer(PORT*port, char* buffer, short len);
-void ReadBuffer(PORT* port, char* buffer, short len);
+OSErr WriteBuffer(PORT*port, char* buffer, sint16 len);
+void ReadBuffer(PORT* port, char* buffer, sint16 len);
 void ClearRXBuffer(PORT* port);
 void ClearTXBuffer(PORT* port);
-long SpaceUsedInTXBuffer(PORT* port);
+sint32 SpaceUsedInTXBuffer(PORT* port);
 void PortClose(PORT* port);
-int ReadChar(PORT* port);
-int getch(void);
-void SetDtr(PORT* port, int state);
-OSErr FastGetPortHardware(short portnum, int* irq, int* baseaddr);
-OSErr FastSetPortHardware(short portnum, int irq, int baseadr);
-PORT* PortOpenGreenleafFast(short portnum, int baud, char parity, short bits, short stops);
-int kbhit(void);
-void HMWaitForOK(long wait, char* what);
-short HMSetEchoMode(PORT* port, short mode);
-short HMSetVerboseMode(PORT* port, short mode);
-short HMSendString(PORT* port, char* init);
-short HMSetDialingMethod(PORT* port, short method);
-short HMDial(PORT* port, char* phonenum);
-short HMSetRegister(PORT* port, short reg, short value);
-void exchange_ramp(PORT* port, long Id);
+sint32 ReadChar(PORT* port);
+sint32 getch(void);
+void SetDtr(PORT* port, sint32 state);
+OSErr FastGetPortHardware(sint16 portnum, sint32* irq, sint32* baseaddr);
+OSErr FastSetPortHardware(sint16 portnum, sint32 irq, sint32 baseadr);
+PORT* PortOpenGreenleafFast(sint16 portnum, sint32 baud, char parity, sint16 bits, sint16 stops);
+sint32 kbhit(void);
+void HMWaitForOK(sint32 wait, char* what);
+sint16 HMSetEchoMode(PORT* port, sint16 mode);
+sint16 HMSetVerboseMode(PORT* port, sint16 mode);
+sint16 HMSendString(PORT* port, char* init);
+sint16 HMSetDialingMethod(PORT* port, sint16 method);
+sint16 HMDial(PORT* port, char* phonenum);
+sint16 HMSetRegister(PORT* port, sint16 reg, sint16 value);
+void exchange_ramp(PORT* port, sint32 Id);

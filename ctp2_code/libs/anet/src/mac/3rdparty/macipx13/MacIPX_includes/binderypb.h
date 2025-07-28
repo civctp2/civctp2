@@ -35,25 +35,25 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma options align=mac68k
 #endif
 typedef struct CreateConnection {
-	unsigned char			*serverAddress;
+	uint8			*serverAddress;
 } CreateConnection;
 
 typedef struct ReadPropertyValue {
-	unsigned short			objectType;
+	uint16			objectType;
 	char					*objectName;
 	char					segmentNumber;
 	char					*propertyName;
-	unsigned char			*propertyValue;
-	unsigned char			*moreSegments;
-	unsigned char			*propertyFlags;
+	uint8			*propertyValue;
+	uint8			*moreSegments;
+	uint8			*propertyFlags;
 } ReadPropertyValue;
 
 typedef struct ScanBinderyObject {
 	char					*searchObjectName;
-	unsigned short			searchObjectType;
-	long					*objectID;
+	uint16			searchObjectType;
+	sint32					*objectID;
 	char					*objectName;
-	unsigned short			*objectType;
+	uint16			*objectType;
 	char					*objectHasProperties;
 	char					*objectFlag;
 	char					*objectSecurity;
@@ -66,12 +66,12 @@ typedef struct Binderypb {
 #else
 	IOCompletionUPP			ioCompletion;
 #endif
-	short					ioResult;
+	sint16					ioResult;
 	char					*ioNamePtr;
-	short					ioVRefNum;
-	short					ioCRefNum;
-	short					csCode;
-	short					NCPCompletionCode;
+	sint16					ioVRefNum;
+	sint16					ioCRefNum;
+	sint16					csCode;
+	sint16					NCPCompletionCode;
 	union {
 		CreateConnection		CreateConn;
 		ReadPropertyValue		ReadPropValue;

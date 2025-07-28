@@ -50,22 +50,22 @@ antpget_t *antpget;
 antpget_url_t url;
 FILE *localfp;
 char localdir[256];
-long offset;
-int sock;
-int state;
-int retries;
+sint32 offset;
+sint32 sock;
+sint32 state;
+sint32 retries;
 clock_t next_retry;
-int bGotDB;
-long DBtotal;
-int DBprogress;
+sint32 bGotDB;
+sint32 DBtotal;
+sint32 DBprogress;
 pwq_t *pwq;
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -80,11 +80,11 @@ static const char *hexstring(const unsigned char *binstr, int len)
  potentially take a while to finish.
  Returns the socket used by servpw or -1 on error.
 --------------------------------------------------------------------------*/
-int servpw_init(const char *wmqDirectory, const char *PWServerAddr,
-	int PWServerPort, const char *PWFile)
+sint32 servpw_init(const char *wmqDirectory, const char *PWServerAddr,
+	sint32 PWServerPort, const char *PWFile)
 {
 	dp_result_t err;
-	int prevDBprogress = 0;
+	sint32 prevDBprogress = 0;
 	char temppath[256];
 	clock_t now = eclock();
 
@@ -173,7 +173,7 @@ void servpw_initQ(tca_t *tca, const char *wmqDirectory)
  state of servpw.
  Returns -1 on error, or the number of socks set (1 or 0).
 --------------------------------------------------------------------------*/
-int servpw_setfds(fd_set *rfds, fd_set *wfds)
+sint32 servpw_setfds(fd_set *rfds, fd_set *wfds)
 {
 	switch (state) {
 	case STATE_DISCONNECTED:
@@ -200,7 +200,7 @@ void servpw_pollQ(tca_t *tca, clock_t now)
 	dp_result_t err;
 	pwq_message_t msg;
 	time_t timestamp;
-	long qoffset;
+	sint32 qoffset;
 
 	do {
 		err = servpw_poll(now);
@@ -280,13 +280,13 @@ dp_result_t servpw_poll(clock_t now)
 {
 	dp_result_t err;
 	antpget_header_t *header;
-	int total = 0;
-	int nread;
+	sint32 total = 0;
+	sint32 nread;
 
 	switch (state) {
 	case STATE_DISCONNECTED:
 		/* Reconnect if we're ready */
-		if ((long)(now - next_retry) < 0)
+		if ((sint32)(now - next_retry) < 0)
 			return dp_RES_AGAIN;
 		retries++;
 		err = antpget_connect(antpget);
@@ -307,7 +307,7 @@ dp_result_t servpw_poll(clock_t now)
 		return dp_RES_OK;
 
 	case STATE_WAIT:
-		if ((long)(now - next_retry) < 0)
+		if ((sint32)(now - next_retry) < 0)
 			return dp_RES_EMPTY;
 		state = STATE_SENDGET;
 		/* Fall through to SENDGET */
@@ -336,7 +336,7 @@ dp_result_t servpw_poll(clock_t now)
 		if ((err == dp_RES_OK) || (err == dp_RES_AGAIN)) {
 			return err;
 		} else if (err == dp_RES_EMPTY) {
-			int j;
+			sint32 j;
 			char temppath[256];
 
 			for (j = 0; j < header->nlines; j++)
@@ -402,7 +402,7 @@ dp_result_t servpw_poll(clock_t now)
 			err = antpget_readData(antpget, buf, BUFLEN, &nread);
 			if (((err == dp_RES_OK) || (err == dp_RES_EMPTY))
 			&&  (nread > 0)) {
-				int j;
+				sint32 j;
 
 				offset += nread;
 				total += nread;

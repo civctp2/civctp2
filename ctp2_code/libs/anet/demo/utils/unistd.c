@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if (defined _WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -60,7 +60,7 @@ static HANDLE hAlarmThread = 0;
 
 static DWORD WINAPI ThreadFunc(LPDWORD lpdwParam)
 {
-	int sec = (int) lpdwParam;
+	sint32 sec = (sint32) lpdwParam;
 
 	//printf("My ship left the dock!, sleeping for %d seconds\n", sec);
 
@@ -79,7 +79,7 @@ static DWORD WINAPI ThreadFunc(LPDWORD lpdwParam)
  Call with sec=0 to cancel previous alarm without setting new one.
  Should return number of seconds remaining from previous run, but don't yet.
 -------------------------------------------------------------------------*/
-unsigned alarm(unsigned sec)
+uint32 alarm(uint32 sec)
 {
 	DWORD dwThreadId;
 
@@ -108,14 +108,14 @@ unsigned alarm(unsigned sec)
  Sleep for sec seconds.
  Return value is undefined!
 -------------------------------------------------------------------------*/
-int sleep(unsigned sec)
+sint32 sleep(uint32 sec)
 {
 	Sleep(sec * 1000);
 	return 0;
 }
 
 #ifdef UNITTEST
-void handler(int sigtype)
+void handler(sint32 sigtype)
 {
 	printf("Got the alarm\n");
 	exit(0);

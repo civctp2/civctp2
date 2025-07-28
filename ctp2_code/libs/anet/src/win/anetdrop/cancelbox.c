@@ -24,6 +24,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <windows.h>
 
 #include "cancelbox.h"
+#include "types.h"
 
 #define GetScreenHeight() GetSystemMetrics(SM_CYFULLSCREEN)
 #define GetScreenWidth() GetSystemMetrics(SM_CXFULLSCREEN)
@@ -44,7 +45,7 @@ static BOOL CancelClicked = FALSE;
 /*--------------------------------------------------------------------------
   Window procdure
 --------------------------------------------------------------------------*/
-long FAR PASCAL cancelbox_WndProc(HWND hWnd, UINT wMessage, WPARAM wParam, LONG lParam)
+sint32 FAR PASCAL cancelbox_WndProc(HWND hWnd, UINT wMessage, WPARAM wParam, LONG lParam)
 {
 	switch(wMessage) {
 	case WM_COMMAND:
@@ -78,8 +79,8 @@ void cancelbox_set(const char *caption, const char *msg)
 		HDC hdc;
 		HINSTANCE hInstance = GetModuleHandle(NULL);
 		SIZE sizeText, sizeWin;
-		int temp;
-		int titleBarHeight;
+		sint32 temp;
+		sint32 titleBarHeight;
 
 		WNDCLASS wndclass;
 		wndclass.style 	= CS_HREDRAW | CS_VREDRAW;
@@ -157,10 +158,10 @@ BOOL cancelbox_poll(void)
 /*--------------------------------------------------------------------------
  Unit test
 --------------------------------------------------------------------------*/
-int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
-		, int nCmdShow)
+sint32 WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
+		, sint32 nCmdShow)
 {
-	int i;
+	sint32 i;
 
 	cancelbox_set("Hello.. This is only a test");
 	for (i = 0; i < 500; i++)  {

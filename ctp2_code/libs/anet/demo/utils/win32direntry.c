@@ -30,7 +30,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "win32direntry.h"
 
-int FIND_FIRST(const char *spec, struct dirent *f)
+sint32 FIND_FIRST(const char *spec, struct dirent *f)
 {
 	f->handle = FindFirstFile(spec, &(f->file));
 	if (INVALID_HANDLE_VALUE == f->handle)
@@ -39,7 +39,7 @@ int FIND_FIRST(const char *spec, struct dirent *f)
 	return 0;
 }
 
-int FIND_NEXT(struct dirent *f)
+sint32 FIND_NEXT(struct dirent *f)
 {
 	if (FALSE == FindNextFile(f->handle, &(f->file)))
 		return -1;
@@ -47,7 +47,7 @@ int FIND_NEXT(struct dirent *f)
 	return 0;
 }
 
-int FIND_END(struct dirent *f)
+sint32 FIND_END(struct dirent *f)
 {
-	return (int)FindClose(f->handle);
+	return (sint32)FindClose(f->handle);
 }

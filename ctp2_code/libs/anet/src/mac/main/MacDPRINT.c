@@ -25,10 +25,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include	"DPRINT.h"
 
-int dprintf( const char *	__format, ...) {
-	static unsigned long debugCount = 0;
+sint32 dprintf( const char *	__format, ...) {
+	static uint32 debugCount = 0;
 	va_list	argptr;
-	int		len = 0;
+	sint32		len = 0;
 
 	FILE* theFile = fopen("dprint.out", "a");
 

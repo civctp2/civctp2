@@ -125,13 +125,13 @@ static atalk_hdl_t commHdl2atalk (playerHdl_t h )
  There is no upper bound on handles.
  Returns atalk_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
-atalk_hdl_t atalk_adr2hdl(DDPAddress* remoteadr, int insert)
+atalk_hdl_t atalk_adr2hdl(DDPAddress* remoteadr, sint32 insert)
 {
 	// Search peer tab.  If not found, append it.
 	atalk_hdl_t h;
 	DDPAddress *peer;
-	int i;
-	unsigned int lport;
+	sint32 i;
+	uint32 lport;
 	OSStatus	err;
 
 	// Look for existing address/handle
@@ -200,7 +200,7 @@ comm_status_t atalk_hdl2adr(atalk_hdl_t hdl, DDPAddress *adr)
  *	Return FALSE on error.
  */
 
-int
+sint32
 commNoOp(
 	commNoOpReq_t *		req,		// Request (or NULL)
 	commNoOpResp_t *	resp)		// Response (or NULL)
@@ -229,7 +229,7 @@ commNoOp(
  *	Return FALSE on error.
  */
 
-int
+sint32
 commInit(
 	commInitReq_t *		req,		// Request (or NULL)
 	commInitResp_t *	resp)		// Response (or NULL)
@@ -372,7 +372,7 @@ commInit(
  *	Return FALSE on error.
  */
 
-int
+sint32
 commTerm(
 	commTermReq_t *		req,		// Request (or NULL)
 	commTermResp_t *	resp)		// Response (or NULL)
@@ -388,7 +388,7 @@ commTerm(
 		resp = &respDummy;
 
 	if (peertab) {
-		int i;
+		sint32 i;
 		for (i=0; i<peertab->n_used; i++) {
 			assoctab_item_t *pe = assoctab_getkey(peertab, i);
 			if (!pe)
@@ -419,7 +419,7 @@ commTerm(
  *	Return TRUE if info was retrieved.
  */
 
-int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+sint32 commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 {
 	static commDriverInfoResp_t   commDriverInfoResp =
 	{
@@ -443,7 +443,7 @@ int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
  *  which will be overwritten by the next call.
  */
 
-int
+sint32
 commPlayerInfo(
 	commPlayerInfoReq_t *	req,	// Request
 	commPlayerInfoResp_t *	resp)	// Response (or NULL)
@@ -485,7 +485,7 @@ commPlayerInfo(
  *	time.
  */
 
-int
+sint32
 commTxFull(
 	commTxFullReq_t *	req,	// Request (or NULL)
 	commTxFullResp_t *	resp)	// Response (or NULL)
@@ -513,7 +513,7 @@ commTxFull(
  *	that the packet has been (or ever will be) sent.
  */
 
-int
+sint32
 commTxPkt(
 	commTxPktReq_t *	req,	// Request
 	commTxPktResp_t *	resp)	// Response (or NULL)
@@ -566,7 +566,7 @@ commTxPkt(
  *	Return TRUE if a packet was retrieved.
  */
 
-int
+sint32
 commPeekPkt(
 	commPeekPktReq_t *	req,	// Request (or NULL)
 	commPeekPktResp_t *	resp)	// Response (or NULL)
@@ -594,7 +594,7 @@ commPeekPkt(
  *  Status is zero on success, nonzero on error!
  */
 
-int
+sint32
 commRxPkt(
 	commRxPktReq_t *	req,	// Request (or NULL)
 	commRxPktResp_t *	resp)	// Response (or NULL)
@@ -602,7 +602,7 @@ commRxPkt(
 	commRxPktReq_t	reqDummy;
 	commRxPktResp_t	respDummy;
 	atalk_session_info_t *info;
-	int len;
+	sint32 len;
 
 	DEBUGSTR(("\p@ATALK commRxPkt(): "));
 
@@ -637,7 +637,7 @@ commRxPkt(
  *	Return TRUE if the string was parsed successfully.
  */
 
-int
+sint32
 commScanAddr(
 	commScanAddrReq_t *		req,	// Request
 	commScanAddrResp_t *	resp)	// Response (or NULL)
@@ -646,9 +646,9 @@ commScanAddr(
 	commScanAddrResp_t	respDummy;
 	DDPAddress* 		adr;
 	OSStatus			err;
-	long				nodeID;
-	long				netID;
-	long				socketID;
+	sint32				nodeID;
+	sint32				netID;
+	sint32				socketID;
 
 	//	this is only called if there is a masterhostname string. There should
 	//	not be for the AppleTalk transport. This code was used for the NBP code
@@ -687,14 +687,14 @@ commScanAddr(
  *	Return TRUE if the buffer was formatted successfully.
  */
 
-int
+sint32
 commPrintAddr(
 	commPrintAddrReq_t *	req,	// Request
 	commPrintAddrResp_t *	resp)	// Response (or NULL)
 {
 	commPrintAddrReq_t	reqDummy;
 	commPrintAddrResp_t	respDummy;
-	unsigned char 	*params;
+	uint8 	*params;
 	char				printable[80];
 
 	DEBUGSTR(("\p@ATALK commPrintAddr(): "));
@@ -709,7 +709,7 @@ commPrintAddr(
 	if (req->length != sizeof(*params))
 		return FALSE;
 
-	params = (unsigned char *)req->address;
+	params = (uint8 *)req->address;
 
 	sprintf(printable, "%u.%u.%u.%u", params[0]&0xff, params[1]&0xff, params[2]&0xff, params[3]&0xff);
 
@@ -731,7 +731,7 @@ commPrintAddr(
  *	Return TRUE if the pseudo-player handle was generated.
  */
 
-int
+sint32
 commGroupAlloc(
 	commGroupAllocReq_t *	req,	// Request
 	commGroupAllocResp_t *	resp)	// Response
@@ -757,7 +757,7 @@ commGroupAlloc(
  *	Return TRUE if the pseudo-player handle was invalidated.
  */
 
-int
+sint32
 commGroupFree(
 	commGroupFreeReq_t *	req,	// Request
 	commGroupFreeResp_t *	resp)	// Response
@@ -783,7 +783,7 @@ commGroupFree(
  *	Return TRUE if the players were all added.
  */
 
-int
+sint32
 commGroupAdd(
 	commGroupAddReq_t *	req,	// Request
 	commGroupAddResp_t *	resp)	// Response
@@ -811,7 +811,7 @@ commGroupAdd(
  */
 
 #if 0
-int
+sint32
 commGroupSubtract(
 	commGroupSubtractReq_t *	req,	// Request
 	commGroupSubtractResp_t *	resp)	// Response
@@ -840,7 +840,7 @@ commGroupSubtract(
  *	Return TRUE if the link was established and we shook hands.
  */
 
-int
+sint32
 commSayHi(
 	commSayHiReq_t *	req,	// Request
 	commSayHiResp_t *	resp)	// Response
@@ -887,7 +887,7 @@ commSayHi(
  *	Return TRUE if the link was successfully broken.
  */
 
-int
+sint32
 commSayBye(
 	commSayByeReq_t *	req,	// Request
 	commSayByeResp_t *	resp)	// Response (or NULL)
@@ -895,7 +895,7 @@ commSayBye(
 	commSayByeResp_t		respDummy;
 	atalk_hdl_t h;
 	comm_status_t err;
-	int err0;
+	sint32 err0;
 
 	DEBUGSTR(("\p@ATALK commSayBye(): "));
 

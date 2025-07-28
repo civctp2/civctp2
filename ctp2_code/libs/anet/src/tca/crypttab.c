@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define crypttab_RW_BUFFER_SIZE 1024
 
 typedef struct {
-	int magic;
-	int n_used;
+	sint32 magic;
+	sint32 n_used;
 	size_t unit;
 } dynatab_encrypted_freeze_t;
 #define dynatab_encrypted_MAGIC 0x9474
@@ -40,12 +40,12 @@ typedef struct {
   Write the dynatab to the given file in a format encrypted with key,
   suitable for restoration with dynatab_thaw_encrypted.
 -------------------------------------------------------------------------*/
-void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8])
+void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8])
 {
 	dynatab_encrypted_freeze_t d;
 	size_t encrypted_unit;
 	size_t nwritten;
-	int n;
+	sint32 n;
 	size_t chunk;
 	char buf[crypttab_RW_BUFFER_SIZE];
 	char *pbuf;
@@ -104,7 +104,7 @@ void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
   Assumes that the items contain no pointers or other data that needs to
   be modified to reflect new conditions upon thawing.
 -------------------------------------------------------------------------*/
-void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8])
+void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8])
 {
 	size_t nread;
 	void *p;
@@ -145,10 +145,10 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 		n = 0;
 		memset(unitbuf, 0, encrypted_unit);
 		deskey(key, DE1);
-		while (n < d.n_used) {
+		while (n < (size_t)d.n_used) {
 			n_end = n + crypttab_RW_BUFFER_SIZE / encrypted_unit;
-			if (n_end > d.n_used)
-				n_end = d.n_used;
+			if (n_end > (size_t)d.n_used)
+				n_end = (size_t)d.n_used;
 			nread = fread(buf, encrypted_unit, n_end - n, fp);
 			if (nread != n_end - n) {
 				/*  Read failed */
@@ -178,13 +178,13 @@ void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8
 
 void test1(dynatab_t *pt)
 {
-	int i;
+	sint32 i;
 	FILE *fp;
 	dynatab_t *th;
 
 	for (i = NENTRIES-1; i >= 0; i--) {
 	/* for (i = 0; i < NENTRIES; i++) { */
-		int *p = dynatab_subscript_grow(pt, i);
+		sint32 *p = dynatab_subscript_grow(pt, i);
 		if (p == NULL) {
 			printf("grow1: test failed on i=%d\n", i);
 			exit(1);
@@ -197,7 +197,7 @@ void test1(dynatab_t *pt)
 		printf(".");
 	}
 	for (i = 0; i < NENTRIES; i++) {
-		int *p = dynatab_subscript(pt, i);
+		sint32 *p = dynatab_subscript(pt, i);
 		if (p == NULL) {
 			printf("subscript2: test failed\n");
 			exit(1);
@@ -225,7 +225,7 @@ void test1(dynatab_t *pt)
 		perror("closing spam.dat");
 		exit(1);
 	}
-	th = dynatab_create(sizeof(int));
+	th = dynatab_create(sizeof(sint32));
 	if (!th) exit(1);
 
 	fp = fopen("spam.dat", "rb");
@@ -243,7 +243,7 @@ void test1(dynatab_t *pt)
 		exit(1);
 	}
 	for (i = 0; i < NENTRIES; i++) {
-		int *p = dynatab_subscript(th, i);
+		sint32 *p = dynatab_subscript(th, i);
 		if (p == NULL) {
 			printf("subscript2: test failed\n");
 			exit(1);
@@ -258,14 +258,14 @@ void test1(dynatab_t *pt)
 		}
 	}
 	for (i = 0; i < NENTRIES/2; i++) {	/* Don't remove them all */
-		int *p = dynatab_subscript(th, 0);
-		int val = *p;
+		sint32 *p = dynatab_subscript(th, 0);
+		sint32 val = *p;
 		if (p == NULL) {
 			printf("subscript3: test failed\n");
 			exit(1);
 		}
 		dynatab_remove(th, 0);
-		if (val == *((int*)dynatab_subscript(th, 0))) {
+		if (val == *((sint32*)dynatab_subscript(th, 0))) {
 			printf("remove test: test failed\n");
 			exit(1);
 		}
@@ -282,11 +282,11 @@ void test1(dynatab_t *pt)
 #define NTABS 100
 main()
 {
-	int i;
+	sint32 i;
 	dynatab_t *pt[NTABS];
 
 	for (i=0;i<NTABS;i++) {
-		pt[i] = dynatab_create(sizeof(int));
+		pt[i] = dynatab_create(sizeof(sint32));
 		if (!pt[i]) {
 			printf("create: test failed\n");
 			exit(1);
@@ -297,7 +297,7 @@ main()
 		}
 	}
 	for (i=0;i<NTABS;i++) {
-		int h;
+		sint32 h;
 		h = _heapchk();
 		if (h != _HEAPOK) {
 			printf("heapchk: test failed\n");

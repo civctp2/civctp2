@@ -25,12 +25,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "anet.h"
 
 #define MAX_PORTS 10
-void main(int argc, char **argv)
+void main(sint32 argc, char **argv)
 {
 	dp_transport_t transport;
 	commPortName_t portName[MAX_PORTS];
-	int nportName;
-	int i;
+	sint32 nportName;
+	sint32 i;
 	dp_result_t err;
 
 	if (argc != 2) {

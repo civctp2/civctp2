@@ -42,12 +42,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --------------------------------------------------------------------------*/
 static dp_result_t acctserv_check_email(const char *email)
 {
-	int i, i_at = -1, i_dot = -1;
+	sint32 i, i_at = -1, i_dot = -1;
 
 	/* some basic checks: */
 	for (i = 0; email[i] && i < tcapw_MAXLEN_EMAIL; i++) {
 		/* strictly 7-bit ASCII */
-		if ((unsigned)email[i] > 0x7f) return dp_RES_BAD;
+		if ((uint32)email[i] > 0x7f) return dp_RES_BAD;
 		/* no more than one '@' */
 		if (email[i] == '@' && (i_at != -1 || i == 0)) return dp_RES_BAD;
 		if (email[i] == '@') i_at = i;
@@ -105,7 +105,7 @@ static dp_result_t check_password(tcapw_t *tcapw, const char *username,
 	wchar_t wpw[tcapw_LEN_PW];
 	tcapw_pw_t pw;
 	tcapw_hpw_t hpw;
-	int len;
+	sint32 len;
 
 	if (tcapw == NULL || username == NULL || password == NULL)
 		return dp_RES_BAD;
@@ -166,7 +166,7 @@ acctserv_t *acctserv_create(pwq_t *pwq)
 	dp_result_t err;
 	acctserv_t *acctserv;
 	time_t timestamp;
-	long offset;
+	sint32 offset;
 
 	if (pwq == NULL || pwq->tcapw == NULL || pwq->wmq == NULL
 	||  !pwq->wmq->openForWrite)
@@ -210,7 +210,7 @@ dp_result_t acctserv_account_create(acctserv_t *acctserv,
 	dp_netchar_t secretcode[tcapw_LEN_PW];
 	dp_uid_t uid;
 	pwq_message_t msg;
-	int len;
+	sint32 len;
 
 	if (acctserv == NULL || username == NULL || password == NULL
 	||  email == NULL)
@@ -400,7 +400,7 @@ dp_result_t acctserv_account_change(acctserv_t *acctserv,
 	tcapw_pw_t newpw;
 	tcapw_hpw_t newhpw, *pnewhpw;
 	char mynewemail[tcapw_MAXLEN_EMAIL], *pnewemail;
-	int newflags;
+	sint32 newflags;
 	dp_netchar_t secretcode[tcapw_LEN_PW];
 	pwq_message_t msg;
 
@@ -417,7 +417,7 @@ dp_result_t acctserv_account_change(acctserv_t *acctserv,
 	if (newpassword == NULL) {
 		pnewhpw = NULL;
 	} else {
-		int len;
+		sint32 len;
 
 		if (mywcs_frommbs(wnewpw, tcapw_LEN_PW, newpassword) == -1) {
 			DPRINT(("acctserv_account_change: invalid char in password:%s\n", newpassword));
@@ -530,14 +530,14 @@ dp_result_t acctserv_account_delete(acctserv_t *acctserv,
 #define STATE_SENDRESPONSE 2
 
 #if defined(_DEBUG) || defined(DEBUG) || defined(DPRNT)
-int cdecl
+sint32 cdecl
 dp_dprintf(
 	const char *	__format,	/* printf-style format (or NULL) */
 	...)						/* printf-style arguments on stack (if any) */
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -548,7 +548,7 @@ dp_dprintf(
 	return len;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -557,10 +557,10 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 }
 #endif
 
-static void acctserv_response(int sockfd, int errcode, char *msg)
+static void acctserv_response(sint32 sockfd, sint32 errcode, char *msg)
 {
 	char resp[BUFLEN];
-	int nbytes;
+	sint32 nbytes;
 
 	sprintf(resp, "%d %s\n", errcode, msg);
 	nbytes = write(sockfd, resp, strlen(resp));
@@ -569,16 +569,16 @@ static void acctserv_response(int sockfd, int errcode, char *msg)
 	return;
 }
 
-static void acctserv_handleRequest(acctserv_t *acctserv, int sockfd)
+static void acctserv_handleRequest(acctserv_t *acctserv, sint32 sockfd)
 {
 	dp_result_t err;
 	char buf[BUFLEN];
-	int nbytes;
+	sint32 nbytes;
 	char *pbuf;
 	char *argv[MAX_ARGS];
-	int argc = 0;
-	int state;
-	int bNewArg = 1;
+	sint32 argc = 0;
+	sint32 state;
+	sint32 bNewArg = 1;
 	time_t now;
 
 	/* wait for a new request */
@@ -751,9 +751,9 @@ static acctserv_t *acctserv_restore(const char *dir)
 	wmq_t *wmq;
 	pwq_t *pwq;
 	char PWFile[256];
-	int len;
+	sint32 len;
 	time_t timestamp;
-	long offset;
+	sint32 offset;
 
 	len = strlen(dir);
 	if (len > 240)
@@ -844,13 +844,13 @@ static acctserv_t *acctserv_restore(const char *dir)
 	return acctserv_create(pwq);
 }
 
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
 	dp_result_t err;
 	acctserv_t *acctserv;
-	int sockfd;
+	sint32 sockfd;
 	struct sockaddr_un my_addr;
-	int pid;
+	sint32 pid;
 	time_t now, next_save;
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
@@ -897,12 +897,12 @@ Usage: %s <Dir>\n\
 
 	next_save = time(NULL) + TIME_SAVE;
 	while (1) {
-		int newsock;
+		sint32 newsock;
 		struct sockaddr_un client_addr;
-		int client_addrlen;
+		sint32 client_addrlen;
 
 		now = time(NULL);
-		if ((long)(now - next_save) > 0) {
+		if ((sint32)(now - next_save) > 0) {
 			err = acctserv_save(acctserv);
 			if (err != dp_RES_OK) {
 				printf("acctserv: save err:%d\n", err);

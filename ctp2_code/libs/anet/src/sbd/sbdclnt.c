@@ -50,9 +50,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Returns 0 if no error was waiting,
          a system dependent numeric code if an error occurred.
 ------------------------------------------------------------------------*/
-static int get_socket_error(char *msg)
+static sint32 get_socket_error(char *msg)
 {
-	int err = 0;
+	sint32 err = 0;
 
 #ifdef UNIX
 	err = errno;
@@ -125,11 +125,11 @@ static int get_socket_error(char *msg)
  Returns 0 on success,
  		 non-zero system dependent error code on failure.
 ------------------------------------------------------------------------*/
-static int set_socket_nonblocking(int sock)
+static sint32 set_socket_nonblocking(sint32 sock)
 {
-	int err;
+	sint32 err;
 #ifdef UNIX
-	int flags;
+	sint32 flags;
 #else
 #ifdef _WIN32
 	ULONG nonblocking;
@@ -166,10 +166,10 @@ static int set_socket_nonblocking(int sock)
  Returns 0 on success,
  		 non-zero WSA error code on failure.
 ------------------------------------------------------------------------*/
-static int Winsock_init(void)
+static sint32 Winsock_init(void)
 {
 	WSADATA wsa;
-	int err;
+	sint32 err;
 
 	DPRINT(("Winsock_init() called...\n"));
 
@@ -202,11 +202,11 @@ static int Winsock_init(void)
  in preparation for sending the len bytes of binary data in buf.
  Returns NULL on failure.
 ------------------------------------------------------------------------*/
-sbdclnt_t *sbdclnt_create(const char *buf, size_t len, const char *hostname, short port)
+sbdclnt_t *sbdclnt_create(const char *buf, size_t len, const char *hostname, sint16 port)
 {
-	int err;
+	sint32 err;
 	sbdclnt_t *sbdclnt;
-	int proto;
+	sint32 proto;
 	struct sockaddr_in hostaddr;
 	struct hostent *he;
 #ifdef UNIX
@@ -318,11 +318,11 @@ void sbdclnt_destroy(sbdclnt_t *sbdclnt)
 		 0 if more calls are needed,
 		-1 on error.
 ------------------------------------------------------------------------*/
-int sbdclnt_poll(sbdclnt_t *sbdclnt)
+sint32 sbdclnt_poll(sbdclnt_t *sbdclnt)
 {
-	int err;
-	int nToSend;
-	int nSent;
+	sint32 err;
+	sint32 nToSend;
+	sint32 nSent;
 
 	assert((sbdclnt->pos >= 0) && (sbdclnt->pos <= sbdclnt->len));
 	if (sbdclnt->pos == sbdclnt->len) {

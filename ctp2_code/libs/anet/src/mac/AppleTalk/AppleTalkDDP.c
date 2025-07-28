@@ -31,8 +31,8 @@ extern EndpointRef		gDDPEndpoint;
 
 typedef struct {
 	DDPAddress dest_addr;			//	OT destination address
-	unsigned char	flags;
-	unsigned char inUse;
+	uint8	flags;
+	uint8 inUse;
 } DestStruct;
 
 DestStruct*				gDests = nil;
@@ -40,8 +40,8 @@ atalk_session_info_t	gSessionInfo;
 #define MAX_PLAYERS 8
 #define	MAX_DESTS	(MAX_PLAYERS*2)
 
-unsigned atalk_ddp_open(DDPAddress* ip_dst, unsigned char flags, unsigned *local_port ) {
-	unsigned long		i;
+uint32 atalk_ddp_open(DDPAddress* ip_dst, uint8 flags, uint32 *local_port ) {
+	uint32		i;
 
 	//	save all of the paramaters in our array and return the index
 	//	that we just used
@@ -69,22 +69,22 @@ unsigned atalk_ddp_open(DDPAddress* ip_dst, unsigned char flags, unsigned *local
 	return i;
 }
 
-int atalk_ddp_close( unsigned handle, unsigned char flags ) {
+sint32 atalk_ddp_close( uint32 handle, uint8 flags ) {
 	gDests[handle].inUse = false;
 	gDests[handle].flags = flags;
 }
 
-int atalk_ddp_recv( unsigned handle, void *buf, unsigned len,
-                   unsigned timeout, unsigned char flags,
-                   unsigned *ttltos, unsigned *id ) {
+sint32 atalk_ddp_recv( uint32 handle, void *buf, uint32 len,
+                   uint32 timeout, uint8 flags,
+                   uint32 *ttltos, uint32 *id ) {
 
 	//	this method reads a packet and returns the
 	//	size of the data read and sets up the senders
 	//	address for the status routine
 
-	unsigned char		recvBuf[sizeof(DDPAddress) + ddpMaxRawData + 1];
+	uint8		recvBuf[sizeof(DDPAddress) + ddpMaxRawData + 1];
 	DDPAddress*			srcAddress;
-	unsigned long		theSize = ddpMaxRawData;
+	uint32		theSize = ddpMaxRawData;
 	Boolean				gotPacket;
 	extern otq_t*		gInQueue;
 
@@ -111,20 +111,20 @@ int atalk_ddp_recv( unsigned handle, void *buf, unsigned len,
 	return theSize;
 }
 
-int atalk_ddp_send( unsigned handle, void *buf, unsigned len,
-                       unsigned ttltos, unsigned id, unsigned char flags ) {
+sint32 atalk_ddp_send( uint32 handle, void *buf, uint32 len,
+                       uint32 ttltos, uint32 id, uint8 flags ) {
 	TUnitData	udata;
 	OSStatus	err;
 	OTResult	theResult;
 
 	udata.addr.len = sizeof(DDPAddress);
-	udata.addr.buf = (unsigned char *) &gDests[handle].dest_addr;
+	udata.addr.buf = (uint8 *) &gDests[handle].dest_addr;
 
 	udata.opt.len = 0;
 	udata.opt.buf = nil;
 
 	udata.udata.len = len;
-	udata.udata.buf = (unsigned char *)buf;
+	udata.udata.buf = (uint8 *)buf;
 
 	do {
 		err = OTSndUData(gDDPEndpoint, &udata);
@@ -140,18 +140,18 @@ int atalk_ddp_send( unsigned handle, void *buf, unsigned len,
 	return err;
 }
 
-int atalk_ddp_status( unsigned handle, unsigned char flags, unsigned *size_next,
+sint32 atalk_ddp_status( uint32 handle, uint8 flags, uint32 *size_next,
                            atalk_session_info_t **info ) {
 	*info = &gSessionInfo;
 }
 
 
-int atalk_ddp_broadcast(void *buf, unsigned len) {
+sint32 atalk_ddp_broadcast(void *buf, uint32 len) {
 	OSStatus			err = noErr;
 	TUnitData			udata;
 	OTResult			theResult;
-	short				i;
-	extern short		gLookupCount;
+	sint16				i;
+	extern sint16		gLookupCount;
 	extern DDPAddress	gLookupResults[];
 
 	//	this method sends the specified packet to our list of
@@ -163,13 +163,13 @@ int atalk_ddp_broadcast(void *buf, unsigned len) {
 	for (i = 0; i < gLookupCount; i++) {
 
 		udata.addr.len = sizeof(DDPAddress);
-		udata.addr.buf = (unsigned char *) &gLookupResults[i];
+		udata.addr.buf = (uint8 *) &gLookupResults[i];
 
 		udata.opt.len = 0;
 		udata.opt.buf = nil;
 
 		udata.udata.len = len;
-		udata.udata.buf = (unsigned char *)buf;
+		udata.udata.buf = (uint8 *)buf;
 
 		do {
 			err = OTSndUData(gDDPEndpoint, &udata);

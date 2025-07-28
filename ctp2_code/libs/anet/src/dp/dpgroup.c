@@ -87,9 +87,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* Function to dump a block of memory in hex */
 #if  1
-static void dumpBuf(char *buf, int len)
+static void dumpBuf(char *buf, sint32 len)
 {
-	int i;
+	sint32 i;
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x ", buf[i]));
 	}
@@ -100,7 +100,7 @@ static void dumpBuf(char *buf, int len)
 /* Function to dump the group table in ascii. */
 static void dpGroup_dump(dp_t *dp)
 {
-	int i;
+	sint32 i;
 	if (!dp->groups) {
 		DPRINT(("dpGroup_dump: no group table\n"));
 		return;
@@ -109,7 +109,7 @@ static void dpGroup_dump(dp_t *dp)
 	for (i=0; i<dp->groups->n_used; i++) {
 		assoctab_item_t *pe;
 		dp_group_t *pg;
-		int j;
+		sint32 j;
 		pe = assoctab_getkey(dp->groups, i);
 		if (!pe) {
 			 DPRINT(("dpGroup_dump: no group entry for index %d\n", i));
@@ -299,7 +299,7 @@ static dp_result_t dpGroup_SendAddGroupPacket(
 	dumpBuf((char *)&pkt, pktlen);
 	if (tag == dp_USER_ADDGROUP_PACKET_ID)
 	{
-		int i;
+		sint32 i;
 		for (i=0; i<pkt.b.add.n; i++) {
 			DPRINT(("dpGroup_SendAddGroupPacket: player %d in group is %d = %d\n",
 				 i, pkt.b.add.members[i], pg->members[i]));
@@ -388,7 +388,7 @@ dp_result_t dpGroup_InformNewMachine(
 	dp_t *dp,
 	playerHdl_t dest)
 {
-	int i;
+	sint32 i;
 	for (i=0; i<dp->groups->n_used; i++) {
 		assoctab_item_t *pe;
 		dp_group_t *pg;
@@ -418,7 +418,7 @@ dp_result_t dpGroup_AddPlayerLocal(
 	dpid_t	idPlayer)
 {
 	dp_group_t *pg;
-	int i;
+	sint32 i;
 
 	DPRINT(("dpGroup_AddPlayerLocal(dp, group %d, player %d)\n", idGroup, idPlayer));
 	if (!dp->groups) {
@@ -470,7 +470,7 @@ dp_result_t dpGroup_DeletePlayerLocal(
 	dpid_t	idPlayer)
 {
 	dp_group_t *pg;
-	int i;
+	sint32 i;
 
 	if (!dp->groups) {
 		DPRINT(("dpGroup_DeletePlayerLocal: not in session\n"));
@@ -506,7 +506,7 @@ dp_result_t dpGroup_DeletePlayerFromAllGroups(
 	dp_t	*dp,
 	dpid_t	idPlayer)
 {
-	int i;
+	sint32 i;
 
 	if (!dp->groups) {
 		DPRINT(("dpGroup_DeletePlayerFromAllGroups: not in session\n"));
@@ -588,7 +588,7 @@ DP_API dp_result_t dpDestroyGroup(
 {
 	dp_group_t *pg;
 	dp_result_t err;
-	int fail;
+	sint32 fail;
 
 	if (!dp || !dp->groups) {
 		DPRINT(("dpDestroyGroup: null\n"));
@@ -670,11 +670,11 @@ DP_API dp_result_t dpEnumGroups(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	)
 {
 	dp_group_t *pg;
-	int i;
+	sint32 i;
 
 	(void) timeout;
 	if (s) {
@@ -720,11 +720,11 @@ DP_API dp_result_t dpEnumGroupPlayers(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	)
 {
 	dp_group_t *pg;
-	int i;
+	sint32 i;
 
 	if (s) {
 		DPRINT(("dpEnumGroupPlayers: can't enum other sessions' groups yet.\n"));

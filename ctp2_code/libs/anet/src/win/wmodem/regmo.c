@@ -68,10 +68,10 @@ HKEY findKeyPointingToPair(HKEY hKeySearchRoot, HKEY hKeyPointerRoot,
 	HKEY hKeyPointer;
 	char tempbuf[MAX_REG_BUFLEN];
 	DWORD werr;
-	int i;
+	sint32 i;
 
 	for (i=0; ; i++) {
-		long len;
+		sint32 len;
 
 		hKeyEnum = NULL;
 		werr = RegEnumKey(hKeySearchRoot, i, szEnum, sizeof(szEnum));
@@ -162,13 +162,13 @@ static HKEY OpenModemRoot(void)
  The given array is filled with each installed modem's key.
  The return value is the number of keys placed in the array.
 --------------------------------------------------------------------------*/
-int regmo_enum(int *keys, int maxkeys)
+sint32 regmo_enum(sint32 *keys, sint32 maxkeys)
 {
 	char modemSubkey[64];
 	DWORD  werr;
 	HKEY   hKeyModemroot;		/* Key handle of SubKey. */
-	int i;
-	int nkeys;
+	sint32 i;
+	sint32 nkeys;
 
 	hKeyModemroot = OpenModemRoot();
 	if (!hKeyModemroot) {
@@ -202,7 +202,7 @@ int regmo_enum(int *keys, int maxkeys)
 static void regmo_unescape(char *p)
 {
 	while ((p=(strchr(p, '<'))) != NULL) {
-		int kill=0;
+		sint32 kill=0;
 		if (strcmp(p, "<cr>") == 0) {
 			*p++ = '\r';
 			kill = 3;
@@ -224,18 +224,18 @@ static void regmo_unescape(char *p)
  drivers aren't really, and we filter them out here rather than in
  regmo_enum for efficiency's sake.
 --------------------------------------------------------------------------*/
-int regmo_get(regmo_t * regmo, int key)
+sint32 regmo_get(regmo_t * regmo, sint32 key)
 {
 	HKEY   hKeyModemroot;
 	HKEY   hKeyModem;
 	HKEY   hKeyInit;
 	char   subkey[100];
 	char   subkeyNameModem[100];
-	long   len;
+	sint32   len;
 	DWORD  werr;
-	int i;
+	sint32 i;
 	char deviceType;
-	int n_init;
+	sint32 n_init;
 
 	memset(regmo, 0, sizeof(regmo_t));
 
@@ -407,18 +407,18 @@ int regmo_get(regmo_t * regmo, int key)
 #if 0
 void main(void)
 {
-	int keys[10];
-	int nkeys = regmo_enum(keys, 10);
+	sint32 keys[10];
+	sint32 nkeys = regmo_enum(keys, 10);
 	regmo_t regmo;
-	int i;
-	int err;
+	sint32 i;
+	sint32 err;
 
 	printf("nkeys %d\n", nkeys);
 	for (i=0; i<nkeys; i++) {
 		printf("keys[%d] %d\n", i, keys[i]);
 		err = regmo_get(&regmo, keys[i]);
 		if (!err) {
-			int j;
+			sint32 j;
 			printf("DriverDesc %s\n", regmo.DriverDesc);
 			printf("AttachedTo %s\n", regmo.AttachedTo);
 			for (j=0; (j<regmo_N_INIT) && (regmo.Init[j][0]); j++) {

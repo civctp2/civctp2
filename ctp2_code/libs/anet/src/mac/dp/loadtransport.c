@@ -28,8 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "LoadTransport.h"
 #include "modm.h"
 
-unsigned long*		hSer = nil;
-unsigned char*		transportGlobalsName = "\pgSer";
+uint32*		hSer = nil;
+uint8*		transportGlobalsName = "\pgSer";
 ConnHandle			gConnection;
 
 /*----------------------------------------------------------------------
@@ -84,9 +84,9 @@ void SetBasePath(void)
 	FSSpec		where;
 	//Handle		theString;
 	Str255		name;
-	short			vRef;
-	long			dirID;
-	long			nDirID;
+	sint16			vRef;
+	sint32			dirID;
+	sint32			nDirID;
 	error = FindFolder(kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder, &vRef, &dirID);
 	GetIndString(name, kTransportPath, 1);
 	if (name[0] != '0') {
@@ -104,12 +104,12 @@ void SetBasePath(void)
 	}
 }
 
-OSErr SetData(CFragConnectionID connID, unsigned long value)
+OSErr SetData(CFragConnectionID connID, uint32 value)
 {
 	OSErr error;
 	CFragSymbolClass symClass;
-	long myCount;
-	short myIndex;
+	sint32 myCount;
+	sint16 myIndex;
 	Str255 myName;
 	Ptr myAddr;
 
@@ -124,8 +124,8 @@ OSErr SetupData(CFragConnectionID connID)
 {
 	OSErr error;
 	CFragSymbolClass symClass;
-	long myCount;
-	short myIndex;
+	sint32 myCount;
+	sint16 myIndex;
 	Str255 myName;
 	Ptr myAddr;
 
@@ -136,12 +136,12 @@ OSErr SetupData(CFragConnectionID connID)
 	return error;
 }
 
-OSErr GetData(CFragConnectionID connID, unsigned long* value)
+OSErr GetData(CFragConnectionID connID, uint32* value)
 {
 	OSErr error;
 	CFragSymbolClass symClass;
-	long myCount;
-	short myIndex;
+	sint32 myCount;
+	sint16 myIndex;
 	Str255 myName;
 	Ptr myAddr;
 
@@ -157,7 +157,7 @@ void CleanupTransport(CFragConnectionID connID)
 {
 	OSErr				error;
 	ConnHandle		connection;
-	unsigned long	value;
+	uint32	value;
 	ser_t*			ser;
 	error = GetData(connID, &value);
 	//Debugger();
@@ -177,15 +177,15 @@ OSErr TotalHack(CFragConnectionID connID)
 {
 	Handle				theStrings;
 	CMBufferSizes		bufSizes;
-	short					procID;
+	sint16					procID;
 	Str255				toolName;
 	OSErr					error;
 	FSSpec				where;
-	short					ref;
+	sint16					ref;
 	char*					end;
 	Ptr					tempString;
 	char*					here;
-	short					baud;
+	sint16					baud;
 	Boolean				prefsChanged = false;
 	THz					myZone;
 	ser_t*				storage;
@@ -222,7 +222,7 @@ OSErr TotalHack(CFragConnectionID connID)
 		if (gConnection != nil) {
 			storage = (ser_t*)NewPtrClear(sizeof(ser_t));
 			storage->sConnection = gConnection;
-			error = SetData(connID, (unsigned long)storage);
+			error = SetData(connID, (uint32)storage);
 		}
 	}
 

@@ -43,11 +43,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Waits for stub acknowledgement.  In order to work, need to find some way to
   get event from game's event loop.  Not implemented correctly now.
 --------------------------------------------------------------------------*/
-//static dp_result_t stubacknowledge(unsigned long msgRefcon) {
-//	const int iwait = MAX_WAIT / SLEEP_DEF;
-//	int i;
-//	int done = 0;
-//	unsigned long sendRefcon, msglen;
+//static dp_result_t stubacknowledge(uint32 msgRefcon) {
+//	const sint32 iwait = MAX_WAIT / SLEEP_DEF;
+//	sint32 i;
+//	sint32 done = 0;
+//	uint32 sendRefcon, msglen;
 //	OSErr err;
 //	EventRecord event;
 //	while (!done) {		/* wait for return receipt */
@@ -110,8 +110,8 @@ DP_API dp_result_t dpLaunchApp(dp_appParam_t *appParam)
 {
 	static ProcessSerialNumber stubPSN;
 	OSErr err;
-	short myVRefNum;
-	long myDirID;
+	sint16 myVRefNum;
+	sint32 myDirID;
 	char buf[FILENAME_MAX];		// c2pstr alters its arg so use a buffer
 	dp_result_t dperr;
 	FSSpec appFSSpec;
@@ -134,8 +134,8 @@ DP_API dp_result_t dpLaunchApp(dp_appParam_t *appParam)
 	dperr = getstub(&stubPSN);
 	if (dperr == dp_RES_OK) {		/* have stub so ask stub to launch new process */
 		TargetID sender;
-		unsigned long msgRefcon = REFCON;
-		unsigned long myOpts;
+		uint32 msgRefcon = REFCON;
+		uint32 myOpts;
 		EventRecord event;
 		event.what = kHighLevelEvent;
 		event.message = STUB_EVENTID;

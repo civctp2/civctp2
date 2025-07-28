@@ -110,7 +110,7 @@ static OSErr makeFSSpecFromTransport(const dp_transport_t *src, FSSpec *dest)
 ----------------------------------------------------------------------*/
 static void makeTransportFromFSSpec(const FSSpec *src, dp_transport_t *dest)
 {
-	unsigned int len;
+	uint32 len;
 	memset(dest, 0, sizeof(dp_transport_t));
 	dest->dirID = src->parID;
 	dest->vRefNum = src->vRefNum;
@@ -212,12 +212,12 @@ dp_result_t dpEnumTransports(dp_transport_t *path, dpEnumTransportCallback_t cb,
 	comm_driverInfo_t	info;
 	dp_result_t			theResult;
 	OSErr				anErr;
-	short				index;
+	sint16				index;
 	Str255				ioName;
 	CInfoPBRec			myCPB;
 	FSSpec				spec;
 	dp_transport_t		transport;
-	int					dirID;
+	sint32					dirID;
 
 	if (!path || !cb)
 		return dp_RES_BUG;
@@ -238,7 +238,7 @@ dp_result_t dpEnumTransports(dp_transport_t *path, dpEnumTransportCallback_t cb,
 	dirID = myCPB.dirInfo.ioDrDirID;
 
 	/* Loop over all items in that directory */
-	myCPB.hFileInfo.ioNamePtr = (unsigned char *)ioName;
+	myCPB.hFileInfo.ioNamePtr = (uint8 *)ioName;
 	for (index=1; ; index++) {
 		myCPB.hFileInfo.ioFDirIndex = index;
 		myCPB.hFileInfo.ioVRefNum = spec.vRefNum;
@@ -306,7 +306,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 	FSSpec spec;
 
 	typedef struct {
-		unsigned char *name;
+		uint8 *name;
 		Ptr *ptr;
 	} sym_t;
 	static sym_t syms[] = {
@@ -402,7 +402,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, dp_transport_t *transport)
 		//	close the code fragment later, even if the dpUnloadDLL
 		//	is called another app which by an app we launch instead of us.
 		if (dpio)
-			dpio->commInitReq.hwirq = (long) gConnID;
+			dpio->commInitReq.hwirq = (sint32) gConnID;
 
 		//	everything initialized fine, so, we return in a happy state
 		result = dp_RES_OK;

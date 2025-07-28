@@ -18,10 +18,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "LoadGlobalFrag.h"
-unsigned long*			hSer;
+uint32*			hSer;
 char*						transportGlobalsName = "\pgSer";
-short						gvRef;
-long						gparID;
+sint16						gvRef;
+sint32						gparID;
 CFragConnectionID		connID;
 void SetBasePath(void);
 /*----------------------------------------------------------------------
@@ -71,12 +71,12 @@ void unloadTransport(void)
 	//	close the code fragment and ignored errors
 	CloseConnection(&connID);
 }
-OSErr GetData(unsigned long* value)
+OSErr GetData(uint32* value)
 {
 	OSErr		error;
 	SymClass	symClass;
-	long		myCount;
-	short		myIndex;
+	sint32		myCount;
+	sint16		myIndex;
 	Str255	myName;
 	Ptr		myAddr;
 	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global
@@ -85,12 +85,12 @@ OSErr GetData(unsigned long* value)
 	}
 	return error;
 }
-OSErr SetData(unsigned long value)
+OSErr SetData(uint32 value)
 {
 	OSErr		error;
 	SymClass	symClass;
-	long		myCount;
-	short		myIndex;
+	sint32		myCount;
+	sint16		myIndex;
 	Str255	myName;
 	Ptr		myAddr;
 	error = FindSymbol(connID, transportGlobalsName, (char**)&hSer, &symClass);	// Find the global
@@ -105,9 +105,9 @@ void SetBasePath(void)
 	FSSpec		where;
 	//Handle		theString;
 	Str255		name;
-	short			vRef;
-	long			dirID;
-	long			nDirID;
+	sint16			vRef;
+	sint32			dirID;
+	sint32			nDirID;
 	error = FindFolder(kOnSystemDisk, kPreferencesFolderType, kDontCreateFolder, &vRef, &dirID);
 	GetIndString(name, kTransportPath, 1);
 	if (name[0] != '0') {

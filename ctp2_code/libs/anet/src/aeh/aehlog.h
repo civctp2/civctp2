@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 typedef struct {
 	char path[aeh_MAX_PATH];  /* path of exception log file */
 	FILE *fp;     /* file pointer to exception log file (can be NULL) */
-	int status;   /* if file is open for read, write, or not open */
+	sint32 status;   /* if file is open for read, write, or not open */
 } aehlog_t;
 
 /*--------------------------------------------------------------------------
@@ -55,7 +55,7 @@ typedef struct {
  Return: aeh_RES_BAD if couldn't set file path
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_Create(const char *logpath, aehlog_t *aehlog);
+sint32 aehlog_Create(const char *logpath, aehlog_t *aehlog);
 
 /*--------------------------------------------------------------------------
  Flush and close file specified in aehlog (a file is opened when an aehlog read
@@ -77,12 +77,12 @@ void aehlog_delete(aehlog_t *aehlog);
          0 if file cannot be opened
          size of file in aehlog otherwise
 --------------------------------------------------------------------------*/
-long aehlog_getfsize(aehlog_t *aehlog);
+sint32 aehlog_getfsize(aehlog_t *aehlog);
 
 /*--------------------------------------------------------------------------
  Returns the current offset in the aehlog or -1 on error.
 --------------------------------------------------------------------------*/
-long aehlog_tell(aehlog_t *aehlog);
+sint32 aehlog_tell(aehlog_t *aehlog);
 
 /*--------------------------------------------------------------------------
  Seek to a given offset in the aehlog and check that it is the beginning of
@@ -98,7 +98,7 @@ long aehlog_tell(aehlog_t *aehlog);
           aeh_RES_BUG on bad offset (in file, but not a valid record),
 		  aeh_RES_BAD if bad arguments,
 --------------------------------------------------------------------------*/
-int aehlog_seek(aehlog_t *aehlog, long offset);
+sint32 aehlog_seek(aehlog_t *aehlog, sint32 offset);
 
 /*--------------------------------------------------------------------------
  Read info on a single crash from file; loop to read entire file.
@@ -112,7 +112,7 @@ int aehlog_seek(aehlog_t *aehlog, long offset);
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_readExceptionRecord(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int *ninst);
+sint32 aehlog_readExceptionRecord(aehlog_t *aehlog, aeh_buf_t *aehbuf, uint32 *ninst);
 
 /*--------------------------------------------------------------------------
  Write info on a single crash to file. Checks in file for identical crash
@@ -128,7 +128,7 @@ int aehlog_readExceptionRecord(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const unsigned int ninst, const unsigned long fmaxsize);
+sint32 aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const uint32 ninst, const uint32 fmaxsize);
 
 /*--------------------------------------------------------------------------
  Simple append info on a single crash to file (no checking in file for
@@ -143,14 +143,14 @@ int aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const unsigned int ninst);
+sint32 aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const uint32 ninst);
 
 /*--------------------------------------------------------------------------
  Read an aehbuf from a buf in memory in the format of an atvilog.bin file,
  i.e. of the sort created by aehlog_writetobuf().
  Returns number of bytes read or -1 on failure.
 --------------------------------------------------------------------------*/
-int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, int buflen);
+sint32 aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, sint32 buflen);
 
 /*--------------------------------------------------------------------------
  Write an aehlog to buf in memory in the format of an atvilog.bin file,
@@ -158,7 +158,7 @@ int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, 
  buf must be at least aehbuf->buflen + 12 bytes in length.
  Returns number of bytes written or -1 on failure.
 --------------------------------------------------------------------------*/
-int aehlog_writetobuf(const aeh_buf_t *aehbuf, const unsigned int ninst, char *buf, int buflen);
+sint32 aehlog_writetobuf(const aeh_buf_t *aehbuf, const uint32 ninst, char *buf, sint32 buflen);
 
 /*--------------------------------------------------------------------------
  Append info (consisting of one or more records packed together) to file.
@@ -174,6 +174,6 @@ int aehlog_writetobuf(const aeh_buf_t *aehbuf, const unsigned int ninst, char *b
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_appendMultExceptionRecords(aehlog_t *aehlog, const unsigned char *buf, const unsigned int buflen, const unsigned long fmaxsize);
+sint32 aehlog_appendMultExceptionRecords(aehlog_t *aehlog, const uint8 *buf, const size_t buflen, const size_t fmaxsize);
 
 #endif

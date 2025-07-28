@@ -19,6 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <windows.h>
 #include <tlhelp32.h> // needed for tool help declarations
+#include "types.h"
 
 // Type definitions for pointers to call tool help functions.
 typedef BOOL (WINAPI *MODULEWALK)(HANDLE hSnapshot, LPMODULEENTRY32 lpme);
@@ -31,5 +32,5 @@ typedef struct {
 	MODULEWALK  pModule32Next;
 } Toolhlp;
 
-int InitSnapshot(Toolhlp *tool);
+sint32 InitSnapshot(Toolhlp *tool);
 UNDECORATESYMNAME InitUnDecorateSymbolName();

@@ -333,6 +333,7 @@
     <ClInclude Include="..\h\dppack1.h" />
     <ClInclude Include="..\h\dpunpack.h" />
     <ClInclude Include="..\h\eclock.h" />
+    <ClInclude Include="..\h\types.h" />
     <ClInclude Include="..\src\win\h\ddprint.h" />
     <ClInclude Include="..\src\win\wipx\ipx2win.h" />
     <ClInclude Include="..\src\win\wipx\nw.h" />

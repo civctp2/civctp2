@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define regmo_STRLEN 64
 #define regmo_N_INIT 8
 
+#include "types.h"
+
 /*-------------------------------------------------------------------------
  Information known about a particular modem.
  Member name are the same as the registry key names.
@@ -44,13 +46,13 @@ typedef struct {
  The given array is filled with each installed modem's key.
  The return value is the number of keys placed in the array.
 --------------------------------------------------------------------------*/
-int regmo_enum(int *keys, int maxkeys);
+int regmo_enum(sint32 *keys, sint32 maxkeys);
 
 /*--------------------------------------------------------------------------
  Read the key'th modem definition from the Windows registry.
  Key is a value gotten from regmo_enum; usually, 0 <= key <= 10.
  Returns 0 on success, non-zero on failure.
 --------------------------------------------------------------------------*/
-int regmo_get(regmo_t * regmo, int key);
+int regmo_get(regmo_t * regmo, sint32 key);
 
 #endif

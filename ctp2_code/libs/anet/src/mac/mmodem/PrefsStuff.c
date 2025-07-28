@@ -36,8 +36,8 @@ OSErr	FindPrefs(FSSpec* where)
 	Str255	theString;
 	Str255	name;
 	FSSpec	spec;
-	short		foundVRefNum;
-	long		foundDirID;
+	sint16		foundVRefNum;
+	sint32		foundDirID;
 
 	// Look for the prefs in the folder
 	GetIndString(theString, kTransportPath, 1);
@@ -65,8 +65,8 @@ OSErr VerifyToolExists(char* toolName);
 OSErr VerifyToolExists(char* toolName)
 {
 	Str255	tempName;
-	short		index;
-	short		result;
+	sint16		index;
+	sint16		result;
 	OSErr		error = noErr;
 
 	result = CMGetProcID(toolName);
@@ -79,11 +79,11 @@ OSErr VerifyToolExists(char* toolName)
 
 OSErr CreateConfigRes(Ptr configPtr)
 {
-	short			ref;
+	sint16			ref;
 	FSSpec		prefs;
 	OSErr			error;
 	Handle		theStrings;
-	long			len;
+	sint32			len;
 	char*			where;
 
 	//	build the 'STR ' resource
@@ -126,7 +126,7 @@ OSErr CreateConfigRes(Ptr configPtr)
 
 OSErr CreateToolNameRes(StringPtr toolName)
 {
-	short			ref;
+	sint16			ref;
 	FSSpec		prefs;
 	OSErr			error;
 	Handle		theStrings;
@@ -171,10 +171,10 @@ OSErr GetConfig(Ptr config)
 {
 	OSErr			error = noErr;
 	FSSpec		where;
-	short			ref;
+	sint16			ref;
 	Handle		theString;
 	Ptr			temp = nil;
-	long			len;
+	sint32			len;
 
 	config[0] = '\0';											// Start without a name
 
@@ -209,7 +209,7 @@ OSErr GetToolname(char* toolName)
 {
 	OSErr			error = noErr;
 	FSSpec		where;
-	short			ref;
+	sint16			ref;
 	Handle		theString;
 
 	toolName[0] = '\0';													// Start without a name

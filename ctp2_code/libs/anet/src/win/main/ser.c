@@ -72,7 +72,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 **************************************************************************************/
 
 // modem signal when is no longer connected (translates to \r\nNO CARRIER\r\n)
-const unsigned char SIGNAL_HANGUP[] =
+const uint8 SIGNAL_HANGUP[] =
 							{0x0d, 0x0a, 0x4e, 0x4f, 0x20, 0x43, 0x41, 0x52,
                              0x52, 0x49, 0x45, 0x52, 0x0d, 0x0a};
 #if 0
@@ -108,9 +108,9 @@ const unsigned char SIGNAL_HANGUP[] =
 /*-----------------------------------------------------------------------
  Debugging stuff.
 -----------------------------------------------------------------------*/
-void printbytes(void *buf, char *msg, long len)
+void printbytes(void *buf, char *msg, sint32 len)
 {
-	int i;
+	sint32 i;
 	if (!buf) return;
 	if (msg) DPRINT(("%s ", msg));
 	for (i = 0; i < len; i++)
@@ -183,7 +183,7 @@ ser_t *ser_create(void)
  portname = "com1", "com2", etc.
  baud = 19200, 38400, 57600?
 -----------------------------------------------------------------------*/
-ser_result_t ser_config(ser_t *ser, long baud, const char * szPort)
+ser_result_t ser_config(ser_t *ser, sint32 baud, const char * szPort)
 {
 	serio_res_t	    err;
 
@@ -235,7 +235,7 @@ void ser_destroy(ser_t *ser)
  Returns ser_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
 
-ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert)
+ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, sint32 insert)
 
 {
   if (*adr == ser->myAdr  ) return ser_HDL_ME;
@@ -313,14 +313,14 @@ ser_result_t ser_hdlDestroy(ser_t *ser, ser_hdl_t hdl)
  Duh, I think this works.  Kee gave it to me.  Looks plausible, anyway.
  Is this really better than just adding the bytes together?
 -----------------------------------------------------------------------*/
-static unsigned char crc(unsigned char *ptr1, int len1)
+static uint8 crc(uint8 *ptr1, sint32 len1)
 {
-	short crc = 0;
-	int i, j;
+	sint16 crc = 0;
+	sint32 i, j;
 
 	for (i = 0; i < len1; i++)
 	{
-		crc = crc ^ (int) ptr1[i] << 8;
+		crc = crc ^ (sint32) ptr1[i] << 8;
 
 		for (j = 0; j < 8; ++j)
 		{
@@ -380,13 +380,13 @@ ser_result_t ser_put(ser_t *ser, void *buf, size_t len)
 	DPRINT(("ser_put: bodycrc %4x, len %d, first 2 bytes %02x %02x, last 5 bytes %02x %02x %02x %02x %02x\n",
 		hdr.bodycrc,
 		hdr.bodylen,
-		((unsigned char *)buf)[0],
-		((unsigned char *)buf)[1],
-		((unsigned char *)buf)[len-5],
-		((unsigned char *)buf)[len-4],
-		((unsigned char *)buf)[len-3],
-		((unsigned char *)buf)[len-2],
-		((unsigned char *)buf)[len-1]));
+		((uint8 *)buf)[0],
+		((uint8 *)buf)[1],
+		((uint8 *)buf)[len-5],
+		((uint8 *)buf)[len-4],
+		((uint8 *)buf)[len-3],
+		((uint8 *)buf)[len-2],
+		((uint8 *)buf)[len-1]));
 	return ser_RES_OK;
 }
 
@@ -489,8 +489,8 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 			} else {
 				/* check if got a modem not connected signal */
 				{	DWORD i;
-					int pos;
-					unsigned char *p;
+					sint32 pos;
+					uint8 *p;
 					pos = ser->sigpos;
 					for (i = 1, p = &(ser->rbuf[ser->end]); i <= dwReadLength; i++, p++) {
 						if (*p == SIGNAL_HANGUP[pos])  {
@@ -545,7 +545,7 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 {
     for (;;) {
-		int c;
+		sint32 c;
 		assert((0 <= ser->got) && (ser->got < sizeof(ser->pkt)));
 
 		//DPRINT(("ser_get: top: got = %d\n", ser->got));
@@ -564,8 +564,8 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 			ser->head = 0;
 			ser->len = n_received;
 			/* check if got a modem not connected signal */
-			{	unsigned char *p = &ser->rbuf[0];
-				int pos = ser->sigpos;
+			{	uint8 *p = &ser->rbuf[0];
+				sint32 pos = ser->sigpos;
 				for ( ; n_received--; p++) {
 					if (*p == SIGNAL_HANGUP[pos])  {
 						DPRINT(("ser_get: matched SH[%d]=%c; pos now %d\n", pos, *p, pos+1));
@@ -588,7 +588,7 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 		}
 		// Continue accumulating bytes of packet.
 		c = ser->rbuf[ser->head++];
-		((unsigned char *)&ser->pkt)[ser->got++] = c;
+		((uint8 *)&ser->pkt)[ser->got++] = c;
 
 		DPRINT(("ser_get: got char 0x%x, got now %d\n", c, ser->got));
 		// Do header processing.
@@ -605,7 +605,7 @@ ser_result_t ser_get(ser_t *ser, void *buf, size_t *len)
 			if (c != ((ser_HDR_FRAME0 + ser_HDR_FRAME1 + ser->pkt.hdr.bodylen) & 0xff))
 				ser->got = 0;			// no, just start over.
 		} else if ((size_t)(ser->got) >= sizeof(ser_hdr_t) + ser->pkt.hdr.bodylen) {
-			int c = crc(ser->pkt.body, ser->pkt.hdr.bodylen);
+			sint32 c = crc(ser->pkt.body, ser->pkt.hdr.bodylen);
 			ser->got = 0;
 			// Done with packet.  Does crc match?
 			DPRINT(("ser_get: bodycrc %4x, len %d, first 2 bytes %02x %02x, last 5 bytes %02x %02x %02x %02x %02x\n",

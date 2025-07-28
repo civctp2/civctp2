@@ -34,7 +34,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -45,13 +45,13 @@ dp_dprintf(
 	return len;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
 }
 
-int scorerep_test(void)
+sint32 scorerep_test(void)
 {
 	dp_result_t err;
 	dp_uid_t myUID;
@@ -61,7 +61,7 @@ int scorerep_test(void)
 	scorerep_t *rep;
 	scorerep_buf_t repbuf;
 	scorerep_player_t *player;
-	unsigned short bloblen;
+	uint16 bloblen;
 	char blob[scorerep_MAX_BLOBLEN];
 
 	/* create a rep */
@@ -70,7 +70,7 @@ int scorerep_test(void)
 
 	/* set my id and uid */
 	myId = 1;
-	myUID = (long) myId + 10000;
+	myUID = (sint32) myId + 10000;
 	err = scorerep_setSelf(rep, myId, myUID);
 	assert(!err);
 	assert(rep->id == myId);
@@ -78,7 +78,7 @@ int scorerep_test(void)
 
 	/* fill my score report with a few blobs */
 	for (hisId = myId; hisId < myId + 10; hisId++) {
-		hisUID = (long) hisId + 10000;
+		hisUID = (sint32) hisId + 10000;
 		blob[0] = dpGETSHORT_FIRSTBYTE(hisId);
 		blob[1] = dpGETSHORT_SECONDBYTE(hisId);
 		blob[2] = dpGETLONG_FIRSTBYTE(hisUID);
@@ -104,7 +104,7 @@ int scorerep_test(void)
 
 	/* set my id and uid */
 	myId = 1;
-	myUID = (long) myId + 10000;
+	myUID = (sint32) myId + 10000;
 	err = scorerep_setSelf(rep, myId, myUID);
 	assert(!err);
 	assert(rep->id == myId);
@@ -121,7 +121,7 @@ int scorerep_test(void)
 	for (hisId = myId; hisId < myId + 10; hisId++) {
 		player = (scorerep_player_t *)assoctab_subscript(rep->players, hisId);
 		assert(player);
-		hisUID = (long) hisId + 10000;
+		hisUID = (sint32) hisId + 10000;
 		assert(player->uid = hisUID);
 		assert(player->bloblen == 6);
 		assert(hisId == dpMAKESHORT(player->blob[0], player->blob[1]));
@@ -130,7 +130,7 @@ int scorerep_test(void)
 
 	/* convert it to a buffer with only my and his scores */
 	hisId = myId + 1;
-	hisUID = (long) hisId + 10000;
+	hisUID = (sint32) hisId + 10000;
 	memset(&repbuf, 0, sizeof(repbuf));
 	err = scorerep_toBuf(rep, 0, hisId, &repbuf);
 	assert(!err);
@@ -145,7 +145,7 @@ int scorerep_test(void)
 
 	/* set my id and uid */
 	myId = 1;
-	myUID = (long) myId + 10000;
+	myUID = (sint32) myId + 10000;
 	err = scorerep_setSelf(rep, myId, myUID);
 	assert(!err);
 	assert(rep->id == myId);
@@ -167,7 +167,7 @@ int scorerep_test(void)
 	assert(myUID == dpMAKELONG(player->blob[2], player->blob[3], player->blob[4], player->blob[5]));
 
 	hisId = myId + 1;
-	hisUID = (long) hisId + 10000;
+	hisUID = (sint32) hisId + 10000;
 	player = (scorerep_player_t *)assoctab_subscript(rep->players, hisId);
 	assert(player);
 	assert(player->uid = hisUID);
@@ -182,7 +182,7 @@ int scorerep_test(void)
 	return 0;
 }
 
-int main(void)
+sint32 main(void)
 {
 	if (scorerep_test()) {
 		printf("scorerep test failed!\n");

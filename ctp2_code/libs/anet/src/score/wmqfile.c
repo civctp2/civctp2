@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*--------------------------------------------------------------------------
  Selector function to pick out *.wmq from a directory for use with scandir()
 --------------------------------------------------------------------------*/
-static int is_wmqfile(const struct dirent *dirent)
+static sint32 is_wmqfile(const struct dirent *dirent)
 {
 	return wmqfile_iswmqfile(dirent->d_name);
 }
@@ -40,9 +40,9 @@ static int is_wmqfile(const struct dirent *dirent)
 /*--------------------------------------------------------------------------
  Returns 1 if <filename> looks like a wmq filename or 0 if not.
 --------------------------------------------------------------------------*/
-int wmqfile_iswmqfile(const char *filename)
+sint32 wmqfile_iswmqfile(const char *filename)
 {
-	int i;
+	sint32 i;
 
 	/* wmq filenames are in format ########.wmq or ########-##?#?.wmq
 	 * where the first 8 characters are the gmt date YYYYMMDD, optionally
@@ -73,10 +73,10 @@ int wmqfile_iswmqfile(const char *filename)
 dp_result_t wmqfile_forTime(time_t when, char *filename)
 {
 	struct tm *gmt = gmtime(&when);
-	long files_per_day;
-	int n_digits;
+	sint32 files_per_day;
+	sint32 n_digits;
 
-	files_per_day = (long)(86400 / wmqfile_ROLLOVER_TIME)
+	files_per_day = (sint32)(86400 / wmqfile_ROLLOVER_TIME)
 		+ ((86400 % wmqfile_ROLLOVER_TIME) ? 1 : 0);
 	if ((files_per_day > 1000) || (files_per_day < 1))
 		return dp_RES_BUG;
@@ -84,8 +84,8 @@ dp_result_t wmqfile_forTime(time_t when, char *filename)
 	            ((files_per_day <= 10) ? 1 :
 	             ((files_per_day <= 100) ? 2 : 3)));
 	if (n_digits > 0) {
-		int filenum;
-		filenum = ((long)(gmt->tm_hour * 3600 + gmt->tm_min*60 + gmt->tm_sec) /
+		sint32 filenum;
+		filenum = ((sint32)(gmt->tm_hour * 3600 + gmt->tm_min*60 + gmt->tm_sec) /
 				         wmqfile_ROLLOVER_TIME);
 		sprintf(filename, "%04d%02d%02d-%0*d.wmq", 1900+gmt->tm_year,
 			gmt->tm_mon+1, gmt->tm_mday, n_digits, filenum);
@@ -107,12 +107,12 @@ dp_result_t wmqfile_forTime(time_t when, char *filename)
 dp_result_t wmqfile_next(const char *dir, const char *file, char *nextfile)
 {
 	struct dirent **dirlist;
-	int n_match = 0;
+	sint32 n_match = 0;
 
 	n_match = scandir(dir, &dirlist, is_wmqfile, alphasort);
 	DPRINT(("wmqfile_next: scandir matched %d files in dir:%s\n", n_match, dir));
 	if (n_match > 0) {
-		int i;
+		sint32 i;
 
 		/* Start at last, look for first before or at <file>, return next */
 		for (i = n_match - 1; i >= 0; i--) {
@@ -150,12 +150,12 @@ dp_result_t wmqfile_next(const char *dir, const char *file, char *nextfile)
 dp_result_t wmqfile_prev(const char *dir, const char *file, char *prevfile)
 {
 	struct dirent **dirlist;
-	int n_match = 0;
+	sint32 n_match = 0;
 
 	n_match = scandir(dir, &dirlist, is_wmqfile, alphasort);
 	DPRINT(("wmqfile_prev: scandir matched %d files in dir:%s\n", n_match, dir));
 	if (n_match > 0) {
-		int i;
+		sint32 i;
 
 		/* Start at last, look for first before <file>, return it */
 		for (i = n_match-1; i >= 0; i--) {
@@ -185,7 +185,7 @@ dp_result_t wmqfile_prev(const char *dir, const char *file, char *prevfile)
 dp_result_t wmqfile_first(const char *dir, char *firstfile)
 {
 	struct dirent **dirlist;
-	int n_match = 0;
+	sint32 n_match = 0;
 
 	n_match = scandir(dir, &dirlist, is_wmqfile, alphasort);
 	DPRINT(("wmqfile_first: scandir matched %d files in dir:%s\n", n_match, dir));
@@ -212,7 +212,7 @@ dp_result_t wmqfile_first(const char *dir, char *firstfile)
 dp_result_t wmqfile_last(const char *dir, char *lastfile)
 {
 	struct dirent **dirlist;
-	int n_match = 0;
+	sint32 n_match = 0;
 
 	n_match = scandir(dir, &dirlist, is_wmqfile, alphasort);
 	DPRINT(("wmqfile_last: scandir matched %d files in dir:%s\n", n_match, dir));

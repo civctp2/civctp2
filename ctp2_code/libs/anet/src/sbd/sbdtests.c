@@ -36,7 +36,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -48,25 +48,25 @@ dp_dprintf(
 }
 #endif
 
-int pleaseQuit;
+sint32 pleaseQuit;
 
-static void signalQuit(int sig)
+static void signalQuit(sint32 sig)
 {
 	printf("Test timed out\n");
 	pleaseQuit = 1;
 }
 
-void main (int argc, char *argv[])
+void main (sint32 argc, char *argv[])
 {
 	sbdserv_t *sbdserv;
-	unsigned short port;
-	int npkts;
-	int pktsize;
+	uint16 port;
+	sint32 npkts;
+	sint32 pktsize;
 	char testbuf[sbd_MAXLEN];
-	int ncomplete;
-	int flags;
-	int i;
-	int timeout;
+	sint32 ncomplete;
+	sint32 flags;
+	sint32 i;
+	sint32 timeout;
 
 	if (argc <= 3) {
 		printf("Usage: %s <port> <npkts> <timeout> [pktsize]\n", argv[0]);
@@ -103,11 +103,11 @@ void main (int argc, char *argv[])
 	while (!pleaseQuit) {
 		fd_set rfds;
 		struct timeval tv;
-		int nsocks;
-		int sockmax;
-		int sock;
+		sint32 nsocks;
+		sint32 sockmax;
+		sint32 sock;
 		char buf[sbd_MAXLEN];
-		int len;
+		sint32 len;
 
 		tv.tv_sec = 10;
 		tv.tv_usec = 0;

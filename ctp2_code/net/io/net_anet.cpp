@@ -51,7 +51,7 @@ ActivNetIO::~ActivNetIO()
 		delete m_playerList.RemoveHead();
 	}
 
-    int i;
+	sint32 i;
 	for(i = 0; i < m_transports.GetSize(); i++) {
 		delete (dp_transport_t *)m_transports.Get(i);
 	}
@@ -293,7 +293,7 @@ ActivNetIO::Host(char* sessionName)
 
 	dp_result_t res = dpOpen(m_dp, &sess, anet_CreateSessionCallback, this);
 
-    return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
+	return (res == dp_RES_OK) ? NET_ERR_OK : NET_ERR_TRANSPORTERROR;
 }
 
 int dp_PASCAL anet_EnumSessionsCallback(dp_session_t *sDesc,

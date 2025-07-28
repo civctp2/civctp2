@@ -27,6 +27,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stddef.h>
 #include <time.h>
 #include <limits.h>
+#include "types.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -100,9 +101,9 @@ extern "C" {
  * real byte-swapping code gets turned on.
  */
 #if defined(SPARC) || defined(__POWERPC__)
-#define SwapBytes2(v)		((unsigned short) ((v) << 8) \
-								| (unsigned char) ((v) >> 8))
-#define SwapBytes4(v)		((unsigned long) (SwapBytes2(v) << 16) \
+#define SwapBytes2(v)		((uint16) ((v) << 8) \
+								| (uint8) ((v) >> 8))
+#define SwapBytes4(v)		((uint32) (SwapBytes2(v) << 16) \
 								| SwapBytes2((v) >> 16))
 #define dp_MUSTSWAP
 #else
@@ -112,23 +113,23 @@ extern "C" {
 #endif
 
 /* Construct portable multibyte representation of short integers */
-#define dpGETSHORT_FIRSTBYTE(s) (unsigned char)((s) & 0xff)
-#define dpGETSHORT_SECONDBYTE(s) (unsigned char)(((s) >> 8) & 0xff)
+#define dpGETSHORT_FIRSTBYTE(s) (uint8)((s) & 0xff)
+#define dpGETSHORT_SECONDBYTE(s) (uint8)(((s) >> 8) & 0xff)
 
 /* Construct portable multibyte representation of long integers */
-#define dpGETLONG_FIRSTBYTE(s)  (unsigned char)((s) & 0xff)
-#define dpGETLONG_SECONDBYTE(s) (unsigned char)(((s) >> 8) & 0xff)
-#define dpGETLONG_THIRDBYTE(s)  (unsigned char)(((s) >> 16) & 0xff)
-#define dpGETLONG_FOURTHBYTE(s) (unsigned char)(((s) >> 24) & 0xff)
+#define dpGETLONG_FIRSTBYTE(s)  (uint8)((s) & 0xff)
+#define dpGETLONG_SECONDBYTE(s) (uint8)(((s) >> 8) & 0xff)
+#define dpGETLONG_THIRDBYTE(s)  (uint8)(((s) >> 16) & 0xff)
+#define dpGETLONG_FOURTHBYTE(s) (uint8)(((s) >> 24) & 0xff)
 
 /* Retrieve short integers from portable multibyte representation */
-#define dpMAKESHORT(first,second) ((unsigned char)(first) |\
-								 (((unsigned short)((unsigned char)(second)))<<8))
+#define dpMAKESHORT(first,second) ((uint8)(first) |\
+								 (((uint16)((uint8)(second)))<<8))
 
 /* Retrieve long integers from portable multibyte representation */
 #define dpMAKELONG(first,second,third,fourth) (   \
-		(unsigned long)dpMAKESHORT(first,second) |\
-		((unsigned long)dpMAKESHORT(third, fourth)) << 16)
+		(uint32)dpMAKESHORT(first,second) |\
+		((uint32)dpMAKESHORT(third, fourth)) << 16)
 
 /* Structure members that need to be byte-aligned have PACK after them
  * for benefit of gcc.  Makefile will define PACK in that case.
@@ -231,25 +232,25 @@ typedef dp_char_t char_t;	/* for the moment - will go away */
 typedef struct {
 
 	DP_ALIAS(char, dummy, dwSize);	/* used to be hMaster; now in dp_t */
-	unsigned char adrMaster[dp_MAX_ADR_LEN];	/*  Address needed to establish comm layer connection. */
+	uint8 adrMaster[dp_MAX_ADR_LEN];	/*  Address needed to establish comm layer connection. */
 	dpid_t		masterPseudoplayer;
 	/*  Only allow connections to sessions with the same sessionType. */
 	DP_ALIAS3(dp_species_t, sessionType, guidSession, guidApplication);
 	/*  Random number chosen by library when creating a session. */
 	DP_ALIAS(dp_karma_t, karma, dwSession);
-	/* short		maxPlayers;*/
-	DP_ALIAS(short,	maxPlayers, dwMaxPlayers);
-	/* short		currentPlayers; */
-	DP_ALIAS(short,	currentPlayers, dwCurrentPlayers);
-	DP_ALIAS(short,	flags, dwFlags);
+	/* sint16		maxPlayers;*/
+	DP_ALIAS(sint16,	maxPlayers, dwMaxPlayers);
+	/* sint16		currentPlayers; */
+	DP_ALIAS(sint16,	currentPlayers, dwCurrentPlayers);
+	DP_ALIAS(sint16,	flags, dwFlags);
 	/* char_t		sessionName[dp_SNAMELEN]; */
 	DP_ALIAS3(dp_char_t, sessionName[dp_SNAMELEN], szSessionName[dp_SNAMELEN], lpszSessionNameA[dp_SNAMELEN]);
 	char		szUserField[dp_USERFIELDLEN];	/*  Availible for user data. */
 	char		szPassword[dp_PASSWORDLEN];		/*  Not supported yet. */
-	long		dwReserved1;
-	long		dwUser1;						/*  Availible for user data. */
+	sint32		dwReserved1;
+	sint32		dwUser1;						/*  Availible for user data. */
 #ifdef dp_ANET2
-	unsigned char	reserved2[dp_MAX_ADR_LEN+2];
+	uint8	reserved2[dp_MAX_ADR_LEN+2];
 #endif
 } PACK dp_session_t;	/* 83 bytes + 2 byte header */
 
@@ -266,18 +267,18 @@ typedef struct {
 typedef struct {
 	DP_ALIAS(dpid_t, id, dpId);
 	dp_karma_t	karma;
-	unsigned char	adr[dp_MAX_ADR_LEN];
+	uint8	adr[dp_MAX_ADR_LEN];
 	char			name[dp_PNAMELEN];
 #ifdef dp_ANET2
-	unsigned char bloblen;
-	unsigned char blob[dp_MAX_PLAYERBLOB_LEN];	/* game-specific info */
+	uint8 bloblen;
+	uint8 blob[dp_MAX_PLAYERBLOB_LEN];	/* game-specific info */
 #endif
 } PACK dp_playerId_t;
 
 /* Structure to describe version info. */
 typedef struct {
-	unsigned short major;
-	unsigned short minor;
+	uint16 major;
+	uint16 minor;
 } PACK dp_version_t;
 
 /* Structure to describe an installed game.
@@ -295,8 +296,8 @@ typedef struct {
 	char *cwd;					/* Directory to be in when launching game */
 	char *shellOpts;			/* Options for netshell */
 	dp_species_t sessionType;	/* Session type of the game */
-	unsigned short platform;	/* OS, accelerator cards, etc. */
-	unsigned char language;		/* e.g, English, French, Hindi, etc. */
+	uint16 platform;	/* OS, accelerator cards, etc. */
+	uint8 language;		/* e.g, English, French, Hindi, etc. */
 	dp_version_t current;		/* installed version # */
 	dp_version_t latest;		/* latest published version # */
 } dp_appParam_t;
@@ -369,7 +370,7 @@ typedef struct dp_groupId_s {
 typedef struct {
 	size_t len;			/* let them be huge */
 	dpid_t id;
-	unsigned short key;
+	uint16 key;
 	void *data;			/* only sent on local machine, ptrs ok */
 } PACK dp_user_playerData_packet_t;
 
@@ -399,9 +400,9 @@ typedef struct {
 	char signature[comm_DRIVER_SIGLEN];
 	size_t recordLen;				/* sizeof(comm_driverInfo_t) */
 	char name[comm_DRIVER_NAMELEN];/* Name to present to user */
-	short version;					/* Major, minor rev. in high, low byte */
-	short capabilities;			/* What driver can do/wants to do */
-	short needs;					/* What fields in commInitReq_t to fill in */
+	sint16 version;					/* Major, minor rev. in high, low byte */
+	sint16 capabilities;			/* What driver can do/wants to do */
+	sint16 needs;					/* What fields in commInitReq_t to fill in */
 } PACK comm_driverInfo_t;
 
 /* Special value for commInitReq_t.portnum */
@@ -435,20 +436,20 @@ typedef struct {
 
 typedef struct {			/* Request (filled in by caller) */
 	size_t reqLen;			/* Sizeof(commInitReq_t) */
-	long sessionId;		/* Random number chosen at initial startup */
-	long portnum;
-	long baud;
-	long baseadr;          /* ignored by Windows */
-	long hwirq;            /* ignored by Windows */
+	sint32 sessionId;		/* Random number chosen at initial startup */
+	sint32 portnum;
+	sint32 baud;
+	sint32 baseadr;          /* ignored by Windows */
+	sint32 hwirq;            /* ignored by Windows */
 	size_t swint;          /* ignored by Windows */
 	const char *phonenum;
 	const char *modeministr;
-	long flags;			/* controls whether to dial and/or test */
-	long dialing_method;	/* parameter to HMSetDialingMethod */
+	sint32 flags;			/* controls whether to dial and/or test */
+	sint32 dialing_method;	/* parameter to HMSetDialingMethod */
 } PACK commInitReq_t;		/* Copy of commInitReq_t in commapi.h */
 
 typedef struct {
-	int portnum;			/* Value for commInitReq->portnum (e.g. 0) */
+	sint32 portnum;			/* Value for commInitReq->portnum (e.g. 0) */
 	char name[64];			/* Name to present to user (e.g. COM1) */
 } commPortName_t;
 
@@ -462,8 +463,8 @@ typedef struct {
 typedef struct {
 #if defined(__MWERKS__)   /* Codewarrior */
 	char fname[120];
-	long vRefNum;
-	long dirID;
+	sint32 vRefNum;
+	sint32 dirID;
 #else
 	char fname[128];
 #endif
@@ -474,17 +475,17 @@ typedef struct {
  * dpEnumServersEx(), and by the Java interface.
  */
 typedef struct dp_serverInfo_s {
-	short len;						/* length of this structure */
-	short rtt_ms_avg;				/* Average round trip time, millisec */
-	short loss_percent;				/* Average packet loss */
-	short cur_users;				/* people currently connected */
-	short max_users;				/* max # allowed to connect */
+	sint16 len;						/* length of this structure */
+	sint16 rtt_ms_avg;				/* Average round trip time, millisec */
+	sint16 loss_percent;				/* Average packet loss */
+	sint16 cur_users;				/* people currently connected */
+	sint16 max_users;				/* max # allowed to connect */
 
 	char hostname[64];				/* ASCII server name (often hostname) */
 	dp_species_t sessType;			/* session type given in dpEnumServersEx()*/
-	short cur_sessTypeUsers;		/* people currently in sessType sessions */
-	short cur_games;				/* games currently running */
-	short cur_sessTypeGames;		/* games of sessType currently running */
+	sint16 cur_sessTypeUsers;		/* people currently in sessType sessions */
+	sint16 cur_games;				/* games currently running */
+	sint16 cur_sessTypeGames;		/* games of sessType currently running */
 	char reserved[16];				/* for internal use */
 } dp_serverInfo_t;
 
@@ -506,9 +507,9 @@ typedef struct {
  * Can't be completely declared in C; some manual unpacking required.
  */
 typedef struct {
-	short nScoreTypes;
-	short scoreIds[1 /* nScoreTypes */];	/* variable length */
-	long scores[1 /* nScoreTypes */ ];		/* variable length */
+	sint16 nScoreTypes;
+	sint16 scoreIds[1 /* nScoreTypes */];	/* variable length */
+	sint32 scores[1 /* nScoreTypes */ ];		/* variable length */
 } PACK dp_scoreInfo_t;
 
 /* The kinds of objects that can be monitored with dpRequestObjectDeltas(). */
@@ -536,10 +537,10 @@ typedef union {
 #define dp_OBJECTDELTA_FLAG_INOPENSESS 2	/* player in session hosted or joined by this machine */
 #define dp_OBJECTDELTA_FLAG_ISHOST 4	/* player is master of session */
 typedef struct {
-	short pktloss;		/* player deltas include a loss in percent */
-	short latency;     /* player deltas include a latency in ms */
+	sint16 pktloss;		/* player deltas include a loss in percent */
+	sint16 latency;     /* player deltas include a latency in ms */
 
-	long flags;		/* one or more of dp_OBJECTDELTA_FLAG_* */
+	sint32 flags;		/* one or more of dp_OBJECTDELTA_FLAG_* */
 
 	/* If an object is being created, status = dp_RES_CREATED.
 	 * If an object is being changed, status = dp_RES_CHANGED.
@@ -551,11 +552,11 @@ typedef struct {
 	 * For sessions, key is {dp_KEY_SESSIONS, reserved bytes...}
 	 * For servers,  key is {dp_KEY_SERVERPINGS, reserved bytes...}
 	 */
-	short keylen;
+	sint16 keylen;
 	char key[dp_KEY_MAXLEN];/* long key of context for following data */
 
 	/* Subkey is reserved. */
-	short subkeylen;
+	sint16 subkeylen;
 	char subkey[dp_KEY_MAXLEN];
 
 	/* For players,  data is dp_playerId_t
@@ -582,7 +583,7 @@ typedef struct {
 typedef struct {
 	dp_uid_t	uid;		/* dp_UID_NONE unless reason is dp_RES_OK */
 	dp_result_t 	reason;
-	unsigned long	reserved;	/* for future use */
+	uint32	reserved;	/* for future use */
 } dp_account_packet_t;
 #endif // dp_ANET2
 
@@ -590,33 +591,39 @@ typedef struct {
 
 /*------------------------------------------------------------------------
  Callback used to list servers and the round trip delay to them.
+ Still use long instead of sint32 for compatibilty with games that have
+ no source available. Then at least the Anet library can be replaced.
 ------------------------------------------------------------------------*/
-typedef int (dp_FAR dp_PASCAL *dpEnumServersCallback_t) (const char *hostname, long roundtrip_ms,long *pTimeout,long flags,void *context);
+typedef sint32 (dp_FAR dp_PASCAL *dpEnumServersCallback_t) (const char *hostname, long roundtrip_ms, long *pTimeout, long flags, void *context);
 
 /* Same thing, but returns dp_serverInfo_t, too */
-typedef int (dp_FAR dp_PASCAL *dpEnumServersExCallback_t)(const char *hostname, long roundtrip_ms,dp_serverInfo_t *server,long *pTimeout,long flags,
+typedef sint32 (dp_FAR dp_PASCAL *dpEnumServersExCallback_t)(const char *hostname, long roundtrip_ms, dp_serverInfo_t *server, long *pTimeout, long flags,
 void *context);
 
 /*------------------------------------------------------------------------
  Callback used for measuring round trip delay.
 ------------------------------------------------------------------------*/
-typedef void (dp_FAR dp_PASCAL *dp_ping_callback_t)(dp_karma_t karma, long avg_ms, int loss_pct);
+typedef void (dp_FAR dp_PASCAL *dp_ping_callback_t)(dp_karma_t karma, long avg_ms, sint32 loss_pct);
 
 /*------------------------------------------------------------------------
  Function type called for each session enumerated or created.
+ Still use long instead of sint32 for compatibilty with games that have
+ no source available. Then at least the Anet library can be replaced.
 ------------------------------------------------------------------------*/
-typedef int (dp_FAR dp_PASCAL *dpEnumSessionsCallback_t)(dp_session_t *sDesc,long *pTimeout,long flags,void *context);
+typedef sint32 (dp_FAR dp_PASCAL *dpEnumSessionsCallback_t)(dp_session_t *sDesc, long *pTimeout, long flags, void *context);
 
 /*----------------------------------------------------------------------
  Function type called when a connection is opened or closed.
 ----------------------------------------------------------------------*/
-typedef void (dp_FAR dp_PASCAL *dpOpenConnCallback_t)(void *addr, int len,
-	int n_conns, dp_result_t state, char *user, char *pass, void *context);
+typedef void (dp_FAR dp_PASCAL *dpOpenConnCallback_t)(void *addr, sint32 len,
+	sint32 n_conns, dp_result_t state, char *user, char *pass, void *context);
 
 /*------------------------------------------------------------------------
  Function type called for each player enumerated or created.
  The flags argument is used to indicate whether the player is on this
  machine or not.
+ Still use long instead of sint32 for compatibilty with games that have
+ no source available. Then at least the Anet library can be replaced.
 ------------------------------------------------------------------------*/
 #define dp_EPC_FLAGS_LOCAL 1
 #define dp_EPC_FLAGS_REMOTE 2
@@ -647,22 +654,22 @@ typedef void (dp_FAR dp_PASCAL *dpEnumAppCallback_t)(dp_appParam_t *appParam, vo
  (this starts at 0 and slowly increases to somewhere between 2 and 10.)
  Return value should be 0 to abort, non-zero to continue.
 -------------------------------------------------------------------------*/
-typedef int (dp_FAR dp_PASCAL *dpCommThawCallback_t)(int status, void *context);
+typedef sint32 (dp_FAR dp_PASCAL *dpCommThawCallback_t)(sint32 status, void *context);
 
 /* For dpGetCaps() */
 
 #define dp_CAPS_FLAGS_ISHOST 1	/* set if calling program is the host */
 typedef struct {
-    long dwSize;
-    long dwFlags;
-    long dwHeaderLength;
-    long dwHundredBaud;
-    long dwLatency;
-    long dwMaxBufferSize;
-    long dwMaxLocalPlayers;
-    long dwMaxPlayers;
-    long dwMaxQueueSize;
-    long dwPktLoss;
+    sint32 dwSize;
+    sint32 dwFlags;
+    sint32 dwHeaderLength;
+    sint32 dwHundredBaud;
+    sint32 dwLatency;
+    sint32 dwMaxBufferSize;
+    sint32 dwMaxLocalPlayers;
+    sint32 dwMaxPlayers;
+    sint32 dwMaxQueueSize;
+    sint32 dwPktLoss;
 } dp_caps_t;
 
 #ifdef dp_ANET2
@@ -689,7 +696,7 @@ typedef struct {
  To get the average number of units waiting, divide sum_waiting by num_waiting.
 -------------------------------------------------------------------------*/
 typedef struct {
-	long in,
+	sint32 in,
 		 out,
 		 dropped,
 		 waiting,
@@ -773,7 +780,7 @@ typedef struct dp_s {
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnumServers(
 	dp_t *dp,
-	long timeout,				/* How long in milliseconds to wait. */
+	sint32 timeout,				/* How long in milliseconds to wait. */
 	dpEnumServersCallback_t cb,
 	void *context);
 
@@ -787,7 +794,7 @@ DP_API dp_result_t DP_APIX dpEnumServers(
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnumServersEx(
 	dp_t *dp,
-	long timeout,				/* How long in milliseconds to wait. */
+	sint32 timeout,				/* How long in milliseconds to wait. */
 	dp_species_t sessType,
 	dpEnumServersExCallback_t cb,
 	void *context);
@@ -800,7 +807,7 @@ DP_API dp_result_t DP_APIX dpEnumServersEx(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetClocksPerSec(
 	dp_t *dp,
-	int cps);
+	sint32 cps);
 
 /*----------------------------------------------------------------------
  Sets a callback to be called for opening and closing of connections.
@@ -845,7 +852,7 @@ DP_API dp_result_t DP_APIX dpCreate(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpDestroy(
 	dp_t *dp,
-	int flags);
+	sint32 flags);
 
 /*--------------------------------------------------------------------------
  Convert an ASCII hostname into a binary address.
@@ -923,7 +930,7 @@ DP_API dp_result_t DP_APIX dpGetSessionDesc(
 DP_API dp_result_t DP_APIX dpSetSessionDesc(
 	dp_t *dp,
 	const dp_session_t *buf,
-	long flags);
+	sint32 flags);
 
 /*------------------------------------------------------------------------
  Retrieve the capabilities of the currently loaded transport,
@@ -934,7 +941,7 @@ DP_API dp_result_t DP_APIX dpSetSessionDesc(
 DP_API dp_result_t DP_APIX dpGetCaps(
 	dp_t *dp,
 	dp_caps_t *info,
-	long flags);
+	sint32 flags);
 
 /*----------------------------------------------------------------------
  Retrieve the capabilities of the currently loaded transport,
@@ -947,7 +954,7 @@ DP_API dp_result_t DP_APIX dpGetPlayerCaps(
 	dp_t *dp,
 	dpid_t id,
 	dp_caps_t *info,
-	long flags);
+	sint32 flags);
 
 /*************************** Security ******************************/
 
@@ -1031,7 +1038,7 @@ DP_API dp_result_t DP_APIX dpSend(
 	dp_t  *dp,
 	dpid_t idFrom,
 	dpid_t idTo,
-	int flags,
+	sint32 flags,
 	void *buffer,
 	size_t size);
 
@@ -1066,7 +1073,7 @@ DP_API dp_result_t DP_APIX dpReceive(
 	dp_t   *dp,
 	dpid_t *idFrom,
 	dpid_t *idTo,
-	int    flags,
+	sint32    flags,
 	void *buffer,
 	size_t *size);
 
@@ -1123,7 +1130,7 @@ DP_API dp_result_t DP_APIX dpEnumSessions(
 	dp_t *dp,
 	dp_session_t *sDesc,
 	char *mhn,					/* must be NULL */
-	long timeout,				/* How long in milliseconds to wait. */
+	sint32 timeout,				/* How long in milliseconds to wait. */
 	dpEnumSessionsCallback_t cb,
 	void *context);
 
@@ -1170,9 +1177,9 @@ DP_API dp_result_t DP_APIX dpEnumSessions(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 	dp_t *dp,
-	int monitor,		/* TRUE to start, FALSE to stop */
+	sint32 monitor,		/* TRUE to start, FALSE to stop */
 	const char *key,
-	int keylen);
+	sint32 keylen);
 
 /*------------------------------------------------------------------------
  Set the intervals used by the latency measurement system.
@@ -1197,8 +1204,8 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetPingIntervals(
 	dp_t *dp,
-	int piggybackPingIntervalMS,
-	int forcedPingIntervalMS);
+	sint32 piggybackPingIntervalMS,
+	sint32 forcedPingIntervalMS);
 
 /*------------------------------------------------------------------------
  Convert a session description to its unique id (aka key).
@@ -1213,7 +1220,7 @@ DP_API dp_result_t DP_APIX dpGetSessionId(
 	dp_t *dp,
 	const dp_session_t *sess,	/* session to convert */
 	char *id,					/* resulting id stored here */
-	int *pidlen);				/* length of resulting id stored here */
+	sint32 *pidlen);				/* length of resulting id stored here */
 
 /*----------------------------------------------------------------------
  Declare that the current session is a lobby.
@@ -1226,7 +1233,7 @@ DP_API dp_result_t DP_APIX dpGetSessionId(
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpDeclareLobby(
 	dp_t *dp,
-	int flags);
+	sint32 flags);
 
 /************************ Player Management ******************************/
 
@@ -1253,7 +1260,7 @@ DP_API dp_result_t DP_APIX dpDestroyPlayer(
 /*------------------------------------------------------------------------
  Return the number of players in the current session.
 ------------------------------------------------------------------------*/
-DP_API int DP_APIX dpNumPlayers(
+DP_API sint32 DP_APIX dpNumPlayers(
 	dp_t *dp);
 
 /*------------------------------------------------------------------------
@@ -1337,7 +1344,7 @@ DP_API dp_result_t DP_APIX dpEnumPlayers(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	);
 
 /*------------------------------------------------------------------------
@@ -1351,7 +1358,7 @@ DP_API dp_result_t DP_APIX dpEnumPlayersEx(
 	dp_session_t *s,
 	dpEnumPlayersExCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	);
 
 /*------------------------------------------------------------------------
@@ -1362,7 +1369,7 @@ DP_API dp_result_t DP_APIX dpEnumPlayersEx(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnableNewPlayers(
 	dp_t *dp,
-	int enable);
+	sint32 enable);
 
 /*------------------------------------------------------------------------
  Measure round-trip transmission time to a player or the gamehost.
@@ -1373,7 +1380,7 @@ DP_API dp_result_t DP_APIX dpEnableNewPlayers(
 DP_API dp_result_t DP_APIX dpPingUser(
 	dp_t *dp,
 	dpid_t dest,
-	short karma,
+	sint16 karma,
 	dp_ping_callback_t cb);
 
 /************************ Group Management *******************************/
@@ -1410,7 +1417,7 @@ DP_API dp_result_t DP_APIX dpEnumGroups(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	);
 
 /*------------------------------------------------------------------------
@@ -1444,7 +1451,7 @@ DP_API dp_result_t DP_APIX dpEnumGroupPlayers(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	);
 
 /******************** Player Variable Management *************************/
@@ -1460,10 +1467,10 @@ DP_API dp_result_t DP_APIX dpEnumGroupPlayers(
 DP_API dp_result_t DP_APIX dpSetPlayerData(
 	dp_t   *dp,
 	dpid_t idPlayer,
-	int    key,
+	sint32    key,
 	void   *buf,
 	size_t buflen,
-	long   flags);
+	sint32   flags);
 
 /*------------------------------------------------------------------------
  Send a given player's variable 'key' to a player (or to everybody,
@@ -1474,7 +1481,7 @@ DP_API dp_result_t DP_APIX dpSetPlayerData(
 DP_API dp_result_t DP_APIX dpSendPlayerData(
 	dp_t   *dp,
 	dpid_t idPlayer,
-	int    key,
+	sint32    key,
 	dpid_t idTo);
 
 /*------------------------------------------------------------------------
@@ -1488,10 +1495,10 @@ DP_API dp_result_t DP_APIX dpSendPlayerData(
 DP_API dp_result_t DP_APIX dpGetPlayerData(
 	dp_t   *dp,
 	dpid_t idPlayer,
-	int    key,
+	sint32    key,
 	void   *buf,
 	size_t *pbuflen,
-	long   flags);
+	sint32   flags);
 
 /************************** Miscellaneous ********************************/
 
@@ -1539,7 +1546,7 @@ DP_API dp_result_t DP_APIX dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallba
  Returns dp_RES_OK when finished,
          dp_RES_BUSY while still shutting down.
 ----------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_after, int flags);
+DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_after, sint32 flags);
 
 #define dpReportScoreStart _dax7
 #define dpReportScore2 _dax8
@@ -1554,7 +1561,7 @@ DP_API dp_result_t DP_APIX dpShutdown(dp_t *dp, clock_t timeout, clock_t wait_af
  call dpReportScore2 to report as many scores as you like, then finally
  call dpReportScoreEnd to finish sending the block of scores.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag);
+DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, sint32 flag);
 
 #define dp_SCOREID_SCORE	0x1101	/* weighted score */
 #define dp_SCOREID_RANK 	0x1103 	/* rank of player by weighted score */
@@ -1565,7 +1572,7 @@ DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag);
 /*-------------------------------------------------------------------------
  Old score reporting function, dummied out.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, long scoreVal);
+DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, sint32 scoreId, sint32 scoreVal);
 
 /*-------------------------------------------------------------------------
  Report the score(s) for player dpId.
@@ -1586,7 +1593,7 @@ DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, lo
 
  scoreId should be zero.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, const char *scorebuf, int scorelen);
+DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, sint32 scoreId, const char *scorebuf, sint32 scorelen);
 
 /*-------------------------------------------------------------------------
  End a score report.
@@ -1605,7 +1612,7 @@ DP_API dp_result_t DP_APIX dpReportScoreEnd(dp_t *dp);
  driver.
  May return other error codes as well; depends on the driver being used.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpGetParameterLong(dp_t *dp, int paramId, long *pparamVal);
+DP_API dp_result_t DP_APIX dpGetParameterLong(dp_t *dp, sint32 paramId, sint32 *pparamVal);
 
 /*----------------------------------------------------------------------
  Read description out of the DLL file named by 'path'.
@@ -1638,7 +1645,7 @@ DP_API dp_result_t DP_APIX dpGetCurrentTransportInfo(
  ports is filled with descriptions of the available ports.
  *pnPorts is set to the number of portnames placed in the ports array.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, int maxports, int *pnPorts);
+DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, sint32 maxports, sint32 *pnPorts);
 
 /*----------------------------------------------------------------------
  Calls the given function once for each transport available.
@@ -1725,7 +1732,7 @@ DP_API dp_result_t DP_APIX dpLaunchApp2(dp_appParam_t *appParam, dpLaunchApp_res
  Searches for stub and if it exists, notifies it of pending exit and if it
   wants NetShell relaunched (yes if status is zero) then exits application.
 --------------------------------------------------------------------------*/
-DP_API void DP_APIX dpExitFromApp(int status);
+DP_API void DP_APIX dpExitFromApp(sint32 status);
 #else
 #define dpExitFromApp(s) exit(s)
 #endif
@@ -1750,7 +1757,7 @@ DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char
 /*--------------------------------------------------------------------------
  Records assertion failure to logfile.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportAssertionFailure(int lineno, char *file, char *linetxt);
+DP_API dp_result_t DP_APIX dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt);
 
 #include <assert.h>
 #ifdef _WIN32
@@ -1780,7 +1787,7 @@ DP_API dp_result_t DP_APIX dpReportAssertionFailure(int lineno, char *file, char
 -------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpGetStats(
 	dp_t *dp,
-	int statkind,
+	sint32 statkind,
 	dp_stat_t *buf,
 	size_t buflen);
 #endif
@@ -1795,14 +1802,14 @@ DP_API dp_result_t DP_APIX dpGetStats(
  If any field is too long, it is truncated.
  Returns length used.
 ----------------------------------------------------------------------*/
-DP_API int DP_APIX dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_session_t *p, char *buf);
+DP_API size_t DP_APIX dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_session_t *p, char *buf);
 
 /*----------------------------------------------------------------------
  Unpack the compact, byte-order-uniform version of a dp_session_t
  into the fluffy form we use internally.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-DP_API int DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const char *buf, size_t buflen, dp_session_t *p);
+DP_API sint32 DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, size_t buflen, dp_session_t *p);
 
 #endif
 
@@ -1834,7 +1841,7 @@ DP_API const char * DP_APIX dpini_GetFile(void);
  Return non-zero on any error.
 --------------------------------------------------------------------------*/
 
-DP_API int DP_APIX dpini_findSection(
+DP_API sint32 DP_APIX dpini_findSection(
 	char *sectionWant);	/* Section we want, minus "[" and "]"; case-blind */
 
 /*--------------------------------------------------------------------------
@@ -1853,7 +1860,7 @@ DP_API int DP_APIX dpini_findSection(
 
 DP_API const char * DP_APIX dpini_readParameter(
 	char *paramWant,	/* Parameter we want, minus "="; case-insensitive */
-	int	  verbatim);	/* Return everything after the "=" (else clean)? */
+	sint32	  verbatim);	/* Return everything after the "=" (else clean)? */
 
 /************************** Debug Log File ********************************/
 
@@ -1890,7 +1897,7 @@ DP_API void DP_APIX dp_flushLog(void);
  call with -1 to decrease debug printing level (i.e. show less info);
  call with 0 to disable all debug printing.
 --------------------------------------------------------------------------*/
-DP_API void DP_APIX dp_enableDebugPrint(int enable);
+DP_API void DP_APIX dp_enableDebugPrint(sint32 enable);
 
 #define dp_LOG_FILE_NONE ((FILE *)0xffffffff)
 
@@ -1934,7 +1941,7 @@ DP_API void DP_APIX dp_setLogFname(const char *fname);
  Don't use dp_dprintf directly; use the DPRINT macro instead.
 --------------------------------------------------------------------------*/
 
-DP_API int DP_APIX dp_dprintf(
+DP_API sint32 DP_APIX dp_dprintf(
 	const char *	__format,	/* printf-style format (or NULL) */
 	...);						/* printf-style arguments on stack (if any) */
 

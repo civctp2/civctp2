@@ -132,7 +132,7 @@ void printAdr(ip_adr_t adr)
 static void dprint_peertab(assoctab_t *p)
 {
 #if defined(DPRNT) || defined(DEBUG)
-	int i;
+	sint32 i;
 	for (i=0; i < p->n_used; i++) {
 		assoctab_item_t	*ip			 = assoctab_getkey(p, i);
 		trump_hdl_t		h			 = (trump_hdl_t) ip->key;
@@ -170,13 +170,13 @@ static void dprint_peertab(assoctab_t *p)
  There is no upper bound on handles.
  Returns trump_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
-trump_hdl_t trump_adr2hdl(ip_adr_t remoteadr, short localport, short remoteport, int insert)
+trump_hdl_t trump_adr2hdl(ip_adr_t remoteadr, sint16 localport, sint16 remoteport, sint32 insert)
 {
 	// Search peer tab.  If not found, append it.
 	trump_hdl_t h;
 	ip_adr_t *peer;
-	int i;
-	unsigned int lport;
+	sint32 i;
+	uint32 lport;
 	OSStatus	err;
 
 #if 0
@@ -247,7 +247,7 @@ comm_status_t trump_hdl2adr(trump_hdl_t hdl, ip_adr_t *adr)
  *	Return FALSE on error.
  */
 
-int
+sint32
 commNoOp(
 	commNoOpReq_t *		req,		// Request (or NULL)
 	commNoOpResp_t *	resp)		// Response (or NULL)
@@ -288,7 +288,7 @@ Boolean commNeedsUI(commInitReq_t* req) {
  *	Return FALSE on error.
  */
 
-int
+sint32
 commInit(
 	commInitReq_t *		req,		// Request (or NULL)
 	commInitResp_t *	resp)		// Response (or NULL)
@@ -466,7 +466,7 @@ commInit(
  *	Return FALSE on error.
  */
 
-int
+sint32
 commTerm(
 	commTermReq_t *		req,		// Request (or NULL)
 	commTermResp_t *	resp)		// Response (or NULL)
@@ -482,7 +482,7 @@ commTerm(
 		resp = &respDummy;
 
 	if (peertab) {
-		int i;
+		sint32 i;
 		for (i=0; i<peertab->n_used; i++) {
 			assoctab_item_t *pe = assoctab_getkey(peertab, i);
 			if (!pe)
@@ -513,7 +513,7 @@ commTerm(
  *	Return TRUE if info was retrieved.
  */
 
-int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+sint32 commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 {
 	static commDriverInfoResp_t   commDriverInfoResp =
 	{
@@ -538,7 +538,7 @@ int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
  *  which will be overwritten by the next call.
  */
 
-int
+sint32
 commPlayerInfo(
 	commPlayerInfoReq_t *	req,	// Request
 	commPlayerInfoResp_t *	resp)	// Response (or NULL)
@@ -580,7 +580,7 @@ commPlayerInfo(
  *	time.
  */
 
-int
+sint32
 commTxFull(
 	commTxFullReq_t *	req,	// Request (or NULL)
 	commTxFullResp_t *	resp)	// Response (or NULL)
@@ -608,7 +608,7 @@ commTxFull(
  *	that the packet has been (or ever will be) sent.
  */
 
-int
+sint32
 commTxPkt(
 	commTxPktReq_t *	req,	// Request
 	commTxPktResp_t *	resp)	// Response (or NULL)
@@ -654,7 +654,7 @@ commTxPkt(
  * Dummy routine. This isn't really used.
  *
 */
-int
+sint32
 commSetParam(
 	commSetParamReq_t *	req,	// Request
 	commSetParamResp_t *	resp)	// Response
@@ -674,7 +674,7 @@ commSetParam(
  *	Return TRUE if a packet was retrieved.
  */
 
-int
+sint32
 commPeekPkt(
 	commPeekPktReq_t *	req,	// Request (or NULL)
 	commPeekPktResp_t *	resp)	// Response (or NULL)
@@ -702,7 +702,7 @@ commPeekPkt(
  *  Status is zero on success, nonzero on error!
  */
 
-int
+sint32
 commRxPkt(
 	commRxPktReq_t *	req,	// Request (or NULL)
 	commRxPktResp_t *	resp)	// Response (or NULL)
@@ -710,7 +710,7 @@ commRxPkt(
 	commRxPktReq_t	reqDummy;
 	commRxPktResp_t	respDummy;
 	tcpabi_session_info_t *info;
-	int len;
+	sint32 len;
 
 	//DPRINT(("@TRUMP commRxPkt(): "));
 
@@ -745,7 +745,7 @@ commRxPkt(
  *	Return TRUE if the string was parsed successfully.
  */
 
-int
+sint32
 commScanAddr(
 	commScanAddrReq_t *		req,	// Request
 	commScanAddrResp_t *	resp)	// Response (or NULL)
@@ -807,14 +807,14 @@ commScanAddr(
  *	Return TRUE if the buffer was formatted successfully.
  */
 
-int
+sint32
 commPrintAddr(
 	commPrintAddrReq_t *	req,	// Request
 	commPrintAddrResp_t *	resp)	// Response (or NULL)
 {
 	commPrintAddrReq_t	reqDummy;
 	commPrintAddrResp_t	respDummy;
-	unsigned char 	*params;
+	uint8 	*params;
 	char				printable[80];
 
 	DPRINT(("@TRUMP commPrintAddr(): "));
@@ -829,7 +829,7 @@ commPrintAddr(
 	if (req->length != sizeof(*params))
 		return FALSE;
 
-	params = (unsigned char *)req->address;
+	params = (uint8 *)req->address;
 
 	sprintf(printable, "%u.%u.%u.%u", params[0]&0xff, params[1]&0xff, params[2]&0xff, params[3]&0xff);
 
@@ -851,7 +851,7 @@ commPrintAddr(
  *	Return TRUE if the pseudo-player handle was generated.
  */
 
-int
+sint32
 commGroupAlloc(
 	commGroupAllocReq_t *	req,	// Request
 	commGroupAllocResp_t *	resp)	// Response
@@ -877,7 +877,7 @@ commGroupAlloc(
  *	Return TRUE if the pseudo-player handle was invalidated.
  */
 
-int
+sint32
 commGroupFree(
 	commGroupFreeReq_t *	req,	// Request
 	commGroupFreeResp_t *	resp)	// Response
@@ -903,7 +903,7 @@ commGroupFree(
  *	Return TRUE if the players were all added.
  */
 
-int
+sint32
 commGroupAdd(
 	commGroupAddReq_t *	req,	// Request
 	commGroupAddResp_t *	resp)	// Response
@@ -931,7 +931,7 @@ commGroupAdd(
  *	Return TRUE unless there was a problem subtracting one or more players.
  */
 
-int
+sint32
 commGroupSubtract(
 	commGroupSubtractReq_t *	req,	// Request
 	commGroupSubtractResp_t *	resp)	// Response
@@ -959,7 +959,7 @@ commGroupSubtract(
  *	Return TRUE if the link was established and we shook hands.
  */
 
-int
+sint32
 commSayHi(
 	commSayHiReq_t *	req,	// Request
 	commSayHiResp_t *	resp)	// Response
@@ -1007,7 +1007,7 @@ commSayHi(
  *	Return TRUE if the link was successfully broken.
  */
 
-int
+sint32
 commSayBye(
 	commSayByeReq_t *	req,	// Request
 	commSayByeResp_t *	resp)	// Response (or NULL)
@@ -1015,7 +1015,7 @@ commSayBye(
 	commSayByeResp_t		respDummy;
 	trump_hdl_t h;
 	comm_status_t err;
-	int err0;
+	sint32 err0;
 
 	DPRINT(("@TRUMP commSayBye(): "));
 

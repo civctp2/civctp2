@@ -34,7 +34,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -47,7 +47,7 @@ dp_dprintf(
 #define DPRINT(a)
 #endif
 /* fake functions so we don't have to include dp2.lib */
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
@@ -62,21 +62,21 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 							 * before a queue is considered truly empty.
 							 */
 
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
 	dp_result_t err;
 	wmq_t *wmq_in[MAX_WMQS];
 	wmq_record_t wmq_record[MAX_WMQS];
-	int outdatfd;
-	int indatfd[MAX_WMQS];
+	sint32 outdatfd;
+	sint32 indatfd[MAX_WMQS];
 	time_t t_now;					/* current local time() */
-	long t_offset;					/* t_now + t_offset = timestamp_now */
+	sint32 t_offset;					/* t_now + t_offset = timestamp_now */
 	time_t t_next_read[MAX_WMQS];	/* local time to attempt next read */
 	wmq_t *wmq_out;
-	int n_wmqs;
-	int i_oldest;
+	sint32 n_wmqs;
+	sint32 i_oldest;
 	char filepath[wmq_DIR_MAXLEN + 24];
-	int wmq_out_restored = 0;
+	sint32 wmq_out_restored = 0;
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
 
@@ -104,7 +104,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 		printf("%s: %s not found, seeking later\n", wmq_out->dir, filepath);
 	} else {
 		time_t t;
-		long offset;
+		sint32 offset;
 
 		printf("%s: reading startup info from %s\n", wmq_out->dir, filepath);
 		err = wmq_restorePosition(wmq_out, outdatfd);
@@ -145,7 +145,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 			}
 		} else {
 			time_t t;
-			long offset;
+			sint32 offset;
 
 			printf("%s: reading startup info from %s\n",
 				wmq_in[n_wmqs]->dir, filepath);
@@ -191,18 +191,18 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 
 	printf("Merging %d files\n", n_wmqs);
 	/* Need timestamp_now = (t_now + t_offset) to be 0, initially */
-	t_offset = (long)(-t_now);
+	t_offset = (sint32)(-t_now);
 	i_oldest = -1;
 	while (1) {
-		int i;
-		int n_empty = 0;
+		sint32 i;
+		sint32 n_empty = 0;
 		time_t timestamp_now;
 
 		t_now = time(NULL);
 		timestamp_now = (time_t)(t_now + t_offset);
 		for (i = 0; i < n_wmqs; i++) {
 			if (wmq_record[i].timestamp == 0) {
-				if ((long)(t_now - t_next_read[i]) < 0) {
+				if ((sint32)(t_now - t_next_read[i]) < 0) {
 					n_empty++;
 					continue;
 				}
@@ -242,8 +242,8 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 
 				/* Got new data. */
 				/* Check if it is the most recent, i.e. best estimate of now */
-				if ((long)(wmq_record[i].timestamp - timestamp_now) > 0) {
-					t_offset = (long)(wmq_record[i].timestamp - t_now);
+				if ((sint32)(wmq_record[i].timestamp - timestamp_now) > 0) {
+					t_offset = (sint32)(wmq_record[i].timestamp - t_now);
 					timestamp_now = wmq_record[i].timestamp;
 					printf("t_now:%d + t_offset:%d = t:%d\n",
 						t_now, t_offset, timestamp_now);
@@ -268,7 +268,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 			sleep(RETRYTIME_GET);
 			continue;
 		} else if ((n_empty > 0)
-		       &&  ((long)(timestamp_now - MAX_CLOCKSKEW -
+		       &&  ((sint32)(timestamp_now - MAX_CLOCKSKEW -
 		                   wmq_record[i_oldest].timestamp) < 0)) {
 			printf("t:%d, n_empty:%d/%d oldest:t[%s]=%d\n", timestamp_now,
 				n_empty, n_wmqs, wmq_in[i_oldest]->dir,
@@ -285,7 +285,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 
 		if (!wmq_out_restored) {
 			time_t t;
-			long offset;
+			sint32 offset;
 
 			/* seek to end of file that would contain this timestamp */
 			err = wmq_seek(wmq_out, wmq_record[i_oldest].timestamp, 0);
@@ -314,7 +314,7 @@ Usage: %s <outdir> <indir1> <indir2> ...\n\
 			exit(1);
 		} else {
 			time_t tin, tout;
-			long offsetin, offsetout;
+			sint32 offsetin, offsetout;
 
 			/* out dat file points to end of queue. */
 			err = wmq_savePosition(wmq_out, outdatfd);

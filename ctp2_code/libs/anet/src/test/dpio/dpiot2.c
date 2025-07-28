@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "eclock.h"
 #include "dpio.h"
 
-int nextid = 0;
+sint32 nextid = 0;
 
 #undef assert
 #define assert(expr)							      \
@@ -40,7 +40,7 @@ int nextid = 0;
 /* This prints an "Assertion failed" message and aborts.  */
 static void assert_fail(__const char *__assertion,
 				__const char *__file,
-				unsigned int __line)
+				uint32 __line)
 {
 	printf("Test failed at line %d of file %s: %s\n",
 		__line, __file, __assertion);
@@ -58,10 +58,10 @@ typedef struct {
 	FILE *logfp;
 
 	/* Which test object this is */
-	int id;
+	sint32 id;
 
 	/* id of peer, handle to peer */
-	int idPeer;
+	sint32 idPeer;
 	playerHdl_t hPeer;
 
 	/* Test duration */
@@ -69,13 +69,13 @@ typedef struct {
 	clock_t t_end;
 
 	/* Number of packets in test */
-	int pkts_desired;
+	sint32 pkts_desired;
 	/* Size of packets for test */
-	int pktsize;
+	sint32 pktsize;
 
 	/* Number of packets xferd so far */
-	int pkts_rx;
-	int pkts_tx;
+	sint32 pkts_rx;
+	sint32 pkts_tx;
 } dpiot2_t;
 
 /*--------------------------------------------------------------------------
@@ -83,9 +83,9 @@ typedef struct {
  length pktsize.
  Test pattern data depends on position in data stream (npkt*pktsize).
 --------------------------------------------------------------------------*/
-static void testramp_fill(char *buf, int pktsize, int npkt)
+static void testramp_fill(char *buf, sint32 pktsize, sint32 npkt)
 {
-	int i;
+	sint32 i;
 
 	/* Fill with pattern */
 	buf[0] = 'T';
@@ -100,7 +100,7 @@ static void testramp_fill(char *buf, int pktsize, int npkt)
 
  Aborts with given error message if comparison fails.
 --------------------------------------------------------------------------*/
-static void testramp_compare(char *buf, int pktsize, int npkt, char *msg)
+static void testramp_compare(char *buf, sint32 pktsize, sint32 npkt, char *msg)
 {
 	char refbuf[dpio_MAXLEN_RELIABLE];
 
@@ -118,7 +118,7 @@ static void testramp_compare(char *buf, int pktsize, int npkt, char *msg)
 /*--------------------------------------------------------------------------
  Create a dpio test object.
 --------------------------------------------------------------------------*/
-dpiot2_t *dpiot2_create(int npkts, int pktsize, int appWillFlush)
+dpiot2_t *dpiot2_create(sint32 npkts, sint32 pktsize, sint32 appWillFlush)
 {
 	dpiot2_t *ptest;
 
@@ -193,7 +193,7 @@ void dpiot2_peer_connect(dpiot2_t *ptest, char *peerAdr)
 /*--------------------------------------------------------------------------
  Set the packet loss (on reception) for this dpiot2.
 --------------------------------------------------------------------------*/
-void dpiot2_setPktLoss(dpiot2_t *ptest, int percent)
+void dpiot2_setPktLoss(dpiot2_t *ptest, sint32 percent)
 {
 	if (!ptest || !ptest->dpio)
 		return;
@@ -213,7 +213,7 @@ void dpiot2_setPktLoss(dpiot2_t *ptest, int percent)
  Only send if there are more than npktsfree open spots in the send queue.
  Returns FALSE if done, TRUE if it still needs to be called.
 --------------------------------------------------------------------------*/
-int dpiot2_poll(dpiot2_t *ptest, int send, int npktsfree)
+sint32 dpiot2_poll(dpiot2_t *ptest, sint32 send, sint32 npktsfree)
 {
 	dp_result_t err;
 	playerHdl_t src;
@@ -317,18 +317,18 @@ void dpiot2_destroy(dpiot2_t *ptest)
  and polls them until they cry uncle.  Any failure causes the
  subroutines to terminate the program with an error message.
 -----------------------------------------------------------------------*/
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
-	int i;
-	int running1;
-	int running2;
-	int pktsize;
-	int total;
-	int npkts;
-	int npktsfree;
-	int appWillFlush;
-	long tx_time[5];
-	long rx_time[5];
+	sint32 i;
+	sint32 running1;
+	sint32 running2;
+	sint32 pktsize;
+	sint32 total;
+	sint32 npkts;
+	sint32 npktsfree;
+	sint32 appWillFlush;
+	sint32 tx_time[5];
+	sint32 rx_time[5];
 	float txpkts_per_sec[5];
 	float rxpkts_per_sec[5];
 
@@ -365,7 +365,7 @@ If <appWillFlush> is present and 0, test will not use packet gathering.\n",
 			argv[0], INT_MAX);
 		exit(1);
 	}
-	npkts = (int)(total + pktsize - 1)/pktsize;
+	npkts = (sint32)(total + pktsize - 1)/pktsize;
 
 	for (i = 0; i < 5; i++) {
 		dpiot2_t *t1, *t2;
@@ -406,13 +406,13 @@ If <appWillFlush> is present and 0, test will not use packet gathering.\n",
 		(appWillFlush ? "on" : "off"));
 	printf("loss (RT) txtime txrate              rxtime rxrate\n");
 	for (i = 0; i < 5; i++) {
-		int pktloss = i*5;
-		int rt_pktloss = 100 - (100 - pktloss)*(100 - pktloss)/100;
+		sint32 pktloss = i*5;
+		sint32 rt_pktloss = 100 - (100 - pktloss)*(100 - pktloss)/100;
 		printf(" %02d%% %02d%% %5.2fs %7.2fp/s %5dB/s %5.2fs %7.2fp/s %5dB/s\n",
 			pktloss, rt_pktloss, (float)tx_time[i]/ECLOCKS_PER_SEC,
-			txpkts_per_sec[i], (int)(txpkts_per_sec[i]*pktsize),
+			txpkts_per_sec[i], (sint32)(txpkts_per_sec[i]*pktsize),
 			(float)rx_time[i]/ECLOCKS_PER_SEC, rxpkts_per_sec[i],
-			(int)(rxpkts_per_sec[i]*pktsize));
+			(sint32)(rxpkts_per_sec[i]*pktsize));
 	}
 	return 0;
 }

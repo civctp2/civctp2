@@ -194,14 +194,14 @@ extern "C" {
 
 typedef struct {
 	clock_t 		PktTime;		/* On RX, last pkt.  On tx, NEXT RELIABLE Tx time */
-	int 			ReTxFactor;		/* Current exponential backoff factor */
+	sint32 			ReTxFactor;		/* Current exponential backoff factor */
 	dpio_wrapped_data_packet_t outstanding[dpio_WINDOWSIZE];
-	int				bAcked[dpio_WINDOWSIZE];	/* Whether outstanding[i] acked. */
+	sint32			bAcked[dpio_WINDOWSIZE];	/* Whether outstanding[i] acked. */
 	clock_t			pktQTime[dpio_WINDOWSIZE];	/* Time this packet entered queue */
-	int				nRetries[dpio_WINDOWSIZE];	/* Number of retries this packet has had */
-	unsigned short	windowBase;
-	unsigned short	origWindowBase;	/* pktnum of SYN packet */
-	unsigned short	next_pktnum;	/* Next unused packet number. */
+	sint32			nRetries[dpio_WINDOWSIZE];	/* Number of retries this packet has had */
+	uint16			windowBase;
+	uint16			origWindowBase;	/* pktnum of SYN packet */
+	uint16			next_pktnum;	/* Next unused packet number. */
 	/* ack flag for pktnum x is bAcked[x % dpio_WINDOWSIZE] */
 	/* Put next packet in outstanding[next_pktnum % dpio_WINDOWSIZE] */
 	/* Warning: dpio_WINDOWSIZE must be power of 2. */
@@ -246,23 +246,23 @@ typedef struct {
  with same options as dpio.c.  Usually, only dp2.c calls that, so that
  shouldn't be any problem.
 ----------------------------------------------------------------------*/
-typedef void (*dpioOpenHdlCallback_t)(playerHdl_t hdl, int n_hdls, dp_result_t err, void *context);
+typedef void (*dpioOpenHdlCallback_t)(playerHdl_t hdl, sint32 n_hdls, dp_result_t err, void *context);
 
 /* All the info that makes up a connection except the comm handle. */
 typedef struct {
 	dpio_window_t rx;			/* incoming reliable packets not yet delivered */
 	dpio_window_t tx;			/* outgoing reliable packets not yet ack'd */
-	short state;				/* see dpio_STATE_* */
+	sint16 state;				/* see dpio_STATE_* */
 #ifdef dp_ANET2
-	short options;				/* see dpio_OPTION_* */
+	sint16 options;				/* see dpio_OPTION_* */
 #endif
-	short remote_capabilities;	/* remote version; see dpio_REMCAP_* */
+	sint16 remote_capabilities;	/* remote version; see dpio_REMCAP_* */
 
 	/* Callback called when connection is opened or closed */
 	/* dpioOpenHdlCallback_t openHdl_callback;
 	void *openHdl_context; */
 
-	int ackNeeded;				/* this peer needs an ack */
+	sint32 ackNeeded;				/* this peer needs an ack */
 
 	/* Following is for holding unreliable packets for transmission
 	 * gathered together into one big packet.
@@ -272,43 +272,43 @@ typedef struct {
 
 	/* Following fields used for tracking connection statistics */
 	clock_t	RTTime;			/* Current round trip time */
-	int		RTT_nsamp;	    /* 0 initially, inc when updating RTTime; max 10 */
-	unsigned char ping_current_pktnum;	/* pktnum of last ping sent */
+	sint32		RTT_nsamp;	    /* 0 initially, inc when updating RTTime; max 10 */
+	uint8 ping_current_pktnum;	/* pktnum of last ping sent */
 	clock_t ping_next_piggyback;	/* time to send next ping */
 	clock_t ping_next_forced;		/* time to send a forced ping */
 	clock_t ping_next_keepalive;	/* time to send a keepalive ping */
 				/* indexed by ping_current_pktnum % * dpio_PING_TIME_SENT_N */
 	clock_t ping_time_sent[dpio_PING_TIME_SENT_N];
-	short	ping_bits;		/* Bit i set if i'th newest ping is still outstanding */
+	sint16	ping_bits;		/* Bit i set if i'th newest ping is still outstanding */
 } dpio_conn_t;
 
 /*------- The dpio_t itself. ----------------------------------------------- */
 typedef struct dpio_s {
 	/* Reliable transport stuff. */
-	int reliable_enabled;	/* if FALSE, do nothing more than ACK *old* pkts. */
-	clock_t nextTxTime;		/* When to look for next packet to send */
-	clock_t minTxInterval;	/* Floor for packet retransmission time (RTO) */
-	clock_t maxTxInterval;	/* Ceiling for packet retransmission (RTO) */
-	clock_t latency;		/* Best current guess of average RTT */
-	assoctab_t *conns;		/* Array of dpio_conn_t's indexed by playerHdl. */
-	int nextconncheck;		/* next connection to check in dpio_get */
- 	int max_playerHdls;		/* Maximum number of connection handles allowed */
-	int ackNeeded;			/* some peer needs an ack */
+	sint32 reliable_enabled;	/* if FALSE, do nothing more than ACK *old* pkts. */
+	clock_t nextTxTime;			/* When to look for next packet to send */
+	clock_t minTxInterval;		/* Floor for packet retransmission time (RTO) */
+	clock_t maxTxInterval;		/* Ceiling for packet retransmission (RTO) */
+	clock_t latency;			/* Best current guess of average RTT */
+	assoctab_t *conns;			/* Array of dpio_conn_t's indexed by playerHdl. */
+	sint32 nextconncheck;		/* next connection to check in dpio_get */
+	sint32 max_playerHdls;		/* Maximum number of connection handles allowed */
+	sint32 ackNeeded;			/* some peer needs an ack */
 
 	/* Whether some peer's gather buffer contains bytes that need sending */
-	int txGatherNeeded;
+	sint32 txGatherNeeded;
 
-	clock_t nextFlush;		/* next time to dpio_flush on 10ms beacon. */
- 	int appWillFlush;		/* TRUE if app calls dpFlush() after tx done */
+	clock_t nextFlush;			/* next time to dpio_flush on 10ms beacon. */
+	sint32 appWillFlush;		/* TRUE if app calls dpFlush() after tx done */
 
 	/* Following is for holding unreliable packets for reception
 	 * gathered together into one big packet.
 	 */
 	char rxGatherBuf[dpio_MAXLEN_GATHER];	/* room for tag & len */
-	int rxGatherBufLen;				/* # of chars in buffer */
-	int rxGatherBufUsed;			/* # of chars read so far from buffer */
-	playerHdl_t rxGatherSrc;		/* source of packet in gather buf */
-	unsigned char	rxGatherAdr[dp_MAX_ADR_LEN];	/* address as seen externally */
+	sint32 rxGatherBufLen;					/* # of chars in buffer */
+	sint32 rxGatherBufUsed;					/* # of chars read so far from buffer */
+	playerHdl_t rxGatherSrc;				/* source of packet in gather buf */
+	uint8	rxGatherAdr[dp_MAX_ADR_LEN];	/* address as seen externally */
 
 	/* Callback called when incoming connections are opened or closed */
 	dpioOpenHdlCallback_t callback;
@@ -319,12 +319,12 @@ typedef struct dpio_s {
 
 #ifndef dp_ANET2
 	clock_t		keepalive_deadline;	/* only used by client; last time sent to master. */
-	int			sentToMaster;		/* whether we have sent a packet to the master lately. */
+	sint32			sentToMaster;		/* whether we have sent a packet to the master lately. */
 	playerHdl_t hMaster;
 
 #endif
 
-	int			clocksPerSec;		/* set by dpio_set_clocks */
+	sint32			clocksPerSec;		/* set by dpio_set_clocks */
 	const clock_t     *now;			/* Really in container... hmm. */
 
 	/* Queue used for explicit loopback messages. */
@@ -332,13 +332,13 @@ typedef struct dpio_s {
 
 	/* Debugging stuff. */
 	delay_t		*delay_q;		/* Delay incoming packets if in debug mode */
-	int			rxDropPercent;	/* drop this many percent of received packets */
+	sint32			rxDropPercent;	/* drop this many percent of received packets */
 
 	/* Basic info. */
-	int			myAdrLen;
-	unsigned char	myAdr[dp_MAX_ADR_LEN];	/* address as seen externally */
-	unsigned char	myAdr2[dp_MAX_ADR_LEN]; /* detected address */
-	int publicAddressKnown;		/* Set when first SYN pkt tells us our outside adr */
+	sint32			myAdrLen;
+	uint8	myAdr[dp_MAX_ADR_LEN];	/* address as seen externally */
+	uint8	myAdr2[dp_MAX_ADR_LEN]; /* detected address */
+	sint32 publicAddressKnown;		/* Set when first SYN pkt tells us our outside adr */
 
 	/* Restoring-from-disk stuff. */
 	commInitReq_t	commInitReq;	/* Baud rate, etc. */
@@ -368,7 +368,7 @@ typedef struct dpio_s {
  Shut down the network API.
  If flags is nonzero, and the network is a modem, don't hang up.
 -----------------------------------------------------------------------*/
-void dpio_destroy(dpio_t *dpio, long flags);
+void dpio_destroy(dpio_t *dpio, sint32 flags);
 
 /*------------------------------------------------------------------------
  Create a dpio_t.  Initialize the network API.
@@ -426,7 +426,7 @@ dp_result_t dpio_setIncomingCallback(dpio_t *dpio, dpioOpenHdlCallback_t cb, voi
  Results in milliseconds.
  Returns 0 upon error.
 -----------------------------------------------------------------------*/
-int dpio_get_latency (dpio_t *dpio, int flags);
+sint32 dpio_get_latency (dpio_t *dpio, sint32 flags);
 
 /*-----------------------------------------------------------------------
  Calculates the latency of the current player according to the reliable
@@ -435,12 +435,12 @@ int dpio_get_latency (dpio_t *dpio, int flags);
  If ploss is not NULL, sets *ploss to round trip packet loss in percent.
  Returns 0 upon error.
 -----------------------------------------------------------------------*/
-int dpio_get_player_latency (dpio_t *dpio, playerHdl_t h, int flags, int *ploss);
+sint32 dpio_get_player_latency (dpio_t *dpio, playerHdl_t h, sint32 flags, sint32 *ploss);
 
 /*-----------------------------------------------------------------------
  Set the maximum number of player handles we will allow to be created
 -----------------------------------------------------------------------*/
-void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls);
+void dpio_setMaxPlayerHdls(dpio_t *dpio, sint32 maxHdls);
 
 /*-----------------------------------------------------------------------
  Get the remote capabilies of a connection by player handle
@@ -448,12 +448,12 @@ void dpio_setMaxPlayerHdls(dpio_t *dpio, int maxHdls);
  handle the new style of dptab_delete.
  The return value is a bitfield full of dpio_REMCAP_*.
 -----------------------------------------------------------------------*/
-short dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h);
+sint16 dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h);
 
 /*-----------------------------------------------------------------------
  Get the current state of a connection by player handle
 -----------------------------------------------------------------------*/
-short dpio_getHdlState(dpio_t *dpio, playerHdl_t h);
+sint16 dpio_getHdlState(dpio_t *dpio, playerHdl_t h);
 
 /*-----------------------------------------------------------------------
  Get the current age in eclock units of a connection by player handle
@@ -469,7 +469,7 @@ clock_t dpio_getHdlAge(dpio_t *dpio, playerHdl_t h);
  Get the remaining number of packets free in the TX queue for a handle.
  Returns -1 on error.
 -----------------------------------------------------------------------*/
-int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h);
+sint32 dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h);
 
 /*-----------------------------------------------------------------------
  Given an ASCII network address and a buffer length, fill a buffer with the
@@ -477,7 +477,7 @@ int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h);
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
 -----------------------------------------------------------------------*/
-DP_API int dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen);
+DP_API sint32 dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen);
 
 /*-----------------------------------------------------------------------
  Convert a binary network address (e.g. one from dpio_scanAdr),
@@ -561,7 +561,7 @@ playerHdl_t dpio_openHdlRaw(dpio_t *dpio, void *adr);
  The flags can be a combination of:
 	dpio_OPENHDL_RAW_2NDLIVE: the second address is to be treated as LIVE
 -----------------------------------------------------------------------*/
-playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, long flags);
+playerHdl_t dpio_openHdlRaw2(dpio_t *dpio, void *adr, void *adr2, sint32 flags);
 
 /*-----------------------------------------------------------------------
  This deletes a raw handle without deleting the connection queue or any
@@ -572,12 +572,12 @@ dp_result_t dpio_closeHdlRaw(dpio_t *dpio, playerHdl_t h);
 /*--------------------------------------------------------------------------
  Find out the network address for a given handle opened with dpio_openHdl.
 --------------------------------------------------------------------------*/
-dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, int *len);
+dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, size_t *len);
 
 /*--------------------------------------------------------------------------
  Find out the network address for a given handle opened with dpio_openHdl2
 --------------------------------------------------------------------------*/
-dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, int *len);
+dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, size_t *len);
 
 /*--------------------------------------------------------------------------
  Find out the player name for a given handle opened with dpio_openHdl.
@@ -607,7 +607,7 @@ dp_result_t dpio_setMaster(dpio_t *dpio, playerHdl_t hMaster);
  Set dpio's Rx/Tx timeout and restransmission parameters.
  2nd parameter is actual system realtime clock speed.
 -----------------------------------------------------------------------*/
-void dpio_set_clocks(dpio_t *dpio, int clocksPerSec);
+void dpio_set_clocks(dpio_t *dpio, sint32 clocksPerSec);
 
 /*------------------------------------------------------------------------
  Set the intervals used by the latency measurement system.
@@ -636,15 +636,15 @@ void dpio_set_clocks(dpio_t *dpio, int clocksPerSec);
 ------------------------------------------------------------------------*/
 dp_result_t dpio_setPingIntervals(
 	dpio_t *dpio,
-	int piggybackPingIntervalMS,
-	int forcedPingIntervalMS);
+	sint32 piggybackPingIntervalMS,
+	sint32 forcedPingIntervalMS);
 
 /*------------------------------------------------------------------------
  For debugging purposes only.
  Force dpio to drop a given percentage of all packets (randomly) on
  reception.
 -----------------------------------------------------------------------*/
-void dpio_forceRxDropPercent(dpio_t *dpio, int rxDropPercent);
+void dpio_forceRxDropPercent(dpio_t *dpio, sint32 rxDropPercent);
 
 /*----------------------------------------------------------------------
  Receive a packet.  Packet might come from the network, the local
@@ -672,7 +672,7 @@ dp_result_t dpio_get(
 	playerHdl_t *src,
 	void *buffer,
 	size_t *size,
-	int *flags);
+	sint32 *flags);
 
 /*----------------------------------------------------------------------
  Send a packet unreliably.
@@ -689,7 +689,7 @@ dp_result_t dpio_get(
 dp_result_t dpio_put_unreliable(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest);  /* If error occurs, dest with error indicated here */
@@ -713,11 +713,11 @@ dp_result_t dpio_put_unreliable(
 dp_result_t dpio_put_reliable2(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest,  /* If error occurs, dest with error indicated here */
-	int flags);
+	sint32 flags);
 
 #define dpio_put_reliable(dpio, dests, nDests, buffer, size, errDest) \
 	dpio_put_reliable2(dpio, dests, nDests, buffer, size, errDest, dp_SEND_RESERVE_NONE)
@@ -730,14 +730,14 @@ dp_result_t dpio_flush(dpio_t *dpio);
 /*--------------------------------------------------------------------------
  Returns the number of packets in the local message queue.
 --------------------------------------------------------------------------*/
-int dpio_localQ_npkts(dpio_t *dpio);
+sint32 dpio_localQ_npkts(dpio_t *dpio);
 
 /*--------------------------------------------------------------------------
  Get a list of currently active connection handles
  Returns number of handles.  Will not overflow buffer; if buffer size is
  returned, call again with a larger buffer.
 --------------------------------------------------------------------------*/
-int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls);
+sint32 dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], sint32 max_nhdls);
 
 #ifdef dp_ANET2
 /*-----------------------------------------------------------------------
@@ -760,7 +760,7 @@ int dpio_getBroadcastHdls(dpio_t *dpio, playerHdl_t hdls[], int max_nhdls);
    dp_RES_BUG if option invalid,
    dp_RES_OK on success.
 -----------------------------------------------------------------------*/
-dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, int options);
+dp_result_t dpio_setHandleOptions(dpio_t *dpio, playerHdl_t h, sint32 options);
 
 /*-----------------------------------------------------------------------
  Call occasionally (once/second).
@@ -846,7 +846,7 @@ dp_result_t dpio_update(dpio_t *dpio);
 dp_result_t dpio_higherLevelBlanketAck(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	char *tag,
 	size_t taglen);
 

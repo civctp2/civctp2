@@ -48,7 +48,7 @@ static void exitUsage(char *msg)
 	exit(1);
 }
 
-static int mkdir_if_none(char *path, int mode)
+static sint32 mkdir_if_none(char *path, sint32 mode)
 {
 	struct stat st;
 	if (-1 == stat(path, &st)) {
@@ -67,7 +67,7 @@ static int mkdir_if_none(char *path, int mode)
 	return 0;
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
 	dp_result_t err;
 	aehlog_t aehlog;
@@ -78,10 +78,10 @@ int main(int argc, char *argv[])
 	char tmp[80];
 	char *c;
 	FILE *fp_dat;
-	long filelen;
-	long offset;
-	int bQuit = FALSE;
-	int i;
+	sint32 filelen;
+	sint32 offset;
+	sint32 bQuit = FALSE;
+	sint32 i;
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
 
@@ -151,8 +151,8 @@ int main(int argc, char *argv[])
 			exitUsage(tmp);
 		}
 	} else {
-		long old_filelen;
-		long old_offset;
+		sint32 old_filelen;
+		sint32 old_offset;
 
 		if (2 != fscanf(fp_dat, "l:%ld o:%ld", &old_filelen, &old_offset)) {
 			DPRINT(("Datfile %s is not valid\n", DatPath));
@@ -190,14 +190,14 @@ int main(int argc, char *argv[])
 		aeh_t aeh;
 		aeh_buf_t aehbuf;
 		aehlog_t outlog;
-		unsigned int ninst;
-		long stackcrc;
+		uint32 ninst;
+		sint32 stackcrc;
 		char signature[10];
 		char outdir[aeh_MAX_PATH];
 		char outbinfile[aeh_MAX_PATH];
 		time_t now;
 #if 0
-		int bNewCrash;
+		sint32 bNewCrash;
 		FILE *fp;
 #endif
 
@@ -287,8 +287,8 @@ int main(int argc, char *argv[])
 			DPRINT(("Write to %s failed\n", DatPath));
 			break;
 		} else {
-			long new_offset = aehlog_tell(&aehlog);
-			long new_filelen = aehlog_getfsize(&aehlog);
+			sint32 new_offset = aehlog_tell(&aehlog);
+			sint32 new_filelen = aehlog_getfsize(&aehlog);
 
 			if ((-1L == new_offset) || (-1L == new_filelen)) {
 				DPRINT(("aehlog_tell:%d or getfsize:%d error\n", new_offset, new_filelen));

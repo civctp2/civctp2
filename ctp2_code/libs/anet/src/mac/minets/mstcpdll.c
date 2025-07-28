@@ -62,7 +62,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -140,7 +140,7 @@ tcp2commHdl(
 	}
 
 	DPRINT(("-- Exiting tcp2commHdl(), Handle: %d", h));
-	DPRINT(("WARNING: converting between dissimilar int types."));
+	DPRINT(("WARNING: converting between dissimilar sint32 types."));
 	return ((playerHdl_t) h);
 }
 
@@ -162,7 +162,7 @@ commHdl2tcp(
 		DPRINT(("PLAYER_BROADCAST => tcp->broadcastHandle.\n"));
 		return tcp->broadcastHandle;
 	}
-	DPRINT(("WARNING: converting between dissimilar int types."));
+	DPRINT(("WARNING: converting between dissimilar sint32 types."));
 	return ((TCPHANDLE) h);
 }
 
@@ -170,7 +170,7 @@ commHdl2tcp(
  Do nothing; return TRUE.  If resp is not null, copy TCP_RES_OK
  into resp->status
 *****************************************************************************/
-DLLEXPORT int cdecl			/* success boolean */
+DLLEXPORT sint32 cdecl			/* success boolean */
 commNoOp(
 	commNoOpReq_t *req,		/* (input) ignored */
 	commNoOpResp_t *resp)	/* (output) status */
@@ -200,12 +200,12 @@ commNoOp(
  Return TRUE if successful, FALSE otherwise.  On successful return,
  the port number in req is set to the actual port number used.
 *****************************************************************************/
-DLLEXPORT int cdecl			/* success boolean */
+DLLEXPORT sint32 cdecl			/* success boolean */
 commInit(
 	commInitReq_t *req,		/* (modified) type of connection */
 	commInitResp_t *resp)	/* (output) status */
 {
-	int status;
+	sint32 status;
 	u_short port;
 	commInitResp_t respDummy;
 
@@ -242,7 +242,7 @@ commInit(
  Return TRUE if successful, FALSE otherwise.  If resp is not NULL,
  TCP_RES_OK is copied into resp->status.
 *****************************************************************************/
-DLLEXPORT int cdecl			/* success boolean (always TRUE) */
+DLLEXPORT sint32 cdecl			/* success boolean (always TRUE) */
 commTerm(
 	commTermReq_t *req,		/* (input) ignored */
 	commTermResp_t *resp)	/* (output) status */
@@ -279,7 +279,7 @@ commTerm(
  to the user, and discover driver properties such as "expects to be
  called by external shell" (e.g. dwango).
 *****************************************************************************/
-DLLEXPORT int cdecl				/* success boolean */
+DLLEXPORT sint32 cdecl				/* success boolean */
 commDriverInfo(
 	commDriverInfoReq_t *req,	/* (input) ignored */
 	commDriverInfoResp_t *resp)	/* (output) driver info */
@@ -336,12 +336,12 @@ commDriverInfo(
 
  Return TRUE if the player is known and is not a group, FALSE otherwise.
 *****************************************************************************/
-DLLEXPORT int cdecl					/* success boolean */
+DLLEXPORT sint32 cdecl					/* success boolean */
 commPlayerInfo(
 	commPlayerInfoReq_t *req,		/* (input) player to get info about */
 	commPlayerInfoResp_t *resp)		/* (output) info about player */
 {
-	int err;
+	sint32 err;
 	static TCPPEER addrBuf;
 
 	DPRINT(("@TCP commPlayerInfo(): "));
@@ -383,7 +383,7 @@ commPlayerInfo(
 
  Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl				/* Transmit queue full boolean */
+DLLEXPORT sint32 cdecl				/* Transmit queue full boolean */
 commTxFull(
 	commTxFullReq_t * req,		/* (input) ignored */
 	commTxFullResp_t * resp)	/* (output) status */
@@ -416,7 +416,7 @@ commTxFull(
 
   WARNING: ignores req->flags.
 *****************************************************************************/
-DLLEXPORT int cdecl				/* success boolean */
+DLLEXPORT sint32 cdecl				/* success boolean */
 commTxPkt(
 	commTxPktReq_t * req,		/* input: destination, packet */
 	commTxPktResp_t * resp)		/* output: status */
@@ -457,7 +457,7 @@ commTxPkt(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commPeekPkt(
 	commPeekPktReq_t *req,
 	commPeekPktResp_t *resp)
@@ -490,13 +490,13 @@ commPeekPkt(
  Returns TRUE if a packet was retrieved, FALSE otherwise; resp->status is
  TCP_RES_OK on success, other values on error.
 *****************************************************************************/
-DLLEXPORT int cdecl			/* success boolean */
+DLLEXPORT sint32 cdecl			/* success boolean */
 commRxPkt(
 	commRxPktReq_t *req,	/* Non-NULL; input bufsize/output buffer */
 	commRxPktResp_t *resp)	/* output (discarded if NULL) */
 {
 	commRxPktResp_t respDummy;
-	int err;
+	sint32 err;
 	TCPHANDLE hTcp;
 	TCPPEER addr;
 
@@ -557,7 +557,7 @@ commRxPkt(
 
  Return TRUE if the buffer was formatted successfully, FALSE otherwise.
 *****************************************************************************/
-DLLEXPORT int cdecl				/* success boolean */
+DLLEXPORT sint32 cdecl				/* success boolean */
 commScanAddr(
 	commScanAddrReq_t *req,		/* (modified) string, buffer size/address */
 	commScanAddrResp_t *resp)	/* (output) address size, status */
@@ -591,7 +591,7 @@ commScanAddr(
 			*pc = '\0';
 			*pc++;
 			if(*pc != '\0')
-				port = (unsigned short) atoi(pc);
+				port = (uint16) atoi(pc);
 			break;
 		}
 	}
@@ -657,7 +657,7 @@ commScanAddr(
 
   Return TRUE if the buffer was formatted successfully, FALSE otherwise.
 *****************************************************************************/
-DLLEXPORT int cdecl				/* success boolean */
+DLLEXPORT sint32 cdecl				/* success boolean */
 commPrintAddr(
 	commPrintAddrReq_t *req,	/* (modified) Address to format, buffer */
 	commPrintAddrResp_t *resp)	/* (output) status */
@@ -688,7 +688,7 @@ commPrintAddr(
 		{
 			const char *params;
 			strAddr = (char *) NewPtr(128);
-			params = (unsigned char *) ((TCPPEER *)req->address)->addr;
+			params = (uint8 *) ((TCPPEER *)req->address)->addr;
 			sprintf(strAddr, "%u.%u.%u.%u", params[0]&0xff, params[1]&0xff, params[2]&0xff, params[3]&0xff);
 		}
     #else
@@ -731,7 +731,7 @@ commPrintAddr(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupAlloc(
 	commGroupAllocReq_t *req,
 	commGroupAllocResp_t *resp)
@@ -755,7 +755,7 @@ commGroupAlloc(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupFree(
 	commGroupFreeReq_t *req,
 	commGroupFreeResp_t *resp)
@@ -779,7 +779,7 @@ commGroupFree(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupAdd(
 	commGroupAddReq_t *req,
 	commGroupAddResp_t *resp)
@@ -802,7 +802,7 @@ commGroupAdd(
 
   Not yet implemented.
 *****************************************************************************/
-DLLEXPORT int cdecl				/* success boolean */
+DLLEXPORT sint32 cdecl				/* success boolean */
 commSetParam(
 	commSetParamReq_t *req,		/* */
 	commSetParamResp_t *resp)	/* */
@@ -825,7 +825,7 @@ commSetParam(
   not actually establish a connection in the IP sense of the word.
   Return TRUE if the link was established and we shook hands.
 *****************************************************************************/
-DLLEXPORT int cdecl			/* success boolean */
+DLLEXPORT sint32 cdecl			/* success boolean */
 commSayHi(
 	commSayHiReq_t *req,	/* (input) address */
 	commSayHiResp_t *resp)	/* (output) player handle, status */
@@ -871,7 +871,7 @@ commSayHi(
 
   Return TRUE if the link was successfully broken.
 *****************************************************************************/
-DLLEXPORT int cdecl				/* success boolean */
+DLLEXPORT sint32 cdecl				/* success boolean */
 commSayBye(
 	commSayByeReq_t *req,		/* (input) address */
 	commSayByeResp_t *resp)		/* (output) status */

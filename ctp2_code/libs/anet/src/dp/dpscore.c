@@ -54,9 +54,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
-static void dumpBuf(const char *buf, int len)
+static void dumpBuf(const char *buf, sint32 len)
 {
-	int i;
+	sint32 i;
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x ", 255 & buf[i]));
 		if ((i % 24) == 23) {
@@ -150,8 +150,8 @@ dp_result_t dpscore_client_playerLeaving(dp_t *dp, dpid_t id)
 {
 	dp_result_t err = dp_RES_OK;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen = 0;
-	int flags;
+	sint32 subkeylen = 0;
+	sint32 flags;
 	dp_uid_t uid;
 	dpid_t firstId;
 	scorerep_buf_t sbuf;
@@ -219,7 +219,7 @@ dp_result_t dpscore_client_playerLeaving(dp_t *dp, dpid_t id)
 /*-------------------------------------------------------------------------
  Report the score for dpid id to the comm layer, if it cares.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, long score)
+DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, sint32 score)
 {
 #if 0
 	commGroupAddReq_t req;
@@ -251,7 +251,7 @@ DP_API dp_result_t dpReportScore(dp_t *dp, dpid_t id, long score)
  call dpReportScore2 to report as many scores as you like, then finally
  call dpReportScoreEnd to finish sending the block of scores.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag)
+DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, sint32 flag)
 {
 	precondition(dp);
 	/* dp->score_flag = flag; */		/* no longer used? */
@@ -264,7 +264,7 @@ DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag)
 		memset(&req, 0, sizeof(commSetParamReq_t));
 		req.param_num = comm_PARAM_FINALREPORT;
 		req.param_value = TRUE;	/* To begin score reporting */
-		req.param_value2 = (long) flag;
+		req.param_value2 = (sint32) flag;
 		req.reqLen = sizeof(commSetParamReq_t);
 		commSetParam(&req, &resp);
 		return resp.status;
@@ -276,7 +276,7 @@ DP_API dp_result_t DP_APIX dpReportScoreStart(dp_t *dp, int flag)
 /*-------------------------------------------------------------------------
  Old score reporting function, dummied out.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, long scoreVal)
+DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, sint32 scoreId, sint32 scoreVal)
 {
 	precondition(dp);
 	precondition(dp->dpio);
@@ -290,7 +290,7 @@ DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, lo
 		req.param_num = scoreId;
 		req.param_value = scoreVal;
 		/* set a playerHdl to param_value2 base on the given dpId */
-		req.param_value2 = (long)dpid2commHdl(dp, dpId);
+		req.param_value2 = (sint32)dpid2commHdl(dp, dpId);
 		req.reqLen = sizeof(commSetParamReq_t);
 		commSetParam(&req, &resp, dp->dpio->commPtr);
 		/* Driver usually returns status dp_RES_OK or dp_RES_UNIMPLEMENTED */
@@ -320,7 +320,7 @@ DP_API dp_result_t DP_APIX dpReportScore2(dp_t *dp, dpid_t dpId, int scoreId, lo
 
  scoreId should be zero.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, const char *scorebuf, int scorelen)
+DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, sint32 scoreId, const char *scorebuf, sint32 scorelen)
 {
 	dp_uid_t uid;
 	dp_result_t err;
@@ -337,7 +337,7 @@ DP_API dp_result_t DP_APIX dpReportScoreBuf(dp_t *dp, dpid_t dpId, int scoreId, 
 		req.param_num = scoreId;
 		req.param_value = scoreVal;
 		/* set a playerHdl to param_value2 base on the given dpId */
-		req.param_value2 = (long)dpid2commHdl(dp, dpId);
+		req.param_value2 = (sint32)dpid2commHdl(dp, dpId);
 		req.reqLen = sizeof(commSetParamReq_t);
 		commSetParam(&req, &resp);
 		/* Driver usually returns status dp_RES_OK or dp_RES_UNIMPLEMENTED */
@@ -423,7 +423,7 @@ DP_API dp_result_t DP_APIX dpReportScoreEnd(dp_t *dp)
  Callback for incoming score tables.  Only used if application requested
  object deltas for this session's scores.
 ----------------------------------------------------------------------*/
-int dp_PASCAL dpscores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status)
+sint32 dp_PASCAL dpscores_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dp_result_t err;
@@ -448,7 +448,7 @@ dp_result_t dpscore_client_subscribe(dp_t *dp, dp_species_t sessType)
 	dp_result_t err;
 	dptab_table_t *tab;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	ASSERTMEM();
 
 	/* Create incoming scores table. */
@@ -494,7 +494,7 @@ dpid_t dpGetMyId(dp_t *dp)
 	void *buf;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	err = dptab_get_byindex(dp->myplayers, 0, &buf, &len, subkey, &subkeylen);
 	if (err != dp_RES_OK) {

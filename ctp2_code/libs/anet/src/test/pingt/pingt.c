@@ -37,7 +37,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define pingt_FORCED_INTERVAL		2000	/* ms */
 #define pingt_KEEPALIVE_INTERVAL	(dp_PLAYER_TIMEOUT_SECS*1000/8)	/* ms */
 
-int nextid = 0;
+sint32 nextid = 0;
 
 #undef assert
 #define assert(expr)							      \
@@ -48,7 +48,7 @@ int nextid = 0;
 /* This prints an "Assertion failed" message and aborts.  */
 static void assert_fail(__const char *__assertion,
 				__const char *__file,
-				unsigned int __line)
+				uint32 __line)
 {
 	printf("Test failed at line %d of file %s: %s\n",
 		__line, __file, __assertion);
@@ -66,10 +66,10 @@ typedef struct {
 	FILE *logfp;
 
 	/* Which test object this is */
-	int id;
+	sint32 id;
 
 	/* Which test object this is connected to */
-	int idPeer;
+	sint32 idPeer;
 	playerHdl_t hPeer;
 
 	/* time to send the next packet to give pings something to
@@ -78,14 +78,14 @@ typedef struct {
 	clock_t t_next_send;
 
 	/* Number of ping responses so far */
-	int nReplies;
+	sint32 nReplies;
 } pingt_t;
 
 /* Struct containing a test pair of connected pingt's */
 typedef struct {
 	pingt_t *pingt[2];
 
-	int status;			/* one of pingt_STATUS_* */
+	sint32 status;			/* one of pingt_STATUS_* */
 	clock_t ping_interval;	/* expected interval between pings for this pair */
 	clock_t t_start;	/* time connection was started */
 	clock_t t_killed;	/* time when we killed pingt[1] */
@@ -96,7 +96,7 @@ typedef struct {
 /*--------------------------------------------------------------------------
  Create a dpio test object.
 --------------------------------------------------------------------------*/
-pingt_t *pingt_create(int appWillFlush)
+pingt_t *pingt_create(sint32 appWillFlush)
 {
 	pingt_t *ptest;
 
@@ -153,7 +153,7 @@ pingt_t *pingt_create(int appWillFlush)
  Connect a dpio test object to its peer with the given handleOptions
  (from dpio_OPTION_*).
 --------------------------------------------------------------------------*/
-void pingt_peer_connect(pingt_t *ptest, char *peerAdr, int handleOptions)
+void pingt_peer_connect(pingt_t *ptest, char *peerAdr, sint32 handleOptions)
 {
 	dp_setLogFP(ptest->logfp);
 
@@ -177,7 +177,7 @@ void pingt_peer_connect(pingt_t *ptest, char *peerAdr, int handleOptions)
 /*--------------------------------------------------------------------------
  Create and connect a pair of pingt_t's.
 --------------------------------------------------------------------------*/
-pingt_pair_t *pingt_pair_create(int appWillFlush, int handleOptions)
+pingt_pair_t *pingt_pair_create(sint32 appWillFlush, sint32 handleOptions)
 {
 	pingt_pair_t *pair;
 
@@ -243,7 +243,7 @@ void pingt_pair_destroy(pingt_pair_t *pair)
 /*--------------------------------------------------------------------------
  Set the packet loss (on reception) for this pingt.
 --------------------------------------------------------------------------*/
-void pingt_setPktloss(pingt_t *ptest, int percent)
+void pingt_setPktloss(pingt_t *ptest, sint32 percent)
 {
 	if (!ptest || !ptest->dpio)
 		return;
@@ -285,14 +285,14 @@ void pingt_setPingIntervals(pingt_t *ptest, clock_t piggybackInterval, clock_t f
  Returns TRUE while the connection to peer is open,
          FALSE if the connection is lost.
 --------------------------------------------------------------------------*/
-dp_result_t pingt_poll(pingt_t *ptest, int send)
+dp_result_t pingt_poll(pingt_t *ptest, sint32 send)
 {
 	dp_result_t err;
 	playerHdl_t src;
 	playerHdl_t h;
 	char pkt[512];
 	size_t size;
-	int flags;
+	sint32 flags;
 
 	dp_setLogFP(ptest->logfp);
 
@@ -310,7 +310,7 @@ dp_result_t pingt_poll(pingt_t *ptest, int send)
 			assert(FALSE);
 		}
 		if (flags & dpio_GET_LATENCY_MEASUREMENT) {
-			int RTT = dpio_get_player_latency(ptest->dpio, ptest->hPeer, 0);
+			sint32 RTT = dpio_get_player_latency(ptest->dpio, ptest->hPeer, 0);
 			ptest->nReplies++;
 			if (src == ptest->hPeer) {
 				printf("id %d: t:%d, got ping response %d from id:%d, new RTT:%d\n", ptest->id, ptest->dpio_now, ptest->nReplies, ptest->idPeer, RTT);
@@ -333,7 +333,7 @@ dp_result_t pingt_poll(pingt_t *ptest, int send)
 		}
 	} while ((err == dp_RES_OK) || (err == dp_RES_AGAIN));
 
-	if (send && ((long)(ptest->dpio_now - ptest->t_next_send) > 0)) {
+	if (send && ((sint32)(ptest->dpio_now - ptest->t_next_send) > 0)) {
 		*((dp_packetType_t *)pkt) = dppt_MAKE('P', 'T');
 		/* rest of packet is random junk we don't care about */
 		err = dpio_put_unreliable(ptest->dpio, &ptest->hPeer, 1, pkt, 100, &src);
@@ -363,24 +363,24 @@ dp_result_t pingt_poll(pingt_t *ptest, int send)
 	return TRUE;
 }
 
-int pingt_pair_poll_timeout(pingt_pair_t *pair, clock_t now, clock_t end)
+sint32 pingt_pair_poll_timeout(pingt_pair_t *pair, clock_t now, clock_t end)
 {
-	int connected;
+	sint32 connected;
 
 	if (!pair)
 		return pingt_STATUS_FAILURE;
 	if (pair->status != pingt_STATUS_CONTINUE)
 		return pair->status;
 
-	if ((long)(now - end) > 0) {
+	if ((sint32)(now - end) > 0) {
 		if (pair->t_timeout) {
 			printf("id %d (timeout): noticed id:%d's death after %.2fs, expected ~%.2fs\n",
 				pair->pingt[0]->id, pair->pingt[0]->idPeer,
 				(float)(pair->t_timeout - pair->t_killed)/ECLOCKS_PER_SEC,
 				(float)(pair->t_timeout_expected - pair->t_killed)/ECLOCKS_PER_SEC);
 			if (pair->t_timeout_expected
-			&&  ((long)(pair->t_timeout - pair->t_timeout_expected) > (-3 - pair->ping_interval/1000)*ECLOCKS_PER_SEC)
-			&&  ((long)(pair->t_timeout - pair->t_timeout_expected) < 2*ECLOCKS_PER_SEC)) {
+			&&  ((sint32)(pair->t_timeout - pair->t_timeout_expected) > (-3 - pair->ping_interval/1000)*ECLOCKS_PER_SEC)
+			&&  ((sint32)(pair->t_timeout - pair->t_timeout_expected) < 2*ECLOCKS_PER_SEC)) {
 				printf("id %d,%d (timeout): test passed\n", pair->pingt[0]->id, pair->pingt[0]->idPeer);
 				pair->status = pingt_STATUS_SUCCESS;
 			} else {
@@ -405,7 +405,7 @@ int pingt_pair_poll_timeout(pingt_pair_t *pair, clock_t now, clock_t end)
 		return pingt_STATUS_CONTINUE;
 
 	/* kill pingt[1] after 20 seconds */
-	if ((long)(now - pair->t_start) < 20 * ECLOCKS_PER_SEC) {
+	if ((sint32)(now - pair->t_start) < 20 * ECLOCKS_PER_SEC) {
 		connected = pingt_poll(pair->pingt[1], 0);
 		if (!connected) {
 			printf("id %d (timeout): t:%d lost connection to id:%d\n",
@@ -448,20 +448,20 @@ int pingt_pair_poll_timeout(pingt_pair_t *pair, clock_t now, clock_t end)
 	return pair->status;
 }
 
-int pingt_pair_poll_ping(pingt_pair_t *pair, clock_t now, clock_t end)
+sint32 pingt_pair_poll_ping(pingt_pair_t *pair, clock_t now, clock_t end)
 {
-	int connected;
-	int i;
+	sint32 connected;
+	sint32 i;
 
 	if (!pair)
 		return pingt_STATUS_FAILURE;
 	if (pair->status != pingt_STATUS_CONTINUE)
 		return pair->status;
 
-	if ((long)(now - end) > 0) {
-		int replies_expected;
+	if ((sint32)(now - end) > 0) {
+		sint32 replies_expected;
 
-		replies_expected = ((long)(now - pair->t_start))*1000/pair->ping_interval/ECLOCKS_PER_SEC;
+		replies_expected = ((sint32)(now - pair->t_start))*1000/pair->ping_interval/ECLOCKS_PER_SEC;
 		pair->status = pingt_STATUS_SUCCESS;
 		for (i = 0; i < 2; i++) {
 			printf("id %d (ping): received %d pings, expected ~%d\n",
@@ -488,7 +488,7 @@ int pingt_pair_poll_ping(pingt_pair_t *pair, clock_t now, clock_t end)
 		if (!connected) {
 			printf("id %d (ping): t:%d lost connection to id:%d after %.2fs\n",
 				pair->pingt[i]->id, now, pair->pingt[i]->idPeer,
-				(float)((long)(now - pair->t_start))/ECLOCKS_PER_SEC);
+				(float)((sint32)(now - pair->t_start))/ECLOCKS_PER_SEC);
 			printf("id %d,%d (ping): test failed\n", pair->pingt[0]->id, pair->pingt[1]->id);
 			pair->status = pingt_STATUS_FAILURE;
 			pingt_destroy(pair->pingt[0]);
@@ -501,17 +501,17 @@ int pingt_pair_poll_ping(pingt_pair_t *pair, clock_t now, clock_t end)
 	return pair->status;
 }
 
-int pingt_pair_poll_keepalive(pingt_pair_t *pair, clock_t now, clock_t end)
+sint32 pingt_pair_poll_keepalive(pingt_pair_t *pair, clock_t now, clock_t end)
 {
-	int connected;
-	int i;
+	sint32 connected;
+	sint32 i;
 
 	if (!pair)
 		return pingt_STATUS_FAILURE;
 	if (pair->status != pingt_STATUS_CONTINUE)
 		return pair->status;
 
-	if ((long)(now - end) > 0) {
+	if ((sint32)(now - end) > 0) {
 		printf("id %d,%d (keepalive): test passed\n", pair->pingt[0]->id, pair->pingt[1]->id);
 		pair->status = pingt_STATUS_SUCCESS;
 		pingt_destroy(pair->pingt[0]);
@@ -527,7 +527,7 @@ int pingt_pair_poll_keepalive(pingt_pair_t *pair, clock_t now, clock_t end)
 		if (!connected) {
 			printf("id %d (keepalive): t:%d lost connection to id:%d after %.2fs\n",
 				pair->pingt[i]->id, now, pair->pingt[i]->idPeer,
-				(float)((long)(now - pair->t_start))/ECLOCKS_PER_SEC);
+				(float)((sint32)(now - pair->t_start))/ECLOCKS_PER_SEC);
 			printf("id %d,%d (keepalive): test failed\n", pair->pingt[0]->id, pair->pingt[1]->id);
 			pair->status = pingt_STATUS_FAILURE;
 			pingt_destroy(pair->pingt[0]);
@@ -545,10 +545,10 @@ int pingt_pair_poll_keepalive(pingt_pair_t *pair, clock_t now, clock_t end)
  Creates a few sets of two connected dpio's and checks their ping
  and keepalive behavior for sanity in various test scenarios.
 -----------------------------------------------------------------------*/
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
-	int i;
-	int appWillFlush;
+	sint32 i;
+	sint32 appWillFlush;
 	pingt_pair_t *timeout;
 	pingt_pair_t *ping;
 	pingt_pair_t *fping;

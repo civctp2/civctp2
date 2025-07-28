@@ -50,14 +50,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define acctservd_STATE_SENDHEADER		4
 
 #if defined(_DEBUG) || defined(DEBUG) || defined(DPRNT)
-int cdecl
+sint32 cdecl
 dp_dprintf(
 	const char *	__format,	/* printf-style format (or NULL) */
 	...)						/* printf-style arguments on stack (if any) */
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -69,7 +69,7 @@ dp_dprintf(
 }
 #endif
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -82,7 +82,7 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
  Returns 1 if allowed,
  		 0 if not.
 --------------------------------------------------------------------------*/
-static int acctservd_validateAddr(struct sockaddr_in addr)
+static sint32 acctservd_validateAddr(struct sockaddr_in addr)
 {
 	if (!strncmp(inet_ntoa(addr.sin_addr), "206.17.", 7))
 		return 1;
@@ -92,17 +92,17 @@ static int acctservd_validateAddr(struct sockaddr_in addr)
 /*--------------------------------------------------------------------------
  Handle an incoming account change request on <sockfd>.
 --------------------------------------------------------------------------*/
-static void acctservd_handleRequest(int sockfd, acctserv_t *acctserv)
+static void acctservd_handleRequest(sint32 sockfd, acctserv_t *acctserv)
 {
 	dp_result_t err;
 	char buf[acctservd_BUFLEN];
 	char *pbuf;
-	int buflen;
-	int nbytes;
+	sint32 buflen;
+	sint32 nbytes;
 	char *argv[acctservd_MAX_ARGS];
-	int argc = 0;
-	int state;
-	int bNewArg = 1;
+	sint32 argc = 0;
+	sint32 state;
+	sint32 bNewArg = 1;
 	time_t now;
 
 	/* wait for a new request */
@@ -324,9 +324,9 @@ static acctserv_t *acctservd_restore(const char *dir, const char *dbfile)
 	wmq_t *wmq;
 	pwq_t *pwq;
 	char PWFile[256];
-	int len;
+	sint32 len;
 	time_t timestamp;
-	long offset;
+	sint32 offset;
 
 	len = strlen(dir);
 	if (len > 240)
@@ -417,20 +417,20 @@ static acctserv_t *acctservd_restore(const char *dir, const char *dbfile)
 	return acctserv_create(pwq);
 }
 
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
 	dp_result_t err;
 	acctserv_t *acctserv;
-	int sockunix, sockinet;
+	sint32 sockunix, sockinet;
 	struct sockaddr_un addrunix;
 	struct sockaddr_in addrinet;
 	time_t now, next_save;
-	int MyPort;
+	sint32 MyPort;
 	char MyDir[antpserv_MAXPATH];
-	int len;
-	int pidunix = 0;
-	int pidinet = 0;
-	int quit = 0;
+	sint32 len;
+	sint32 pidunix = 0;
+	sint32 pidinet = 0;
+	sint32 quit = 0;
 	char DBFile[] = "prefs.dat";
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
@@ -512,10 +512,10 @@ Usage: %s <Dir> <Port>\n\
 	next_save = time(NULL) + acctservd_TIME_SAVE;
 	while (!quit) {
 		struct timeval tv;
-		int sockmax;
-		int nsocks;
+		sint32 sockmax;
+		sint32 nsocks;
 		fd_set rfds;
-		int pid;
+		sint32 pid;
 
 		if (pidunix) {
 			pid = waitpid(pidunix, NULL, WNOHANG);
@@ -543,7 +543,7 @@ Usage: %s <Dir> <Port>\n\
 		if (nsocks == 0) {
 			if (!pidunix) {
 				now = time(NULL);
-				if ((long)(now - next_save) > 0) {
+				if ((sint32)(now - next_save) > 0) {
 					err = acctservd_save(acctserv);
 					if (err != dp_RES_OK) {
 						printf("acctservd: save err:%d\n", err);
@@ -557,9 +557,9 @@ Usage: %s <Dir> <Port>\n\
 		}
 
 		if (FD_ISSET(sockunix, &rfds)) {
-			int newsock;
+			sint32 newsock;
 			struct sockaddr_un client_addr;
-			int client_addrlen;
+			sint32 client_addrlen;
 
 			newsock = accept(sockunix, (struct sockaddr *)&client_addr,
 				&client_addrlen);
@@ -595,9 +595,9 @@ Usage: %s <Dir> <Port>\n\
 			}
 		}
 		if (FD_ISSET(sockinet, &rfds) && !quit) {
-			int newsock;
+			sint32 newsock;
 			struct sockaddr_in client_addr;
-			int client_addrlen;
+			sint32 client_addrlen;
 
 			newsock = accept(sockinet, (struct sockaddr *)&client_addr,
 				&client_addrlen);

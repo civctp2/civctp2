@@ -36,14 +36,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define SIGTIMER SIGTERM	/* sorry - can't define new signals :-( */
 #endif
 
+#import "types.h"
+
 /*-------------------------------------------------------------------------
  After sec seconds, raise the SIGTIMER exception.
 -------------------------------------------------------------------------*/
-unsigned alarm(unsigned sec);
+uint32 alarm(uint32 sec);
 
 /*-------------------------------------------------------------------------
  Sleep for sec seconds.
 -------------------------------------------------------------------------*/
-int sleep(unsigned sec);
+sint32 sleep(uint32 sec);
 
 #endif

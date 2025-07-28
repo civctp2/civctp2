@@ -128,7 +128,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 static ser_t *ser = NULL;
 
 #ifdef DRIVER_LOG
-static int logfd = __ERROR;
+static sint32 logfd = __ERROR;
 
 /*************************************************************************************
 
@@ -195,7 +195,7 @@ void fdprint(char *msg)
  *  Return FALSE on error.
  */
 
-int cdecl commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp)
+sint32 cdecl commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp)
 
 {
   DPRINT(("commNoOp(): \n"));
@@ -209,7 +209,7 @@ int cdecl commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp)
 /*-------------------------------------------------------------------------
  Return true if the given com port is available.
 -------------------------------------------------------------------------*/
-static int commPortIsAvailable(const char *name)
+static sint32 commPortIsAvailable(const char *name)
 {
 	SECURITY_ATTRIBUTES SecurityAttributes;
 	HANDLE h;
@@ -234,13 +234,13 @@ static int commPortIsAvailable(const char *name)
  List the available comm ports.
  Implemented only for serial and modem drivers.
 -------------------------------------------------------------------------*/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commEnumPorts(
 	commEnumPortsReq_t *	req,		/* Request (or NULL) */
 	commEnumPortsResp_t *	resp)		/* Response (or NULL) */
 {
-	int i;
-	int nports;
+	sint32 i;
+	sint32 nports;
 	commPortName_t *pPort;
 
 	if (!resp) {
@@ -294,7 +294,7 @@ commEnumPorts(
  *  Return FALSE on error.
  */
 
-int cdecl commInit(commInitReq_t * req, commInitResp_t * resp)
+sint32 cdecl commInit(commInitReq_t * req, commInitResp_t * resp)
 {
 	commInitResp_t respDummy;
 	char			szPort[ 15 ];
@@ -347,7 +347,7 @@ int cdecl commInit(commInitReq_t * req, commInitResp_t * resp)
  *  Return FALSE on error.
  */
 
-int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
+sint32 cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
 
 {
   if (ser)
@@ -374,7 +374,7 @@ int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
  *  Return TRUE if info was retrieved.
  */
 
-int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+sint32 cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 
 {
   // We plan to make dpEnumTransports scan through the DLL file looking
@@ -425,7 +425,7 @@ int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
  *  another station.
  */
 
-int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
+sint32 cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 
 {
   static ser_adr_t kludgeAdr;
@@ -471,7 +471,7 @@ int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
  *  time.
  */
 
-int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
+sint32 cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
 
 {
   commTxFullReq_t   reqDummy;
@@ -499,7 +499,7 @@ int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
  *  that the packet has been (or ever will be) sent.
  */
 
-int cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
+sint32 cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
 
 {
   commTxPktResp_t   respDummy;
@@ -535,7 +535,7 @@ int cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
  *  Return TRUE if a packet was retrieved.
  */
 
-int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
+sint32 cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
 
 {
   commPeekPktReq_t  reqDummy;
@@ -560,7 +560,7 @@ int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
  *  Return TRUE if a packet was retrieved.
  */
 
-int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
+sint32 cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
 
 {
   commRxPktReq_t    reqDummy;
@@ -592,7 +592,7 @@ int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
  *  Return TRUE if the string was parsed successfully.
  */
 
-int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
+sint32 cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
 
 {
   commScanAddrReq_t  reqDummy;
@@ -626,7 +626,7 @@ int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
  *  Return TRUE if the buffer was formatted successfully.
  */
 
-int cdecl commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
+sint32 cdecl commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
 
 {
   commPrintAddrReq_t  reqDummy;
@@ -673,7 +673,7 @@ int cdecl commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
  *  Return TRUE if the pseudo-player handle was generated.
  */
 
-int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
+sint32 cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
 
 {
   req  = req;
@@ -694,7 +694,7 @@ int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
  *  Return TRUE if the pseudo-player handle was invalidated.
  */
 
-int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
+sint32 cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
 
 {
   req = req;
@@ -715,7 +715,7 @@ int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
  *  Return TRUE if the players were all added.
  */
 
-int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
+sint32 cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
 
 {
   req = req;
@@ -734,7 +734,7 @@ int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
  *  Set driver parameters.
  */
 
-int cdecl commSetParam(commSetParamReq_t * req,  commSetParamResp_t *resp)
+sint32 cdecl commSetParam(commSetParamReq_t * req,  commSetParamResp_t *resp)
 
 {
 	commSetParamReq_t   reqDummy;
@@ -769,11 +769,11 @@ int cdecl commSetParam(commSetParamReq_t * req,  commSetParamResp_t *resp)
  *
  *  Return TRUE if the link was established and we shook hands.
  *
- *  req->address is a ser_adr_t, which is just a random long int.
+ *  req->address is a ser_adr_t, which is just a random sint32.
  *
  */
 
-int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
+sint32 cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 {
   commSayHiReq_t  reqDummy;
   commSayHiResp_t respDummy;
@@ -819,7 +819,7 @@ int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
  *  Return TRUE if the link was successfully broken.
  */
 
-int cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
+sint32 cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
 
 {
   commSayByeResp_t  respDummy;

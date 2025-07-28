@@ -31,30 +31,34 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 extern "C" {
 #endif
 
+// For some reason VS does not like this, gives the wrong location
+// but include it in the c file and it is fine, however it is still ugly
+//#import "types.h"
+
 /*--------------------------------------------------------------------------
  Return TRUE if autodial is enabled.
 --------------------------------------------------------------------------*/
-int adialup_autodial_enabled(void);
+sint32 adialup_autodial_enabled(void);
 
 /*--------------------------------------------------------------------------
  Enable or disable autodial.
  Return TRUE on success.
 --------------------------------------------------------------------------*/
-int adialup_autodial_set(int enable);
+sint32 adialup_autodial_set(sint32 enable);
 
 /*--------------------------------------------------------------------------
  Return TRUE if there is an active, ready-for-data, dialup connection,
  or if there are no dialup connections, active or not.
  Return FALSE if there are dialup connections, but none are active.
 --------------------------------------------------------------------------*/
-int adialup_is_active(void);
+sint32 adialup_is_active(void);
 
 /*--------------------------------------------------------------------------
  Return TRUE if Internet activity is likely to trigger an autodial.
  This is same as
     adialup_autodial_enabled() && !adialup_is_active()
 --------------------------------------------------------------------------*/
-int adialup_willdial(void);
+sint32 adialup_willdial(void);
 
 #ifdef __cplusplus
 }

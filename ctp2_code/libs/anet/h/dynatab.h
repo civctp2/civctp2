@@ -54,6 +54,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <stddef.h>
 
+#include "types.h"
+
 /* The structures in this file are not meant to be sent over the net
  * nor written to disk.  We need to protect ourselves from programs
  * that set the default packing to strange values, so always set it to
@@ -66,10 +68,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define dynatab_NONE	-1
 
 typedef struct {
-	void *buf;
+	void*  buf;
 	size_t unit;	/*  Size of one element in the buffer. */
-	int  n_used;	/*  How many elements in the table have been used. */
-	int  n_alloced;	/*  How many have been allocated. */
+	sint32 n_used;	/*  How many elements in the table have been used. */
+	sint32 n_alloced;	/*  How many have been allocated. */
 } dynatab_t;
 
 /*-----------------------------------------------------------------------
@@ -87,7 +89,7 @@ void dynatab_destroy(dynatab_t *ptab);
  Remove the given element of the table.
  WARNING: Silently does nothing if subscript is out of range.
 -----------------------------------------------------------------------*/
-void dynatab_remove(dynatab_t *tab, int subscript);
+void dynatab_remove(dynatab_t *tab, sint32 subscript);
 
 /*-----------------------------------------------------------------------
  Remove all elements of the table, but don't touch its allocation.
@@ -99,14 +101,14 @@ void dynatab_removeAll(dynatab_t *tab);
  If the table isn't that big, grow.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *dynatab_subscript_grow(dynatab_t *tab, int subscript);
+void *dynatab_subscript_grow(dynatab_t *tab, sint32 subscript);
 
 /*-----------------------------------------------------------------------
  Inserts a record into the table before the nth record.
  Grows the table.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *dynatab_subscript_insert(dynatab_t *tab, int n);
+void *dynatab_subscript_insert(dynatab_t *tab, sint32 n);
 
 /*-----------------------------------------------------------------------
  Return the address of the given element of the table.
@@ -114,7 +116,7 @@ void *dynatab_subscript_insert(dynatab_t *tab, int n);
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
 #ifdef dyatab_NONINLINE
-void *dynatab_subscript(dynatab_t *tab, int subscript);
+void *dynatab_subscript(dynatab_t *tab, sint32 subscript);
 #else
 #define dynatab_subscript(tab, subscript) \
 	((void *)(((subscript) < 0 || (subscript) >= (tab)->n_used) ? NULL : \
@@ -125,7 +127,7 @@ void *dynatab_subscript(dynatab_t *tab, int subscript);
  Return the index of the element of the table that holds addr.
  If the table doesn't hold addr, return dynatab_NONE.
 -----------------------------------------------------------------------*/
-int dynatab_find(dynatab_t *tab, void* addr);
+sint32 dynatab_find(dynatab_t *tab, void* addr);
 
 /*-----------------------------------------------------------------------
  Return the number of elements in the table.

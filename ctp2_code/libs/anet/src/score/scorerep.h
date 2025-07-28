@@ -34,7 +34,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define scorerep_MAX_BLOBLEN 256
 typedef struct {
 	dp_uid_t uid;			 /* This player's uid */
-	unsigned short bloblen;  /* This player's score blob length */
+	uint16 bloblen;  /* This player's score blob length */
 	char blob[scorerep_MAX_BLOBLEN];  /* This player's score blob */
 } scorerep_player_t;
 
@@ -48,7 +48,7 @@ typedef struct {
 	dp_uid_t uid;			/* uid of reporting player */
 	dpid_t leaverid;		/* dpid of leaving player */
 	dp_uid_t leaveruid;		/* uid of leaving player */
-	short flags;			/* bitwise union of scorerep_FLAGS_* */
+	sint16 flags;			/* bitwise union of scorerep_FLAGS_* */
 	assoctab_t *players;	/* scorerep_player_t players[dpid_t] */
 } scorerep_t;
 
@@ -84,7 +84,7 @@ dp_result_t scorerep_setLeaver(scorerep_t *rep, dpid_t dpId, dp_uid_t uid);
  representation in the given scorerep_t.
  Overwrites the previous value of this score for the given player.
 --------------------------------------------------------------------------*/
-dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId, const char *blob, unsigned short bloblen);
+dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, sint32 scoreId, const char *blob, uint16 bloblen);
 
 /*--------------------------------------------------------------------------
  Convert a scorerep_t to a scorerep_buf_t suitable for writing to disk or
@@ -97,7 +97,7 @@ dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId
  Other flags are simply stored in the report for interpretation by the
  receiver.
 --------------------------------------------------------------------------*/
-dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorerep_buf_t *repbuf);
+dp_result_t scorerep_toBuf(const scorerep_t *rep, sint32 flags, dpid_t id, scorerep_buf_t *repbuf);
 
 /*--------------------------------------------------------------------------
  Convert a scorerep_buf_t to a scorerep_t.  You can then probe the innards

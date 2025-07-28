@@ -45,12 +45,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Furthermore, the dp layer expects the address to not change from session
  to session.
 --------------------------------------------------------------------------*/
-typedef long ser_adr_t;
+typedef sint32 ser_adr_t;
 #define ser_ADR_NONE 0			// Used internally to indicate no connection.
 
 // A peer handle.  A short and non-portable notation for the address of
 // an open connection.
-typedef int ser_hdl_t;			// Handles used in sending packets.
+typedef sint32 ser_hdl_t;			// Handles used in sending packets.
 #define ser_HDL_NONE		-1
 #define ser_HDL_BROADCAST	0	// For this driver, same as ser_HDL_YOU.
 #define ser_HDL_ME			1	// The 2nd entry is for my own address.
@@ -76,11 +76,11 @@ typedef int ser_hdl_t;			// Handles used in sending packets.
 #define ser_HDR_FRAME0 'F'		// First byte of every packet header
 #define ser_HDR_FRAME1 'R'		// Second byte of every packet header
 typedef struct {
-	unsigned char frame0;		// ser_HDR_FRAME0
-	unsigned char frame1;		// ser_HDR_FRAME1
-	unsigned char bodylen;		// max packet payload length: 255.  Jeepers.
-	unsigned char hchksum;		// sum of previous three bytes of header
-	unsigned char bodycrc;		// crc of payload
+	uint8 frame0;		// ser_HDR_FRAME0
+	uint8 frame1;		// ser_HDR_FRAME1
+	uint8 bodylen;		// max packet payload length: 255.  Jeepers.
+	uint8 hchksum;		// sum of previous three bytes of header
+	uint8 bodycrc;		// crc of payload
 } ser_hdr_t;			// the six-byte header in front of each packet
 
 //--------------------------------------------------------------------------
@@ -100,8 +100,8 @@ typedef struct {
 	ser_adr_t yourAdr;			// table[ser_HDL_ME], else ser_ADR_NONE
 
 	// Stuff about incoming serial data
-	unsigned char rbuf[ser_READSIZE];	// bytes read from serial port
-	int sigpos;					// used in checking for modem offline signal
+	uint8 rbuf[ser_READSIZE];	// bytes read from serial port
+	sint32 sigpos;					// used in checking for modem offline signal
 
 #if 0
 	DWORD length;
@@ -109,28 +109,28 @@ typedef struct {
 	DWORD start;
 	BYTE state;
 	DWORD rbufsize;
-	unsigned char crc;
+	uint8 crc;
 	BOOL empty;
 #else
 	// Stuff about incoming serial data
-	int len;					// number of bytes in rbuf
-	int head;					// index into rbuf; next byte to get out
+	sint32 len;					// number of bytes in rbuf
+	sint32 head;					// index into rbuf; next byte to get out
 
 	// The packet being recieved.
 	struct {
 		ser_hdr_t hdr;			// header of received packet
-		unsigned char body[ser_USERMAXPACK];	// bytes of recieved packet
+		uint8 body[ser_USERMAXPACK];	// bytes of recieved packet
 	} pkt;
 
 	// 'got' is the number of bytes of packet received and recognized so far.
 	// 0 <= got < sizeof(pkt)
-	int got;
+	sint32 got;
 
 #endif
 } ser_t;
 
 // A result.  Lets you know if a call failed, and why.
-typedef int ser_result_t;		// Error/success status type.
+typedef sint32 ser_result_t;		// Error/success status type.
 #include "commerr.h"
 #define ser_RES_OK		comm_STATUS_OK
 #define ser_RES_FULL	comm_STATUS_FULL
@@ -167,7 +167,7 @@ void ser_destroy(ser_t *ser);
 
  Returns ser_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
-ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert);
+ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, sint32 insert);
 
 /*-----------------------------------------------------------------------
  Given a baud rate and port number, configure the
@@ -176,7 +176,7 @@ ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert);
  portname = "com1", "com2", etc.
  baud = 19200, 38400, 57600?
 -----------------------------------------------------------------------*/
-ser_result_t ser_config(ser_t *ser, long baud, const char * portname);
+ser_result_t ser_config(ser_t *ser, sint32 baud, const char * portname);
 
 /*-----------------------------------------------------------------------
  Given a handle, return the corresponding ser address.

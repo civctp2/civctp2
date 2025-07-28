@@ -71,24 +71,24 @@ static HINSTANCE hcommDLL = NULL;
 
 #if DYNALINK
   // Hooks to DLL comm functions
-  static int (* pcommNoOp      ) (commNoOpReq_t *,       commNoOpResp_t *      ) = NULL;
-  static int (* pcommInit      ) (commInitReq_t *,       commInitResp_t *      ) = NULL;
-  static int (* pcommTerm      ) (commTermReq_t *,       commTermResp_t *      ) = NULL;
-  static int (* pcommDriverInfo) (commDriverInfoReq_t *, commDriverInfoResp_t *) = NULL;
-  static int (* pcommPlayerInfo) (commPlayerInfoReq_t *, commPlayerInfoResp_t *) = NULL;
-  static int (* pcommTxFull    ) (commTxFullReq_t *,     commTxFullResp_t *    ) = NULL;
-  static int (* pcommTxPkt     ) (commTxPktReq_t *,      commTxPktResp_t *     ) = NULL;
-  static int (* pcommPeekPkt   ) (commPeekPktReq_t *,    commPeekPktResp_t *   ) = NULL;
-  static int (* pcommRxPkt     ) (commRxPktReq_t *,      commRxPktResp_t *     ) = NULL;
-  static int (* pcommScanAddr  ) (commScanAddrReq_t *,   commScanAddrResp_t *  ) = NULL;
-  static int (* pcommPrintAddr ) (commPrintAddrReq_t *,  commPrintAddrResp_t * ) = NULL;
-  static int (* pcommGroupAlloc) (commGroupAllocReq_t *, commGroupAllocResp_t *) = NULL;
-  static int (* pcommGroupFree ) (commGroupFreeReq_t *,  commGroupFreeResp_t * ) = NULL;
-  static int (* pcommGroupAdd  ) (commGroupAddReq_t *,   commGroupAddResp_t *  ) = NULL;
-  static int (* pcommSetParam  ) (commSetParamReq_t *,   commSetParamResp_t *  ) = NULL;
-  static int (* pcommSayHi     ) (commSayHiReq_t *,      commSayHiResp_t *     ) = NULL;
-  static int (* pcommSayBye    ) (commSayByeReq_t *,     commSayByeResp_t *    ) = NULL;
-  static int (* pcommEnumPorts ) (commEnumPortsReq_t *,  commEnumPortsResp_t * ) = NULL;
+  static sint32 (* pcommNoOp      ) (commNoOpReq_t *,       commNoOpResp_t *      ) = NULL;
+  static sint32 (* pcommInit      ) (commInitReq_t *,       commInitResp_t *      ) = NULL;
+  static sint32 (* pcommTerm      ) (commTermReq_t *,       commTermResp_t *      ) = NULL;
+  static sint32 (* pcommDriverInfo) (commDriverInfoReq_t *, commDriverInfoResp_t *) = NULL;
+  static sint32 (* pcommPlayerInfo) (commPlayerInfoReq_t *, commPlayerInfoResp_t *) = NULL;
+  static sint32 (* pcommTxFull    ) (commTxFullReq_t *,     commTxFullResp_t *    ) = NULL;
+  static sint32 (* pcommTxPkt     ) (commTxPktReq_t *,      commTxPktResp_t *     ) = NULL;
+  static sint32 (* pcommPeekPkt   ) (commPeekPktReq_t *,    commPeekPktResp_t *   ) = NULL;
+  static sint32 (* pcommRxPkt     ) (commRxPktReq_t *,      commRxPktResp_t *     ) = NULL;
+  static sint32 (* pcommScanAddr  ) (commScanAddrReq_t *,   commScanAddrResp_t *  ) = NULL;
+  static sint32 (* pcommPrintAddr ) (commPrintAddrReq_t *,  commPrintAddrResp_t * ) = NULL;
+  static sint32 (* pcommGroupAlloc) (commGroupAllocReq_t *, commGroupAllocResp_t *) = NULL;
+  static sint32 (* pcommGroupFree ) (commGroupFreeReq_t *,  commGroupFreeResp_t * ) = NULL;
+  static sint32 (* pcommGroupAdd  ) (commGroupAddReq_t *,   commGroupAddResp_t *  ) = NULL;
+  static sint32 (* pcommSetParam  ) (commSetParamReq_t *,   commSetParamResp_t *  ) = NULL;
+  static sint32 (* pcommSayHi     ) (commSayHiReq_t *,      commSayHiResp_t *     ) = NULL;
+  static sint32 (* pcommSayBye    ) (commSayByeReq_t *,     commSayByeResp_t *    ) = NULL;
+  static sint32 (* pcommEnumPorts ) (commEnumPortsReq_t *,  commEnumPortsResp_t * ) = NULL;
 
   // structure to hook DLL exported function names to above comm function ptrs
   typedef struct _COMMFUNC
@@ -123,41 +123,41 @@ static HINSTANCE hcommDLL = NULL;
   #define NO_COMMDLL_FUNCS  (sizeof(commfuncs) / sizeof(commfuncs[0]))
 
   // public comm function stubs
-  int cdecl commNoOp(commNoOpReq_t *req, commNoOpResp_t *resp) {return (*pcommNoOp)(req, resp);}
+  sint32 cdecl commNoOp(commNoOpReq_t *req, commNoOpResp_t *resp) {return (*pcommNoOp)(req, resp);}
 
-  int cdecl commInit(commInitReq_t *req, commInitResp_t *resp) {return (*pcommInit)(req, resp);}
+  sint32 cdecl commInit(commInitReq_t *req, commInitResp_t *resp) {return (*pcommInit)(req, resp);}
 
-  int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp) {return (*pcommTerm)(req, resp);}
+  sint32 cdecl commTerm(commTermReq_t *req, commTermResp_t *resp) {return (*pcommTerm)(req, resp);}
 
-  int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {return (*pcommDriverInfo)(req, resp);}
+  sint32 cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {return (*pcommDriverInfo)(req, resp);}
 
-  int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {return (*pcommPlayerInfo)(req, resp);}
+  sint32 cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {return (*pcommPlayerInfo)(req, resp);}
 
-  int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {return (*pcommTxFull)(req, resp);}
+  sint32 cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {return (*pcommTxFull)(req, resp);}
 
-  int cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp) {return (*pcommTxPkt)(req, resp);}
+  sint32 cdecl commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp) {return (*pcommTxPkt)(req, resp);}
 
-  int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {return (*pcommPeekPkt)(req, resp);}
+  sint32 cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {return (*pcommPeekPkt)(req, resp);}
 
-  int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {return (*pcommRxPkt)(req, resp);}
+  sint32 cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {return (*pcommRxPkt)(req, resp);}
 
-  int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {return (*pcommScanAddr)(req, resp);}
+  sint32 cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {return (*pcommScanAddr)(req, resp);}
 
-  int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {return (*pcommPrintAddr)(req, resp);}
+  sint32 cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {return (*pcommPrintAddr)(req, resp);}
 
-  int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {return (*pcommGroupAlloc)(req, resp);}
+  sint32 cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {return (*pcommGroupAlloc)(req, resp);}
 
-  int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {return (*pcommGroupFree)(req, resp);}
+  sint32 cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {return (*pcommGroupFree)(req, resp);}
 
-  int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {return (*pcommGroupAdd)(req, resp);}
+  sint32 cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {return (*pcommGroupAdd)(req, resp);}
 
-  int cdecl commSetParam(commSetParamReq_t *req, commSetParamResp_t *resp) {return (*pcommSetParam)(req, resp);}
+  sint32 cdecl commSetParam(commSetParamReq_t *req, commSetParamResp_t *resp) {return (*pcommSetParam)(req, resp);}
 
-  int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {return (*pcommSayHi)(req, resp);}
+  sint32 cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {return (*pcommSayHi)(req, resp);}
 
-  int cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp) {return (*pcommSayBye)(req, resp);}
+  sint32 cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp) {return (*pcommSayBye)(req, resp);}
 
-  int cdecl commEnumPorts(commEnumPortsReq_t *req, commEnumPortsResp_t *resp) {return (*pcommEnumPorts)(req, resp);}
+  sint32 cdecl commEnumPorts(commEnumPortsReq_t *req, commEnumPortsResp_t *resp) {return (*pcommEnumPorts)(req, resp);}
 #endif
 
 #if 0
@@ -191,8 +191,8 @@ static void showErr()
 DP_API dp_result_t dpGetTransportInfo(dp_transport_t *transport, comm_driverInfo_t *infoptr)
 {
 	FILE *fp;
-	int match;
-	int c;
+	sint32 match;
+	sint32 c;
 
 	fp = fopen(transport->fname, "rb");
 	if (!fp) {
@@ -309,7 +309,7 @@ dp_result_t dpLoadDLL(dpio_t *dpio, const dp_transport_t *transport)
 {
 #if DYNALINK
 
-	int i;
+	sint32 i;
 
 	if (!transport)
 		return dp_RES_BUG;
@@ -372,7 +372,7 @@ void dpUnloadDLL(dpio_t *dpio)
  ports is filled with descriptions of the available ports.
  *pnPorts is set to the number of portnames placed in the ports array.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, int maxports, int *pnPorts)
+DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, sint32 maxports, sint32 *pnPorts)
 {
 	dp_result_t err;
 	commEnumPortsReq_t req;
