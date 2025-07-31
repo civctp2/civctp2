@@ -532,9 +532,9 @@ static sint32 dpio_log_dropped;
 
 /* Function to dump a block of memory in hex */
 #ifdef VERYVERBOSE
-static void dumpBuf(const char *msg, const char *buf, sint32 len)
+static void dumpBuf(const char *msg, const char *buf, size_t len)
 {
-	sint32 i;
+	size_t i;
 	DPRINT(("%s", msg));
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x", 0xff & buf[i]));
@@ -558,7 +558,7 @@ static void dumpBuf(const char *msg, const char *buf, sint32 len)
 #else
 void dpio_dprintAdr(
 	char adr[dp_MAX_ADR_LEN],
-	sint32 adrLen)
+	size_t adrLen)
 {
 	char buf[256];
 	sint32 i;
@@ -804,7 +804,7 @@ void dpio_setMaxPlayerHdls(dpio_t *dpio, sint32 maxHdls) {
  Returns length of address in bytes, or 0 upon error.
  Output buffer must be big enough, or buffer won't be valid.
 -----------------------------------------------------------------------*/
-DP_API sint32 dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, size_t buflen)
+DP_API sint32 dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
 {
 	commScanAddrReq_t req;
 	commScanAddrResp_t resp;
@@ -823,7 +823,7 @@ DP_API sint32 dpio_scanAdr(dpio_t *dpio, const char *hostname, char *adrbuf, siz
 	(void) dpio;
 	DPRINT(("dpio_scanAdr: got address.\n"));
 	dpio_assertValid(dpio);
-	return resp.length;
+	return (sint32)resp.length;
 }
 
 /*-----------------------------------------------------------------------
@@ -1752,7 +1752,7 @@ dp_result_t dpio_create(dpio_t **pdpio, const dp_transport_t *transportDLLname,
 	 * Save the detected address(es)
 	 */
 	dpio->myAdrLen = sizeof(dpio->myAdr);
-	if (dpio_hdl2adr2(dpio, PLAYER_ME, dpio->myAdr, dpio->myAdr2, &dpio->myAdrLen) != dp_RES_OK)
+	if (dpio_hdl2adr2(dpio, PLAYER_ME, dpio->myAdr, dpio->myAdr2, (size_t*)&dpio->myAdrLen) != dp_RES_OK)
 	{
 		DPRINT(("dpio_create: Can't get me own address!\n"));
 		dpio_destroy(dpio, 0);
@@ -2404,9 +2404,9 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 			DPRINT(("dpio_closeHdl: t:%d closing; h:%x state:%x\n", *dpio->now, h, pc->state));
 #ifdef dp_STATS
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].out++;
-			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += pktlen;
+			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += (sint32)pktlen;
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting++;
-			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += pktlen;
+			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += (sint32)pktlen;
 		/*	DPRINT(("dpio_closeHdl: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", h, pktlen, (pc->tx.next_pktnum - 1)&0xffff,
 					dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 					dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));*/
@@ -2639,7 +2639,7 @@ static clock_t dpio_current_pingInterval(const dpio_t *dpio, const dpio_conn_t *
  Returns dp_RES_OK if the latency of the player was calculated,
          dp_RES_EMPTY if not.
 -------------------------------------------------------------------------*/
-static dp_result_t dpio_handle_ping_response(dpio_t *dpio, dpio_conn_t *pc, playerHdl_t h, uint8 *buffer, sint32 len)
+static dp_result_t dpio_handle_ping_response(dpio_t *dpio, dpio_conn_t *pc, playerHdl_t h, uint8 *buffer, size_t len)
 {
 	uint8 pktnum = buffer[2];
 	uint8 age_in_pktnums = (pc->ping_current_pktnum - pktnum - 1);
@@ -3071,7 +3071,7 @@ static dp_result_t dpio_getReliable(
 #endif
 #ifdef dp_STATS
 				dpio->stats[dp_STAT_DPIO_RX_REL_PKTS].in++;
-				dpio->stats[dp_STAT_DPIO_RX_REL_BYTES].in += *pcallerBufLen;
+				dpio->stats[dp_STAT_DPIO_RX_REL_BYTES].in += (sint32)*pcallerBufLen;
 #endif
 				return dp_RES_OK;
 			}
@@ -3134,7 +3134,7 @@ static dp_result_t dpio_getRaw(
 	if (dpio->rxGatherBufUsed < dpio->rxGatherBufLen) {
 		rxPktResp.length = ((uint8 *)dpio->rxGatherBuf)[dpio->rxGatherBufUsed++];
 		rxPktReq.buffer = dpio->rxGatherBuf + dpio->rxGatherBufUsed;
-		dpio->rxGatherBufUsed += rxPktResp.length;
+		dpio->rxGatherBufUsed += (sint32)rxPktResp.length;
 		DPRINT(("dpio_getRaw: gathered; tag %2.2s, ln %d\n", rxPktReq.buffer, rxPktResp.length));
 		if (dpio->rxGatherBufUsed > dpio->rxGatherBufLen) {
 			DPRINT(("dpio_get: bug: subpacket longer than packet\n"));
@@ -3213,13 +3213,13 @@ static dp_result_t dpio_getRaw(
 
 #ifdef dp_STATS
 		dpio->stats[dp_STAT_DPIO_RX_UNREL_PKTS].in++;
-		dpio->stats[dp_STAT_DPIO_RX_UNREL_BYTES].in += rxPktResp.length;
+		dpio->stats[dp_STAT_DPIO_RX_UNREL_BYTES].in += (sint32)rxPktResp.length;
 #endif
 
 		/* If gathered packet, explode it on next call */
 		if ((*(dp_packetType_t *) dpio->rxGatherBuf) == dpio_GATHER_PACKET_ID) {
 			dpio->rxGatherBufUsed = 2;
-			dpio->rxGatherBufLen = rxPktResp.length;
+			dpio->rxGatherBufLen = (sint32)rxPktResp.length;
 			dpio->rxGatherSrc = rxPktResp.src;
 			memcpy(dpio->rxGatherAdr, rxPktResp.adr, dpio->myAdrLen);
 			return dp_RES_AGAIN;
@@ -4062,7 +4062,7 @@ dp_result_t dpio_get(
 				;
 #ifdef dp_STATS
 				dpio->stats[dp_STAT_DPIO_RX_REL_PKTS].in++;
-				dpio->stats[dp_STAT_DPIO_RX_REL_BYTES].in += *psize;
+				dpio->stats[dp_STAT_DPIO_RX_REL_BYTES].in += (sint32)*psize;
 #endif
 			}
 		} else if (err != dp_RES_EMPTY) {
@@ -4135,14 +4135,14 @@ static dp_result_t dpio_put_unreliable_unbuffered(dpio_t *dpio, playerHdl_t dest
 		DPRINT(("dpio_put_unreliable: error: commTxPkt status %d\n", txPktResp.status));
 #ifdef dp_STATS
 		dpio->stats[dp_STAT_DPIO_TX_UNREL_PKTS].dropped++;
-		dpio->stats[dp_STAT_DPIO_TX_UNREL_BYTES].dropped += size;
+		dpio->stats[dp_STAT_DPIO_TX_UNREL_BYTES].dropped += (sint32)size;
 #endif
 		return txPktResp.status;
 	}
 
 #ifdef dp_STATS
 	dpio->stats[dp_STAT_DPIO_TX_UNREL_PKTS].out++;
-	dpio->stats[dp_STAT_DPIO_TX_UNREL_BYTES].out += size;
+	dpio->stats[dp_STAT_DPIO_TX_UNREL_BYTES].out += (sint32)size;
 #endif
 	return dp_RES_OK;
 }
@@ -4417,7 +4417,7 @@ dp_result_t dpio_put_reliable2(
 			dpio_assertValid(dpio);
 #ifdef dp_STATS
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].dropped++;
-			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].dropped += size;
+			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].dropped += (sint32)size;
 #endif
 			return dp_RES_FULL;
 		}
@@ -4445,9 +4445,9 @@ dp_result_t dpio_put_reliable2(
 #ifdef dp_STATS
 		if (err == dp_RES_OK) {
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].out++;
-			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += size;
+			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].out += (sint32)size;
 			dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting++;
-			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += size;
+			dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting += (sint32)size;
 /*			DPRINT(("dpio_put_reliable: h:%x, queued %d bytes, pktnum %d, waiting %d %d\n", dests[i], size, (cdests[i]->tx.next_pktnum - 1)&0xffff,
 					dpio->stats[dp_STAT_DPIO_TX_REL_PKTS].waiting,
 					dpio->stats[dp_STAT_DPIO_TX_REL_BYTES].waiting));*/

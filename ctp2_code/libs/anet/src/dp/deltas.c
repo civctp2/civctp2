@@ -69,7 +69,7 @@ typedef struct {
  Callback for remote enum players.  Only used if application requested
  object deltas for this session's players.
 ----------------------------------------------------------------------*/
-void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, sint32 flags, void *context, dp_playerId_t *player)
+void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, long flags, void *context, dp_playerId_t *player)
 {
 	dp_rplayers_enumEx_context_t *r = (dp_rplayers_enumEx_context_t *)context;
 	dp_result_t err;

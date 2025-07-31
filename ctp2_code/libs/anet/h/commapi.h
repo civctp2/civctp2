@@ -332,7 +332,7 @@ typedef struct {			/* Request (filled in by caller) */
 	char	*phonenum;
 	char	*modeministr;
 	sint32	flags;			/* controls whether to dial and/or test */
-	sint32	dialing_method;	/* parameter to HMSetDialingMethod */
+	size_t	dialing_method;	/* parameter to HMSetDialingMethod */
 } commInitReq_t;			/* Copy of commInitReq_t in anet.h */
 
 typedef struct {

@@ -230,7 +230,7 @@ static sint32 aehlog_writetofile(aehlog_t *aehlog, const aeh_buf_t *aehbuf, cons
  i.e. of the sort created by aehlog_writetobuf().
  Returns number of bytes read or -1 on failure.
 --------------------------------------------------------------------------*/
-sint32 aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, sint32 buflen)
+size_t aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, size_t buflen)
 {
 	const char *ptr = buf;
 	sint32 aehlog_tag;
@@ -247,7 +247,7 @@ sint32 aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, sin
 		aehDPRINT(("aehlog_readfrombuf: err: len %d > max %d\n", aehbuf->buflen, aeh_BUF_MAXLEN));
 		return -1;
 	} else if ((sint32)aehbuf->buflen > (buflen - (ptr - buf))) {
-		aehDPRINT(("aehlog_readfrombuf: err: len %d > buflen %d\n", aehbuf->buflen + (ptr - buf), buflen));
+		aehDPRINT(("aehlog_readfrombuf: err: len %d > buflen %zu\n", aehbuf->buflen + (ptr - buf), buflen));
 		return -1;
 	}
 	memcpy(aehbuf->buf, ptr, aehbuf->buflen);
@@ -260,7 +260,7 @@ sint32 aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, sin
  buf must be at least aehbuf->buflen + 12 bytes in length.
  Returns number of bytes written or -1 on failure.
 --------------------------------------------------------------------------*/
-sint32 aehlog_writetobuf(const aeh_buf_t *aehbuf, const uint32 ninst, char *buf, sint32 buflen)
+size_t aehlog_writetobuf(const aeh_buf_t *aehbuf, const uint32 ninst, char *buf, size_t buflen)
 {
 	char *ptr = buf;
 	sint32 aehlog_tag = aehlog_MAGIC;
@@ -290,7 +290,7 @@ static sint32 checkDupException(const uint8 *buf, uint32 size, uint32 fsize, aeh
 	sint32 fpos;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	fseek(aehlog->fp, 0L, SEEK_SET);
-	while ((fpos = ftell(aehlog->fp)) >= 0 && fpos < fsize) {
+	while ((fpos = ftell(aehlog->fp)) >= 0 && fpos < (sint32)fsize) {
 		fgetpos(aehlog->fp, &fptr);
 		if ((err = aehlog_readfromfile(aehlog, &tmpaehbuf, &ninst)) != aeh_RES_OK) {
 			if (err == aeh_RES_EMPTY) break;

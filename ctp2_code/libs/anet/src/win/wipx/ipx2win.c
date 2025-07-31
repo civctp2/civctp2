@@ -333,7 +333,7 @@ sint32 IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr)
 // Copies len bytes from buf into internal packet queue.
 // Must have previously gotten handle for destination by calling ipx2_adr2hdl.
 
-sint32 IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest)
+sint32 IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, size_t len, IPXHANDLE hdest)
 
 {
   sint32        nobytes;
@@ -396,13 +396,13 @@ sint32 IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hde
 // (ipx2_get could do this for you, but then the peer table might fill up
 // with all sorts of garbage addresses from hosts who sent you junk mail.)
 
-sint32 IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *plen, IPXHANDLE *hsrc, IPXPEER *srcaddr)
+sint32 IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, size_t *plen, IPXHANDLE *hsrc, IPXPEER *srcaddr)
 
 {
   sint32     addrlen;
   ULONG   nobytes;
   IPXPEER addr;
-  sint32 origlen = *plen;
+  size_t origlen = *plen;
 
 //  DPRINT(("IPXWIN_GetPacket() Called..\n"));
 
@@ -424,7 +424,7 @@ sint32 IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *plen, IPXHANDLE *
 
 		DPRINT(("IPXWIN_GetPacket: Winsock error: %i\n", lastErr));
 		if (lastErr == WSAEMSGSIZE) {
-			DPRINT(("IPXWIN_GetPacket: buflen was %d, got WSAEMSGSIZE\n", origlen));
+			DPRINT(("IPXWIN_GetPacket: buflen was %zu, got WSAEMSGSIZE\n", origlen));
 			return ipx2_RES_FULL;
 		}
 	}

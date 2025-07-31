@@ -126,7 +126,7 @@ LONG _cdecl MemoryAccessExceptionFilter (LPEXCEPTION_POINTERS ep)
  * list is ordered in descending order from highest load address to lowest */
 typedef struct aeh_module_entry_s{
 	aeh_modfile_t aehmod;
-	uint32 start_addr;
+	size_t start_addr;
 	char *path;
 	BOOLEAN bCrash;
 	struct aeh_module_entry_s *next;
@@ -164,7 +164,7 @@ static sint32 aehmod_add(char *mName, char *path, HMODULE hMod)
 		return aeh_RES_NOMEM;
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
-	modentry->start_addr = (uint32)hMod;
+	modentry->start_addr = (size_t)hMod;
 	modentry->bCrash = FALSE;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!firstmod) {
@@ -356,7 +356,7 @@ static sint32 aeh_modfunc_Fill(aeh_modfunc_t *modfunc, aeh_mapcat_t *aehmapcat, 
 	aeh_map_func_t *pointer;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!modfunc || !stk || !aehmapcat || !(aehmapcat->map) ||
-		((mapindex >= 0) && (mapindex >= aehmapcat->nmap))) {
+		((mapindex >= 0) && (mapindex >= (sint32)aehmapcat->nmap))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return aeh_RES_BAD;
 	}
@@ -1116,7 +1116,7 @@ sint32 aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat)
 		sint32 modind = aeh->stk[i].mod_index - 1;
 		if (modind < 0)
 			index = -1;
-		else if (modind >= aeh->nmod) {
+		else if (modind >= (sint32)aeh->nmod) {
 			aehDPRINT(("aeh_getAllInfo: bug: mod_index %d > aeh->nmod %d\n",
 				aeh->stk[i].mod_index, aeh->nmod));
 			index = -1;
@@ -1290,7 +1290,7 @@ void codetostring(sint32 retcode, char *desc)
          len (actual length of aehDesc)
  Return: length needed to completely write out info
 --------------------------------------------------------------------------*/
-sint32 aeh_toString(const aeh_t *aeh, char *aehDesc, uint32 *len)
+size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len)
 {
 	uint32 i;
 	char tmp[BUFFER_SIZE + 1];
@@ -1389,7 +1389,8 @@ sint32 aeh_toString(const aeh_t *aeh, char *aehDesc, uint32 *len)
 		if (strlen(tmp) + 29 < BUFFER_SIZE)
 			sprintf(&tmp[strlen(tmp)], " abs_addr  mod_off func_off\n");
 		for (i = 0; i < aeh->nstk; i++) {
-			uint32 stkoffsetaddr, stkmodcrc;
+			size_t stkoffsetaddr;
+			uint32 stkmodcrc;
 			char *stkmodname;
 			stkoffsetaddr = aeh->stk[i].offset_addr;
 			stkmodname = aeh_StkModName(aeh, i);
@@ -1407,22 +1408,22 @@ sint32 aeh_toString(const aeh_t *aeh, char *aehDesc, uint32 *len)
 				if (!strcmp(aeh->modfunc[i].name, unknown) &&
 					strcmp(stkmodname, unknown))
 					sprintf(&tmp[strlen(tmp)],
-							" %8lx %8lx %8lx  %s(crc:%8lx)  %s  %s\n",
+							" %8zx %8zx %8zx  %s(crc:%8lx)  %s  %s\n",
 							aeh->modfunc[i].load_addr, stkoffsetaddr,
 							aeh->modfunc[i].offset_addr, stkmodname, stkmodcrc,
 							aeh->modfunc[i].name, aeh->modfunc[i].mappath);
 				else
-					sprintf(&tmp[strlen(tmp)], " %8lx %8lx %8lx  %s  %s  %s\n",
+					sprintf(&tmp[strlen(tmp)], " %8zx %8zx %8zx  %s  %s  %s\n",
 							aeh->modfunc[i].load_addr, stkoffsetaddr,
 							aeh->modfunc[i].offset_addr, stkmodname,
 							aeh->modfunc[i].name, aeh->modfunc[i].mappath);
 			} else {
 				if (strlen(stkmodname) + 44 + strlen(tmp) > BUFFER_SIZE) break;
 				if (stkmodcrc)
-					sprintf(&tmp[strlen(tmp)], " %8x %8lx %8x  %s(crc:%8lx)\n",
+					sprintf(&tmp[strlen(tmp)], " %8x %8zx %8x  %s(crc:%8lx)\n",
 							0, stkoffsetaddr, 0, stkmodname, stkmodcrc);
 				else
-					sprintf(&tmp[strlen(tmp)], " %8x %8lx %8x  %s\n",
+					sprintf(&tmp[strlen(tmp)], " %8x %8zx %8x  %s\n",
 							0, stkoffsetaddr, 0, stkmodname);
 			}
 		}
@@ -1442,10 +1443,10 @@ sint32 aeh_toString(const aeh_t *aeh, char *aehDesc, uint32 *len)
  **** Methods to convert between aeh_t and aeh_buf_t(binary stream) ****
  ***********************************************************************/
 
-static sint32 putStream(uint8 **p, const void *dat, uint32 lendat, uint8 *peos)
+static sint32 putStream(uint8 **p, const void *dat, size_t lendat, uint8 *peos)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if ((peos < *p) || (peos - *p < lendat)) {
+	if ((peos < *p) || (peos - *p < (ptrdiff_t)lendat)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
@@ -1454,10 +1455,10 @@ static sint32 putStream(uint8 **p, const void *dat, uint32 lendat, uint8 *peos)
 	return 0;
 }
 
-static sint32 getStream(const uint8 **p, void *dat, uint32 lendat, const uint8 *peos)
+static sint32 getStream(const uint8 **p, void *dat, size_t lendat, const uint8 *peos)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
-	if ((peos < *p) || (peos - *p < lendat)) {
+	if ((peos < *p) || (peos - *p < (ptrdiff_t)lendat)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
@@ -1468,7 +1469,7 @@ static sint32 getStream(const uint8 **p, void *dat, uint32 lendat, const uint8 *
 
 static sint32 putCharStream(uint8 **p, const char *dat, uint8 *peos)
 {
-	uint32 lendat = 0;
+	size_t lendat = 0;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if ((peos < *p) || (peos - *p < sizeof(lendat))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
@@ -1490,14 +1491,14 @@ static sint32 putCharStream(uint8 **p, const char *dat, uint8 *peos)
 
 static sint32 getCharStream(const uint8 **p, char **dat, const uint8 *peos)
 {
-	uint32 lendat = 0;
+	size_t lendat = 0;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if ((peos < *p) || (peos - *p < sizeof(lendat))) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
 	readSwap((const void**)p, &lendat, sizeof(lendat));
-	if ((peos < *p) || (peos - *p < lendat)) {
+	if ((peos < *p) || (peos - *p < (ptrdiff_t)lendat)) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return -1;
 	}
@@ -1517,7 +1518,7 @@ static sint32 getCharStream(const uint8 **p, char **dat, const uint8 *peos)
 static sint32 putStreamErrFull(uint8 *p, aeh_buf_t *aehbuf)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
-	aehbuf->buflen = p - &(aehbuf->buf[0]);
+	aehbuf->buflen = (uint32)(p - &(aehbuf->buf[0]));
 	aeh_SetCurrent(__LINE__, __FILE__);
 	return aeh_RES_FULL;
 }
@@ -1557,7 +1558,7 @@ sint32 aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 				return putStreamErrFull(pwrite, aehbuf);
 			}
 		}
-		aehbuf->buflen = pwrite - &(aehbuf->buf[0]);
+		aehbuf->buflen = (uint32)(pwrite - &(aehbuf->buf[0]));
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return aeh_RES_OK;
 	}
@@ -1697,7 +1698,7 @@ sint32 aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf)
 		}
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
-	aehbuf->buflen = pwrite - &(aehbuf->buf[0]);
+	aehbuf->buflen = (uint32)(pwrite - &(aehbuf->buf[0]));
 	aeh_SetCurrent(__LINE__, __FILE__);
 	return aeh_RES_OK;
 }

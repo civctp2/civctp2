@@ -1943,7 +1943,7 @@ dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, sint32 seconds)
 --------------------------------------------------------------------------*/
 DP_API dp_result_t
 dptab_get_bykey(
-	dptab_table_t *table, const char *subkey, sint32 subkeylen, void **pbuf, size_t *plen)
+	dptab_table_t *table, const char *subkey, size_t subkeylen, void **pbuf, size_t *plen)
 {
 	void *varbuf;
 	size_t varlen;
@@ -2270,7 +2270,7 @@ dptab_send(
 
 #ifdef dp_STATS
 	dptab->stats[dptab_STAT_TX_RECORDS].in++;
-	dptab->stats[dptab_STAT_TX_BYTES].in += varlen + subkeylen;
+	dptab->stats[dptab_STAT_TX_BYTES].in += (sint32)varlen + subkeylen;
 #ifdef VERBOSE
 	DPRINT(("dptab_send: STAT_TX_RECORDS.in %d STAT_TX_BYTES.in %d, len %d\n",
 		dptab->stats[dptab_STAT_TX_RECORDS].in,
@@ -2490,7 +2490,7 @@ static void dptab_xferBuffer_flush(dptab_t *dptab, dptab_xferBuffer_t *xbuf)
 								xfer->table->aContext[j], dp_RES_FINISHED);   /* FIXME */
 				}
 			}
-			totallen += xbuf->varlen[i] + xfer->subkeylen;
+			totallen += (sint32)xbuf->varlen[i] + xfer->subkeylen;
 
 			/* Delete the transfer request */
 			ierr = assoctab_subscript_delete(xbuf->peer_tx, xfer->xferid);
@@ -2775,7 +2775,7 @@ dptab_update_send_large(
 
 #ifdef dp_STATS
 			dptab->stats[dptab_STAT_TX_RECORDS].out++;
-			dptab->stats[dptab_STAT_TX_BYTES].out += varlen + xfer->subkeylen;
+			dptab->stats[dptab_STAT_TX_BYTES].out += (sint32)varlen + xfer->subkeylen;
 #ifdef VERBOSE
 			DPRINT(("dptab_update_send_large: STAT_TX_RECORDS.out %d STAT_TX_BYTES.out %d, len %d\n",
 				dptab->stats[dptab_STAT_TX_RECORDS].out,
@@ -3406,7 +3406,7 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 		/* The variable has arrived! Obey the value change it carries.
 		 * Don't echo to other machines!
 		 */
-		sint32 newcrc = dp_crc32((uint8 *)var->buf, var->len);
+		sint32 newcrc = (sint32)dp_crc32((uint8 *)var->buf, var->len);
 		dptab_table_t *table;
 		if (newcrc != xfer->crc) {
 			DPRINT(("dptab_handlePacket: bad crc %x, expected %x!\n",
@@ -3428,10 +3428,10 @@ dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t len, void *buf)
 #ifdef dp_STATS
 		if (err == dp_RES_OK) {
 			dptab->stats[dptab_STAT_RX_RECORDS].in++;
-			dptab->stats[dptab_STAT_RX_BYTES].in += var->len + xfer->subkeylen;
+			dptab->stats[dptab_STAT_RX_BYTES].in += (sint32)var->len + xfer->subkeylen;
 		} else {
 			dptab->stats[dptab_STAT_RX_RECORDS].dropped++;
-			dptab->stats[dptab_STAT_RX_BYTES].dropped += var->len + xfer->subkeylen;
+			dptab->stats[dptab_STAT_RX_BYTES].dropped += (sint32)var->len + xfer->subkeylen;
 		}
 #endif
 		/* Done with this transfer. */

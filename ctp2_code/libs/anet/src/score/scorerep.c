@@ -45,7 +45,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const uint8 *binstr, sint32 len)
+static const char *hexstring(const uint8 *binstr, size_t len)
 {
 	static char buf[768];
 	sint32 i;

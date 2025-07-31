@@ -168,7 +168,7 @@ sint32 TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr, 
  * second address will only be sent to if it is marked as LIVE.
  *
  */
-sint32 TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest);
+sint32 TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, size_t len, TCPHANDLE hdest);
 
 /*
  * Receive a packet.  The packet will be copied into bufptr, and

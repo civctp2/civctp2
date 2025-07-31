@@ -1190,7 +1190,7 @@ sint32						/* status */
 TCPWIN_PutPacket(
 	TCPINSTANCE *tcp,	/* (input) current TCP instance */
 	void *bufptr,		/* (input) packet to send */
-	ULONG len,			/* (input) length in bytes of packet to send */
+	size_t len,			/* (input) length in bytes of packet to send */
 	TCPHANDLE hdest)	/* (input) destination for packet */
 {
 	sint32 cBytes;

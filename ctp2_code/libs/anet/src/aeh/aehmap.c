@@ -109,7 +109,7 @@ static void aeh_map_Unload(aeh_map_t *aehmap, sint32 bWriteAlg);
  * returns aeh_RES_EMPTY if could not load file */
 static sint32 aeh_map_algRead(aeh_map_t *aehmap, char *algpath) {
 	FILE *fh;
-	sint32 nread, nsize;
+	size_t nread, nsize;
 	uint16 tag;
 	char buffer[BUFFER_SIZE], *ptr;
 	char name[BUFFER_SIZE];
@@ -146,7 +146,7 @@ static sint32 aeh_map_algRead(aeh_map_t *aehmap, char *algpath) {
 				break;
 		}
 		if (ptr < eobuf) {
-			sint32 nleft = eobuf - ptr;
+			size_t nleft = eobuf - ptr;
 			memcpy(buffer, ptr, nleft);
 			ptr = buffer + nleft;
 			nsize = BUFFER_SIZE - nleft;
@@ -189,10 +189,10 @@ static sint32 aeh_map_algWrite(aeh_map_t *aehmap, char *algpath) {
 	ptr = buffer;
 	while (curr) {
 		aeh_map_func_t *next = curr->next;
-		uint16 namelen = (uint16)strlen(curr->name);
+		size_t namelen = (uint16)strlen(curr->name);
 		if (ptr + (sizeof(uint32) + sizeof(uint16) + namelen) >
 			buffer + BUFFER_SIZE) {
-			uint32 len = ptr - buffer;
+			size_t len = ptr - buffer;
 			if (fwrite(buffer, 1, len, fh) != len) {
 				aehDPRINT(("aeh_map_Unload: error writing %s\n", algpath));
 				bWriteError = 1;
@@ -201,13 +201,13 @@ static sint32 aeh_map_algWrite(aeh_map_t *aehmap, char *algpath) {
 			ptr = buffer;
 		}
 		*((uint32*)ptr) = curr->start_addr; ptr += sizeof(uint32);
-		*((uint16*)ptr) = namelen; ptr += sizeof(uint16);
+		*((uint16*)ptr) = (uint16)namelen; ptr += sizeof(uint16);
 		memcpy(ptr, curr->name, namelen); ptr += namelen;
 		curr = next;
 	}
 	if (!bWriteError) {
 		if (ptr > buffer) {
-			uint32 len = ptr - buffer;
+			size_t len = ptr - buffer;
 			if (fwrite(buffer, 1, len, fh) != len)
 				bWriteError = 1;
 		}

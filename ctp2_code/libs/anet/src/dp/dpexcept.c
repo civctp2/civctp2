@@ -74,7 +74,7 @@ static sint32 getAppParam(aeh_appParam_t *aehapp)
  Gets a string describing the system into systemDesc, which has length len.
  Prepends the string crshtxt.
 --------------------------------------------------------------------------*/
-static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
+static void getSystemInfo(char *systemDesc, char *crshtxt, size_t len)
 {
 	static sint32 firstCall = TRUE;
 	static char buf2d[aeh_BUF_MAXLEN] = "";
@@ -123,7 +123,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
 		return;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (buf2d[0]) {
-		sint32 tmplen;
+		size_t tmplen;
 		if (crshtxt) strcat(systemDesc, "@@##");
 		tmplen = strlen(systemDesc) + 1;
 		if (len > tmplen + strlen(buf2d))
@@ -136,7 +136,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
 	}
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (buf3d[0]) {
-		sint32 tmplen;
+		size_t tmplen;
 		if (buf2d[0])
 			strcat(systemDesc, ";");
 		else if (crshtxt)
@@ -154,7 +154,7 @@ static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
 }
 #else
 /* not implemented */
-static void getSystemInfo(char *systemDesc, char *crshtxt, uint32 len)
+static void getSystemInfo(char *systemDesc, char *crshtxt, size_t len)
 {
 	systemDesc[0] = '\0';
 	if (crshtxt) {
@@ -192,7 +192,7 @@ static dptab_table_t *getExceptionTable(dptab_t *dptab)
 
 /*** Functions for client ***/
 
-static sint32 dp_makeExceptionRecords(uint8 *buf, uint32 buflen, aehlog_t *aehlog)
+static size_t dp_makeExceptionRecords(uint8 *buf, size_t buflen, aehlog_t *aehlog)
 {
 	sint32 err;
 	uint32 ninst;
@@ -227,7 +227,7 @@ static sint32 dp_makeExceptionRecords(uint8 *buf, uint32 buflen, aehlog_t *aehlo
 dp_result_t dp_publishExceptions(dptab_t *dptab, playerHdl_t h, aehlog_t *aehlog)
 {
 	uint8 buf[aehlog_MAXSEND];
-	uint32 aehsize;
+	size_t aehsize;
 	dp_result_t err;
 	aehlog_t aehlogtmp;
 	aehlog_t *aehlogptr;
@@ -353,7 +353,7 @@ dp_result_t dp_handleExceptionRecords(uint8 *buf, uint32 buflen, uint32 fmaxsize
  hexbuf must be at least 2*len + 1 characters in length.
  Returns hexbuf.
 --------------------------------------------------------------------------*/
-static char *buf2hex(const char *buf, sint32 len, char *hexbuf)
+static char *buf2hex(const char *buf, size_t len, char *hexbuf)
 {
 	sint32 i;
 	for (i = 0; i < len; i++) {
@@ -372,7 +372,7 @@ static char *buf2hex(const char *buf, sint32 len, char *hexbuf)
 static sint32 sendtoserver(aeh_t *aeh)
 {
 	sint32 err;
-	sint32 len;
+	size_t len;
 	aeh_buf_t aehbuf;
 	char atvilog[aeh_BUF_MAXLEN+12];
 	char buf[2];
@@ -570,7 +570,7 @@ DP_API dp_result_t DP_APIX dpReportCrashEx(LPEXCEPTION_POINTERS pException, char
 		 */
 		if (pException->ExceptionRecord->ExceptionCode == aeh_ASSERTION_CODE &&
 			pException->ExceptionRecord->NumberParameters == 3) {
-			const DWORD *array = pException->ExceptionRecord->ExceptionInformation;
+			const ULONG_PTR *array = pException->ExceptionRecord->ExceptionInformation;
 			err = aeh_Create(&aeh, pException, &aehapp, systemDesc, (const sint32 *)array[0], (const char*)array[1], (const char*)array[2]);
 			bPrevCall--;
 		} else

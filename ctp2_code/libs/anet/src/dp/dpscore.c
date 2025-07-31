@@ -54,9 +54,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
-static void dumpBuf(const char *buf, sint32 len)
+static void dumpBuf(const char *buf, size_t len)
 {
-	sint32 i;
+	size_t i;
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x ", 255 & buf[i]));
 		if ((i % 24) == 23) {

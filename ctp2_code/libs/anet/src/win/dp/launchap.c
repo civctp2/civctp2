@@ -52,7 +52,7 @@ static dp_result_t notifystub(HANDLE hprocess)
 		DPRINT(("launchap: could not find stub\n"));
 		return dp_RES_EMPTY;
 	}
-	sscanf(strhandle, "%x", &hstub);
+	sscanf(strhandle, "%p", &hstub);
 /*	DPRINT(("launchap: Got stub handle %x\n", hstub)); */
 	if (!DuplicateHandle(GetCurrentProcess(), hprocess, hstub, &hspawn, 0, FALSE, DUPLICATE_SAME_ACCESS)) {
 		DPRINT(("launchap: duplicating handle error %x.\n", GetLastError()));
@@ -63,7 +63,7 @@ static dp_result_t notifystub(HANDLE hprocess)
 		DPRINT(("launchap: could not find stub pipe write handle\n"));
 		return dp_RES_BUG;
 	}
-	sscanf(strhandle, "%x", &hpipe);
+	sscanf(strhandle, "%p", &hpipe);
 	if (!WriteFile(hpipe, (char *)&tag, sizeof(tag), &nwrite, NULL) ||
 		!WriteFile(hpipe, (char *)&hspawn, sizeof(hspawn), &nwrite, NULL)) {
 		DPRINT(("launchap: writing error %x.\n", GetLastError()));

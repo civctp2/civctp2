@@ -197,7 +197,7 @@ sint32 delay_put(delay_t *q, void *buf, size_t len, clock_t now)
 	if (!q->bytes_per_sec)
 		pkt->entry_done = entry_start;	/* wrong, but avoids divide by zero err */
 	else
-		pkt->entry_done = entry_start + ((len + delay_HEADER_BYTES) * ECLOCKS_PER_SEC) / q->bytes_per_sec;
+		pkt->entry_done = entry_start + (((clock_t)len + delay_HEADER_BYTES) * ECLOCKS_PER_SEC) / q->bytes_per_sec;
 	/*printf("delay_put: entry_done %d + ((%d + %d) * %d) / %d\n",
 			entry_start, len, delay_HEADER_BYTES, ECLOCKS_PER_SEC, q->bytes_per_sec);*/
 	/* set exit time to the transit durations plus the 'input free' time. */

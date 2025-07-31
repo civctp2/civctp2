@@ -381,9 +381,9 @@ static sint32 dp_getHdls(dp_t *dp, dpid_t idTo, playerHdl_t *dests, sint32 flags
  Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
-static void dumpBuf(const char *buf, sint32 len)
+static void dumpBuf(const char *buf, size_t len)
 {
-	sint32 i;
+	size_t i;
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x ", 255 & buf[i]));
 		if ((i % 24) == 23) {
@@ -998,12 +998,12 @@ DP_API size_t dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const d
 	lenp = q++;	/* skip len */
 	for (len=0, s=p->sessionName; (len < dp_SNAMELEN-1) && *s; len++)
 		*q++ = *s++;
-	*lenp = len;
+	*lenp = (char)len;
 
 	lenp = q++;	/* skip len */
 	for (len=0, s=p->szPassword; (len < dp_PASSWORDLEN-1) && *s; len++)
 		*q++ = *s++;
-	*lenp = len;
+	*lenp = (char)len;
 
 	/* concatenate user fields and strip trailing 0's */
 	lenp = q++;	/* skip len */
@@ -1015,7 +1015,7 @@ DP_API size_t dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const d
 	for (len=sizeof(p->szUserField)+sizeof(p->dwUser1); len > 0; len--)
 		if (q[len-1])
 			break;
-	*lenp = len;
+	*lenp = (char)len;
 	q += len;
 
 	DPRINT(("dp_pack_session: subkey %s, adrMaster ",
@@ -1045,10 +1045,10 @@ DP_API size_t dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const d
  into the fluffy form we use internally.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-DP_API sint32 dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, size_t buflen, dp_session_t *p)
+DP_API size_t dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, size_t buflen, dp_session_t *p)
 {
 	const uint8 *q = (const uint8 *)buf;
-	sint32 len;
+	size_t len;
 	uint8 userbuf[sizeof(p->szUserField)+sizeof(p->dwUser1)];
 	dp_assertValid(dp);
 
@@ -1292,7 +1292,7 @@ dp_sessions_cb(
  21 instead of 12 of these into one packet.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-static sint32 dp_unpack_host(dpid_t firstId, sint32 myAdrLen, const char *buf, dp_host_t *p, size_t length)
+static size_t dp_unpack_host(dpid_t firstId, sint32 myAdrLen, const char *buf, dp_host_t *p, size_t length)
 {
 	const uint8 *q = (const uint8 *)buf;
 
@@ -1332,7 +1332,7 @@ static sint32 dp_unpack_host(dpid_t firstId, sint32 myAdrLen, const char *buf, d
  Pack a dp_host_t into a compact, uniform byte order form for transmission.
  Returns length used.
 ----------------------------------------------------------------------*/
-static sint32 dp_pack_host(sint32 myAdrLen, const dp_host_t *p, char *buf)
+static size_t dp_pack_host(sint32 myAdrLen, const dp_host_t *p, char *buf)
 {
 	char *q = buf;
 
@@ -1363,7 +1363,7 @@ static sint32 dp_pack_host(sint32 myAdrLen, const dp_host_t *p, char *buf)
  If any field is too long, it is truncated.
  Returns length used.
 ----------------------------------------------------------------------*/
-static sint32 dp_pack_playerId(const dp_playerId_t *p, char *buf)
+static size_t dp_pack_playerId(const dp_playerId_t *p, char *buf)
 {
 	char *q = buf;
 	const char *s;
@@ -1401,7 +1401,7 @@ static sint32 dp_pack_playerId(const dp_playerId_t *p, char *buf)
  Does not fill in address field; that has to be looked up in the hosts table.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-sint32 dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
+size_t dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 {
 	const uint8 *q = (const uint8 *)buf;
 	sint32 len;
@@ -1438,7 +1438,7 @@ sint32 dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 	DPRINT(("dp_unpack_playerId(id %d): name %s\n", id, p->name));
 #endif
 
-  return ((uintptr_t)q - (uintptr_t)buf);
+	return ((uintptr_t)q - (uintptr_t)buf);
 }
 
 /*--------------------------------------------------------------------------
@@ -2001,7 +2001,7 @@ dp_myplayers_cb(
 		dpid_t id = (dpid_t) dpMAKESHORT(subkey[0], subkey[1]);
 		size_t len_used = dp_unpack_playerId(id, buf, &player);
 		dp_uid_t uid = dp_UID_NONE;
-		sint32 playerlen;
+		size_t playerlen;
 		char playerbuf[dpio_MAXLEN_RELIABLE];
 
 		if (len_used != total) {
@@ -2242,7 +2242,7 @@ dp_groups_cb(
 	dp_result_t err;
 	dp_groupId_t gbuf;
 	playerHdl_t me = PLAYER_ME;
-	sint32 namelen = sent < dp_PNAMELEN - 1 ? sent : dp_PNAMELEN - 1;
+	size_t namelen = sent < dp_PNAMELEN - 1 ? sent : dp_PNAMELEN - 1;
 
 	dptab_assertValid(dptab);
 
@@ -3215,7 +3215,7 @@ dpThaw(
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when creating a session.
 -------------------------------------------------------------------------*/
-static sint32	dp_PASCAL open_sess_cb(dp_session_t *ps, sint32 *pTimeout, sint32 flags, void *context)
+static sint32	dp_PASCAL open_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context)
 {
 	dp_result_t *pOpenFinished = (dp_result_t *)context;
 	assert(pOpenFinished);
@@ -3243,7 +3243,7 @@ typedef struct {
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-static sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, sint32 *pTimeout, sint32 flags,void *context)
+static sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags,void *context)
 {
 	dp_commThaw_sessfinder_t *pc = (dp_commThaw_sessfinder_t *)context;
 	assert(pc);
@@ -3286,7 +3286,7 @@ static sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, sint32 *pTimeout, s
 /*-------------------------------------------------------------------------
  Callback triggered by creating a player.
 -------------------------------------------------------------------------*/
-static void dp_PASCAL create_player_cb(dpid_t id, char_t *name, sint32 flags, void *context)
+static void dp_PASCAL create_player_cb(dpid_t id, char_t *name, long flags, void *context)
 {
 	dpid_t *pMy_id = (dpid_t *)context;
 
@@ -3306,7 +3306,7 @@ static void dp_PASCAL create_player_cb(dpid_t id, char_t *name, sint32 flags, vo
 --------------------------------------------------------------------------*/
 static void chopnl(char *string)
 {
-	sint32		len;
+	size_t		len;
 
 	len = strlen(string);
 	if (len && (string[len - 1] == '\n'))
@@ -3415,7 +3415,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 	if (params.OpenAddresses[0]) {
 		DPRINT(("dpCommThaw: Open Addresses %s\n", params.OpenAddresses));
 		params.commInitReq.flags |= comm_INIT_FLAGS_CONN_ADDR;
-		params.commInitReq.dialing_method = (uintptr_t) params.OpenAddresses;
+		params.commInitReq.dialing_method = (size_t) params.OpenAddresses;
 	}
 
 	/* Load Activenet. */
@@ -4009,7 +4009,7 @@ DP_API dp_result_t dpCloseGameServer(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t dpResolveHostname(
 	dp_t *dp,
-	const char *hostname,
+	char *hostname,
 	char adrbuf[dp_MAX_ADR_LEN])
 {
 	precondition(dp != NULL);
@@ -4124,7 +4124,7 @@ static dp_result_t dp_setSessionTablePeer(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_t *dp,
-	const char *masterHostName)	/* server's name, or NULL to clear */
+	char *masterHostName)	/* server's name, or NULL to clear */
 #ifdef dp_MULTISESSTABLE
 {
 	dp_result_t err;
@@ -4161,7 +4161,7 @@ DP_API dp_result_t DP_APIX dpSetGameServer(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	dp_t *dp,
-	const char *masterHostName,	/* server's name, or NULL to clear */
+	char *masterHostName,	/* server's name, or NULL to clear */
 	dp_species_t sessionType)
 #endif
 {
@@ -6102,7 +6102,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
  dpOpen does not require a callback, we need a non-null value to use if no
  callback is given.
 ------------------------------------------------------------------------*/
-static sint32 dp_PASCAL dpOpen_dummy_cb(dp_session_t *sDesc, sint32 *timeout, sint32 flags, void *context)
+static sint32 dp_PASCAL dpOpen_dummy_cb(dp_session_t *sDesc, long *timeout, long flags, void *context)
 {
 	(dp_session_t *)sDesc;
 	(sint32 *)timeout;
@@ -6996,7 +6996,7 @@ DP_API dp_result_t dpCreatePlayer(
 {
 	dp_playerId_t player;
 	char playerbuf[dpio_MAXLEN_RELIABLE];
-	sint32 playerlen;
+	size_t playerlen;
 	dp_result_t err;
 	char subkey[dptab_KEY_MAXLEN];
 	sint32 subkeylen;
@@ -8239,9 +8239,13 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 	 */
 	sp->hostid = (highest_id / dp_PLAYERS_PER_HOST) + 2;
 	DPRINT(("dp_election_become_master: new players will start at id:%d\n", sp->hostid * dp_PLAYERS_PER_HOST));
-	{	sint32 i; size_t len; size_t subkeylen;
+	{
+		sint32 i;
+		size_t len;
+		size_t subkeylen;
 		char subkey[dptab_KEY_MAXLEN];
 		char *buf;
+
 		subkeylen = 2;
 		dp->nextGId = dp->firstGId;
 		for (i = dp->firstGId + dp_MAX_GROUPS; i >= dp->firstGId; i--) {
@@ -9134,7 +9138,7 @@ static void dpPollPing(dp_t *dp)
 				else
 					average = 0;
 				DPRINT(("average: %ld\n", average));
-				dp->ping.cb(dp->ping.karma, average, loss_percent);
+				dp->ping.cb(dp->ping.karma, (long)average, loss_percent);
 			}
 			dp->ping.cb = NULL;
 			dp->ping_dest = PLAYER_NONE;
@@ -9164,7 +9168,7 @@ static void dpPollPing(dp_t *dp)
  Look up the session type and id of the session the given uid most
  recently tried to join.
 ----------------------------------------------------------------------*/
-dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, sint32 *sessidlen, dp_species_t *sessType)
+dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, size_t *sessidlen, dp_species_t *sessType)
 {
 	char subkey[dptab_KEY_MAXLEN];
 	char *pbuf;
@@ -9195,7 +9199,7 @@ dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, sint32 *sessi
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/
-dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, sint32 sessidlen, dp_species_t sessType)
+dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, size_t sessidlen, dp_species_t sessType)
 {
 	dp_result_t err;
 	char subkey[dptab_KEY_MAXLEN];
@@ -9851,7 +9855,7 @@ static dp_result_t dp_receive(
 				dp_packetType_t				tag;
 				dp_request_open_packet_t	body;
 			} PACK pkt;
-			sint32 len;
+			size_t len;
 
 			DPRINT(("dpReceive: Could not send credentials from h:%x to h:%x, err:%d\n", pktsrc, host, err));
 
@@ -10805,7 +10809,7 @@ DP_API dp_result_t dpEnumGroups(
 	}
 
 	for (i = dptab_tableSize(dp->groups) - 1; i >= 0; i--) {
-		sint32 namelen;
+		size_t namelen;
 		char subkey[dptab_KEY_MAXLEN];
 		sint32 subkeylen;
 		char *grec;

@@ -731,7 +731,7 @@ DP_API dp_result_t dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, sint
  *pbuf is filled with the item's buffer address, and
  *plen is filled with the item's length.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_get_bykey(dptab_table_t *table, const char *subkey, sint32 subkeylen, void **pbuf, size_t *plen);
+DP_API dp_result_t dptab_get_bykey(dptab_table_t *table, const char *subkey, size_t subkeylen, void **pbuf, size_t *plen);
 
 /*--------------------------------------------------------------------------
  Given a table pointer and an index,

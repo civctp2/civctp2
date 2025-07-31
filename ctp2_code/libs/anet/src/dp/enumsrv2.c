@@ -102,7 +102,7 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 	 */
 	pkt.tag = dp_PING_PACKET_ID;
 	pkt.body.karma = 0;
-	pkt.body.len = sizeof(clock_t) + dp->dpio->myAdrLen + sizeof(sessType);
+	pkt.body.len = (sint8)(sizeof(clock_t) + dp->dpio->myAdrLen + sizeof(sessType));
 	pkt.body.pktnum = SERVER_PING_MAGIC_PKTNUM1;
 	memset(pkt.body.data, 0, sizeof(pkt.body.data));
 	memcpy(pkt.body.data, &dp->now, sizeof(clock_t));
@@ -585,8 +585,8 @@ void dp_endEnumServers(
 /*----------------------------------------------------------------------
  Wrapper for dpEnumServers callback.
 ----------------------------------------------------------------------*/
-static sint32 dp_PASCAL serversEx_cb(const char *hostname, sint32 roundtrip_ms,
-		dp_serverInfo_t *server, sint32 *pTimeout, sint32 flags, void *context)
+static sint32 dp_PASCAL serversEx_cb(const char *hostname, long roundtrip_ms,
+		dp_serverInfo_t *server, long *pTimeout, long flags, void *context)
 {
 	dp_t *dp = (dp_t *)context;
 	if (!dp) return dp_RES_BAD;

@@ -150,7 +150,7 @@ sint32 aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, c
  i.e. of the sort created by aehlog_writetobuf().
  Returns number of bytes read or -1 on failure.
 --------------------------------------------------------------------------*/
-sint32 aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, sint32 buflen);
+size_t aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, size_t buflen);
 
 /*--------------------------------------------------------------------------
  Write an aehlog to buf in memory in the format of an atvilog.bin file,
@@ -158,7 +158,7 @@ sint32 aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, sin
  buf must be at least aehbuf->buflen + 12 bytes in length.
  Returns number of bytes written or -1 on failure.
 --------------------------------------------------------------------------*/
-sint32 aehlog_writetobuf(const aeh_buf_t *aehbuf, const uint32 ninst, char *buf, sint32 buflen);
+size_t aehlog_writetobuf(const aeh_buf_t *aehbuf, const uint32 ninst, char *buf, size_t buflen);
 
 /*--------------------------------------------------------------------------
  Append info (consisting of one or more records packed together) to file.

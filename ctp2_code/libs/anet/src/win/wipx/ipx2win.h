@@ -78,9 +78,9 @@ IPXHANDLE     IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, sint32 inse
 
 sint32        IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr);
 
-sint32        IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest);
+sint32        IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, size_t len, IPXHANDLE hdest);
 
-sint32        IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *len, IPXHANDLE *hsrc, IPXPEER *srcaddr);
+sint32        IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, size_t *len, IPXHANDLE *hsrc, IPXPEER *srcaddr);
 
 #define ipx2_create(socket, stat)               IPXWIN_Create(socket, stat)
 

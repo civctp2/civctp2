@@ -60,9 +60,9 @@ clock_t dp_Sparc_clock(void)
 ------------------------------------------------------------------------*/
 #ifdef WIN32
 #include <windows.h>
-sint32 getTempDir(char *name, sint32 maxnamelen)
+sint32 getTempDir(char *name, size_t maxnamelen)
 {
-	sint32 namelen = GetTempPath(maxnamelen, name);
+	sint32 namelen = GetTempPath((DWORD)maxnamelen, name);
 	if (namelen == 0) {
 		name[0] = '\0';
 	} else if (name[namelen - 1] != '\\') {
@@ -93,7 +93,7 @@ sint32 getTempDir(char *name, sint32 namelen)
  Byteswaps if necessary.
 ------------------------------------------------------------------------*/
 #if defined(SPARC) || defined(POWERPC)
-void writeSwap(void **bp, const void *dat, uint32 size)
+void writeSwap(void **bp, const void *dat, size_t size)
 {
 	uint8 *p0 = (uint8 *)dat + (size - 1);
 	uint8 *p1 = (uint8 *)(*bp);
@@ -101,7 +101,7 @@ void writeSwap(void **bp, const void *dat, uint32 size)
 		*p1++ = *p0--;
 	*bp = (void *)p1;
 }
-void readSwap(const void **bp, void *dat, uint32 size)
+void readSwap(const void **bp, void *dat, size_t size)
 {
 	uint8 *p0 = (uint8 *)(*bp);
 	uint8 *p1 = (uint8 *)dat + (size - 1);
@@ -111,14 +111,14 @@ void readSwap(const void **bp, void *dat, uint32 size)
 }
 
 #else
-void writeSwap(void **bp, const void *dat, uint32 size)
+void writeSwap(void **bp, const void *dat, size_t size)
 {
 	memcpy(*bp, dat, size);
 	uint8 *ucp = (uint8 *) *bp;
 	ucp += size;
 	*bp = (void *) ucp;
 }
-void readSwap(const void **bp, void *dat, uint32 size)
+void readSwap(const void **bp, void *dat, size_t size)
 {
 	memcpy(dat, *bp, size);
 	uint8 *ucp = (uint8 *) *bp;
@@ -282,9 +282,9 @@ void dpSwapPvUpdate(pv_playerData_body_packet_t *buffer)
 
 #if defined(_DEBUG) || defined(DPRNT)
 /* Convert a key to ASCII for debug printing */
-char *key2buf(const char *key, sint32 keylen, char *buf)
+char *key2buf(const char *key, size_t keylen, char *buf)
 {
-	sint32 i;
+	size_t i;
 
 	if (keylen > hkeytab_MAXLEN)
 		return "key too long";

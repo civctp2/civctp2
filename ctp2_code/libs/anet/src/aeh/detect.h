@@ -21,5 +21,5 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "types.h"
 
-void GetPrimaryDisplayDesc(char *desc, uint32 *len);
-void Get3DHardware(char *sz3DCard, uint32 stringlen);
+void GetPrimaryDisplayDesc(char *desc, size_t *len);
+void Get3DHardware(char *sz3DCard, size_t stringlen);

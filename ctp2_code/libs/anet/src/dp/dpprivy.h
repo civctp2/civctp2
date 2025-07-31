@@ -49,14 +49,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*------------------------------------------------------------------------
  Returns temporary directory for the local machine.
 ------------------------------------------------------------------------*/
-sint32 getTempDir(char *name, sint32 namelen);
+sint32 getTempDir(char *name, size_t namelen);
 
 /*------------------------------------------------------------------------
  Write/read size bytes to/from dat from/to *bp, incrementing *bp by size.
  Byteswaps if Sparc and PowerMac and do nothing otherwise.
 ------------------------------------------------------------------------*/
-void writeSwap(void **bp, const void *dat, uint32 size);
-void readSwap(const void **bp, void *dat, uint32 size);
+void writeSwap(void **bp, const void *dat, size_t size);
+void readSwap(const void **bp, void *dat, size_t size);
 
 #ifndef NO_NETWORK	/* what the hell is this? */
 /*-----------------------------------------------------------------------
@@ -126,7 +126,7 @@ extern char key2a_buf[];
 extern char key2a_buf2[];
 extern char key2a_buf3[];
 extern char key2a_buf4[];
-extern char *key2buf(const char *key, sint32 keylen, char *buf);
+extern char *key2buf(const char *key, size_t keylen, char *buf);
 /* Don't use this twice in one printf! */
 #define key2a(key, keylen) key2buf(key, keylen, key2a_buf)
 /* You can use this one for the second key in a printf */
@@ -162,7 +162,7 @@ void dp_assertValid(dp_t *d);
  Does not fill in address field; that has to be looked up in the hosts table.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-sint32 dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p);
+size_t dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p);
 
 /*----------------------------------------------------------------------
  Convert a dpid into a playerHdl.
@@ -334,14 +334,14 @@ dp_result_t dpEnumServersPoll(dp_t *dp);
  Look up the session type and id of the session the given uid most
  recently tried to join.
 ----------------------------------------------------------------------*/
-dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, sint32 *sessidlen, dp_species_t *sessType);
+dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, size_t *sessidlen, dp_species_t *sessType);
 
 /*----------------------------------------------------------------------
  Remember the session type and id of the session the given uid most
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/
-dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, sint32 sessidlen, dp_species_t sessType);
+dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, size_t sessidlen, dp_species_t sessType);
 
 #endif	/* NO_NETWORK */
 

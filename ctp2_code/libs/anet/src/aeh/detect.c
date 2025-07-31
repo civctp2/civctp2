@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "detect.h"
 #define MAXLEN 256
 
-void GetPrimaryDisplayDesc(char *desc, uint32 *len)
+void GetPrimaryDisplayDesc(char *desc, size_t *len)
 {
 //Most reliable routine to find description of Video Card from Registry
 //	Does NOT check for or check info from DirectX!
@@ -97,7 +97,7 @@ void GetPrimaryDisplayDesc(char *desc, uint32 *len)
                      //  no tagged problems, so we assume this is the active display.
                      //  Now get the description and let's blow this joint
                      //
-                     valueSize = *len;
+                     valueSize = (DWORD)*len;
                      valueType = REG_SZ;
                      returnVal = RegQueryValueEx(hSubKey2, "DeviceDesc", NULL, &valueType, (uint8 *)desc, &valueSize);
                      if ( returnVal == ERROR_SUCCESS ) {
@@ -178,7 +178,7 @@ BOOL WINAPI FindRendition()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	sint32 len = MAXLEN;
+	size_t len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -193,7 +193,7 @@ BOOL WINAPI FindATI()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	sint32 len = MAXLEN;
+	size_t len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -208,7 +208,7 @@ BOOL WINAPI FindMystique()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	sint32 len = MAXLEN;
+	size_t len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -234,7 +234,7 @@ BOOL WINAPI FindS3ViRGE()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	sint32 len = MAXLEN;
+	size_t len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -249,7 +249,7 @@ BOOL WINAPI FindSTB()
 {
 	char	szCardDescrip[MAXLEN];
 	BOOL	result = FALSE;
-	sint32 len = MAXLEN;
+	size_t len = MAXLEN;
 
 	GetPrimaryDisplayDesc(szCardDescrip, &len);
 
@@ -287,7 +287,7 @@ BOOL WINAPI FindPowerVR()
 
 //--------------------------------------------------------------------------
 //--------------------------------------------------------------------------
-void Get3DHardware(char *sz3DCard, uint32 stringlen)
+void Get3DHardware(char *sz3DCard, size_t stringlen)
 {
 	char *Monst3D = "Monster 3D";
 	char *Right3D = "Righteous 3D";
@@ -297,7 +297,7 @@ void Get3DHardware(char *sz3DCard, uint32 stringlen)
 	char *STBBit  = "STB Bitro 3D";
 	char *Midas   = "Midas PCI or Apocalypse 3D";
 	char *Matrox  = "Matrox MGA Mystique";
-	uint32 len = stringlen;
+	size_t len = stringlen;
 
 #if 0
 	return

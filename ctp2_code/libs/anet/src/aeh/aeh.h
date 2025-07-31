@@ -148,15 +148,15 @@ typedef struct {
 typedef struct {
 	uint32 mod_index;  /* index of module in module array in aeh_t
                                 0: unknown/kernel; 1 thru n_mod: array index */
-	uint32 offset_addr; /* address offset by module's base address */
+	size_t offset_addr; /* address offset by module's base address */
 } aeh_stack_entry_t;
 #define aeh_MAX_STACK_DEPTH (aeh_BUF_MAXLEN/sizeof(aeh_stack_entry_t))
 
 /* module function info */
 typedef struct {
 	char *name;                /* name of the module function */
-	uint32 offset_addr; /* address offset by function's base address */
-	uint32 load_addr;   /* preferred load address of module function */
+	size_t offset_addr; /* address offset by function's base address */
+	size_t load_addr;   /* preferred load address of module function */
 	char *mappath;             /* path to mapfile for this module function */
 	/* sint32 lineno; */   /* module function line number; not yet implemented */
 } aeh_modfunc_t;
@@ -343,7 +343,7 @@ sint32 aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat);
          len (actual length of aehDesc)
  Return: length needed to completely write out info
 --------------------------------------------------------------------------*/
-sint32 aeh_toString(const aeh_t *aeh, char *aehDesc, uint32 *len);
+size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len);
 
 /*--------------------------------------------------------------------------
  Strip system description from crash info. Takes aeh and returns it with

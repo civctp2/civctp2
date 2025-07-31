@@ -859,7 +859,7 @@ DP_API dp_result_t DP_APIX dpDestroy(
 --------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpResolveHostname(
 	dp_t *dp,
-	const char *hostname,
+	char *hostname,
 	char adrbuf[dp_MAX_ADR_LEN]);
 
 /*------------------------------------------------------------------------
@@ -885,7 +885,7 @@ DP_API dp_result_t DP_APIX dpResolveHostname(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServerEx(
 	dp_t *dp,
-	const char *masterHostName,	/* server's name, or NULL to clear */
+	char *masterHostName,	/* server's name, or NULL to clear */
 	dp_species_t sessionType);
 
 /*--------------------------------------------------------------------------
@@ -905,7 +905,7 @@ DP_API dp_result_t DP_APIX dpGetGameServerEx(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpSetGameServer(
 	dp_t *dp,
-	const char *masterHostName);	/* server's name, or NULL to clear */
+	char *masterHostName);	/* server's name, or NULL to clear */
 
 /*------------------------------------------------------------------------
  Retrieve the current session description.
@@ -1809,7 +1809,7 @@ DP_API size_t DP_APIX dp_pack_session(dp_t *dp, dp_species_t defaultSessionType,
  into the fluffy form we use internally.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-DP_API sint32 DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, size_t buflen, dp_session_t *p);
+DP_API size_t DP_APIX dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, size_t buflen, dp_session_t *p);
 
 #endif
 
@@ -1899,7 +1899,7 @@ DP_API void DP_APIX dp_flushLog(void);
 --------------------------------------------------------------------------*/
 DP_API void DP_APIX dp_enableDebugPrint(sint32 enable);
 
-#define dp_LOG_FILE_NONE ((FILE *)0xffffffff)
+#define dp_LOG_FILE_NONE ((FILE *)SIZE_MAX)
 
 /*--------------------------------------------------------------------------
  Call this to retrieve the file pointer which dp is using for logging.

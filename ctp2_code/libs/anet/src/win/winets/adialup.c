@@ -62,7 +62,7 @@ sint32 adialup_autodial_enabled(void)
 	len = sizeof(enableAutodial);
 	werr = RegQueryValueEx(hKey,
 			"EnableAutodial",
-			NULL, NULL, (void *)&enableAutodial, &len);
+			NULL, NULL, (void *)&enableAutodial, (LPDWORD)&len);
 	CloseHandle(hKey);
 	if (werr != ERROR_SUCCESS) {
 		DPRINT(("autodial_enabled: Can't find %s in subkey %s, error %d\n",
@@ -155,7 +155,7 @@ sint32 adialup_is_active(void)
 	rasconnArray[0].dwSize = sizeof(rasconnArray[0]);
 	rasconnLen = sizeof(rasconnArray);
 	cConnections = adialup_MAXCONNS;
-	werr = pfnRasEnumConnections( rasconnArray, &rasconnLen,  &cConnections);
+	werr = pfnRasEnumConnections( rasconnArray, (LPDWORD)&rasconnLen,  &cConnections);
 	if (werr) {
 		DPRINT(("adialup_is_active: RasEnumConnections fails, err %d\n", werr));
 		FreeLibrary(hlib);

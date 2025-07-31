@@ -89,7 +89,7 @@ static void init_crc32()
 	}
 }
 
-uint32 dp_crc32_inc(uint8 *buf, sint32 len, uint32 crc)
+uint32 dp_crc32_inc(uint8 *buf, size_t len, uint32 crc)
 {
 	uint8 *p;
 
@@ -100,7 +100,7 @@ uint32 dp_crc32_inc(uint8 *buf, sint32 len, uint32 crc)
 	return crc;
 }
 
-uint32 dp_crc32(uint8 *buf, sint32 len)
+uint32 dp_crc32(uint8 *buf, size_t len)
 {
 	/* preload shift register, per CRC-32 spec */
 	/* transmit complement, per CRC-32 spec */
@@ -110,7 +110,7 @@ uint32 dp_crc32(uint8 *buf, sint32 len)
 #define BUF_SIZE 8192
 uint32 dp_fil_crc32(FILE *fp)
 {
-	sint32 nread;
+	size_t nread;
 	uint8 buf[BUF_SIZE];
 	uint32  crc;
 
