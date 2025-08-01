@@ -73,14 +73,14 @@ sint32 getTempDir(char *name, size_t maxnamelen)
 }
 
 #elif defined(UNIX)
-sint32 getTempDir(char *name, sint32 namelen)
+sint32 getTempDir(char *name, size_t namelen)
 {
 	strcpy(name, "/var/tmp/");
 	return 5;
 }
 
 #elif defined(__POWERPC__)
-sint32 getTempDir(char *name, sint32 namelen)
+sint32 getTempDir(char *name, size_tnamelen)
 {
 	name[0] = '\0';
 	return 0;	/* not yet implemented */

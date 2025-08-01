@@ -52,7 +52,7 @@ public:
 	NET_ERR Send(uint16 id, sint32 flags, uint8* buf, sint32 len);
 	NET_ERR Idle();
 	NET_ERR SetName(const char* name);
-	NET_ERR SetLobby(const char* serverName);
+	NET_ERR SetLobby(char* serverName);
 	NET_ERR SetMaxPlayers(uint16 players, bool lock);
 	NET_ERR KickPlayer(uint16 player);
 	NET_ERR Reset();

@@ -736,7 +736,7 @@ ActivNetIO::SetName(const char* name)
 }
 
 NET_ERR
-ActivNetIO::SetLobby(const char* serverName)
+ActivNetIO::SetLobby(char* serverName)
 {
 	Assert(m_dp);
 	dp_result_t res;
