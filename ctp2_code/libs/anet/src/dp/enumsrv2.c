@@ -815,7 +815,7 @@ dp_result_t dpHandleServerPingResponsePacket(
 
 	/* Inform caller via callback, if desired */
 	if (dp->enumServersEx_callback) {
-		sint32 timeout = 1;
+		long timeout = 1;
 		dp->enumServersEx_callback(serv.hostname, (sint32)serv.rtt_ms_avg,
 								&serv, &timeout, 0, dp->enumServersEx_context);
 	}

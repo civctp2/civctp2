@@ -1937,7 +1937,7 @@ sint32 main( sint32 argc, char *argv[] )
 		memset(&req, 0, sizeof(commSetParamReq_t));
 		req.reqLen = sizeof(commSetParamReq_t);
 		req.param_num = comm_PARAM_SESSIONINFO;
-		req.param_value = (sint32)&sessinfo;
+		req.param_pointer = (void*)&sessinfo;
 		if (commSetParam(&req, &resp, dp->dpio->commPtr) != 1) {
 			printf("Couldn't commSetParam on sessinfo, status %d\n", resp.status);
 			exit(1);

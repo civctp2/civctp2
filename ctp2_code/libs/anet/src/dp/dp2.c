@@ -1250,7 +1250,7 @@ dp_sessions_cb(
 	 * user's callback.
 	 */
 	if (dp->enumSessions_callback) {
-		sint32 timeout_dummy;
+		long timeout_dummy;
 
 		/* Report only sessions that allow new players, and have same type unless wildcard (0) specified */
 		if (
@@ -6758,7 +6758,7 @@ DP_API dp_result_t dpEnumSessions(
 {
 	dp_result_t err;
 	sint32 i;
-	sint32 timeout_dummy;
+	long timeout_dummy;
 	dptab_table_t *sesstab;
 
 	precondition(dp != NULL);
@@ -6774,7 +6774,7 @@ DP_API dp_result_t dpEnumSessions(
 
 	/* End enumSessions activity if already active. */
 	if (dp->enumSessions_callback) {
-		sint32 timeout_dummy;
+		long timeout_dummy;
 		DPRINT(("dpEnumSessions: terminating previous callback\n"));
 		(dp->enumSessions_callback)(NULL, &timeout_dummy, 0, dp->enumSessions_context );
 		dp->enumSessions_callback = NULL;
@@ -8951,7 +8951,7 @@ static dp_result_t dpPoll(
 			dp->enumSessions_callback, dp->now, dp->enumSessions_deadline));
 		if (dp->enumSessions_callback && (sint32)(dp->enumSessions_deadline - now) < 0) {
 			dpEnumSessionsCallback_t cb = dp->enumSessions_callback;
-			sint32 timeout_dummy;
+			long timeout_dummy;
 			/*DPRINT(("dpPoll: enumSessions timeout: deadline %d, now %d\n", dp->enumSessions_deadline, now));*/
 			cb(NULL, &timeout_dummy, 0, dp->enumSessions_context);
 			dp->enumSessions_callback = NULL;

@@ -1154,7 +1154,7 @@ static sint32 parseDispCardInfo(const char *dispCard, char *szName, char *szDriv
 	}
 	memcpy(szDriver, ptr, (pbuf - ptr));
 	szDriver[(pbuf - ptr)] = '\0';
-	if (sscanf(pbuf, ",%lx,%lx", VersionMS, VersionLS) != 2) {
+	if (sscanf(pbuf, ",%x,%x", VersionMS, VersionLS) != 2) {
 		aeh_SetCurrent(__LINE__, __FILE__);
 		return aeh_RES_EMPTY;
 	}
@@ -1318,16 +1318,16 @@ size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len)
 	if (aeh->retcode == aeh_ASSERTION_CODE) {
 		sprintf(&tmp[strlen(tmp)], "excDesc: assertion failure");
 		if (aeh->retflag)
-			sprintf(&tmp[strlen(tmp)], ", retFlag:%lx", aeh->retflag);
+			sprintf(&tmp[strlen(tmp)], ", retFlag:%x", aeh->retflag);
 		if (aeh->retaddr)
-			sprintf(&tmp[strlen(tmp)], ", retAddr:%lx", aeh->retaddr);
+			sprintf(&tmp[strlen(tmp)], ", retAddr:%x", aeh->retaddr);
 		sprintf(&tmp[strlen(tmp)], "\n");
 	} else {
 		char exceptdesc[50];
 		codetostring(aeh->retcode, exceptdesc);
-		sprintf(&tmp[strlen(tmp)], "excDesc: %s, retFlag:%lx", exceptdesc, aeh->retflag);
+		sprintf(&tmp[strlen(tmp)], "excDesc: %s, retFlag:%x", exceptdesc, aeh->retflag);
 		if (aeh->retaddr)
-			sprintf(&tmp[strlen(tmp)], ", retAddr:%lx", aeh->retaddr);
+			sprintf(&tmp[strlen(tmp)], ", retAddr:%x", aeh->retaddr);
 		sprintf(&tmp[strlen(tmp)], "\n");
 	}
 	if (aeh->assertln) {
@@ -1346,12 +1346,12 @@ size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len)
 					*((uint8 *)(aeh->info[i].data)) ? "write" : "read");
 			} else if (aeh->info[i].id == aeh_WIN32info_ID) {
 				if (aeh->retcode == EXCEPTION_ACCESS_VIOLATION) {
-					sprintf(&tmp[strlen(tmp)], " Access violation addr: %lx\n",
+					sprintf(&tmp[strlen(tmp)], " Access violation addr: %x\n",
 						((aeh_WIN32info_t *)(aeh->info[i].data))->access_addr);
 				}
-				sprintf(&tmp[strlen(tmp)], "Reg: ax:%08lx bx:%08lx cx:%08lx dx:%08lx si:%08lx di:%08lx\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->eax, ((aeh_WIN32info_t *)(aeh->info[i].data))->ebx, ((aeh_WIN32info_t *)(aeh->info[i].data))->ecx, ((aeh_WIN32info_t *)(aeh->info[i].data))->edx, ((aeh_WIN32info_t *)(aeh->info[i].data))->esi, ((aeh_WIN32info_t *)(aeh->info[i].data))->edi);
-				sprintf(&tmp[strlen(tmp)], "Reg: bp:%08lx sp:%08lx ip:%08lx cs:%08lx ss:%08lx\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->ebp, ((aeh_WIN32info_t *)(aeh->info[i].data))->esp, ((aeh_WIN32info_t *)(aeh->info[i].data))->eip, ((aeh_WIN32info_t *)(aeh->info[i].data))->segCs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segSs);
-				sprintf(&tmp[strlen(tmp)], "Reg: ds:%08lx es:%08lx fs:%08lx gs:%08lx ContextFlags:%08lx\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->segDs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segEs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segFs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segGs, ((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags);
+				sprintf(&tmp[strlen(tmp)], "Reg: ax:%08x bx:%08x cx:%08x dx:%08x si:%08x di:%08x\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->eax, ((aeh_WIN32info_t *)(aeh->info[i].data))->ebx, ((aeh_WIN32info_t *)(aeh->info[i].data))->ecx, ((aeh_WIN32info_t *)(aeh->info[i].data))->edx, ((aeh_WIN32info_t *)(aeh->info[i].data))->esi, ((aeh_WIN32info_t *)(aeh->info[i].data))->edi);
+				sprintf(&tmp[strlen(tmp)], "Reg: bp:%08x sp:%08x ip:%08x cs:%08x ss:%08x\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->ebp, ((aeh_WIN32info_t *)(aeh->info[i].data))->esp, ((aeh_WIN32info_t *)(aeh->info[i].data))->eip, ((aeh_WIN32info_t *)(aeh->info[i].data))->segCs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segSs);
+				sprintf(&tmp[strlen(tmp)], "Reg: ds:%08x es:%08x fs:%08x gs:%08x ContextFlags:%08x\n", ((aeh_WIN32info_t *)(aeh->info[i].data))->segDs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segEs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segFs, ((aeh_WIN32info_t *)(aeh->info[i].data))->segGs, ((aeh_WIN32info_t *)(aeh->info[i].data))->contextFlags);
 			} else if (aeh->info[i].id == aeh_WIN32inst_ID) {
 				sint32 j;
 				sprintf(&tmp[strlen(tmp)], "Bytes at cs:ip: ");
@@ -1409,7 +1409,7 @@ size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len)
 				if (!strcmp(aeh->modfunc[i].name, unknown) &&
 					strcmp(stkmodname, unknown))
 					sprintf(&tmp[strlen(tmp)],
-							" %8zx %8zx %8zx  %s(crc:%8lx)  %s  %s\n",
+							" %8zx %8zx %8zx  %s(crc:%8x)  %s  %s\n",
 							aeh->modfunc[i].load_addr, stkoffsetaddr,
 							aeh->modfunc[i].offset_addr, stkmodname, stkmodcrc,
 							aeh->modfunc[i].name, aeh->modfunc[i].mappath);
@@ -1421,7 +1421,7 @@ size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len)
 			} else {
 				if (strlen(stkmodname) + 44 + strlen(tmp) > BUFFER_SIZE) break;
 				if (stkmodcrc)
-					sprintf(&tmp[strlen(tmp)], " %8x %8zx %8x  %s(crc:%8lx)\n",
+					sprintf(&tmp[strlen(tmp)], " %8x %8zx %8x  %s(crc:%8x)\n",
 							0, stkoffsetaddr, 0, stkmodname, stkmodcrc);
 				else
 					sprintf(&tmp[strlen(tmp)], " %8x %8zx %8x  %s\n",

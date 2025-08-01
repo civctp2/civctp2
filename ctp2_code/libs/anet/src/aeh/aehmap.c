@@ -366,7 +366,7 @@ sint32 aeh_mapcat_Create(aeh_mapcat_t *aehmapcat, const char *catpath)
 	mapbuf.path = &path[0];
 	aehmapcat->nmap = 0;
 	while (fgets(buf, BUFFER_SIZE, fp)) {
-		if (sscanf(buf, "%lx %[^\n\r\f]", &mapbuf.crc, mapbuf.path) == 2)
+		if (sscanf(buf, "%x %[^\n\r\f]", &mapbuf.crc, mapbuf.path) == 2)
 			aehmapcat->nmap++;
 	}
 	if (!((aehmapcat->map) = (aeh_map_t *)malloc((aehmapcat->nmap) * sizeof(aeh_map_t))))
@@ -386,7 +386,7 @@ sint32 aeh_mapcat_Create(aeh_mapcat_t *aehmapcat, const char *catpath)
 			aehDPRINT(("aeh_mapcat_Create: iloaded %d bigger than nmap %d\n", iloaded, aehmapcat->nmap));
 			return aeh_RES_BAD;
 		}
-		if (sscanf(buf, "%lx %[^\n\r\f]", &mapbuf.crc, mapbuf.path) != 2) {
+		if (sscanf(buf, "%x %[^\n\r\f]", &mapbuf.crc, mapbuf.path) != 2) {
 			aehDPRINT(("aeh_mapcat_Create: error reading mapfile entry %s\n", buf));
 			continue;
 		}

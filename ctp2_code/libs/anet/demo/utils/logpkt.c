@@ -154,7 +154,7 @@ void logPkt(FILE *outFile, const void *buffer, size_t length, uint32 peer, const
 	}
 	*p++ = 0;
 
-	fprintf(outFile, "%2s %10ld %2ld %3zu : %s\n", tag, eclock(), peer, length, tbuf);
+	fprintf(outFile, "%2s %10ld %2d %3zu : %s\n", tag, eclock(), peer, length, tbuf);
 }
 
 #endif

@@ -1244,9 +1244,9 @@ commSetParam(
 			/* Do stuff here */
 			break;
 		case comm_PARAM_SESSIONINFO:
-			if (req->param_value) {
+			if (req->param_pointer) {
 				DPRINT(("commSetParam: set new sessioninfo successfully\n"));
-				comm->sessinfo = (commSessInfo_t *) req->param_value;
+				comm->sessinfo = (commSessInfo_t *) req->param_pointer;
 				resp->status = comm_STATUS_OK;
 			} else
 				resp->status = comm_STATUS_BAD;

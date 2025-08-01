@@ -546,7 +546,7 @@ typedef struct {
  Internal callback for groupNameToID.
  Calls the specified callback upon each match.
 --------------------------------------------------------------------------*/
-void dp_PASCAL enumGroupsByNameCallback(dpid_t id, char_t *name, sint32 flags, void *context)
+void dp_PASCAL enumGroupsByNameCallback(dpid_t id, char_t *name, long flags, void *context)
 {
 	enumGroupsContext_t *ctxt = (enumGroupsContext_t *) context;
 
@@ -785,8 +785,8 @@ void dp_PASCAL enumTransports_cb(const dp_transport_t *path, const comm_driverIn
 /*-------------------------------------------------------------------------
  Callback triggered by listing game servers.
 -------------------------------------------------------------------------*/
-sint32 dp_PASCAL listServersEx_cb(const char *hostname, sint32 roundtrip_ms,
-		dp_serverInfo_t *server, sint32 *pTimeout, sint32 flags,void *context)
+sint32 dp_PASCAL listServersEx_cb(const char *hostname, long roundtrip_ms,
+		dp_serverInfo_t *server, long *pTimeout, long flags,void *context)
 {
 	char buf[300];
 	DPRINT(("listServers_cb(%s, %d, %p, %d, %p)\n", hostname, roundtrip_ms, pTimeout, flags, context));
@@ -805,7 +805,7 @@ sint32 dp_PASCAL listServersEx_cb(const char *hostname, sint32 roundtrip_ms,
 	return TRUE;
 }
 
-sint32 dp_PASCAL listServers_cb(const char *hostname, sint32 roundtrip_ms,sint32 *pTimeout,sint32 flags,void *context)
+sint32 dp_PASCAL listServers_cb(const char *hostname, long roundtrip_ms, long *pTimeout, long flags, void *context)
 {
 	return listServersEx_cb(hostname, roundtrip_ms, NULL, pTimeout,
 							flags, context);
@@ -814,7 +814,7 @@ sint32 dp_PASCAL listServers_cb(const char *hostname, sint32 roundtrip_ms,sint32
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, sint32 *pTimeout,sint32 flags,void *context)
+sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, void *context)
 {
 	char buf[300];
 	if (!sDesc) {
@@ -849,7 +849,7 @@ sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, sint32 *pTimeout,sint32 fl
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
 -------------------------------------------------------------------------*/
-void dp_PASCAL listPlayers_cb(dpid_t id, char_t *name, sint32 flags, void *context)
+void dp_PASCAL listPlayers_cb(dpid_t id, char_t *name, long flags, void *context)
 {
 	char buf[300];
 	if (id != dp_ID_NONE) {
@@ -882,7 +882,7 @@ void dp_PASCAL listPlayers_cb(dpid_t id, char_t *name, sint32 flags, void *conte
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
 -------------------------------------------------------------------------*/
-void dp_PASCAL listPlayersEx_cb(dpid_t id, char_t *name, sint32 flags, void *context, dp_playerId_t *player)
+void dp_PASCAL listPlayersEx_cb(dpid_t id, char_t *name, long flags, void *context, dp_playerId_t *player)
 {
 	char buf[300];
 	if (id != dp_ID_NONE) {
@@ -918,7 +918,7 @@ void dp_PASCAL listPlayersEx_cb(dpid_t id, char_t *name, sint32 flags, void *con
 /*-------------------------------------------------------------------------
  Callback triggered by listing groups.
 -------------------------------------------------------------------------*/
-void dp_PASCAL listGroups_cb(dpid_t id, char_t *name, sint32 flags, void *context)
+void dp_PASCAL listGroups_cb(dpid_t id, char_t *name, long flags, void *context)
 {
 	char buf[300];
 	if (id != dp_ID_NONE) {
@@ -937,7 +937,7 @@ void dp_PASCAL listGroups_cb(dpid_t id, char_t *name, sint32 flags, void *contex
 /*-------------------------------------------------------------------------
  Callback triggered by deleting groups.
 -------------------------------------------------------------------------*/
-void dp_PASCAL delGroups_cb(dpid_t id, char_t *name, sint32 flags, void *context)
+void dp_PASCAL delGroups_cb(dpid_t id, char_t *name, long flags, void *context)
 {
 	if (id != dp_ID_NONE) {
 		dp_result_t err;
@@ -956,7 +956,7 @@ void dp_PASCAL delGroups_cb(dpid_t id, char_t *name, sint32 flags, void *context
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
 -------------------------------------------------------------------------*/
-static void dp_FAR dp_PASCAL my_listPlayers_cb(dpid_t id, char_t * name, sint32 flags, void *context)
+static void dp_FAR dp_PASCAL my_listPlayers_cb(dpid_t id, char_t * name, long flags, void *context)
 {
 	(void) context;
 
@@ -997,7 +997,7 @@ dp_result_t countMyPlayers(dp_t *dp)
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when creating a session.
 -------------------------------------------------------------------------*/
-sint32 	dp_PASCAL create_sess_cb(dp_session_t *ps, sint32 *pTimeout,sint32 flags, void *context)
+sint32 	dp_PASCAL create_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context)
 
 {
 	if (ps) {
@@ -1077,7 +1077,7 @@ void dp_PASCAL connection_cb(void *adr, sint32 len, sint32 nhdls, dp_result_t er
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when joining a session.
 -------------------------------------------------------------------------*/
-sint32 dp_PASCAL join_sess_cb(dp_session_t *ps, sint32 *pTimeout, sint32 flags, void *context) {
+sint32 dp_PASCAL join_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context) {
 	char buf[255];
 	if (ps) {
 		sprintf(buf,  "Joined session %s.", ps->sessionName);
@@ -1131,7 +1131,7 @@ dp_result_t joinSessionByName(dp_t *dp, char *name)
 /*-------------------------------------------------------------------------
  Callback triggered by creating a player.
 -------------------------------------------------------------------------*/
-void dp_PASCAL create_player_cb(dpid_t id, char_t *name, sint32 flags, void *context)
+void dp_PASCAL create_player_cb(dpid_t id, char_t *name, long flags, void *context)
 {
 	char buf[300];
 	if (id != dp_ID_NONE) {
@@ -1153,7 +1153,7 @@ void dp_PASCAL create_player_cb(dpid_t id, char_t *name, sint32 flags, void *con
 /*-------------------------------------------------------------------------
  Stuff to support PingPlayerByName().
 -------------------------------------------------------------------------*/
-void dp_PASCAL ping_callback(dp_karma_t karma, sint32 avg_ms, sint32 loss_pct)
+void dp_PASCAL ping_callback(dp_karma_t karma, long avg_ms, sint32 loss_pct)
 {
 	char buf[256];
 
@@ -1170,7 +1170,7 @@ typedef struct {
 	char *name;
 } pingPlayerContext_t;
 
-void dp_PASCAL pingPlayerCallback(dpid_t id, char_t *name, sint32 flags, void *context)
+void dp_PASCAL pingPlayerCallback(dpid_t id, char_t *name, long flags, void *context)
 {
 	pingPlayerContext_t *pc = (pingPlayerContext_t *) context;
 	char buf[512];

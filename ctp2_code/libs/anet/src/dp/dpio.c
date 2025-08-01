@@ -2248,7 +2248,7 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 
 	/* Choose an initial packet number at random.  Hope this *is* random. */
 #ifdef UNIX
-	pw->next_pktnum = (uint16)((eclock()^getpid()^(sint32)pw)
+	pw->next_pktnum = (uint16)((eclock()^getpid()^(size_t)pw)
 #else
 	/* WARNING:  This relies on srand() called by the application */
  	pw->next_pktnum = (uint16)((rand() + (sint16) (*dpio->now) + (sint16) time(NULL))
