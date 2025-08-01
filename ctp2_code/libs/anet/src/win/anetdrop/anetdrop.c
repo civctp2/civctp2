@@ -90,7 +90,7 @@ FILE *flog = NULL;
 static void write_log(char *fmt, ...) {
 	if (!flog) {
 		char logfile[MAX_PATH];
-		sprintf(logfile, "%x", time(NULL));
+		sprintf(logfile, "%lx", time(NULL));
 		strcat(logfile, ".log");
 		flog = fopen(logfile, "w");
 	}
@@ -209,6 +209,8 @@ sint32 WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdL
 	} __except(Debug_ExceptionFilter(GetExceptionInformation())) {
 		;
 	}
+
+	return 0;
 }
 
 /*--------------------------------------------------------------------------
@@ -372,7 +374,7 @@ sint32 main(sint32 argc, char **argv)
 			strcpy(params.Playname, "player");
 	}
 
-    params.commInitReq.sessionId = rand() ^ (rand() << 16) ^ time(0) ^ clock();
+	params.commInitReq.sessionId = rand() ^ (rand() << 16) ^ time(0) ^ clock();
 	params.commInitReq.reqLen = sizeof(commInitReq_t);
 
 	/* Load the app's anet.inf. */

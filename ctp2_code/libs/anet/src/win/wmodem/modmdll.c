@@ -312,9 +312,9 @@ static sint32 notifystub(HANDLE hser)
 	uint32 tag = DPSTUB_TAG_SERHDL;
 	/* get stub handle values */
 	if (!GetEnvironmentVariable(DPSTUB,strhandle,MAX_HSTR) ||
-		(sscanf(strhandle, "%x", &hstub) != 1) ||
+		(sscanf(strhandle, "%p", &hstub) != 1) ||
 		!GetEnvironmentVariable(DPSTUBWPIPE,strhandle,MAX_HSTR) ||
-		(sscanf(strhandle, "%x", &hpipe) != 1)) {
+		(sscanf(strhandle, "%p", &hpipe) != 1)) {
 		DPRINT(("wmodem: err: couldn't get stub env vars\n"));
 		return comm_STATUS_BAD;
 	}
@@ -336,7 +336,7 @@ static sint32 notifystub(HANDLE hser)
 	 * of serial handle; stub will do the same thing so that processes it
 	 * launches have this set the same too */
 	if (hser != INVALID_HANDLE_VALUE) {
-		sprintf(strhandle, "%x", hstubser);
+		sprintf(strhandle, "%p", hstubser);
 		pstrhandle = strhandle;
 	} else
 		pstrhandle = NULL;

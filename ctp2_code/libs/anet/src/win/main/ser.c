@@ -362,7 +362,7 @@ ser_result_t ser_put(ser_t *ser, void *buf, size_t len)
 
 	hdr.frame0 = ser_HDR_FRAME0;
 	hdr.frame1 = ser_HDR_FRAME1;
-	hdr.bodylen = len;
+	hdr.bodylen = (uint8)len;
 	hdr.hchksum = (ser_HDR_FRAME0 + ser_HDR_FRAME1 + len) & 0xff;
 	hdr.bodycrc = crc(buf, len);
 	err = serio_write(&ser->serio, &hdr, sizeof(hdr));

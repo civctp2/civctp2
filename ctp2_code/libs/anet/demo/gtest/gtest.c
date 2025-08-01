@@ -3481,7 +3481,7 @@ void ProcessCommandLine(sint32 argc, char **argv) {
 		default:
 			usage();
 			printf("%s: Unknown arg %s\n", argv[0], argv[i]);
-		    exit(1);
+			exit(1);
 	  } /*  end switch */
 	}
   }
@@ -3615,7 +3615,7 @@ sint32 gtest( sint32 argc, char *argv[] )
 
 		/* Specify what server to use to rendezvous with other players. */
 		/* I usually use the "setgameserver" command to do this in a script. */
-        if (adrString[0]) {
+		if (adrString[0]) {
 			if (defaultSessType)
 				cur_species = defaultSessType;
 #ifdef dp_MULTISESSTABLE
@@ -3623,11 +3623,11 @@ sint32 gtest( sint32 argc, char *argv[] )
 #else
 			err = dpSetGameServer(myDP, adrString);
 #endif
-            if (err != dp_RES_OK) {
-                printf("SetGameServer(%s) failed, error %d\n", adrString, err);
-                exit(3);
-            }
-        }
+			if (err != dp_RES_OK) {
+				printf("SetGameServer(%s) failed, error %d\n", adrString, err);
+				exit(3);
+			}
+		}
 
 		/* Games won't need to know about incoming connections,
 		 * but this test program likes to print them out in case

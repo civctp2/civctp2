@@ -90,9 +90,9 @@ void subtract(dp_stat_t *result, const dp_stat_t *x, time_t dt)
 	 if (dt == 0)
 		 dt = 1000000; /* avoid crashes */
 	 /* multiply by 60 to get units per minute */
-	 result->in = (result->in * 60) / dt;
-	 result->out = (result->out * 60) / dt;
-	 result->dropped = (result->dropped * 60) / dt;
+	 result->in      = (sint32)((result->in * 60) / dt);
+	 result->out     = (sint32)((result->out * 60) / dt);
+	 result->dropped = (sint32)((result->dropped * 60) / dt);
 }
 
 /*-------------------------------------------------------------------------
