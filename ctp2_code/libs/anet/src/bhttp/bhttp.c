@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "anet.h"
 #include "bhttp.h"
@@ -511,7 +512,7 @@ static sint32 bhttp_formatOutputBuffer(bhttp_t *bhttp, sint32 h, sint32 status, 
         modbuf );
 	if (content) {
 		/* Terminate the http header with a blank line, follow it with the content for this URL */
-		pc->olen += sprintf(pc->obuf+pc->olen, "Content-length: %d\r\n\r\n%s", strlen(content), content);
+		pc->olen += sprintf(pc->obuf+pc->olen, "Content-length: %zu\r\n\r\n%s", strlen(content), content);
 	} else {
 		/* Terminate the http header with a blank line */
 		pc->olen += sprintf(pc->obuf+pc->olen, "\r\n");

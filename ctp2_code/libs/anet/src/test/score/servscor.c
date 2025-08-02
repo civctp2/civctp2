@@ -38,7 +38,7 @@ static sint32 dp_PASCAL scores_cb(dptab_t *dptab, dptab_table_t *table, playerHd
 	scorerep_t *srep;
 	dp_uid_t uid;
 	char sessid[dptab_KEY_MAXLEN];
-	sint32 sessidlen;
+	size_t sessidlen;
 	dp_species_t sessType;
 
 	if (!dp || !buf || (status != dp_RES_CREATED))

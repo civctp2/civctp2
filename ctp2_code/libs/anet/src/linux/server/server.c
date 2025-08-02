@@ -653,7 +653,7 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, sint32 *pTimeout, sint32 flags, void *context)
+sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, void *context)
 {
 	dp_t *dp = (dp_t *) context;
 	sint32 i;
@@ -998,7 +998,7 @@ sint32 SetHTMLFile(char *tplFile)
 	fsize = fread(pages[npages].template, 1, statbuf.st_size, inTpl);
 	if (statbuf.st_size != (sint32)(fsize)) {
 #ifndef WIN32
-		printf("Warning: read %d of %d bytes from file %s\n", fsize, statbuf.st_size, tplFile);
+		printf("Warning: read %ld of %ld bytes from file %s\n", fsize, statbuf.st_size, tplFile);
 #endif
 		if (!fsize) return FALSE;
 	}
@@ -1072,17 +1072,17 @@ sint32 ProcessCommandLine(sint32 argc, char **argv) {
 			switch(toupper(argv[i][1])) {
 			case 'A':   /*  apps file name */
 				if (!val) {
-					printf("Expected = after -%c in %s\n", argv[i][1]);
+					printf("Expected = after -%c in %s\n", argv[i][1], argv[i]);
 					return -1;
 				}
 				strncpy(AppsFile, val, sizeof(AppsFile));
 				AppsFile[sizeof(AppsFile)-1] = '\0';
-                DPRINT(("Loading application info from %s\n",AppsFile));
+               	DPRINT(("Loading application info from %s\n",AppsFile));
 				break;
 
 			case 'C':   /* Crashlog (atvilog.bin) name */
 				if (!val) {
-					printf("Expected = after -%c in %s\n", argv[i][1]);
+					printf("Expected = after -%c in %s\n", argv[i][1], argv[i]);
 					return -1;
 				}
 				strncpy(AtvilogFile, val, sizeof(AtvilogFile));
@@ -1220,7 +1220,7 @@ sint32 ProcessCommandLine(sint32 argc, char **argv) {
 	return 0;
 }
 
-static sint32 dp_PASCAL joinsess_cb (dp_session_t *sDesc, sint32 *timeout, sint32 flags, void *context)
+static sint32 dp_PASCAL joinsess_cb (dp_session_t *sDesc, long *timeout, long flags, void *context)
 {
 	if (!sDesc) {
 		printf("Error creating session.\n");
@@ -1286,8 +1286,8 @@ void dp_PASCAL incoming_cb(void *adr, sint32 len, sint32 nhdls, dp_result_t err,
 			sprintf(print_adr + 3*i, ":%02x", ((uint8 *)adr)[i]);
 	}
 	if (err == dp_RES_OPENED) {
-		printf("t:%d, %d conns, Opened host%s, h:%x\n", now, nhdls, print_adr, (playerHdl_t) pass);
-		DPRINT(("SERVER: t:%d, %d conns, Opened host%s\n", now, nhdls, print_adr));
+		printf("t:%ld, %d conns, Opened host%s, h:%x\n", now, nhdls, print_adr, (playerHdl_t) pass);
+		DPRINT(("SERVER: t:%ld, %d conns, Opened host%s\n", now, nhdls, print_adr));
 #ifdef dp_ANET2
 #ifndef WIN32		/* not in dll */
 		/* We don't need to send - client will send to us, and
@@ -1305,25 +1305,25 @@ void dp_PASCAL incoming_cb(void *adr, sint32 len, sint32 nhdls, dp_result_t err,
 		}
 
 	} else if (err == dp_RES_PEER_CLOSED) {
-		printf("t:%d, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass);
-		DPRINT(("SERVER: t:%d, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass));
+		printf("t:%ld, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass);
+		DPRINT(("SERVER: t:%ld, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass));
 		err = tserv_client_delete(dp->tserv, (playerHdl_t)pass);
 		if (err != dp_RES_OK) {
 			DPRINT(("SERVER: can't tserv_client_delete, err %d?\n", err));
 		}
 	} else if (err == dp_RES_CLOSED) {
-		printf("t:%d, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass);
-		DPRINT(("SERVER: t:%d, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass));
+		printf("t:%ld, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass);
+		DPRINT(("SERVER: t:%ld, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass));
 		err = tserv_client_delete(dp->tserv, (playerHdl_t)pass);
 		if (err != dp_RES_OK) {
 			DPRINT(("SERVER: can't tserv_client_delete, err %d?\n", err));
 		}
 	} else if (err == dp_RES_OK) {
-		printf("t:%d, %d conns, Opened host%s, already open\n", now, nhdls, print_adr);
-		DPRINT(("SERVER: t:%d, %d conns, Opened host%s, already open\n", now, nhdls, print_adr));
+		printf("t:%ld, %d conns, Opened host%s, already open\n", now, nhdls, print_adr);
+		DPRINT(("SERVER: t:%ld, %d conns, Opened host%s, already open\n", now, nhdls, print_adr));
 	} else if (err == dp_RES_HOST_NOT_RESPONDING) {
-		printf("t:%d, %d conns, Host%s not responding\n", now, nhdls, print_adr);
-		DPRINT(("SERVER: t:%d, %d conns, Host%s not responding\n", now, nhdls, print_adr));
+		printf("t:%ld, %d conns, Host%s not responding\n", now, nhdls, print_adr);
+		DPRINT(("SERVER: t:%ld, %d conns, Host%s not responding\n", now, nhdls, print_adr));
 	}
 	fflush(stdout);
 	(void) context;
@@ -1392,7 +1392,7 @@ static sint32 updateRoom(
 	while (fgets(buf, sizeof(buf), fp)) {
 		ROOM_OPTS roomopts;
 		char namebuf[128], *name;
-		if (sscanf(buf, "%d %[^\n\r\f]", &utype[nsess], namebuf) != 2) {
+		if (sscanf(buf, "%hd %[^\n\r\f]", &utype[nsess], namebuf) != 2) {
 			printf("Bad line %s in room file; wanted 'type name'\n", buf);
 			fclose(fp);
 			break;
@@ -1550,7 +1550,7 @@ static sint32 updateAppTable(
 	while (fgets(buf, sizeof(buf), fp)) {
 		uint32 vmaj, vmin;
 		DPRINT(("loadAppTable: line is %s\n",buf));
-		if (sscanf(buf, "%u %u %u %u%*c%u\n",&utype[napp],&uplat[napp],&ulang[napp], &vmaj, &vmin) != 5) {
+		if (sscanf(buf, "%hu %hu %hhu %u%*c%u\n",&utype[napp],&uplat[napp],&ulang[napp], &vmaj, &vmin) != 5) {
 			printf("Bad line %s in apps file; wanted 'type platform language ...'\n", buf);
 			err = dp_RES_BAD;
 		} else {
@@ -2011,7 +2011,7 @@ sint32 main( sint32 argc, char *argv[] )
 				dp_account_packet_t account;
 				dp_sessionResult_packet_t sessionRes;
 				char buf[1024];
-			} u PACK;
+			} u;
 		} pkt;
 #include "dpunpack.h"
 
