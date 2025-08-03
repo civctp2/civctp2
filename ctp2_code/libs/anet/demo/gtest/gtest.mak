@@ -396,7 +396,7 @@ DEP_CPP_GTEST=\
 	"..\utils\raw.h"\
 	"..\utils\strdup.h"\
 	"..\utils\stricmp.h"\
-	"..\utils\unistd.h"\
+	"..\utils\unistd-win.h"\
 	
 
 !IF  "$(CFG)" == "gtest - Win32 anet2 Debug"
@@ -437,7 +437,7 @@ DEP_CPP_RAW_C=\
 	"..\utils\rawsun.c"\
 	"..\utils\rawvms.c"\
 	"..\utils\rawwin.c"\
-	"..\utils\unistd.h"\
+	"..\utils\unistd-win.h"\
 	{$(INCLUDE)}"\sys\Types.h"\
 	
 
@@ -518,7 +518,7 @@ DEP_CPP_AVGST=\
 
 SOURCE=..\utils\unistd.c
 DEP_CPP_UNIST=\
-	"..\utils\unistd.h"\
+	"..\utils\unistd-win.h"\
 	
 
 !IF  "$(CFG)" == "gtest - Win32 anet2 Debug"

@@ -318,7 +318,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\demo\utils\bad\unistd.h" />
+    <ClInclude Include="..\demo\utils\unistd-win.h" />
     <ClInclude Include="..\demo\utils\logpkt.h" />
     <ClInclude Include="..\h\anet.h" />
     <ClInclude Include="..\h\aneterr.h" />

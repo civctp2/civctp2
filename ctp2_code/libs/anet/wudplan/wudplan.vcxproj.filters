@@ -15,7 +15,7 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\demo\utils\bad\unistd.h">
+    <ClInclude Include="..\demo\utils\unistd-win.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
     <ClInclude Include="..\src\win\winets\wstcp.h">

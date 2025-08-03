@@ -1111,7 +1111,7 @@ DEP_CPP_LAUNC=\
 SOURCE=..\..\dp\dp2.c
 DEP_CPP_DP2_C=\
 	"..\..\..\demo\utils\logprint.h"\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	"..\..\..\h\anet.h"\
 	"..\..\..\h\aneterr.h"\
 	"..\..\..\h\assoctab.h"\
@@ -1422,7 +1422,7 @@ BuildCmds= \
 SOURCE=..\..\dp\dpexcept.c
 DEP_CPP_DPEXC=\
 	"..\..\..\demo\utils\logprint.h"\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	"..\..\..\h\anet.h"\
 	"..\..\..\h\aneterr.h"\
 	"..\..\..\h\assoctab.h"\

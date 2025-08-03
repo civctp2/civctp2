@@ -325,7 +325,7 @@
     <ClCompile Include="..\src\win\wipx\ipx2win.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\demo\utils\bad\unistd.h" />
+    <ClInclude Include="..\demo\utils\unistd-win.h" />
     <ClInclude Include="..\demo\utils\logpkt.h" />
     <ClInclude Include="..\h\commapi.h" />
     <ClInclude Include="..\h\commerr.h" />

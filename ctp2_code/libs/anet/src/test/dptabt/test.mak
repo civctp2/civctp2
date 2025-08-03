@@ -535,7 +535,7 @@ LINK32_OBJS= \
 
 SOURCE=.\dptabt.c
 DEP_CPP_DPTAB=\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	"..\..\..\h\anet.h"\
 	"..\..\..\h\aneterr.h"\
 	"..\..\..\h\assoctab.h"\
@@ -616,7 +616,7 @@ DEP_CPP_DPTAB=\
 
 SOURCE=..\..\..\demo\utils\unistd.c
 DEP_CPP_UNIST=\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	
 
 !IF  "$(CFG)" == "DPTab - Win32 Release"

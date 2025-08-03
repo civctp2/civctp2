@@ -38,7 +38,7 @@ MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
 4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
-#if (defined _WIN32)
+#if (defined _MSC_VER)
 #pragma warning( disable : 4201 4214 4115 )
 #endif
 
@@ -46,12 +46,12 @@ MSVC's warning level is set to 4.
 #include <signal.h>
 #include <assert.h>
 #include <stdio.h>
-#include "unistd.h"
+#include "unistd-win.h"
 
 /* Re-enable MSVC warnings (#@$&%#^& MS) */
 /* Disable MSVC warning "unreferenced inline function has been removed"
    (Windows *linked* code has six of these ) */
-#if (defined _WIN32)
+#if (defined _MSC_VER)
 #pragma warning( default : 4201 4214 4115 )
 #pragma warning( disable : 4514 )
 #endif

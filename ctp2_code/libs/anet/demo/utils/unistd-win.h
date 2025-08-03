@@ -18,11 +18,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 /*-------------------------------------------------------------------------
- Win32 implementations of functions normally in <unistd.h>
+ Win32 implementations of functions normally in <uinstd-win.h>
  alarm()
  sleep()
 
  $Log: unistd.h $
+ Revision 2.1  2025/08/03 03:42:35  Martin Gühmann
+ Rename to uinstd-win.h as it interferes with system version with gcc
  Revision 1.2  1997/08/14 21:48:40  dkegel
  Pick a signal that isn't usually used
  Revision 1.1  1997/08/14 21:38:06  dkegel
@@ -36,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define SIGTIMER SIGTERM	/* sorry - can't define new signals :-( */
 #endif
 
-#import "types.h"
+#include "types.h"
 
 /*-------------------------------------------------------------------------
  After sec seconds, raise the SIGTIMER exception.
