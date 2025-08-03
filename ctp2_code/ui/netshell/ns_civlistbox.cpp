@@ -166,7 +166,6 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 
 	if ( ldlBlock )
 	{
-
 		if ( m_header )
 		{
 			RemoveChild( m_header->Id() );

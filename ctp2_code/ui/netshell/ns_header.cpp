@@ -45,8 +45,10 @@ ns_Header::ns_Header(
 :
 	aui_ImageBase   (ldlBlock),
 	aui_TextBase    (ldlBlock, (MBCHAR const *) NULL),
-	aui_Header      (retval, id, ldlBlock)
+//	aui_Header      (retval, id, ldlBlock) // This screws up the header
+	aui_Header      ()                     // Instead use this, unless you wanna fix the version above
 {
+	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
@@ -80,8 +82,11 @@ ns_Header::ns_Header(
 :
 	aui_ImageBase   ((sint32) 0),
 	aui_TextBase    (NULL),
-	aui_Header      (retval, id, x, y, width, height)
+//	aui_Header      (retval, id, x, y, width, height)  // This screws up the header
+	aui_Header      ()                                 // Instead use this, unless you wanna fix the version above
 {
+	*retval = aui_Region::InitCommon( id, x, y, width, height );
+	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
 	*retval = aui_Control::InitCommon( NULL, nullptr );

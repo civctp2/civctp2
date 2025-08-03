@@ -90,7 +90,7 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 {
 	AUI_ERRCODE     errcode = AUI_ERRCODE_OK;
 	aui_Control *   control = new c3_Static
-        (&errcode, aui_UniqueId(), "serverselectwindow.titlestatictext");
+	    (&errcode, aui_UniqueId(), "serverselectwindow.titlestatictext");
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_TITLESTATICTEXT ] = control;

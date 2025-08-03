@@ -727,7 +727,7 @@ static dp_result_t dpSendErrorPacket(
 {
 	struct {
 		dp_packetType_t   tag;
- 		dp_error_packet_t body;
+		dp_error_packet_t body;
 	} PACK pkt;
 
 	dp_assertValid(dp);

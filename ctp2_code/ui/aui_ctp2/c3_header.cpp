@@ -29,6 +29,7 @@
 //----------------------------------------------------------------------------
 
 #include "c3.h"
+#include "c3_header.h"
 
 #include "aui.h"
 #include "aui_ui.h"
@@ -36,18 +37,13 @@
 #include "c3_headerswitch.h"
 #include "aui_ldl.h"
 
-#include "c3_header.h"
-
-extern aui_UI *g_ui;
-
-
 c3_Header::c3_Header(
 	AUI_ERRCODE *retval,
 	uint32 id,
 	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+	aui_TextBase( ldlBlock, (MBCHAR const*)NULL ),
 	aui_Header()
 {
 	*retval = aui_Region::InitCommonLdl( id, ldlBlock );
@@ -74,7 +70,6 @@ c3_Header::c3_Header(
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
-
 
 c3_Header::c3_Header(
 	AUI_ERRCODE *retval,
@@ -113,25 +108,19 @@ c3_Header::c3_Header(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE c3_Header::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }
-
 
 AUI_ERRCODE c3_Header::InitCommon( void )
 {
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE c3_Header::CreateSwitches( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
-
-
-
 
 	aui_Switch		*dummyItemControl = new aui_Switch(&errcode, aui_UniqueId(), 0, 0, 0, m_height);
 	AddChild( dummyItemControl );
@@ -145,7 +134,7 @@ AUI_ERRCODE c3_Header::CreateSwitches( const MBCHAR *ldlBlock )
 		{
 			sprintf( block, "%s.%s%d", ldlBlock, k_AUI_HEADER_LDL_SWITCH, i );
 
-            if ( !aui_Ldl::FindDataBlock( block ) )
+			if ( !aui_Ldl::FindDataBlock( block ) )
 				break;
 
 			aui_Switch *theSwitch = new c3_HeaderSwitch(
