@@ -153,8 +153,6 @@ Also, note that `make -j$(nproc)` may fail the first time. Some files are auto-g
 
 Finally, you may have to use gold instead of ld for link (add `-fuse-ld=gold` to your CFLAGS & CXXFLAGS if needed).
 
-When the build is over, you have to copy the mapgen libraries from `ctp2_code/mapgen/.libs/*.so` to `ctp2_code/ctp/dll/map/`. So do something like `cp -v ctp2_code/mapgen/.libs/*.so ctp2_code/ctp/dll/map/` if you are in the base directory of your working copy. This must be done manually, even so the libraries should be created there, automatically (not implemented/bug).
-
 If you get the message on the terminal: `Failed to load module "atk-bridge"`. Install at-spi with `sudo apt install at-spi`.
 
 ### Running
