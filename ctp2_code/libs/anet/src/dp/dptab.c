@@ -281,7 +281,7 @@ void dptab_assertPeerXfers(dptab_t* dt)
 /*-------------------------------------------------------------------------
 Special debug-only logging
 -------------------------------------------------------------------------*/
-#if 0 && (defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)) /* Special-debug only */
+#if (defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)) /* Special-debug only */
 void dumpTable(dptab_table_t *table)
 {
 	sint32 i;
@@ -671,7 +671,7 @@ dptab_createTable(
 	if(cb != NULL)
 		dptab_setTableCallback(table, cb, context);
 
-	DPRINT(("dptab_createTable: created table %s\n", key2a(key, keylen)));
+	DPRINT(("dptab_createTable: created table %s (%p)\n", key2a(key, keylen), table));
 	*ptable = table;
 	dptab_assertValidTable(*ptable);
 	dptab_assertValid(dptab);

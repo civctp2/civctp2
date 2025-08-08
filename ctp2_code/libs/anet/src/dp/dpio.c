@@ -1450,6 +1450,8 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, si
 	*len = resp.addrLen;
 	memcpy(adr, resp.address, resp.addrLen);
 
+	DPRINT(("dpio_hdl2adr: h:%x len:%zu Adr: ", h, *len));
+	dpio_dprintAdr((char *)adr, resp.addrLen);
 	/* If there a second address was asked for try to copy it over also */
 	if (adr2)
 	{
@@ -1461,10 +1463,10 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, si
 		{
 			memcpy(adr2, resp.address, resp.addrLen);
 		}
+		DPRINT((" Adr2: "));
+		dpio_dprintAdr((char *)adr2, resp.addrLen);
 	}
 
-	DPRINT(("dpio_hdl2adr: h:%x len:%zu Adr: ", h, *len));
-	dpio_dprintAdr((char *)adr, resp.addrLen);
 	DPRINT(("\n"));
 	(void) dpio;
 	return dp_RES_OK;
@@ -3675,7 +3677,11 @@ dp_result_t dpio_get(
 					 * If we only have one address then its simple
 					 */
 					if (!memcmp(dpio->myAdr, dpio->myAdr2, dpio->myAdrLen)) {
-						DPRINT(("dpio_get: Overwriting myAdr!\n"));
+						DPRINT(("dpio_get: Overwriting myAdr: "));
+						dpio_dprintAdr(dpio->myAdr, dpio->myAdrLen);
+						DPRINT((" with destAdr: "));
+						dpio_dprintAdr(destAdr, dpio->myAdrLen);
+						DPRINT(("\n"));
 						memcpy(dpio->myAdr, destAdr, dpio->myAdrLen);
 					} else {
 						/*

@@ -630,7 +630,8 @@ playerHdl_t dpid2commHdl(
 		dp_assertValid(dp);
 		return PLAYER_NONE;
 	}
-	DPRINT(("dpid2commHdl(%d) returns %d\n", id, *pH));
+
+	DPRINT(("dpid2commHdl(%d) from %p of size %zu with used %d returns %d\n", id, dp->dpid2commHdl, dp->dpid2commHdl->unit, dp->dpid2commHdl->n_used, *pH));
 	dp_assertValid(dp);
 	return *pH;
 }

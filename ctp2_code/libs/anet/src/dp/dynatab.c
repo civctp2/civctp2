@@ -90,6 +90,9 @@ dynatab_t *dynatab_create(size_t element_size)
 	pdt->unit = element_size;
 	pdt->n_used = 0;
 	pdt->n_alloced = 0;
+
+	DPRINT(("dynatab_create: %p of size %zu\n", pdt, element_size));
+
 	return pdt;
 }
 
@@ -174,6 +177,8 @@ void *dynatab_subscript_grow(dynatab_t *tab, sint32 subscript)
 	}
 	if (tab->n_used < subscript + 1)
 		tab->n_used = subscript + 1;
+
+	DPRINT(("dynatab_subscript_grow: %p of size %zu has grown to %d\n", tab, tab->unit, tab->n_used));
 
 	return ((char *)tab->buf) + (subscript * tab->unit);
 }
@@ -356,7 +361,7 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 		p = dynatab_subscript_grow(tab, 1);
 	}
 	tab->n_used = d.n_used;
-	DPRINT(("dynatab_thaw: successful.\n"));
+	DPRINT(("dynatab_thaw: %p of size %zu successful.\n", tab, tab->unit));
 	return (void *) tab->buf;
 }
 

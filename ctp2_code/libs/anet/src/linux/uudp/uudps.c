@@ -436,6 +436,9 @@ commInit(
 	/* Assign and save handle for broadcast address */
 	addr.addr = -1;
 	addr.port = htons(port);
+	DPRINT(("commInit: Address of new broadcast handle %d: ", comm->uudp_broadcastHdl));
+	printAdr(&addr);
+	DPRINT(("\n"));
 	comm->uudp_broadcastHdl = dcstReplace(comm->uudp_handles, comm->uudp_broadcastHdl, &addr);
 
 	/* Assign and save handle for our address */
@@ -448,6 +451,9 @@ commInit(
 		return FALSE;
 	}
 	addr.port = htons(port);
+	DPRINT(("commInit: Address of new self handle %d: ", comm->uudp_myHdl));
+	printAdr(&addr);
+	DPRINT(("\n"));
 	comm->uudp_myHdl = dcstReplace(comm->uudp_handles, comm->uudp_myHdl, &addr);
 
 	/* Postconditions */
@@ -597,7 +603,9 @@ commPlayerInfo(
 		comm->adr = *ptr;
 	}
 
-	DPRINT(("commPlayerInfo: player %d -> adr %x\n", req->player, comm->adr));
+	DPRINT(("commPlayerInfo: player %d -> adr ", req->player));
+	printAdr(&comm->adr);
+	DPRINT(("\n"));
 
 	/* copy the data and return */
 	resp->name = "";	/* This layer doesn't know about names. */
@@ -1095,20 +1103,48 @@ commSayHi(
 	resp->player = getHandleFromAddress(comm->uudp_handles, req->address);
 	if(resp->player == (uint32) dcst_INVALID_KEY) {
 		resp->player = dcstAdd(comm->uudp_handles, req->address);
+		DPRINT(("commSayHi: Addresses of new handle %d\n", resp->player));
+		DPRINT(("comm->adr: "));
+		printAdr(&comm->adr);
+		DPRINT((", req->address: "));
+		printAdr(req->address);
 		if (req->address2) {
+			DPRINT((", req->address2: "));
+			printAdr(req->address2);
+			DPRINT(("\n"));
 			dcstAddEx(comm->uudp_secondary, resp->player, req->address2);
+		}
+		else
+		{
+			DPRINT(("\n"));
 		}
 	}
 
+	/* Find also the handle of the second adress if we have one */
+	playerHdl_t player2 = resp->player;
+	if (req->address2) {
+		player2 = getHandleFromAddress(comm->uudp_handles, req->address2);
+	}
+
+	DPRINT(("hdl2commHdl : Handle %d : ", resp->player));
+
 	/* Translate handles to commapi values */
-	if(resp->player == (uint32) dcst_INVALID_KEY) {
-		resp->player = PLAYER_UNKNOWN;
+	if(resp->player == (uint32) dcst_INVALID_KEY && player2 == (uint32) dcst_INVALID_KEY ) { // Probably the second handle is always invalid if the first handle is invalid
+		DPRINT(("resp->player => PLAYER_UNKNOWN\n"));
+		resp->player = PLAYER_UNKNOWN; // @ToDo: Check whether this should be PLAYER_NONE
 		resp->status = comm_STATUS_EMPTY;
 		return FALSE;
-	} else if(resp->player == (uint32) comm->uudp_myHdl)
+	} else if(resp->player == (uint32) comm->uudp_myHdl || player2 == (uint32) comm->uudp_myHdl) {
+		DPRINT(("resp->player => PLAYER_ME\n"));
 		resp->player = PLAYER_ME;
-	else if(resp->player == (uint32) comm->uudp_broadcastHdl)
+	}
+	else if(resp->player == (uint32) comm->uudp_broadcastHdl || player2 == (uint32) comm->uudp_broadcastHdl) {
+		DPRINT(("resp->player => PLAYER_BROADCAST\n"));
 		resp->player = PLAYER_BROADCAST;
+	}
+	else {
+		DPRINT(("resp->player => unchanged\n"));
+	}
 
 	/* Return status */
 	resp->status = comm_STATUS_OK;
