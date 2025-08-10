@@ -844,7 +844,7 @@ TCPWIN_Address2Handle(
 	DPRINT(("TCPWIN_Address2Handle : "));
 	if (insert)
 	{
-	    DPRINT(("canINS "));
+		DPRINT(("canINS "));
 	}
 
 	if (live)
@@ -1088,8 +1088,8 @@ TCPWIN_Address2Handle(
 			}
 			else
 			{
-		        /* Did not find in second list */
-		        DPRINT(("n2nd "));
+				/* Did not find in second list */
+				DPRINT(("n2nd "));
 
 				/* Check to see if there is a NON-LIVE version
 				   in the second group of addresses */

@@ -684,14 +684,14 @@ commPrintAddr(
 	}
 
 	/* Get printable version */
-    #ifdef __MWERKS__
+	#ifdef __MWERKS__
 		{
 			const char *params;
 			strAddr = (char *) NewPtr(128);
 			params = (uint8 *) ((TCPPEER *)req->address)->addr;
 			sprintf(strAddr, "%u.%u.%u.%u", params[0]&0xff, params[1]&0xff, params[2]&0xff, params[3]&0xff);
 		}
-    #else
+	#else
 		{
 			struct in_addr inetAddr;
 
@@ -702,7 +702,7 @@ commPrintAddr(
 				return FALSE;
 			}
 		}
-    #endif
+	#endif
 	sprintf(strPort, ":%d", ntohs(((TCPPEER *)(req->address))->port));
 
 	/* Copy printable version to response */
@@ -715,9 +715,9 @@ commPrintAddr(
 		strcat(req->printable, strPort);
 	}
 
-    #ifdef __MWERKS__
-	    DisposePtr((Ptr) strAddr);
-    #endif
+	#ifdef __MWERKS__
+		DisposePtr((Ptr) strAddr);
+	#endif
 
 	/* Save status and return */
 	resp->status = TCP_RES_OK;

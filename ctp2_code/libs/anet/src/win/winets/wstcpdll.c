@@ -907,7 +907,7 @@ commSayHi(
 	commSayHiResp_t respDummy;
 	TCPHANDLE hTcp;
 
-  DPRINT(("@TCP commSayHi():\n"));
+	DPRINT(("@TCP commSayHi():\n"));
 
 	/* Protect against invalid parameters */
 	assert(req != NULL);
