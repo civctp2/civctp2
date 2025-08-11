@@ -1112,7 +1112,7 @@ DP_API size_t dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, 
 	len = buflen - ((uintptr_t)q - (uintptr_t)buf);
 	if (len > 0) {
 		/* session has migrated.  Receive new master address. */
-		assert(len >= dp->dpio->myAdrLen);
+		assert((sint32)len >= dp->dpio->myAdrLen);
 		memcpy(p->adrMaster, q, dp->dpio->myAdrLen);
 		DPRINT(("dp_unpack_session: session has migrated: new adr "));
 		printAdr(dp->dpio->myAdrLen, p->adrMaster);

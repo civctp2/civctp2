@@ -48,7 +48,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 static const char *hexstring(const uint8 *binstr, size_t len)
 {
 	static char buf[768];
-	sint32 i;
+	size_t i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);

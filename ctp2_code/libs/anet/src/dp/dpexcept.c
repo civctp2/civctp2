@@ -355,7 +355,7 @@ dp_result_t dp_handleExceptionRecords(uint8 *buf, uint32 buflen, uint32 fmaxsize
 --------------------------------------------------------------------------*/
 static char *buf2hex(const char *buf, size_t len, char *hexbuf)
 {
-	sint32 i;
+	size_t i;
 	for (i = 0; i < len; i++) {
 		sprintf(hexbuf + 2*i, "%02x", (uint8)buf[i]);
 	}

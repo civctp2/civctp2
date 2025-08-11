@@ -561,7 +561,7 @@ void dpio_dprintAdr(
 	size_t adrLen)
 {
 	char buf[256];
-	sint32 i;
+	size_t i;
 
 	if(adr == NULL) {
 		DPRINT(("NULL"));
