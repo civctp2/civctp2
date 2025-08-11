@@ -76,7 +76,7 @@ MSVC's warning level is set to 4.
 #endif
 
 #include "dictset.h"
-#include "anet.h"
+//#include "anet.h"  // For DPRINT, but VS Studio does not like it to have it here
 
 /* Disable MSVC warning "unreferenced inline function has been removed"
    (Windows *linked* code has six of these ) */
@@ -278,7 +278,7 @@ dcstAdd(
 			memcpy(pDcst->keys[key].value, value, pDcst->valueSize);
 			pDcst->keys[key].next = pDcst->htab[hash];
 			pDcst->htab[hash] = &(pDcst->keys[key]);
-			DPRINT(("dcstAdd: Add key %d to %d@%p, value (address) %p\n", key, hash, pDcst->keys, value));
+//			DPRINT(("dcstAdd: Add key %d to %d@%p, value (address) %p\n", key, hash, pDcst->keys, value)); // VS Studio does not like it to have it here
 		}
 	}
 
@@ -322,13 +322,13 @@ dcstAddEx(
 			memcpy(pDcst->keys[newkey].value, newvalue, pDcst->valueSize);
 			pDcst->keys[newkey].next = pDcst->htab[hash];
 			pDcst->htab[hash] = &(pDcst->keys[newkey]);
-			DPRINT(("dcstAdd: Add key %d to %d@%p, value (address) %p\n", newkey, hash, pDcst->keys, newvalue));
+	//		DPRINT(("dcstAdd: Add key %d to %d@%p, value (address) %p\n", newkey, hash, pDcst->keys, newvalue)); // VS Studio does not like it to have it here
 		}
 	}
 	else
 	{
 		/* Replace value */
-		DPRINT(("dcstAddEx: Replace value %p of key %d to %p\n", newvalue, newkey, pDcst->keys));
+	//	DPRINT(("dcstAddEx: Replace value %p of key %d to %p\n", newvalue, newkey, pDcst->keys)); // VS Studio does not like it to have it here
 		dcstReplace(pDcst, newkey, newvalue);
 	}
 
