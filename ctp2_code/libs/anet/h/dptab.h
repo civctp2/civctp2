@@ -274,7 +274,7 @@ typedef size_t (*dptab_pack_fn)(const void *ibuf, size_t ibuflen, void *obuf, si
  */
 typedef struct {
 	playerHdl_t src;	/* where data element came from; arg to dptab_set() */
-	sint32 hops;			/* copy of hops argument of dptab_set() */
+	sint32 hops;		/* copy of hops argument of dptab_set() */
 	clock_t arrived;	/* when it arrived here.  Used by dptab_delete_byAge */
 } dptab_varinfo_t;
 
@@ -283,7 +283,7 @@ typedef struct {
  * without this wrapper.
  */
 typedef struct {
-	size_t len;		/* length of user data */
+	size_t len;			/* length of user data */
 	void *buf;			/* pointer to malloc'd user data */
 } dptab_var_t;
 
@@ -294,7 +294,7 @@ typedef struct {
 	assoctab_t *tx;		/* [xferid] outstanding outgoing dptab_xfer_t's */
 	assoctab_t *rx;		/* [xferid] outstanding incoming dptab_xfer_t's */
 	hkeytab_t *pubs;	/* [key] dptab_table_t *'s mounted from this src */
-	sint32 cur_tx;			/* round robin offset into tx for fairness */
+	sint32 cur_tx;		/* round robin offset into tx for fairness */
 	sint32 next_xferid;	/* incremented each time we start a multipack xfer */
 } dptab_peer_t;
 
@@ -346,7 +346,7 @@ typedef struct dptab_s {
 
 	struct dpio_s *dpio;
 
-    /* cur_dest indicates which destination we checked most recently
+	/* cur_dest indicates which destination we checked most recently
 	 * in the round robin.  We start the scan with a different destination
 	 * each time to try to give each destination a fair share of the outgoing
 	 * bandwidth.

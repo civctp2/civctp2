@@ -131,7 +131,7 @@ public:
 	void Execute(SlicObject *obj);
 
 	void AddBuiltinFunctions();
-    bool Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum);
+	bool Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum);
 	void Link();
 
 	sint32 GetTutorialPlayer() const { return m_tutorialPlayer; }
@@ -309,7 +309,7 @@ public:
 
 	sint32 CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 player);
 
-    static bool Reload(std::basic_string<MBCHAR> const & a_File);
+	static bool Reload(std::basic_string<MBCHAR> const & a_File);
 
 	sint32 GetCurrentLine() const;
 	const char* GetSegmentName() const;
