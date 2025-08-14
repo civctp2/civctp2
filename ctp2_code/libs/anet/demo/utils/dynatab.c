@@ -226,7 +226,7 @@ dynatab_find(
 typedef struct {
 	sint32 magic;
 	sint32 n_used;
-	size_t unit;
+	uint32 unit;
 } dynatab_freeze_t;
 #define dynatab_MAGIC 0x9473
 
@@ -239,11 +239,18 @@ typedef struct {
 void dynatab_freeze(dynatab_t *tab, FILE *fp)
 {
 	dynatab_freeze_t d;
-	sint32 i;
+	size_t i;
 
-	d.magic = dynatab_MAGIC;
+	size_t datalen = tab->unit - sizeof(dptab_varinfo_t);
+
+	d.magic  = dynatab_MAGIC;
 	d.n_used = tab->n_used;
-	d.unit = tab->unit;
+	d.unit   = (uint32)(datalen + sizeof(playerHdl_t) + sizeof(sint32) + sizeof(uint32));
+//	These are the types of the following, see for loop below
+//	This is necessary to have servers.dat compatible between Windows and Linux
+//	d.unit   = (uint32)tab->unit - datalen + sizeof(varInfo->src) + sizeof(varInfo->hops) + sizeof(arrived);
+
+
 assert(d.n_used <= 5000);
 	DPRINT(("dynatab_freeze: Saving %d elements of size %d.\n", d.n_used, d.unit));
 	i = fwrite(&d, sizeof(d), 1, fp);
@@ -252,10 +259,29 @@ assert(d.n_used <= 5000);
 		;
 	}
 	if (tab->n_used > 0) {
-		i = fwrite(tab->buf, tab->unit, tab->n_used, fp);
-		if (i != tab->n_used) {
-			DPRINT(("dynatab_freeze: Error writing element %d.\n", i));
-			;
+		size_t datalen = tab->unit - sizeof(dptab_varinfo_t);
+		for(uint8* p = tab->buf; p < (uint8*)tab->buf + tab->unit * d.n_used; p += tab->unit) {
+			if (fwrite(p, sizeof(char), datalen, fp) != datalen) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
+
+			dptab_varinfo_t* varInfo = (dptab_varinfo_t*)((char*)p + datalen);
+
+			if (fwrite(&varInfo->src,  sizeof(varInfo->src),  1, fp) != 1) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
+			if (fwrite(&varInfo->hops, sizeof(varInfo->hops), 1, fp) != 1) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
+
+			uint32 arrived = (uint32)varInfo->arrived;
+			if (fwrite(&arrived, sizeof(arrived), 1, fp) != 1) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
 		}
 	}
 }
@@ -270,7 +296,7 @@ assert(d.n_used <= 5000);
 -------------------------------------------------------------------------*/
 void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 {
-	sint32 i;
+	size_t i;
 	void *p;
 	dynatab_freeze_t d;
 
@@ -286,18 +312,42 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 		return NULL;
 	}
 	DPRINT(("dynatab_thaw: Reading %d elements of size %d.\n", d.n_used, d.unit));
-	tab->unit = d.unit;
+	// This is needed to assure compatibilty of servers.dat files between Linux
+	// and Windows. On 32 and 64 bit Windows, clock_t is 4 bytes, while on 
+	// 64 bit Linux it is 8 bytes.
+	tab->unit = (size_t)d.unit - sizeof(uint32) + sizeof(clock_t);
 	if (d.n_used != 0) {
 		p = dynatab_subscript_grow(tab, d.n_used-1);
 		if (!p) {
-			DPRINT(("dynatab_thaw: Could not allocate element %d\n", i));
+			DPRINT(("dynatab_thaw: Could not allocate element %p\n", p));
 			return NULL;
 		}
-		i = fread(tab->buf, tab->unit, d.n_used, fp);
-		if (i != tab->n_used) {
-			/*  Read failed */
-			DPRINT(("dynatab_thaw: Could not read element %d\n", i));
-			return NULL;
+
+		size_t datalen = tab->unit - sizeof(dptab_varinfo_t);
+		for(uint8* p = tab->buf; p < (uint8*)tab->buf + tab->unit * d.n_used; p += tab->unit) {
+			if(fread(p, sizeof(char), datalen, fp) != datalen) {
+				DPRINT(("dynatab_thaw: error reading buf %p\n", p));
+				return NULL;
+			}
+
+			/* Seperate these so that we do not have a problem with packing*/
+			dptab_varinfo_t* varInfo = (dptab_varinfo_t*)((char*)p + datalen);
+
+			if(fread(&varInfo->src, sizeof(varInfo->src), 1, fp) != 1) {
+				DPRINT(("dynatab_thaw: error reading varInfo->src %p\n", p));
+				return NULL;
+			}
+			if(fread(&varInfo->hops, sizeof(varInfo->hops), 1, fp) != 1) {
+				DPRINT(("dynatab_thaw: error reading varInfo->hops %p\n", p));
+				return NULL;
+			}
+
+			uint32 arrived = 0; /* This needs to be 32 bit for compatibilty, clock_t is 32 bit on 64 bit Windows and 64 bit on 64 bit Linux */
+			if(fread(&arrived, sizeof(arrived), 1, fp) != 1) {
+				DPRINT(("dynatab_thaw: error reading varInfo->arrived %p\n", p));
+				return NULL;
+			}
+			varInfo->arrived = (clock_t)arrived;
 		}
 	} else {
 		/*  Kludge: force non-NULL buffer */
@@ -305,7 +355,7 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 		p = dynatab_subscript_grow(tab, 1);
 	}
 	tab->n_used = d.n_used;
-	DPRINT(("dynatab_thaw: successful.\n"));
+	DPRINT(("dynatab_thaw: %p of size %zu successful.\n", tab, tab->unit));
 	return (void *) tab->buf;
 }
 

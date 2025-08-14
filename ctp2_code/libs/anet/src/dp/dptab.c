@@ -3569,9 +3569,9 @@ dptab_table_freeze(
 
 	DPRINT(("dptab_table_freeze: freezing table %s\n",
 			key2a(table->key, table->keylen)));
-
+	uint32 size = (uint32)table->elsize; // To ensure binary compatibility between 32 and 64 bit versions
 	/* Table details */
-	if ((fwrite(&(table->elsize), sizeof(size_t), 1, fp) != 1) ||
+	if ((fwrite(&(size), sizeof(uint32), 1, fp) != 1) ||
 		(fwrite(&(table->keylen), sizeof(sint32), 1, fp) != 1))
 		return dp_RES_FULL;
 	if ((fwrite(table->key, sizeof(char), table->keylen, fp) !=
@@ -3597,8 +3597,19 @@ dptab_table_freeze(
 		for(i = 0; i < table->vars->n_used; i++) {
 			hkeytab_item_t* item = hkeytab_getkey(table->vars, i);
 			dptab_var_t* var = (dptab_var_t*) item->value;
-			size_t datalen = var->len + sizeof(dptab_varinfo_t);
+			size_t datalen = var->len;
 			if (fwrite(var->buf, sizeof(char), datalen, fp) != datalen)
+				return dp_RES_FULL;
+
+			dptab_varinfo_t* varInfo = (dptab_varinfo_t*)((char*)var->buf + var->len);
+
+			if (fwrite(&varInfo->src,  sizeof(varInfo->src),  1, fp) != 1)
+				return dp_RES_FULL;
+			if (fwrite(&varInfo->hops, sizeof(varInfo->hops), 1, fp) != 1)
+				return dp_RES_FULL;
+
+			uint32 arrived = (uint32)varInfo->arrived;
+			if (fwrite(&arrived, sizeof(arrived), 1, fp) != 1)
 				return dp_RES_FULL;
 		}
 	}
@@ -3656,7 +3667,7 @@ dptab_table_thaw(
 	FILE *fp)			/* (modified) stream to thaw from */
 {
 	dptab_table_t *table;
-	size_t elsize;
+	uint32 elsize; // Must be uint32, to keep the format of servers.dat the same between 32 anf 64 bit versions
 	sint32 keylen;
 	char key[dptab_KEY_MAXLEN];
 	sint32 vars_used;
@@ -3683,7 +3694,7 @@ dptab_table_thaw(
 	}
 
 	/* Table details */
-	if ((fread(&elsize, sizeof(size_t), 1, fp) != 1) ||
+	if ((fread(&elsize, sizeof(uint32), 1, fp) != 1) ||
 			(fread(&keylen, sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dptab_table_thaw: can't read details\n"));
 		return dp_RES_BAD;	/* Invalid file */
@@ -3700,7 +3711,7 @@ dptab_table_thaw(
 	/* If so, put in a check here */
 
 	/* Create new table */
-	err = dptab_createTable(dptab, &table, key, keylen, elsize,
+	err = dptab_createTable(dptab, &table, key, keylen, (size_t)elsize,
 				NULL, NULL, NULL, NULL);
 	if(err != dp_RES_OK) {
 		DPRINT(("dptab_table_thaw: couldn't create table\n"));
@@ -3735,11 +3746,30 @@ dptab_table_thaw(
 				DPRINT(("dptab_table_thaw: error allocating var %d\n", i));
 				return dp_RES_EMPTY;
 			}
-			datalen = var->len + sizeof(dptab_varinfo_t);
+			datalen = var->len;
 			if(fread(var->buf, sizeof(char), datalen, fp) != datalen) {
 				DPRINT(("dptab_table_thaw: error reading var %d\n", i));
 				return dp_RES_EMPTY;
 			}
+
+			/* Seperate these so that we do not have a problem with packing*/
+			dptab_varinfo_t* varInfo = (dptab_varinfo_t*)((char*)var->buf + var->len);
+
+			if(fread(&varInfo->src, sizeof(varInfo->src), 1, fp) != 1) {
+				DPRINT(("dptab_table_thaw: error reading varInfo->src %d\n", i));
+				return dp_RES_EMPTY;
+			}
+			if(fread(&varInfo->hops, sizeof(varInfo->hops), 1, fp) != 1) {
+				DPRINT(("dptab_table_thaw: error reading varInfo->hops %d\n", i));
+				return dp_RES_EMPTY;
+			}
+
+			uint32 arrived = 0; /* This needs to be 32 bit for compatibilty, clock_t is 32 bit on 64 bit Windows and 64 bit on 64 bit Linux */
+			if(fread(&arrived, sizeof(arrived), 1, fp) != 1) {
+				DPRINT(("dptab_table_thaw: error reading varInfo->arrived %d\n", i));
+				return dp_RES_EMPTY;
+			}
+			varInfo->arrived = (clock_t)arrived;
 		}
 	}
 	/* Thaw handles for the source of each variable and reset the
