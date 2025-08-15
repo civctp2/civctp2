@@ -518,7 +518,7 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 	}
 	else
 	{
-		profileTxtFile = g_civPaths->FindFile(C3DIR_DIRECT, "userprofile.txt",
+		profileTxtFile = g_civPaths->FindFile(C3DIR_APPBASE, "userprofile.txt",
 		                                      profileName);
 		if (!profileTxtFile || !c3files_PathIsValid(profileTxtFile))
 		{
@@ -867,7 +867,7 @@ void ProfileDB::Save()
 		return;
 	}
 
-	FILE *file = c3files_fopen(C3DIR_DIRECT, "userprofile.txt", "w");
+	FILE *file = c3files_fopen(C3DIR_APPBASE, "userprofile.txt", "w");
 	if(file) {
 		PointerList<ProfileVar>::Walker walk(m_vars);
 		while(walk.IsValid()) {

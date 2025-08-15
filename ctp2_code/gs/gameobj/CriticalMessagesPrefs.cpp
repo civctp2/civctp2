@@ -137,7 +137,7 @@ void CriticalMessagesPrefs::Load()
 	FILE *filePtr;
 	MBCHAR inputStr[100];
 	bool value;
-	filePtr=c3files_fopen(C3DIR_DIRECT, k_CRITMSG, "rt");
+	filePtr=c3files_fopen(C3DIR_APPBASE, k_CRITMSG, "rt");
 	if(!filePtr) {
 		filePtr=c3files_fopen(C3DIR_UIDATA, "CritMsgs.txt", "rt");
 		if(!filePtr)
@@ -163,7 +163,7 @@ void CriticalMessagesPrefs::Load()
 void CriticalMessagesPrefs::Save()
 {
 	FILE *filePtr;
-	filePtr=c3files_fopen(C3DIR_DIRECT, k_CRITMSG, "wt");
+	filePtr=c3files_fopen(C3DIR_APPBASE, k_CRITMSG, "wt");
 	if(!filePtr)
 		return;
 

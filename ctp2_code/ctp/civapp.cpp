@@ -1270,12 +1270,9 @@ sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 
 	Splash::Initialize();
 
-	g_theProfileDB = new ProfileDB;
-	if (!g_theProfileDB->Init(FALSE))
-	{
-		c3errors_FatalDialog("CivApp", "Unable to init the ProfileDB.");
-	}
-
+	// Initializes the civ paths theProfileDB and theLanguageDB
+	// These must be initialzed in this order not to break anything
+	// If you need this initilized earlier, just call this earlier
 	CivPaths_InitCivPaths();
 
 	g_logCrashes = g_theProfileDB->GetEnableLogs();

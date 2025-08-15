@@ -86,6 +86,14 @@ void CivPaths_InitCivPaths()
 		}
 	}
 
+	// Load the profile DB after the civpaths, so that we can load it from
+	// the base directory
+	g_theProfileDB = new ProfileDB;
+	if (!g_theProfileDB->Init(FALSE))
+	{
+		c3errors_FatalDialog("CivApp", "Unable to init the ProfileDB.");
+	}
+
 	// Get the Language DB up
 	g_theLanguageDB = new CTPDatabase<LanguageRecord>;
 	if (!g_theLanguageDB->Parse(C3DIR_GAMEDATA, "Language.txt"))
@@ -455,6 +463,12 @@ MBCHAR *CivPaths::FindFile(C3DIR dir, const MBCHAR *filename, MBCHAR *path,
 	{
 		strcpy(path, filename);
 
+		return path;
+	}
+	else if(dir == C3DIR_APPBASE)
+	{
+		sprintf(fullPath, "%s%s%s", m_hdPath, FILE_SEP, filename);
+		strcpy(path, fullPath);
 		return path;
 	}
 
