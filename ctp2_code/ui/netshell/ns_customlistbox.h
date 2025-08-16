@@ -2,6 +2,8 @@
 #define __NS_CUSTOMLISTBOX_H__
 
 #include "ns_listbox.h"
+
+#include "c3files.h"
 #include "ns_session.h"
 #include "ns_lobby.h"
 #include "ns_game.h"
@@ -113,7 +115,7 @@ public:
 	{
 
 		strncpy(m_filename, filename, 64);
-		FILE *file = fopen(filename, "rb");
+		FILE *file = c3files_fopen(C3DIR_APPBASE, filename, "rb");
 		if(file) {
 
 			sint32 test = 0;
@@ -161,7 +163,7 @@ public:
 
 		memset(&(this->m_curkey), 0, sizeof(this->m_curkey));
 		this->m_curkey.m_len = 1;
-		FILE *file = fopen(m_filename, "wb");
+		FILE *file = c3files_fopen(C3DIR_APPBASE, m_filename, "wb");
 		if(file) {
 
 			fwrite( &NFT::m_version, sizeof( sint32 ), 1, file );

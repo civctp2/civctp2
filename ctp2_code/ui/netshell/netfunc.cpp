@@ -2243,7 +2243,7 @@ NETFunc::NETFunc(void) {
 	s_lobby = Lobby();
 	memset(&m_appParam, 0, sizeof(dp_appParam_t));
 
-	FILE *f = fopen("netf.def", "rb");
+	FILE *f = c3files_fopen(C3DIR_APPBASE, "netf.def", "rb");
 	if(f) {
 		fread(&s_servername, sizeof(s_servername) + sizeof(s_playername) + sizeof(s_sessionname), 1, f);
 		fclose(f);
@@ -2300,7 +2300,7 @@ NETFunc::STATUS NETFunc::Connect(const char *file) {
 
 NETFunc::~NETFunc(void) {
 
-	FILE *f = fopen("netf.def", "wb");
+	FILE *f = c3files_fopen(C3DIR_APPBASE, "netf.def", "wb");
 	if(f) {
 		fwrite(&s_servername, sizeof(s_servername) + sizeof(s_playername) + sizeof(s_sessionname), 1, f);
 		fclose(f);

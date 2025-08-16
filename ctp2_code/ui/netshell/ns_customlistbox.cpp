@@ -33,6 +33,7 @@
 
 #include "c3.h"
 
+#include "c3files.h"
 #include "netshell.h"
 #include "ns_customlistbox.h"
 #include "ns_civlistbox.h"
@@ -201,7 +202,7 @@ ns_TransportListBox::ns_TransportListBox (
 	}
 
 	sint32 lasttime = 0;
-	FILE *f = fopen( "nstrnsprt.cfg", "rb" );
+	FILE *f = c3files_fopen(C3DIR_APPBASE, "nstrnsprt.cfg", "rb" );
 	if ( f )
 	{
 		sint32 test = 0;
@@ -223,7 +224,7 @@ ns_TransportListBox::~ns_TransportListBox()
 	sint32 lasttime = GetSelectedItemIndex();
 	if ( 0 <= lasttime && lasttime < NumItems() )
 	{
-		FILE *f = fopen( "nstrnsprt.cfg", "wb" );
+		FILE *f = c3files_fopen(C3DIR_APPBASE, "nstrnsprt.cfg", "wb" );
 		if ( f )
 		{
 
