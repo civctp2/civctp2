@@ -1,0 +1,37 @@
+List of Fixed Sprites for AE 2025 v1 (all from Cradle 5, renumbered for AE)
+To install, copy all 29 sprites into the ctp2_data\default\graphics\sprites folder. They will overwrite the existing 29 files.
+
+1) 8 Sprites used by AE:
+
+- GU021.spr (Ship of the Line) - Adds new "broadside" attack mode
+- GU026.spr (Galleon) - Adds new "broadside" attack mode
+- GU032.spr (Stealth Fighter) Adds "stealth move" and various fixes
+- GU035.spr (P-38 Fighter) Adds Idle
+- GU040.spr (Nuke) - Adds Idle
+- GU046.spr (Interceptor) Adds Idle
+- GU051.spr (Stealth Bomber) Adds Idle & "stealth move"
+- GU057.spr (Spy Plane) Adds Idle & "stealth move"
+
+2) 21 Extra Sprites from CtP1 (included with AE but not used by the base game):
+
+- GU01.spr (Cow) - Adds Idle
+- GU03.spr (CtP1 Warrior, Cradle Pacal) Adds Idle
+- GU05.spr (CtP1 Mounted Archer, Cradle Mounted Archer) - Adds Idle
+- GU07.spr (CtP1 Trireme, Cradle Quinquereme) - Adds Idle & Ramming attack
+- GU08.spr (CtP1 Phalanx, Cradle Hired Thug) - Adds Idle
+- GU09.spr (Cow) - Identical to GU01.spr
+- GU10.spr (CtP1 Diplomat, Cradle Emissary) - Adds Idle
+- GU14.spr (CtP1 Fire Trireme, Cradle Trireme) Adds Idle & Ramming attack, Removes Fire
+- GU15.spr (CtP1 Knight, Cradle Teutonic Knight) - Adds Idle
+- GU16.spr (CtP1 Longship, Cradle Dromon) - Adds Idle & Fire Attack
+- GU17.spr (CtP1 Pikeman, Cradle Pikeman) - Adds Idle, Replaces Halberd with Pike, Adds Stabbing Attack
+- GU20.spr (CtP1 Cavalry, Cradle Field Marshall) - Adds Idle
+- GU22.spr (CtP1 Musketeer, Cradle Brigadier) - Adds Idle & Death
+- GU23.spr (CtP1 Lawyer, Cradle Ambassador) - Adds Idle
+- GU24.spr (CtP1 Fascist, Cradle Red Guard) - Adds Idle
+- GU28.spr (CtP1 Artillery, Cradle Howitzer) - Adds Idle
+- GU42.spr (CtP1 Televangelist, Cradle Televangelist) - Adds Idle
+- GU46.spr (CtP1 Interceptor, Cradle Interceptor) - Adds Idle & Death
+- GU48.spr (CtP1 Cyber Ninja, Cradle Cyber Attorney) - Adds Idle & Changes Move, Attack, and Death
+- GU50.spr (CtP1 Corporate Branch, Cradle Corporate Branch) - Adds Idle
+- GU56.spr (CtP1 Subneural Ad, Cradle Subneural Ad) - Adds Idle
