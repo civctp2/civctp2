@@ -26,3 +26,4 @@ graphics\icons
 graphics\cursors
 sound
 videos
+music

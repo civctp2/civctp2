@@ -96,8 +96,8 @@ SoundManager::SoundManager()
 		m_noSound                   (false),
 		m_usePlaySound              (false),
 #if defined(USE_SDL)
-		m_useOggTracks				(false),
-		m_oggTrack					(0),
+		m_useOggTracks              (0),
+		m_oggTrack                  (0),
 #else // USE_SDL
 		m_redbook                   (0),
 #endif // USE_SDL
@@ -209,10 +209,20 @@ void SoundManager::InitRedbook()
 {
 #if defined(USE_SDL)
 	// check if Ogg Tracks are present first
-	if( !m_useOggTracks) {
-		if(c3files_PathIsValid("music/Track02.ogg")) {
-			m_useOggTracks = true;
-			printf("Detected Ogg Music track\n");
+	if( !m_useOggTracks)
+	{
+		MBCHAR  s[_MAX_PATH];
+		if(g_civPaths->FindFile(C3DIR_MUSIC, "Track02.ogg", s, true)
+		&& c3files_PathIsValid(s))
+		{
+			m_useOggTracks = C3DIR_MUSIC;
+			printf("Detected Ogg Music track in data folder\n");
+		}
+		else if(g_civPaths->FindFile(C3DIR_APPBASE,"music/Track02.ogg", s, true)
+		     && c3files_PathIsValid(s))
+		{
+			m_useOggTracks = C3DIR_APPBASE;
+			printf("Detected Ogg Music track in app folder\n");
 		}
 	}
 #else // USE_SDL
@@ -677,7 +687,7 @@ SoundManager::DisableMusic()
 void
 SoundManager::EnableMusic()
 {
-    m_musicEnabled = TRUE;
+	m_musicEnabled = TRUE;
 }
 
 CivSound
@@ -880,15 +890,29 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	if (m_curTrack == -1) return;
 
 #if defined(USE_SDL)
-	if(m_useOggTracks) {
-		char buf[60];
-		if(!m_numTracks) {
+	if(m_useOggTracks)
+	{
+		char   s[_MAX_PATH];
+		char buf[_MAX_PATH];
+		if(!m_numTracks)
+		{
 			// first search number of tracks
 			sint32 numTracks = 1;
 			do {
+				memset(s, 0, _MAX_PATH);// Invalidate path, as FindFile width C3DIR_MUSIC, does not overwrite the previous path if this is invalid
 				numTracks++;
-				sprintf(buf, "music/Track%02d.ogg", numTracks);
-			} while(c3files_PathIsValid(buf));
+				if(m_useOggTracks == C3DIR_MUSIC)
+				{
+					sprintf(buf, "Track%02d.ogg", numTracks);
+					g_civPaths->FindFile(C3DIR_MUSIC, buf, s, true);
+				}
+				else if(m_useOggTracks == C3DIR_APPBASE)
+				{
+					sprintf(buf, "music/Track%02d.ogg", numTracks);
+					g_civPaths->FindFile(C3DIR_APPBASE, buf, s, true);
+				}
+			}
+			while(c3files_PathIsValid(s));
 			m_numTracks = numTracks-1; // start at 2
 		}
 		// setting up
@@ -900,17 +924,27 @@ void SoundManager::StartMusic(const sint32 &InTrackNum)
 	
 		m_curTrack = trackNum;
 
-		sprintf(buf, "music/Track%02d.ogg", m_curTrack+1);
+		if(m_useOggTracks == C3DIR_MUSIC)
+		{
+			sprintf(buf, "Track%02d.ogg", m_curTrack+1);
+			g_civPaths->FindFile(C3DIR_MUSIC, buf, s, true);
+		}
+		else if(m_useOggTracks == C3DIR_APPBASE)
+		{
+			sprintf(buf, "music/Track%02d.ogg", m_curTrack+1);
+			g_civPaths->FindFile(C3DIR_APPBASE, buf, s, true);
+		}
+
 		// clean previous if there
 		if(m_oggTrack) {
 			Mix_FreeMusic(m_oggTrack);
 			m_oggTrack = NULL;
 		}
-		m_oggTrack = Mix_LoadMUS(CI_FixName(buf));
+		m_oggTrack = Mix_LoadMUS(CI_FixName(s));
 		if(m_oggTrack)
 			Mix_PlayMusic(m_oggTrack, 1);
 		else
-			printf("Error, music track %s not found\n", buf);
+			printf("Error, music track %s not found\n", s);
 		
 	}
 #else

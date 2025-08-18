@@ -210,8 +210,14 @@ CivPaths::CivPaths(AUI_ERRCODE &errcode)
 	for (size_t dir = 1; dir < C3DIR_MAX; ++dir)
 	{
 		m_assetPaths[dir] = new MBCHAR[_MAX_PATH];
-		fscanf (fin, "%s", m_assetPaths[dir]);
-		ReplaceFileSeperator(m_assetPaths[dir]);
+		if(fscanf(fin, "%s", m_assetPaths[dir]) > 0)
+		{
+			ReplaceFileSeperator(m_assetPaths[dir]);
+		}
+		else
+		{
+			strcpy(m_assetPaths[dir], "music");
+		}
 	}
 
 	fclose(fin);
