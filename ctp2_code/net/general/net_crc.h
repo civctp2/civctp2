@@ -35,7 +35,7 @@
 #define __NET_CRC_H__
 #include "net_packet.h"
 
-#define k_MAX_DBS 40
+#define k_MAX_DBS 41
 
 class NetCRC : public Packetizer
 {

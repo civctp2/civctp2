@@ -87,6 +87,7 @@
 #include "UnitBuildListRecord.h"
 #include "WonderRecord.h"
 #include "WonderBuildListRecord.h"
+#include "SlicEngine.h"
 
 #include "civapp.h"
 #include "c3_utilitydialogbox.h"
@@ -239,6 +240,14 @@ sint32 NetCRC::SerializeDBs()
 	CHECKDB(g_theUnitBuildListDB);     // 37
 	CHECKDB(g_theWonderDB);            // 38
 	CHECKDB(g_theWonderBuildListDB);   // 39
+
+	// Create a temory SlicEngine with default values
+	// so that game specific values can be ignored
+	// and we can check whether the loaded slic code
+	// is identical
+	SlicEngine* tmpSlicEngine = new SlicEngine();
+	CHECKDB(tmpSlicEngine);            // 40
+	delete tmpSlicEngine;
 
 	return numchecked;
 }
