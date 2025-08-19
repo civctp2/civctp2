@@ -8598,7 +8598,7 @@ static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
 		char body[2];
 	} PACK pkt;
 
-	dp_result_t		err;
+	dp_result_t		err = dp_RES_OK;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
 	sint32 ndests;
 	sint32 i;
@@ -8664,7 +8664,7 @@ static dp_result_t dpSendVictory(dp_t *dp)
 		dp_packetType_t   tag;
 	} PACK pkt;
 
-	dp_result_t		err;
+	dp_result_t		err = dp_RES_OK;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
 	sint32 ndests;
 
