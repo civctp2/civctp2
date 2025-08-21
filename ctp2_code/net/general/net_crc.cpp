@@ -87,7 +87,7 @@
 #include "UnitBuildListRecord.h"
 #include "WonderRecord.h"
 #include "WonderBuildListRecord.h"
-#include "SlicEngine.h"
+#include "slicif.h"
 
 #include "civapp.h"
 #include "c3_utilitydialogbox.h"
@@ -98,6 +98,7 @@ extern ProfileDB               *g_theProfileDB;
 extern OzoneDatabase           *g_theUVDB;
 
 extern CivApp                  *g_civApp;
+extern MBCHAR                   g_slic_filename[_MAX_PATH];
 
 //----------------------------------------------------------------------------
 //
@@ -241,13 +242,20 @@ sint32 NetCRC::SerializeDBs()
 	CHECKDB(g_theWonderDB);            // 38
 	CHECKDB(g_theWonderBuildListDB);   // 39
 
-	// Create a temory SlicEngine with default values
-	// so that game specific values can be ignored
-	// and we can check whether the loaded slic code
-	// is identical
-	SlicEngine* tmpSlicEngine = new SlicEngine();
-	CHECKDB(tmpSlicEngine);            // 40
-	delete tmpSlicEngine;
+	// Check the loaded slic code, weather it is
+	// identical on both ends
+	// Technnically:                   // 40
+	if(dbnum < m_startAt || dbnum > m_stopAt) {
+		dbnum++; \
+	} else {
+		Assert(dbnum < k_MAX_DBS);
+		check = new CheckSum;
+		check->AddData(slicif_get_code(), slicif_get_code_size());
+		check->Done(m_db_crc[dbnum][0], m_db_crc[dbnum][1], m_db_crc[dbnum][2], m_db_crc[dbnum][3]);
+		delete check;
+		dbnum++;
+		numchecked++;
+	}
 
 	return numchecked;
 }

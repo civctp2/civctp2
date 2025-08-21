@@ -107,7 +107,7 @@ typedef enum {
 	SOP_PUSHA,
 	SOP_AINDX,
 	SOP_ASSNA,
-    SOP_RET,
+	SOP_RET,
 	SOP_ASSNM,
 	SOP_PUSHM,
 	SOP_PUSHAM,
@@ -201,6 +201,8 @@ extern int g_slicLineNumber;
 extern int g_slicWarnUndeclared;
 extern FILE *debuglog;
 
+unsigned char* slicif_get_code();
+int slicif_get_code_size();
 SLIC_ERROR slicif_run_parser(char *filename, int symStart);
 void slicif_add_object(struct PSlicObject* obj);
 void slicif_add_op(SOP op, ...);

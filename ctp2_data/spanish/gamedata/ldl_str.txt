@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS			"ANULAR OFERTA"
 str_ldl_No_item_selected_in_list		"¡No se ha seleccionado un objeto en la lista!"
 str_ldl_Foreign_Attitude			"Actitud extranjera"
 str_ldl_Local					"Local"
-str_ldl_mp_dbase_out_of_synch			"La base de datos no está sincronizada. Volviendo a la sala."
+str_ldl_mp_dbase_out_of_synch			"La base de datos no está sincronizada. Volviendo a la sala." # Needs update
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 

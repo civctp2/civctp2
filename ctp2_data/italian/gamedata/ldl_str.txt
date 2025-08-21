@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS			"ANNULLA OFFERTA"
 str_ldl_No_item_selected_in_list		"Nessun oggetto selezionato sulla lista!"
 str_ldl_Foreign_Attitude			"Atteggiamento degli imperi"
 str_ldl_Local					"Locale"
-str_ldl_mp_dbase_out_of_synch			"Il database non è sincronizzato. Torna all'atrio"
+str_ldl_mp_dbase_out_of_synch			"Il database non è sincronizzato. Torna all'atrio" # Needs update
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 

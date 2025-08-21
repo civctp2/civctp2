@@ -125,6 +125,16 @@ static int s_argMemberIndex;
 
 extern "C" void yyerror(char *s);
 
+unsigned char* slicif_get_code()
+{
+	return s_code;
+}
+
+int slicif_get_code_size()
+{
+	return s_allocated_code;
+}
+
 void slicif_init()
 {
 	int i;

@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS			"CANCEL OFFER"
 str_ldl_No_item_selected_in_list		"No item selected in the list!"
 str_ldl_Foreign_Attitude			"Foreign Attitude"
 str_ldl_Local					"Local"
-str_ldl_mp_dbase_out_of_synch			"Database is out of synch. Returning to Lobby"
+str_ldl_mp_dbase_out_of_synch			"Databases or slic code are out of synch. Returning to Lobby."
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 

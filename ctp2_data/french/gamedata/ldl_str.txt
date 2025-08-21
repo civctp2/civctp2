@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS			"ANNULER OFFRE"
 str_ldl_No_item_selected_in_list		"Pas d'élément sélectionné dans la liste !"
 str_ldl_Foreign_Attitude			"Attitude nations étrangères"
 str_ldl_Local					"Local"
-str_ldl_mp_dbase_out_of_synch			"Base de données non synchro. Retour à la salle d'attente."
+str_ldl_mp_dbase_out_of_synch			"Base de données ou code de slic non synchro. Retour à la salle d'attente." # Needs to be checked by native
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 

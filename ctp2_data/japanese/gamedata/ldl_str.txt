@@ -100,7 +100,7 @@ str_ldl_No_item_selected_in_list	"リストに選択したユニットや改善施設がありません
 str_ldl_Foreign_Attitude	"排外主義"
 str_ldl_Local	"ローカル"
 str_ldl_Neutral	"中立"
-str_ldl_mp_dbase_out_of_synch	"データベースの同期が取られていません｡ロビーに戻ってください｡"
+str_ldl_mp_dbase_out_of_synch	"データベースの同期が取られていません｡ロビーに戻ってください｡" # Needs update
 
 ##Add_str.txtの最新バッチです｡99/02/26##
 
