@@ -70,7 +70,7 @@ public:
 
 	Path();
 	Path(const Path *copy);
-	void FlattenAstarList(AstarPoint *best);
+	bool FlattenAstarList(AstarPoint *best);
 	void FlattenNormalizedPointList(const MapPoint &start, DynamicArray<MapPoint> &pixel);
 	void SetStart(const MapPoint &s) { m_start = s; m_step.Clear(); }
 	void Clear();
