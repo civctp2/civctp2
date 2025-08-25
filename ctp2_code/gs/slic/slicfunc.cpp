@@ -4701,10 +4701,8 @@ SFN_ERROR Slic_MakeLocation::Call(SlicArgList *args)
 	if(!args->GetInt(1, x)) return SFN_ERROR_TYPE_ARGS;
 	if(!args->GetInt(2, y)) return SFN_ERROR_TYPE_ARGS;
 
-	long width,height;
-
-	width=g_theWorld->GetXWidth();
-	height=g_theWorld->GetYHeight();
+	sint32 width  = g_theWorld->GetXWidth();
+	sint32 height = g_theWorld->GetYHeight();
 
 	if(x < 0 || x >= width)
 		return SFN_ERROR_OUT_OF_RANGE;
