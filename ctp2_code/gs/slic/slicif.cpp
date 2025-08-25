@@ -130,9 +130,9 @@ unsigned char* slicif_get_code()
 	return s_code;
 }
 
-int slicif_get_code_size()
+size_t slicif_get_code_size()
 {
-	return s_allocated_code;
+	return static_cast<size_t>(s_code_ptr - s_code);
 }
 
 void slicif_init()
