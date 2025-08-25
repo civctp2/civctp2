@@ -47,6 +47,7 @@ class aui_Control;
 class ctp2_Button;
 class ctp2_ListBox;
 class ctp2_Window;
+union Cookie;
 
 /// City espionage window and data
 /// \remarks    Implemented using a sort of singleton pattern.
@@ -72,7 +73,7 @@ private:
         aui_Control *   control,
         uint32          action,
         uint32          data,
-        void *          cookie
+        Cookie          cookie
     );
 
     static void         Cleanup();

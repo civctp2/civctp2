@@ -48,8 +48,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 typedef struct AdvertisingStruct {
 	struct AdvertisingStruct	*qLink;
-	short						qType;	/* Not used */
-	unsigned long				signature;
+	sint16						qType;	/* Not used */
+	uint32				signature;
 	T_SAP_ID_PACKET				ASServerIDpacket;
 } T_AdvertisingStruct;
 #if defined(powerc) || defined(__powerc)

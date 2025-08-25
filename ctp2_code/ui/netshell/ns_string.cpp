@@ -9,7 +9,7 @@
 
 extern StringDB	*g_theStringDB;
 
-ns_String::ns_String( char *ldlBlock )
+ns_String::ns_String( const char *ldlBlock )
 :
     m_string    (NULL)
 {

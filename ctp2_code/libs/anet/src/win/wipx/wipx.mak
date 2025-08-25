@@ -584,7 +584,7 @@ BuildCmds= \
 SOURCE=..\..\..\demo\utils\logpkt.c
 DEP_CPP_LOGPK=\
 	"..\..\..\demo\utils\logpkt.h"\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	"..\..\..\h\eclock.h"\
 	
 

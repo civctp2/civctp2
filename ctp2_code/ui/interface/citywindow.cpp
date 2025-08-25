@@ -143,8 +143,8 @@ extern ResourceMap                  *g_resourceMap;
 extern C3UI                         *g_c3ui;
 
 static CityWindow                   *s_cityWindow = NULL;
-static MBCHAR                       *s_cityWindowBlock = "CityWindow";
-static MBCHAR                       *s_cityStatsBlock = "CityStatisticsWindow";//advisor window
+static const MBCHAR                 *s_cityWindowBlock = "CityWindow";
+static const MBCHAR                 *s_cityStatsBlock  = "CityStatisticsWindow"; // Advisor window
 
 static sint32 s_isBuilding = 1;
 
@@ -166,18 +166,18 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
     m_growthDelta           (NULL),
     m_happinessValue        (NULL),
     m_conversionLossValue   (NULL),
-	m_franchiseLossValue    (NULL),
-	m_growthTurns	        (NULL),
+    m_franchiseLossValue    (NULL),
+    m_growthTurns           (NULL),
     m_buildProgressBar      (NULL),
     m_globalBox             (NULL),
     m_globalFood            (NULL),
     m_globalProduction      (NULL),
     m_globalTrade           (NULL),
     m_globalScience         (NULL),
+    m_globalPopulation      (NULL),
     m_globalTradeFood       (NULL),
     m_globalTradeProduction (NULL),
     m_globalTradeGold       (NULL),
-    m_globalPopulation      (NULL),
     m_activateButton        (NULL),
     m_disbandButton         (NULL)
 {
@@ -208,24 +208,24 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	MBCHAR buttonBlock[k_AUI_LDL_MAXBLOCK + 1];
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CloseButton");
-	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::Close, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::Close, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CityList.Next");
-	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::NextCity, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::NextCity, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	sprintf(buttonBlock, "%s.%s", s_cityWindowBlock, "CityList.Previous");
-	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::PreviousCity, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(buttonBlock, CityWindow::PreviousCity, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Toggle", CityWindow::GovernorToggle, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Toggle", CityWindow::GovernorToggle, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Pulldown", CityWindow::GovernorPriority, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GovernorBox.Pulldown", CityWindow::GovernorPriority, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "CityList.Pulldown", CityWindow::SelectCity, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "CityList.Pulldown", CityWindow::SelectCity, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	m_popSpinners[POP_ENTERTAINER] = (ctp2_Spinner *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.EntertainersSpinner");
@@ -248,46 +248,46 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	m_popSpinners[POP_MERCHANT]->SetSpinnerCallback(CityWindow::WorkerSpinnerCallback,
 													m_popSpinners[POP_MERCHANT]);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "EditQueueButton", CityWindow::EditQueue, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	if (aui_Ldl::GetObject(s_cityWindowBlock, "NationalManagerButton"))
 	{
-		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "NationalManagerButton", CityWindow::OpenNationalManager, NULL);
+		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "NationalManagerButton", CityWindow::OpenNationalManager, nullptr);
 		Assert(*err == AUI_ERRCODE_OK);
 	}
 
 	if (aui_Ldl::GetObject(s_cityWindowBlock, "OptimizeSpecialistButton"))
 	{
 		// Added by Martin Gühmann for specialist optimization option:
-		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, NULL);
+		*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "OptimizeSpecialistButton", CityWindow::OptimizeSpecialists, nullptr);
 		Assert(*err == AUI_ERRCODE_OK);
 	}
 	// else No action: this button is not guaranteed to exist in mods.
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.List", CityWindow::BuildListSelect, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.List", CityWindow::BuildListSelect, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.List", CityWindow::InventoryListSelect, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.List", CityWindow::InventoryListSelect, nullptr);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.RushBuyButton", CityWindow::Buy, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ProductionSection.RushBuyButton", CityWindow::Buy, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.SellButton", CityWindow::Sell, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "InventorySection.SellButton", CityWindow::Sell, nullptr);
 
 
 
 
 	m_growthBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.GrowthBar");
 	if(m_growthBar) {
-		m_growthBar->SetDrawCallbackAndCookie(CityWindow::DrawGrowthBar, NULL);
+		m_growthBar->SetDrawCallbackAndCookie(CityWindow::DrawGrowthBar, nullptr);
 	}
 
 	m_growthDelta = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.GrowthDelta");
 
 	m_happinessBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.HappinessBar");
 	if(m_happinessBar) {
-		m_happinessBar->SetDrawCallbackAndCookie(CityWindow::DrawHappinessBar, NULL);
+		m_happinessBar->SetDrawCallbackAndCookie(CityWindow::DrawHappinessBar, nullptr);
 	}
 	m_happinessValue = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.HappinessValue");
 
@@ -296,15 +296,15 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	m_growthTurns = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "StatisticsSection.GrowthTurnsValue");
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton", CityWindow::EditQueue, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton", CityWindow::EditQueue, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton", CityWindow::EditQueue, NULL);
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.RadialButton", CityWindow::EditQueue, nullptr);
 	Assert(*err == AUI_ERRCODE_OK);
 
 	m_buildProgressBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.ItemProgress.IconBorder.IconButton.ProgressBarParent.ProgressBar");
 	if(m_buildProgressBar) {
-		m_buildProgressBar->SetDrawCallbackAndCookie(CityWindow::DrawBuildBar, NULL);
+		m_buildProgressBar->SetDrawCallbackAndCookie(CityWindow::DrawBuildBar, nullptr);
 	}
 
 	m_globalBox = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals");
@@ -319,12 +319,12 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	ctp2_Static *efficiencyBar = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.EfficiencyBar");
 	if(efficiencyBar) {
-		efficiencyBar->SetDrawCallbackAndCookie(CityWindow::DrawEfficiencyBar, NULL);
+		efficiencyBar->SetDrawCallbackAndCookie(CityWindow::DrawEfficiencyBar, nullptr);
 	}
 
 	ctp2_Static *mapStatic = (ctp2_Static *)aui_Ldl::GetObject(s_cityWindowBlock, "Globals.ResourceMap");
 	if(mapStatic) {
-		mapStatic->SetDrawCallbackAndCookie(CityWindow::DrawResourceMap, NULL);
+		mapStatic->SetDrawCallbackAndCookie(CityWindow::DrawResourceMap, nullptr);
 	}
 
 	ctp2_DropDown *dd = (ctp2_DropDown *)aui_Ldl::GetObject(s_cityWindowBlock, "GovernorBox.Pulldown");
@@ -374,7 +374,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 
 	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection", BuildTabCallback, (void *)CW_PANEL_GARRISON);
 
-	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ShowStatisticsButton", ShowStatistics, NULL);//advisor window button
+	*err = aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "ShowStatisticsButton", ShowStatistics, nullptr);//advisor window button
 	Assert(*err == AUI_ERRCODE_OK);
 
 	sint32 x,y;
@@ -387,7 +387,7 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 			Assert(m_unitButtons[unitButton]);
 			if(m_unitButtons[unitButton]) {
 				m_unitButtons[unitButton]->Enable(FALSE);
-				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, (void *)unitButton);
+				m_unitButtons[unitButton]->SetActionFuncAndCookie(UnitButtonCallback, unitButton);
 			}
 
 			unitButton++;
@@ -395,10 +395,10 @@ CityWindow::CityWindow(AUI_ERRCODE *err)
 	}
 
 	m_activateButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.ActivateButton");
-	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ActivateButton", ActivateUnitCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_cityWindowBlock, "GarrisonSection.ActivateButton", ActivateUnitCallback, nullptr);
 
 	m_disbandButton = (ctp2_Button *)aui_Ldl::GetObject(s_cityWindowBlock, "GarrisonSection.DisbandButton");
-	m_disbandButton->SetActionFuncAndCookie(DisbandUnitCallback, NULL);
+	m_disbandButton->SetActionFuncAndCookie(DisbandUnitCallback, nullptr);
 }
 
 //----------------------------------------------------------------------------
@@ -1038,7 +1038,7 @@ void CityWindow::UpdateCostsGives()
 	if(lb) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 		if(item) {
-			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
+			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserDataPtr();
 			Assert(info);
 			if (info) {
 				if(!info->m_isBuilding) {
@@ -1059,7 +1059,7 @@ void CityWindow::UpdateCostsGives()
 	}
 }
 
-void CityWindow::Close(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void CityWindow::Close(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1068,7 +1068,7 @@ void CityWindow::Close(aui_Control * control, uint32 action, uint32 data, void *
 	Hide();
 }
 
-void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1102,7 +1102,7 @@ void CityWindow::NextCity(aui_Control *control, uint32 action, uint32 data, void
 
 }
 
-void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1135,7 +1135,7 @@ void CityWindow::PreviousCity(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void CityWindow::SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::SelectCity(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_DROPDOWN_ACTION_SELECT)
 		return;
@@ -1155,7 +1155,7 @@ void CityWindow::SelectCity(aui_Control *control, uint32 action, uint32 data, vo
 	}
 }
 
-void CityWindow::Resource(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::Resource(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1175,7 +1175,7 @@ void CityWindow::Resource(aui_Control *control, uint32 action, uint32 data, void
 #endif
 }
 
-void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	static bool settingValueAutomatically = false;
 	if(action != AUI_RANGER_ACTION_VALUECHANGE)
@@ -1184,7 +1184,7 @@ void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint
 	if(settingValueAutomatically)
 		return;
 
-	ctp2_Spinner *spinner = (ctp2_Spinner *)cookie;
+	ctp2_Spinner *spinner = (ctp2_Spinner *)cookie.m_voidPtr;
 
 	Assert(s_cityWindow);
 	if(!s_cityWindow)
@@ -1226,7 +1226,7 @@ void CityWindow::WorkerSpinnerCallback(aui_Control *control, uint32 action, uint
 	s_cityWindow->Update();
 }
 
-void CityWindow::GovernorToggle(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::GovernorToggle(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1237,7 +1237,7 @@ void CityWindow::GovernorToggle(aui_Control *control, uint32 action, uint32 data
 	s_cityWindow->Update();
 }
 
-void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_DROPDOWN_ACTION_SELECT)
 		return;
@@ -1260,7 +1260,7 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //
@@ -1269,7 +1269,7 @@ void CityWindow::GovernorPriority(aui_Control *control, uint32 action, uint32 da
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1292,7 +1292,7 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //
@@ -1301,7 +1301,7 @@ void CityWindow::EditQueue(aui_Control *control, uint32 action, uint32 data, voi
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1318,7 +1318,7 @@ void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //
@@ -1327,7 +1327,7 @@ void CityWindow::OpenNationalManager(aui_Control *control, uint32 action, uint32
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1374,7 +1374,7 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //
@@ -1383,7 +1383,7 @@ void CityWindow::OptimizeSpecialists(aui_Control *control, uint32 action, uint32
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
@@ -1488,7 +1488,7 @@ void CityWindow::BuildListSelect(aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
@@ -1514,7 +1514,7 @@ void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32
 		}
 
 		const IconRecord *icon = NULL;
-		InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
+		InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserDataPtr();
 		Assert(info);
 		if(info->m_isBuilding) {
 			icon = g_theBuildingDB->Get(info->m_type)->GetDefaultIcon();
@@ -1529,7 +1529,7 @@ void CityWindow::InventoryListSelect(aui_Control *control, uint32 action, uint32
 	s_cityWindow->UpdateBuildTabButtons();
 }
 
-void CityWindow::Buy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::Buy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -1570,9 +1570,8 @@ void CityWindow::UpdateCity(const Unit & city)
 	s_cityWindow->UpdateBuildTabs();
 }
 
-void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
-
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
 
@@ -1581,7 +1580,7 @@ void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *co
 	if(lb) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 		if(item) {
-			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserData();
+			InventoryItemInfo *info = (InventoryItemInfo *)item->GetUserDataPtr();
 			if(!info->m_isBuilding) {
 				return;
 			}
@@ -1592,7 +1591,7 @@ void CityWindow::Sell(aui_Control *control, uint32 action, uint32 data, void *co
 	}
 }
 
-void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
@@ -1615,7 +1614,7 @@ void CityWindow::CityList( aui_Control *control, uint32 action, uint32 data, voi
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::PopulateQueueList(const Unit & city, ctp2_ListBox *listBox, char * itemBlock)
+void CityWindow::PopulateQueueList(const Unit & city, ctp2_ListBox *listBox, const char * itemBlock)
 {
 	if (!city.IsValid()) {
 		return;
@@ -1690,7 +1689,7 @@ void CityWindow::PopulateQueueList(const Unit & city, ctp2_ListBox *listBox, cha
 AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1748,7 +1747,7 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1789,7 +1788,7 @@ AUI_ERRCODE CityWindow::DrawHappinessBar(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawEfficiencyBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1822,7 +1821,7 @@ AUI_ERRCODE CityWindow::DrawEfficiencyBar(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie )
+									  Cookie cookie )
 {
 	if(!s_cityWindow)
 		return AUI_ERRCODE_OK;
@@ -1860,7 +1859,7 @@ AUI_ERRCODE CityWindow::DrawBuildBar(ctp2_Static *control,
 	return err;
 }
 
-void CityWindow::ShowStatistics(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::ShowStatistics(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE)
 		return;
@@ -1985,7 +1984,7 @@ void CityWindow::UpdateActivateButtons()
 AUI_ERRCODE CityWindow::DrawResourceMap(ctp2_Static *control,
 										aui_Surface *surface,
 										RECT &rect,
-										void *cookie)
+										Cookie cookie)
 {
 	if(!g_resourceMap) {
 		workwin_Initialize();
@@ -2028,7 +2027,7 @@ void CityWindow::SetItemIconOnly(const IconRecord *icon, SlicContext &sc, ctp2_S
 	}
 }
 
-void CityWindow::BuildTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::BuildTabCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
 
@@ -2110,13 +2109,13 @@ void CityWindow::FillHappinessList()
 		{
 			ctp2_Static *   happyAmount = (ctp2_Static *)box->GetChildByIndex(2);
 			happyAmount->SetDrawCallbackAndCookie
-			    (DrawHappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawHappyIcons, (sint32)happies[i].amount, false);
 		}
 		else
 		{
 			ctp2_Static *   unhappyAmount = (ctp2_Static *)box->GetChildByIndex(0);
 			unhappyAmount->SetDrawCallbackAndCookie
-			    (DrawUnhappyIcons, (void *)(sint32)happies[i].amount, false);
+			    (DrawUnhappyIcons, (sint32)happies[i].amount, false);
 		}
 
 		char buf[20];
@@ -2136,9 +2135,9 @@ void CityWindow::FillHappinessList()
 AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 								  aui_Surface *surface,
 								  RECT &rect,
-								  void *cookie )
+								  Cookie cookie )
 {
-	sint32 amount = (sint32)cookie;
+	sint32 amount = cookie.m_sin32Type;
 	aui_Image *im = s_cityWindow->m_unhappyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2147,7 +2146,7 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 	if(numIcons <= 0)
 		numIcons = 1;
 
-    sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
+	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
 
@@ -2176,10 +2175,10 @@ AUI_ERRCODE CityWindow::DrawUnhappyIcons(ctp2_Static *control,
 AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 								  aui_Surface *surface,
 								  RECT &rect,
-								  void *cookie )
+								  Cookie cookie )
 {
 
-	sint32 amount = (sint32)cookie;
+	sint32 amount = cookie.m_sin32Type;
 	aui_Image *im = s_cityWindow->m_happyIcon;
 	Assert(im);
 	if(!im) return AUI_ERRCODE_OK;
@@ -2188,7 +2187,7 @@ AUI_ERRCODE CityWindow::DrawHappyIcons(ctp2_Static *control,
 	if(numIcons <= 0)
 		numIcons = 1;
 
-    sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
+	sint32 w = (rect.right - im->TheSurface()->Width() - rect.left) / numIcons;
 	if(w > im->TheSurface()->Width())
 		w = im->TheSurface()->Width();
 
@@ -2217,7 +2216,7 @@ static int cw_comparePollutionItems(const void *item1, const void *item2)
 	ctp2_ListItem *i1 = *(ctp2_ListItem **)item1;
 	ctp2_ListItem *i2 = *(ctp2_ListItem **)item2;
 
-	return (sint32)i1->GetUserData() - (sint32)i2->GetUserData();
+	return i1->GetUserDataSint32() - i2->GetUserDataSint32();
 }
 
 void CityWindow::FillPollutionList()
@@ -2267,7 +2266,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i", cityData->GetPopulationPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)cityData->GetPopulationPollution());
+			item->SetUserData(cityData->GetPopulationPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2283,7 +2282,7 @@ void CityWindow::FillPollutionList()
 			sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 			sprintf(interp,"%i",cityData->GetProductionPollution());
 			sublabel->SetText(interp);
-			item->SetUserData((void *)cityData->GetProductionPollution());
+			item->SetUserData(cityData->GetProductionPollution());
 			allAbsItems[numAbsItems++] = item;
 		}
 	}
@@ -2330,7 +2329,7 @@ void CityWindow::FillPollutionList()
 					sublabel = (ctp2_Static *)label->GetChildByIndex(1);
 					sprintf(interp,"%d",(sint32) value);
 					sublabel->SetText(interp);
-					item->SetUserData((void *)(sint32)value);
+					item->SetUserData((sint32)value);
 					allAbsItems[numAbsItems++] = item;
 				}
 			}
@@ -2381,14 +2380,14 @@ void CityWindow::NotifyBuildChange(const Unit & city)
 	s_cityWindow->UpdateBuildTabs();
 }
 
-void CityWindow::UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	Assert(s_cityWindow);
 	if(!s_cityWindow) return;
 
-	sint32 which = (sint32)cookie;
+	sint32 which = cookie.m_sin32Type;
 	ctp2_Button *button = s_cityWindow->m_unitButtons[which];
 	Assert(button);
 	if(button) {
@@ -2398,7 +2397,7 @@ void CityWindow::UnitButtonCallback(aui_Control *control, uint32 action, uint32 
 	s_cityWindow->UpdateActivateButtons();
 }
 
-void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2440,7 +2439,7 @@ void CityWindow::ActivateUnitCallback(aui_Control *control, uint32 action, uint3
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void CityWindow::DisbandQuery(bool result, void *ud)
+void CityWindow::DisbandQuery(bool result, Cookie ud)
 {
 	if(result) {
 
@@ -2481,7 +2480,7 @@ void CityWindow::DisbandQuery(bool result, void *ud)
 	}
 }
 
-void CityWindow::DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityWindow::DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 

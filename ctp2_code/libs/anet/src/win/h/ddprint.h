@@ -41,11 +41,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define _DDPrint_h_
 
 #include <windows.h>
+#include "types.h"
 
 /*------------------------------------------------------------------------
  Callback used to list servers and the round trip delay to them.
 ------------------------------------------------------------------------*/
-typedef int (FAR PASCAL *dp_dprintf_t) (
+typedef sint32 (FAR PASCAL *dp_dprintf_t) (
 	const char *    __format,   /* printf-style format (or NULL) */
 	...);                       /* printf-style arguments on stack (if any) */
 
@@ -62,7 +63,7 @@ dp_dprintf_t dp_dprintf;
  Returns the number of characters sent.
  Don't use dp_dprintf directly; use the DPRINT macro instead for lower overhead.
 --------------------------------------------------------------------------*/
-int ddprintf(
+sint32 ddprintf(
 	const char *    __format,   /* printf-style format (or NULL) */
 	...);                       /* printf-style arguments on stack (if any) */
 

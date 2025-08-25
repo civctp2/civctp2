@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -139,7 +139,7 @@ void WonderTab::AddWonderItem(sint32 wonder, sint32 player, sint32 turn)
 					st->SetText("error");
 				}
 
-				item->SetUserData((void*)turn);
+				item->SetUserData(turn);
 			}
 
 			st = (ctp2_Static *)box->GetChildByIndex(3);
@@ -194,7 +194,7 @@ sint32 WonderTab::CompareWonderItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 
 	if(column==2)
 	{
-		return (sint32)item1->GetUserData() - (sint32)item2->GetUserData();
+		return item1->GetUserDataSint32() - item2->GetUserDataSint32();
 	}
 	else
 	{
@@ -212,6 +212,8 @@ void WonderTab::UpdateList()
 			case EVENT_TYPE_WONDER:
 				AddWonderItem(walk.GetObj()->m_dbIndex,
 							  walk.GetObj()->m_playerNum, walk.GetObj()->m_turn);
+				break;
+			default:
 				break;
 		}
 	}

@@ -26,8 +26,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define	kQueueSize			(64*1024)
 
-void otq_put(otq_t* q, unsigned char* data, unsigned long theSize) {
-	unsigned long			spaceInBuffer;
+void otq_put(otq_t* q, uint8* data, uint32 theSize) {
+	uint32			spaceInBuffer;
 
 	//	Empty Buffer
 	//
@@ -56,9 +56,9 @@ void otq_put(otq_t* q, unsigned char* data, unsigned long theSize) {
 
 			//	there is room at the end of the buffer for the packet
 
-			* ((unsigned long*) (q->storage + q->in)) = theSize;
-			memcpy(q->storage + q->in + sizeof(unsigned long), data, theSize);
-			q->in += theSize + sizeof(unsigned long);
+			* ((uint32*) (q->storage + q->in)) = theSize;
+			memcpy(q->storage + q->in + sizeof(uint32), data, theSize);
+			q->in += theSize + sizeof(uint32);
 
 		} else {
 
@@ -70,10 +70,10 @@ void otq_put(otq_t* q, unsigned char* data, unsigned long theSize) {
 
 				//	add the packet at the beginning of the buffer
 
-				* ((unsigned long*) (q->storage + q->in)) = 0xffffffff;	//	end of buffer
-				* ((unsigned long*) (q->storage + 0)) = theSize;
-				memcpy(q->storage + 0 + sizeof(unsigned long), data, theSize);
-				q->in = theSize + sizeof(unsigned long);
+				* ((uint32*) (q->storage + q->in)) = 0xffffffff;	//	end of buffer
+				* ((uint32*) (q->storage + 0)) = theSize;
+				memcpy(q->storage + 0 + sizeof(uint32), data, theSize);
+				q->in = theSize + sizeof(uint32);
 			} else {
 				#ifdef MACDEBUG
 					ColorDebugStr("\pError 1");
@@ -92,9 +92,9 @@ void otq_put(otq_t* q, unsigned char* data, unsigned long theSize) {
 
 			//	there is room at the end of the buffer for the packet
 
-			* ((unsigned long*) (q->storage + q->in)) = theSize;
-			memcpy(q->storage + q->in + sizeof(unsigned long), data, theSize);
-			q->in += theSize + sizeof(unsigned long);
+			* ((uint32*) (q->storage + q->in)) = theSize;
+			memcpy(q->storage + q->in + sizeof(uint32), data, theSize);
+			q->in += theSize + sizeof(uint32);
 
 		} else {
 			#ifdef MACDEBUG
@@ -105,9 +105,9 @@ void otq_put(otq_t* q, unsigned char* data, unsigned long theSize) {
 
 }
 
-Boolean otq_get(otq_t* q, unsigned char* data, unsigned long* theSize) {
+Boolean otq_get(otq_t* q, uint8* data, uint32* theSize) {
 	Boolean					gotData = false;
-	unsigned long			dataSize;
+	uint32			dataSize;
 
 	//	put the packet into the buffer pointed to by the data pointer. We also
 	//	return the size of the packet
@@ -118,14 +118,14 @@ Boolean otq_get(otq_t* q, unsigned char* data, unsigned long* theSize) {
 
 		//	there is data in the queue, get one packet out
 
-		dataSize = * (unsigned long*) (q->storage + q->out);
+		dataSize = * (uint32*) (q->storage + q->out);
 		if (dataSize == 0xffffffff) {
 
 			//	this is the end of the data in the buffer, we must
 			//	now wrap the output index
 
 			q->out = 0;
-			dataSize = * (unsigned long*) (q->storage + q->out);
+			dataSize = * (uint32*) (q->storage + q->out);
 		}
 
 		if (dataSize > *theSize) {
@@ -142,11 +142,11 @@ Boolean otq_get(otq_t* q, unsigned char* data, unsigned long* theSize) {
 			//	read the size and the packet out of the buffer
 
 			*theSize = dataSize;
-			memcpy(data, q->storage + q->out + sizeof(unsigned long), dataSize);
+			memcpy(data, q->storage + q->out + sizeof(uint32), dataSize);
 
 			gotData = true;
 		}
-		q->out += dataSize + sizeof(unsigned long);
+		q->out += dataSize + sizeof(uint32);
 
 	}
 

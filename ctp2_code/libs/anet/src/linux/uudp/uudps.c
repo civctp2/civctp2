@@ -135,22 +135,21 @@ typedef dcst_key_t handle_t;
 * Module data
 */
 typedef struct {
-	unsigned long	magic;				/* magic number used to validate the structure */
-	int 			uudp_sock;			/* handle to driver socket */
-	dcst_t 			uudp_handles;		/* addr_t; player handles */
-	dcst_t 			uudp_secondary;		/* uudps_peer2_t; 2nd adr for each h */
-	handle_t 		uudp_myHdl;			/* my handle */
-	handle_t 		uudp_broadcastHdl;	/* broadcast handle */
-	int		 		uudp_rxWait;		/* should commRx wait when checking for packets */
-	addr_t 			adr;				/* kludge city, commPlayerInfo returns a pointer to this */
+	uint32			magic;				/* magic number used to validate the structure */
+	sint32			uudp_sock;			/* handle to driver socket */
+	dcst_t			uudp_handles;		/* addr_t; player handles */
+	dcst_t			uudp_secondary;		/* uudps_peer2_t; 2nd adr for each h */
+	handle_t		uudp_myHdl;			/* my handle */
+	handle_t		uudp_broadcastHdl;	/* broadcast handle */
+	sint32			uudp_rxWait;		/* should commRx wait when checking for packets */
+	addr_t			adr;				/* kludge city, commPlayerInfo returns a pointer to this */
 	uudps_peer2_t	adr2;				/* kludge city, take 2 */
 	commSessInfo_t *sessinfo;			/* info sent to pinging hosts; pointer set using commSetParam by server.c */
 
 #ifdef LOGPKT_ENABLED
-	FILE 			*logpkt_fp;			/* file for packet logging */
+	FILE			*logpkt_fp;			/* file for packet logging */
 #endif
 } comm_t;
-
 
 /**
 * Macros
@@ -172,10 +171,10 @@ typedef struct {
 static void printAdr(addr_t* adr)
 {
 	DPRINT(("%d.%d.%d.%d:%d",
-		((unsigned char *)&(adr->addr))[0] & 0xFF,
-		((unsigned char *)&(adr->addr))[1] & 0xFF,
-		((unsigned char *)&(adr->addr))[2] & 0xFF,
-		((unsigned char *)&(adr->addr))[3] & 0xFF,
+		((uint8 *)&(adr->addr))[0] & 0xFF,
+		((uint8 *)&(adr->addr))[1] & 0xFF,
+		((uint8 *)&(adr->addr))[2] & 0xFF,
+		((uint8 *)&(adr->addr))[3] & 0xFF,
 		adr->port));
 	(void) adr;
 }
@@ -183,7 +182,7 @@ static void printAdr(addr_t* adr)
 /*-------------------------------------------------------------------------
  Validate a comm_t pointer
 -------------------------------------------------------------------------*/
-int validateComm(void *_comm)
+sint32 validateComm(void *_comm)
 {
 	comm_t *comm = (comm_t *)_comm;
 /*	DPRINT(("validateComm: comm:%p magic:%x\n", comm, comm?comm->magic:0)); */
@@ -194,7 +193,7 @@ int validateComm(void *_comm)
  ** do nothing **
  Returns TRUE in all cases.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commNoOp(
 	commNoOpReq_t* req,		/* ignored */
 	commNoOpResp_t* resp,	/* (output) status */
@@ -238,7 +237,7 @@ commNoOp(
 
  Returns TRUE on success, FALSE on failure.
 --------------------------------------------------------------------------*/
-static int				/* success boolean */
+static sint32				/* success boolean */
 gethostaddr(
 	addr_t* address)	/*(output) our address */
 {
@@ -252,7 +251,7 @@ gethostaddr(
 		address->addr = inet_addr(me);
 	} else {
 		char my_name[HOSTNAMELEN];
-		int err;
+		sint32 err;
 		err = gethostname(my_name, HOSTNAMELEN);
 		if(err != SOCKET_ERROR) {
 			struct hostent *hp = gethostbyname(my_name);
@@ -267,11 +266,10 @@ gethostaddr(
 	return TRUE;
 }
 
-
 /*-------------------------------------------------------------------------
  Allocate a comm structure and initialize it
 -------------------------------------------------------------------------*/
-int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
+sint32 cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 {
 	comm_t	*comm;
 	commAllocResp_t respDummy;
@@ -286,13 +284,13 @@ int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 		resp = &respDummy;
 	}
 
-   	DPRINT(("commAlloc: allocating %d bytes for comm_t\n", sizeof (comm_t)));
+	DPRINT(("commAlloc: allocating %d bytes for comm_t\n", sizeof (comm_t)));
 
 	comm = dp_MALLOC(sizeof (comm_t));
 
 	if (!comm)
 	{
-	   	DPRINT(("commAlloc: failed to allocate memory\n"));
+		DPRINT(("commAlloc: failed to allocate memory\n"));
 		resp->status = comm_STATUS_MEMORY;
 		return (FALSE);
 	}
@@ -302,7 +300,7 @@ int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 	 */
 	DPRINT(("commAlloc: Initializing structure\n"));
 
-   	comm->magic = COMM_MAGIC;
+	comm->magic = COMM_MAGIC;
 	comm->uudp_sock = SOCKET_ERROR;
 	comm->uudp_handles = NULL;
 	comm->uudp_secondary = NULL;
@@ -321,16 +319,15 @@ int cdecl commAlloc(commAllocReq_t *req, commAllocResp_t *resp)
 	*req->ptr = comm;
 	resp->status = comm_STATUS_OK;
 
-   	assert(validateComm(*req->ptr));
+	assert(validateComm(*req->ptr));
 
 	return (TRUE);
 }
 
-
 /*-------------------------------------------------------------------------
  Initialize the communications layer.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commInit(
 	commInitReq_t* req,		/* (input) port */
 	commInitResp_t* resp,	/* (output) status */
@@ -340,7 +337,7 @@ commInit(
 	commInitResp_t respDummy;
 	addr_t addr;
 	uudps_peer2_t addr2;
-	u_short port;	/* in host byte ordering */
+	uint16 port;	/* in host byte ordering */
 	comm_t	*comm = (comm_t *) commPtr;
 
 	DPRINT(("commInit: uudps\n"));
@@ -393,14 +390,14 @@ commInit(
 
 	/* Enable broadcast on that socket */
 	{
-		int allow_broadcast = TRUE;
+		sint32 allow_broadcast = TRUE;
 		setsockopt(comm->uudp_sock, SOL_SOCKET, SO_BROADCAST,
 				(char *) &allow_broadcast, sizeof(allow_broadcast));
 	}
 
 	/* Set the socket to non-blocking if nowait mode is enabled */
 	{
-		int flags;
+		sint32 flags;
 		flags = fcntl(comm->uudp_sock, F_GETFL, 0);
 		flags |= O_NONBLOCK;
 		fcntl(comm->uudp_sock, F_SETFL, flags);
@@ -421,8 +418,8 @@ commInit(
 
 	/* determine the actual port number */
 	if(UUDP_SOCKET_ANY == port) {
-		int addrlen = sizeof(sockAddr);
-		int err;
+		size_t addrlen = sizeof(sockAddr);
+		sint32 err;
 		memset(&sockAddr, 0, sizeof(sockAddr));
 		err = getsockname(comm->uudp_sock, (sockaddr*)&sockAddr, (socklen_t *)&addrlen);
 		if(SOCKET_ERROR == err)
@@ -439,6 +436,9 @@ commInit(
 	/* Assign and save handle for broadcast address */
 	addr.addr = -1;
 	addr.port = htons(port);
+	DPRINT(("commInit: Address of new broadcast handle %d: ", comm->uudp_broadcastHdl));
+	printAdr(&addr);
+	DPRINT(("\n"));
 	comm->uudp_broadcastHdl = dcstReplace(comm->uudp_handles, comm->uudp_broadcastHdl, &addr);
 
 	/* Assign and save handle for our address */
@@ -451,6 +451,9 @@ commInit(
 		return FALSE;
 	}
 	addr.port = htons(port);
+	DPRINT(("commInit: Address of new self handle %d: ", comm->uudp_myHdl));
+	printAdr(&addr);
+	DPRINT(("\n"));
 	comm->uudp_myHdl = dcstReplace(comm->uudp_handles, comm->uudp_myHdl, &addr);
 
 	/* Postconditions */
@@ -467,7 +470,7 @@ commInit(
 /*-------------------------------------------------------------------------
  Remove the communications layer.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commTerm(
 	commTermReq_t* req,		/* ignored */
 	commTermResp_t* resp,	/* (output) status */
@@ -520,7 +523,7 @@ comm_driverInfo_t uudp_commDriverInfo =
  Return TRUE if info was retrieved.
  Return FALSE if called with NULL resp.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commDriverInfo(
 	commDriverInfoReq_t*req,
 	commDriverInfoResp_t*resp,
@@ -529,15 +532,15 @@ commDriverInfo(
 	/* Protect against invalid arguments */
 	(void) req;
 	(void) resp;
-    if (NULL == resp)
+	if (NULL == resp)
 		return FALSE;
 
 	/* copy the data */
-    resp->info = &uudp_commDriverInfo;
+	resp->info = &uudp_commDriverInfo;
 
 	/* Return status */
-    resp->status = comm_STATUS_OK;
-    return (TRUE);
+	resp->status = comm_STATUS_OK;
+	return (TRUE);
 }
 
 /*-------------------------------------------------------------------------
@@ -546,7 +549,7 @@ commDriverInfo(
  Pointers returned in the response point to static buffers
  which will be overwritten by the next call.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl						/* success boolean */
 commPlayerInfo(
 	commPlayerInfoReq_t* req,	/* (input) */
 	commPlayerInfoResp_t* resp, /* (output) */
@@ -585,7 +588,7 @@ commPlayerInfo(
 			return FALSE;
 		}
 		comm->adr = *ptr;
-   	}
+	}
 	else
 	{
 		addr_t *ptr;
@@ -600,7 +603,9 @@ commPlayerInfo(
 		comm->adr = *ptr;
 	}
 
-	DPRINT(("commPlayerInfo: player %d -> adr %x\n", req->player, comm->adr));
+	DPRINT(("commPlayerInfo: player %d -> adr ", req->player));
+	printAdr(&comm->adr);
+	DPRINT(("\n"));
 
 	/* copy the data and return */
 	resp->name = "";	/* This layer doesn't know about names. */
@@ -632,7 +637,7 @@ commPlayerInfo(
  Return TRUE if no more packets can be queued for transmission at this
  time.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commTxFull(
 	commTxFullReq_t* req,	/* */
 	commTxFullResp_t* resp,	/* */
@@ -663,7 +668,7 @@ commTxFull(
  Return FALSE on error.  Note that a TRUE return value does not guarantee
  that the packet has been (or ever will be) sent.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commTxPkt(
 	commTxPktReq_t*	req,	/* (input) destination, packet */
 	commTxPktResp_t* resp,	/* (output) status */
@@ -733,7 +738,7 @@ commTxPkt(
  Get information about a pending incoming packet.
  Return TRUE if a packet was retrieved.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl						/* success boolean */
 commPeekPkt(
 	commPeekPktReq_t* req,		/* */
 	commPeekPktResp_t* resp,	/* */
@@ -765,7 +770,7 @@ commPeekPkt(
  Status is zero on success, nonzero on error.
  Return TRUE if a packet was retrieved, FALSE otherwise.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commRxPkt(
 	commRxPktReq_t* req,	/* (modified) buffer size/buffer*/
 	commRxPktResp_t* resp,	/* (output) packet size, status */
@@ -776,7 +781,7 @@ commRxPkt(
 	sockaddr_in sockAddr;
 	addr_t addr;
 	size_t nBytes;
-	int fromlen;
+	size_t fromlen;
 
 	/* Protect against invalid arguments */
 	assert(validateComm(comm));
@@ -795,7 +800,7 @@ commRxPkt(
 	{
 		fd_set fds;
 		struct timeval timeout;
-		int n;
+		sint32 n;
 		FD_ZERO(&fds);
 		FD_SET(comm->uudp_sock, &fds);
 		timeout.tv_usec = 20000;	/* 20 milliseconds */
@@ -813,7 +818,7 @@ commRxPkt(
 	nBytes = recvfrom(comm->uudp_sock, req->buffer, req->size, 0,
 			(sockaddr *)&sockAddr, (socklen_t*) &fromlen);
 	/*DPRINT(("commRxPkt: recvfrom(%d,,%d,0,,%d) returns %d.\n", uudp_sock, req->size, fromlen, nBytes));*/
-	if (nBytes == (unsigned) -1) {
+	if (nBytes == (uint32) -1) {
 		resp->status = comm_STATUS_EMPTY;
 		if (errno != EWOULDBLOCK) {
 			DPRINT(("commRxPkt: recvfrom returns -1.  errno %d\n", errno));
@@ -830,15 +835,15 @@ commRxPkt(
 			/* Old pings with a sessiontype stuffed in at the end of pkt->data
 			 * cause the server to return of information about the sessiontype.
 			 */
-			short players;
-			short cur_players = SwapBytes2(comm->sessinfo->cur_players);
-			short max_players = SwapBytes2(comm->sessinfo->max_players);
-			unsigned char *p = pkt->data + (pkt->len - sizeof(dp_species_t));
+			sint16 players;
+			sint16 cur_players = SwapBytes2(comm->sessinfo->cur_players);
+			sint16 max_players = SwapBytes2(comm->sessinfo->max_players);
+			uint8 *p = pkt->data + (pkt->len - sizeof(dp_species_t));
 			dp_species_t sessType = SwapBytes2(*((dp_species_t*)p));
 			players = SwapBytes2((comm->sessinfo->players)[sessType]);
-			p += sizeof(dp_species_t); *((short *)p) = cur_players;
-			p += 2; *((short *)p) = max_players;
-			p += 2; *((short *)p) = players;
+			p += sizeof(dp_species_t); *((sint16 *)p) = cur_players;
+			p += 2; *((sint16 *)p) = max_players;
+			p += 2; *((sint16 *)p) = players;
 			pkt->len += 6;
 			nBytes += 6;
 		}
@@ -855,14 +860,14 @@ commRxPkt(
 	addr.addr = sockAddr.sin_addr.s_addr;
 	addr.port = sockAddr.sin_port;
 	resp->src = getHandleFromAddress(comm->uudp_handles, &addr);
-	if((unsigned) dcst_INVALID_KEY == resp->src) {
+	if((uint32) dcst_INVALID_KEY == resp->src) {
 		resp->src = PLAYER_NONE;
 		assert(sizeof(addr_t) <= comm_MAX_ADR_LEN);
 		memcpy(resp->adr, &addr, sizeof(addr_t));
-	} else if (resp->src == (unsigned) comm->uudp_myHdl) {
+	} else if (resp->src == (uint32) comm->uudp_myHdl) {
 		resp->src = PLAYER_ME;
 	}
-	assert(resp->src != (unsigned) comm->uudp_broadcastHdl);	/* erroneous sockAddr from recvfrom */
+	assert(resp->src != (uint32) comm->uudp_broadcastHdl);	/* erroneous sockAddr from recvfrom */
 
 	logPkt(comm->logpkt_fp, req->buffer, resp->length, resp->src, "rx");
 
@@ -885,7 +890,7 @@ commRxPkt(
 
  Return TRUE if the buffer was formatted successfully, FALSE otherwise.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl					/* success boolean */
 commScanAddr(
 	commScanAddrReq_t* req,		/* (modified) string/address */
 	commScanAddrResp_t* resp,	/* (output) addr len, status */
@@ -893,8 +898,8 @@ commScanAddr(
 {
 	comm_t	*comm = (comm_t *) commPtr;
 	commScanAddrResp_t respDummy;
-	u_long adr;
-	u_short port = UUDP_SOCKET_DEFAULT;
+	uint32 adr;
+	uint32 port = UUDP_SOCKET_DEFAULT;
 	char *pc;
 
 	/* Protect against invalid arguments */
@@ -920,7 +925,7 @@ commScanAddr(
 			*pc = '\0';
 			*pc++;
 			if(*pc != '\0')
-				port = (unsigned short) atoi(pc);
+				port = (uint16) atoi(pc);
 			break;
 		}
 	}
@@ -936,7 +941,7 @@ commScanAddr(
 			resp->status = comm_STATUS_BAD;
 			return FALSE;
 		}
-		memcpy(&adr, he->h_addr, sizeof(u_long));
+		memcpy(&adr, he->h_addr, sizeof(uint32));
 	}
 
 	/* Save and return */
@@ -960,7 +965,7 @@ commScanAddr(
 
   Return TRUE if the buffer was formatted successfully, FALSE otherwise.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl					/* success boolean */
 commPrintAddr(
 	commPrintAddrReq_t* req,	/* (modified) address/buffer */
 	commPrintAddrResp_t* resp,  /* (output) status */
@@ -1019,7 +1024,7 @@ commPrintAddr(
 
  Return TRUE if the link was successfully broken.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commSayBye(
 	commSayByeReq_t* req,	/* */
 	commSayByeResp_t* resp,	/* */
@@ -1053,8 +1058,8 @@ commSayBye(
 		dcstDeleteKey(comm->uudp_secondary, req->player);
 
 	/* Return status */
-    resp->status = comm_STATUS_OK;
-    return TRUE;
+	resp->status = comm_STATUS_OK;
+	return TRUE;
 }
 
 /*-------------------------------------------------------------------------
@@ -1066,7 +1071,7 @@ to handles.
 
 Return TRUE if the handle was assigned.
 -------------------------------------------------------------------------*/
-int cdecl					/* success boolean */
+sint32 cdecl					/* success boolean */
 commSayHi(
 	commSayHiReq_t* req,	/* (input) address */
 	commSayHiResp_t* resp,	/* (output) handle, status */
@@ -1096,22 +1101,50 @@ commSayHi(
 
 	/* Find or assign a handle for this address */
 	resp->player = getHandleFromAddress(comm->uudp_handles, req->address);
-	if(resp->player == (unsigned) dcst_INVALID_KEY) {
+	if(resp->player == (uint32) dcst_INVALID_KEY) {
 		resp->player = dcstAdd(comm->uudp_handles, req->address);
+		DPRINT(("commSayHi: Addresses of new handle %d\n", resp->player));
+		DPRINT(("comm->adr: "));
+		printAdr(&comm->adr);
+		DPRINT((", req->address: "));
+		printAdr(req->address);
 		if (req->address2) {
+			DPRINT((", req->address2: "));
+			printAdr(req->address2);
+			DPRINT(("\n"));
 			dcstAddEx(comm->uudp_secondary, resp->player, req->address2);
+		}
+		else
+		{
+			DPRINT(("\n"));
 		}
 	}
 
+	/* Find also the handle of the second adress if we have one */
+	playerHdl_t player2 = resp->player;
+	if (req->address2) {
+		player2 = getHandleFromAddress(comm->uudp_handles, req->address2);
+	}
+
+	DPRINT(("hdl2commHdl : Handle %d : ", resp->player));
+
 	/* Translate handles to commapi values */
-	if(resp->player == (unsigned) dcst_INVALID_KEY) {
-		resp->player = PLAYER_UNKNOWN;
+	if(resp->player == (uint32) dcst_INVALID_KEY && player2 == (uint32) dcst_INVALID_KEY ) { // Probably the second handle is always invalid if the first handle is invalid
+		DPRINT(("resp->player => PLAYER_UNKNOWN\n"));
+		resp->player = PLAYER_UNKNOWN; // @ToDo: Check whether this should be PLAYER_NONE
 		resp->status = comm_STATUS_EMPTY;
 		return FALSE;
-	} else if(resp->player == (unsigned) comm->uudp_myHdl)
+	} else if(resp->player == (uint32) comm->uudp_myHdl || player2 == (uint32) comm->uudp_myHdl) {
+		DPRINT(("resp->player => PLAYER_ME\n"));
 		resp->player = PLAYER_ME;
-	else if(resp->player == (unsigned) comm->uudp_broadcastHdl)
+	}
+	else if(resp->player == (uint32) comm->uudp_broadcastHdl || player2 == (uint32) comm->uudp_broadcastHdl) {
+		DPRINT(("resp->player => PLAYER_BROADCAST\n"));
 		resp->player = PLAYER_BROADCAST;
+	}
+	else {
+		DPRINT(("resp->player => unchanged\n"));
+	}
 
 	/* Return status */
 	resp->status = comm_STATUS_OK;
@@ -1125,7 +1158,7 @@ commSayHi(
  for multicasting.  A group can have zero players.
  Return TRUE if the pseudo-player handle was generated.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl						/* success boolean */
 commGroupAlloc(
 	commGroupAllocReq_t* req,	/* */
 	commGroupAllocResp_t* resp,	/* */
@@ -1155,7 +1188,7 @@ commGroupAlloc(
  Invalidate a pseudo-player handle referring to a group of players.
  Return TRUE if the pseudo-player handle was invalidated.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl						/* success boolean */
 commGroupFree(
 	commGroupFreeReq_t* req,	/* */
 	commGroupFreeResp_t* resp,	/* */
@@ -1185,7 +1218,7 @@ commGroupFree(
  Add one or more players to a group.
  Return TRUE if the players were all added.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl						/* success boolean */
 commGroupAdd(
 	commGroupAddReq_t* req,		/* */
 	commGroupAddResp_t* resp,	/* */
@@ -1213,7 +1246,7 @@ commGroupAdd(
  ** unimplemented **
  Set driver parameters.
 -------------------------------------------------------------------------*/
-int cdecl						/* success boolean */
+sint32 cdecl						/* success boolean */
 commSetParam(
 	commSetParamReq_t* req,		/* */
 	commSetParamResp_t* resp,	/* */
@@ -1247,9 +1280,9 @@ commSetParam(
 			/* Do stuff here */
 			break;
 		case comm_PARAM_SESSIONINFO:
-			if (req->param_value) {
+			if (req->param_pointer) {
 				DPRINT(("commSetParam: set new sessioninfo successfully\n"));
-				comm->sessinfo = (commSessInfo_t *) req->param_value;
+				comm->sessinfo = (commSessInfo_t *) req->param_pointer;
 				resp->status = comm_STATUS_OK;
 			} else
 				resp->status = comm_STATUS_BAD;
@@ -1267,6 +1300,12 @@ commSetParam(
 
 		case comm_PARAM_FILEDESC:
 			resp->param_value = comm->uudp_sock;
+			resp->status = comm_STATUS_OK;
+			break;
+
+		case comm_PARAM_DPRINTF:
+		//  This is actually Windows only
+		//	dp_dprintf_set((dp_dprintf_t) req->param_value);
 			resp->status = comm_STATUS_OK;
 			break;
 

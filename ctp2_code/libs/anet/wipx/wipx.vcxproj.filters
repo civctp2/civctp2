@@ -62,7 +62,10 @@
     <ClInclude Include="..\h\eclock.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
-    <ClInclude Include="..\demo\utils\bad\unistd.h">
+    <ClInclude Include="..\demo\utils\unistd-win.h">
+      <Filter>Headerdateien</Filter>
+    </ClInclude>
+    <ClInclude Include="..\h\types.h">
       <Filter>Headerdateien</Filter>
     </ClInclude>
   </ItemGroup>

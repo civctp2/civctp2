@@ -33,13 +33,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "macapp.h"
 
 /*--------------------------------------------------------------------------
-Takes a long int and returns a point; used to convert eventRecord.where for
+Takes a sint32 and returns a point; used to convert eventRecord.where for
  high-level applications.
 --------------------------------------------------------------------------*/
-Point longtopt(long n) {
+Point longtopt(sint32 n) {
 	Point pt;
-	pt.v = (short)(n >> 16);
-	pt.h = (short)n;
+	pt.v = (sint16)(n >> 16);
+	pt.h = (sint16)n;
 	return pt;
 }
 /*--------------------------------------------------------------------------
@@ -48,7 +48,7 @@ Requires stub to be called anetstub.
 --------------------------------------------------------------------------*/
 dp_result_t getstub(ProcessSerialNumber *pstubPSN)
 {
-	static int havestub = -1;
+	static sint32 havestub = -1;
 	OSErr err;
 	ProcessInfoRec proc;
 	ProcessSerialNumber myPSN;

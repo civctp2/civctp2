@@ -96,7 +96,7 @@ void NetFullStrengths::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	Strengths *str = g_player[m_player]->m_strengths;
 
-	sint32 n;
+	sint32 n; // Is needed
 	PULLLONG(n);
 	sint32 r, i;
 	if(m_startRound == 0) {

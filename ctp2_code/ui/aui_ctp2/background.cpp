@@ -83,10 +83,6 @@ AUI_ERRCODE Background::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 void Background::MouseLDragOver(aui_MouseEvent *data)
 {
 	if (IsDisabled()) return;
-
-	sint16 hold;
-
-	hold = 0;
 }
 
 void Background::MouseLGrabInside(aui_MouseEvent *data)
@@ -107,17 +103,7 @@ void Background::MouseLGrabInside(aui_MouseEvent *data)
 	ev->type = SEV_LGRAB;
 	s_savedEvents.AddTail(ev);
 
-
-    m_lbutton_isdown = TRUE;
-
-
-
-
-
-
-
-
-
+	m_lbutton_isdown = TRUE;
 
 	data->position.x += X();
 	data->position.y += Y();

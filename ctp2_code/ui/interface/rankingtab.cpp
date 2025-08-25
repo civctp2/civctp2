@@ -24,11 +24,11 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Redesigned constructor, fixed possible crash. (June 5th 2006 Martin Gühmann)
+// - Added pollution power graph (Nov 2nd 2003 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Redesigned constructor, fixed possible crash. (June 5th 2006 Martin GÃ¼hmann)
 // - Repaired crashes and memory leaks
-// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -145,7 +145,7 @@ RankingTab::RankingTab(ctp2_Window *parent)
 	}
 }
 
-void RankingTab::Add_Dropdown_Category(char * category)
+void RankingTab::Add_Dropdown_Category(const char * category)
 {
 	ctp2_ListItem * listItem =
 	    static_cast<ctp2_ListItem*>(aui_Ldl::BuildHierarchyFromRoot("RankingListItem"));
@@ -330,7 +330,7 @@ void RankingTab::UpdatePlayerList( void )
 }
 
 void RankingTab::SelectRankingActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
@@ -342,7 +342,7 @@ void RankingTab::SelectRankingActionCallback(aui_Control *control,
 }
 
 void RankingTab::LineOrZeroSumButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;

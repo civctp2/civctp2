@@ -233,7 +233,7 @@ public:
 					  uint8* buf,
 					  sint32 size);
 	void AddPlayer(uint16 id,
-					char* name);
+					const char* name);
 	void RemovePlayer(uint16 id);
 	void SetToHost();
 	void ChangeHost(uint16 id);

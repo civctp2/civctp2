@@ -28,12 +28,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <netdb.h>
 #include "eclock.h"
 
-int n = 0;
-int nrcvd = 0;
+sint32 n = 0;
+sint32 nrcvd = 0;
 clock_t t_first;
 clock_t t_last;
 
-void printStats(int sig)
+void printStats(sint32 sig)
 {
 	float duration;
 
@@ -41,7 +41,7 @@ void printStats(int sig)
 		printf("got signal %d != SIGALRM\n", sig);
 		exit(1);
 	}
-	duration = (float)((long)(t_last-t_first))/ECLOCKS_PER_SEC;
+	duration = (float)((sint32)(t_last-t_first))/ECLOCKS_PER_SEC;
 	if (duration < (float)1.0/ECLOCKS_PER_SEC)
 		duration = (float)1.0/ECLOCKS_PER_SEC;
 	printf("received %d/%d packets in %.2fs, %.2f pkts/sec %.2f%% loss\n",
@@ -49,10 +49,10 @@ void printStats(int sig)
 	exit(0);
 }
 
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
-	int sockfd;
-	int port = 2000;
+	sint32 sockfd;
+	sint32 port = 2000;
 	struct protoent *pe;
 	struct sockaddr_in my_addr;
 
@@ -89,11 +89,11 @@ void main(int argc, char *argv[])
 
 	printf("listening for udpspew packets on UDP port %d\n", port);
 	while(1) {
-		unsigned char msg[1500];
-		int len;
+		uint8 msg[1500];
+		sint32 len;
 		struct sockaddr_in from_addr;
-		int fromlen = sizeof(struct sockaddr_in);
-		int i;
+		sint32 fromlen = sizeof(struct sockaddr_in);
+		sint32 i;
 
 		if ((len = recvfrom(sockfd, msg, 256, 0, &from_addr, &fromlen)) == -1) {
 			printf("recvfrom error:%d\n", errno);

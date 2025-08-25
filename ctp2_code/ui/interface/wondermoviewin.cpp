@@ -121,7 +121,7 @@ void wondermoviewin_Cleanup()
 }
 
 
-void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
+void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

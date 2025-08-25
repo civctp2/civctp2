@@ -52,7 +52,7 @@ assoctab_t *assoctab_create(size_t element_size)
 {
 	/*assoctab_item_t *pi; */
 
-	return (assoctab_t *)dynatab_create(element_size + sizeof(int /*pi->key*/));
+	return (assoctab_t *)dynatab_create(element_size + sizeof(sint32 /*pi->key*/));
 }
 
 /*-----------------------------------------------------------------------
@@ -69,10 +69,10 @@ void assoctab_destroy(assoctab_t *ptab)
  to be zeroed.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *assoctab_subscript_grow(assoctab_t *tab, int key)
+void *assoctab_subscript_grow(assoctab_t *tab, sint32 key)
 {
 	char *p;
-	int i;
+	sint32 i;
 	assoctab_item_t *pi;
 
 	/* Use brute force approach, and just do a linear search. */
@@ -93,10 +93,10 @@ void *assoctab_subscript_grow(assoctab_t *tab, int key)
  If the table doesn't contain that key, return NULL.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *assoctab_subscript(assoctab_t *tab, int key)
+void *assoctab_subscript(assoctab_t *tab, sint32 key)
 {
 	char *p;
-	int i;
+	sint32 i;
 	assoctab_item_t *pi;
 
 	/* Use brute force approach, and just do a linear search. */
@@ -112,10 +112,10 @@ void *assoctab_subscript(assoctab_t *tab, int key)
  (in the assoctab_getkey sense).
  Returns 0 on success, 1 on failure.
 -----------------------------------------------------------------------*/
-int assoctab_subscript_delete(assoctab_t *tab, int key)
+sint32 assoctab_subscript_delete(assoctab_t *tab, sint32 key)
 {
 	char *p;
-	int i;
+	sint32 i;
 	assoctab_item_t *pi;
 
 	/* Use brute force approach, and just do a linear search. */
@@ -136,11 +136,11 @@ int assoctab_subscript_delete(assoctab_t *tab, int key)
 
 #include <stdio.h>
 
-void test1(assoctab_t *pt, int callnum)
+void test1(assoctab_t *pt, sint32 callnum)
 {
-	int i;
-	int errs;
-	int *p;
+	sint32 i;
+	sint32 errs;
+	sint32 *p;
 	/* Try to delete something that's not there */
 	if (assoctab_subscript_delete(pt, 0) == 0) {
 		printf("delete0: test failed\n");
@@ -204,7 +204,7 @@ void test1(assoctab_t *pt, int callnum)
 	}
 	/* Delete elements, get ready for next run */
 	for (i=0; i<33; i++) {
-		int b;
+		sint32 b;
 		b = assoctab_subscript_delete(pt, i);
 		if (b ^ (i == 16)) {
 			printf("delete2: test failed, i %d.  Expected %d, got %d\n", i==16, b);
@@ -224,11 +224,11 @@ void test1(assoctab_t *pt, int callnum)
 #define NTABS 100
 main()
 {
-	int i;
+	sint32 i;
 	assoctab_t *pt[NTABS];
 
 	for (i=0;i<NTABS;i++) {
-		pt[i] = assoctab_create(sizeof(int));
+		pt[i] = assoctab_create(sizeof(sint32));
 		if (!pt[i]) {
 			printf("create: test failed\n");
 			exit(1);
@@ -239,7 +239,7 @@ main()
 		}
 	}
 	for (i=0;i<NTABS;i++) {
-		int h;
+		sint32 h;
 		h = _heapchk();
 		if (h != _HEAPOK) {
 			printf("heapchk: test failed\n");

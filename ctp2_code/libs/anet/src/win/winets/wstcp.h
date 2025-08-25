@@ -117,7 +117,7 @@ TCPINSTANCE;
    the specified socket.  If socket is TCP_SOCKET_ANY, have
    OS choose an unused socket.  TCPWIN will support a maximum
    of maxHandles connections at a time. */
-TCPINSTANCE * TCPWIN_Create(unsigned short maxHandles, unsigned short* socket, int *status);
+TCPINSTANCE * TCPWIN_Create(uint16 maxHandles, uint16* socket, sint32 *status);
 
 /* Destructor: End a run of TCPWIN. */
 void TCPWIN_Destroy(TCPINSTANCE *TCP);
@@ -158,7 +158,7 @@ TCPHANDLE TCPWIN_Address2Handle(TCPINSTANCE *TCP, TCPPEER *addr, TCPPEER *addr2,
    If a second address exists then it is returned also via addr2
    A second address is only seached for if the primary existed
 */
-int TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr, TCPPEER2 *addr2);
+sint32 TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr, TCPPEER2 *addr2);
 
 /*
  * Send a packet to a node identified by a TCPHANDLE.
@@ -168,7 +168,7 @@ int TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr, TCP
  * second address will only be sent to if it is marked as LIVE.
  *
  */
-int TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest);
+sint32 TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, size_t len, TCPHANDLE hdest);
 
 /*
  * Receive a packet.  The packet will be copied into bufptr, and
@@ -188,6 +188,6 @@ int TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest)
  * in the address to associate with a handle for sending packets.
  *
  */
-int TCPWIN_GetPacket(TCPINSTANCE *TCP, void *bufptr, ULONG *len, TCPHANDLE *phSrc, TCPPEER *pSrcAddr);
+sint32 TCPWIN_GetPacket(TCPINSTANCE *TCP, void *bufptr, ULONG *len, TCPHANDLE *phSrc, TCPPEER *pSrcAddr);
 
 #endif

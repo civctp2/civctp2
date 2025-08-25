@@ -63,7 +63,7 @@ aui_ListBox::aui_ListBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -89,7 +89,7 @@ aui_ListBox::aui_ListBox(
 	sint32 width,
 	sint32 height,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -827,7 +827,7 @@ AUI_ERRCODE aui_ListBox::CalculateDimensions( void )
 		if ( j + 1 > m_numColumns ) m_numColumns = j + 1;
 
 		ListPos subPosition = item->ChildList()->GetHeadPosition();
-		for ( j; j; j-- )
+		for ( ; j; j-- )
 		{
 			aui_Item *subItem =
 				(aui_Item *)item->ChildList()->GetNext( subPosition );
@@ -1121,10 +1121,16 @@ void aui_ListBox::SendSelectCallback(
 	AUI_LISTBOX_ACTION action,
 	uint32 data )
 {
-	if ( !data && (action == AUI_LISTBOX_ACTION_SELECT
-		|| action == AUI_LISTBOX_ACTION_RMOUSESELECT))
-		data = (uint32)m_selectedList; // Something you should not do
-		                               // It seems that we just want to have something that is not zero, but that is not clear
+	if(!data && (action == AUI_LISTBOX_ACTION_SELECT
+	|| action == AUI_LISTBOX_ACTION_RMOUSESELECT))
+	{
+		data = 1; // Unclear, whether that should be here at all
+		          // but that is better then the previous code below
+		          // There is corresponding warnig somewhere else
+		          // fo the code below.
+	//	data = (uint32)m_selectedList; // Something you should not do
+	//	                               // It seems that we just want to have something that is not zero, but that is not clear
+	}
 
 	m_selectedList->DeleteAll();
 
@@ -1986,11 +1992,11 @@ void ListBoxRangerActionCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action == (uint32)AUI_RANGER_ACTION_VALUECHANGE )
 	{
-		aui_ListBox *listbox = (aui_ListBox *)cookie;
+		aui_ListBox *listbox = (aui_ListBox *)cookie.m_voidPtr;
 
 		listbox->RangerMoved();
 	}

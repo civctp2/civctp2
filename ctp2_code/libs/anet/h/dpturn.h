@@ -30,6 +30,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define dpturn_h
 
 #include <stddef.h>
+#include "anet.h"
+#include "aneterr.h"
 
 /* Note: includer must include dp.h first, or this be included by dp.h
  * to get dp_MAXLEN_RELIABLE and dp_packetType_t
@@ -38,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #ifndef DPBOOL_DEFINED
 #define DPBOOL_DEFINED
-typedef int DPBOOL;
+typedef sint32 DPBOOL;
 #endif
 
 #ifndef TRUE
@@ -54,7 +56,7 @@ typedef struct dpturn_peer_s {
 	dpid_t id;                  /* actual DPID of this player */
 	DPBOOL outReady;           /* My data is ready to be sent to this player */
 	DPBOOL received;           /* Received a packet from this player this round */
-	int n_received;			   /* How many rounds we've gotten from him ever */
+	sint32 n_received;			   /* How many rounds we've gotten from him ever */
 	char in_data[dp_MAXLEN_RELIABLE];   /* the packet we received */
 	size_t in_data_size;        /* its length */
 } dpturn_peer_t;
@@ -69,13 +71,13 @@ typedef struct dpturn_s {
 	dpid_t id;                  /* our address */
 	dpid_t master;              /* master's address */
 
-	int n_peers;
+	sint32 n_peers;
 	dpturn_peer_t peers[dpturn_MAX_PEERS];
 
 	/* Outgoing packet */
 	char out_data[dp_MAXLEN_RELIABLE];
 	size_t out_data_size;
-	int n_sent;
+	sint32 n_sent;
 } dpturn_t;
 
 /* for packet types, see dppkt.h */

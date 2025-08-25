@@ -55,28 +55,28 @@ typedef struct {
 
 	clock_t tnextPoll;
 
-	long magic;
+	sint32 magic;
 
 	/* server info */
 	assoctab_t *clients;        /* list of clients' info indexed by handle */
 
 	/* client info */
 	playerHdl_t hServer;
-   	tcapw_entry_t userinfo;
+	tcapw_entry_t userinfo;
 	tcapw_pw_t secretcode;      /* secretcode used by tserv_account_activate */
 	tcapw_hpw_t newhpw;         /* newpassword used by tserv_change_password */
-	int challenge_set;          /* TRUE if we have received a challenge */
+	sint32 challenge_set;          /* TRUE if we have received a challenge */
 	tca_challenge_t challenge;
-	int logged_in;              /* TRUE if we are logged in */
-	int activated;              /* TRUE if we are activated */
-    /* all please_send's are TRUE if a packet of the given type has been
+	sint32 logged_in;              /* TRUE if we are logged in */
+	sint32 activated;              /* TRUE if we are activated */
+	/* all please_send's are TRUE if a packet of the given type has been
 	 * scheduled using tserv_account_* or tserv_change_password.
 	 */
-	int please_send_response;
-	int please_send_newuser;
-	int please_send_secretcode;
-	int please_send_pwchange;
-	int waiting_for_rx;         /* TRUE if we are expecting a packet */
+	sint32 please_send_response;
+	sint32 please_send_newuser;
+	sint32 please_send_secretcode;
+	sint32 please_send_pwchange;
+	sint32 waiting_for_rx;         /* TRUE if we are expecting a packet */
 	clock_t rx_deadline;        /* If the server does not send an expected
 								 * packet before this 30s deadline, time out.
 								 */
@@ -85,10 +85,10 @@ typedef struct {
 /* An entry in the clients assoctab on the server */
 typedef struct {
 	tcapw_uid_t uid;		/* tcapw_UID_NONE until successful login */
-	int logged_in;          /* TRUE if password has been validated */
-	int activated;          /* TRUE if email has been validated */
+	sint32 logged_in;          /* TRUE if password has been validated */
+	sint32 activated;          /* TRUE if email has been validated */
 	tca_challenge_t challenge;
-	int challenge_uses;         /* number of uses of this challenge */
+	sint32 challenge_uses;         /* number of uses of this challenge */
 	/* Following field used to control retransmission in case packet
 	 * couldn't be queued on first try
 	 */
@@ -147,13 +147,13 @@ typedef struct {
  */
 
 typedef struct {
-	unsigned char	adr[dp_MAX_ADR_LEN];
-	unsigned char	adr2[dp_MAX_ADR_LEN];
+	uint8	adr[dp_MAX_ADR_LEN];
+	uint8	adr2[dp_MAX_ADR_LEN];
 	tcapw_uid_t uid;		/* uid of guy at that address */
 } PACK tserv_packet_credentials_t;
 
 typedef struct {
-	unsigned char kind;
+	uint8 kind;
 	union {
 		tca_challenge_t challenge;
 		tca_response_t  response;
@@ -261,7 +261,7 @@ dp_result_t tserv_poll(tserv_t *tserv);
 	 dp_RES_CHANGED password, email, and flags changed successfully
 	 dp_RES_BUG     server error, try again
 --------------------------------------------------------------------------*/
-dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, int pkt_flags, tserv_packet_t *pkt, tserv_event_t *result);
+dp_result_t tserv_handle_packet(tserv_t *tserv, playerHdl_t src, sint32 pkt_flags, tserv_packet_t *pkt, tserv_event_t *result);
 
 /***** Server stuff *****/
 
@@ -353,9 +353,9 @@ dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const cha
  tserv_account_activate() after calling tserv_account_login() and receiving
  an event from tserv_handle_packet() containing reason dp_RES_NOTYET.
 --------------------------------------------------------------------------*/
-dp_result_t tserv_account_createW(tserv_t *tserv, const wchar_t *username, const wchar_t *password, int flags, const wchar_t *email);
+dp_result_t tserv_account_createW(tserv_t *tserv, const wchar_t *username, const wchar_t *password, sint32 flags, const wchar_t *email);
 
-dp_result_t tserv_account_createA(tserv_t *tserv, const char *username, const char *password, int flags, const char *email);
+dp_result_t tserv_account_createA(tserv_t *tserv, const char *username, const char *password, sint32 flags, const char *email);
 
 #ifdef UNICODE
 #define tserv_account_create tserv_account_createW
@@ -404,9 +404,9 @@ dp_result_t tserv_account_activateA(tserv_t *tserv, const char *secretcode);
  Success or failure is indicated by the result event from a later call
  to tserv_handle_packet().
 --------------------------------------------------------------------------*/
-dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, const wchar_t *newpassword, int flags, const wchar_t *email);
+dp_result_t tserv_change_passwordW(tserv_t *tserv, const wchar_t *oldpassword, const wchar_t *newpassword, sint32 flags, const wchar_t *email);
 
-dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, const char *newpassword, int flags, const char *email);
+dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, const char *newpassword, sint32 flags, const char *email);
 
 #ifdef UNICODE
 #define tserv_change_password tserv_change_passwordW

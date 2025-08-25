@@ -384,7 +384,7 @@ LINK32_OBJS= \
 SOURCE=.\load.c
 DEP_CPP_LOAD_=\
 	"..\..\..\demo\utils\stricmp.h"\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	"..\..\..\h\anet.h"\
 	"..\..\..\h\aneterr.h"\
 	"..\..\..\h\eclock.h"\

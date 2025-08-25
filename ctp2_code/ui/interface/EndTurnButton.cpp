@@ -9,7 +9,7 @@
 #include "AttractWindow.h"
 #include "GameEventManager.h"
 
-EndTurnButton::EndTurnButton(MBCHAR *ldlBlock) :
+EndTurnButton::EndTurnButton(const MBCHAR *ldlBlock) :
 m_endTurn(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "TurnButton")))
 {
 	Assert(m_endTurn);
@@ -30,7 +30,7 @@ void EndTurnButton::UpdatePlayer(PLAYER_INDEX player)
 	g_attractWindow->RemoveRegion(m_endTurn);
 }
 
-void EndTurnButton::EndTurnButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void EndTurnButton::EndTurnButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;

@@ -7,4 +7,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __COUNTER_RESPONSE_EVENT_H__
+#endif // __COUNTER_RESPONSE_EVENT_H__

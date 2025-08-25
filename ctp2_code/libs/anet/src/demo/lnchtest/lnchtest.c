@@ -47,10 +47,10 @@ char        	commDLLName[256];
 commInitReq_t	commInitReq;		/*  Parameters needed by some comm drivers. */
 char			modeministr[256];
 char			phonenum[256];
-long			sessionid = 0;
-long			baseadr = 0;
+sint32			sessionid = 0;
+sint32			baseadr = 0;
 
-static void quickTest(char *buf, int packetLen)
+static void quickTest(char *buf, sint32 packetLen)
 {
 	commTxPktReq_t		txReq;
 	commTxPktResp_t		txResp;
@@ -72,9 +72,9 @@ static void quickTest(char *buf, int packetLen)
 	printf("quicktest done.\n");
 }
 
-static void ProcessCommandLine(int argc, char **argv) {
+static void ProcessCommandLine(sint32 argc, char **argv) {
   char *chptr;
-  int   i;
+  sint32   i;
 
   commDLLName[0] = 0;
   adrString[0] = 0;
@@ -127,16 +127,16 @@ static void ProcessCommandLine(int argc, char **argv) {
   }
 }
 
-int main( int argc, char *argv[] )
+sint32 main( sint32 argc, char *argv[] )
 {
-	int i;
-	int packetLen;
+	sint32 i;
+	sint32 packetLen;
 	char cmd[256];
 	char args[256];
 	char buf[256];
-    commInitResp_t  commInitResp;
+	commInitResp_t  commInitResp;
 	commTermReq_t   termReq;
-    dp_result_t err;
+	dp_result_t err;
 
 	if (argc == 1) {
 		printf("Usage: %s [-N=comm.dll][-W=phonenum][-Y=commportnum(0 = com1)]\n", argv[0]);

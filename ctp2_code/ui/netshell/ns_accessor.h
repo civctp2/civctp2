@@ -94,22 +94,29 @@ public:
 		Type t = ((T *)this)->type(i);
 		void *a = ((T *)this)->data(i);
 		void *b = p->data(i);
-		switch(t) {
-		case INT:
-			return int((size_t)a - (size_t)b);
-		case STRING:
-		case ICON:
-			if(a) {
-				if(b)
-					return strcmp((char *)a, (char *)b);
+		switch(t)
+		{
+			case INT:
+				return int((size_t)a - (size_t)b);
+			case STRING:
+			case ICON:
+				if(a)
+				{
+					if(b)
+						return strcmp((char *)a, (char *)b);
+					else
+						return 1;
+				}
 				else
-					return 1;
-			} else {
-				if(b)
-					return -1;
-				else
-					return 0;
-			}
+				{
+					if(b)
+						return -1;
+					else
+						return 0;
+				}
+			default:
+				Assert(false);
+				break;
 		}
 		return 0;
 	}

@@ -38,19 +38,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* globals for use by main, echo_server/echo_client */
 dpio_t *dpio = NULL;
 clock_t	now;
-int n_connects = 0;
+sint32 n_connects = 0;
 
 /* globals for use by main, ProcessCommandLine */
 char commDLLName[256];
-int server;
+sint32 server;
 char servernames[4][256];
-int n_servers = 0;
+sint32 n_servers = 0;
 commInitReq_t commInitReq; /*  Parameters needed by some comm drivers. */
 char phonenum[256];
 char modeministr[256];
 
-int disconnect_wait;  /* time to wait to disconnect after dpReadyToFreeze */
-long total_logins = 1000;  /* number of logins in speed test.  0=infinite */
+sint32 disconnect_wait;  /* time to wait to disconnect after dpReadyToFreeze */
+sint32 total_logins = 1000;  /* number of logins in speed test.  0=infinite */
 char user1[tcapw_LEN_USERNAME+1];  /* username and pass to use in speed test */
 char pass1[tcapw_LEN_PW+1];
 
@@ -65,10 +65,10 @@ wchar_t secretcode[tcapw_LEN_PW];
 
 /* There are two addresses: 0 and 1.  All packets are from the other address. */
 struct {
-	int len;
+	sint32 len;
 	char buf[256];
 } simnetbuf[2];			/* receive buffer */
-int sim_my_rx = 0;		/* offset I receive into */
+sint32 sim_my_rx = 0;		/* offset I receive into */
 
 dpioOpenHdlCallback_t simnet_openhdlcb = NULL;
 void *simnet_openhdlcontext = NULL;
@@ -79,7 +79,7 @@ dp_result_t dpio_get(
 	playerHdl_t *psrc,
 	void *buffer,
 	size_t *psize,
-	int *flags)
+	sint32 *flags)
 {
 	(void) dpio;
 	if (simnetbuf[sim_my_rx].len) {
@@ -91,7 +91,7 @@ dp_result_t dpio_get(
 		simnetbuf[sim_my_rx].len = 0;
 		printf("sim dpio_get: %d got packet of size %d from %d:", sim_my_rx, *psize, *psrc);
 		for (i = 0; i < *psize; i++)
-			printf(" %02x", ((unsigned char *)buffer)[i]);
+			printf(" %02x", ((uint8 *)buffer)[i]);
 		printf("\n");
 
 		if (flags)
@@ -101,7 +101,7 @@ dp_result_t dpio_get(
 	return dp_RES_EMPTY;
 }
 
-int retry_fraction = 0;
+sint32 retry_fraction = 0;
 
 /* Send a packet */
 /* Returns dp_RES_FULL retry_fraction percent of the time to test the packet
@@ -110,16 +110,16 @@ int retry_fraction = 0;
 dp_result_t dpio_put_reliable2(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest,  /* If error occurs, dest with error indicated here */
-	int flags)
+	sint32 flags)
 {
 	static retry_sum = 0;
 
-	DPRINT(("sim dpio_put: h:%d sending packet of size %d to h:%x\n", sim_my_rx, size, (int)(*dests)));
-	if ((int)(*dests) != (1 - sim_my_rx)) {
+	DPRINT(("sim dpio_put: h:%d sending packet of size %d to h:%x\n", sim_my_rx, size, (sint32)(*dests)));
+	if ((sint32)(*dests) != (1 - sim_my_rx)) {
 		printf("dpio_put_reliable: bad dest\n");
 		exit(1);
 	}
@@ -178,15 +178,15 @@ dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char 
 	sprintf(buf, "%d", *adrbuf);
 	return dp_RES_OK;
 }
-int dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
+sint32 dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
 {
-	int adr;
+	sint32 adr;
 	sscanf(hostname, "%d", &adr);
 	*adrbuf = adr;
 	DPRINT(("simnet_scanAdr(%s) -> %d\n", hostname, adr));
 	return 1;
 }
-dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, int *len)
+dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, sint32 *len)
 {
 	if (h != PLAYER_ME) {
 		printf("dpio_hdl2adr: bad\n");
@@ -222,7 +222,7 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 	return dp_RES_OK;
 }
 
-dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, int *len)
+dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, sint32 *len)
 {
 	DPRINT(("simnet dpio_hdl2adr2: not implemented\n"));
 	return dp_RES_BUG;
@@ -242,7 +242,7 @@ dp_result_t dpio_thawHdl(dpio_t* dpio, playerHdl_t* hdl, FILE* file)
 	return dp_RES_OK;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -250,14 +250,14 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 	return dp_RES_OK;
 }
 
-int cdecl
+sint32 cdecl
 dp_dprintf(
 	const char *	__format,	/* printf-style format (or NULL) */
 	...)						/* printf-style arguments on stack (if any) */
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -275,10 +275,10 @@ dp_dprintf(
   directly by this routine.  Others simply result in an update to
   the global switches data structure.
 ----------------------------------------------------------------------------*/
-void ProcessCommandLine(int argc, char **argv)
+void ProcessCommandLine(sint32 argc, char **argv)
 {
 	char *chptr;
-	int   i;
+	sint32   i;
 
 	servernames[n_servers][0] = '\0';
 	commDLLName[0] = '\0';
@@ -393,7 +393,7 @@ connect to.\n");
  Callback (ick) called by dpio when a handle is opened or closed.
  err is either dp_RES_OPENED, dp_RES_HOST_NOT_RESPONDING, or dp_RES_CLOSED.
 ----------------------------------------------------------------------------*/
-void server_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *context)
+void server_openhdl_cb(playerHdl_t hdl, sint32 n_hdls, dp_result_t err, void *context)
 {
 	tserv_t *tserv = context;
 	if (!context) return;
@@ -410,7 +410,7 @@ void server_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *conte
  Callback (ick) called by dpio when a handle is opened or closed.
  err is either dp_RES_OPENED, dp_RES_HOST_NOT_RESPONDING, or dp_RES_CLOSED.
 ----------------------------------------------------------------------------*/
-void client_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *context)
+void client_openhdl_cb(playerHdl_t hdl, sint32 n_hdls, dp_result_t err, void *context)
 {
 	if (err == dp_RES_OPENED)
 		n_connects++;
@@ -429,7 +429,7 @@ dp_result_t server_restart(tserv_t **tserv)
 	dp_result_t err;
 	FILE *fp;
 	tca_t *tca;
-	int nClients = (*tserv)->clients->n_used;
+	sint32 nClients = (*tserv)->clients->n_used;
 
 	assert(nClients < 1000);
 
@@ -498,14 +498,14 @@ dp_result_t server_restart(tserv_t **tserv)
 /*----------------------------------------------------------------------------
  The server calls this periodically to get and process packets.
 ----------------------------------------------------------------------------*/
-void server_poll(int init)
+void server_poll(sint32 init)
 {
 	dp_result_t err;
 	playerHdl_t src;
-	int flags;
+	sint32 flags;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
-	int res;
+	sint32 res;
 	tserv_event_t event;
 
 	static tserv_t *tserv;
@@ -603,7 +603,7 @@ playerHdl_t openServer(const char *servername)
 {
 	playerHdl_t serverhdl;
 	char serveraddr[dp_MAX_ADR_LEN];
-	int addrlen;
+	sint32 addrlen;
 
 	addrlen = dpio_scanAdr(dpio, (char *)servername, serveraddr, dp_MAX_ADR_LEN);
 	if (addrlen == 0) {
@@ -623,23 +623,23 @@ playerHdl_t openServer(const char *servername)
  which goes thru the normal login sequence.
  Returns TRUE when test complete.
 ----------------------------------------------------------------------------*/
-int client_poll(int init)
+sint32 client_poll(sint32 init)
 {
 	dp_result_t err;
 	playerHdl_t src;
 	playerHdl_t phdl;
-	int flags;
+	sint32 flags;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
 	tserv_event_t result;
-	int got_result;
+	sint32 got_result;
 	wchar_t pw1[tcapw_LEN_PW], pw2[tcapw_LEN_PW];
 	wchar_t uname1[tcapw_LEN_USERNAME];
 	wchar_t email[tcapw_MAXLEN_EMAIL];
-	int done = FALSE;
+	sint32 done = FALSE;
 	char *servername = servernames[0];
 
-	static int client_state = 0;
+	static sint32 client_state = 0;
 	static tserv_t *tserv = NULL;
 	static tca_t *tca = NULL;
 	static tcapw_uid_t uid = tcapw_UID_NONE;
@@ -779,7 +779,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -883,7 +883,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -959,7 +959,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -1054,7 +1054,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -1270,7 +1270,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -1346,7 +1346,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -1475,7 +1475,7 @@ int client_poll(int init)
 			DPRINT(("client: Guess we weren't done closing\n"));
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -1495,29 +1495,29 @@ int client_poll(int init)
  which goes thru the normal login sequence repeatedly to measure speed.
  Returns TRUE when test complete.
 ----------------------------------------------------------------------------*/
-int client_poll_speedtest(int init)
+sint32 client_poll_speedtest(sint32 init)
 {
 	dp_result_t err;
 	playerHdl_t src;
 	playerHdl_t phdl;
-	int flags;
+	sint32 flags;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
 	tserv_event_t result;
-	int got_result;
+	sint32 got_result;
 	wchar_t pw1[tcapw_LEN_PW];
 	wchar_t uname1[tcapw_LEN_USERNAME];
-	int done = FALSE;
+	sint32 done = FALSE;
 	char *servername;
 
-	static int client_state = 0;
+	static sint32 client_state = 0;
 	static tserv_t *tserv = NULL;
 	static tca_t *tca = NULL;
 	static tcapw_uid_t uid = tcapw_UID_NONE;
 	static playerHdl_t serverhdl = PLAYER_NONE;
 	static clock_t deadline;
 	static clock_t t_start;
-	static int n_logins = 0;
+	static sint32 n_logins = 0;
 
 	now = eclock();
 	if (init) {
@@ -1646,7 +1646,7 @@ int client_poll_speedtest(int init)
 			client_state -= 5;
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			n_logins++;
 			printf(".");
 			if (!(n_logins%20)) {
@@ -1716,7 +1716,7 @@ void create_db()
 	DPRINT(("create_db: done.\n"));
 }
 
-int tserv_test(int which)
+sint32 tserv_test(sint32 which)
 {
 	dp_result_t err;
 	dp_transport_t transport;
@@ -1758,7 +1758,7 @@ int tserv_test(int which)
 #endif
 	{
 		char serveraddr[dp_MAX_ADR_LEN];
-		int addrlen = dp_MAX_ADR_LEN;
+		sint32 addrlen = dp_MAX_ADR_LEN;
 		char printable[50];
 
 		DPRINT(("tservt: initializing server\n"));
@@ -1777,7 +1777,7 @@ int tserv_test(int which)
 
 	raw_init();
 	while (1) {
-		int charFromUser = 0;
+		sint32 charFromUser = 0;
 		if (raw_kbhit()) {
 			charFromUser = raw_getc();
 			if (charFromUser == 27 /* Esc */) {
@@ -1824,7 +1824,7 @@ int tserv_test(int which)
     return 0;
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
 #ifndef SIMNET
 	if (argc < 2) {

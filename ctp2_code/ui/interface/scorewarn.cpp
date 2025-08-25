@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ c3_PopupWindow	*   g_scorewarn = NULL;
 
 static c3_Static *  s_message   = NULL;
 
-void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -65,7 +65,7 @@ void scorewarn_OkButtonActionCallback( aui_Control *control, uint32 action, uint
 }
 
 
-void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(optionsscreen_removeMyWindow(action)) {
 		AUI_ERRCODE auiErr = g_c3ui->RemoveWindow( g_scorewarn->Id() );
@@ -83,7 +83,7 @@ void scorewarn_AcceptWarningCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void scorewarn_CancelButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -114,7 +114,7 @@ sint32 scorewarn_Initialize( void )
 
 	g_scorewarn->SetStronglyModal( TRUE );
 
-	g_scorewarn->AddOk( scorewarn_OkButtonActionCallback, NULL, "c3_PopupOk" );
+	g_scorewarn->AddOk( scorewarn_OkButtonActionCallback, nullptr, "c3_PopupOk" );
 	g_scorewarn->AddCancel( scorewarn_CancelButtonActionCallback );
 
 	MBCHAR			buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -153,7 +153,7 @@ void DisclaimerCloseAction::Execute(aui_Control *control, uint32 action, uint32 
 	disclaimer_Cleanup();
 }
 
-void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -163,7 +163,7 @@ void disclaimer_AcceptButtonActionCallback(aui_Control *control, uint32 action, 
 		s_disclaimerCallback(control, action, data, cookie);
 }
 
-void disclaimer_DeclineButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void disclaimer_DeclineButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -237,7 +237,7 @@ sint32 disclaimer_Initialize(aui_Control::ControlActionCallback *callback)
 
 
 	sprintf(buttonBlock, "%s.%s", windowBlock, "DisclaimerText");
-	s_disclaimerTextBox = new ctp2_HyperTextBox(&errcode, aui_UniqueId(), buttonBlock, NULL, NULL);
+	s_disclaimerTextBox = new ctp2_HyperTextBox(&errcode, aui_UniqueId(), buttonBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(s_disclaimerTextBox, errcode) );
 	if ( !AUI_NEWOK(s_disclaimerTextBox, errcode) ) return -1;
 

@@ -53,9 +53,9 @@ static char rootpath[aeh_MAX_PATH];
  files that were already in modcrc.txt.
 ------------------------------------------------------------------------------*/
 typedef struct modcrc_mapfilecat_s {
-	unsigned long *fnamecrc;   /* a pointer to an array of the crc's of all the
+	uint32 *fnamecrc;   /* a pointer to an array of the crc's of all the
 								  filenames read from the current modcrc.txt */
-	unsigned n;                /* the current malloc'd size of the array */
+	uint32 n;                /* the current malloc'd size of the array */
 } modcrc_mapfilecat_t;
 
 void printUsage(void)
@@ -96,8 +96,8 @@ void test_addmod(char *fpath, modcrc_mapfilecat_t *files_seen, FILE *fp)
 	char mappath[aeh_MAX_PATH];
 	char *pbuf;
 	FILE *f;
-	unsigned long this_fnamecrc;
-	unsigned int i;
+	uint32 this_fnamecrc;
+	uint32 i;
 
 	/* Convert path delimiter to portable / before calculating CRC */
 	convertPathDelimiters(fpath);
@@ -140,7 +140,7 @@ void test_addmod(char *fpath, modcrc_mapfilecat_t *files_seen, FILE *fp)
 	/* Otherwise, calculate CRC of file contents */
 	f = fopen(fpath, "rb");
 	if (f) {
-		unsigned long crc = dp_fil_crc32(f);
+		uint32 crc = dp_fil_crc32(f);
 		fclose(f);
 		fprintf(fp, "%08lx %s\n", crc, pbuf);
 		printf("adding %s\n", pbuf);
@@ -220,19 +220,19 @@ void test_getmod(const char *path, char *pattern, modcrc_mapfilecat_t *files_see
  Returns: aeh_RES_NOMEM if out of memory (a partial files_seen is possible)
           aeh_RES_OK if successful
 ------------------------------------------------------------------------------*/
-int test_getfilesseen(modcrc_mapfilecat_t *files_seen, FILE *fp)
+sint32 test_getfilesseen(modcrc_mapfilecat_t *files_seen, FILE *fp)
 {
 	char buf[modcrc_MAX_LINE_LENGTH];
 	char path[aeh_MAX_PATH];
-	unsigned long fnamecrc, crc;
-	unsigned long *temp;
+	uint32 fnamecrc, crc;
+	uint32 *temp;
 
 	while (fgets(buf, modcrc_MAX_LINE_LENGTH, fp) != NULL)
 		if (sscanf(buf, "%lx %[^\n\r\f]", &crc, path) == 2) {
 			fnamecrc = dp_crc32(path, strlen(path));
 			files_seen->n++;
 			aehDPRINT(("read %s, now seen\n", path));
-			if ((temp = (unsigned long *)realloc(files_seen->fnamecrc, files_seen->n * sizeof(long))) == NULL) {
+			if ((temp = (uint32 *)realloc(files_seen->fnamecrc, files_seen->n * sizeof(sint32))) == NULL) {
 				files_seen->n--;
 				return aeh_RES_NOMEM;
 			} else {
@@ -243,16 +243,16 @@ int test_getfilesseen(modcrc_mapfilecat_t *files_seen, FILE *fp)
 	return aeh_RES_OK;
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
 	FILE *fp;
 	char tmppath[aeh_MAX_PATH];
 	modcrc_mapfilecat_t files_seen;
-	int readNamesFromStdin;
-	int i;
-	int len;
+	sint32 readNamesFromStdin;
+	sint32 i;
+	sint32 len;
 
-	files_seen.fnamecrc = (unsigned long*)NULL;
+	files_seen.fnamecrc = (uint32*)NULL;
 	files_seen.n = 0;
 
 	/* Set defaults */

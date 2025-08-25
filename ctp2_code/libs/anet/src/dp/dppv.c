@@ -106,7 +106,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifdef DPRINTBUFS
 static void dprint_buf(char *buf, size_t len)
 {
-	int i;
+	sint32 i;
 	if (len > 50) len = 50;
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x ", buf[i]));
@@ -150,7 +150,7 @@ pv_t *pv_create(struct dp_s *dp)
 --------------------------------------------------------------------------*/
 void pv_destroy(pv_t *pv)
 {
-	int i;
+	sint32 i;
 	if (!pv) return;
 
 	/* For all players.  Step backwards to avoid having to move in delete. */
@@ -170,9 +170,9 @@ void pv_destroy(pv_t *pv)
 /*--------------------------------------------------------------------------
  Delete a particular player from the table.
 --------------------------------------------------------------------------*/
-dp_result_t pv_deletePlayer(pv_t *pv, int player)
+dp_result_t pv_deletePlayer(pv_t *pv, sint32 player)
 {
-	int i;
+	sint32 i;
 	pv_peer_t *peer;
 	if (!pv) return dp_RES_BUG;
 
@@ -209,7 +209,7 @@ dp_result_t pv_deletePlayer(pv_t *pv, int player)
 /*--------------------------------------------------------------------------
  Add a particular player to the table.
 --------------------------------------------------------------------------*/
-static pv_peer_t *pv_addPlayer(pv_t *pv, int player)
+static pv_peer_t *pv_addPlayer(pv_t *pv, sint32 player)
 {
 	/* No peer yet.  Create one. */
 	pv_peer_t *peer = (pv_peer_t *)assoctab_subscript_grow(pv->peers, player);
@@ -233,7 +233,7 @@ static pv_peer_t *pv_addPlayer(pv_t *pv, int player)
 --------------------------------------------------------------------------*/
 dp_result_t pv_addNode(pv_t *pv, playerHdl_t node)
 {
-	int i;
+	sint32 i;
 
 	DPRINT(("pv_addNode(pv, %d)\n", node));
 	if (!pv) return dp_RES_BUG;
@@ -256,7 +256,7 @@ dp_result_t pv_addNode(pv_t *pv, playerHdl_t node)
  Value is copied onto the heap, and must be freed later with
  pv_set (overwriting frees), pv_deletePlayer or pv_destroy.
 --------------------------------------------------------------------------*/
-dp_result_t pv_set(pv_t *pv, int player, int key, size_t len, void *buf, int flags)
+dp_result_t pv_set(pv_t *pv, sint32 player, sint32 key, size_t len, void *buf, sint32 flags)
 {
 	pv_peer_t *peer;
 	pv_var_t *pvar;
@@ -298,7 +298,7 @@ dp_result_t pv_set(pv_t *pv, int player, int key, size_t len, void *buf, int fla
 	pvar->flags = flags;
 	pvar->len = len;
 	memcpy(pvar->buf, buf, len);
-	pvar->crc = dp_crc32((unsigned char *)buf, len);
+	pvar->crc = dp_crc32((uint8 *)buf, len);
 	DPRINT(("pv_set: player %d key %d len %d crc is %x\n", player, key, len, pvar->crc));
 
 	/* Inform other players of the change unless told not to. */
@@ -319,7 +319,7 @@ dp_result_t pv_set(pv_t *pv, int player, int key, size_t len, void *buf, int fla
  and dp_res_FULL is returned.
  buf may be NULL if you only want to find the variable's size.
 --------------------------------------------------------------------------*/
-dp_result_t pv_get(pv_t *pv, int player, int key, size_t *len, void *buf, int flags)
+dp_result_t pv_get(pv_t *pv, sint32 player, sint32 key, size_t *len, void *buf, sint32 flags)
 {
 	pv_peer_t *peer;
 	pv_var_t *pvar;
@@ -460,7 +460,7 @@ dp_result_t pv_handlePacket(pv_t *pv, size_t len, void *buf)
 		/* The variable has arrived! Obey the value change it carries.
 		 * Don't echo to other machines!
 		 */
-		long newcrc = dp_crc32((unsigned char *)pvar->buf, pvar->len);
+		sint32 newcrc = dp_crc32((uint8 *)pvar->buf, pvar->len);
 		DPRINT(("pv_handlePacket: got crc %x\n", newcrc));
 		if (newcrc != pvar->crc) {
 			DPRINT(("pv_handlePacket: bad crc %x, expected %x!\n", newcrc, pvar->crc));
@@ -528,7 +528,7 @@ dp_result_t pv_update(pv_t *pv, dpid_t owner)
 	dp_result_t err;
 	playerHdl_t errHdl;
 	time_t interval;
-	int i, j;
+	sint32 i, j;
 	char buf[dpio_MAXLEN_RELIABLE];
 
 	if (!pv) {
@@ -537,7 +537,7 @@ dp_result_t pv_update(pv_t *pv, dpid_t owner)
 	}
 
 	/* Wait 'til previous transmission has had time to get sent. */
-	if ((long)(pv->dp->now - pv->next_send) < 0) return dp_RES_OK;
+	if ((sint32)(pv->dp->now - pv->next_send) < 0) return dp_RES_OK;
 	/* Set default next-check-time if no transmission this time. */
 	pv->next_send = pv->dp->now + pv->dp->clocksPerSec / 8;
 
@@ -649,7 +649,7 @@ dp_result_t pv_update(pv_t *pv, dpid_t owner)
 		*tag = pv_PLAYERDATA_INITIAL_PACKET_ID;
 		body->len = pvar->len;
 		body->id = owner;
-		body->flags = (short) pvar->flags;
+		body->flags = (sint16) pvar->flags;
 		body->key = pvar->key;
 		body->crc = pvar->crc;
 		/* call dpSwapPvUpdateInitial to byte swap body */
@@ -749,14 +749,14 @@ static dp_result_t pv_var_thaw(pv_var_t *pvar, FILE *fp)
 -----------------------------------------------------------------------*/
 static dp_result_t pv_peer_freeze(pv_peer_t *peer, dpid_t id, FILE *fp)
 {
-	int i;
-	short dirty = peer->dirty;
-	unsigned long n_vars;
-	long sig = 0x12340009;
+	sint32 i;
+	sint16 dirty = peer->dirty;
+	uint32 n_vars;
+	sint32 sig = 0x12340009;
 	dp_result_t err;
 
 	DPRINT(("pv_peer_freeze:\n"));
-	n_vars = (unsigned long) peer->vars->n_used;
+	n_vars = (uint32) peer->vars->n_used;
 	/* Header */
 	if ((fwrite(&sig, sizeof(sig), 1, fp) != 1)
 	||  (fwrite(&dirty, sizeof(dirty), 1, fp) != 1)
@@ -795,10 +795,10 @@ static dp_result_t pv_peer_freeze(pv_peer_t *peer, dpid_t id, FILE *fp)
 static dp_result_t pv_peer_thaw(pv_t *pv, FILE *fp)
 {
 	pv_peer_t *peer;
-	int i;
-	short dirty;
-	unsigned long n_vars;
-	long sig;
+	sint32 i;
+	sint16 dirty;
+	uint32 n_vars;
+	sint32 sig;
 	dpid_t id;
 	dp_result_t err;
 
@@ -876,8 +876,8 @@ static dp_result_t pv_peer_thaw(pv_t *pv, FILE *fp)
 -----------------------------------------------------------------------*/
 dp_result_t pv_freeze(pv_t *pv, FILE *fp)
 {
-	int i;
-	unsigned long n_peers;
+	sint32 i;
+	uint32 n_peers;
 	pv_t temp;
 	DPRINT(("pv_freeze:\n"));
 
@@ -921,8 +921,8 @@ dp_result_t pv_freeze(pv_t *pv, FILE *fp)
 dp_result_t pv_thaw(pv_t *pv, FILE *fp)
 {
 	char buf[sizeof(pv_SIG_END)];
-	unsigned long n_peers;
-	int i;
+	uint32 n_peers;
+	sint32 i;
 	dp_result_t err;
 	dynatab_t *peers;
 	dp_t *dp;
@@ -943,7 +943,7 @@ dp_result_t pv_thaw(pv_t *pv, FILE *fp)
 	if ((fread(pv, sizeof(pv_t), 1, fp) != 1)
 	||  (fread(&n_peers, sizeof(n_peers), 1, fp) != 1))
 		return dp_RES_EMPTY;
-	if ((int) pv->peers != 0x12345679)
+	if ((sint32) pv->peers != 0x12345679)
 		return dp_RES_BAD;
     pv->peers = peers;
 	pv->dp = dp;

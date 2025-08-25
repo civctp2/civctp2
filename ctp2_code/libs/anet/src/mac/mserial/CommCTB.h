@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define _CommCTB_
 
 #include	<Connections.h>
+#include "types.h"
 
 #define	kSERIALDRIVERNAME	"Serial\0"
 
@@ -33,12 +34,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Furthermore, the dp layer expects the address to not change from session
  to session.
 --------------------------------------------------------------------------*/
-typedef long ser_adr_t;
+typedef sint32 ser_adr_t;
 #define ser_ADR_NONE 0			// Used internally to indicate no connection.
 
 // A peer handle.  A short and non-portable notation for the address of
 // an open connection.
-typedef int ser_hdl_t;			// Handles used in sending packets.
+typedef sint32 ser_hdl_t;			// Handles used in sending packets.
 #define ser_HDL_NONE 		-1
 #define ser_HDL_BROADCAST	0	// For this driver, same as ser_HDL_YOU.
 #define ser_HDL_ME			1	// The 2nd entry is for my own address.
@@ -67,12 +68,12 @@ typedef int ser_hdl_t;			// Handles used in sending packets.
 #define ser_HDR_FRAME0 'F'		// First byte of every packet header
 #define ser_HDR_FRAME1 'R'		// Second byte of every packet header
 typedef struct {
-	unsigned char frame0;		// ser_HDR_FRAME0
-	unsigned char frame1;		// ser_HDR_FRAME1
-	// MAD unsigned char src;			// low byte of sender's address.
-	unsigned char bodylen;		// max packet payload length: 255.  Jeepers.
-	unsigned char hchksum;		// sum of previous three bytes of header
-	unsigned char bodycrc;		// crc of payload
+	uint8 frame0;		// ser_HDR_FRAME0
+	uint8 frame1;		// ser_HDR_FRAME1
+	// MAD uint8 src;			// low byte of sender's address.
+	uint8 bodylen;		// max packet payload length: 255.  Jeepers.
+	uint8 hchksum;		// sum of previous three bytes of header
+	uint8 bodycrc;		// crc of payload
 } ser_hdr_t;			// the six-byte header in front of each packet
 
 //--------------------------------------------------------------------------
@@ -82,21 +83,21 @@ typedef struct {
 typedef struct {
 	// Stuff about the connection to the other computer
 	ConnHandle sConnection;
-	long baud;					// MAD forced to 38400 for PC compatibility
-	int portnum;				// hardware comm port; 0 or 1 (or possibly more)
-	int hwirq;
-	int baseadr;
+	sint32 baud;					// MAD forced to 38400 for PC compatibility
+	sint32 portnum;				// hardware comm port; 0 or 1 (or possibly more)
+	sint32 hwirq;
+	sint32 baseadr;
 
 	// Stuff about incoming serial data
-	unsigned char rbuf[ser_READSIZE];	// bytes read from serial port
-	int len;					// number of bytes in rbuf
-	int head;					// index into rbuf; next byte to get out
+	uint8 rbuf[ser_READSIZE];	// bytes read from serial port
+	sint32 len;					// number of bytes in rbuf
+	sint32 head;					// index into rbuf; next byte to get out
 	// Stuff about the packet being recieved.
 	struct {
 		ser_hdr_t hdr;			// header of received packet
-		unsigned char body[ser_USERMAXPACK];	// bytes of recieved packet
+		uint8 body[ser_USERMAXPACK];	// bytes of recieved packet
 	} pkt;
-	int got;					// index into pkt; good bytes in pkt so far
+	sint32 got;					// index into pkt; good bytes in pkt so far
 								// Also controls how incoming byte is interpreted.
 
 	// The addressing mechanism for the upper layer's convienience.
@@ -113,7 +114,7 @@ typedef struct {
 
 // MAD -- shouldn't these match with dp_RES_xxxxx  values in anet.h ?
 
-typedef int ser_result_t;		// Error/success status type.
+typedef sint32 ser_result_t;		// Error/success status type.
 #define ser_RES_OK		0
 #define ser_RES_EMPTY	2
 #define ser_RES_FULL	3
@@ -126,8 +127,8 @@ void CTB_Load(void);
 ser_result_t CTB_hdl2adr(ser_t *ser, ser_hdl_t hdl, ser_adr_t *adr);
 ser_t *CTB_create(void);
 ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len);
-unsigned char CTB_crc(unsigned char *ptr, int len);
-ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert);
+uint8 CTB_crc(uint8 *ptr, sint32 len);
+ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, sint32 insert);
 ser_result_t CTB_hdlDestroy(ser_t *ser, ser_hdl_t hdl);
 ser_result_t CTB_put(ser_t *ser, ser_hdl_t dest, void *buf, size_t len);
 

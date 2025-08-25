@@ -6,6 +6,7 @@
 
 class aui_Control;
 class ctp2_Button;
+union Cookie;
 
 class ZoomPad {
 public:
@@ -18,10 +19,10 @@ public:
 private:
 
 	static void ZoomInButtonActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	static void ZoomOutButtonActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	ctp2_Button	*m_zoomIn;
 

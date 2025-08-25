@@ -253,7 +253,7 @@ DEP_CPP_RAW_C=\
 	"..\..\..\demo\utils\rawsun.c"\
 	"..\..\..\demo\utils\rawvms.c"\
 	"..\..\..\demo\utils\rawwin.c"\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	{$(INCLUDE)}"\sys\types.h"\
 	
 

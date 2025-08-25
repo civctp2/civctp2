@@ -50,6 +50,16 @@ GameObj::~GameObj()
 	delete m_greater;
 }
 
+void* GameObj::operator new(size_t size)
+{
+	return ::operator new(size);
+}
+
+void* GameObj::operator new[] (size_t size)
+{
+	return ::operator new[](size);
+}
+
 void GameObj::operator delete(void *ptr)
 {
 	GameObj *obj = (GameObj *)ptr;

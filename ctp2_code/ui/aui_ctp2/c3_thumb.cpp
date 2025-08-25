@@ -19,7 +19,7 @@ c3_Thumb::c3_Thumb(
 	sint32 height,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
@@ -33,7 +33,7 @@ c3_Thumb::c3_Thumb(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),

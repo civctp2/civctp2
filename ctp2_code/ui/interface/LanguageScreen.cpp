@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Created file. (04-May-2025 Martin Gühmann)
+// - Created file. (04-May-2025 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -66,7 +66,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 	m_LanguageListBox->SetForceSelect(TRUE);
 	m_LanguageListBox->SetMultiSelect(FALSE);
 
-	m_LanguageListBox->SetActionFuncAndCookie(LanguageScreen::ItemSelected, NULL);
+	m_LanguageListBox->SetActionFuncAndCookie(LanguageScreen::ItemSelected, nullptr);
 
 	ctp2_ListItem *selItem = NULL;
 
@@ -84,7 +84,7 @@ LanguageScreen::LanguageScreen(AUI_ERRCODE *errcode, sint32 bpp)
 		if(!item)
 			return;
 
-		item->SetUserData((void *)i);
+		item->SetUserData(i);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -165,7 +165,7 @@ void LanguageScreen::RemoveWindow(uint32 action)
 	keypress_RemoveHandler(s_languageScreen);
 }
 
-void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -173,14 +173,14 @@ void LanguageScreen::AcceptPress(aui_Control *control, uint32 action, uint32 dat
 	LanguageScreen::RemoveWindow(action);
 }
 
-void LanguageScreen::CancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::CancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
 	LanguageScreen::RemoveWindow(action);
 }
 
-void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::GetLanguageFromOS(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -197,7 +197,7 @@ sint32 LanguageScreen::CompareItems(ctp2_ListItem *item1, ctp2_ListItem *item2, 
 	return _stricoll(text1->GetText(), text2->GetText());
 }
 
-void LanguageScreen::ItemSelected(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void LanguageScreen::ItemSelected(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	// This is for the text boxes and updated once selected
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -213,7 +213,7 @@ void LanguageScreen::SetLanguageDescription()
 
 	if(!item) return;
 
-	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 lan = item->GetUserDataSint32();
 	m_languageDescription->SetText(g_theStringDB->GetNameStr(g_theLanguageDB->Get(lan)->GetDescription()));
 
 	Ok()->Enable(!g_theLanguageDB->Get(lan)->GetDisabled());
@@ -230,7 +230,7 @@ void LanguageScreen::ApplyLanguage()
 
 	if(!item) return;
 
-	sint32 lan = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 lan = item->GetUserDataSint32();
 
 	const LanguageRecord* lanRec = g_theLanguageDB->Get(lan);
 	g_theProfileDB->SetLanguageDirectory(lanRec->GetDirectory());
@@ -255,7 +255,7 @@ void LanguageScreen::SelectLocLanguage()
 	{
 		ctp2_ListItem *item = static_cast<ctp2_ListItem*>(m_LanguageListBox->GetItemByIndex(i));
 
-		if(reinterpret_cast<sint32>(item->GetUserData()) == lanRec->GetIndex())
+		if(item->GetUserDataSint32() == lanRec->GetIndex())
 		{
 			m_LanguageListBox->SelectItem(item);
 			return;

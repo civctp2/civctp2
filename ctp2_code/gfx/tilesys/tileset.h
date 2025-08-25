@@ -28,9 +28,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added new map icon database. (3-Mar-2007 Martin Gühmann)
+// - Added new map icon database. (3-Mar-2007 Martin GÃ¼hmann)
 // - Increased the number of possible tile improvement graphics in the
-//   tile to 1024. (28-Feb-2008 Martin Gühmann)
+//   tile to 1024. (28-Feb-2008 Martin GÃ¼hmann)
 // - Added show city production icons. (25-Jun-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -398,17 +398,16 @@ private:
 	uint16			m_megaTileLengths[k_MAX_MEGATILES];
 	MegaTileStep	m_megaTileData[k_MAX_MEGATILES][k_MAX_MEGATILE_STEPS];
 
-	Pixel16			**m_mapIcons;
-	POINT			*m_mapIconDimensions;
-
 	BOOL			m_quick;
 	BOOL			m_mapped;
+	Pixel16			**m_mapIcons;
+	POINT			*m_mapIconDimensions;
 
 #ifdef WIN32
 	HANDLE			m_fileHandle;
 	HANDLE			m_mappedFileHandle;
 #else
-	int			m_fd;
+	int				m_fd;
 	size_t			m_MMapSize;
 #endif
 };

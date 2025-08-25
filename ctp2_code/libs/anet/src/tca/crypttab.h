@@ -33,12 +33,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Write the dynatab to the given file in a format encrypted with key,
  suitable for restoration with dynatab_thaw_encrypted.
 -------------------------------------------------------------------------*/
-void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8]);
+void dynatab_freeze_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8]);
 
 /*-------------------------------------------------------------------------
  Read the dynatab (encrypted with key) from the given file.
  Returns a pointer to the first element on success or NULL on failure.
 -------------------------------------------------------------------------*/
-void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8]);
+void *dynatab_thaw_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8]);
 
 #endif

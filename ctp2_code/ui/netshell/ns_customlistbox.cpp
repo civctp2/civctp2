@@ -26,13 +26,14 @@
 //
 // - Corrected strange access of non-static members from static data.
 // - Replaced typename T in specialized template member function by the
-//   the type for that the function is specialized, by Martin Gühmann.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+//   the type for that the function is specialized, by Martin GÃ¼hmann.
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
 #include "c3.h"
 
+#include "c3files.h"
 #include "netshell.h"
 #include "ns_customlistbox.h"
 #include "ns_civlistbox.h"
@@ -97,10 +98,10 @@ void NETFunc::ListHandler<NETFunc::Transport>::SetKey(void) {}
 ns_PlayerSetupListBox::ns_PlayerSetupListBox (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
-	char *filename)
+	Cookie cookie,
+	const char *filename)
 
 	:
 	aui_ImageBase( ldlBlock),
@@ -119,10 +120,10 @@ ns_PlayerSetupListBox::ns_PlayerSetupListBox (
 ns_GameSetupListBox::ns_GameSetupListBox (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
-	char *filename)
+	Cookie cookie,
+	const char *filename)
 
 	:
 	aui_ImageBase( ldlBlock),
@@ -140,10 +141,10 @@ ns_GameSetupListBox::ns_GameSetupListBox (
 ns_AIPlayerSetupListBox::ns_AIPlayerSetupListBox (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
-	char *filename)
+	Cookie cookie,
+	const char *filename)
 
 	:
 	aui_ImageBase( ldlBlock),
@@ -170,7 +171,7 @@ HotseatTransport::HotseatTransport()
 }
 
 ns_TransportListBox::ns_TransportListBox (
-	AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, void *cookie )
+	AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock, ControlActionCallback *ActionFunc, Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -200,19 +201,12 @@ ns_TransportListBox::ns_TransportListBox (
 		}
 	}
 
-
-
-
-
-
 	sint32 lasttime = 0;
-	FILE *f = fopen( "nstrnsprt.cfg", "rb" );
+	FILE *f = c3files_fopen(C3DIR_APPBASE, "nstrnsprt.cfg", "rb" );
 	if ( f )
 	{
-
 		sint32 test = 0;
 		fread( &test, sizeof( sint32 ), 1, f );
-
 
 		if ( test == m_version )
 		{
@@ -230,7 +224,7 @@ ns_TransportListBox::~ns_TransportListBox()
 	sint32 lasttime = GetSelectedItemIndex();
 	if ( 0 <= lasttime && lasttime < NumItems() )
 	{
-		FILE *f = fopen( "nstrnsprt.cfg", "wb" );
+		FILE *f = c3files_fopen(C3DIR_APPBASE, "nstrnsprt.cfg", "wb" );
 		if ( f )
 		{
 
@@ -246,9 +240,9 @@ ns_TransportListBox::~ns_TransportListBox()
 ns_SessionListBox::ns_SessionListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -264,9 +258,9 @@ ns_SessionListBox::ns_SessionListBox (
 ns_LobbyListBox::ns_LobbyListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -282,9 +276,9 @@ ns_LobbyListBox::ns_LobbyListBox (
 ns_GameListBox::ns_GameListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -300,9 +294,9 @@ ns_GameListBox::ns_GameListBox (
 ns_PlayerListBox::ns_PlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -386,9 +380,9 @@ void ns_PlayerListBox::ColorCodePingTime( NETFunc::Player *player )
 ns_RPlayerListBox::ns_RPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -404,9 +398,9 @@ ns_RPlayerListBox::ns_RPlayerListBox (
 ns_ServerListBox::ns_ServerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -488,10 +482,10 @@ void ns_ServerListBox::ColorCodePingTime( NETFunc::Server *server )
 ns_GPlayerListBox::ns_GPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -597,13 +591,15 @@ void ns_GPlayerListBox::Insert( NETFunc::Player *player )
 
 	switch ( g_allinoneWindow->GetMode() )
 	{
-	case g_allinoneWindow->CONTINUE_CREATE:
-	case g_allinoneWindow->CONTINUE_JOIN:
-		if(!g_allinoneWindow->GetScenarioInfo() ||
-			!g_allinoneWindow->GetScenarioInfo()->isScenario) {
-			item->GetTribeButton()->Enable( FALSE );
-		}
-		break;
+		case g_allinoneWindow->CONTINUE_CREATE:
+		case g_allinoneWindow->CONTINUE_JOIN:
+			if(!g_allinoneWindow->GetScenarioInfo() ||
+				!g_allinoneWindow->GetScenarioInfo()->isScenario) {
+				item->GetTribeButton()->Enable( FALSE );
+			}
+			break;
+		default:
+			break;
 	}
 
 	ColorCodePingTime( player );
@@ -819,10 +815,10 @@ AUI_ERRCODE ns_ListBox<NETFunc::Player, ns_Player>::StoreAppropriateData(
 ns_AIPlayerListBox::ns_AIPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc,
-		void *cookie )
+		Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -863,22 +859,21 @@ void ns_AIPlayerListBox::Insert( nf_AIPlayer *player )
 	}
 	else
 	{
-
 		if ( !g_gamesetup.GetHandicapping() )
 		{
 			item->GetCivpointsButton()->Enable( FALSE );
 			item->GetPwpointsButton()->Enable( FALSE );
 		}
-
-
 	}
 
 	switch ( g_allinoneWindow->GetMode() )
 	{
-	case g_allinoneWindow->CONTINUE_CREATE:
-	case g_allinoneWindow->CONTINUE_JOIN:
-		item->GetTribeButton()->Enable( FALSE );
-		break;
+		case g_allinoneWindow->CONTINUE_CREATE:
+		case g_allinoneWindow->CONTINUE_JOIN:
+			item->GetTribeButton()->Enable( FALSE );
+			break;
+		default:
+			break;
 	}
 }
 

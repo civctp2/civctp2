@@ -55,11 +55,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 #ifdef __MWERKS__
-	typedef unsigned long u_long;
-	typedef unsigned short u_short;
-	typedef unsigned int BOOL;
-	typedef unsigned long ULONG;
-	typedef unsigned short USHORT;
+	// If this makes trouble, replace those in the code
+	typedef uint32 u_long;
+	typedef uint16 u_short;
+	typedef uint32 BOOL;
+	typedef uint32 ULONG;
+	typedef uint16 USHORT;
 #endif
 
 #include "dictset.h"
@@ -123,7 +124,7 @@ TCPINSTANCE;
    the specified socket.  If socket is TCP_SOCKET_ANY, have
    OS choose an unused socket.  TCPWIN will support a maximum
    of maxHandles connections at a time. */
-TCPINSTANCE * TCPWIN_Create(unsigned short maxHandles, unsigned short* socket, int *status);
+TCPINSTANCE * TCPWIN_Create(uint16 maxHandles, uint16* socket, sint32 *status);
 
 /* Destructor: End a run of TCPWIN. */
 void TCPWIN_Destroy(TCPINSTANCE *TCP);
@@ -136,14 +137,14 @@ TCPHANDLE TCPWIN_Address2Handle(TCPINSTANCE *TCP, TCPPEER *addr, BOOL insert);
 
 /* Convert a TCPHANDLE to its corresponding TCPPEER.  Return
    a status code to indicate success or failure. */
-int TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr);
+sint32 TCPWIN_Handle2Address(TCPINSTANCE *TCP, TCPHANDLE handle, TCPPEER *addr);
 
 /* Send a packet to a node identified by a TCPHANDLE. */
-int TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest);
+sint32 TCPWIN_PutPacket(TCPINSTANCE *TCP, void *bufptr, ULONG len, TCPHANDLE hdest);
 
 /* Receive a packet.  The packet will be copied into bufptr, and
    the source handle will be copied into phSrc.  If pSrcAddr is
    not NULL, the source address will be copied into it. */
-int TCPWIN_GetPacket(TCPINSTANCE *TCP, void *bufptr, ULONG *len, TCPHANDLE *phSrc, TCPPEER *pSrcAddr);
+sint32 TCPWIN_GetPacket(TCPINSTANCE *TCP, void *bufptr, ULONG *len, TCPHANDLE *phSrc, TCPPEER *pSrcAddr);
 
 #endif

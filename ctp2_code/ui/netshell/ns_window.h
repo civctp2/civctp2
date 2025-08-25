@@ -19,7 +19,7 @@ public:
 	ns_Window(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 	virtual ~ns_Window();
@@ -27,13 +27,13 @@ public:
 protected:
 
 	ns_Window() : c3_PopupWindow() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
-	AUI_ERRCODE InitCommon( MBCHAR *tile, BOOL retired );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommon( const MBCHAR *tile, BOOL retired );
 
 public:
 	aui_Control	*FindControl( uint32 index );
 
-	aui_Image	*SetTile( MBCHAR *tile );
+	aui_Image	*SetTile( const MBCHAR *tile );
 	aui_Image	*GetTile( void ) const { return m_tile; }
 
 	BOOL		IsRetired( void ) const { return m_retired; }

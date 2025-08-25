@@ -31,16 +31,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define BIGDATALEN 800
 
-int nextid = 1;
+sint32 nextid = 1;
 
 /* Set this FALSE to disable local callback value check on variables,
  * e.g. when setting up illegal value which will be overridden
  * before it finishes sending
  */
-int checklocal = TRUE;
+sint32 checklocal = TRUE;
 
 /* Use -v on command line to activate verbose printing */
-int Verbose = FALSE;
+sint32 Verbose = FALSE;
 
 /*--------------------------------------------------------------------------
  Structure holding the state of a dptab test object.
@@ -53,10 +53,10 @@ typedef struct {
 	FILE *logfp;
 
 	/* Which test object this is */
-	int id;
+	sint32 id;
 
 	/* id of peer, handle to peer */
-	int idPeer;
+	sint32 idPeer;
 	playerHdl_t hPeer;
 
 	/* Pointers to tables inside dptab being tested */
@@ -66,12 +66,12 @@ typedef struct {
 	/* Test state */
 	clock_t started;
 	dp_result_t dptab_status;
-	int nvars_rx;
-	int nvars_tx;
-	int nvars_rx_delete;
-	int nvars_tx_delete;
-	int pkts_rx;
-	int pkts_rx_at_bogus_set;
+	sint32 nvars_rx;
+	sint32 nvars_tx;
+	sint32 nvars_rx_delete;
+	sint32 nvars_tx_delete;
+	sint32 pkts_rx;
+	sint32 pkts_rx_at_bogus_set;
 } dptabt1_t;
 
 /*--------------------------------------------------------------------------
@@ -89,10 +89,10 @@ typedef struct {
 		length=BIGDATALEN
  Test pattern data depends on id, key, and subkey.
 --------------------------------------------------------------------------*/
-static int testramp_fill(int id, int key, int subkey, char **bufp)
+static sint32 testramp_fill(sint32 id, sint32 key, sint32 subkey, char **bufp)
 {
-	int len;
-	int i;
+	sint32 len;
+	sint32 i;
 	char xor;
 	char *buf;
 
@@ -128,10 +128,10 @@ static int testramp_fill(int id, int key, int subkey, char **bufp)
 
  Aborts with given error message if comparison fails.
 --------------------------------------------------------------------------*/
-static void testramp_compare(int id, int key, int subkey, char *buf, int buflen, char *msg)
+static void testramp_compare(sint32 id, sint32 key, sint32 subkey, char *buf, sint32 buflen, char *msg)
 {
 	char *refbuf;
-	int reflen;
+	sint32 reflen;
 
 	if (!buf) {
 		printf("%s: null buf\n", msg);
@@ -160,11 +160,11 @@ static void testramp_compare(int id, int key, int subkey, char *buf, int buflen,
  We pass in the dptabt1_t in the context parameter, so we can
  know which test instance the callback is for.
 -----------------------------------------------------------------------*/
-int dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err)
+sint32 dp_PASCAL table_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t err)
 {
 	dptabt1_t *ptest = (dptabt1_t *)context;
-	int idsrc;
-	int skey;
+	sint32 idsrc;
+	sint32 skey;
 
 	/* Note who it's from */
 	if (src == PLAYER_ME) {
@@ -259,22 +259,22 @@ void dptabt1_build_tables(dptabt1_t *ptest)
 	char key[10];
 	char badkey[10];
 	char subkey[10];
-	int dummy;
-	int *pdummy;
+	sint32 dummy;
+	sint32 *pdummy;
 	size_t len;
 	size_t subkeylen;
 	char bigdata[BIGDATALEN];
 	char *pbigdata;
-	int i;
+	sint32 i;
 	dptab_table_t *table1;
 	dptab_table_t *table2;
 	char *maxdata;
 	char *buf;
-	int skey;
+	sint32 skey;
 
 	/* Create one fixed size table and one variable sized table. */
 	key[0] = 1;
-	err = dptab_createTable(ptest->dt, &table1, key, 1, sizeof(int), NULL, NULL, table_cb, ptest);
+	err = dptab_createTable(ptest->dt, &table1, key, 1, sizeof(sint32), NULL, NULL, table_cb, ptest);
 	assert(err == dp_RES_OK);
 
 	key[0] = 2;
@@ -358,11 +358,11 @@ dptabt1_t *dptabt1_create()
 	commScanAddrResp_t		scanResp;
 	dp_result_t err;
 	dp_transport_t dll;
-	int i;
+	sint32 i;
 	char logfname[128];
 
 	char peeradr_printable[128];
-	unsigned char peeradr[dp_MAX_ADR_LEN];
+	uint8 peeradr[dp_MAX_ADR_LEN];
 
 	ptest = malloc(sizeof(dptabt1_t));
 	if (!ptest)
@@ -437,7 +437,7 @@ void dptabt1_peer_connect(dptabt1_t *ptest, char *peerAdr)
 	/* Create fixed table #9.1 and route peer's table #1 to it. */
 	key[0] = 9;
 	key[1] = 1;
-	err = dptab_createTable(ptest->dt, &ptest->peerTable1, key, 2, sizeof(int), NULL, NULL, table_cb, ptest);
+	err = dptab_createTable(ptest->dt, &ptest->peerTable1, key, 2, sizeof(sint32), NULL, NULL, table_cb, ptest);
 	assert(err == dp_RES_OK);
 	key[0] = 1;
 	err = dptab_addPublisher(ptest->dt, ptest->peerTable1, key, 1, ptest->hPeer);
@@ -465,7 +465,7 @@ void dptabt1_send(dptabt1_t *ptest)
 {
 	char key[10];
 	dp_result_t err;
-	int j;
+	sint32 j;
 
 	dp_setLogFP(ptest->logfp);
 
@@ -509,7 +509,7 @@ void dptabt1_send(dptabt1_t *ptest)
  that it meets our expectations.
  Returns FALSE if done, TRUE if it still needs to be called.
 --------------------------------------------------------------------------*/
-int dptabt1_poll(dptabt1_t *ptest)
+sint32 dptabt1_poll(dptabt1_t *ptest)
 {
 	char key[10];
 	playerHdl_t src;
@@ -526,7 +526,7 @@ int dptabt1_poll(dptabt1_t *ptest)
 	assert(ptest->dptab_status == dp_RES_OK || ptest->dptab_status == dp_RES_EMPTY);
 
 	if ((ptest->nvars_rx >= 4) && (ptest->nvars_tx_delete == 0)) {
-		int len;
+		sint32 len;
 		char *buf;
 
 		ptest->nvars_tx_delete++;
@@ -555,7 +555,7 @@ int dptabt1_poll(dptabt1_t *ptest)
 	 * Want to see if receiving an override works ok.
 	 */
 	if (ptest->pkts_rx_at_bogus_set && (ptest->pkts_rx_at_bogus_set + 4 <= ptest->pkts_rx)) {
-		int len;
+		sint32 len;
 		char *buf;
 
 		DPRINT(("Setting final good value\n"));
@@ -675,11 +675,11 @@ void dptabt1_destroy(dptabt1_t *ptest)
  and polls them until they cry uncle.  Any failure causes the
  subroutines to terminate the program with an error message.
 -----------------------------------------------------------------------*/
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
-	int i;
-	int running1;
-	int running2;
+	sint32 i;
+	sint32 running1;
+	sint32 running2;
 
 	if (argc > 1 && argv[1][0] == '-' && argv[1][1] == 'v')
 		Verbose = TRUE;

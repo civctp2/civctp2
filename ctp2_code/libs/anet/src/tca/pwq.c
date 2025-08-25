@@ -31,13 +31,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  If write is non-0, it will be a write queue, and pwq_get will fail.
  Returns NULL on failure.
 --------------------------------------------------------------------------*/
-pwq_t *pwq_create(tcapw_t *tcapw, const char *wmqDirectory, int write, const char *masterServerTag)
+pwq_t *pwq_create(tcapw_t *tcapw, const char *wmqDirectory, sint32 write, const char *masterServerTag)
 {
 	dp_result_t err;
 	pwq_t *pwq;
 	wmq_t *wmq;
 	time_t timestamp;
-	long offset;
+	sint32 offset;
 
 	if (tcapw == NULL || wmqDirectory == NULL || masterServerTag == NULL || tcapw->tab == NULL)
 		return NULL;
@@ -108,7 +108,7 @@ dp_result_t pwq_get(pwq_t *pwq, pwq_message_t *msg)
 	wmq_record_t record;
 	char getbuf[1024];
 	char *pbuf = getbuf;
-	int emaillen;
+	sint32 emaillen;
 
 	if (pwq == NULL || msg == NULL || pwq->wmq->openForWrite)
 		return dp_RES_BAD;
@@ -155,7 +155,7 @@ dp_result_t pwq_get(pwq_t *pwq, pwq_message_t *msg)
 		pbuf += sizeof(tcapw_uname_t);
 		memcpy(&msg->u.acctChange.hpw, pbuf, sizeof(tcapw_hpw_t));
 		pbuf += sizeof(tcapw_hpw_t);
-		emaillen = (unsigned char)*pbuf;
+		emaillen = (uint8)*pbuf;
 		pbuf++;
 		if (emaillen >= tcapw_MAXLEN_EMAIL) {
 			DPRINT(("pwq_get: invalid record.  emaillen:%d > %d\n", emaillen, tcapw_MAXLEN_EMAIL - 1));
@@ -192,8 +192,8 @@ dp_result_t pwq_put(pwq_t *pwq, time_t now, pwq_message_t *msg)
 	dp_result_t err;
 	char putbuf[1024];
 	char *pbuf = putbuf;
-	int datalen;
-	int emaillen;
+	sint32 datalen;
+	sint32 emaillen;
 
 	if (pwq == NULL || msg == NULL || !pwq->wmq->openForWrite)
 		return dp_RES_BAD;
@@ -240,7 +240,7 @@ dp_result_t pwq_put(pwq_t *pwq, time_t now, pwq_message_t *msg)
 		break;
 	}
 
-	err = wmq_put(pwq->wmq, now, wmq_RECORDTAG_ACCOUNT, putbuf, (unsigned short)(pbuf-putbuf));
+	err = wmq_put(pwq->wmq, now, wmq_RECORDTAG_ACCOUNT, putbuf, (uint16)(pbuf-putbuf));
 	if (err != dp_RES_OK) {
 		DPRINT(("pwq_put: wmq_put returns err:%d", err));
 		return dp_RES_BUG;
@@ -252,7 +252,7 @@ dp_result_t pwq_put(pwq_t *pwq, time_t now, pwq_message_t *msg)
  Get the wmq position into timestamp, offset.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t pwq_tell(pwq_t *pwq, time_t *ptime, long *poffset)
+dp_result_t pwq_tell(pwq_t *pwq, time_t *ptime, sint32 *poffset)
 {
 	if (pwq == NULL)
 		return dp_RES_BAD;

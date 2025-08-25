@@ -46,6 +46,7 @@ class ctp2_ListItem;
 class ctp2_Static;
 class ctp2_Window;
 class ctp2_Tab;
+union Cookie;
 
 class NationalManagementDialog {
 public:
@@ -102,41 +103,41 @@ private:
 	                                 sint32 column);
 
 	static void StatusListSelectActionCallback(aui_Control *control,
-	                                           uint32 action, uint32 data, void *cookie);
+	                                           uint32 action, uint32 data, Cookie cookie);
 
 	static void CloseButtonActionCallback(aui_Control *control,
-	                                      uint32 action, uint32 data, void *cookie);
+	                                      uint32 action, uint32 data, Cookie cookie);
 
 	static void BuildQueueButtonActionCallback(aui_Control *control,
-	                                           uint32 action, uint32 data, void *cookie);
+	                                           uint32 action, uint32 data, Cookie cookie);
 
 	static void CityManagerButtonActionCallback(aui_Control *control,
-	                                            uint32 action, uint32 data, void *cookie);
+	                                            uint32 action, uint32 data, Cookie cookie);
 
 	static void DisbandButtonActionCallback(aui_Control *control,
-	                                        uint32 action, uint32 data, void *cookie);
+	                                        uint32 action, uint32 data, Cookie cookie);
 
-	static void DisbandCallback(bool response, void *userData);
+	static void DisbandCallback(bool response, Cookie userData);
 
 	static void ToggleGovernorButtonActionCallback(aui_Control *control,
-	                                               uint32 action, uint32 data, void *cookie);
+	                                               uint32 action, uint32 data, Cookie cookie);
 
 	static void SelectGovernorActionCallback(aui_Control *control,
-	                                         uint32 action, uint32 data, void *cookie);
+	                                         uint32 action, uint32 data, Cookie cookie);
 
 	static void RushBuyButtonActionCallback(aui_Control *control,
-	                                        uint32 action, uint32 data, void *cookie);
+	                                        uint32 action, uint32 data, Cookie cookie);
 
 	static void ResourceListSelectActionCallback(aui_Control *control,
-	                                             uint32 action, uint32 data, void *cookie);
+	                                             uint32 action, uint32 data, Cookie cookie);
 
 	static void SpecialistListSelectActionCallback(aui_Control *control,
-	                                               uint32 action, uint32 data, void *cookie);
+	                                               uint32 action, uint32 data, Cookie cookie);
 
 	void UpdateMainButtons(ctp2_ListBox *box);
 
 	static void TabActionCallback(aui_Control *control,
-	                              uint32 action, uint32 data, void *cookie);
+	                              uint32 action, uint32 data, Cookie cookie);
 
 	void MirrorSelectedCities();
 	static Unit GetSelectedCity();

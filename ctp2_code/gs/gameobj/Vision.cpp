@@ -28,7 +28,7 @@
 // - Corrected strange visibility patterns ("see tile" counter underflow).
 // - Removed causes of memory leak reports (static variables).
 // - Unseen cells are now always created and not only in the case if a
-//   tile improvement is under construction there. - Dec. 21st 2004 Martin Gühmann
+//   tile improvement is under construction there. - Dec. 21st 2004 Martin GÃ¼hmann
 // - Corrected cleanup (using the old m_width!) when reloading in Serialize.
 //
 //----------------------------------------------------------------------------
@@ -72,15 +72,15 @@ namespace
 
 Vision::Vision(sint32 owner, bool amOnScreen)
 :
-    m_width                 (0),
-    m_height                (0),
-    m_owner                 (owner),
-    m_xyConversion          (0),
-    m_isYwrap               (false),
-    m_amOnScreen            (amOnScreen),
     m_array                 (NULL),
     m_unseenCells           (NULL),
-    m_mergeFrom             (NULL)
+    m_mergeFrom             (NULL),
+    m_owner                 (owner),
+    m_width                 (0),
+    m_height                (0),
+    m_xyConversion          (0),
+    m_isYwrap               (false),
+    m_amOnScreen            (amOnScreen)
 {
 	Assert(g_theWorld);
 	MapPoint * size = g_theWorld->GetSize();

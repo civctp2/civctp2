@@ -74,7 +74,7 @@
 static bool debug_dump_whole_stack = false;
 
 void Debug_FunctionNameFindAddresses(FILE *fp);
-int Debug_FunctionNameOpen (char *map_file_name);
+int Debug_FunctionNameOpen (const char *map_file_name);
 void Debug_FunctionNameClose (void);
 const char *Debug_FunctionNameGet (size_t address);
 void Debug_MakeRoom(size_t capacity);
@@ -227,7 +227,7 @@ void Debug_FunctionNameFindAddresses(FILE *fp)
 #endif
 }
 
-int Debug_FunctionNameOpen (char *map_file_name)
+int Debug_FunctionNameOpen (const char *map_file_name)
 {
 	FILE *fp;
 	char buffer[BUFFER_SIZE];

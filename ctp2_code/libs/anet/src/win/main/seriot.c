@@ -23,18 +23,18 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <string.h>
 #include "serio.h"
 
-void fillRamp(char *buffer, int len)
+void fillRamp(char *buffer, sint32 len)
 {
-	int	i;
+	sint32	i;
 
 	for (i=1; i<=len; i++) buffer[i-1]=(i&15)+'A';
 	/* buffer[len-1]=13; */
 }
 
-void oneWayTestTx(serio_t *serio, int packetLen, int packetCnt)
+void oneWayTestTx(serio_t *serio, sint32 packetLen, sint32 packetCnt)
 {
-	int			txrx = 0;
-	int			txrxok = 0;
+	sint32			txrx = 0;
+	sint32			txrxok = 0;
 	double		duration = 0.0;
 	char		buf[1000];
 	clock_t		first;
@@ -67,10 +67,10 @@ void oneWayTestTx(serio_t *serio, int packetLen, int packetCnt)
 
 }
 
-void oneWayTestRx(serio_t *serio, int packetLen, int packetCnt)
+void oneWayTestRx(serio_t *serio, sint32 packetLen, sint32 packetCnt)
 {
-	int			txrx = 0;
-	int			txrxok = 0;
+	sint32			txrx = 0;
+	sint32			txrxok = 0;
 	double		duration = 0.0;
 	char		buf[1000];
 	clock_t		first;
@@ -85,7 +85,7 @@ void oneWayTestRx(serio_t *serio, int packetLen, int packetCnt)
 
 		txrx++;
 		got = 0;
-		while ((int)got < packetLen) {
+		while ((sint32)got < packetLen) {
 			clock_t before_read = clock();
 			size_t get = packetLen - got;
 			n_received = 6666666;
@@ -113,12 +113,12 @@ void oneWayTestRx(serio_t *serio, int packetLen, int packetCnt)
 
 }
 
-void main(int argc, char **argv)
+void main(sint32 argc, char **argv)
 {
-	int   i;
-	int packetCnt;
+	sint32   i;
+	sint32 packetCnt;
 	size_t packetLen;
-	long baud;
+	sint32 baud;
 	char portname[_MAX_PATH];
 	char *command = "t";
 	serio_res_t err;

@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS			"ANNULLA OFFERTA"
 str_ldl_No_item_selected_in_list		"Nessun oggetto selezionato sulla lista!"
 str_ldl_Foreign_Attitude			"Atteggiamento degli imperi"
 str_ldl_Local					"Locale"
-str_ldl_mp_dbase_out_of_synch			"Il database non è sincronizzato. Torna all'atrio"
+str_ldl_mp_dbase_out_of_synch			"Il database non è sincronizzato. Torna all'atrio" # Needs update
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 
@@ -1186,7 +1186,7 @@ str_ldl_Unit_Help				"Guida unità"
 str_ldl_UNIT_MOVEMENT				"MOVIMENTO UNITÀ"
 str_ldl_UNIT_STATUS				"SITUAZIONE UNITÀ"
 str_ldl_Units					"Unità"
-str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
+str_ldl_Unix_Internet			"Unix Internet requires an active connection to the Internet."
 str_ldl_UNLOAD_ALL				"SCARICA TUTTO"
 str_ldl_Unpredictable				"Imprevedibile"
 str_ldl_Untarnished				"Immacolato"

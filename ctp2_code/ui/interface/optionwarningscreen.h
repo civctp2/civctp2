@@ -23,9 +23,9 @@ typedef enum
 	OWS_OWSTOTAL
 } OWS_ENUM;
 
-void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionwarningscreen_nevermindPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void optionwarningscreen_but1Press(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionwarningscreen_but2Press(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionwarningscreen_nevermindPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 class CloseOptionWarningScreenAction : public aui_Action
 {

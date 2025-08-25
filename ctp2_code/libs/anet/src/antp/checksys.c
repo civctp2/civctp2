@@ -29,9 +29,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 static void checksys()
 {
 	char *memptr[MAX_MEM];
-	int fd[MAX_FD];
+	sint32 fd[MAX_FD];
 	const char file[] = "/dev/null";
-	int i;
+	sint32 i;
 
 	for (i = 0; i < MAX_MEM; i++) {
 		memptr[i] = (char *)malloc(1024*1024);

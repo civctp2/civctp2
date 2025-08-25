@@ -88,7 +88,7 @@ void WorkWinUpdateAction::Execute(aui_Control *control,
 	}
 }
 
-void WorkExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void WorkExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (!g_workWindow) return;
 

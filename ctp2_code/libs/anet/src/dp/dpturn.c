@@ -70,7 +70,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --------------------------------------------------------------------------*/
 DPBOOL dpturn_addPlayer(dp_t *dp, dpid_t id)
 {
-	int loop;
+	sint32 loop;
 	dpturn_peer_t *p;
 
 	if (!dp || !dp->dpt.initialized) return FALSE;
@@ -110,7 +110,7 @@ DPBOOL dpturn_addPlayer(dp_t *dp, dpid_t id)
 --------------------------------------------------------------------------*/
 DPBOOL dpturn_delPlayer(dp_t *dp, dpid_t id)
 {
-	int loop;
+	sint32 loop;
 	dpturn_peer_t *p;
 
 	if (!dp || !dp->dpt.initialized) return FALSE;
@@ -145,7 +145,7 @@ DPBOOL dpturn_delPlayer(dp_t *dp, dpid_t id)
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
 -------------------------------------------------------------------------*/
-static void dp_FAR dp_PASCAL dpturn_listPlayers_cb(dpid_t id, char_t * name, long flags, void *context)
+static void dp_FAR dp_PASCAL dpturn_listPlayers_cb(dpid_t id, char_t * name, sint32 flags, void *context)
 {
 	dp_t *dp = (dp_t *) context;
 
@@ -214,7 +214,7 @@ DP_API dp_result_t dpTurnFinish(dp_t *dp)
 -------------------------------------------------------------------------*/
 DP_API dp_result_t dpTurnPutMove(dp_t *dp, char *buf, size_t buflen)
 {
-	int loop;
+	sint32 loop;
 	dpturn_peer_t *p;
 
 	if (!dp || !dp->dpt.initialized) return dp_RES_BUG;
@@ -258,7 +258,7 @@ DP_API dp_result_t dpTurnPutMove(dp_t *dp, char *buf, size_t buflen)
 -------------------------------------------------------------------------*/
 DP_API dp_result_t dpTurnGetMove(dp_t *dp, dpid_t *id, void *buf, size_t *data_len)
 {
-	int loop;
+	sint32 loop;
 	dpturn_peer_t *p;
 	size_t maxlen;
 
@@ -323,7 +323,7 @@ DP_API dp_result_t dpTurnGetMove(dp_t *dp, dpid_t *id, void *buf, size_t *data_l
 -------------------------------------------------------------------------*/
 dp_result_t dpturn_handlePacket(dp_t *dp, dpid_t idFrom, char *buf, size_t buflen)
 {
-	int loop;
+	sint32 loop;
 	dpturn_peer_t *p;
 #include "dppack1.h"
 	struct dp_turn_handlePacket_pkt_s {
@@ -331,7 +331,7 @@ dp_result_t dpturn_handlePacket(dp_t *dp, dpid_t idFrom, char *buf, size_t bufle
 		union {
 			/*dp_user_addPlayer_packet_t addPlayer;*/
 			/*dp_user_delPlayer_packet_t delPlayer;*/
-			unsigned char buf[dpio_MAXLEN_UNRELIABLE];
+			uint8 buf[dpio_MAXLEN_UNRELIABLE];
 		} u PACK;
 	} *pkt = (struct dp_turn_handlePacket_pkt_s *)buf;
 #include "dpunpack.h"
@@ -396,11 +396,11 @@ DP_API dp_result_t dpTurnPoll(dp_t *dp)
 		char skip[6] PACK;      /* Caution: six bytes after buf trashed by dpSend! */
 	} pkt;
 #include "dpunpack.h"
-	int copyIt = TRUE;
+	sint32 copyIt = TRUE;
 	dp_result_t err;
-	int loop;
+	sint32 loop;
 	dpturn_peer_t *p;
-	int numUnsentMoves;
+	sint32 numUnsentMoves;
 
 	if (!dp) return dp_RES_BUG;
 	if (!dp->dpt.initialized) return dp_RES_EMPTY;

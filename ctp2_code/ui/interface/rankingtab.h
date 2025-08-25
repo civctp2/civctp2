@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added pollution power graph (Nov 2nd 2003 Martin Gühmann)
-// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
+// - Added pollution power graph (Nov 2nd 2003 Martin GÃ¼hmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -44,6 +44,7 @@ class ctp2_Window;
 class ctp2_DropDown;
 class ctp2_ListBox;
 class LineGraph;
+union Cookie;
 
 class RankingTab
 {
@@ -87,7 +88,7 @@ private:
 
 	void Hide();
 
-	void Add_Dropdown_Category(char * category);
+	void Add_Dropdown_Category(const char * category);
 
 	void SetLineGraph( bool line_graph );
 
@@ -99,10 +100,10 @@ private:
 	void CleanupGraph();
 
 	static void SelectRankingActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void LineOrZeroSumButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 };
 

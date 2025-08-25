@@ -29,28 +29,28 @@
 // Modifications from the original Activision code:
 //
 // - Added terrain boni arguments to FindBestTileImprovement to record the
-//   already given terrain boni for that city, by Martin Gühmann
+//   already given terrain boni for that city, by Martin GÃ¼hmann
 // - Added GetBestTerraformImprovement function to find the best terraform
-//   improvement. - Sep. 21st 2004 Martin Gühmann
-// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin Gühmann
+//   improvement. - Sep. 21st 2004 Martin GÃ¼hmann
+// - Cleaned up GetBestTerraformImprovement function. - Oct. 6th 2004 Martin GÃ¼hmann
 // - Replaced ComputeMinimumFoodWorkers by ComputeMinimumWorkers function.
-//   - April 4th 2005 Martin Gühmann
-// - Made some methods const. - April 15th 2005 Martin Gühmann
+//   - April 4th 2005 Martin GÃ¼hmann
+// - Made some methods const. - April 15th 2005 Martin GÃ¼hmann
 // - Added Cleanup to reduce memory leak reports.
 // - Merged with linux changes.
 // - Improved import structure, removed debug allocator versions.
 // - Added copy constructor to bypass a problem concerning memory
-//   allocation. - June 18th 2005 Martin Gühmann
+//   allocation. - June 18th 2005 Martin GÃ¼hmann
 // - Added no test sliders struct.
 // - Added OptimizeSliders method to have a better routine for AI sliders
-//   optimisation. - Jul 18th 2005 Martin Gühmann
-// - Added code for new city resource calculation. (Aug 12th 2005 Martin Gühmann)
-// - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin Gühmann)
-// - AIs now consider path between more than one city. (17-Jan-2008 Martin Gühmann)
+//   optimisation. - Jul 18th 2005 Martin GÃ¼hmann
+// - Added code for new city resource calculation. (Aug 12th 2005 Martin GÃ¼hmann)
+// - GetDBUnitRec added to get government dependent unit recs. (June 5th 2006 Martin GÃ¼hmann)
+// - AIs now consider path between more than one city. (17-Jan-2008 Martin GÃ¼hmann)
 // - Corrected iterator problems (detected with _HAS_ITERATOR_DEBUGGING).
 // - If the AI loses its Capitol it builds a new one in its most productive
-//   city. (08-Sep-2008 Martin Gühmann)
-// - Initialzed all members of BuildUnitList. (02-Jan-2019 Martin Gühmann)
+//   city. (08-Sep-2008 Martin GÃ¼hmann)
+// - Initialzed all members of BuildUnitList. (02-Jan-2019 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -88,8 +88,6 @@ class CityData;
 class BuildingBuildListRecord;
 class BuildListSequenceRecord;
 class WonderBuildListRecord;
-class StrategyRecord::PopAssignmentElement;
-class StrategyRecord::BuildListSequenceElement;
 class UnitBuildListRecord;
 class SlicContext;
 

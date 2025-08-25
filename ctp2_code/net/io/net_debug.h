@@ -6,6 +6,6 @@
 
 #include "net_types.h"
 
-extern "C" char* netdebug_NetErrToString(NET_ERR err);
+extern "C" const char* netdebug_NetErrToString(NET_ERR err);
 
 #endif

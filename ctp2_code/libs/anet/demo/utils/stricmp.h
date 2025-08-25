@@ -27,6 +27,6 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --------------------------------------------------------------------------*/
 #ifndef _stricmp_h_
 #define _stricmp_h_
-int stricmp(const char *s1, const char *s2);
-int strnicmp(const char *s1, const char *s2, int n);
+sint32 stricmp(const char *s1, const char *s2);
+sint32 strnicmp(const char *s1, const char *s2, sint32 n);
 #endif

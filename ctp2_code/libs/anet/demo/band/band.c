@@ -46,30 +46,30 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Packets which simulate game information */
 #define BAND_PACKET_ID dppt_MAKE('B','_')
 typedef struct {
-	unsigned long pkt_round PACK;  /* incremented when test params change */
-	unsigned long pkt_num PACK;    /* incremented with each band packet sent */
+	uint32 pkt_round PACK;  /* incremented when test params change */
+	uint32 pkt_num PACK;    /* incremented with each band packet sent */
 } band_packet_t;
 
 /* Sent as a reply to a band packet to allow measurement of latency */
 #define LATENCY_PACKET_ID dppt_MAKE('B','R')
 typedef struct {
-	unsigned long pkt_num PACK;    /* this is a reply to packet# pkt_num */
+	uint32 pkt_num PACK;    /* this is a reply to packet# pkt_num */
 	clock_t max_ping PACK;         /* the maximum ping I see locally */
 } latency_packet_t;
 
 /* Sent by host to notify clients of new test parameters */
 #define TESTPARAMS_PACKET_ID dppt_MAKE('B','T')
 typedef struct {
-	long pkt_interval PACK;   /* the new interval between packet sends (ms) */
-	long pkt_size PACK;       /* the new packet size to send (Bytes) */
+	sint32 pkt_interval PACK;   /* the new interval between packet sends (ms) */
+	sint32 pkt_size PACK;       /* the new packet size to send (Bytes) */
 } testParams_packet_t;
 
 /* Sent by host to notify clients of the <dll>.ini settings at login time */
 #define DLLINI_PACKET_ID dppt_MAKE('B','D')
 typedef struct {
-	int LimitLowNPPI;
-	int LimitHiNPPI;
-	int DivisorPing2NPPI;
+	sint32 LimitLowNPPI;
+	sint32 LimitHiNPPI;
+	sint32 DivisorPing2NPPI;
 } dllIni_packet_t;
 
 typedef struct {
@@ -82,7 +82,7 @@ typedef struct {
 		latency_packet_t latency;
 		testParams_packet_t testParams;
 		dllIni_packet_t dllIni;
-		unsigned char buf[dpio_MAXLEN_UNRELIABLE];
+		uint8 buf[dpio_MAXLEN_UNRELIABLE];
 	} u PACK;
 } pkt_t;
 
@@ -102,7 +102,7 @@ typedef struct {
   and calculate the round trip ping.
 -----------------------------------------------------------------------------*/
 typedef struct {
-	unsigned pkt_num;
+	uint32 pkt_num;
 	clock_t time_sent;
 } sentList_entry_t;
 
@@ -115,18 +115,18 @@ typedef struct {
   State of the bandwidth testing algorithm is stored here (globally)
 -----------------------------------------------------------------------------*/
 struct {
-	int pkt_interval;           /* interval in ms between band packets */
-	int pkt_size;               /* size in bytes of band packets */
-	int round_duration;         /* duration of current test round */
-	int adaptive_interval;      /* actual interval to use when pkt_interval = 0
+	sint32 pkt_interval;           /* interval in ms between band packets */
+	sint32 pkt_size;               /* size in bytes of band packets */
+	sint32 round_duration;         /* duration of current test round */
+	sint32 adaptive_interval;      /* actual interval to use when pkt_interval = 0
 								 * indicates we should adapt based on pings
 								 */
 	clock_t max_local_ping;     /* maximum of pings seen from here to others */
 	clock_t last_receive_time;  /* last time packet was rec'd from another */
-	unsigned pkt_num;           /* sequence number of current packet */
-	unsigned pkt_round;         /* index of current round */
-	int I_am_host;              /* boolean, I am host */
-	int I_am_logged_in;         /* boolean, I have sent login packet to host */
+	uint32 pkt_num;           /* sequence number of current packet */
+	uint32 pkt_round;         /* index of current round */
+	sint32 I_am_host;              /* boolean, I am host */
+	sint32 I_am_logged_in;         /* boolean, I have sent login packet to host */
 	dp_t *dp;                   /* the network transport object */
 	dpid_t myid;                /* my dp id */
 	dpid_t hostid;              /* the hosts dp id */
@@ -138,15 +138,15 @@ struct {
 								 * adapt global interval based on his pings.
 								 */
 	                            /* tuning parameters from <dll>.ini: */
-	int LimitLowNPPI;           /* lower limit (ms) on adaptive intervals */
-	int LimitHiNPPI;            /* upper limit (ms) on adaptive intervals */
-	int DivisorPing2NPPI;       /* number (1/100ths) to divide ping by to get
+	sint32 LimitLowNPPI;           /* lower limit (ms) on adaptive intervals */
+	sint32 LimitHiNPPI;            /* upper limit (ms) on adaptive intervals */
+	sint32 DivisorPing2NPPI;       /* number (1/100ths) to divide ping by to get
 								 * adaptive interval.
 								 */
 	assoctab_t *ids;            /* information associated with other players */
 	dpid_t replytoid;           /* id to send the next ping reply to */
-	int replyto_idx;            /* index of replytoid in *ids */
-	int quitState;              /* state var handling behavior at quit time */
+	sint32 replyto_idx;            /* index of replytoid in *ids */
+	sint32 quitState;              /* state var handling behavior at quit time */
 	clock_t tfinish;            /* time to really exit, used at quit time */
 	FILE *infp;                 /* pointer to test parameters input file */
 	sentList_entry_t sentList[SENT_LIST_LENGTH];
@@ -155,7 +155,7 @@ struct {
 								 */
 } band;
 
-void quit(int errcode)
+void quit(sint32 errcode)
 {
 	/* get a key so we can see messages before the console window closes */
 	printf("Press any key to continue\n");
@@ -189,7 +189,7 @@ Usage: band [-h] [-f infile]\n\
 /*-----------------------------------------------------------------------------
   Send the current test parameters over the net to one or all other players.
 -----------------------------------------------------------------------------*/
-int send_testParams(dp_t *dp, dpid_t myid, dpid_t dest, int pkt_interval, int pkt_size)
+sint32 send_testParams(dp_t *dp, dpid_t myid, dpid_t dest, sint32 pkt_interval, sint32 pkt_size)
 {
 	dp_result_t err;
 	pkt_t pkt;
@@ -209,7 +209,7 @@ int send_testParams(dp_t *dp, dpid_t myid, dpid_t dest, int pkt_interval, int pk
                  1 if test over,
 				 2 on session lost
 -----------------------------------------------------------------------------*/
-int band_poll()
+sint32 band_poll()
 {
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	clock_t now = eclock();
@@ -343,12 +343,12 @@ int band_poll()
 		case LATENCY_PACKET_ID:
 			band.last_receive_time = now;
 			{
-				int sent_idx;
+				sint32 sent_idx;
 				playerInfo_t *p;
 				assoctab_item_t *pe;
 				clock_t ping;
 				clock_t max_global_ping;
-				int i;
+				sint32 i;
 
 				p = (playerInfo_t *)assoctab_subscript(band.ids, idFrom);
 				p->last_max_ping = pkt.u.latency.max_ping;
@@ -447,7 +447,7 @@ int band_poll()
 	if (band.myid == dp_ID_NONE)
 		return 0;
 
-	if (((long)(now - band.next_ping_time) >= 0) &&
+	if (((sint32)(now - band.next_ping_time) >= 0) &&
 		(band.ids->n_used > 1)) {
 		assoctab_item_t *pe;
 
@@ -477,9 +477,9 @@ int band_poll()
 	/* If we're hosting, and the previous test round is finished,
 	 * read in the new test parameters and send them to the clients.
 	 */
-	if (band.I_am_host && ((long)(now - band.next_round_time) >= 0)) {
+	if (band.I_am_host && ((sint32)(now - band.next_round_time) >= 0)) {
 		char input[256];
-		int temp_interval, temp_duration;
+		sint32 temp_interval, temp_duration;
 
 		if (fgets(input, 256, band.infp) &&
 			sscanf(input, "%d %d %d", &temp_interval, &band.pkt_size, &temp_duration) == 3 &&
@@ -515,7 +515,7 @@ int band_poll()
 	 * adaptive interval, send out a new testParams packet every 2 seconds
 	 * with the appropriate values.
 	 */
-	if (band.I_am_host && (band.pkt_interval == -1) && ((long)(now - band.next_update_time) >= 0)) {
+	if (band.I_am_host && (band.pkt_interval == -1) && ((sint32)(now - band.next_update_time) >= 0)) {
 		band.adaptive_interval = (band.max_local_ping << 4) / band.DivisorPing2NPPI;
 
 		if (band.adaptive_interval > band.LimitHiNPPI)
@@ -537,15 +537,15 @@ int band_poll()
 	 * has entered the game proper, and is ready to receive.
 	 */
 	if (band.hostid != dp_ID_NONE && !band.I_am_logged_in && !band.I_am_host) {
-		*((int *)buf) = LOGIN_PACKET_ID;
+		*((sint32 *)buf) = LOGIN_PACKET_ID;
 		err = dpSend(band.dp, band.myid, band.hostid, dp_SEND_RELIABLE, buf, 2);
 		if (err != dp_RES_OK)
 			printf("band: warning: dpSend returned %d at login\n", err);
 		band.I_am_logged_in = TRUE;
 	}
 
-	if ((long)(now - band.next_send_time) >= 0) {
-		int sent_idx;
+	if ((sint32)(now - band.next_send_time) >= 0) {
+		sint32 sent_idx;
 		pkt_t pkt;
 		clock_t dt;
 
@@ -563,7 +563,7 @@ int band_poll()
 
 		/* Look for total network dropouts in the incoming packets. */
 		dt = (now - band.last_receive_time);
-		if (((long)(dt - band.LimitHiNPPI * 2)) > 0) {
+		if (((sint32)(dt - band.LimitHiNPPI * 2)) > 0) {
 			printf("band: overdue; last rx %d ms ago!\n", ECLOCKS2MS(dt));
 			DPRINT(("band: overdue; last rx %d ms ago!\n", ECLOCKS2MS(dt)));
 		}
@@ -577,15 +577,15 @@ int band_poll()
 	return 0;
 }
 
-void __cdecl main(int argc, char **argv)
+void __cdecl main(sint32 argc, char **argv)
 {
-	int i;
-	int banderr;
+	sint32 i;
+	sint32 banderr;
 	dp_result_t err;
 	dp_session_t sess;
 	size_t size = sizeof(sess);
 	char key[dp_KEY_MAXLEN+1];
-	int keylen;
+	sint32 keylen;
 	dp_transport_t dllname;
 	comm_driverInfo_t dllinfo;
 

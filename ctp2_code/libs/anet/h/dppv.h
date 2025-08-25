@@ -84,10 +84,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* A single variable owned by a particular peer */
 typedef struct {
-	unsigned short key PACK;/* tag for this data element */
-	short flags PACK;		/* see #defines above */
+	uint16 key PACK;/* tag for this data element */
+	sint16 flags PACK;		/* see #defines above */
 	size_t len PACK;		/* length of user data */
-	long crc PACK;			/* checksum */
+	sint32 crc PACK;			/* checksum */
 	char type[pv_VAR_TYPE_LEN] PACK;/* MS-DOS filename extension, null terminated */
 	size_t offset PACK;		/* if not yet fully transferred, next byte to transfer */
 	void *buf PACK;			/* pointer to malloc'd user data */
@@ -96,7 +96,7 @@ typedef struct {
 /* A peer and all its variables */
 typedef struct {
 	assoctab_t *vars PACK;	/* current variables */
-	int dirty PACK;			/* boolean set by pv_set, cleared by pv_update. */
+	sint32 dirty PACK;			/* boolean set by pv_set, cleared by pv_update. */
 	size_t allocated PACK;	/* bytes allocated for incoming.buf */
 	pv_var_t incoming PACK;	/* incoming variable held here until complete */
 } pv_peer_t;
@@ -140,18 +140,18 @@ typedef struct {
 	/* cur_keys lists the variables we're updating this cycle;
 	 * cur_keys[cur_key_index] is the key of the variable we're on.
  	 */
- 	int cur_keys[dp_PLAYERDATA_NKEYS_MAX];
-	int cur_nkeys;
- 	int cur_key_index;
+ 	sint32 cur_keys[dp_PLAYERDATA_NKEYS_MAX];
+	sint32 cur_nkeys;
+ 	sint32 cur_key_index;
 
 	/* cur_dests lists the hosts we're updating this cycle;
 	 * new_dests lists the hosts that have been added since last cycle.
 	 * A playerHdl_t[] is used because that's just what dpio_put wants.
  	 */
 	playerHdl_t cur_dests[dp_MAXPLAYERS] PACK;
-	int cur_ndests PACK;
+	sint32 cur_ndests PACK;
 	playerHdl_t new_dests[dp_MAXPLAYERS] PACK;
-	int new_ndests PACK;
+	sint32 new_ndests PACK;
 } pv_t;
 
 /*--------------------------------------------------------------------------
@@ -177,7 +177,7 @@ dp_result_t pv_update(pv_t *pv, dpid_t owner);
 /*--------------------------------------------------------------------------
  Delete a particular player from the table.
 --------------------------------------------------------------------------*/
-dp_result_t pv_deletePlayer(pv_t *pv, int player);
+dp_result_t pv_deletePlayer(pv_t *pv, sint32 player);
 
 /*--------------------------------------------------------------------------
  Notify pv that a new node has entered the session,
@@ -189,13 +189,13 @@ dp_result_t pv_addNode(pv_t *pv, playerHdl_t node);
  Set variable 'key' for a player.
  Flags currently ignored.
 --------------------------------------------------------------------------*/
-dp_result_t pv_set(pv_t *pv, int player, int key, size_t len, void *buf, int flags);
+dp_result_t pv_set(pv_t *pv, sint32 player, sint32 key, size_t len, void *buf, sint32 flags);
 
 /*--------------------------------------------------------------------------
  Get a variable for a player.
  Flags currently ignored.
 --------------------------------------------------------------------------*/
-dp_result_t pv_get(pv_t *pv, int player, int key, size_t *len, void *buf, int flags);
+dp_result_t pv_get(pv_t *pv, sint32 player, sint32 key, size_t *len, void *buf, sint32 flags);
 
 /* See dp_user_playerData_packet_t and dp_USER_PLAYERDATA_PACKET_ID
  * in dppkt.h
@@ -210,7 +210,7 @@ dp_result_t pv_get(pv_t *pv, int player, int key, size_t *len, void *buf, int fl
 typedef struct {
 	size_t len PACK;			/* let them be huge */
 	dpid_t id PACK;
-	unsigned short key PACK;
+	uint16 key PACK;
 	void *data PACK;			/* only sent on local machine, ptrs ok */
 } pv_user_playerData_packet_t;
 #endif
@@ -218,10 +218,10 @@ typedef struct {
 /* First (and maybe last) packet is sent with this header */
 #define pv_PLAYERDATA_INITIAL_PACKET_ID		dppt_MAKE('d','v')
 typedef struct {
-	unsigned short key PACK;	/* tag for this data element */
-	short flags PACK;				/* see #defines above */
+	uint16 key PACK;	/* tag for this data element */
+	sint16 flags PACK;				/* see #defines above */
 	size_t len PACK;			/* length of user data */
-	long crc PACK;				/* checksum */
+	sint32 crc PACK;				/* checksum */
 	char type[pv_VAR_TYPE_LEN] PACK;	/* MS-DOS filename extension or 0 */
 	dpid_t id PACK;
 } pv_playerData_initial_packet_t;
@@ -240,7 +240,7 @@ typedef struct {
 #define pv_PLAYERDATA_REPLY_PACKET_ID		dppt_MAKE('d','x')
 typedef struct {
 	/* Enough info to identify the transmission in question. */
-	long crc PACK;				/* checksum */
+	sint32 crc PACK;				/* checksum */
 	char type[pv_VAR_TYPE_LEN] PACK;	/* MS-DOS filename extension or 0 */
 	dpid_t id PACK;
 	/* The error - either BAD (for bad CRC) or ALREADY (for stop sending,

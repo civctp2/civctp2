@@ -21,9 +21,9 @@ extern aui_UI *g_ui;
 c3_HeaderSwitch::c3_HeaderSwitch(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -55,10 +55,10 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *text,
-	MBCHAR *pattern,
+	const MBCHAR *text,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:
@@ -90,9 +90,9 @@ c3_HeaderSwitch::c3_HeaderSwitch(
 }
 
 
-AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -102,7 +102,7 @@ AUI_ERRCODE c3_HeaderSwitch::InitCommonLdl( MBCHAR *ldlBlock )
 		MBCHAR imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 		sprintf(imageBlock, "%s.%s", ldlBlock, k_C3_HEADERSWITCH_IMAGE );
 
-        if (aui_Ldl::FindDataBlock(imageBlock))
+		if (aui_Ldl::FindDataBlock(imageBlock))
 		{
 			m_image = new c3_Static(
 				&errcode,

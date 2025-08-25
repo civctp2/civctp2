@@ -55,7 +55,7 @@ class CellUnitList;
 class ControlTabPanel {
 public:
 
-	ControlTabPanel(MBCHAR *ldlBlock);
+	ControlTabPanel(const MBCHAR *ldlBlock);
 
 	void Blank();
 

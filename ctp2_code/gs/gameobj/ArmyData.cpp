@@ -349,19 +349,19 @@ ArmyData::ArmyData(const Army &army, const UnitDynamicArray &units)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
     {
@@ -374,19 +374,19 @@ ArmyData::ArmyData(const Army &army, const CellUnitList &units)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     for (sint32 i = 0; i < units.Num(); ++i)
     {
@@ -399,19 +399,19 @@ ArmyData::ArmyData(const Army &army, Unit &u)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     Insert(u);
 }
@@ -421,19 +421,19 @@ ArmyData::ArmyData(const Army &army)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
 }
 
@@ -442,19 +442,19 @@ ArmyData::ArmyData(CivArchive &archive)
     m_tempKillList          (NULL),
     m_attackedByDefenders   (new UnitDynamicArray),
     m_orders                (new PointerList<Order>),
-    m_owner                 (-1),
-    m_pos                   (),
-    m_hasBeenAdded          (false),
-    m_isPirating            (false),
+    m_killMeSoon            (new PointerList<KillRecord>),
     m_name                  (NULL),
+    m_debugString           (NULL),
+    m_owner                 (-1),
     m_reentryTurn           (-1),
+    m_pos                   (),
     m_reentryPos            (),
     m_debugStringColor      (0),
-    m_killMeSoon            (new PointerList<KillRecord>),
     m_dontKillCount         (0),
+    m_hasBeenAdded          (false),
+    m_isPirating            (false),
     m_needToKill            (false),
-    m_addOrdersAI           (true),
-    m_debugString           (NULL)
+    m_addOrdersAI           (true)
 {
     Serialize(archive);
 }
@@ -2861,7 +2861,7 @@ void ArmyData::FixActors(MapPoint &opos, const MapPoint &npos)
 	sint32 numRest = m_nElements - 1;
 
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		GetActors(top_src, restOfStack);
 	}
 
@@ -3588,7 +3588,6 @@ ORDER_RESULT ArmyData::ThrowParty(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 
 	Unit c = GetAdjacentCity(point);
-	Unit u = m_array[uindex];
 
 	if(c.m_id == 0)
 		return ORDER_RESULT_ILLEGAL;
@@ -4488,8 +4487,6 @@ ORDER_RESULT ArmyData::Advertise(const MapPoint &point)
 
 	if(!CanAdvertise(uindex))
 		return ORDER_RESULT_ILLEGAL;
-
-	Unit u = m_array[uindex];
 
 	// establish that building there. Used to spread corporations
 	for (sint32 i = m_nElements - 1; i>= 0; i--) {
@@ -6492,7 +6489,7 @@ bool ArmyData::ExecuteOrders(bool propagate)
 			if (g_theDiplomacyLog) {
 				g_theDiplomacyLog->PopRegardRequest();
 			}
-#endif _DEBUG
+#endif // _DEBUG
 
 		if (me.IsValid())
 		{
@@ -6583,19 +6580,22 @@ void ArmyData::InformAI(const UNIT_ORDER_TYPE order_type, const MapPoint &pos)
 	Diplomat & city_diplomat = Diplomat::GetDiplomat(city.GetOwner());
 	switch (order_type)
 	{
-	case UNIT_ORDER_STEAL_TECHNOLOGY:
-		city_diplomat.GetCurrentDiplomacy(m_owner).GetCreateParkRegardCost(cost);
-		// CreateParkRegardCost since there's no 'StealTechologyRegardCost'
+		case UNIT_ORDER_STEAL_TECHNOLOGY:
+			city_diplomat.GetCurrentDiplomacy(m_owner).GetCreateParkRegardCost(cost);
+			// CreateParkRegardCost since there's no 'StealTechologyRegardCost'
 
-		StringId strId;
-		g_theStringDB->GetStringID("REGARD_EVENT_STEAL_TECHNOLOGY", strId);
-		city_diplomat.LogRegardEvent( m_owner,
-			cost,
-			REGARD_EVENT_MILITARY_SAFETY,
-			strId);
+			StringId strId;
+			g_theStringDB->GetStringID("REGARD_EVENT_STEAL_TECHNOLOGY", strId);
+			city_diplomat.LogRegardEvent( m_owner,
+				cost,
+				REGARD_EVENT_MILITARY_SAFETY,
+				strId);
 
-	city_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_RESEARCH_PACT);
-	break;
+		city_diplomat.LogViolationEvent(m_owner, PROPOSAL_TREATY_RESEARCH_PACT);
+		break;
+
+		default:
+			break;
 	}
 }
 
@@ -7510,6 +7510,8 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 			case SOUTHWEST:  dirs = N_F | NE_F | E_F; break;
 			case WEST:       dirs = N_F | NE_F | E_F | SE_F | S_F; break;
 			case NORTHWEST:  dirs = S_F | SE_F | E_F; break;
+			default:
+				break;
 		}
 
 	    DynamicArray<MapPoint> points;
@@ -7540,6 +7542,7 @@ void ArmyData::UpdateZOCForMove(const MapPoint &pos, WORLD_DIRECTION d)
 		case NORTHEAST:  dirs = N_F | NE_F | E_F; break;
 		case EAST:       dirs = N_F | NE_F | E_F | SE_F | S_F; break;
 		case SOUTHEAST:  dirs = S_F | SE_F | E_F; break;
+		default: Assert(false); break;
 		}
 
 		for(dd = 0; dd < (sint32)NOWHERE; dd++) {
@@ -7724,7 +7727,7 @@ void ArmyData::MoveActors(const MapPoint &pos, bool teleport)
 
 	if (numRest > 0) {
 		sint32 n = 0;
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		for(i = 0; i < m_nElements; i++) {
 			if(!m_array[i].Flag(k_UDF_TELEPORT_DEATH) && m_array[i].m_id != top_src.m_id) {
 				restOfStack[n++] = m_array[i].GetActor();
@@ -8182,7 +8185,7 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 
 	if (numRest > 0)
 	{
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		GetActors(top_src, restOfStack);
 	}
 
@@ -8709,13 +8712,6 @@ sint32 ArmyData::Fight(CellUnitList &defender)
 		so->AddUnit(ta);
 		so->AddUnit(td);
 		g_slicEngine->Execute(so);
-	}
-
-	double defenders_bonus = 0.0;
-
-	if (c.m_id != (0))
-	{
-		defenders_bonus = c.GetDefendersBonus();
 	}
 
 //	double amr = 1.0 / GetHPModifier();
@@ -9514,7 +9510,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		{
 			g_theDiplomacyLog->PopRegardRequest();
 		}
-#endif _DEBUG
+#endif // _DEBUG
 
 	if(result == ORDER_RESULT_ILLEGAL)
 	{
@@ -9591,6 +9587,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		case ORDER_RESULT_INCOMPLETE:
 			deduct = true;
 			break;
+		default:
+			break;
 	}
 
 	if(result == ORDER_RESULT_SUCCEEDED
@@ -9603,6 +9601,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			case UNIT_ORDER_ASSASSINATE:       sText = "176AssassinationCompleteVictim"; break;
 			case UNIT_ORDER_INDULGENCE:        sText = "155IndulgenceCompleteVictim"; break;
 			case UNIT_ORDER_INJOIN:            sText = "159InjunctionCompleteVictim"; break;
+			default: break;
 		}
 
 		if (sText)
@@ -9678,7 +9677,7 @@ void ArmyData::GetCurrentHP
 
 	for(sint32 i = 0; i < count; ++i)
 	{
-		Assert(i < MAX_UNIT_COUNT);
+		Assert(static_cast<size_t>(i) < MAX_UNIT_COUNT);
 
 		unit_type[i]    = m_array[i].GetType();
 		unit_hp  [i]    = std::max<sint32>(static_cast<sint32>(m_array[i].GetHP()), 0);

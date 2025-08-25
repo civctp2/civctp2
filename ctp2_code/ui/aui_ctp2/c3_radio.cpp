@@ -21,9 +21,9 @@ extern C3UI			*g_c3ui;
 c3_Radio::c3_Radio(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -46,9 +46,9 @@ c3_Radio::c3_Radio(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:
@@ -66,7 +66,7 @@ c3_Radio::c3_Radio(
 }
 
 
-AUI_ERRCODE c3_Radio::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_Radio::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );

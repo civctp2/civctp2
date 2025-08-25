@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define serio_h
 
 #include <windows.h>
+#include "types.h"
 
 #define serio_BUFSIZE 4096		/*  Must be power of 2 for serio_WRAP! */
 
@@ -41,10 +42,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* User code should neither declare nor peek at these. */
 typedef struct {
 	OVERLAPPED overlap;			/* Shared status from operating system */
-	int pending;				/* TRUE after issuing read or write */
+	sint32 pending;				/* TRUE after issuing read or write */
 	char buf[serio_BUFSIZE];	/* empty if head == tail */
-	int head;					/* offset of next byte to remove */
-	int tail;					/* offset at which to add next byte */
+	sint32 head;				/* offset of next byte to remove */
+	sint32 tail;				/* offset at which to add next byte */
 } serio_q_t;
 
 /* Private structure manipulated by the public serio_* methods below. */
@@ -69,7 +70,7 @@ typedef int serio_res_t;	/* Error/success status type. */
  Call with a pointer to an uninitizlized serio_t.
  If you call this, don't call serio_open_handle().
 -------------------------------------------------------------------------*/
-serio_res_t serio_open(serio_t *serio, long baud, const char *portname);
+serio_res_t serio_open(serio_t *serio, sint32 baud, const char *portname);
 
 /*-------------------------------------------------------------------------
  Given a Win32 comm handle already initialized, build a serio_t around it.

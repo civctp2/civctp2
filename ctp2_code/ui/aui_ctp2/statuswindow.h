@@ -18,7 +18,7 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern )
+		const MBCHAR *pattern )
 		:
 		C3Window( retval, id, x, y, width, height, bpp, pattern, AUI_WINDOW_TYPE_SINKING )
 		{}

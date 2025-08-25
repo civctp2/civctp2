@@ -122,7 +122,7 @@ void dpUnloadDLL(dpio_t *dpio)
  ports is filled with descriptions of the available ports.
  *pnPorts is set to the number of portnames placed in the ports array.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, int maxports, int *pnPorts)
+DP_API dp_result_t DP_APIX dpEnumPorts(const dp_transport_t *transport, commPortName_t *ports, sint32 maxports, sint32 *pnPorts)
 {
 	/* unimplemented */
 	return dp_RES_BAD;

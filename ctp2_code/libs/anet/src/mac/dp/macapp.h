@@ -30,14 +30,16 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef macapp_h
 #define macapp_h
 
+#include "types.h"
+
 #define STUB_NAME "anetstub"
 #define MAX_PATH 255
 #define STUB_EVENTID 'STUB'		// defines events used by the stub
 #define STUB_LAUNCLASS 'LAUN'	// launch request for stub
 #define STUB_OBITCLASS 'OBIT'	// app die requests relaunch of netshell
-#define pttolong(s) ((long) ((s).v << 16 | (s).h ))
+#define pttolong(s) ((sint32) ((s).v << 16 | (s).h ))
 
-Point longtopt(long n);
+Point longtopt(sint32 n);
 
 #ifdef dp_h
 dp_result_t getstub(ProcessSerialNumber *stubPSN);

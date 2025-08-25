@@ -20,7 +20,7 @@ ctp2_TextField::ctp2_TextField(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -45,7 +45,7 @@ ctp2_TextField::ctp2_TextField(
 	const MBCHAR *pattern,
 	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),

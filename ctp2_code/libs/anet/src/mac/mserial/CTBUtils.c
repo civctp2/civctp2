@@ -49,16 +49,16 @@ OSErr OpenCTBConnection(ConnHandle* connection) {
 	OSErr				error = noErr;
 	char*				here;
 	char*				end;
-	long				baud;
+	sint32				baud;
 	Boolean			done;
-	short				result = noErr;
+	sint16				result = noErr;
 
 	if (*connection != nil) {
 
 		//	put our A5 value into the connection record so that the search callbacks
 		//	can get it and restore it
 
-		CMSetUserData(*connection,(long) LMGetCurrentA5());
+		CMSetUserData(*connection, (sint32) LMGetCurrentA5());
 
 		// CMChoose Dialog has to hang off this point (global coordinates)
 
@@ -213,7 +213,7 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection) {
 	Ptr				configString = nil;
 	CMErr				err;
 	CMBufferSizes	bufSizes;
-	short				procID;
+	sint16				procID;
 	StringPtr		temp = nil;
 	Str255			toolName;
 

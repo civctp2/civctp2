@@ -42,7 +42,7 @@ public:
 
 	static const aui_Control *GetOwner() { return m_owner; }
 
-	StatusBar(MBCHAR *ldlBlock);
+	StatusBar(const MBCHAR *ldlBlock);
 
 	static void CleanUp(){
 		if(m_text){

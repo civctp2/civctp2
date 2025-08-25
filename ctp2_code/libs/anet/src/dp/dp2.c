@@ -236,7 +236,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(_WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -329,10 +329,10 @@ typedef struct {
 
 #if !defined(NDEBUG)
 
-int dp_PASCAL dp_hosts_cb(
+sint32 dp_PASCAL dp_hosts_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status);
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status);
 
 #define dp_assertValidSessionContext(s) {\
 	assert((s) != NULL);\
@@ -364,9 +364,9 @@ int dp_PASCAL dp_hosts_cb(
 /* Forward declarations (ugh) */
 static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess);
 static dp_result_t dp_setSessionTablePeer(dp_t *dp, playerHdl_t h, dp_species_t sessionType);
-static dp_result_t dp_setSessionDesc( dp_t *dp, dp_session_t *buf, long flags);
+static dp_result_t dp_setSessionDesc( dp_t *dp, dp_session_t *buf, sint32 flags);
 static dpid_t dp_findLowestHost(dp_t *dp, clock_t maxAge);
-static void dp_election_start(dp_t *dp, int hostDeleted);
+static void dp_election_start(dp_t *dp, sint32 hostDeleted);
 static void dp_election_end(dp_t *dp);
 static void dp_election_poll(dp_t *dp);
 static void dp_election_peer_deleted(dp_t *dp, playerHdl_t h);
@@ -374,16 +374,16 @@ static dp_result_t dpHandleVote(dp_t *dp, playerHdl_t h, char *req, size_t reqle
 static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest);
 static void dpElectMaster(dp_t *dp);
 static dp_result_t dpSendVictory(dp_t *dp);
-static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags);
-static int dp_getHdls(dp_t *dp, dpid_t idTo, playerHdl_t *dests, int flags);
+static sint32 dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], sint32 flags);
+static sint32 dp_getHdls(dp_t *dp, dpid_t idTo, playerHdl_t *dests, sint32 flags);
 
 /*----------------------------------------------------------------------
  Debugging routines.
 ----------------------------------------------------------------------*/
 #ifdef _DEBUG
-static void dumpBuf(const char *buf, int len)
+static void dumpBuf(const char *buf, size_t len)
 {
-	int i;
+	size_t i;
 	for (i=0; i<len; i++) {
 		DPRINT(("%02x ", 255 & buf[i]));
 		if ((i % 24) == 23) {
@@ -398,22 +398,22 @@ static void dumpBuf(const char *buf, int len)
 
 #ifdef _DEBUG
 static void printAdr(
-	int adrLen,
-	const unsigned char adr[dp_MAX_ADR_LEN])
+	sint32 adrLen,
+	const uint8 adr[dp_MAX_ADR_LEN])
 {
 	char buf[256];
-	int i;
+	sint32 i;
 
 	buf[0] = 0;
 	for (i=0; i<adrLen-1; i++)
-		sprintf(buf + 3*i, "%02x:", ((unsigned char *)adr)[i]);
-	sprintf(buf + 3*i, "%02x", ((unsigned char *)adr)[i]);
+		sprintf(buf + 3*i, "%02x:", ((uint8 *)adr)[i]);
+	sprintf(buf + 3*i, "%02x", ((uint8 *)adr)[i]);
 	DPRINT(("%s [", buf));
 
 	buf[0] = 0;
 	for (i=0; i<adrLen-1; i++)
-		sprintf(buf + strlen(buf), "%d.", ((unsigned char *)adr)[i]);
-	sprintf(buf + strlen(buf), "%d]", ((unsigned char *)adr)[i]);
+		sprintf(buf + strlen(buf), "%d.", ((uint8 *)adr)[i]);
+	sprintf(buf + strlen(buf), "%d]", ((uint8 *)adr)[i]);
 	DPRINT(("%s", buf));
 }
 #else
@@ -449,8 +449,8 @@ Debugging dump routines
 /* Check a dp_t's session contexts for validity */
 void dp_assertValidSessionContexts(dp_t* d)
 {
-	int i;
-	int count = 0;
+	sint32 i;
+	sint32 count = 0;
 
 	/* All session contexts should be internally valid */
 	/* One session context should be the current one */
@@ -469,11 +469,11 @@ void dp_assertValidSessionContexts(dp_t* d)
 
 	/* Each handle's session should be in sessionContexts */
 	for(i = 0; i < d->hdl2sess->n_used; i++) {
-		int found = FALSE;
+		sint32 found = FALSE;
 		dp_sessionContext_t **ppS = NULL;
 		assoctab_item_t *pe = assoctab_getkey(d->hdl2sess, i);
 		playerHdl_t h;
-		int j;
+		sint32 j;
 		assert(pe != NULL);
 		h = pe->key;
 		ppS = (dp_sessionContext_t **) &pe->value;
@@ -524,7 +524,7 @@ void
 dumpAdrTable(
 	dp_t *dp)
 {
-	int i;
+	sint32 i;
 
 	assert(dp != NULL);
 	assert(dp->dpid2commHdl != NULL);
@@ -537,7 +537,7 @@ dumpAdrTable(
 	}
 }
 
-void dumpSessContext(dp_sessionContext_t *sess, int indent)
+void dumpSessContext(dp_sessionContext_t *sess, sint32 indent)
 {
 	char buf[120] = "";
 
@@ -558,7 +558,7 @@ void dumpSessContext(dp_sessionContext_t *sess, int indent)
 
 void dumpSessionContexts(dp_t *dp)
 {
-	int i;
+	sint32 i;
 	DPRINT(("%d Session Contexts in dp %p:\n", dp->sessionContexts->n_used, dp));
 	for(i = 0; i < dp->sessionContexts->n_used; i++) {
 		dumpSessContext(*((dp_sessionContext_t **)dynatab_subscript(dp->sessionContexts, i)),1);
@@ -581,7 +581,7 @@ void dumpSessionContexts(dp_t *dp)
 -------------------------------------------------------------------------*/
 
 #ifdef dp_MUSTSWAP
-static void dpSwapJoinPacketT(dp_join_packet_t *p, int len)
+static void dpSwapJoinPacketT(dp_join_packet_t *p, sint32 len)
 {
 	p->joinKarma = SwapBytes2(p->joinKarma);
 	p->sessionKarma = SwapBytes2(p->sessionKarma);
@@ -630,7 +630,8 @@ playerHdl_t dpid2commHdl(
 		dp_assertValid(dp);
 		return PLAYER_NONE;
 	}
-	DPRINT(("dpid2commHdl(%d) returns %d\n", id, *pH));
+
+	DPRINT(("dpid2commHdl(%d) from %p of size %zu with used %d returns %d\n", id, dp->dpid2commHdl, dp->dpid2commHdl->unit, dp->dpid2commHdl->n_used, *pH));
 	dp_assertValid(dp);
 	return *pH;
 }
@@ -643,7 +644,7 @@ dpid_t dp_commHdl2dpid(
 	dp_t *dp,
 	playerHdl_t h)
 {
-	int i;
+	sint32 i;
 
 	if (!dp->dpid2commHdl)
 		return dp_ID_NONE;
@@ -686,7 +687,7 @@ void commHdl4dpid(
 	}
 	firstId = (dpid_t) (id & ~(dp_PLAYERS_PER_HOST-1));	/* Skip back to firstId */
 	if (h == PLAYER_NONE) {
-		int err = assoctab_subscript_delete(dp->dpid2commHdl, firstId);
+		sint32 err = assoctab_subscript_delete(dp->dpid2commHdl, firstId);
 		DPRINT(("commHdl4dpid: deleting commHdl[%d..%d]; fail:%d\n",
 			firstId, firstId+dp_PLAYERS_PER_HOST-1, err));
 		dp_assertValid(dp);
@@ -727,7 +728,7 @@ static dp_result_t dpSendErrorPacket(
 {
 	struct {
 		dp_packetType_t   tag;
- 		dp_error_packet_t body;
+		dp_error_packet_t body;
 	} PACK pkt;
 
 	dp_assertValid(dp);
@@ -829,7 +830,7 @@ static dp_result_t dpOpenLocalResult(dp_t *dp, dp_result_t reason, dpid_t id)
  happens on remote close
 ----------------------------------------------------------------------*/
 static void dp_openHdl_cb(
-	playerHdl_t h, int n_hdls, dp_result_t status, void *context)
+	playerHdl_t h, sint32 n_hdls, dp_result_t status, void *context)
 {
 	dp_t *dp = (dp_t *) context;
 	DPRINT(("dp_openHdl_cb: h:%x status:%d t:%d\n", h, status, *(dp->dpio->now)));
@@ -838,7 +839,7 @@ static void dp_openHdl_cb(
 	if (dp) {
 		dp_assertValid(dp);
 		if ((status == dp_RES_PEER_CLOSED) || (status == dp_RES_CLOSED)) {
-			int i;
+			sint32 i;
 			dptab_peer_t *peer;
 			dp_sessionContext_t **spp;
 
@@ -945,8 +946,8 @@ static void dp_openHdl_cb(
 		}
 		/* Check for a user callback */
 		if (dp->openConn_callback) {
-			int len = dp_MAX_ADR_LEN;
-			static unsigned char adr[dp_MAX_ADR_LEN];
+			sint32 len = dp_MAX_ADR_LEN;
+			static uint8 adr[dp_MAX_ADR_LEN];
 			dp_result_t err = dp_RES_OK;
 
 			memset(adr, 0, sizeof(adr));
@@ -973,13 +974,13 @@ static void dp_openHdl_cb(
  If any field is too long, it is truncated.
  Returns length used.
 ----------------------------------------------------------------------*/
-DP_API int dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_session_t *p, char *buf)
+DP_API size_t dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_session_t *p, char *buf)
 {
 	char *q = buf;
 	const char *s;
 	char *lenp;
-	int len;
-	int subkeylen = dp->dpio->myAdrLen + sizeof(dp_karma_t);
+	size_t len;
+	sint32 subkeylen = dp->dpio->myAdrLen + sizeof(dp_karma_t);
 
 	DPRINT(("dp_pack_session: deftype %d, ", dp->defaultSessionType));
 	dprint_sess(dp, p, "");
@@ -998,12 +999,12 @@ DP_API int dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_s
 	lenp = q++;	/* skip len */
 	for (len=0, s=p->sessionName; (len < dp_SNAMELEN-1) && *s; len++)
 		*q++ = *s++;
-	*lenp = len;
+	*lenp = (char)len;
 
 	lenp = q++;	/* skip len */
 	for (len=0, s=p->szPassword; (len < dp_PASSWORDLEN-1) && *s; len++)
 		*q++ = *s++;
-	*lenp = len;
+	*lenp = (char)len;
 
 	/* concatenate user fields and strip trailing 0's */
 	lenp = q++;	/* skip len */
@@ -1015,7 +1016,7 @@ DP_API int dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_s
 	for (len=sizeof(p->szUserField)+sizeof(p->dwUser1); len > 0; len--)
 		if (q[len-1])
 			break;
-	*lenp = len;
+	*lenp = (char)len;
 	q += len;
 
 	DPRINT(("dp_pack_session: subkey %s, adrMaster ",
@@ -1045,11 +1046,11 @@ DP_API int dp_pack_session(dp_t *dp, dp_species_t defaultSessionType, const dp_s
  into the fluffy form we use internally.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const char *buf, size_t buflen, dp_session_t *p)
+DP_API size_t dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, size_t buflen, dp_session_t *p)
 {
-	const unsigned char *q = (const unsigned char *)buf;
-	int len;
-	unsigned char userbuf[sizeof(p->szUserField)+sizeof(p->dwUser1)];
+	const uint8 *q = (const uint8 *)buf;
+	size_t len;
+	uint8 userbuf[sizeof(p->szUserField)+sizeof(p->dwUser1)];
 	dp_assertValid(dp);
 
 	/* Handle old uncompressed records */
@@ -1073,8 +1074,8 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 
 	assert(dp->defaultSessionType != 0);
 	p->sessionType = dp->defaultSessionType;
-	p->maxPlayers = *(unsigned char *)q++;
-	p->currentPlayers = *(unsigned char *)q++;
+	p->maxPlayers = *(uint8 *)q++;
+	p->currentPlayers = *(uint8 *)q++;
 	p->flags = *q++ & 255;
 
 	len = *q++;
@@ -1099,7 +1100,7 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 	memset(userbuf, 0, sizeof(userbuf));
 	memcpy(userbuf, q, len);
 	q += len;
-	p->dwUser1 = (long) dpMAKELONG(userbuf[0], userbuf[1], userbuf[2], userbuf[3]);
+	p->dwUser1 = (sint32) dpMAKELONG(userbuf[0], userbuf[1], userbuf[2], userbuf[3]);
 	/*DPRINT(("dp_unpack_session: dwuser1 %02x%02x%02x%02x = %08x\n", userbuf[0], userbuf[1], userbuf[2], userbuf[3], p->dwUser1));*/
 
 	len -= 4;
@@ -1111,7 +1112,7 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 	len = buflen - ((uintptr_t)q - (uintptr_t)buf);
 	if (len > 0) {
 		/* session has migrated.  Receive new master address. */
-		assert(len >= dp->dpio->myAdrLen);
+		assert((sint32)len >= dp->dpio->myAdrLen);
 		memcpy(p->adrMaster, q, dp->dpio->myAdrLen);
 		DPRINT(("dp_unpack_session: session has migrated: new adr "));
 		printAdr(dp->dpio->myAdrLen, p->adrMaster);
@@ -1130,7 +1131,7 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
  Don't send subkey.
  Returns length used.
 ----------------------------------------------------------------------*/
-static int dp_pack_session(dp_t *dp, const dp_session_t *p, char *buf)
+static sint32 dp_pack_session(dp_t *dp, const dp_session_t *p, char *buf)
 {
 	size_t len;
 
@@ -1147,7 +1148,7 @@ static int dp_pack_session(dp_t *dp, const dp_session_t *p, char *buf)
  All this does right now is add back in the subkey.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const char *buf, dp_session_t *p)
+DP_API sint32 dp_unpack_session(dp_t *dp, const char *subkey, sint32 subkeylen, const char *buf, dp_session_t *p)
 {
 	size_t len;
 
@@ -1164,11 +1165,11 @@ DP_API int dp_unpack_session(dp_t *dp, const char *subkey, int subkeylen, const 
 /*----------------------------------------------------------------------
  Callback for addition/deletion of session entries.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_sessions_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dp_session_t sess;
@@ -1292,9 +1293,9 @@ dp_sessions_cb(
  21 instead of 12 of these into one packet.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-static int dp_unpack_host(dpid_t firstId, int myAdrLen, const char *buf, dp_host_t *p, int length)
+static size_t dp_unpack_host(dpid_t firstId, sint32 myAdrLen, const char *buf, dp_host_t *p, size_t length)
 {
-	const unsigned char *q = (const unsigned char *)buf;
+	const uint8 *q = (const uint8 *)buf;
 
 	/*
 	 * Make sure that the package is of a valid size
@@ -1332,7 +1333,7 @@ static int dp_unpack_host(dpid_t firstId, int myAdrLen, const char *buf, dp_host
  Pack a dp_host_t into a compact, uniform byte order form for transmission.
  Returns length used.
 ----------------------------------------------------------------------*/
-static int dp_pack_host(int myAdrLen, const dp_host_t *p, char *buf)
+static size_t dp_pack_host(sint32 myAdrLen, const dp_host_t *p, char *buf)
 {
 	char *q = buf;
 
@@ -1363,12 +1364,12 @@ static int dp_pack_host(int myAdrLen, const dp_host_t *p, char *buf)
  If any field is too long, it is truncated.
  Returns length used.
 ----------------------------------------------------------------------*/
-static int dp_pack_playerId(const dp_playerId_t *p, char *buf)
+static size_t dp_pack_playerId(const dp_playerId_t *p, char *buf)
 {
 	char *q = buf;
 	const char *s;
 	char *lenp;
-	int len;
+	sint32 len;
 
 	*q++ = (char) dpGETSHORT_FIRSTBYTE(p->karma);
 	*q++ = (char) dpGETSHORT_SECONDBYTE(p->karma);
@@ -1401,10 +1402,10 @@ static int dp_pack_playerId(const dp_playerId_t *p, char *buf)
  Does not fill in address field; that has to be looked up in the hosts table.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-int dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
+size_t dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 {
-	const unsigned char *q = (const unsigned char *)buf;
-	int len;
+	const uint8 *q = (const uint8 *)buf;
+	sint32 len;
 
 	p->karma = (dp_karma_t) dpMAKESHORT(q[0], q[1]);
 	q += 2;
@@ -1438,7 +1439,7 @@ int dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p)
 	DPRINT(("dp_unpack_playerId(id %d): name %s\n", id, p->name));
 #endif
 
-  return ((uintptr_t)q - (uintptr_t)buf);
+	return ((uintptr_t)q - (uintptr_t)buf);
 }
 
 /*--------------------------------------------------------------------------
@@ -1520,7 +1521,7 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
 	if (dptab_getTableContext(dp->players, dp_rplayers_cb)) {
 		/* they want a new style message instead of an old one */
 		char subkey[2];
-		int subkeylen;
+		sint32 subkeylen;
 		subkeylen = 0;
 		subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(pp->id);
 		subkey[subkeylen++] = (char) dpGETSHORT_SECONDBYTE(pp->id);
@@ -1572,11 +1573,11 @@ static void dp_player_notify(dp_t *dp, dp_playerId_t *pp, dp_host_t *phost, dp_r
  Can handle multiple sessions.  Context pointer for this callback is a pointer
  to a structure holding pointers to this session's tables.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_playervars_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_sessionContext_t *pSess = (dp_sessionContext_t *)context;
 	dp_t *dp;
@@ -1613,7 +1614,7 @@ dp_playervars_cb(
 	 * variables. */
 	{	dptab_table_t *playervars;
 		char key[dptab_KEY_MAXLEN];
-		int keylen = 0;
+		sint32 keylen = 0;
 		key[keylen++] = dp_KEY_PLAYER_VARIABLES;
 		key[keylen++] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
 		key[keylen++] = (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
@@ -1630,10 +1631,10 @@ dp_playervars_cb(
 	}
 
 	if (table->keylen == 3) { /* one of our own player's variable */
-		id = dp->firstId + (unsigned short) dpMAKESHORT(subkey[0], 0);
+		id = dp->firstId + (uint16) dpMAKESHORT(subkey[0], 0);
 	} else {
-		dpid_t firstid = (unsigned short) dpMAKESHORT(table->key[3], table->key[4]);
-		id = firstid + (unsigned short) dpMAKESHORT(subkey[0], 0);
+		dpid_t firstid = (uint16) dpMAKESHORT(table->key[3], table->key[4]);
+		id = firstid + (uint16) dpMAKESHORT(subkey[0], 0);
 	}
 	DPRINT(("dp_playervars_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
@@ -1645,7 +1646,7 @@ dp_playervars_cb(
 		pkt.tag = dp_USER_PLAYERDATA_PACKET_ID;
 		pkt.body.len = sent;
 		pkt.body.id = id;
-		pkt.body.key = (unsigned short) dpMAKESHORT(subkey[1], subkey[2]);
+		pkt.body.key = (uint16) dpMAKESHORT(subkey[1], subkey[2]);
 		/* the following is currently invalid since buf is a local variable */
 		pkt.body.data = buf;
 		err = dpio_put_reliable(dp->dpio, &me, 1, &pkt, sizeof(pkt.tag)+sizeof(pkt.body), NULL);
@@ -1661,9 +1662,9 @@ dp_playervars_cb(
 	return 0;
 }
 
-static short dp_getDesiredHandleOptions(dp_t *dp, playerHdl_t h)
+static sint16 dp_getDesiredHandleOptions(dp_t *dp, playerHdl_t h)
 {
-	short opt;
+	sint16 opt;
 
 	/* Check pings, if dpSetPingIntervals() was called.
 	 * Not sure this is quite right for a server, but it's not unreasonable.
@@ -1687,11 +1688,11 @@ static short dp_getDesiredHandleOptions(dp_t *dp, playerHdl_t h)
  Only one session at a time can be open.
  This callback refers to the default session's variables in dp for convenience.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_hosts_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp;
 	dp_sessionContext_t *pSess = (dp_sessionContext_t *)context;
@@ -1699,7 +1700,7 @@ dp_hosts_cb(
 	dpid_t id;
 	dp_result_t err;
 	playerHdl_t h = dp_ID_NONE;
-	int itsMe;
+	sint32 itsMe;
 
 	dptab_assertValid(dptab);
 	dptab_assertValidTable(table);
@@ -1811,7 +1812,7 @@ dp_hosts_cb(
 
 			dptab_table_t *playervars;
 			char key[dptab_KEY_MAXLEN];
-			int keylen;
+			sint32 keylen;
 			dp_session_t sess;
 			err = dpGetSessionDescById(dp, pSess->sess_subkey, &sess, 0);
 			if (err != dp_RES_OK) {
@@ -1878,7 +1879,7 @@ dp_hosts_cb(
 		} else if (dp_RES_DELETED == status) {	/* someone else deleted */
 			/* Delete the host's subscription to our player variable table */
 			char key[dptab_KEY_MAXLEN];
-			int keylen;
+			sint32 keylen;
 			if (pSess->playervars)
 				err = dptab_deleteSubscriber(dp->dt, pSess->playervars, h);
 			/* Delete publisher and host's player variable table */
@@ -1953,18 +1954,18 @@ dp_hosts_cb(
  Only does anything on the host.
  On the host, it copies records into the matching players table.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_myplayers_cb(
 	dptab_t *dptab,
 	dptab_table_t *table,
 	playerHdl_t src,
 	playerHdl_t dest,
 	char *subkey,
-	int subkeylen,
+	sint32 subkeylen,
 	void *buf,
 	size_t sent,
 	size_t total,
-	int seconds_left,
+	sint32 seconds_left,
 	void *context,
 	dp_result_t status)
 {
@@ -2001,7 +2002,7 @@ dp_myplayers_cb(
 		dpid_t id = (dpid_t) dpMAKESHORT(subkey[0], subkey[1]);
 		size_t len_used = dp_unpack_playerId(id, buf, &player);
 		dp_uid_t uid = dp_UID_NONE;
-		int playerlen;
+		size_t playerlen;
 		char playerbuf[dpio_MAXLEN_RELIABLE];
 
 		if (len_used != total) {
@@ -2041,18 +2042,18 @@ dp_myplayers_cb(
  Can handle multiple sessions.  Context pointer for this callback is a pointer
  to a structure holding pointers to this session's tables.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_players_cb(
 	dptab_t *dptab,
 	dptab_table_t *table,
 	playerHdl_t src,
 	playerHdl_t dest,
 	char *subkey,
-	int subkeylen,
+	sint32 subkeylen,
 	void *buf,
 	size_t sent,
 	size_t total,
-	int seconds_left,
+	sint32 seconds_left,
 	void *context,
 	dp_result_t status)
 {
@@ -2102,7 +2103,7 @@ dp_players_cb(
 		size_t rawbuflen;
 		/* Must unpack when retrieving records from dptab */
 		dp_unpack_session(dp, pSess->sess_subkey, pSess->sess_subkeylen, sessbuf, sesslen, &sess);
-		sess.currentPlayers = (short) dptab_tableSize(table);
+		sess.currentPlayers = (sint16) dptab_tableSize(table);
 		/* Callback happens before record actually deleted */
 		if (status == dp_RES_DELETED)
 			sess.currentPlayers--;
@@ -2121,9 +2122,9 @@ dp_players_cb(
 	/* Even if not master, delete player from group player, group myplayer,
 	 * and player variable tables. */
 	if (status == dp_RES_DELETED) {
-		int i;
+		sint32 i;
 		char key[dptab_KEY_MAXLEN];
-		int keylen = 5;
+		sint32 keylen = 5;
 
 		if (!bIAmGameServer(dp)) {
 			/* Tell the server about this guy's score, since he's leaving
@@ -2160,7 +2161,7 @@ dp_players_cb(
 			if ((playervars = dptab_getTable(dp->dt, key, keylen)) != NULL) {
 				for (i=dptab_tableSize(playervars) - 1; i >= 0; i--) {
 					char pvsubkey[dptab_KEY_MAXLEN];
-					int pvsubkeylen;
+					sint32 pvsubkeylen;
 					char* buf;
 					size_t len;
 					err = dptab_get_byindex(playervars, i, (void **)&buf, &len, pvsubkey, &pvsubkeylen);
@@ -2230,11 +2231,11 @@ dp_players_cb(
  Can handle multiple sessions.  Context pointer for this callback is a pointer
  to a structure holding pointers to this session's tables.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_groups_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_sessionContext_t *pSess = (dp_sessionContext_t *)context;
 	dp_t *dp;
@@ -2242,7 +2243,7 @@ dp_groups_cb(
 	dp_result_t err;
 	dp_groupId_t gbuf;
 	playerHdl_t me = PLAYER_ME;
-	int namelen = sent < dp_PNAMELEN - 1 ? sent : dp_PNAMELEN - 1;
+	size_t namelen = sent < dp_PNAMELEN - 1 ? sent : dp_PNAMELEN - 1;
 
 	dptab_assertValid(dptab);
 
@@ -2272,7 +2273,7 @@ dp_groups_cb(
 		return 0;
 	}
 
-	id = (unsigned short) dpMAKESHORT(subkey[0], subkey[1]);
+	id = (uint16) dpMAKESHORT(subkey[0], subkey[1]);
 	DPRINT(("dp_groups_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
 
@@ -2325,11 +2326,11 @@ dp_groups_cb(
  Can handle multiple sessions.  Context pointer for this callback is a pointer
  to a structure holding pointers to this session's tables.
 ----------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 dp_group_players_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_sessionContext_t *pSess = (dp_sessionContext_t *)context;
 	dp_t *dp;
@@ -2363,7 +2364,7 @@ dp_group_players_cb(
 	 */
 	{	dptab_table_t *grplayers;
 		char key[dptab_KEY_MAXLEN];
-		int keylen = 0;
+		sint32 keylen = 0;
 		key[keylen++] = dp_KEY_GROUP_PLAYERS;
 		key[keylen++] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
 		key[keylen++] = (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
@@ -2381,7 +2382,7 @@ dp_group_players_cb(
 	DPRINT(("dp_group_players_cb: subkey %s maps to id %d\n",
 			key2a(subkey, 2), id));
 
-	gbuf.dpIdGroup = (unsigned short) dpMAKESHORT(table->key[3], table->key[4]);
+	gbuf.dpIdGroup = (uint16) dpMAKESHORT(table->key[3], table->key[4]);
 	gbuf.dpIdPlayer = id;
 	gbuf.sessionKarma = dp->sess_karma;
 	if (status == dp_RES_CREATED) {
@@ -2435,7 +2436,7 @@ dp_sessionContext_freeze(
 	FILE* fp)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 	char state = 0;
 
 	precondition(pSess != NULL);
@@ -2460,7 +2461,7 @@ dp_sessionContext_freeze(
 	/* Save simple stuff */
 	if ((fwrite(&state, sizeof(char), 1, fp) != 1) ||
 		(fwrite(&(pSess->sessionType), sizeof(dp_species_t), 1, fp) != 1) ||
-		(fwrite(&(pSess->sess_subkeylen), sizeof(int), 1, fp) != 1) ||
+		(fwrite(&(pSess->sess_subkeylen), sizeof(sint32), 1, fp) != 1) ||
 		(fwrite(pSess->sess_subkey, sizeof(char), pSess->sess_subkeylen, fp) !=
 										(size_t)(pSess->sess_subkeylen)))
 		return dp_RES_FULL;
@@ -2534,7 +2535,7 @@ dp_sessionContext_thaw(
 {
 	dp_result_t err;
 	char state = 0;
-	int i;
+	sint32 i;
 
 	precondition(pSess != NULL);
 	precondition(dp != NULL);
@@ -2546,7 +2547,7 @@ dp_sessionContext_thaw(
 	if ((fread(&state, sizeof(char), 1, fp) != 1) ||
 		(fread(&(pSess->sessionType), sizeof(dp_species_t), 1, fp) != 1) ||
 		(pSess->sess_subkeylen != dp->dpio->myAdrLen+2) ||
-		(fread(&(pSess->sess_subkeylen), sizeof(int), 1, fp) != 1) ||
+		(fread(&(pSess->sess_subkeylen), sizeof(sint32), 1, fp) != 1) ||
 		(fread(pSess->sess_subkey, sizeof(char), pSess->sess_subkeylen, fp) !=
 										(size_t)(pSess->sess_subkeylen))) {
 		DPRINT(("dp_sessionContext_thaw: error reading key\n"));
@@ -2629,9 +2630,9 @@ dpFreeze(
 	dp_t* dp,		/* (input) dp_t to freeze */
 	char* fname)	/* (input) Name of file to freeze to */
 {
-	int sig = dp_SIGNATURE;
+	sint32 sig = dp_SIGNATURE;
 	FILE* fp;
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	precondition(dp != NULL);
@@ -2693,21 +2694,21 @@ dpFreeze(
 		(fwrite(&(dp->beacon_interval), sizeof(clock_t), 1, fp) != 1) ||
 		(fwrite(dp->sess_subkey, sizeof(char), dptab_KEY_MAXLEN, fp) !=
 													dptab_KEY_MAXLEN) ||
-		(fwrite(&(dp->sess_subkeylen), sizeof(int), 1, fp) != 1) ||
+		(fwrite(&(dp->sess_subkeylen), sizeof(sint32), 1, fp) != 1) ||
 		(fwrite(&(dp->sess_karma), sizeof(dp_karma_t), 1, fp) != 1) ||
 		(fwrite(&(dp->joinKarma), sizeof(dp_karma_t), 1, fp) != 1) ||
 #ifdef USE_dp_enableNewPlayers
-		(fwrite(&(dp->enableNewPlayers), sizeof(int), 1, fp) != 1) ||
+		(fwrite(&(dp->enableNewPlayers), sizeof(sint32), 1, fp) != 1) ||
 #endif
 		(fwrite(&(dp->firstId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fwrite(&(dp->nextId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fwrite(&(dp->firstGId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fwrite(&(dp->nextGId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fwrite(&(dp->defaultSessionType), sizeof(dp_species_t), 1, fp) != 1) ||
-		(fwrite(&(dp->select_keylen), sizeof(int), 1, fp) != 1) ||
+		(fwrite(&(dp->select_keylen), sizeof(sint32), 1, fp) != 1) ||
 		(fwrite(&(dp->select_key), sizeof(char), dptab_KEY_MAXLEN, fp) !=
 		 											dptab_KEY_MAXLEN) ||
-		(fwrite(&(dp->pleaseClose), sizeof(int), 1, fp) != 1)) {
+		(fwrite(&(dp->pleaseClose), sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dpFreeze: error writing details\n", err));
 		dp_assertValid(dp);
 		fclose(fp);
@@ -2784,9 +2785,9 @@ dpFreeze(
 
 	/* DPIDs */
 	if(dp->dpid2commHdl == NULL) {
-		int nullTag = -1;
+		sint32 nullTag = -1;
 		DPRINT(("dpFreeze: freezing NULL dpid2commHdl\n"));
-		if (fwrite(&nullTag, sizeof(int), 1, fp) != 1) {
+		if (fwrite(&nullTag, sizeof(sint32), 1, fp) != 1) {
 			dp_assertValid(dp);
 			fclose(fp);
 			return dp_RES_FULL;
@@ -2794,7 +2795,7 @@ dpFreeze(
 	} else {
 		DPRINT(("dpFreeze: freezing dpid2commHdl of %d items\n", dp->dpid2commHdl->n_used));
 		condition(dp->dpid2commHdl->n_used >= 0, "bad null logic");
-		if (fwrite(&(dp->dpid2commHdl->n_used), sizeof(int), 1, fp) != 1) {
+		if (fwrite(&(dp->dpid2commHdl->n_used), sizeof(sint32), 1, fp) != 1) {
 			dp_assertValid(dp);
 			fclose(fp);
 			return dp_RES_FULL;
@@ -2802,7 +2803,7 @@ dpFreeze(
 		for (i = 0; i < dp->dpid2commHdl->n_used; i++) {
 			assoctab_item_t* item = assoctab_getkey(dp->dpid2commHdl, i);
 			condition(item != NULL, "not enough items in dpid2commHdl");
-			if (fwrite(&(item->key), sizeof(int), 1, fp) != 1) {
+			if (fwrite(&(item->key), sizeof(sint32), 1, fp) != 1) {
 				dp_assertValid(dp);
 				fclose(fp);
 				return dp_RES_FULL;
@@ -2819,7 +2820,7 @@ dpFreeze(
 	}
 
 	/* Session contexts */
-	if (fwrite(&(dp->sessionContexts->n_used), sizeof(int), 1, fp) != 1) {
+	if (fwrite(&(dp->sessionContexts->n_used), sizeof(sint32), 1, fp) != 1) {
 		dp_assertValid(dp);
 		fclose(fp);
 		return dp_RES_FULL;
@@ -2876,10 +2877,10 @@ dpThaw(
 	dp_t* dp,		/* (output) dp_t to thaw into */
 	FILE* fp)		/* (modified) File to thaw from */
 {
-	int sig;
-	int id2comm_used;
-	int sessCont_used;
-	int i;
+	sint32 sig;
+	sint32 id2comm_used;
+	sint32 sessCont_used;
+	sint32 i;
 	dp_result_t err;
 
 	precondition(dp != NULL);
@@ -2915,21 +2916,21 @@ dpThaw(
 		(fread(&(dp->beacon_interval), sizeof(clock_t), 1, fp) != 1) ||
 		(fread(dp->sess_subkey, sizeof(char), dptab_KEY_MAXLEN, fp) !=
 													dptab_KEY_MAXLEN) ||
-		(fread(&(dp->sess_subkeylen), sizeof(int), 1, fp) != 1) ||
+		(fread(&(dp->sess_subkeylen), sizeof(sint32), 1, fp) != 1) ||
 		(fread(&(dp->sess_karma), sizeof(dp_karma_t), 1, fp) != 1) ||
 		(fread(&(dp->joinKarma), sizeof(dp_karma_t), 1, fp) != 1) ||
 #ifdef USE_dp_enableNewPlayers
-		(fread(&(dp->enableNewPlayers), sizeof(int), 1, fp) != 1) ||
+		(fread(&(dp->enableNewPlayers), sizeof(sint32), 1, fp) != 1) ||
 #endif
 		(fread(&(dp->firstId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fread(&(dp->nextId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fread(&(dp->firstGId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fread(&(dp->nextGId), sizeof(dpid_t), 1, fp) != 1) ||
 		(fread(&(dp->defaultSessionType), sizeof(dp_species_t), 1, fp) != 1) ||
-		(fread(&(dp->select_keylen), sizeof(int), 1, fp) != 1) ||
+		(fread(&(dp->select_keylen), sizeof(sint32), 1, fp) != 1) ||
 		(fread(&(dp->select_key), sizeof(char), dptab_KEY_MAXLEN, fp) !=
 													dptab_KEY_MAXLEN) ||
-		(fread(&(dp->pleaseClose), sizeof(int), 1, fp) != 1)) {
+		(fread(&(dp->pleaseClose), sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("dpThaw: error reading details\n", err));
 		return dp_RES_EMPTY;
 	}
@@ -2989,7 +2990,7 @@ dpThaw(
 	err = dptab_setTableCallback(dp->myplayers, dp_myplayers_cb, dp);
 
 	/* DPIDs */
-	if (fread(&(id2comm_used), sizeof(int), 1, fp) != 1) {
+	if (fread(&(id2comm_used), sizeof(sint32), 1, fp) != 1) {
 		return dp_RES_EMPTY;
 	}
 	DPRINT(("dpThaw: thawing dpid2commHdl of %d items\n", id2comm_used));
@@ -3005,8 +3006,8 @@ dpThaw(
 		}
 		for (i = 0; i < id2comm_used; i++) {
 			playerHdl_t* pH = NULL;
-			int key;
-			if (fread(&key, sizeof(int), 1, fp) != 1) {
+			sint32 key;
+			if (fread(&key, sizeof(sint32), 1, fp) != 1) {
 				DPRINT(("dpThaw: unable to read dpid %d\n", i));
 				return dp_RES_EMPTY;
 			}
@@ -3032,14 +3033,14 @@ dpThaw(
 		DPRINT(("dpThaw: error creating sessionContexts or hdl2sess\n"));
 		return dp_RES_NOMEM;
 	}
-	if (fread(&(sessCont_used), sizeof(int), 1, fp) != 1) {
+	if (fread(&(sessCont_used), sizeof(sint32), 1, fp) != 1) {
 		DPRINT(("dpThaw: unable to read sessCont_used\n"));
 		return dp_RES_EMPTY;
 	}
 	DPRINT(("dpThaw: thawing sessionContexts of %d items\n", sessCont_used));
 	dumpSessionContexts(dp);
 	for (i = 0; i < sessCont_used; i++) {
-		int j;
+		sint32 j;
 		dp_sessionContext_t* pSess;
 		dp_sessionContext_t** ppSess;
 		/* Read in session context */
@@ -3079,7 +3080,7 @@ dpThaw(
 		assert(pSess->groups != NULL);
 		if (pSess->groups == dp->groups) {
 			char key[dptab_KEY_MAXLEN];
-			int keylen;
+			sint32 keylen;
 
 			assert(pSess->hosts != NULL);
 			err = dptab_setTableCallback(pSess->hosts, dp_hosts_cb, pSess);
@@ -3113,7 +3114,7 @@ dpThaw(
 				key[2] =  (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
 				for (j=dptab_tableSize(pSess->hosts); j-- > 0; ) {
 					char subkey[dptab_KEY_MAXLEN];
-					int subkeylen;
+					sint32 subkeylen;
 					dptab_table_t *playervars;
 					char* hostbuf;
 					size_t len;
@@ -3146,7 +3147,7 @@ dpThaw(
 			char* hostbuf;
 			size_t len;
 			char subkey[dptab_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 			dp_sessionContext_t **spp;
 
 			err = dptab_get_byindex(pSess->hosts, j, (void **)&hostbuf, &len, subkey, &subkeylen);
@@ -3215,9 +3216,9 @@ dpThaw(
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when creating a session.
 -------------------------------------------------------------------------*/
-static int	dp_PASCAL open_sess_cb(dp_session_t *ps, long *pTimeout,long flags, void *context)
+static sint32	dp_PASCAL open_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context)
 {
-	dp_result_t *pOpenFinished = (int *)context;
+	dp_result_t *pOpenFinished = (dp_result_t *)context;
 	assert(pOpenFinished);
 
 	if (ps) {
@@ -3235,15 +3236,15 @@ static int	dp_PASCAL open_sess_cb(dp_session_t *ps, long *pTimeout,long flags, v
 typedef struct {
 	const char * sessname;	/* set by caller to desired session name, if any */
 	const char * sessId;	/* used if session ID is used instead of sessname */
-	int sessIdLen;
-	int finished;			/* set nonzero by callback when done */
+	sint32 sessIdLen;
+	sint32 finished;			/* set nonzero by callback when done */
 	dp_session_t session;	/* set to found session by callback when done */
 } dp_commThaw_sessfinder_t;
 
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-static int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout,long flags,void *context)
+static sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags,void *context)
 {
 	dp_commThaw_sessfinder_t *pc = (dp_commThaw_sessfinder_t *)context;
 	assert(pc);
@@ -3306,7 +3307,7 @@ static void dp_PASCAL create_player_cb(dpid_t id, char_t *name, long flags, void
 --------------------------------------------------------------------------*/
 static void chopnl(char *string)
 {
-	int		len;
+	size_t		len;
 
 	len = strlen(string);
 	if (len && (string[len - 1] == '\n'))
@@ -3316,7 +3317,7 @@ static void chopnl(char *string)
 /*--------------------------------------------------------------------------
  Return true if all len bytes of buf are zero.
 --------------------------------------------------------------------------*/
-static int allzeros(char *buf, int len)
+static sint32 allzeros(char *buf, sint32 len)
 {
 	while(len--)
 		if (*buf++)
@@ -3351,7 +3352,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 	char	 GameArgs[MAX_PATH]="";
 	char	 GameCwd[MAX_PATH]="";
 	char	 GameShellOpts[MAX_PATH]="";
-	int		 cancelStatus=0;
+	sint32		 cancelStatus=0;
 	dpid_t my_id;
 	time_t deadline;
 
@@ -3415,7 +3416,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 	if (params.OpenAddresses[0]) {
 		DPRINT(("dpCommThaw: Open Addresses %s\n", params.OpenAddresses));
 		params.commInitReq.flags |= comm_INIT_FLAGS_CONN_ADDR;
-		params.commInitReq.dialing_method = (uintptr_t) params.OpenAddresses;
+		params.commInitReq.dialing_method = (size_t) params.OpenAddresses;
 	}
 
 	/* Load Activenet. */
@@ -3439,7 +3440,7 @@ DP_API dp_result_t dpCommThaw(dp_t **pdp, FILE *thawfp, dpCommThawCallback_t cb,
 
 		/* Login using Username and Password (tserv login) */
 		if (params.Username[0] != 0) {
-			int got_result = FALSE;
+			sint32 got_result = FALSE;
 			dp_uid_t dpuid = dp_UID_NONE;
 			dp_uid_t tservuid = dp_UID_NONE;
 
@@ -3719,7 +3720,7 @@ DP_API dp_result_t dpCreate(
 	dp_t **pdp,
 	dp_transport_t *transport,
 	commInitReq_t *params,
-	char *thawFilename)
+	const char *thawFilename)
 {
 	dp_t *dp;
 	dp_result_t		err;
@@ -3901,7 +3902,7 @@ DP_API dp_result_t dpCreate(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t dpDestroy(
 	dp_t *dp,
-	int flags)
+	sint32 flags)
 {
 	precondition(dp != NULL);
 
@@ -3965,7 +3966,7 @@ DP_API dp_result_t dpCloseGameServer(
 	 */
 	if (dp->sessions) {
 		char key[dptab_KEY_MAXLEN];
-		int n;
+		sint32 n;
 
 		dptab_delete_byAge(dp->dt, dp->sessions, 0);
 		n = dptab_tableSize(dp->sessions);
@@ -4016,11 +4017,11 @@ DP_API dp_result_t dpResolveHostname(
 	dp_assertValid(dp);
 
 	if (dp->serverpings) {
-		int i;
+		sint32 i;
 		dp_serverInfo_t *server;
 		char subkey[dptab_KEY_MAXLEN];
 		size_t serverlen;
-		int subkeylen;
+		sint32 subkeylen;
 		for (i = 0; i < dptab_tableSize(dp->serverpings); i++) {
 			if (dptab_get_byindex(dp->serverpings, i, (void **)&server,
 				&serverlen, subkey, &subkeylen) == dp_RES_OK) {
@@ -4051,7 +4052,7 @@ static dp_result_t dp_setSessionTablePeer(
 	dp_species_t sessionType)
 {
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	dp_result_t err;
 
 	precondition(dp != NULL);
@@ -4199,7 +4200,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(
 		/* if connection already exists, check... */
 		if (dpio_getHdlTxPktsFree(dp->dpio, h) != -1) {
 			/* If we're in the process of closing the desired server. */
-			short state = dpio_getHdlState(dp->dpio, h);
+			sint16 state = dpio_getHdlState(dp->dpio, h);
 			if ((state & (dpio_STATE_FIN_SENT | dpio_STATE_FIN_RCVD))) {
 				DPRINT(("dpSetGameServer: return busy; state:%x, t:%d, h:%x is closing.\n", state, dp->now, h));
 				dp_assertValid(dp);
@@ -4430,7 +4431,7 @@ dp_result_t dpGetSessionDescById(
 	dp_session_t *buf,
 	size_t *pbuflen)
 {
-	int keylen;
+	sint32 keylen;
 	char* rawbuf;
 	size_t len;
 	dp_result_t err;
@@ -4472,7 +4473,7 @@ dp_result_t dpGetSessionDescById(
 static dp_result_t dp_setSessionDesc(
 	dp_t *dp,
 	dp_session_t *buf,
-	long flags)
+	sint32 flags)
 {
 	dp_result_t err;
 	dp_session_t desc;
@@ -4532,7 +4533,7 @@ static dp_result_t dp_setSessionDesc(
 DP_API dp_result_t DP_APIX dpSetSessionDesc(
 	dp_t *dp,
 	const dp_session_t *buf,
-	long flags)
+	sint32 flags)
 {
 	dp_session_t desc;
 
@@ -4559,7 +4560,7 @@ DP_API dp_result_t DP_APIX dpSetSessionDesc(
 DP_API dp_result_t dpGetCaps(
 	dp_t *dp,
 	dp_caps_t *info,
-	long flags)
+	sint32 flags)
 {
 	precondition(dp != NULL);
 	precondition(dp->dpio != NULL);
@@ -4600,9 +4601,9 @@ DP_API dp_result_t dpGetPlayerCaps(
 	dp_t *dp,
 	dpid_t id,
 	dp_caps_t *info,
-	long flags)
+	sint32 flags)
 {
-	int	loss;
+	sint32	loss;
 	precondition(dp != NULL);
 	precondition(dp->dpio != NULL);
 	precondition(dp->dpio->conns != NULL);
@@ -4633,9 +4634,9 @@ DP_API dp_result_t dpGetPlayerCaps(
 ----------------------------------------------------------------------*/
 static dp_result_t dp_subscribe_client(dp_t *dp, playerHdl_t h, dp_sessionContext_t *sp)
 {
-	int i;
+	sint32 i;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	dp_result_t err;
 
 	if (h == PLAYER_ME) {
@@ -4768,7 +4769,7 @@ static dp_result_t dp_subscribe_client(dp_t *dp, playerHdl_t h, dp_sessionContex
 static dp_result_t dp_subscribe_host(dp_t *dp, playerHdl_t h, dp_sessionContext_t *sp)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 
 	dpio_setHandleOptions(dp->dpio, h, dp_getDesiredHandleOptions(dp, h));
 	err = dptab_addSubscriber(dp->dt, dp->myplayers, h);
@@ -4870,13 +4871,13 @@ dp_result_t DP_APIX dp_addClient(dp_t *dp, playerHdl_t src,
 static dp_result_t dp_selectSessionForHost
  (dp_t *dp, playerHdl_t h, dp_join_packet_t *req)
 {
-	int nRating;
-	int nRatingSelect;
+	sint32 nRating;
+	sint32 nRatingSelect;
 	dp_session_t sessSelect;
 	char key[dptab_KEY_MAXLEN];
-	int nsess;
-	int keylen;
-	int i;
+	sint32 nsess;
+	sint32 keylen;
+	sint32 i;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	struct {
 		dp_packetType_t tag;
@@ -4896,7 +4897,7 @@ static dp_result_t dp_selectSessionForHost
 	nRatingSelect = 0;
 	for (i = 0; i < dp->sessionContexts->n_used; i++) {
 		dp_result_t err;
-		int nPlayers, nHosts;
+		sint32 nPlayers, nHosts;
 		dp_session_t sess;
 		dp_sessionContext_t *pSess;
 		dp_sessionContext_t **ppS = (dp_sessionContext_t **)dynatab_subscript(
@@ -5003,9 +5004,9 @@ dpHandleJoinSession(
 {
 	dp_host_t host;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 /*	char oadr[dptab_KEY_MAXLEN]; */
-/*  int iadr2len; */
+/*  sint32 iadr2len; */
 	dptab_table_t *players;
 	dp_result_t err;
 	char hostbuf[dpio_MAXLEN_RELIABLE];
@@ -5013,7 +5014,7 @@ dpHandleJoinSession(
 	dp_sessionContext_t **spp = NULL;
 	dp_sessionContext_t *sp = NULL;
 	dp_session_t sess;
-	int hops;
+	sint32 hops;
 
 	precondition(dp != NULL);
 	precondition(req != NULL);
@@ -5118,7 +5119,7 @@ dpHandleJoinSession(
 	{
 		char *sessbuf;
 		size_t len;
-		int nHappyLurkers;
+		sint32 nHappyLurkers;
 
 		/* Verify that session is not full and allows new players.  Act as
 		 * if lurkers take a slot, too. */
@@ -5191,7 +5192,7 @@ dpHandleJoinSession(
 	/* Find first available non-reserved dpId for player */
 	do {
 		char subkey[dp_KEY_MAXLEN];
-		int subkeylen = 2;
+		sint32 subkeylen = 2;
 		char *buf;
 		size_t buflen;
 
@@ -5299,14 +5300,14 @@ dpHandleJoinSession(
  The 3rd argument is TRUE to join the session, or FALSE to just
  open a connection to enumerate players.
 --------------------------------------------------------------------------*/
-static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, int joining)
+static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, sint32 joining)
 {
 	struct {
 		dp_packetType_t				tag;
 		dp_indirect_join_packet_t	body;
 	} PACK pkt;
 	dp_result_t res;
-	int	len;
+	sint32	len;
 
 	/*
 	 * Compose packet
@@ -5314,7 +5315,7 @@ static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, int joini
 	memset(&pkt, 0, sizeof(pkt));
 	pkt.tag = dp_INDIRECT_JOIN_PACKET_ID;
 	pkt.body.chunk1 = joining ? dp_INDIRECT_JOIN_CHUNK_SESSIONID : dp_INDIRECT_JOIN_CHUNK_SESSIONID_OPENONLY;
-	res = dpGetSessionId(dp, session, (unsigned char *) &pkt.body.sessionId, &len);
+	res = dpGetSessionId(dp, session, (uint8 *) &pkt.body.sessionId, &len);
 
 	if (res != dp_RES_OK) {
 		DPRINT(("dpSendIndirectJoin: can't convert session into sessionId\n"));
@@ -5345,13 +5346,13 @@ static dp_result_t dpSendIndirectJoin(dp_t *dp, dp_session_t *session, int joini
  If the session supports dual-addresses then send them both of our addresses
  in the extended join session packet.  Otherwise rever to to old behaviour.
 --------------------------------------------------------------------------*/
-static dp_result_t dpSendJoinSession(dp_t *dp, dp_karma_t joinKarma, dp_session_t *session, dp_species_t select_sessionType, short select_flags, short select_mask, playerHdl_t h)
+static dp_result_t dpSendJoinSession(dp_t *dp, dp_karma_t joinKarma, dp_session_t *session, dp_species_t select_sessionType, sint16 select_flags, sint16 select_mask, playerHdl_t h)
 {
 	struct {
 		dp_packetType_t   tag;
 		dp_join_packet_t body;
 	} PACK pkt;
-	int bodylen;
+	sint32 bodylen;
 
 	precondition(dp != NULL);
 	condition(dp->dpio != NULL, "corrupted dp");
@@ -5447,9 +5448,9 @@ static dp_result_t dpSendJoinSession(dp_t *dp, dp_karma_t joinKarma, dp_session_
 -------------------------------------------------------------------------*/
 static dp_result_t dpHandleLeaveSession(dp_t *dp, playerHdl_t h, dp_leave_packet_t *req, size_t reqlen)
 {
-	int i;
+	sint32 i;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	dptab_table_t *hosts;
 	dptab_table_t *players;
 	dptab_table_t *groups;
@@ -5598,7 +5599,7 @@ static dp_result_t dpSendLeaveSession
 static dp_result_t dpHandleSelectedSession
  (dp_t *dp, playerHdl_t h, dp_select_sess_packet_t *s, size_t slen)
 {
-	int err;
+	sint32 err;
 	dp_session_t sess;
 	precondition(s != NULL);
 
@@ -5664,7 +5665,7 @@ static dp_result_t dpHandleSelectedSession
 -------------------------------------------------------------------------*/
 static dp_sessionContext_t *findSessionWithKarma(dp_t *dp, dp_karma_t karma)
 {
-	int i;
+	sint32 i;
 
 	for (i = 0; i < dp->sessionContexts->n_used; i++) {
 		dp_sessionContext_t *pSess;
@@ -5689,10 +5690,10 @@ static dp_sessionContext_t *findSessionWithKarma(dp_t *dp, dp_karma_t karma)
 -------------------------------------------------------------------------*/
 static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess)
 {
-	int i;
+	sint32 i;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
-	int subkeylen;
+	sint32 keylen;
+	sint32 subkeylen;
 	dp_result_t err;
 	dp_sessionContext_t *pSess;	/* a handle to the session in memory */
 	dp_sessionContext_t **ppSC;
@@ -5742,7 +5743,7 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
 		}
 		/* Clear flags, except for user-modifiable flags */
 		DPRINT(("initOpenSession: Pre-clear flags=%x\n", sess->flags));
-		sess->flags = (short) (sess->flags &
+		sess->flags = (sint16) (sess->flags &
 			(dp_SESSION_FLAGS_USE_BROADCAST| dp_SESSION_FLAGS_MIGRATE_FORBIDDEN|
 			dp_SESSION_FLAGS_ISLOBBY | dp_SESSION_FLAGS_ENABLE_NEWPLAYERS |
 			dp_SESSION_FLAGS_ENABLE_PLAYERVARS));
@@ -6102,11 +6103,11 @@ static dp_result_t initOpenSession(dp_t *dp, dp_session_t *s, dp_session_t *sess
  dpOpen does not require a callback, we need a non-null value to use if no
  callback is given.
 ------------------------------------------------------------------------*/
-static int dp_PASCAL dpOpen_dummy_cb(dp_session_t *sDesc, long *timeout, long flags, void *context)
+static sint32 dp_PASCAL dpOpen_dummy_cb(dp_session_t *sDesc, long *timeout, long flags, void *context)
 {
 	(dp_session_t *)sDesc;
-	(long *)timeout;
-	(long)flags;
+	(sint32 *)timeout;
+	(sint32)flags;
 	(void *)context;
 	return FALSE;
 }
@@ -6139,7 +6140,7 @@ DP_API dp_result_t dpOpen(
 {
 	dp_result_t err;
 	dp_session_t sess;
-	int bJoinAny;
+	sint32 bJoinAny;
 
 	precondition(dp);
 	precondition(dp->dpio);
@@ -6236,7 +6237,7 @@ DP_API dp_result_t dpOpen(
 	/* Pick a random number to identify this join request by */
 	dp->joinKarma = (dp_karma_t) ((dp->now + rand()) & 0xffff);
 #ifdef _WIN32
-	dp->joinKarma = (dp_karma_t) (dp->joinKarma ^ (short) GetTickCount());
+	dp->joinKarma = (dp_karma_t) (dp->joinKarma ^ (sint16) GetTickCount());
 #endif
 	DPRINT(("dpOpen: chose joinKarma %d.\n", 0xffff & dp->joinKarma));
 
@@ -6260,7 +6261,7 @@ DP_API dp_result_t dpOpen(
 		err = dpSendJoinSession(dp, dp->joinKarma, &sess, 0, s->flags, 0, dp->hMaster);
 	} else {
 		dp_species_t sessType;
-		short mask = dp_SESSION_FLAGS_ISLOBBY;
+		sint16 mask = dp_SESSION_FLAGS_ISLOBBY;
 		if (s && s->sessionType)
 			sessType = s->sessionType;
 		else
@@ -6270,7 +6271,7 @@ DP_API dp_result_t dpOpen(
 			DPRINT(("dpOpen: joining any session sessType %d, flags %d\n", sessType, s->flags));
 			err = dpSendJoinSession(dp, dp->joinKarma, NULL, sessType, s->flags, mask, dp->hMaster);
 		} else if (dp->dpio->publicAddressKnown) {
-			short flags = mask | dp_SESSION_FLAGS_ENABLE_DUALADDRESS;
+			sint16 flags = mask | dp_SESSION_FLAGS_ENABLE_DUALADDRESS;
 			/* joining game server; pick a lobby */
 			/* kludge: when joining any session on a server, include support for DUAL addresses */
 			DPRINT(("dpOpen: joining any session on game server sessType %d, mask %d, flags %d\n", sessType, mask, flags));
@@ -6297,7 +6298,7 @@ DP_API dp_result_t dpOpen(
 	if (!s || (s->flags & dp_SESSION_FLAGS_ISLOBBY)) {
 		if (dp->hGameServer != PLAYER_NONE) {
 			char key[dp_KEY_MAXLEN];
-			int keylen = 1;
+			sint32 keylen = 1;
 
 			/* Note: probably should set defaultSessionType here if an explicit
 			 * session was given?
@@ -6344,8 +6345,8 @@ DP_API dp_result_t dpClose(
 {
 	dp_sessionContext_t *pSC = NULL;
 	dp_result_t err;
-	int i;
-	int iSC;
+	sint32 i;
+	sint32 iSC;
 
 	dp_assertValid(dp);
 	precondition(dp);
@@ -6369,7 +6370,7 @@ DP_API dp_result_t dpClose(
 			void *buf;
 			size_t len;
 			char subkey[dptab_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 
 			err = dptab_get_byindex(dp->myplayers, i, &buf, &len, subkey, &subkeylen);
 			if (err != dp_RES_OK)
@@ -6388,7 +6389,7 @@ DP_API dp_result_t dpClose(
 
 	if (dp->hMaster != PLAYER_NONE) {
 		char key[dptab_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 
 		/* Delete master's right to publish players, hosts, groups and
 		 * group players tables to us, or when he does, he will crash us,
@@ -6445,14 +6446,14 @@ DP_API dp_result_t dpClose(
 	 * session.  Delete subscribers to our player variable table. */
 	if (dp->hosts) {
 		char key[dptab_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 		key[0] = dp_KEY_PLAYER_VARIABLES;
 		key[1] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
 		key[2] = (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
 		for (i = dptab_tableSize(dp->hosts) - 1; i >= 0; i--) {
 			dptab_table_t *playervars;
 			char subkey[dptab_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 			char *hbuf;
 			size_t len;
 			dpid_t id;
@@ -6551,7 +6552,7 @@ DP_API dp_result_t dpClose(
 	}
 
 	{	char key[dptab_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 		keylen = 5;
 		key[1] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
 		key[2] = (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
@@ -6670,10 +6671,10 @@ DP_API dp_result_t dpCastoffSession(
 
 	/* No longer care if hosts, groups, group players and player variables
 	 * come and go from that session */
-	{	int i;
+	{	sint32 i;
 		dptab_table_t *playervars;
 		char key[dptab_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 		keylen = 3;
 		key[0] = dp_KEY_PLAYER_VARIABLES;
 		key[1] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
@@ -6686,7 +6687,7 @@ DP_API dp_result_t dpCastoffSession(
 			size_t len;
 			dp_result_t err;
 			char subkey[dptab_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 			err = dptab_get_byindex(dp->hosts, i, (void **)&buf, &len, subkey, &subkeylen);
 			condition(err == dp_RES_OK, "dp->hosts corrupted");
 			if (((dpid_t)dpMAKESHORT(subkey[0], subkey[1])) == dp->firstId) continue; /* our own player variable table */
@@ -6700,9 +6701,9 @@ DP_API dp_result_t dpCastoffSession(
 	dp->hosts = NULL;		/* The underlying table continues to exist */
 	dptab_clearTableCallback(dp->groups, dp_groups_cb);
 	dp->groups = NULL;		/* The underlying table continues to exist */
-	{	int i;
+	{	sint32 i;
 		char key[dptab_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 		keylen = 5;
 		key[0] = dp_KEY_GROUP_PLAYERS;
 		key[1] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
@@ -6752,12 +6753,12 @@ DP_API dp_result_t dpEnumSessions(
 	dp_t *dp,
 	dp_session_t *sDesc,
 	char *mhn,					/* must be NULL */
-	long timeout,				/* How long in milliseconds to wait. */
+	sint32 timeout,				/* How long in milliseconds to wait. */
 	dpEnumSessionsCallback_t cb,
 	void *context)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 	long timeout_dummy;
 	dptab_table_t *sesstab;
 
@@ -6808,7 +6809,7 @@ DP_API dp_result_t dpEnumSessions(
 		dp_session_t sess;
 		size_t len;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 
 		err = dptab_get_byindex(sesstab, i, (void **)&s, &len, subkey, &subkeylen);
 		if (err != dp_RES_OK) {
@@ -6857,7 +6858,7 @@ DP_API dp_result_t dpEnumSessions(
 ----------------------------------------------------------------------*/
 DP_API dp_result_t dpDeclareLobby(
 	dp_t *dp,
-	int flags)
+	sint32 flags)
 {
 	dp_session_t sess;
 	dp_result_t err;
@@ -6897,7 +6898,7 @@ DP_API dp_result_t dpDeclareLobby(
 dp_result_t dpPrunePlayerSubscriptions(dp_t *dp)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 
 	if (bIAmGameServer(dp))
 		return dp_RES_OK;
@@ -6996,10 +6997,10 @@ DP_API dp_result_t dpCreatePlayer(
 {
 	dp_playerId_t player;
 	char playerbuf[dpio_MAXLEN_RELIABLE];
-	int playerlen;
+	size_t playerlen;
 	dp_result_t err;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	dp_assertValid(dp);
 
@@ -7065,7 +7066,7 @@ DP_API dp_result_t dpCreatePlayer(
 #if 0
 	{
 		dp_playerId_t foo;
-		int len_used = dp_unpack_playerId(player.id, playerbuf, &foo);
+		sint32 len_used = dp_unpack_playerId(player.id, playerbuf, &foo);
 		DPRINT(("dpCreatePlayer: id %d %d, karma %d %d bloblen %d %d, name %s %s\n",
 				player.id, foo.id,
 				player.karma, foo.karma,
@@ -7103,7 +7104,7 @@ DP_API dp_result_t dpDestroyPlayer(
 {
 	dp_result_t err;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	dp_assertValid(dp);
 	if (!dp)
@@ -7148,7 +7149,7 @@ DP_API dp_result_t dpDestroyPlayer(
 /*------------------------------------------------------------------------
  Return the number of players in the current session.
 ------------------------------------------------------------------------*/
-DP_API int dpNumPlayers(
+DP_API sint32 dpNumPlayers(
 	dp_t *dp)
 {
 	if (!dp || !dp->players)
@@ -7201,7 +7202,7 @@ DP_API dp_result_t dpGetPlayerName(
 	size_t len_used;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -7269,7 +7270,7 @@ DP_API dp_result_t dpSetPlayerName(
 	size_t len_used;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -7322,7 +7323,7 @@ static dp_result_t dpSetPlayerUid(
 	size_t len_used;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -7378,7 +7379,7 @@ DP_API dp_result_t dpGetPlayerBlob(
 	size_t len_used;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -7431,7 +7432,7 @@ DP_API dp_result_t dpSetPlayerBlob(
 	size_t len_used;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -7460,7 +7461,7 @@ DP_API dp_result_t dpSetPlayerBlob(
 	}
 
 	memcpy(player.blob, blob, bloblen);
-	player.bloblen = bloblen;
+	player.bloblen = (uint8)bloblen;
 	len = dp_pack_playerId(&player, newplayerbuf);
 	err = dptab_set(dp->dt, dp->myplayers, subkey, subkeylen, newplayerbuf, len, 2, PLAYER_ME);
 	if (dp->hMaster == PLAYER_ME) {
@@ -7481,10 +7482,10 @@ static dp_result_t dpRemoteEnumPlayers(
 	void *context,
 	dpid_t start)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	dptab_table_t *rplayers;
 
 	dp_assertValid(dp);
@@ -7539,7 +7540,7 @@ static dp_result_t dpRemoteEnumPlayers(
 	if (!cb) return dp_RES_EMPTY;
 	for (i=dptab_tableSize(rplayers) - 1; i >= 0; i--) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dp_result_t err;
 		dp_playerId_t player;
 		char *playerbuf;
@@ -7586,10 +7587,10 @@ DP_API dp_result_t dpEnumPlayers(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	precondition(dp != NULL);
@@ -7615,12 +7616,12 @@ DP_API dp_result_t dpEnumPlayers(
 	DPRINT(("dpEnumPlayers: %d players in table\n", dptab_tableSize(dp->players)));
 	for (i=dptab_tableSize(dp->players) - 1; i >= 0; i--) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dp_playerId_t player;
 		char *playerbuf;
 		size_t len_used;
 		size_t len;
-		long flag;
+		sint32 flag;
 		dpid_t id;
 
 		err = dptab_get_byindex(dp->players, i, (void **)&playerbuf, &len, subkey, &subkeylen);
@@ -7670,10 +7671,10 @@ static dp_result_t dpRemoteEnumPlayersEx(
 	void *context,
 	dpid_t start)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	dptab_table_t *rplayers;
 
 	dp_assertValid(dp);
@@ -7727,7 +7728,7 @@ static dp_result_t dpRemoteEnumPlayersEx(
 	}
 	for (i=dptab_tableSize(rplayers) - 1; i >= 0; i--) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dp_result_t err;
 		dp_playerId_t player;
 		char *playerbuf;
@@ -7773,10 +7774,10 @@ DP_API dp_result_t dpEnumPlayersEx(
 	dp_session_t *s,
 	dpEnumPlayersExCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	precondition(dp != NULL);
@@ -7801,12 +7802,12 @@ DP_API dp_result_t dpEnumPlayersEx(
 	DPRINT(("dpEnumPlayers: %d players in table\n", dptab_tableSize(dp->players)));
 	for (i=dptab_tableSize(dp->players) - 1; i >= 0; i--) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dp_playerId_t player;
 		char *playerbuf;
 		size_t len_used;
 		size_t len;
-		long flag;
+		sint32 flag;
 		dpid_t id;
 
 		err = dptab_get_byindex(dp->players, i, (void **)&playerbuf, &len, subkey, &subkeylen);
@@ -7849,7 +7850,7 @@ DP_API dp_result_t dpEnumPlayersEx(
 ----------------------------------------------------------------------*/
 DP_API dp_result_t dpEnableNewPlayers(
 	dp_t *dp,
-	int enable)
+	sint32 enable)
 {
 	dp_session_t sess;
 
@@ -7878,9 +7879,9 @@ DP_API dp_result_t dpEnableNewPlayers(
   host's handle has closed; set it FALSE if somebody else started the
   election.
 --------------------------------------------------------------------------*/
-static void dp_election_start(dp_t *dp, int hostDeleted)
+static void dp_election_start(dp_t *dp, sint32 hostDeleted)
 {
-	int nhosts;
+	sint32 nhosts;
 
 	assert(dp != NULL);
 	dp_assertValid(dp);
@@ -7939,7 +7940,7 @@ static void dp_election_start(dp_t *dp, int hostDeleted)
 
 	/* Turn on keepalive for all handles for duration of election */
 	{
-		int i, n;
+		sint32 i, n;
 		playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
 
 		n = dp_getHdls(dp, dp_ID_BROADCAST, dests, dp_SEND_RELIABLE);
@@ -7973,7 +7974,7 @@ static void dp_election_end(dp_t *dp)
 
 	/* Turn off keepalive for all handles but host */
 	{
-		int i, n;
+		sint32 i, n;
 		playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
 
 		n = dp_getHdls(dp, dp_ID_BROADCAST, dests, dp_SEND_RELIABLE);
@@ -7997,7 +7998,7 @@ static void dp_election_poll(dp_t *dp)
 	if (!dp->election_size)
 		return;
 
-	if ((long)(dp->election_deadline - dp->now) < 0) {
+	if ((sint32)(dp->election_deadline - dp->now) < 0) {
 		DPRINT(("dpPoll: election took too long.\n"));
 		dp->pleaseClose = TRUE;
 	}
@@ -8028,7 +8029,7 @@ static dp_result_t dp_election_set_master(dp_t *dp, dpid_t newIdMaster)
 		 * so it doesn't migrate; delete table during host callback */
 		{
 			char key[dptab_KEY_MAXLEN];
-			int keylen = 3;
+			sint32 keylen = 3;
 			key[0] = dp_KEY_PLAYER_VARIABLES;
 			key[1] = (char) dpGETSHORT_FIRSTBYTE(dp->sess_karma);
 			key[2] = (char) dpGETSHORT_SECONDBYTE(dp->sess_karma);
@@ -8051,7 +8052,7 @@ static dp_result_t dp_election_set_master(dp_t *dp, dpid_t newIdMaster)
 		if ((dp->hGameServer != PLAYER_NONE)
 		&&  !(dp->election_old_session.flags & dp_SESSION_FLAGS_ISLOBBY)) {
 			char key[dptab_KEY_MAXLEN];
-			int keylen;
+			sint32 keylen;
 
 			key[0] = dp_KEY_MYSESSIONS;
 			keylen = 1;
@@ -8086,14 +8087,14 @@ static void dp_election_register_vote(dp_t *dp,
  Count votes; see who won, and how many votes he had.
  Returns count; sets *pwinner_id to the winner's id.
 --------------------------------------------------------------------------*/
-static int dp_election_tally(dp_t *dp, dpid_t *pwinner_id)
+static sint32 dp_election_tally(dp_t *dp, dpid_t *pwinner_id)
 {
 	assoctab_t *tally;
-	int winner_votes;
+	sint32 winner_votes;
 	dpid_t winner_id;
-	int i;
+	sint32 i;
 
-	tally = assoctab_create(sizeof(int));
+	tally = assoctab_create(sizeof(sint32));
 	assert(tally);
 	winner_votes = 0;
 	winner_id = dp_ID_NONE;
@@ -8101,7 +8102,7 @@ static int dp_election_tally(dp_t *dp, dpid_t *pwinner_id)
 	/* Iterate downwards through votes 'cause we might delete 'em on the fly */
 	for (i=dp->election_votes->n_used-1; i>=0; i--) {
 		assoctab_item_t *pe;
-		int* pint;
+		sint32* pint;
 		dp_election_vote_t *pvote;
 		dpid_t voter_id;
 		playerHdl_t voter_h;
@@ -8112,7 +8113,7 @@ static int dp_election_tally(dp_t *dp, dpid_t *pwinner_id)
 		voter_h = (playerHdl_t)(pe->key);
 		voter_id = dp_commHdl2dpid(dp, voter_h);
 
-		if ((long)(dp->now - pvote->when) > dp_ELECTIONLEN) {
+		if ((sint32)(dp->now - pvote->when) > dp_ELECTIONLEN) {
 			/* Vote too old.  Delete it.  This is why we iterate downwards. */
 			DPRINT(("dp_election_tally: id:%d h:%x vote too old, deleting\n", voter_id, voter_h));
 			assoctab_subscript_delete(dp->election_votes, pe->key);
@@ -8148,7 +8149,7 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 	playerHdl_t h;
 	dp_packetType_t pkt;
 	dp_result_t err;
-	int j;
+	sint32 j;
 
 	DPRINT(("dp_election_become_master: We must have won the election.  Setting up to be master.\n"));
 
@@ -8186,7 +8187,7 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 		char* hostbuf;
 		size_t len;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dpid_t firstId;
 		dp_sessionContext_t **spp;
 
@@ -8239,9 +8240,13 @@ static dp_result_t dp_election_become_master(dp_t *dp, dpid_t winner_id)
 	 */
 	sp->hostid = (highest_id / dp_PLAYERS_PER_HOST) + 2;
 	DPRINT(("dp_election_become_master: new players will start at id:%d\n", sp->hostid * dp_PLAYERS_PER_HOST));
-	{	int i; size_t len; size_t subkeylen;
+	{
+		sint32 i;
+		size_t len;
+		size_t subkeylen;
 		char subkey[dptab_KEY_MAXLEN];
 		char *buf;
+
 		subkeylen = 2;
 		dp->nextGId = dp->firstGId;
 		for (i = dp->firstGId + dp_MAX_GROUPS; i >= dp->firstGId; i--) {
@@ -8320,7 +8325,7 @@ static dp_result_t dp_election_inaugerate_winner(dp_t *dp, dpid_t winner_id)
 	/* Notify user code of change in master if player deltas requested. */
 	if (dptab_getTableContext(dp->players, dp_rplayers_cb)) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		char *pbuf;
 		dp_playerId_t player;
 		size_t len;
@@ -8353,7 +8358,7 @@ static dp_result_t dp_election_inaugerate_winner(dp_t *dp, dpid_t winner_id)
 	 * lowest id for this to work.
 	 */
 	if (1) {
-		int j;
+		sint32 j;
 		dptab_table_t *hosts;
 
 		hosts = dp->hosts;
@@ -8361,7 +8366,7 @@ static dp_result_t dp_election_inaugerate_winner(dp_t *dp, dpid_t winner_id)
 			char* hostbuf;
 			size_t len;
 			char subkey[dptab_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 			dpid_t firstId;
 
 			err = dptab_get_byindex(hosts, j, (void **)&hostbuf, &len, subkey, &subkeylen);
@@ -8427,7 +8432,7 @@ dpHandleVote(
 	dp_election_vote_t *pvote;
 	dpid_t winner_id;
 	playerHdl_t winner_h;
-	int winner_votes;
+	sint32 winner_votes;
 	dp_result_t err;
 	dpid_t idVoter = dp_ID_NONE;
 
@@ -8454,7 +8459,7 @@ dpHandleVote(
 			return dp_RES_OK;
 		}
 
-		idVotedFor = (unsigned short) dpMAKESHORT(req[0], req[1]);
+		idVotedFor = (uint16) dpMAKESHORT(req[0], req[1]);
 
 		/* If no election is yet in progress...  */
 		if (!dp->election_size) {
@@ -8544,7 +8549,7 @@ dpHandleVote(
 		subkey[1] = (char) dpGETSHORT_SECONDBYTE(winner_id);
 		err = dptab_get_bykey(dp->hosts, subkey, 2, (void **)&pbuf, &len);
 		if ((winner_h == PLAYER_NONE) || (err != dp_RES_OK)) {
-			long left;
+			sint32 left;
 			left = dp->election_yield_deadline - dp->now;
 			if (left <= 0) {
 				DPRINT(("dpHandleVote: I have no handle to the winner id:%d; yielding.\n", winner_id));
@@ -8593,10 +8598,10 @@ static dp_result_t dpSendVote(dp_t *dp, dpid_t candidate, playerHdl_t dest)
 		char body[2];
 	} PACK pkt;
 
-	dp_result_t		err;
+	dp_result_t		err = dp_RES_OK;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
-	int ndests;
-	int i;
+	sint32 ndests;
+	sint32 i;
 
 	precondition(dp != NULL);
 	precondition(dp->dpid2commHdl);
@@ -8659,9 +8664,9 @@ static dp_result_t dpSendVictory(dp_t *dp)
 		dp_packetType_t   tag;
 	} PACK pkt;
 
-	dp_result_t		err;
+	dp_result_t		err = dp_RES_OK;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
-	int ndests;
+	sint32 ndests;
 
 	precondition(dp != NULL);
 	precondition(dp->dpid2commHdl);
@@ -8710,8 +8715,8 @@ static dp_result_t dpHandleVictory(dp_t *dp, playerHdl_t src, size_t reqlen)
 	 */
 	if (dp->election_size) {
 		dpid_t winner_id;
-		int winner_votes = dp_election_tally(dp, &winner_id);
-		int election_size = dp->election_size;
+		sint32 winner_votes = dp_election_tally(dp, &winner_id);
+		sint32 election_size = dp->election_size;
 
 		dp_election_end(dp);
 
@@ -8759,7 +8764,7 @@ static dp_result_t dpHandleVictory(dp_t *dp, playerHdl_t src, size_t reqlen)
 --------------------------------------------------------------------------*/
 static dpid_t dp_findLowestHost(dp_t *dp, clock_t maxAge)
 {
-	int j;
+	sint32 j;
 	dpid_t lowest;
 	dptab_table_t *hosts;
 
@@ -8769,7 +8774,7 @@ static dpid_t dp_findLowestHost(dp_t *dp, clock_t maxAge)
 		char* hostbuf;
 		size_t len;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dpid_t firstId;
 
 		dp_result_t err = dptab_get_byindex(hosts, j, (void **)&hostbuf, &len, subkey, &subkeylen);
@@ -8780,7 +8785,7 @@ static dpid_t dp_findLowestHost(dp_t *dp, clock_t maxAge)
 #define BADSTATE (dpio_STATE_FIN_SENT | dpio_STATE_FIN_RCVD | dpio_STATE_FIN_RCVDACK | dpio_STATE_RST_RCVD | dpio_STATE_CLOSE_QFULL)
 			/* Don't vote for a handle that is closing! */
 			playerHdl_t h = dpid2commHdl(dp, firstId);
-			short state = dpio_getHdlState(dp->dpio, h);
+			sint16 state = dpio_getHdlState(dp->dpio, h);
 			DPRINT(("dp_findLowestHost: considering id %d h:%x; state %x; bad state %x\n", firstId, h, state, state&BADSTATE));
 			if (state & BADSTATE)
 				continue;
@@ -8867,21 +8872,21 @@ static dp_result_t dpPoll(
 	playerHdl_t h;
 	dp_result_t err;
 	dp_result_t return_value = dp_RES_OK;
-	int nhdls= -1;
-	int beacon_expired;
-	int beacon2_expired;
-	int beacon4_expired;
+	sint32 nhdls= -1;
+	sint32 beacon_expired;
+	sint32 beacon2_expired;
+	sint32 beacon4_expired;
 
 	dp_assertValid(dp);
 
 	/* Check the beacons and reset them */
-	beacon_expired = ((long)(dp->next_beacon - now) < 0);
+	beacon_expired = ((sint32)(dp->next_beacon - now) < 0);
 	if (beacon_expired)
 		dp->next_beacon = now + dp->beacon_interval;
-	beacon2_expired = ((long)(dp->next_beacon2 - now) < 0);
+	beacon2_expired = ((sint32)(dp->next_beacon2 - now) < 0);
 	if (beacon2_expired)
 		dp->next_beacon2 = now + dp->beacon_interval*2;
-	beacon4_expired = ((long)(dp->next_beacon4 - now) < 0);
+	beacon4_expired = ((sint32)(dp->next_beacon4 - now) < 0);
 	if (beacon4_expired)
 		dp->next_beacon4 = now + dp->beacon_interval*4;
 
@@ -8895,7 +8900,7 @@ static dp_result_t dpPoll(
 
 		/* If this app isn't calling dpFlush(), switch it to the old behavior */
 		if (dp->dpio->appWillFlush
-		&&  ((long)(dp->now - dp->appLastFlushed) > ECLOCKS_PER_SEC/4)) {
+		&&  ((sint32)(dp->now - dp->appLastFlushed) > ECLOCKS_PER_SEC/4)) {
 			DPRINT(("dpPoll: t:%d - no dpFlush since t:%d, switching to old behavior\n", dp->now, dp->appLastFlushed));
 			/* flush in case anything is in the gather buffer */
 			dpio_flush(dp->dpio);
@@ -8939,13 +8944,13 @@ static dp_result_t dpPoll(
 	if (beacon2_expired) {
 		/* End enumServers activity if deadline passes. */
 		if (dp->enumServersEx_callback &&
-			((long)(dp->enumServers_deadline - now) < 0))
+			((sint32)(dp->enumServers_deadline - now) < 0))
 			dp_endEnumServers(dp);
 
 		/* End enumSessions activity if deadline passes. */
 		DPRINT(("dpPoll: checking enumSessions timeout: cb %p, t:%d, deadline %d\n",
 			dp->enumSessions_callback, dp->now, dp->enumSessions_deadline));
-		if (dp->enumSessions_callback && (long)(dp->enumSessions_deadline - now) < 0) {
+		if (dp->enumSessions_callback && (sint32)(dp->enumSessions_deadline - now) < 0) {
 			dpEnumSessionsCallback_t cb = dp->enumSessions_callback;
 			long timeout_dummy;
 			/*DPRINT(("dpPoll: enumSessions timeout: deadline %d, now %d\n", dp->enumSessions_deadline, now));*/
@@ -8957,7 +8962,7 @@ static dp_result_t dpPoll(
 	/* Every 4th beacon... */
 	if (beacon4_expired) {
 #ifdef DEFER_SESSION_UPDATE
-		int i;
+		sint32 i;
 		/* If we're the master, inform the world of the change in the
 		 * number of players.  We can only tell if we're the master of
 		 * a particular (possibly cast-off) session by seeing if it's
@@ -8985,7 +8990,7 @@ static dp_result_t dpPoll(
 				dp_session_t sess;
 				/* Must unpack when retrieving records from dptab */
 				dp_unpack_session(dp, pSess->sess_subkey, pSess->sess_subkeylen, sessbuf, sesslen, &sess);
-				sess.currentPlayers = (short) dptab_tableSize(pSess->players);
+				sess.currentPlayers = (sint16) dptab_tableSize(pSess->players);
 				pSess->old_numplayers = sess.currentPlayers;
 				/* Must pack when writing to dptab */
 				rawbuflen = dp_pack_session(dp, 0, &sess, rawbuf);
@@ -9068,7 +9073,7 @@ static dp_result_t dpPoll(
 ----------------------------------------------------------------------*/
 static dp_result_t dpHandlePingPacket(
 	dp_t *dp,
-	unsigned char *buf,
+	uint8 *buf,
 	size_t len,
 	playerHdl_t dest,
 	dp_packetType_t tag)
@@ -9084,7 +9089,7 @@ static dp_result_t dpHandlePingPacket(
 		return dp_RES_OK;
 	}
 
-	*(short *)buf = tag;
+	*(sint16 *)buf = tag;
 
 	DPRINT(("dpHandlePingPacket: set tag; sending to %d; pkt is ", dest));
 	  dumpBuf(buf, len);
@@ -9097,7 +9102,7 @@ static dp_result_t dpHandlePingPacket(
 ----------------------------------------------------------------------*/
 static void dpPollPing(dp_t *dp)
 {
-	unsigned short len;
+	uint16 len;
 
 	/*DPRINT(("dpPollPing: now %d, next %d, dest h:%x\n",
 		dp->now, dp->ping.next_send_time, dp->ping_dest));*/
@@ -9110,12 +9115,12 @@ static void dpPollPing(dp_t *dp)
 	}
 
 	if (dp->ping.n_sent >= dp->ping.n_total) {
-		if ((long)(dp->now - dp->ping.deadline) > 0) {
+		if ((sint32)(dp->now - dp->ping.deadline) > 0) {
 			DPRINT(("dpPollPing: done listening pings to dest %d\n", dp->ping_dest));
 			if (dp->ping.cb) {
-				int loss_percent = 100*(dp->ping.n_total - dp->ping.n_got) / dp->ping.n_total;
+				sint32 loss_percent = 100*(dp->ping.n_total - dp->ping.n_got) / dp->ping.n_total;
 				time_t average = 0;
-				int i;
+				sint32 i;
 
 				DPRINT(("dpPollPing: for()\n"));
 				for (i=0; i<dp_PING_MAX_NTOTAL; i++) {
@@ -9134,12 +9139,12 @@ static void dpPollPing(dp_t *dp)
 				else
 					average = 0;
 				DPRINT(("average: %ld\n", average));
-				dp->ping.cb(dp->ping.karma, average, loss_percent);
+				dp->ping.cb(dp->ping.karma, (long)average, loss_percent);
 			}
 			dp->ping.cb = NULL;
 			dp->ping_dest = PLAYER_NONE;
 		}
-	} else if ((long)(dp->now - dp->ping.next_send_time) > 0) {
+	} else if ((sint32)(dp->now - dp->ping.next_send_time) > 0) {
 		struct {
 			dp_packetType_t tag;
 			dp_ping_packet_t pingbuf;
@@ -9147,7 +9152,7 @@ static void dpPollPing(dp_t *dp)
 		DPRINT(("dpPollPing: sending ping to dest %d\n", dp->ping_dest));
 		pkt.pingbuf.karma = dp->ping.karma;
 		dp->ping.sent_at[dp->ping.n_sent] = dp->now;
-		pkt.pingbuf.pktnum = (unsigned short) dp->ping.n_sent++;
+		pkt.pingbuf.pktnum = (uint16) dp->ping.n_sent++;
 		pkt.pingbuf.len = 0;
 		pkt.tag = dp_PING_PACKET_ID;
 		len = sizeof(pkt.tag)+sizeof(pkt.pingbuf)-sizeof(pkt.pingbuf.data)+0;
@@ -9164,7 +9169,7 @@ static void dpPollPing(dp_t *dp)
  Look up the session type and id of the session the given uid most
  recently tried to join.
 ----------------------------------------------------------------------*/
-dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidlen, dp_species_t *sessType)
+dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, size_t *sessidlen, dp_species_t *sessType)
 {
 	char subkey[dptab_KEY_MAXLEN];
 	char *pbuf;
@@ -9195,7 +9200,7 @@ dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidle
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/
-dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, int sessidlen, dp_species_t sessType)
+dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, size_t sessidlen, dp_species_t sessType)
 {
 	dp_result_t err;
 	char subkey[dptab_KEY_MAXLEN];
@@ -9256,17 +9261,17 @@ dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, int sessid
  and *idTo is set to dp_ID_NONE.  This is meant for game server
  development until we figure our how to do it right.
 ----------------------------------------------------------------------*/
-static dp_result_t dp_receive(dp_t *dp, dpid_t *idFrom, dpid_t *idTo, int flags, void *buffer, size_t *size);
+static dp_result_t dp_receive(dp_t *dp, dpid_t *idFrom, dpid_t *idTo, sint32 flags, void *buffer, size_t *size);
 
 DP_API dp_result_t dpReceive(
 	dp_t   *dp,
 	dpid_t *idFrom,
 	dpid_t *idTo,
-	int    flags,
+	sint32    flags,
 	void *buffer,
 	size_t *size)
 {
-	int i;
+	sint32 i;
 	dp_result_t err = dp_RES_AGAIN;
 	clock_t			new_now;
 	size_t orig_size;
@@ -9299,7 +9304,7 @@ DP_API dp_result_t dpReceive(
 	dp->now = new_now;
 	orig_size = *size;
 	ptimer_Enter(PTIMER_RECEIVE, "dpReceive timer");
-	for (i = 0; (i < 25) && (err == dp_RES_AGAIN); i++) {
+	for (i = 0; (i < 25) && (err == dp_RES_AGAIN); i++) { //
 		*size = orig_size;
 		ptimer_Enter(PTIMER_RECEIVE_FINE, "dp_receive timer");
 		err = dp_receive(dp, idFrom, idTo, flags, buffer, size);
@@ -9321,7 +9326,7 @@ static dp_result_t dp_sendLatencyDelta(dp_t *dp, playerHdl_t h)
 {
 	dpid_t id;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 	char *pbuf;
 	dp_playerId_t player;
 	size_t len;
@@ -9362,7 +9367,7 @@ static dp_result_t dp_receive(
 	dp_t   *dp,
 	dpid_t *idFrom,
 	dpid_t *idTo,
-	int    flags,
+	sint32    flags,
 	void *buffer,
 	size_t *size)
 {
@@ -9371,7 +9376,7 @@ static dp_result_t dp_receive(
 
 	playerHdl_t		pktsrc;
 	size_t			pktlen;
-	int				get_flags;
+	sint32				get_flags;
 	struct dpReceivePkt_s {
 		dp_packetType_t tag;
 		union {
@@ -9411,7 +9416,7 @@ static dp_result_t dp_receive(
 	if (dp->pleaseJoinAny && dp->dpio->publicAddressKnown) {
 		dp->pleaseJoinAny = FALSE;
 		if (dp->dpOpen_cb) {
-			short flags = dp->pleaseJoinAnyMask | dp_SESSION_FLAGS_ENABLE_DUALADDRESS;
+			sint16 flags = dp->pleaseJoinAnyMask | dp_SESSION_FLAGS_ENABLE_DUALADDRESS;
 
 			DPRINT(("dpReceive: joining any session on game server sessType %d, mask %d, flags %d\n", dp->pleaseJoinAnySessType, dp->pleaseJoinAnyMask, flags));
 			err = dpSendJoinSession(dp, dp->joinKarma, NULL, dp->pleaseJoinAnySessType, flags, dp->pleaseJoinAnyMask, dp->hMaster);
@@ -9598,12 +9603,12 @@ static dp_result_t dp_receive(
 		 */
 		dpSwapPingPacket(&pkt->body.ping);
 		DPRINT(("ping: karma %d, pktnum %d\n", pkt->body.ping.karma, pkt->body.ping.pktnum));
-		dpHandlePingPacket(dp, (unsigned char *)buffer, pktlen, pktsrc, dp_PING_RESP_PACKET_ID);
+		dpHandlePingPacket(dp, (uint8 *)buffer, pktlen, pktsrc, dp_PING_RESP_PACKET_ID);
 		dp_assertValid(dp);
 		return dp_RES_AGAIN;
 		break;
 
-	case dp_PING_RESP_PACKET_ID:
+	case dp_PING_RESP_PACKET_ID: //
 		dpSwapPingPacket(&pkt->body.pingresp);
 		DPRINT(("ping_resp: karma %d, want karma %d, pktnum %d, len %d\n",
 				pkt->body.pingresp.karma,
@@ -9612,8 +9617,8 @@ static dp_result_t dp_receive(
 				pktlen));
 		if (pkt->body.pingresp.pktnum & 0x8000) {
 			/* kludge for now */
-			extern dp_result_t dpHandleServerPingResponsePacket( dp_t *dp, unsigned char *buf, size_t len, playerHdl_t src);
-			dpHandleServerPingResponsePacket(dp, (unsigned char *)buffer, pktlen, pktsrc);
+			extern dp_result_t dpHandleServerPingResponsePacket( dp_t *dp, uint8 *buf, size_t len, playerHdl_t src);
+			dpHandleServerPingResponsePacket(dp, (uint8 *)buffer, pktlen, pktsrc);
 			dp_assertValid(dp);
 			return dp_RES_AGAIN;
 		}
@@ -9632,7 +9637,7 @@ static dp_result_t dp_receive(
 	case dp_USER_PLAYERDATA_PACKET_ID: {
 		dptab_table_t *playervars;
 		char key[dptab_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 		dpid_t firstId = (dpid_t) (pkt->body.pData.id & ~(dp_PLAYERS_PER_HOST-1));
 		/* make sure packet was sent reliably */
 		if ((get_flags & dpio_GET_RELIABLE) == 0) {
@@ -9651,10 +9656,10 @@ static dp_result_t dp_receive(
 		}
 		if ((playervars = dptab_getTable(dp->dt, key, keylen)) != NULL) {
 			char subkey[dptab_KEY_MAXLEN];
-			int subkeylen = 0;
+			sint32 subkeylen = 0;
 			char *buf;
 			size_t buflen;
-			int idoffset = (dpid_t)pkt->body.pData.id - firstId;
+			sint32 idoffset = (dpid_t)pkt->body.pData.id - firstId;
 			subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(idoffset);
 			subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(pkt->body.pData.key);
 			subkey[subkeylen++] = (char) dpGETSHORT_SECONDBYTE(pkt->body.pData.key);
@@ -9851,7 +9856,7 @@ static dp_result_t dp_receive(
 				dp_packetType_t				tag;
 				dp_request_open_packet_t	body;
 			} PACK pkt;
-			int len;
+			size_t len;
 
 			DPRINT(("dpReceive: Could not send credentials from h:%x to h:%x, err:%d\n", pktsrc, host, err));
 
@@ -10018,10 +10023,10 @@ static dp_result_t dp_receive(
  If flags is dp_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if
  idTo is dp_ID_BROADCAST and the driver prefers broadcast.
 --------------------------------------------------------------------------*/
-static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags)
+static sint32 dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], sint32 flags)
 {
-	int i;
-	int nhdls;
+	sint32 i;
+	sint32 nhdls;
 
 	dp_assertValid(dp);
 
@@ -10039,7 +10044,7 @@ static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags)
 
 	/* Construct destination list on the fly for now. */
 	for (nhdls=0, i=dp->dpid2commHdl->n_used-1; i>=0; i--) {
-		int k;
+		sint32 k;
 		assoctab_item_t *pe;
 		playerHdl_t *pH;
 		playerHdl_t h;
@@ -10090,13 +10095,13 @@ static int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[], int flags)
  BUG: doesn't return -1... should fix.
  Note: will not return PLAYER_ME.
 --------------------------------------------------------------------------*/
-static int dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
+static sint32 dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
 {
-	int i;
-	int nhdls;
+	sint32 i;
+	sint32 nhdls;
 	dptab_table_t *grplayers;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 
 	dp_assertValid(dp);
 
@@ -10123,11 +10128,11 @@ static int dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
 
 	/* Construct destination list on the fly for now. */
 	for (i = dptab_tableSize(grplayers) - 1, nhdls = 0; i >= 0; i--) {
-		int k;
+		sint32 k;
 		playerHdl_t h;
 		dp_result_t err;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		void *pbuf;
 		size_t plen;
 		dpid_t pid;
@@ -10137,7 +10142,7 @@ static int dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
 			dp_assertValid(dp);
 			return -1;
 		}
-		pid = (unsigned short) dpMAKESHORT(subkey[0], subkey[1]);
+		pid = (uint16) dpMAKESHORT(subkey[0], subkey[1]);
 		h = dpid2commHdl(dp, pid);
 
 		/* Set to PLAYER_NONE if duplicate */
@@ -10169,9 +10174,9 @@ static int dp_getGroupHdls(dp_t *dp, dpid_t id, playerHdl_t hdls[])
 
  Returns number of handles, or -1 (or zero :( ) on error.
 --------------------------------------------------------------------------*/
-static int dp_getHdls(dp_t *dp, dpid_t idTo, playerHdl_t *dests, int flags)
+static sint32 dp_getHdls(dp_t *dp, dpid_t idTo, playerHdl_t *dests, sint32 flags)
 {
-	int ndests;
+	sint32 ndests;
 
 	dp_assertValid(dp);
 
@@ -10206,14 +10211,14 @@ DP_API dp_result_t dpSend(
 	dp_t  *dp,
 	dpid_t idFrom,
 	dpid_t idTo,
-	int flags,
+	sint32 flags,
 	void *buffer,
 	size_t size)
 {
 	dp_envelope_t	*env;
 	dp_result_t		err;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
-	int ndests;
+	sint32 ndests;
 
 	precondition(dp != NULL);
 	precondition((idFrom != dp_ID_NONE) && (idTo != dp_ID_NONE));
@@ -10316,13 +10321,13 @@ DP_API dp_result_t dpFlush(
 ------------------------------------------------------------------------*/
 DP_API dp_result_t dpSetPingIntervals(
 	dp_t *dp,
-	int piggybackPingIntervalMS,
-	int forcedPingIntervalMS)
+	sint32 piggybackPingIntervalMS,
+	sint32 forcedPingIntervalMS)
 {
 	dp_result_t err;
-	int i;
+	sint32 i;
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
-	int ndests;
+	sint32 ndests;
 
 	precondition(dp && dp->dpio);
 	err = dpio_setPingIntervals(dp->dpio, piggybackPingIntervalMS,
@@ -10338,7 +10343,7 @@ DP_API dp_result_t dpSetPingIntervals(
 	ndests = dp_getBroadcastHdls(dp, dests, dp_SEND_RELIABLE);
 	for (i = 0; i < ndests; i++) {
 		playerHdl_t h = dests[i];
-		short opt = dp_getDesiredHandleOptions(dp, h);
+		sint16 opt = dp_getDesiredHandleOptions(dp, h);
 
 		err = dpio_setHandleOptions(dp->dpio, h, opt);
 		if (err != dp_RES_OK) {
@@ -10357,7 +10362,7 @@ DP_API dp_result_t dpSetPingIntervals(
 DP_API dp_result_t dpPingUser(
 	dp_t *dp,
 	dpid_t dest,
-	short karma,
+	sint16 karma,
 	dp_ping_callback_t cb)
 {
 	DPRINT(("dpPingUser(,%d,):\n", dest));
@@ -10415,7 +10420,7 @@ DP_API dp_result_t dpCreateGroup(
 		char_t name[dp_PNAMELEN];
 	} PACK gbuf;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 	size_t glen;
 
 	precondition(dp != NULL);
@@ -10484,14 +10489,14 @@ DP_API dp_result_t dpDestroyGroup(
 	dp_t   *dp,
 	dpid_t id)
 {
-	int i;
-	int n;
+	sint32 i;
+	sint32 n;
 	dp_result_t err;
 	dptab_table_t *grplayers;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -10577,9 +10582,9 @@ DP_API dp_result_t dpAddPlayerToGroup(
 	dptab_table_t *grplayers;
 	playerHdl_t src;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 	char name[dp_PNAMELEN];
 
 	DPRINT(("dpAddPlayerToGroup:\n"));
@@ -10702,9 +10707,9 @@ DP_API dp_result_t dpDeletePlayerFromGroup(
 	dp_result_t err;
 	dptab_table_t *grplayers;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -10780,10 +10785,10 @@ DP_API dp_result_t dpEnumGroups(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	DPRINT(("dpEnumGroups:\n"));
@@ -10805,9 +10810,9 @@ DP_API dp_result_t dpEnumGroups(
 	}
 
 	for (i = dptab_tableSize(dp->groups) - 1; i >= 0; i--) {
-		int namelen;
+		size_t namelen;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		char *grec;
 		size_t glen;
 		dpid_t gid;
@@ -10819,7 +10824,7 @@ DP_API dp_result_t dpEnumGroups(
 			dp_assertValid(dp);
 			return dp_RES_BUG;
 		}
-		gid = (unsigned short) dpMAKESHORT(subkey[0], subkey[1]);
+		gid = (uint16) dpMAKESHORT(subkey[0], subkey[1]);
 		memcpy(name, grec, glen);
 		namelen = glen < dp_PNAMELEN - 1 ? glen : dp_PNAMELEN - 1;
 		name[namelen] = '\0';
@@ -10856,14 +10861,14 @@ DP_API dp_result_t dpEnumGroupPlayers(
 	dp_session_t *s,
 	dpEnumPlayersCallback_t cb,
 	void *context,
-	long timeout				/* How long in milliseconds to wait. */
+	sint32 timeout				/* How long in milliseconds to wait. */
 	)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 	dptab_table_t *grplayers;
 	char key[dptab_KEY_MAXLEN];
-	int keylen;
+	sint32 keylen;
 
 	precondition(dp != NULL);
 	precondition(cb != NULL);
@@ -10884,7 +10889,7 @@ DP_API dp_result_t dpEnumGroupPlayers(
 	{
 		dp_result_t err;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		void *pbuf;
 		size_t plen;
 		subkeylen = 0;
@@ -10912,7 +10917,7 @@ DP_API dp_result_t dpEnumGroupPlayers(
 	DPRINT(("dpEnumGroupPlayers: tablesize %d\n", dptab_tableSize(grplayers)));
 	for (i = dptab_tableSize(grplayers) - 1; i >= 0; i--) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		void *pbuf;
 		size_t plen;
 		dpid_t pid;
@@ -10924,7 +10929,7 @@ DP_API dp_result_t dpEnumGroupPlayers(
 			dp_assertValid(dp);
 			return dp_RES_BUG;
 		}
-		pid = (unsigned short) dpMAKESHORT(subkey[0], subkey[1]);
+		pid = (uint16) dpMAKESHORT(subkey[0], subkey[1]);
 		if ((err = dpGetPlayerName(dp, pid, name, dp_PNAMELEN)) != dp_RES_OK) {
 			DPRINT(("dpEnumGroupPlayers: err: no player name for id %d\n", pid));
 			dp_assertValid(dp);
@@ -10951,21 +10956,21 @@ DP_API dp_result_t dpEnumGroupPlayers(
 DP_API dp_result_t dpSetPlayerData(
 	dp_t   *dp,
 	dpid_t idPlayer,
-	int    key,
+	sint32    key,
 	void   *buf,
     size_t buflen,
-	long   flags)
+	sint32   flags)
 {
 	dptab_table_t *playervars;
 	playerHdl_t src;
 	dp_result_t err;
 	dpid_t firstId;
 	char tabkey[dptab_KEY_MAXLEN];
-	int tabkeylen;
+	sint32 tabkeylen;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 	char_t name[dp_PNAMELEN];
-	int idoffset;
+	sint32 idoffset;
 	precondition(dp != NULL);
 	if ((src = dpid2commHdl(dp, idPlayer)) == PLAYER_NONE) {
 		DPRINT(("dpSetPlayerData: err: player %d has no comm handle, can't add\n", idPlayer));
@@ -11030,7 +11035,7 @@ DP_API dp_result_t dpSetPlayerData(
 DP_API dp_result_t dpSendPlayerData(
 	dp_t   *dp,
 	dpid_t idPlayer,
-	int    key,
+	sint32    key,
 	dpid_t idTo)
 {
 	playerHdl_t dests[MY_MAX_HOSTS];		/* FIXME */
@@ -11039,13 +11044,13 @@ DP_API dp_result_t dpSendPlayerData(
 	dp_result_t err;
 	dpid_t firstId;
 	char tabkey[dptab_KEY_MAXLEN];
-	int tabkeylen;
+	sint32 tabkeylen;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 	char_t name[dp_PNAMELEN];
-	int idoffset;
-	int ndests;
-	int i;
+	sint32 idoffset;
+	sint32 ndests;
+	sint32 i;
 
 	precondition(dp != NULL);
 
@@ -11124,21 +11129,21 @@ DP_API dp_result_t dpSendPlayerData(
 DP_API dp_result_t dpGetPlayerData(
 	dp_t   *dp,
 	dpid_t idPlayer,
-	int    key,
+	sint32    key,
 	void   *buf,
 	size_t *pbuflen,
-	long   flags)
+	sint32   flags)
 {
 	dptab_table_t *playervars;
 	dp_result_t err;
 	dpid_t firstId;
 	char tabkey[dptab_KEY_MAXLEN];
-	int tabkeylen;
+	sint32 tabkeylen;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 	char *tabbuf;
 	size_t tabbuflen;
-	int idoffset;
+	sint32 idoffset;
 	precondition(dp != NULL);
 
 #if !defined(NDEBUG)
@@ -11217,7 +11222,7 @@ DP_API dp_result_t dpGetPlayerData(
 DP_API dp_result_t dpReadyToFreeze(
 	dp_t   *dp)
 {
-	int i;
+	sint32 i;
 	playerHdl_t errHdl;	/* Should return this to caller! */
 
 	dp_assertValid(dp);
@@ -11273,11 +11278,11 @@ DP_API dp_result_t dpSetConnCallback(
  driver.
  May return other error codes as well; depends on the driver being used.
 -------------------------------------------------------------------------*/
-DP_API dp_result_t DP_APIX dpGetParameterLong(dp_t *dp, int paramId, long *pparamVal)
+DP_API dp_result_t DP_APIX dpGetParameterLong(dp_t *dp, sint32 paramId, sint32 *pparamVal)
 {
 	commSetParamReq_t   req;
 	commSetParamResp_t  resp; /* This is a dummy variable */
-	int ok;
+	sint32 ok;
 
 	precondition(dp);
 	precondition(pparamVal);
@@ -11425,7 +11430,7 @@ DP_API dp_result_t dpTurnPoll(dp_t *dp)
 -------------------------------------------------------------------------*/
 DP_API dp_result_t dpGetStats(
 	dp_t *dp,
-	int statkind,
+	sint32 statkind,
 	dp_stat_t *buf,
 	size_t buflen)
 {

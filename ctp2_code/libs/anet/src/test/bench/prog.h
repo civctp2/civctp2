@@ -50,7 +50,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  */
 
 
-
+#include "types.h"
 
 /*
  * Definitions
@@ -137,7 +137,7 @@ typedef struct prog_syntax_s
  */
 typedef struct prog_line_s
 {
-	unsigned long		flags;					/* flags for this line */
+	uint32		flags;					/* flags for this line */
 	prog_cmd_t			*cmd;					/* function to be called when this is executed */
 	char				params[PROG_MAX_PARAM_LENGTH];	/* paramaters sent to the function */
 	struct prog_line_s	*next;					/* pointer to next line in the program */
@@ -162,10 +162,10 @@ typedef struct prog_s
  */
 typedef struct prog_process_s
 {
-	int						integers[PROG_MAX_INT];		/* Integer Variables */
+	sint32						integers[PROG_MAX_INT];		/* Integer Variables */
 	char					strings[PROG_MAX_STRING][PROG_MAX_STRINGLEN];
 														/* String Variables */
-	int						exitcode;					/* Exit Code */
+	sint32						exitcode;					/* Exit Code */
 	prog_t					*program;					/* Program being executed */
 	prog_line_t				*line;						/* Current line of the program */
 	prog_line_t				*errhandler;				/* Current error handler */
@@ -244,7 +244,7 @@ prog_res_t prog_syntax_PrintCmds(prog_syntax_t *syntax, int verbose);
  *        prog_RES_SYNTAX: there was a syntactic error in the program
  *        prog_RES_FILE: file error
  */
-prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, int argc, char **argv);
+prog_res_t prog_Load(prog_t *prog, prog_syntax_t *syntax, const char *file, sint32 argc, char **argv);
 
 /*
  * prog_UnLoad
@@ -294,7 +294,7 @@ prog_res_t prog_process_Step(prog_process_t *process, void *context);
  * out <- value
  *
  */
-int prog_process_GetInteger(prog_process_t *process, int index);
+int prog_process_GetInteger(prog_process_t *process, sint32 index);
 
 /*
  * prog_process_SetInteger
@@ -305,7 +305,7 @@ int prog_process_GetInteger(prog_process_t *process, int index);
  *        index: index of integer value
  *        value: value to set
  */
-void prog_process_SetInteger(prog_process_t *process, int index, int value);
+void prog_process_SetInteger(prog_process_t *process, sint32 index, sint32 value);
 
 /*
  * prog_process_GetString
@@ -317,7 +317,7 @@ void prog_process_SetInteger(prog_process_t *process, int index, int value);
  * out <- value
  *
  */
-char *prog_process_GetString(prog_process_t *process, int index);
+char *prog_process_GetString(prog_process_t *process, sint32 index);
 
 /*
  * prog_process_SetString
@@ -328,7 +328,7 @@ char *prog_process_GetString(prog_process_t *process, int index);
  *        index: index of string value
  *        value: value to set
  */
-void prog_process_SetString(prog_process_t *process, int index, const char *value);
+void prog_process_SetString(prog_process_t *process, sint32 index, const char *value);
 
 /*
  * prog_process_GetExitCode
@@ -362,4 +362,4 @@ prog_line_t *prog_Resolv(const char *label, prog_t *prog);
  *        argc: pointer to variable which will hold the number of arguments
  *        argv: pointer to char * array to hold the argument pointers
  */
-void prog_Char2Args(char *string, int *argc, char **argv);
+void prog_Char2Args(char *string, sint32 *argc, char **argv);

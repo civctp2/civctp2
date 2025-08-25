@@ -27,7 +27,7 @@
 //
 // - Prevented memory leak report (not an actual leak).
 // - Added second World::GetGood method, usefull if you already have a Cell
-//   pointer. - May 18th 2005 Martin Gühmann
+//   pointer. - May 18th 2005 Martin GÃ¼hmann
 // - Prevented crash with multiple instances of an improvement that is deleted.
 //
 //----------------------------------------------------------------------------
@@ -506,14 +506,7 @@ bool World::IsInstallation(const MapPoint &pos) const
 
 sint32 World::GetColor(const MapPoint &pos) const
 {
-	int c = GetCell(pos)->m_color;
-
-	int foo;
-	if (0 <c) {
-		foo = 1;
-	}
-	return c;
-
+	return GetCell(pos)->m_color;
 }
 
 void World::ShowCellOwners()

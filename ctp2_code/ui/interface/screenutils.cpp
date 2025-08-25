@@ -476,7 +476,7 @@ void close_CreditsScreen(void)
 	creditsscreen_Cleanup();
 }
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 //----------------------------------------------------------------------------
 //
@@ -520,7 +520,7 @@ void close_AllScreens(void)
 		g_modalWindow = 1;
 
 		battleview_ExitButtonActionCallback
-		    (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		    (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 	}
 	else
 	{
@@ -569,7 +569,7 @@ void close_AllScreensAndUpdateInfoScreen(void)
 	{
 		g_modalWindow = 1;
 		battleview_ExitButtonActionCallback
-		    (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		    (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 	}
 	else
 	{

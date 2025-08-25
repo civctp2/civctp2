@@ -51,7 +51,7 @@ aui_DropDown::aui_DropDown(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -80,7 +80,7 @@ aui_DropDown::aui_DropDown(
 	sint32 buttonSize,
 	sint32 windowSize,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -607,31 +607,22 @@ void aui_DropDown::MouseLDropOutside( aui_MouseEvent *mouseData )
 	}
 }
 
-
-
-
-
-
-
-
-
-
-void DropDownButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void DropDownButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action == (uint32)AUI_BUTTON_ACTION_PRESS
 	&&   ((aui_Button *)control)->ExtractRepeatCount( data ) == 0 )
 	{
-		aui_DropDown *dropdown = (aui_DropDown *)cookie;
+		aui_DropDown *dropdown = (aui_DropDown *)cookie.m_voidPtr;
 		dropdown->ToggleListBoxWindow();
 	}
 }
 
 
-void DropDownListBoxActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void DropDownListBoxActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action == (uint32)AUI_LISTBOX_ACTION_SELECT )
 	{
-		aui_DropDown *dropdown = (aui_DropDown *)cookie;
+		aui_DropDown *dropdown = (aui_DropDown *)cookie.m_voidPtr;
 
 
 		dropdown->UpdateSelectedItem();

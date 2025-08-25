@@ -17,7 +17,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_DropDown(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -29,7 +29,7 @@ public:
 		sint32 buttonSize = 0,
 		sint32 windowSize = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~c3_DropDown() {};
 
 	void Clear(void);

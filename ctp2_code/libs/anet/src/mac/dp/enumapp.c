@@ -53,17 +53,17 @@ Pascal/nonstandard string utilities -- might want to stick into another file.
 #define MIN(a,b) (((a)<(b))?(a):(b))
 #endif
 
-char *pStrcat(unsigned char *dest, unsigned char *src)
+char *pStrcat(uint8 *dest, uint8 *src)
 {
-	long sLen = MIN(*src, 255 - *dest);
+	sint32 sLen = MIN(*src, 255 - *dest);
 	BlockMove(src + 1, dest + *dest + 1, sLen);
 	*dest += sLen;
 	return (char *)dest;
 }
 
-char *pStrcpy(unsigned char *dest, unsigned char *src)
+char *pStrcpy(uint8 *dest, uint8 *src)
 {
-	BlockMove(src, dest, (long) *src + 1);
+	BlockMove(src, dest, (sint32) *src + 1);
 	return (char*)dest;
 }
 
@@ -140,7 +140,7 @@ DP_API dp_result_t dpReadAnetInf(const char *path, dp_appParam_t *pAppParam)
 	/* Read info from the .ini file */
 	if (!err) {
         const char* buf;
-        unsigned int val, val2; /* dummy vars to prevent sscanf from overwriting */
+        uint32 val, val2; /* dummy vars to prevent sscanf from overwriting */
 	    strcpy(pAppParam->name, dpini_readParameter("Name", 0));
 		strcpy(pAppParam->path, dpini_readParameter("Run", 0));
 	    strcpy(pAppParam->args, dpini_readParameter("Cmdline", 1));
@@ -322,7 +322,7 @@ getLatest(
 {
 	dptab_table_t *ptApps;
 	char key[dptab_KEY_MAXLEN];
-	int keylen = 0;
+	sint32 keylen = 0;
 	dp_result_t err;
 
 	assert(dp != NULL);
@@ -411,7 +411,7 @@ dpGetAppVersion(
 {
 	dp_result_t err;
 	char cwd[256];
-	int len;
+	sint32 len;
 
 	if (!dp || !app) {
 		DPRINT(("dpGetAppVersion: null arguments not allowed\n"));
@@ -472,9 +472,9 @@ DP_API dp_result_t dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 ----------------------------------------------------------------------*/
 DP_API dp_result_t dpEnumApp(dp_t *dp, dpEnumAppCallback_t cb, void *context)
 {
-	int i;
-	short myVRef=0;
-	long myDirID=0;
+	sint32 i;
+	sint16 myVRef=0;
+	sint32 myDirID=0;
 	dp_appParam_t appParam;
 	CInfoPBRec myCPB;
 	FSSpec mySpec;

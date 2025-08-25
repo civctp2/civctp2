@@ -39,6 +39,7 @@
 #include "UnitData.h"
 #include "citydata.h"
 #include "Happy.h"
+#include "aui_control.h"
 
 extern Player **g_player;
 
@@ -127,7 +128,7 @@ void World::CDMove(sint32 costSoFar, const sint32 x, const sint32 y,
 }
 
 void World::FindDistances(sint32 player, const MapPoint &start, sint32 numHits,
-						  FindDistanceCellCallback *cb, void *cookie)
+						  FindDistanceCellCallback *cb, Cookie cookie)
 {
 	if(!m_distanceQueue) {
 		m_distanceQueue = new PQueue<DistItem>(32);
@@ -159,7 +160,7 @@ void World::FindDistances(sint32 player, const MapPoint &start, sint32 numHits,
 
 void World::FDMove(sint32 costSoFar, const sint32 x, const sint32 y,
 				   sint32 player, sint32 &numHitsNeeded, FindDistanceCellCallback *cb,
-				   void *cookie)
+				   Cookie cookie)
 {
 	Cell *cell = m_map[x][y];
 	cell->m_search_count = costSoFar + sint32(cell->m_move_cost);

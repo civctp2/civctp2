@@ -51,7 +51,7 @@ private:
 
 	void doButtonCallback(ctp2_Button *button);
 
-	static void EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+	static void EventsInfoButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 };
 

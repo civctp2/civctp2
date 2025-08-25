@@ -27,24 +27,27 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef __IPXERROR_INCLUDED__
 #define __IPXERROR_INCLUDED__
 
-#define IPX_SUCCESSFUL					(short)0x0000
+#include "types.h"
 
-#define IPX_NOT_INSTALLED				(short)0x90F0
-#define IPX_OUT_OF_RESOURCE				(short)0x90F7
-#define IPX_EVENT_CANNOT_BE_SCHEDULED	(short)0x90F8
-#define IPX_EVENT_CANNOT_BE_CANCELLED	(short)0x90F9
-#define IPX_NO_ROUTE					(short)0x90FA
-#define IPX_EVENT_CANCELLED				(short)0x90FC
-#define IPX_BAD_PACKET					(short)0x90FD
-#define IPX_SOCKET_TABLE_FULL			(short)0x90FE
-#define IPX_SOCKET_IN_USE				(short)0x90FF
 
-#define IPX_BAD_CHECKSUM				(short)0x91D1
-#define IPX_LAP_FAILS					(short)0x91D2
-#define IPX_PACKET_OVERFLOW				(short)0x91FD
-#define IPX_BAD_PARAMETER				(short)0x91FE
-#define IPX_SOCKET_NOT_OPEN				(short)0x91FF
+#define IPX_SUCCESSFUL					(sint16)0x0000
 
-#define IPX_ECB_IN_USE					(short)0x92FF
+#define IPX_NOT_INSTALLED				(sint16)0x90F0
+#define IPX_OUT_OF_RESOURCE				(sint16)0x90F7
+#define IPX_EVENT_CANNOT_BE_SCHEDULED	(sint16)0x90F8
+#define IPX_EVENT_CANNOT_BE_CANCELLED	(sint16)0x90F9
+#define IPX_NO_ROUTE					(sint16)0x90FA
+#define IPX_EVENT_CANCELLED				(sint16)0x90FC
+#define IPX_BAD_PACKET					(sint16)0x90FD
+#define IPX_SOCKET_TABLE_FULL			(sint16)0x90FE
+#define IPX_SOCKET_IN_USE				(sint16)0x90FF
+
+#define IPX_BAD_CHECKSUM				(sint16)0x91D1
+#define IPX_LAP_FAILS					(sint16)0x91D2
+#define IPX_PACKET_OVERFLOW				(sint16)0x91FD
+#define IPX_BAD_PARAMETER				(sint16)0x91FE
+#define IPX_SOCKET_NOT_OPEN				(sint16)0x91FF
+
+#define IPX_ECB_IN_USE					(sint16)0x92FF
 
 #endif /* __IPXERROR_INCLUDED__ */

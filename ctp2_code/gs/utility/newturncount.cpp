@@ -366,7 +366,7 @@ void NewTurnCount::SendMsgEndOfGameEarlyWarning()
 	}
 }
 
-void NewTurnCount::SendMsgToAllPlayers(MBCHAR *s)
+void NewTurnCount::SendMsgToAllPlayers(const MBCHAR *s)
 {
 	sint32	i ;
 

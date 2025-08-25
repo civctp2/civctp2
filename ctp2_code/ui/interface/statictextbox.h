@@ -18,14 +18,14 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *text = NULL,
+		const MBCHAR *text = NULL,
 		uint32 maxLength = 0,
 		uint32 size = 0,
 		sint32 bevel = 0);
 	StaticTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock);
+		const MBCHAR *ldlBlock);
 
 	virtual ~StaticTextBox() {}
 

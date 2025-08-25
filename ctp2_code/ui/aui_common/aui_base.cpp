@@ -39,8 +39,8 @@ void gen_crc_table()
 {
    if (!g_crcTable)
       g_crcTable = new uint32[256];
-   register int i, j;
-   register unsigned long crc_accum;
+   int i, j;
+   unsigned long crc_accum;
 
    for ( i = 0;  i < 256;  i++ ) {
       crc_accum = ( (uint32) i << 24 );

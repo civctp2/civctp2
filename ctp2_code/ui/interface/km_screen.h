@@ -40,8 +40,8 @@ sint32      km_screen_removeMyWindow(uint32 action);
 void        km_screen_Cleanup(void);
 sint32      km_screen_remapKey( WPARAM wParam, LPARAM lParam );
 
-void        km_screen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void        km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void        km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void        km_screen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void        km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void        km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 #endif

@@ -43,7 +43,7 @@ public:
 	MessageWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		Message data,
 		MessageIconWindow *icon,
@@ -61,7 +61,7 @@ public:
 
 	AUI_ERRCODE	ShowWindow( BOOL show );
 
-	void SetMessageText( MBCHAR *text ) { m_messageText->SetHyperText( text ); }
+	void SetMessageText( const MBCHAR *text ) { m_messageText->SetHyperText( text ); }
 
 	PLAYER_INDEX		GetPlayer( void ) { return m_player; }
 
@@ -73,21 +73,21 @@ protected:
 	AUI_ERRCODE AddBordersToUI();
 	AUI_ERRCODE RemoveBordersFromUI();
 
-	AUI_ERRCODE CreateWindowEdges( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateStandardTextBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateTurnText( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateStandardMinimizeButton( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateStandardDismissButton( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateGreatLibraryButton( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateWindowEdges( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateStandardTextBox( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateTurnText( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateStandardMinimizeButton( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateStandardDismissButton( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateGreatLibraryButton( const MBCHAR *ldlBlock );
 
-	AUI_ERRCODE CreateEyePointBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateStandardEyePointBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateDropdownEyePointBox( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateListboxEyePointBox( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateEyePointBox( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateStandardEyePointBox( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateDropdownEyePointBox( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateListboxEyePointBox( const MBCHAR *ldlBlock );
 
-	AUI_ERRCODE CreateResponses( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateSelectResponses( MBCHAR *ldlBlock );
-	AUI_ERRCODE CreateSubmitResponses( MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateResponses( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateSelectResponses( const MBCHAR *ldlBlock );
+	AUI_ERRCODE CreateSubmitResponses( const MBCHAR *ldlBlock );
 
 private:
 	aui_HyperTextBox						*m_messageText;

@@ -32,7 +32,7 @@ TextBox::TextBox(
 	const MBCHAR *pattern,
 	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL, k_TEXTBOX_MAXTEXT * k_TEXTBOX_MAXITEMS ),
@@ -72,7 +72,7 @@ TextBox::TextBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),

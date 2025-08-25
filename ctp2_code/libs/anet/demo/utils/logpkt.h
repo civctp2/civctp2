@@ -29,6 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 #include <stdio.h>
+#include "types.h"
 
 /*------------------------------------------------------------------------------
  Return the filename that the next call to logPkt_open() will use.
@@ -70,7 +71,7 @@ void logPkt_close(FILE *outFile);
  in the text log file.  tag is a 2 character id, usually "rx" or "tx".
 ------------------------------------------------------------------------------*/
 #ifdef LOGPKT_ENABLED
-void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer, const char *tag);
+void logPkt(FILE *outFile, const void *buffer, size_t length, uint32 peer, const char *tag);
 #else
 #define logPkt(fp,buf,len,peer,tag)
 #endif

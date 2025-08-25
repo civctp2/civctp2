@@ -228,7 +228,7 @@ void ScienceVictoryDialog::SetSwitchState(sint32 switchState)
 	{
 		aui_Region *child = m_switch->GetChildByIndex(childIndex);
 
-		if(childIndex == switchState)
+		if(childIndex == static_cast<size_t>(switchState))
 		{
 			if(child->IsHidden())
 				child->Show();
@@ -302,7 +302,7 @@ ctp2_ListItem *ScienceVictoryDialog::CreateMainframeItem(const Unit &city,
 	if(!item)
 		return(NULL);
 
-	item->SetUserData(reinterpret_cast<void*>(city.m_id));
+	item->SetUserData(city.m_id);
 
 	item->SetCompareCallback(CompareMainframeCities);
 
@@ -400,25 +400,21 @@ void ScienceVictoryDialog::UpdateConstructionMap(
 
 void ScienceVictoryDialog::UpdateStatus(const GaiaController *gaiaController)
 {
-
 	char buffer[256];
 	sprintf(buffer, g_theStringDB->GetNameStr("str_ldl_SV_COUNTDOWN_SEQUENCE"),
 		gaiaController->TurnsToComplete());
 	m_statusText->SetText(buffer);
-
-
-
 
 	m_statusBar->SetDrawCallbackAndCookie(StatusBarActionCallback,
 		const_cast<GaiaController*>(gaiaController), false);
 }
 
 AUI_ERRCODE ScienceVictoryDialog::StatusBarActionCallback(ctp2_Static *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+	aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 
 	const GaiaController *gaiaController =
-		static_cast<const GaiaController *>(cookie);
+		static_cast<const GaiaController *>(cookie.m_voidPtr);
 
 	double percentComplete =
 		static_cast<double>(gaiaController->TotalCountdownTurns() -
@@ -459,8 +455,8 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 {
 
 	Unit city1, city2;
-	city1.m_id = reinterpret_cast<uint32>(item1->GetUserData());
-	city2.m_id = reinterpret_cast<uint32>(item2->GetUserData());
+	city1.m_id = item1->GetUserDataUint32();
+	city2.m_id = item2->GetUserDataUint32();
 
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
@@ -503,7 +499,7 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 }
 
 void ScienceVictoryDialog::StartButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -521,11 +517,11 @@ void ScienceVictoryDialog::StartButtonActionCallback(aui_Control *control,
 
 	gaiaController->StartCountdown();
 
-	static_cast<ScienceVictoryDialog*>(cookie)->Update();
+	static_cast<ScienceVictoryDialog*>(cookie.m_voidPtr)->Update();
 }
 
 void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -562,11 +558,11 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 }
 
 void ScienceVictoryDialog::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<ScienceVictoryDialog*>(cookie)->Hide();
+	static_cast<ScienceVictoryDialog*>(cookie.m_voidPtr)->Hide();
 }

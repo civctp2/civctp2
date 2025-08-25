@@ -41,7 +41,7 @@ UInt8					gRecvBuf[sizeof(InetAddress) + udpMaxRawData + 1];
 Boolean					gEndPointValidUDP = false;
 TEndpointInfo			gEndPointInfo;
 otq_t*					gInQueue = nil;
-long					gExtraOTDataUDP = 0;
+sint32					gExtraOTDataUDP = 0;
 extern EndpointRef		gUDPEndpoint;
 Boolean OpenTransportInetExists(void) {
 	Boolean		result = false;
@@ -71,7 +71,7 @@ OSStatus DoInetBind(EndpointRef ep) {
 
 	bindReq.addr.maxlen = sizeof(InetAddress);
 	bindReq.addr.len = sizeof(InetAddress);
-	bindReq.addr.buf = (unsigned char*) &inAddr;
+	bindReq.addr.buf = (uint8*) &inAddr;
 	bindReq.qlen = 0;
 
 	err = OTBind(ep, &bindReq, nil);
@@ -135,9 +135,9 @@ OSStatus ShutDownUDP(void) {
 #pragma segment Main
 pascal void HandleEndpointEventsUDP(void* contextPtr, OTEventCode code, OTResult result, void* it) {
 	OSStatus 					error;
-	static unsigned long		unhandled = 0;
-	static unsigned long		unknown = 0;
-	static unsigned long		overflowErrors = 0;
+	static uint32		unhandled = 0;
+	static uint32		unknown = 0;
+	static uint32		overflowErrors = 0;
 	Boolean						doneReading = false;
 	OTResult					epState;
 	//	this method handles events for this endpoint
@@ -244,9 +244,9 @@ OSStatus HandleErrorUDERR(void) {
 	char		addrBuf[sizeof(InetAddress)];
 	char		optBuff[100];
 	uderr.addr.maxlen = sizeof(InetAddress);
-	uderr.addr.buf = (unsigned char *)addrBuf;
+	uderr.addr.buf = (uint8 *)addrBuf;
 
 	uderr.opt.maxlen = 100;
-	uderr.opt.buf = (unsigned char *)optBuff;
+	uderr.opt.buf = (uint8 *)optBuff;
 	return OTRcvUDErr(gUDPEndpoint, &uderr);
 }

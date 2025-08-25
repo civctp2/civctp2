@@ -52,11 +52,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Socket MUST be passed in network byte order.
  pool is created FULL of DONE packets.
 -----------------------------------------------------------------------*/
-ipxq_t *ipxq_create(short socket, nw_adr_t *defaultSrc, IOCompletionUPP esr) {
+ipxq_t *ipxq_create(sint16 socket, nw_adr_t *defaultSrc, IOCompletionUPP esr) {
 	ipxq_t *pq;
 	size_t len;
 	//union REGS      regs;
-	int i;
+	sint32 i;
 
 	pq = (ipxq_t *)malloc(sizeof(ipxq_t));
 	if (!pq) {
@@ -161,7 +161,7 @@ void ipxq_destroy(ipxq_t *pq)
 -----------------------------------------------------------------------*/
 ipxq_pkt_t *ipxq_get(ipxq_t *pq)
 {
-	int i;
+	sint32 i;
 	ipxq_pkt_t *pp;
 
 	for (i=0, pp=pq->pkts; i<ipxq_MAXELS; i++, pp++)

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -125,14 +125,8 @@ static TipWindow	*g_thumbTipWindow = NULL;
 static TextTab *g_happyTab = NULL;
 static IconButton *g_iconButton = NULL;
 
-
-
-
-
-
-void DebugExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void DebugExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -142,16 +136,15 @@ void DebugExitButtonActionCallback( aui_Control *control, uint32 action, uint32 
 	if ( auiErr != AUI_ERRCODE_OK ) return;
 }
 
-void DebugApplyButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void DebugApplyButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	TextBox *textbox;
 	C3TextField *textfield;
 
-	memcpy( &textbox, cookie, sizeof( TextBox * ) );
-	memcpy( &textfield, (MBCHAR *)cookie + sizeof( TextBox * ), sizeof( C3TextField * ) );
+	memcpy( &textbox, cookie.m_voidPtr, sizeof( TextBox * ) );
+	memcpy( &textfield, (MBCHAR *)cookie.m_voidPtr + sizeof( TextBox * ), sizeof( C3TextField * ) );
 
 	static MBCHAR text[ 100 ];
 
@@ -165,9 +158,8 @@ void DebugApplyButtonActionCallback( aui_Control *control, uint32 action, uint32
 		textbox->AppendText( text );
 }
 
-void TestWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TestWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AUI_ERRCODE auiErr;
@@ -183,37 +175,23 @@ void TestWindowButtonActionCallback( aui_Control *control, uint32 action, uint32
 	auiErr = g_c3ui->RemoveWindow( k_ID_WINDOW_FLOATING );
 	Assert( auiErr == AUI_ERRCODE_OK );
 	if ( auiErr != AUI_ERRCODE_OK ) return;
-
-
-
-
 }
 
-
-
-
-
-
-void TabCallbackSad( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TabCallbackSad( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 }
 
-void TabCallbackIndifferent( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TabCallbackIndifferent( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 }
 
-void TabCallbackHappy( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TabCallbackHappy( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 }
 
-
-
-
-
-
-void CheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CheckboxCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-	aui_TabGroup *tabGroup = (aui_TabGroup *)cookie;
+	aui_TabGroup *tabGroup = (aui_TabGroup *)cookie.m_voidPtr;
 	if ( !tabGroup ) return;
 
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -295,7 +273,7 @@ void CheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *c
 	}
 }
 
-void DraggableCheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void DraggableCheckboxCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	aui_Window *window = control->GetParentWindow();
 	if ( !window ) return;
@@ -312,7 +290,7 @@ void DraggableCheckboxCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void TransparentCheckboxCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void TransparentCheckboxCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	aui_Window *window = control->GetParentWindow();
 	if ( !window ) return;
@@ -334,7 +312,7 @@ void TransparentCheckboxCallback( aui_Control *control, uint32 action, uint32 da
 
 
 
-void ModalRadioCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ModalRadioCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	aui_Window *window = control->GetParentWindow();
 	if ( !window ) return;
@@ -1149,7 +1127,7 @@ int c3windows_MakeFloatingWindow( BOOL make )
 	return 0;
 }
 
-void ControlWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ControlWindowButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1180,7 +1158,7 @@ void ControlWindowButtonActionCallback( aui_Control *control, uint32 action, uin
 	if ( auiErr != AUI_ERRCODE_OK ) return;
 }
 
-void KnowledgeButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void KnowledgeButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1189,7 +1167,7 @@ void KnowledgeButtonActionCallback( aui_Control *control, uint32 action, uint32 
 	popup->DisplayWindow();
 }
 
-void DebugButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void DebugButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1204,7 +1182,7 @@ void DebugButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 static aui_Window		*s_thumbWindow = NULL;
 static ThumbnailMap		*s_thumbnail = NULL;
 
-void ResourceButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ResourceButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1232,7 +1210,7 @@ void ResourceButtonActionCallback( aui_Control *control, uint32 action, uint32 d
 
 }
 
-void CheatButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CheatButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1242,14 +1220,14 @@ void CheatButtonActionCallback( aui_Control *control, uint32 action, uint32 data
 
 }
 
-void DiplomacyButtonActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DiplomacyButtonActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 }
 
-void CityViewButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void CityViewButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -1542,7 +1520,7 @@ int c3windows_MakeDebugWindow( BOOL make )
 			12,
 			windowWidth - 30,
 			windowHeight - 24,
-			k_PatternName, NULL, NULL, NULL);
+			k_PatternName, NULL, NULL, nullptr);
 		if ( !textbox ) return -3;
 
 

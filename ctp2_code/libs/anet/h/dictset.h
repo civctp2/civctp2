@@ -98,6 +98,7 @@ on the screen such as icons, screen display looks, etc.
 #define _DICTSET_H_
 
 #include <stdio.h>
+#include "types.h"
 
 /**
 * Constants
@@ -118,10 +119,10 @@ on the screen such as icons, screen display looks, etc.
 typedef struct dcst_s* dcst_t;
 
 /* Type for status return values */
-typedef int dcst_status_t;
+typedef sint32 dcst_status_t;
 
 /* Type for the keys into the dictionary */
-typedef int dcst_key_t;
+typedef sint32 dcst_key_t;
 
 /* Type for the values in the dictionary */
 typedef void* dcst_value_t;
@@ -129,7 +130,7 @@ typedef void* dcst_value_t;
 /* Type for the for-each method callback (iterator callback)
    Return 0 to continue to next element, nonzero to end the
    for-each call immediately */
-typedef int (*dcst_forEach_cb) (
+typedef sint32 (*dcst_forEach_cb) (
 	dcst_t pDcst,		/* set being operated on */
 	dcst_key_t key,		/* key of current element */
 	dcst_value_t value,	/* value of current element */
@@ -143,7 +144,7 @@ typedef int (*dcst_forEach_cb) (
 can accomodate a maximum of maxKeys elements.  Use maxHashEntries to
 tune the size vs. speed of the lookup; a value of maxKeys/2 should
 produce close to optimum response time. */
-dcst_t dcstCreate(size_t valueSize, int maxKeys, int maxHashEntries);
+dcst_t dcstCreate(size_t valueSize, sint32 maxKeys, sint32 maxHashEntries);
 
 /* Destroy a dictionary set */
 void dcstDestroy(dcst_t pDcst);
@@ -208,7 +209,7 @@ dcst_status_t dcstThaw(dcst_t pDcst, FILE *fp);
 
 /* Assert that the dictset has a consistent internal structure */
 #define dcst_ASSERTVALID(d)	dcstAssertValid(d,__FILE__, __LINE__)
-void dcstAssertValid(dcst_t pDcst, char* file, int line);
+void dcstAssertValid(dcst_t pDcst, char* file, sint32 line);
 
 #else
 
@@ -223,14 +224,14 @@ void dcstAssertValid(dcst_t pDcst, char* file, int line);
 #if DCST_SELFTEST
 
 /* Test callback for dcstForEach() */
-int forEachTestCb (
+sint32 forEachTestCb (
 	dcst_t pDcst,		/* Dictset being operated on */
 	dcst_key_t key,		/* key of current element */
 	dcst_value_t value,	/* value of current element */
 	void *context);		/* context passed to dcstForEach() */
 
 /* Test executive */
-int main(int argc, char** argv);
+sint32 main(sint32 argc, char** argv);
 
 #endif /* self-test support */
 

@@ -44,6 +44,7 @@ class aui_Control;
 class ctp2_Button;
 class ctp2_Static;
 class aui_Surface;
+union Cookie;
 
 class TurnYearStatus {
 public:
@@ -54,7 +55,7 @@ public:
 	static         void  BuildTurnLengthOverride();
 	static         void  CleanupTurnLengthOverride();
 
-	TurnYearStatus(MBCHAR *ldlBlock);
+	TurnYearStatus(const MBCHAR *ldlBlock);
 
 	void Update();
 	void UpdatePlayer(PLAYER_INDEX player);
@@ -62,12 +63,12 @@ public:
 	static AUI_ERRCODE DrawDougsProgress(ctp2_Static *control,
 	                                     aui_Surface *surface,
 	                                     RECT &rect,
-	                                     void *cookie);
+	                                     Cookie cookie);
 
 private:
 
 	static void TurnYearStatusActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	ctp2_Button *m_turnYearStatus;
 	ctp2_Static *m_dougsProgress;

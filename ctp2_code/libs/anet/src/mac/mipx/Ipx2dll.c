@@ -109,7 +109,7 @@ static ipx2_hdl_t commHdl2ipx( playerHdl_t h )
  *	Return FALSE on error.
  */
 
-int
+sint32
 commNoOp(
 	commNoOpReq_t *		req,		// Request (or NULL)
 	commNoOpResp_t *	resp)		// Response (or NULL)
@@ -138,14 +138,14 @@ commNoOp(
  *	Return FALSE on error.
  */
 
-int
+sint32
 commInit(
 	commInitReq_t *		req,		// Request (or NULL)
 	commInitResp_t *	resp)		// Response (or NULL)
 {
 	commInitReq_t		reqDummy;
 	commInitResp_t		respDummy;
-	int status;
+	sint32 status;
 
 //  printf("commInit starting...\n");
 	DPRINT(("@IPX commInit(): "));
@@ -174,7 +174,7 @@ commInit(
 	#ifdef MACDEBUG
 		{
 			IPX_STATS		buffer;
-			unsigned long		length = sizeof(IPX_STATS);
+			uint32		length = sizeof(IPX_STATS);
 
 			IpxGetStatistics(&buffer, &length);
 		}
@@ -189,7 +189,7 @@ commInit(
  *	Return FALSE on error.
  */
 
-int
+sint32
 commTerm(
 	commTermReq_t *		req,		// Request (or NULL)
 	commTermResp_t *	resp)		// Response (or NULL)
@@ -200,7 +200,7 @@ commTerm(
 	#ifdef MACDEBUG
 		{
 			IPX_STATS		buffer;
-			unsigned long		length = sizeof(IPX_STATS);
+			uint32		length = sizeof(IPX_STATS);
 
 			IpxGetStatistics(&buffer, &length);
 		}
@@ -228,7 +228,7 @@ commTerm(
  *	Return TRUE if info was retrieved.
  */
 
-int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+sint32 commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 {
 	static commDriverInfoResp_t   commDriverInfoResp =
 	{
@@ -253,7 +253,7 @@ int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
  *  which will be overwritten by the next call.
  */
 
-int
+sint32
 commPlayerInfo(
 	commPlayerInfoReq_t *	req,	// Request
 	commPlayerInfoResp_t *	resp)	// Response (or NULL)
@@ -294,7 +294,7 @@ commPlayerInfo(
  *	time.
  */
 
-int
+sint32
 commTxFull(
 	commTxFullReq_t *	req,	// Request (or NULL)
 	commTxFullResp_t *	resp)	// Response (or NULL)
@@ -322,7 +322,7 @@ commTxFull(
  *	that the packet has been (or ever will be) sent.
  */
 
-int
+sint32
 commTxPkt(
 	commTxPktReq_t *	req,	// Request
 	commTxPktResp_t *	resp)	// Response (or NULL)
@@ -359,7 +359,7 @@ commTxPkt(
  *	Return TRUE if a packet was retrieved.
  */
 
-int
+sint32
 commPeekPkt(
 	commPeekPktReq_t *	req,	// Request (or NULL)
 	commPeekPktResp_t *	resp)	// Response (or NULL)
@@ -387,7 +387,7 @@ commPeekPkt(
  *  Status is zero on success, nonzero on error!
  */
 
-int
+sint32
 commRxPkt(
 	commRxPktReq_t *	req,	// Request (or NULL)
 	commRxPktResp_t *	resp)	// Response (or NULL)
@@ -424,15 +424,15 @@ commRxPkt(
  *	Return TRUE if the string was parsed successfully.
  */
 
-int
+sint32
 commScanAddr(
 	commScanAddrReq_t *		req,	// Request
 	commScanAddrResp_t *	resp)	// Response (or NULL)
 {
 	commScanAddrReq_t	reqDummy;
 	commScanAddrResp_t	respDummy;
-	int					tmpInt[sizeof(nw_adr_t)];
-	int					i;
+	sint32					tmpInt[sizeof(nw_adr_t)];
+	sint32					i;
 
 	if (req == NULL)
 		req = (commScanAddrReq_t *)memset(&reqDummy, 0, sizeof(*req));
@@ -472,7 +472,7 @@ commScanAddr(
  *	Return TRUE if the buffer was formatted successfully.
  */
 
-int
+sint32
 commPrintAddr(
 	commPrintAddrReq_t *	req,	// Request
 	commPrintAddrResp_t *	resp)	// Response (or NULL)
@@ -526,7 +526,7 @@ commPrintAddr(
  *	Return TRUE if the pseudo-player handle was generated.
  */
 
-int
+sint32
 commGroupAlloc(
 	commGroupAllocReq_t *	req,	// Request
 	commGroupAllocResp_t *	resp)	// Response
@@ -552,7 +552,7 @@ commGroupAlloc(
  *	Return TRUE if the pseudo-player handle was invalidated.
  */
 
-int
+sint32
 commGroupFree(
 	commGroupFreeReq_t *	req,	// Request
 	commGroupFreeResp_t *	resp)	// Response
@@ -578,7 +578,7 @@ commGroupFree(
  *	Return TRUE if the players were all added.
  */
 
-int
+sint32
 commGroupAdd(
 	commGroupAddReq_t *	req,	// Request
 	commGroupAddResp_t *	resp)	// Response
@@ -606,7 +606,7 @@ commGroupAdd(
  *	Return TRUE unless there was a problem subtracting one or more players.
  */
 
-int
+sint32
 commGroupSubtract(
 	commGroupSubtractReq_t *	req,	// Request
 	commGroupSubtractResp_t *	resp)	// Response
@@ -626,7 +626,7 @@ commGroupSubtract(
 	return FALSE;
 }
 #else
-int
+sint32
 commSetParam(
 	commSetParamReq_t *	req,	// Request
 	commSetParamResp_t *	resp)	// Response
@@ -648,7 +648,7 @@ commSetParam(
  *	Return TRUE if the link was established and we shook hands.
  */
 
-int
+sint32
 commSayHi(
 	commSayHiReq_t *	req,	// Request
 	commSayHiResp_t *	resp)	// Response
@@ -692,7 +692,7 @@ commSayHi(
  *	Return TRUE if the link was successfully broken.
  */
 
-int
+sint32
 commSayBye(
 	commSayByeReq_t *	req,	// Request
 	commSayByeResp_t *	resp)	// Response (or NULL)

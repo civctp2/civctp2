@@ -19,6 +19,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #ifndef _CTBStuff_
 #define _CTBStuff_
+
+#include "types.h"
+
 #ifdef __cplusplus
 extern "C" {
 #endif
@@ -26,7 +29,7 @@ extern "C" {
 Boolean InitializeCommToolBox(void);
 OSErr	FindPrefs(FSSpec* where);
 OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection);
-int config_ctb(ConnHandle* connection);
+sint32 config_ctb(ConnHandle* connection);
 OSErr CreateToolNameRes(StringPtr toolName);
 OSErr CreateConfigRes(Ptr configPtr);
 OSErr ConfigureConnection(ConnHandle* connection);
@@ -34,8 +37,8 @@ OSErr GetToolname(char* toolName);
 OSErr GetConfig(char* toolName);
 void CMTest(void);
 void CMTest2(void);
-OSErr GetData(unsigned long* value);
-OSErr SetData(unsigned long value);
+OSErr GetData(uint32* value);
+OSErr SetData(uint32 value);
 #define kConfigRes	5013
 #define kToolNameRes	6013
 #define kSerPtrRes	7013

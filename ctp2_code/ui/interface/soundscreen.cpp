@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -118,7 +118,7 @@ AUI_ERRCODE soundscreen_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false );
 	Assert( AUI_NEWOK(s_soundWindow, errcode) );
-	if ( !AUI_NEWOK(s_soundWindow, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_soundWindow, errcode) ) return errcode;
 
 	s_soundWindow->SetStronglyModal(TRUE);
 
@@ -192,7 +192,7 @@ AUI_ERRCODE soundscreen_Cleanup()
 
 
 
-void soundscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void soundscreen_exitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	g_theProfileDB->Save();
 
@@ -207,19 +207,19 @@ void soundscreen_exitPress(aui_Control *control, uint32 action, uint32 data, voi
 
 
 
-void soundscreen_sfxSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void soundscreen_sfxSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 	g_theProfileDB->SetSFXVolume(s_sfx->GetValueX());
 
 }
-void soundscreen_musicSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void soundscreen_musicSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 	g_theProfileDB->SetMusicVolume(s_music->GetValueX());
 
 }
-void soundscreen_voiceSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void soundscreen_voiceSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 	g_theProfileDB->SetVoiceVolume(s_voice->GetValueX());

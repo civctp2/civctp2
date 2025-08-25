@@ -28,10 +28,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-const char *hexstring(const unsigned char *binstr, int len)
+const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -47,7 +47,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -58,13 +58,13 @@ dp_dprintf(
 	return len;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
 }
 
-int update_mysql(dp_species_t sessType, dp_uid_t uid, int score, int won)
+sint32 update_mysql(dp_species_t sessType, dp_uid_t uid, sint32 score, sint32 won)
 {
 	MYSQL *mysql;
 	MYSQL_RES *res;
@@ -73,10 +73,10 @@ int update_mysql(dp_species_t sessType, dp_uid_t uid, int score, int won)
 	char tablename[16];
 	char query[2048];
 	char *errormsg;
-	long score_sum;
-	long score_max;
-	int err;
-	int i;
+	sint32 score_sum;
+	sint32 score_max;
+	sint32 err;
+	sint32 i;
 
 	mysql = mysql_connect(mysql, "localhost", "dank", "");
 	if (!mysql) {
@@ -136,7 +136,7 @@ int update_mysql(dp_species_t sessType, dp_uid_t uid, int score, int won)
 	return 0;
 }
 
-int main()
+sint32 main()
 {
 	dp_result_t err;
 	time_t now, t_last, t_start = time(NULL);
@@ -144,9 +144,9 @@ int main()
 	wmq_record_t record;
 	char buf[1024];
 	char *pbuf;
-	unsigned short len;
+	uint16 len;
 	time_t data;
-	long offset_old = 0;
+	sint32 offset_old = 0;
 	time_t t_old = t_start;
 
 	record.buf = buf;
@@ -168,8 +168,8 @@ int main()
 		scorerep_t *rep;
 		scorerep_buf_t repbuf;
 		scorerep_player_t *player;
-		int score;
-		int won;
+		sint32 score;
+		sint32 won;
 
 		err = wmq_get(wmq, &record);
 		assert(err == dp_RES_OK || err == dp_RES_EMPTY);
@@ -218,7 +218,7 @@ int main()
 			continue;
 		}
 		score = dpMAKESHORT(player->blob[0], player->blob[1]);
-		won = (int)player->blob[2];
+		won = (sint32)player->blob[2];
 		DPRINT(("wmq2mysql: read score:%d won:%d\n", score, won));
 
 	}

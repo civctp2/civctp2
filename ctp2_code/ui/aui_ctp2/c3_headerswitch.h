@@ -17,9 +17,9 @@ public:
 	c3_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_HeaderSwitch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -27,10 +27,10 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *text,
-		MBCHAR *pattern,
+		const MBCHAR *text,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = nullptr,
 		sint32 state = 0,
 		sint32 numStates = k_C3_HEADERSWITCH_DEFAULTNUMSTATES );
 	virtual ~c3_HeaderSwitch();
@@ -39,7 +39,7 @@ public:
 
 protected:
 	c3_HeaderSwitch() : aui_Radio() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 
 protected:

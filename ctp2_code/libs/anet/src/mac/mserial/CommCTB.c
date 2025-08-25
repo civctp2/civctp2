@@ -49,7 +49,7 @@ comm_driverInfo_t gCommDriverInfo = {
 	comm_INIT_NEEDS_UI
 };
 
-int commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp) {
+sint32 commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp) {
 
 	/*
 	 *	Do nothing.
@@ -61,7 +61,7 @@ int commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp) {
 	return(TRUE);
 }
 
-int commInit(commInitReq_t *req, commInitResp_t *resp) {
+sint32 commInit(commInitReq_t *req, commInitResp_t *resp) {
  	OSErr				error = noErr;
 	ConnHandle			connection = nil;
     commInitResp_t   	respDummy;
@@ -166,7 +166,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp) {
 }
 
 
-int commTerm(commTermReq_t *req, commTermResp_t *resp) {
+sint32 commTerm(commTermReq_t *req, commTermResp_t *resp) {
 
 /*
  *	Tear down the communications driver.
@@ -191,7 +191,7 @@ int commTerm(commTermReq_t *req, commTermResp_t *resp) {
 }
 
 
-int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {
+sint32 commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {
 	static commDriverInfoResp_t	sCommDriverInfoResp =  {
 		0,
 		&gCommDriverInfo
@@ -217,7 +217,7 @@ int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp) {
 }
 
 
-int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {
+sint32 commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {
 	static ser_adr_t kludgeAdr;
 	ser_hdl_t h;
 
@@ -266,7 +266,7 @@ int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp) {
     return(TRUE);
 }
 
-int commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {
+sint32 commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {
 
 /*
  *	Find out whether the transmit queue is full.
@@ -286,7 +286,7 @@ int commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp) {
     return(FALSE);
 }
 
-int commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp) {
+sint32 commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp) {
 
 /*
  *	Send a packet.  Upon return, the buffer can be discarded, although the
@@ -324,7 +324,7 @@ int commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp) {
     return(resp->status == 0);
 }
 
-int commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {
+sint32 commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {
     commPeekPktReq_t	reqDummy;
     commPeekPktResp_t	respDummy;
 
@@ -342,7 +342,7 @@ int commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp) {
 	return(FALSE);
 }
 
-int commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {
+sint32 commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {
 
 	/*
 	 *	Retrieve a pending incoming packet.
@@ -368,7 +368,7 @@ int commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp) {
     return (resp->status == ser_RES_OK);
 }
 
-int commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {
+sint32 commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {
 
 /*
  *	Attempt to parse a NUL-terminated address string into a free-format
@@ -400,7 +400,7 @@ int commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp) {
     return (TRUE);
 }
 
-int commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {
+sint32 commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {
     commPrintAddrReq_t	reqDummy;
     commPrintAddrResp_t	respDummy;
     char printable[50];
@@ -435,7 +435,7 @@ int commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp) {
     return(TRUE);
 }
 
-int commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {
+sint32 commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {
 
 /*
  *	Generate a pseudo-player handle referring to a group of players.  Handy
@@ -449,7 +449,7 @@ int commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp) {
     return(FALSE);
 }
 
-int commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {
+sint32 commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {
 
 /*
  *	Invalidate a pseudo-player handle referring to a group of players.
@@ -463,7 +463,7 @@ int commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp) {
 }
 
 
-int commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {
+sint32 commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {
 
 /*
  *	Add one or more players to a group.
@@ -479,7 +479,7 @@ int commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp) {
 
 #if 0 // MAD	 -- this stuff seems to be commented out in commapi.h
 
-int commGroupSubtract(commGroupSubtractReq_t *req, commGroupSubtractResp_t *resp) {
+sint32 commGroupSubtract(commGroupSubtractReq_t *req, commGroupSubtractResp_t *resp) {
 
 /*
  *	Subtract one or more players from a group.  Do not delete the group,
@@ -499,7 +499,7 @@ int commGroupSubtract(commGroupSubtractReq_t *req, commGroupSubtractResp_t *resp
 
 // MAD below
 
-int
+sint32
 commSetParam(
 	commSetParamReq_t *	req,	// Request
 	commSetParamResp_t *	resp)	// Response
@@ -515,7 +515,7 @@ commSetParam(
 
 #endif
 
-int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
+sint32 commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
 
 /*
  *	Establish a data link to a player and shake hands with him.  This does
@@ -523,18 +523,18 @@ int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
  *
  *	Return TRUE if the link was established and we shook hands.
  *
- *  req->address is a ser_adr_t, which is just a random long int.
+ *  req->address is a ser_adr_t, which is just a random sint32.
  *
  */
 
-    commSayHiReq_t	reqDummy;
-    commSayHiResp_t	respDummy;
+	commSayHiReq_t	reqDummy;
+	commSayHiResp_t	respDummy;
 	ser_hdl_t		hdl;
 
-    if (req == NULL)  req = memset(&reqDummy, 0, sizeof(*req));
-    if (resp == NULL) resp = &respDummy;
+	if (req == NULL)  req = memset(&reqDummy, 0, sizeof(*req));
+	if (resp == NULL) resp = &respDummy;
 
-    if (req->length == 0) {
+	if (req->length == 0) {
 		DPRINT(("commSayHi: req->length == 0"));
 		resp->status = 1;
 		return FALSE;
@@ -558,7 +558,7 @@ int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp) {
     return TRUE;
 }
 
-int commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp) {
+sint32 commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp) {
 
 /*
  *	Tear down a data link to a player.  The link or the player may already be
@@ -598,7 +598,7 @@ Boolean commLoadTest(void);		// this prototype should be in commapi.h
 Boolean commLoadTest(void)
 {
 	Boolean	result = false;
-	long	value;
+	sint32	value;
 	OSErr	error;
 	FSSpec	where;
 
@@ -649,12 +649,12 @@ void CTB_Unload(void) {
 }
 #endif
 
-unsigned char CTB_crc(unsigned char *ptr, int len) {
-    short crc = 0;
-    int i, j;
+uint8 CTB_crc(uint8 *ptr, sint32 len) {
+    sint16 crc = 0;
+    sint32 i, j;
 
     for (i = 0; i < len; i++) {
-		crc = crc ^ (int) ptr[i] << 8;
+		crc = crc ^ (sint32) ptr[i] << 8;
 
         for (j = 0; j < 8; ++j) {
             if (crc & 0x8000) crc = crc << 1 ^ 0x1021;
@@ -664,7 +664,7 @@ unsigned char CTB_crc(unsigned char *ptr, int len) {
 	return crc & 0xff;
 }
 
-ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert) {
+ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, sint32 insert) {
 
 	/*-----------------------------------------------------------------------
 	 Given an ser Adress, open a handle that can be used to send an
@@ -685,7 +685,7 @@ ser_hdl_t CTB_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert) {
 	-----------------------------------------------------------------------*/
 
 #if 0 // MAD
-	int i;
+	sint32 i;
 	ser_adr_t *padr;
 	for (i=0; i<ser->adrtab->n_used; i++) {
 		assoctab_item_t *pe;
@@ -768,7 +768,7 @@ ser_result_t CTB_put(ser_t *ser, ser_hdl_t dest, void *buf, size_t len) {
 	hdr.bodycrc = CTB_crc(buf, len);
 	{
 		CMErr		theErr;
-		long		nBytes;
+		sint32		nBytes;
 		char kludge[1000];
 		memcpy(kludge, &hdr, 5);	// MAD sizeof(hdr));
 		memcpy(kludge+ 5 /* MAD sizeof(hdr) */, buf, len);
@@ -828,12 +828,12 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 	mfp = fopen("md.log","a");
 
 	while (true) {
-		int c;
+		sint32 c;
 
 		//	if we have used up all of the bytes in our recieve buffer, read some more
 
 		if (ser->head >= ser->len) {
-			long	nBytes = ser_READSIZE;
+			sint32	nBytes = ser_READSIZE;
 			CMErr	theErr;
 
 			theErr = CMRead(
@@ -876,7 +876,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 
 		c = ser->rbuf[ser->head++];
 		if (ser->got < 5)		// if still filling header[
-			((unsigned char *)&ser->pkt)[ser->got++] = c;
+			((uint8 *)&ser->pkt)[ser->got++] = c;
 		else
 			ser->pkt.body[ser->got++ - 5] = c;
 
@@ -893,7 +893,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len) {
 			}
 		} else if (ser->got == 4) {	// MAD 4 since removed src byte
 			// Is header Checksum valid?
-			int cs = ((ser_HDR_FRAME0 + ser_HDR_FRAME1 + ser->pkt.hdr.bodylen) & 0xff);
+			sint32 cs = ((ser_HDR_FRAME0 + ser_HDR_FRAME1 + ser->pkt.hdr.bodylen) & 0xff);
 			fprintf(mfp, "checksum: have %d, want %d + %d + %d = %d\n",
 					c, ser_HDR_FRAME0 , ser_HDR_FRAME1, + ser->pkt.hdr.bodylen,  cs);
 			if (c != cs) {

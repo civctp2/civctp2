@@ -454,19 +454,23 @@ BattleViewActor *BattleEvent::GetActor(void)
 	eventData = node->GetObj();
 	Assert(eventData);
 
-	switch (m_type) {
-	case BATTLE_EVENT_TYPE_PLACEMENT:
-		actor = eventData->positionActor;
-		break;
-	case BATTLE_EVENT_TYPE_ATTACK:
-		actor = eventData->attackActor;
-		break;
-	case BATTLE_EVENT_TYPE_EXPLODE:
-		actor = eventData->explodeVictim;
-		break;
-	case BATTLE_EVENT_TYPE_DEATH:
-		actor = eventData->deathVictim;
-		break;
+	switch (m_type)
+	{
+		case BATTLE_EVENT_TYPE_PLACEMENT:
+			actor = eventData->positionActor;
+			break;
+		case BATTLE_EVENT_TYPE_ATTACK:
+			actor = eventData->attackActor;
+			break;
+		case BATTLE_EVENT_TYPE_EXPLODE:
+			actor = eventData->explodeVictim;
+			break;
+		case BATTLE_EVENT_TYPE_DEATH:
+			actor = eventData->deathVictim;
+			break;
+		default:
+			Assert(false);
+			break;
 	}
 
 	return actor;

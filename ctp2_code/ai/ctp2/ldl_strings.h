@@ -63,4 +63,4 @@ extern string ID_SPY_MAKE_FRIEND_DS;
 extern string ID_ADVICE_MAKE_FRIEND_DS;
 extern string ID_NEWS_MAKE_FRIEND_DS;
 
-#endif __LDL_STRINGS_H__
+#endif // __LDL_STRINGS_H__

@@ -13,7 +13,7 @@ public:
 	IntroMovieWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 	IntroMovieWindow(
@@ -24,12 +24,12 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD );
 
 	virtual ~IntroMovieWindow();
 
-	virtual AUI_ERRCODE InitCommonLdl(MBCHAR *ldlBlock);
+	virtual AUI_ERRCODE InitCommonLdl(const MBCHAR *ldlBlock);
 	virtual AUI_ERRCODE InitCommon(void);
 
 	virtual AUI_ERRCODE Idle();
@@ -39,7 +39,7 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	void SetMovie(MBCHAR *filename);
+	void SetMovie(const MBCHAR *filename);
 
 private:
 	aui_MovieButton		*m_movieButton;

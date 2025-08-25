@@ -47,7 +47,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include <stdlib.h>
 
-int raw_kbhit(void)
+sint32 raw_kbhit(void)
 {
 	EventRecord event;
 
@@ -65,9 +65,9 @@ int raw_kbhit(void)
  * Bug: This version does not set unbuffered mode on stdout,
  * so be sure to fflush(stdout) early and often...
  */
-int raw_getc(void)
+sint32 raw_getc(void)
 {
-	int c;
+	sint32 c;
 	EventRecord event;
 
 	// Allow SIOUX response for the mouse, drag, zoom, or resize.
@@ -89,7 +89,7 @@ int raw_getc(void)
 	return -1;  /* No character avail */
 }
 
-void raw_set_stdio(int raw)
+void raw_set_stdio(sint32 raw)
 {
 	(void) raw;
 }

@@ -27,8 +27,8 @@
 // - The good sprite index is now taken from the resource database instead of
 //   the good's sprite state database. However this file isn't used as the
 //   wormhole has been removed from the game, but maybe there is someone
-//   who whishes to put it back into the game. (Aug 29th 2005 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+//   who whishes to put it back into the game. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -222,6 +222,8 @@ void Wormhole::Move()
 					m_curDir = EAST;
 					m_horizontalMoves = k_HORIZONTAL_MOVES;
 				}
+				break;
+			default:
 				break;
 		}
 	}

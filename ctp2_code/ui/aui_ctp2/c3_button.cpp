@@ -53,15 +53,15 @@ c3_Button::c3_Button
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
     // virtual (see aui_Control)
-	aui_ImageBase   (ldlBlock ),
-	aui_TextBase    (ldlBlock, (MBCHAR *) NULL),
+    aui_ImageBase   (ldlBlock ),
+    aui_TextBase    (ldlBlock, (MBCHAR *) NULL),
     // normal
-	aui_Button      (retval, id, ldlBlock, ActionFunc, cookie),
-	PatternBase     (ldlBlock, NULL),
+    aui_Button      (retval, id, ldlBlock, ActionFunc, cookie),
+    PatternBase     (ldlBlock, NULL),
     m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
     m_bevelType     (0)
 {
@@ -82,14 +82,14 @@ c3_Button::c3_Button(
 	sint32 height,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
     // virtual (see aui_Control)
-	aui_ImageBase   ((sint32) 0),
-	aui_TextBase    (NULL),
+    aui_ImageBase   ((sint32) 0),
+    aui_TextBase    (NULL),
     // normal
-	aui_Button      (retval, id, x, y, width, height, ActionFunc, cookie),
-	PatternBase     (pattern),
+    aui_Button      (retval, id, x, y, width, height, ActionFunc, cookie),
+    PatternBase     (pattern),
     m_bevelWidth    (k_C3_BUTTON_DEFAULT_BEVELWIDTH),
     m_bevelType     (0)
 {
@@ -185,20 +185,20 @@ c3_EditButton::c3_EditButton
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
     // virtual (defined in aui_Control)
-	aui_ImageBase   (ldlBlock),
-	aui_TextBase    (ldlBlock, (MBCHAR const *) NULL),
+    aui_ImageBase   (ldlBlock),
+    aui_TextBase    (ldlBlock, (MBCHAR const *) NULL),
     // normal
-	c3_Button       (retval, id, ldlBlock, ActionFunc, cookie),
-	m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
-	m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
-	m_max           (k_C3_EDITBUTTON_DEFAULTMAX),
-	m_field         (NULL),
+    c3_Button       (retval, id, ldlBlock, ActionFunc, cookie),
+    m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
+    m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
+    m_max           (k_C3_EDITBUTTON_DEFAULTMAX),
+    m_field         (NULL),
     m_origAction    (NULL),
-	m_origCallback  (NULL)
+    m_origCallback  (NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -211,7 +211,6 @@ c3_EditButton::c3_EditButton
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 c3_EditButton::c3_EditButton
 (
 	AUI_ERRCODE *retval,
@@ -222,20 +221,20 @@ c3_EditButton::c3_EditButton
 	sint32 height,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
     // virtual (see aui_Control)
-	aui_ImageBase   ((sint32) 0),
-	aui_TextBase    (NULL),
+    aui_ImageBase   ((sint32) 0),
+    aui_TextBase    (NULL),
     // normal
-	c3_Button       (retval, id, x, y, width, height, pattern, ActionFunc, cookie),
-	m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
-	m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
-	m_max           (k_C3_EDITBUTTON_DEFAULTMAX),
-	m_field         (NULL),
+    c3_Button       (retval, id, x, y, width, height, pattern, ActionFunc, cookie),
+    m_val           (k_C3_EDITBUTTON_DEFAULTVAL),
+    m_min           (k_C3_EDITBUTTON_DEFAULTMIN),
+    m_max           (k_C3_EDITBUTTON_DEFAULTMAX),
+    m_field         (NULL),
     m_origAction    (NULL),
-	m_origCallback  (NULL)
+    m_origCallback  (NULL)
 {
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
@@ -244,10 +243,9 @@ c3_EditButton::c3_EditButton
 	Assert( AUI_SUCCESS(*retval) );
 }
 
-
 AUI_ERRCODE c3_EditButton::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -255,11 +253,11 @@ AUI_ERRCODE c3_EditButton::InitCommonLdl( const MBCHAR *ldlBlock )
 		block->GetAttributeType( k_C3_EDITBUTTON_LDL_VAL ) == ATTRIBUTE_TYPE_INT ?
 			block->GetInt( k_C3_EDITBUTTON_LDL_VAL ) :
 			k_C3_EDITBUTTON_DEFAULTVAL;
-    m_min =
+	m_min =
 		block->GetAttributeType( k_C3_EDITBUTTON_LDL_MINVAL ) == ATTRIBUTE_TYPE_INT ?
 			block->GetInt( k_C3_EDITBUTTON_LDL_MINVAL ) :
 			k_C3_EDITBUTTON_DEFAULTMIN;
-    m_max =
+	m_max =
 		block->GetAttributeType( k_C3_EDITBUTTON_LDL_MAXVAL ) == ATTRIBUTE_TYPE_INT ?
 			block->GetInt( k_C3_EDITBUTTON_LDL_MAXVAL ) :
 			k_C3_EDITBUTTON_DEFAULTMAX;
@@ -302,15 +300,15 @@ AUI_ERRCODE c3_EditButton::CreateFieldAndActions( const MBCHAR *ldlBlock )
 
 	m_origCallback  = GetActionFunc();
 
-    /// @todo Check the working of the union: &m_origCookie == &m_origAction!
-    if (m_origCallback)
-    {
-        m_origCookie    = GetCookie();
-    }
-    else
-    {
-        m_origAction    = GetAction();
-    }
+	/// @todo Check the working of the union: &m_origCookie == &m_origAction!
+	if (m_origCallback)
+	{
+		m_origCookie    = GetCookie();
+	}
+	else
+	{
+		m_origAction    = GetAction();
+	}
 
 	SetActionFuncAndCookie( c3_EditButtonCallback, m_field );
 
@@ -355,8 +353,8 @@ AUI_ERRCODE c3_EditButton::SetMinimum( sint32 min )
 		return AUI_ERRCODE_INVALIDDIMENSION;
 
 	m_min = min;
-    // Recheck impact on current value
-    return SetValue(m_val);
+	// Recheck impact on current value
+	return SetValue(m_val);
 }
 
 
@@ -367,8 +365,8 @@ AUI_ERRCODE c3_EditButton::SetMaximum( sint32 max )
 		return AUI_ERRCODE_INVALIDDIMENSION;
 
 	m_max = max;
-    // Recheck impact on current value
-    return SetValue(m_val);
+	// Recheck impact on current value
+	return SetValue(m_val);
 }
 
 
@@ -388,12 +386,12 @@ void c3_EditButton::DoCallback( void )
 }
 
 
-void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	c3_EditButton *button = (c3_EditButton *)control;
-	C3TextField *field = (C3TextField *)cookie;
+	C3TextField *field = (C3TextField *)cookie.m_voidPtr;
 
 	button->GetParent()->AddChild( field );
 	button->GetParent()->RemoveChild( button->Id() );
@@ -407,13 +405,13 @@ void c3_EditButtonCallback( aui_Control *control, uint32 action, uint32 data, vo
 }
 
 
-void c3_EditButtonFieldCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void c3_EditButtonFieldCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE
 		&& action != (uint32)AUI_TEXTFIELD_ACTION_DISMISS ) return;
 
 	C3TextField *field = (C3TextField *)control;
-	c3_EditButton *button = (c3_EditButton *)cookie;
+	c3_EditButton *button = (c3_EditButton *)cookie.m_voidPtr;
 
 	field->GetParent()->AddChild( button );
 	field->GetParent()->RemoveChild( field->Id() );

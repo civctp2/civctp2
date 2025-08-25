@@ -20,6 +20,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef _IpxTransport_
 #define	_IpxTransport_
 
+#include "types.h"
+
 //	remap some structures to the MacIPX header files
 
 #define	nw_ecb_t	IPX_ECB			//	Macintosh ECB structure
@@ -29,10 +31,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //	steal some structures from NW.H
 
 // IPX network number
-typedef	unsigned char nw_netAdr_t[4];
+typedef	uint8 nw_netAdr_t[4];
 
 // IPX node address (link layer address)
-typedef	unsigned char nw_nodeAdr_t[6];
+typedef	uint8 nw_nodeAdr_t[6];
 
 // The two together form a full IPX internetwork address.
 typedef	struct {
@@ -42,7 +44,7 @@ typedef	struct {
 
 typedef struct {
 	nw_adr_t		netNode;
-	short			socket;
+	sint16			socket;
 } IpxNetAddress;
 
 #define nw_MAX_FRAGMENT_COUNT	2		// fragment count- hdr and body

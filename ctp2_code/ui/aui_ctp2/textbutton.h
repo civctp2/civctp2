@@ -21,7 +21,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	TextButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -32,7 +32,7 @@ public:
 		const MBCHAR *pattern = NULL,
 		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~TextButton() {}
 
 	virtual AUI_ERRCODE DrawThis(

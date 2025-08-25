@@ -62,8 +62,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define IOCTL		0x44
 
 /* A nice way to call the DOS IOCTL function */
-static int
-dos_ioctl(int handle, int mode, unsigned setvalue)
+static sint32
+dos_ioctl(sint32 handle, sint32 mode, uint32 setvalue)
 {
 	union _REGS regs;
 
@@ -82,9 +82,9 @@ dos_ioctl(int handle, int mode, unsigned setvalue)
  Returns FALSE if not in raw mode, TRUE if in raw mode.
  Example: old_raw = raw_get(fileno(stdin));
 --------------------------------------------------------------------------*/
-static int
+static sint32
 raw_get(fd)
-	int fd;
+	sint32 fd;
 {
 	return ( RAW == (RAW & dos_ioctl(fd, GETBITS, 0)));
 }
@@ -96,10 +96,10 @@ raw_get(fd)
 --------------------------------------------------------------------------*/
 static void
 raw_set(fd, raw)
-	int fd;
-	int raw;
+	sint32 fd;
+	sint32 raw;
 {
-	int bits;
+	sint32 bits;
 	bits = dos_ioctl(fd, GETBITS, 0);
 	if (DEVICE & bits) {
 		if (raw)
@@ -111,8 +111,8 @@ raw_set(fd, raw)
 }
 
 /* A nice way to call the DOS BREAKCHECK function */
-static int
-breakctl(int mode, int setvalue)
+static sint32
+breakctl(sint32 mode, sint32 setvalue)
 {
 	union _REGS regs;
 
@@ -129,7 +129,7 @@ breakctl(int mode, int setvalue)
  Return value is FALSE if it only checks before console I/O function calls,
  TRUE if it checks before any function call.
 --------------------------------------------------------------------------*/
-static int
+static sint32
 break_get(void)
 {
 	return ( 0 != breakctl(GETBITS, 0));
@@ -143,7 +143,7 @@ break_get(void)
 --------------------------------------------------------------------------*/
 void
 static break_set(check)
-	int check;
+	sint32 check;
 {
 	(void) breakctl(SETBITS, check);
 }
@@ -157,9 +157,9 @@ static break_set(check)
 --------------------------------------------------------------------------*/
 void
 raw_set_stdio(raw)
-	int raw;	/* TRUE -> set raw mode; FALSE -> clear raw mode */
+	sint32 raw;	/* TRUE -> set raw mode; FALSE -> clear raw mode */
 {
-	static int was_break_checking = 0;
+	static sint32 was_break_checking = 0;
 
 	raw_set(fileno(stdin), raw);
 	raw_set(fileno(stdout), raw);
@@ -181,7 +181,7 @@ raw_set_stdio(raw)
  In RAW mode, if break checking is turned off, does not check for ^C.
  (The kbhit() that comes with Microsoft C seems to always check for ^C.)
 ----------------------------------------------------------------------------*/
-int
+sint32
 raw_kbhit()
 {
 	union _REGS regs;
@@ -198,7 +198,7 @@ raw_kbhit()
  Else return -1.
  Does not check for ^C.
 ----------------------------------------------------------------------------*/
-int
+sint32
 raw_getc()
 {
 	union _REGS regs;

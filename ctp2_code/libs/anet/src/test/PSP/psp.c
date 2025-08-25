@@ -128,7 +128,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if (defined WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -196,7 +196,7 @@ MSVC's warning level is set to 4.
 #define psp_RES_IDZERO			6	/* */
 #define psp_RES_HOSTLOST		7	/* lost host during test */
 
-#define SwapBytes(v)	((unsigned short)((v)<<8)|(unsigned char)((v)>>8))
+#define SwapBytes(v)	((uint16)((v)<<8)|(uint8)((v)>>8))
 /**
 * Types
 */
@@ -205,33 +205,33 @@ MSVC's warning level is set to 4.
 typedef struct pspArgs_s {
 	char *server;
 	char *group;
-	int packetLoss;
-	unsigned long portnum;
+	sint32 packetLoss;
+	uint32 portnum;
 	time_t extra_timeout;
-	int endPlayer;
+	sint32 endPlayer;
 } pspArgs_t;
 
 /* Structure to hold the ongoing results of the test */
 typedef struct pspResult_s {
 	// Scratch
 	dp_session_t sessions[MAX_SESSIONS];
-	int* procs;
+	sint32* procs;
 	char* room;
 	char* exe;
 	boolean callbacksFinished;
 	boolean allAcks;
 	boolean* acks;
-	int n_sessions;
-	int n_players;
-	int n_groups;
-	int n_gplayers;   // number of players found in group
-	int n_pvplayers;  // number of players found with player variables set
-	int *npv;		  // # of player variables received indexed by player
-	int freezeLoop;
-	int in_session;
+	sint32 n_sessions;
+	sint32 n_players;
+	sint32 n_groups;
+	sint32 n_gplayers;   // number of players found in group
+	sint32 n_pvplayers;  // number of players found with player variables set
+	sint32 *npv;		  // # of player variables received indexed by player
+	sint32 freezeLoop;
+	sint32 in_session;
 	time_t yield_time;
 	#if defined(WIN32)
-		int emptyCount;
+		sint32 emptyCount;
 	#endif
 
 	// Results
@@ -247,15 +247,15 @@ typedef struct pspResult_s {
 	time_t allPlayerTime;
 	time_t allGPlayerTime;
 	time_t allPVPlayerTime;
-	int thisPlayer;
-	int n_expectedPlayers;
-	int n_localPlayers;
-	int n_maxPlayers;
-	int n_maxGPlayers;
-	int n_maxPVPlayers;
-	int beginPlayer;
-	int n_expectedpVars;
-	int loops;
+	sint32 thisPlayer;
+	sint32 n_expectedPlayers;
+	sint32 n_localPlayers;
+	sint32 n_maxPlayers;
+	sint32 n_maxGPlayers;
+	sint32 n_maxPVPlayers;
+	sint32 beginPlayer;
+	sint32 n_expectedpVars;
+	sint32 loops;
 	char *driver;
 } pspResult_t;
 
@@ -284,32 +284,32 @@ writeReport(
 	}
 	fprintf(log, "\nPlayer %d res:\n", res->thisPlayer);
 	if(res->allPlayerTime == -1) {
-		int diff = eclock() - res->dpOpenTime;
+		sint32 diff = eclock() - res->dpOpenTime;
 		fprintf(log, "INCOMPLETE: %d.%03d seconds until %d of %d players found.\n",
 				diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC, res->n_maxPlayers, res->n_expectedPlayers);
 	} else {
-		int diff = res->allPlayerTime - res->dpOpenTime;
+		sint32 diff = res->allPlayerTime - res->dpOpenTime;
 		fprintf(log, "%d.%03d seconds until player list completed.\n",
 				diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC);
 	}
 	if (res->groupID != dp_ID_NONE) {
 		if(res->allGPlayerTime == -1) {
-			int diff = eclock() - res->dpOpenTime;
+			sint32 diff = eclock() - res->dpOpenTime;
 			fprintf(log, "INCOMPLETE: %d.%03d seconds until %d of %d group players found.\n",
 					diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC, res->n_maxGPlayers, res->n_expectedPlayers);
 		} else {
-			int diff = res->allGPlayerTime - res->dpOpenTime;
+			sint32 diff = res->allGPlayerTime - res->dpOpenTime;
 			fprintf(log, "%d.%03d seconds until group player list completed.\n",
 					diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC);
 		}
 	}
 	if (res->n_expectedpVars != 0) {
 		if(res->allPVPlayerTime == -1) {
-			int diff = eclock() - res->dpOpenTime;
+			sint32 diff = eclock() - res->dpOpenTime;
 			fprintf(log, "INCOMPLETE: %d.%03d seconds until all %d player variables for %d of %d players found.\n",
 					diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC, res->n_expectedpVars, res->n_maxPVPlayers, res->n_expectedPlayers);
 		} else {
-			int diff = res->allPVPlayerTime - res->dpOpenTime;
+			sint32 diff = res->allPVPlayerTime - res->dpOpenTime;
 			fprintf(log, "%d.%03d seconds until all %d player variables for all players completed.\n",
 					diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC, res->n_expectedpVars);
 		}
@@ -317,21 +317,21 @@ writeReport(
 	if(res->dpCreatePlayerCallbackTime == -1) {
 		fprintf(log, "Create player callback never completed.\n");
 	} else {
-		int diff = res->dpCreatePlayerCallbackTime - res->dpOpenTime;
+		sint32 diff = res->dpCreatePlayerCallbackTime - res->dpOpenTime;
 		fprintf(log, "%d.%03d seconds until player creation callback.\n",
 				diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC);
 	}
 	if(res->dpCreatePlayerTime == -1) {
 		fprintf(log, "Player create never completed.\n");
 	} else {
-		int diff = res->dpCreatePlayerTime - res->dpOpenTime;
+		sint32 diff = res->dpCreatePlayerTime - res->dpOpenTime;
 		fprintf(log, "%d.%03d seconds until player creation returned.\n",
 				diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC);
 	}
 	if(res->dpOpenCallbackTime == -1) {
 		fprintf(log, "Session open callback never completed.\n");
 	} else {
-		int diff = res->dpOpenCallbackTime - res->dpOpenTime;
+		sint32 diff = res->dpOpenCallbackTime - res->dpOpenTime;
 		fprintf(log, "%d.%03d seconds until session open callback.\n",
 				diff/ECLOCKS_PER_SEC, diff%ECLOCKS_PER_SEC);
 	}
@@ -343,7 +343,7 @@ writeReport(
 void
 abortTest(
 	FILE* log,
-	int exitCode,
+	sint32 exitCode,
 	char* message,
 	pspResult_t* res)
 {
@@ -365,7 +365,7 @@ abortTest(
 -------------------------------------------------------------------------*/
 void
 signalHandler(
-	int sigId)
+	sint32 sigId)
 {
 	sigId = sigId;
 	abortTest(logFile, psp_RES_SIGNAL, "Test terminated at user request.\n", &results);
@@ -380,10 +380,10 @@ setAck(
 	dpid_t idFrom,		/* The player */
 	pspResult_t* res)
 {
-	int i;
+	sint32 i;
 	char buf[BUFSIZE];
 	boolean allAck = TRUE;
-	int found = FALSE;
+	sint32 found = FALSE;
 
 	for(i = 0; i < res->n_expectedPlayers; i++) {
 		if(idFrom == res->playerID[i]) {
@@ -408,7 +408,7 @@ getAck(
 	dpid_t idFrom,		/* The player */
 	pspResult_t* res)
 {
-	int i;
+	sint32 i;
 
 	for(i = 0; i < res->n_expectedPlayers; i++) {
 		if(idFrom == res->playerID[i])
@@ -421,11 +421,11 @@ getAck(
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen.
 -------------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 open_cb(
 	dp_session_t *ps,
-	long *pTimeout,
-	long flags,
+	sint32 *pTimeout,
+	sint32 flags,
 	void *context)
 {
 	pspResult_t* res = (pspResult_t *) context;
@@ -443,11 +443,11 @@ open_cb(
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 listSessions_cb(
 	dp_session_t *sDesc,
-	long *pTimeout,
-	long flags,
+	sint32 *pTimeout,
+	sint32 flags,
 	void *context)
 {
 	pspResult_t* res = (pspResult_t *) context;
@@ -483,7 +483,7 @@ joinSessionByName(
 	char *name,
 	void* context)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 	pspResult_t* res = (pspResult_t *) context;
 
@@ -510,10 +510,10 @@ void dp_PASCAL
 create_player_cb(
 	dpid_t id,
 	char_t *name,
-	long flags,
+	sint32 flags,
 	void *context)
 {
-	int i = 0;
+	sint32 i = 0;
 	pspResult_t* res = (pspResult_t *) context;
 	res->dpCreatePlayerCallbackTime = eclock();
 
@@ -548,11 +548,11 @@ void dp_PASCAL
 listPlayers_cb(
 	dpid_t id,
 	char_t *name,
-	long flags,
+	sint32 flags,
 	void *context)
 {
 	pspResult_t* res = (pspResult_t *) context;
-	int i;
+	sint32 i;
 
 	if (id != dp_ID_NONE) {
 		res->n_players++;
@@ -587,7 +587,7 @@ void dp_PASCAL
 listGroups_cb(
 	dpid_t id,
 	char_t *name,
-	long flags,
+	sint32 flags,
 	void *context)
 {
 	pspResult_t* res = (pspResult_t *) context;
@@ -610,11 +610,11 @@ void dp_PASCAL
 listGroupPlayers_cb(
 	dpid_t id,
 	char_t *name,
-	long flags,
+	sint32 flags,
 	void *context)
 {
 	pspResult_t* res = (pspResult_t *) context;
-	int i;
+	sint32 i;
 
 	if (id != dp_ID_NONE) {
 		res->n_gplayers++;
@@ -652,7 +652,7 @@ processMessage(dp_t* myDP, pspResult_t* res)
 	dpid_t idTo;
 	char buf[dpio_MAXLEN_UNRELIABLE];
 	void *pbuf = &buf[0];
-	unsigned int size = dpio_MAXLEN_UNRELIABLE;
+	uint32 size = dpio_MAXLEN_UNRELIABLE;
 	dp_result_t err;
 
 	/* Get a packet */
@@ -694,7 +694,7 @@ processMessage(dp_t* myDP, pspResult_t* res)
 			case dp_USER_ADDPLAYER_PACKET_ID: {
 			/* detect only as check if player record or player variable record
 			 * arrives first; add player to res array using dpEnumPlayers */
-				int i;
+				sint32 i;
 				char printbuf[BUFSIZE];
 				struct {
 					dp_packetType_t tag PACK;
@@ -719,10 +719,10 @@ processMessage(dp_t* myDP, pspResult_t* res)
 				break;
 			}
 			case dp_USER_PLAYERDATA_PACKET_ID: {
-				int i;
+				sint32 i;
 				char *ipvbuf;
 				char printbuf[BUFSIZE];
-				long base;
+				sint32 base;
 				struct {
 					dp_packetType_t tag PACK;
 					dp_user_playerData_packet_t pdat PACK;
@@ -735,14 +735,14 @@ processMessage(dp_t* myDP, pspResult_t* res)
 					abortTest(logFile, 2, printbuf, res);
 				}
 				// check if value of pvbuf is correct
-				base = ((unsigned long)(pkt->pdat.key << 16) | (unsigned short)SwapBytes(pkt->pdat.id)) + pkt->pdat.key;
+				base = ((uint32)(pkt->pdat.key << 16) | (uint16)SwapBytes(pkt->pdat.id)) + pkt->pdat.key;
 				if(pkt->pdat.len != (pkt->pdat.key * 25 + 1) * sizeof(base)) {
 					sprintf(printbuf, "processMessage: err: incorrect buf size %d for player index %d; should be %d", pkt->pdat.len, pkt->pdat.key, (pkt->pdat.key * 25 + 1) * sizeof(base));
 					abortTest(logFile, 2, printbuf, res);
 				}
 				for (ipvbuf = (char *)(pkt->pdat.data); ipvbuf < (char *)(pkt->pdat.data) + pkt->pdat.len; ipvbuf += sizeof(base)) {
-					if(*((long*)ipvbuf) != base) {
-						sprintf(printbuf, "processMessage: err: got incorrect pvbuf value at %d byte position; base, val, playerId, index are %ld, %ld, %d, %d", ipvbuf - (char *)(pkt->pdat.data), base, *((long*)ipvbuf), pkt->pdat.id, pkt->pdat.key);
+					if(*((sint32*)ipvbuf) != base) {
+						sprintf(printbuf, "processMessage: err: got incorrect pvbuf value at %d byte position; base, val, playerId, index are %ld, %ld, %d, %d", ipvbuf - (char *)(pkt->pdat.data), base, *((sint32*)ipvbuf), pkt->pdat.id, pkt->pdat.key);
 						abortTest(logFile, 2, printbuf, res);
 					}
 				}
@@ -767,8 +767,8 @@ void synchronize_done_simple(
 	boolean timedOut)
 {
 	char buf[BUFSIZE];
-	int i;
-	int size;
+	sint32 i;
+	sint32 size;
 	time_t endtime;
 
 	buf[0] = test_ALL_RECEIVED & 0xff;
@@ -793,7 +793,7 @@ void synchronize_done_simple(
 	}
 	printf("%d: Complete; waiting for other tests.\n", res->thisPlayer);
 	endtime = eclock() + test_TIMEOUT_DELAY;
-	while (((long)(eclock() - endtime) < 0) && (!res->allAcks))
+	while (((sint32)(eclock() - endtime) < 0) && (!res->allAcks))
 		processMessage(myDP, &results);
 }
 
@@ -808,13 +808,13 @@ void synchronize_done_simple(
 void synchronize_done_via_host(
 	dp_t *myDP,
 	pspResult_t *res,
-	int iteration,
+	sint32 iteration,
 	boolean timedOut)
 {
 	dpid_t master;
 	char buf[BUFSIZE];
-	int i;
-	int size;
+	sint32 i;
+	sint32 size;
 	time_t endtime;
 
 	/* Tell other tests we're done */
@@ -836,9 +836,9 @@ void synchronize_done_via_host(
 			printf("%d.%d: Complete; master waiting for others.\n", res->thisPlayer, iteration);
 		}
 		endtime = eclock() + test_TIMEOUT_DELAY;
-		while (((long)(eclock() - endtime) < 0) && (!res->allAcks))
+		while (((sint32)(eclock() - endtime) < 0) && (!res->allAcks))
 			processMessage(myDP, &results);
-		if ((long)(eclock() - endtime) >= 0)
+		if ((sint32)(eclock() - endtime) >= 0)
 			printf("%d.%d: Master timed out waiting for other players to ack.\n", res->thisPlayer, iteration);
 		printf("%d.%d: Master really complete.\n", res->thisPlayer, iteration);
 
@@ -860,7 +860,7 @@ void synchronize_done_via_host(
 		}
 		printf("%d.%d: Complete; waiting for other hosts.\n", res->thisPlayer, iteration);
 		endtime = eclock() + test_TIMEOUT_DELAY;
-		while (((long)(eclock() - endtime) < 0) && !getAck(master, res))
+		while (((sint32)(eclock() - endtime) < 0) && !getAck(master, res))
 			processMessage(myDP, &results);
 		printf("%d.%d: Really complete.\n", res->thisPlayer, iteration);
 	}
@@ -869,16 +869,16 @@ void synchronize_done_via_host(
 /*-------------------------------------------------------------------------
  Handle command-line arguments
 -------------------------------------------------------------------------*/
-int						/* status */
+sint32						/* status */
 handleArguments(
 	pspArgs_t *arg,		/* (output) values */
 	FILE** logfile,		/* (output) log file */
-	int argc,			/* (input) number of arguments */
+	sint32 argc,			/* (input) number of arguments */
 	char *argv[] )		/* (input) value of arguments */
 {
 	char buf[BUFSIZE];
 	char usage[BUFSIZE];
-	int i;
+	sint32 i;
 
 	sprintf(usage,
 "Usage: %s -c=player_count [-m=player] [-i=packet_loss] [-t=timeout]\n\
@@ -1086,20 +1086,20 @@ handleArguments(
 /*-------------------------------------------------------------------------
  Launch all tests
 -------------------------------------------------------------------------*/
-int launch (
-	int playerCount,		/* Total number to launch */
-	int beginPlayer,
-	int endPlayer,
-	int packetLoss,
-	int pVarCount,
-	unsigned long port,
-	unsigned long timeout,
+sint32 launch (
+	sint32 playerCount,		/* Total number to launch */
+	sint32 beginPlayer,
+	sint32 endPlayer,
+	sint32 packetLoss,
+	sint32 pVarCount,
+	uint32 port,
+	uint32 timeout,
 	char* test,
 	char* driver,
 	char* server,
 	char* room,
 	char* group,
-	int** procs)
+	sint32** procs)
 {
 	char * childArgs[15] = {
 		NULL,
@@ -1119,12 +1119,12 @@ int launch (
 		NULL
 	};
 
-	int i;
+	sint32 i;
 	char buf[BUFSIZE];
-	int rVal;
+	sint32 rVal;
 
 	/* allocate storage */
-	if((*procs = (int *) malloc(playerCount * sizeof(int))) == NULL)
+	if((*procs = (sint32 *) malloc(playerCount * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate process handle storage.\n", NULL);
 
 	/* Start tests */
@@ -1168,7 +1168,7 @@ int launch (
 	/* Wait for results */
 	rVal = 0;
 	for(i = beginPlayer; i < endPlayer; i++) {
-		int result;
+		sint32 result;
 		_cwait(&result, (*procs)[i], 0);
 		if(result != 0)
 			rVal = result;
@@ -1179,63 +1179,63 @@ int launch (
 /*-------------------------------------------------------------------------
  Collate results from all tests
 -------------------------------------------------------------------------*/
-int collate (
-	int playerCount,		/* Total number launched */
-	int beginPlayer,
-	int endPlayer,
-	int packetLoss,
-	int pVarCount,
+sint32 collate (
+	sint32 playerCount,		/* Total number launched */
+	sint32 beginPlayer,
+	sint32 endPlayer,
+	sint32 packetLoss,
+	sint32 pVarCount,
 	char *group,
-	int* procs)
+	sint32* procs)
 {
-	int* result = NULL;
-	int* found = NULL;
+	sint32* result = NULL;
+	sint32* found = NULL;
 	float* endTime = NULL;
-	int* Gresult = NULL;
-	int* Gfound = NULL;
+	sint32* Gresult = NULL;
+	sint32* Gfound = NULL;
 	float* GendTime = NULL;
-	int* PVresult = NULL;
-	int* PVfound = NULL;
+	sint32* PVresult = NULL;
+	sint32* PVfound = NULL;
 	float* PVendTime = NULL;
 
 	float foundMean = 0.0f;
 	float endMean = 0.0f;
 	float endSD = 0.0f;
-	int completionCount;
+	sint32 completionCount;
 	float GfoundMean = 0.0f;
 	float GendMean = 0.0f;
 	float GendSD = 0.0f;
-	int GcompletionCount;
+	sint32 GcompletionCount;
 	float PVfoundMean = 0.0f;
 	float PVendMean = 0.0f;
 	float PVendSD = 0.0f;
-	int PVcompletionCount;
-	int rVal;
+	sint32 PVcompletionCount;
+	sint32 rVal;
 
 	char buf[BUFSIZE];
-	int i;
+	sint32 i;
 
-	int loopCount = results.loops;
+	sint32 loopCount = results.loops;
 
 	/* Allocate storage */
-	if((result = (int *) malloc(playerCount * loopCount * sizeof(int))) == NULL)
+	if((result = (sint32 *) malloc(playerCount * loopCount * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate result storage.\n", NULL);
-	if((found = (int *) malloc(playerCount * loopCount * sizeof(int))) == NULL)
+	if((found = (sint32 *) malloc(playerCount * loopCount * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate found storage.\n", NULL);
 	if((endTime = (float *) malloc(playerCount * loopCount * sizeof(float))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate time storage.\n", NULL);
 	if (group) {
-		if((Gresult = (int *) malloc(playerCount * loopCount * sizeof(int))) == NULL)
+		if((Gresult = (sint32 *) malloc(playerCount * loopCount * sizeof(sint32))) == NULL)
 			abortTest(logFile, 3, "Unable to allocate result storage.\n", NULL);
-		if((Gfound = (int *) malloc(playerCount * loopCount * sizeof(int))) == NULL)
+		if((Gfound = (sint32 *) malloc(playerCount * loopCount * sizeof(sint32))) == NULL)
 			abortTest(logFile, 3, "Unable to allocate found storage.\n", NULL);
 		if((GendTime = (float *) malloc(playerCount * loopCount * sizeof(float))) == NULL)
 			abortTest(logFile, 3, "Unable to allocate time storage.\n", NULL);
 	}
 	if (pVarCount) {
-		if((PVresult = (int *) malloc(playerCount * loopCount * sizeof(int))) == NULL)
+		if((PVresult = (sint32 *) malloc(playerCount * loopCount * sizeof(sint32))) == NULL)
 			abortTest(logFile, 3, "Unable to allocate result storage.\n", NULL);
-		if((PVfound = (int *) malloc(playerCount * loopCount * sizeof(int))) == NULL)
+		if((PVfound = (sint32 *) malloc(playerCount * loopCount * sizeof(sint32))) == NULL)
 			abortTest(logFile, 3, "Unable to allocate found storage.\n", NULL);
 		if((PVendTime = (float *) malloc(playerCount * loopCount * sizeof(float))) == NULL)
 			abortTest(logFile, 3, "Unable to allocate time storage.\n", NULL);
@@ -1249,12 +1249,12 @@ int collate (
 	/* Get test results */
 	for(i = beginPlayer; i < endPlayer; i++) {
 		FILE* fp;
-		int cnt;
+		sint32 cnt;
 		float val;
 		char test[BUFSIZE];
 		sprintf(buf, "RawPSP%d.%d.log", packetLoss, i);
 		if((fp = fopen(buf, "r")) != NULL) {
-			int j = (i-beginPlayer)*loopCount;
+			sint32 j = (i-beginPlayer)*loopCount;
 			found[j] = playerCount;
 			endTime[j] = -1.0f;
 			if (group) {
@@ -1300,7 +1300,7 @@ int collate (
 					}
 				}
 				if (pVarCount) {
-					int chkVarCount = 0;
+					sint32 chkVarCount = 0;
 					if(sscanf(buf, "%f%*s%*s%*s%d%*s%s", &val, &chkVarCount, &test) == 3) {
 						if(strcmpi(test, "variables") == 0)
 							PVendTime[j] = val;
@@ -1429,12 +1429,12 @@ int collate (
 /*-------------------------------------------------------------------------
  Run the test for one player
 -------------------------------------------------------------------------*/
-int testOne (
-	int thisPlayer,			/* Which player are we */
-	int packetLoss,
-	int pVarCount,
-	unsigned long port,
-	unsigned long timeout,
+sint32 testOne (
+	sint32 thisPlayer,			/* Which player are we */
+	sint32 packetLoss,
+	sint32 pVarCount,
+	uint32 port,
+	uint32 timeout,
 	char* driver,
 	char* server,
 	char *group)
@@ -1452,16 +1452,16 @@ int testOne (
 	char fname[128];
 	time_t startTime;
 	time_t endtime;
-	int lastCount = 0;
-	int lastGCount = 0;
-	int lastPVCount = 0;
+	sint32 lastCount = 0;
+	sint32 lastGCount = 0;
+	sint32 lastPVCount = 0;
 	boolean timedOut;
 	boolean *pvdone;
-	int i;
-	int iLoop;
-	int startLoopAt = 0;
-	int thawed = FALSE;
-	int hostNum = -1;
+	sint32 i;
+	sint32 iLoop;
+	sint32 startLoopAt = 0;
+	sint32 thawed = FALSE;
+	sint32 hostNum = -1;
 
 	printf("%d: Opening port %ld.\n", thisPlayer, port);
 
@@ -1484,10 +1484,10 @@ int testOne (
 		thawed = TRUE;
 
 		/* Read first part from our file */
-		fread(&startLoopAt,sizeof(int),1,thawFile);
-		fread(&(results.loops),sizeof(int),1,thawFile);
-		fread(&(results.n_expectedPlayers),sizeof(int),1,thawFile);
-		fread(&(results.n_expectedpVars),sizeof(int),1,thawFile);
+		fread(&startLoopAt,sizeof(sint32),1,thawFile);
+		fread(&(results.loops),sizeof(sint32),1,thawFile);
+		fread(&(results.n_expectedPlayers),sizeof(sint32),1,thawFile);
+		fread(&(results.n_expectedpVars),sizeof(sint32),1,thawFile);
 
 		/* Allocate storage */
 		if((results.room = (char *) malloc(120 * sizeof(char))) == NULL)
@@ -1513,7 +1513,7 @@ int testOne (
 			for(i = 0; i < results.n_expectedPlayers; i++) {
 				results.pvplayerID[i] = dp_ID_NONE;
 			}
-			if((results.npv = (int *) malloc(results.n_expectedPlayers * sizeof(int))) == NULL)
+			if((results.npv = (sint32 *) malloc(results.n_expectedPlayers * sizeof(sint32))) == NULL)
 				abortTest(logFile, 3, "Unable to allocate npv storage.\n", NULL);
 			for(i = 0; i < results.n_expectedPlayers; i++) {
 				results.npv[i] = 0;
@@ -1526,14 +1526,14 @@ int testOne (
 		}
 
 		/* Read the rest of our file */
-		fread(&(results.n_localPlayers),sizeof(int),1,thawFile);
-		fread(&(results.beginPlayer),sizeof(int),1,thawFile);
+		fread(&(results.n_localPlayers),sizeof(sint32),1,thawFile);
+		fread(&(results.beginPlayer),sizeof(sint32),1,thawFile);
 		fread(&(results.myID),sizeof(dpid_t),1,thawFile);
 		fread(&(results.groupID),sizeof(dpid_t),1,thawFile);
 		fread(&startTime,sizeof(clock_t),1,thawFile);
 		fread(&(results.dpOpenTime),sizeof(clock_t),1,thawFile);
 		fread(&(results.dpCreatePlayerTime),sizeof(clock_t),1,thawFile);
-		fread(&i,sizeof(int),1,thawFile);
+		fread(&i,sizeof(sint32),1,thawFile);
 		fread(results.room,sizeof(char),i,thawFile);
 		for(i = 0; i < results.n_expectedPlayers; i++) {
 			fread(&(results.playerID[i]),sizeof(dpid_t),1,thawFile);
@@ -1542,7 +1542,7 @@ int testOne (
 				fread(&(results.gplayerID[i]),sizeof(dpid_t),1,thawFile);
 			if (pVarCount) {
 				fread(&(results.pvplayerID[i]),sizeof(dpid_t),1,thawFile);
-				fread(&(results.npv[i]),sizeof(int),1,thawFile);
+				fread(&(results.npv[i]),sizeof(sint32),1,thawFile);
 			}
 		}
 		fclose(thawFile);
@@ -1584,7 +1584,7 @@ int testOne (
 			for(i = 0; i < results.n_expectedPlayers; i++) {
 				results.pvplayerID[i] = dp_ID_NONE;
 			}
-			if((results.npv = (int *) malloc(results.n_expectedPlayers * sizeof(int))) == NULL)
+			if((results.npv = (sint32 *) malloc(results.n_expectedPlayers * sizeof(sint32))) == NULL)
 				abortTest(logFile, 3, "Unable to allocate npv storage.\n", NULL);
 			for(i = 0; i < results.n_expectedPlayers; i++) {
 				results.npv[i] = 0;
@@ -1636,7 +1636,7 @@ int testOne (
 			/* Wait a little while for the game server to notice us */
 			/* There should be a callback that tells us when we're connected! */
 			endtime = eclock() + 20 * ECLOCKS_PER_SEC;
-			while ((long)(eclock() - endtime) < 0)
+			while ((sint32)(eclock() - endtime) < 0)
 				processMessage(myDP, &results);
 		}
 	}
@@ -1648,7 +1648,7 @@ int testOne (
 			thawed = FALSE;
 			results.in_session = TRUE;
 		} else { /* not thawed */
-			int pvar;
+			sint32 pvar;
 			/* Host/join session */
 			startTime = eclock();
 			/* Let each one be master ?twice?, in turn */
@@ -1656,7 +1656,7 @@ int testOne (
 				/* host a session */
 				memset(&sess, 0, sizeof(sess));
 				sess.sessionType = TEST_SPECIES;
-				sess.maxPlayers = (short) results.n_expectedPlayers;
+				sess.maxPlayers = (sint16) results.n_expectedPlayers;
 				sprintf(sess.sessionName, "%s%d", results.room, iLoop);
 				sess.sessionName[dp_SNAMELEN-1] = '\0';
 				printf("%d.%d: Starting session %s.\n", thisPlayer, iLoop, sess.sessionName);
@@ -1796,11 +1796,11 @@ int testOne (
 			}
 
 			for (pvar = 0; pvar < pVarCount; pvar++) {
-				int j;
+				sint32 j;
 				char val[5 * 1024];
 				char *ptr;
-				long base;
-				base = ((unsigned long)(pvar << 16) | (unsigned short)SwapBytes(results.myID)) + pvar;
+				sint32 base;
+				base = ((uint32)(pvar << 16) | (uint16)SwapBytes(results.myID)) + pvar;
 				ptr = &val[0];
 				for (j = 0; j < pvar * 25 + 1; j++) { /*increment by 100 bytes*/
 					ptr = &val[0] + j * sizeof(base);
@@ -1811,8 +1811,8 @@ int testOne (
 
 			/* Freeze and spawn if it's the right iteration. */
 			if(iLoop == results.freezeLoop) {
-				int result;
-				int proc;
+				sint32 result;
+				sint32 proc;
 				char buf1[BUFSIZE];
 				char buf2[BUFSIZE];
 				char buf3[BUFSIZE];
@@ -1834,19 +1834,19 @@ int testOne (
 				assert(freezeFile != NULL);
 
 				/* Write everything to our file */
-				fwrite(&iLoop,sizeof(int),1,freezeFile);
-				fwrite(&(results.loops),sizeof(int),1,freezeFile);
-				fwrite(&(results.n_expectedPlayers),sizeof(int),1,freezeFile);
-				fwrite(&(results.n_expectedpVars),sizeof(int),1,freezeFile);
-				fwrite(&(results.n_localPlayers),sizeof(int),1,freezeFile);
-				fwrite(&(results.beginPlayer),sizeof(int),1,freezeFile);
+				fwrite(&iLoop,sizeof(sint32),1,freezeFile);
+				fwrite(&(results.loops),sizeof(sint32),1,freezeFile);
+				fwrite(&(results.n_expectedPlayers),sizeof(sint32),1,freezeFile);
+				fwrite(&(results.n_expectedpVars),sizeof(sint32),1,freezeFile);
+				fwrite(&(results.n_localPlayers),sizeof(sint32),1,freezeFile);
+				fwrite(&(results.beginPlayer),sizeof(sint32),1,freezeFile);
 				fwrite(&(results.myID),sizeof(dpid_t),1,freezeFile);
 				fwrite(&(results.groupID),sizeof(dpid_t),1,freezeFile);
 				fwrite(&startTime,sizeof(clock_t),1,freezeFile);
 				fwrite(&(results.dpOpenTime),sizeof(clock_t),1,freezeFile);
 				fwrite(&(results.dpCreatePlayerTime),sizeof(clock_t),1,freezeFile);
 				i = strlen(results.room) + 1;
-				fwrite(&i,sizeof(int),1,freezeFile);
+				fwrite(&i,sizeof(sint32),1,freezeFile);
 				fwrite(results.room,sizeof(char),i,freezeFile);
 				for(i = 0; i < results.n_expectedPlayers; i++) {
 					fwrite(&(results.playerID[i]),sizeof(dpid_t),1,freezeFile);
@@ -1855,7 +1855,7 @@ int testOne (
 						fwrite(&(results.gplayerID[i]),sizeof(dpid_t),1,freezeFile);
 					if (pVarCount) {
 						fwrite(&(results.pvplayerID[i]),sizeof(dpid_t),1,freezeFile);
-						fwrite(&(results.npv[i]),sizeof(int),1,freezeFile);
+						fwrite(&(results.npv[i]),sizeof(sint32),1,freezeFile);
 					}
 				}
 				fclose(freezeFile);
@@ -1955,7 +1955,7 @@ int testOne (
 			}
 
 			if (pVarCount && results.n_pvplayers < results.n_expectedPlayers) {
-				int i, j;
+				sint32 i, j;
 				for (i = 0; i < results.n_expectedPlayers; i++) {
 					processMessage(myDP, &results);
 					if (results.pvplayerID[i] == dp_ID_NONE) continue;
@@ -1979,16 +1979,16 @@ int testOne (
 								abortTest(logFile, 2, pvbuf, &results);
 							} else {
 								// check if value of pvbuf is correct
-								long base;
+								sint32 base;
 								char *ipvbuf;
-								base = ((unsigned long)(j << 16) | (unsigned short)SwapBytes(results.pvplayerID[i])) + j;
+								base = ((uint32)(j << 16) | (uint16)SwapBytes(results.pvplayerID[i])) + j;
 								if(spvbuf != (j * 25 + 1) * sizeof(base)) {
 									sprintf(buf, "error: incorrect buf size %d for player index %d; should be %d", spvbuf, j);
 									abortTest(logFile, 2, buf, &results);
 								}
 								for (ipvbuf = &pvbuf[0]; ipvbuf < &pvbuf[0] + spvbuf; ipvbuf += sizeof(base)) {
-									if(*((long*)ipvbuf) != base) {
-										sprintf(buf, "error: got incorrect pvbuf value at %d byte position; base, val, playerId, index are %ld, %ld, %d, %d", ipvbuf - &pvbuf[0], base, *((long*)ipvbuf), results.pvplayerID[i], j);
+									if(*((sint32*)ipvbuf) != base) {
+										sprintf(buf, "error: got incorrect pvbuf value at %d byte position; base, val, playerId, index are %ld, %ld, %d, %d", ipvbuf - &pvbuf[0], base, *((sint32*)ipvbuf), results.pvplayerID[i], j);
 										abortTest(logFile, 2, buf, &results);
 									}
 								}
@@ -2016,7 +2016,7 @@ int testOne (
 		}
 		/* if didn't find all player variables, print out how many found */
 		if (pVarCount && results.n_pvplayers != results.n_expectedPlayers) {
-			int i;
+			sint32 i;
 			for (i = 0; i < results.n_expectedPlayers; i++) {
 				if (results.pvplayerID[i] != dp_ID_NONE && results.npv[i] != 0)
 					printf("%d.%d: timedOut: found %d out of %d player vars for player id %d\n", thisPlayer, iLoop, results.npv[i], results.n_expectedpVars, results.pvplayerID[i]);
@@ -2031,7 +2031,7 @@ int testOne (
 		#endif
 		/*if(thisPlayer == hostNum) {*/
 			endtime = eclock() + 3 * ECLOCKS_PER_SEC;
-			while((long)(eclock() - endtime) < 0)
+			while((sint32)(eclock() - endtime) < 0)
 				processMessage(myDP, &results);
 		/*}*/
 
@@ -2074,14 +2074,14 @@ int testOne (
 		}
 		/*if(thisPlayer == hostNum) {*/
 			endtime = eclock() + 3 * ECLOCKS_PER_SEC;
-			while((long)(eclock() - endtime) < 0)
+			while((sint32)(eclock() - endtime) < 0)
 				processMessage(myDP, &results);
 		/*}*/
 		printf("%d.%d: Session appears empty.\n", thisPlayer, iLoop);
 
 		/* Hang around until all packets have been sent and acked */
 		endtime = eclock() + test_TIMEOUT_DELAY;
-		while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((long)(eclock() - endtime) < 0))
+		while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((sint32)(eclock() - endtime) < 0))
 			processMessage(myDP, &results);
 
 		/* Close the session, then hang around a little longer, to re-ack
@@ -2091,12 +2091,12 @@ int testOne (
 		dpClose(myDP);
 		results.in_session = FALSE;
 		endtime = eclock() + test_ACK_DELAY;
-		while ((long)(eclock() - endtime) < 0)
+		while ((sint32)(eclock() - endtime) < 0)
 			processMessage(myDP, &results);
 
 		/* Hang around until all packets have been sent and acked */
 		endtime = eclock() + test_TIMEOUT_DELAY;
-		while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((long)(eclock() - endtime) < 0))
+		while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((sint32)(eclock() - endtime) < 0))
 			processMessage(myDP, &results);
 
 		/* Clear scratch variables and write results*/
@@ -2130,13 +2130,13 @@ int testOne (
 
 	/* Hang around until all packets have been sent and acked */
 	endtime = eclock() + test_TIMEOUT_DELAY;
-	while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((long)(eclock() - endtime) < 0))
+	while((dpReadyToFreeze(myDP) == dp_RES_BUSY) && ((sint32)(eclock() - endtime) < 0))
 		processMessage(myDP, &results);
 	printf("%d: Ready to freeze.\n", thisPlayer);
 
 	/* Hang around a little longer if desired. */
 	endtime = eclock() + timeout;
-	while ((long)(eclock() - endtime) < 0)
+	while ((sint32)(eclock() - endtime) < 0)
 		processMessage(myDP, &results);
 
 	/* Clean up nicely */
@@ -2152,9 +2152,9 @@ int testOne (
 /*-------------------------------------------------------------------------
  Entry point
 -------------------------------------------------------------------------*/
-int						/* Success (0) or failure (nonzero) */
+sint32						/* Success (0) or failure (nonzero) */
 main(
-	int argc,			/* number of arguments */
+	sint32 argc,			/* number of arguments */
 	char *argv[] )		/* value of arguments */
 {
 	pspArgs_t args;

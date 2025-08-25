@@ -257,7 +257,7 @@ extern "C" {
  */
 struct dptab_s;
 struct dptab_table_s;
-typedef int (dp_FAR dp_PASCAL *dptab_status_cb)(struct dptab_s *dptab, struct dptab_table_s *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err);
+typedef sint32 (dp_FAR dp_PASCAL *dptab_status_cb)(struct dptab_s *dptab, struct dptab_table_s *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t err);
 
 /* Function to pack a structure for transmission - or unpack it.
  * Returns number of bytes in result, or 0 for failure.
@@ -274,7 +274,7 @@ typedef size_t (*dptab_pack_fn)(const void *ibuf, size_t ibuflen, void *obuf, si
  */
 typedef struct {
 	playerHdl_t src;	/* where data element came from; arg to dptab_set() */
-	int hops;			/* copy of hops argument of dptab_set() */
+	sint32 hops;		/* copy of hops argument of dptab_set() */
 	clock_t arrived;	/* when it arrived here.  Used by dptab_delete_byAge */
 } dptab_varinfo_t;
 
@@ -283,7 +283,7 @@ typedef struct {
  * without this wrapper.
  */
 typedef struct {
-	size_t len;		/* length of user data */
+	size_t len;			/* length of user data */
 	void *buf;			/* pointer to malloc'd user data */
 } dptab_var_t;
 
@@ -294,8 +294,8 @@ typedef struct {
 	assoctab_t *tx;		/* [xferid] outstanding outgoing dptab_xfer_t's */
 	assoctab_t *rx;		/* [xferid] outstanding incoming dptab_xfer_t's */
 	hkeytab_t *pubs;	/* [key] dptab_table_t *'s mounted from this src */
-	int cur_tx;			/* round robin offset into tx for fairness */
-	int next_xferid;	/* incremented each time we start a multipack xfer */
+	sint32 cur_tx;		/* round robin offset into tx for fairness */
+	sint32 next_xferid;	/* incremented each time we start a multipack xfer */
 } dptab_peer_t;
 
 /* A master table entry.  Points to a table of variables.
@@ -310,7 +310,7 @@ typedef struct dptab_table_s {
 	dptab_pack_fn unpack;	/* how to decompress on reception, or NULL */
 	assoctab_t *subscribers;/* [playerHdl_t]; who to mirror the table to */
 	char key[dptab_KEY_MAXLEN];/* key for dptab_getTable() or createTable */
-	int keylen;
+	sint32 keylen;
 	dptab_status_cb aCb[dptab_MAX_CALLBACKS];	/* callbacks for status updates */
 	void *aContext[dptab_MAX_CALLBACKS];		/* contexts passed to callbacks */
 } dptab_table_t;
@@ -321,18 +321,18 @@ typedef struct {
  	size_t cur_offset;		/* how far along in current xfer, or dptab_OFFSET_DELETE */
 	dptab_var_t incoming;	/* incoming variable held here until complete */
 	size_t allocated;		/* bytes allocated for incoming.buf */
-	long crc;				/* checksum */
+	sint32 crc;				/* checksum */
 
 	dptab_table_t *table;	/* result of dptab_getTable() or createTable */
 
 	char subkey[dptab_KEY_MAXLEN];/* key for dptab_set() */
-	int subkeylen;
+	sint32 subkeylen;
 
-	int hops;				/* hops left before variable dies */
+	sint32 hops;				/* hops left before variable dies */
 
-	int xferid;				/* from peer->next_xferid */
+	sint32 xferid;				/* from peer->next_xferid */
 
-	int is_delete;			/* TRUE, and offset == dptab_OFFSET_DELETE,
+	sint32 is_delete;			/* TRUE, and offset == dptab_OFFSET_DELETE,
 							 * if it's a delete command rather than set.
 							 */
 } dptab_xfer_t;
@@ -346,7 +346,7 @@ typedef struct dptab_s {
 
 	struct dpio_s *dpio;
 
-    /* cur_dest indicates which destination we checked most recently
+	/* cur_dest indicates which destination we checked most recently
 	 * in the round robin.  We start the scan with a different destination
 	 * each time to try to give each destination a fair share of the outgoing
 	 * bandwidth.
@@ -515,7 +515,7 @@ DP_API dp_result_t dptab_update(dptab_t *dptab);
  dp_RES_ALREADY.
  If table could not be created and didn't already exist, returns dp_RES_NOMEM.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_createTable(dptab_t *dptab, dptab_table_t **ptable, char *key, int keylen, size_t elsize, dptab_pack_fn pack, dptab_pack_fn unpack, dptab_status_cb cb, void *context);
+DP_API dp_result_t dptab_createTable(dptab_t *dptab, dptab_table_t **ptable, char *key, sint32 keylen, size_t elsize, dptab_pack_fn pack, dptab_pack_fn unpack, dptab_status_cb cb, void *context);
 
 /*--------------------------------------------------------------------------
  Set (register) a table's callback function and callback context.
@@ -581,12 +581,12 @@ DP_API void* dptab_getTableContext(dptab_table_t *tab, dptab_status_cb cb);
 /*--------------------------------------------------------------------------
  Delete a table.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, int keylen);
+DP_API dp_result_t dptab_deleteTable(dptab_t *dptab, char *key, sint32 keylen);
 
 /*--------------------------------------------------------------------------
  Get a pointer to the table with the given key.
 --------------------------------------------------------------------------*/
-DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, int keylen);
+DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, sint32 keylen);
 
 /*--------------------------------------------------------------------------
  Get a pointer to the nth table in the dptab; returns a dptab_table_t*,
@@ -595,7 +595,7 @@ DP_API dptab_table_t *dptab_getTable(dptab_t *dptab, char *key, int keylen);
 #define dptab_getkey(dptab,n)  ((dptab_table_t *)hkeytab_getkey(dptab->tables, n))
 
 /*--------------------------------------------------------------------------
- Get the number of tables in the dptab; returns an int.
+ Get the number of tables in the dptab; returns an sint32.
 --------------------------------------------------------------------------*/
 #define dptab_size(dptab)  (dptab->tables->n_used)
 
@@ -622,14 +622,14 @@ DP_API dp_result_t dptab_deleteSubscriber(dptab_t *dptab, dptab_table_t *tab, pl
  Eventually, we should have a callback here indicating whether request
  was rejected.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, int keylen, playerHdl_t src, void *cb, void *context);
+DP_API dp_result_t dptab_requestSubscription(dptab_t *dptab, char *key, sint32 keylen, playerHdl_t src, void *cb, void *context);
 
 /*--------------------------------------------------------------------------
  Request that the remote system call dptab_deleteSubscriber on the given
  table to stop sending it to us.  Also delete them as a publisher, so
  future packets from them will be ignored.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, int keylen, playerHdl_t h);
+DP_API dp_result_t dptab_requestUnsubscription(dptab_t *dptab, char *key, sint32 keylen, playerHdl_t h);
 
 /*--------------------------------------------------------------------------
  Find the first subscription to a table matching the given key from the
@@ -652,7 +652,7 @@ dp_result_t dptab_shutdownMatchingSubscription(dptab_t *dptab, char key, playerH
 
  Also note: this overrides any old table mount from this key of this source.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_addPublisher(dptab_t *dptab, dptab_table_t *table, char *key, int keylen, playerHdl_t src);
+DP_API dp_result_t dptab_addPublisher(dptab_t *dptab, dptab_table_t *table, char *key, sint32 keylen, playerHdl_t src);
 
 /*--------------------------------------------------------------------------
  Delete a publisher.
@@ -660,7 +660,7 @@ DP_API dp_result_t dptab_addPublisher(dptab_t *dptab, dptab_table_t *table, char
  any table here.
  (Note: the key here is the key on the publisher's machine.)
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_deletePublisher(dptab_t *dptab, char *key, int keylen, playerHdl_t src);
+DP_API dp_result_t dptab_deletePublisher(dptab_t *dptab, char *key, sint32 keylen, playerHdl_t src);
 
 /*--------------------------------------------------------------------------
  Replace one publisher with another in all tables.
@@ -695,12 +695,12 @@ DP_API dp_result_t dptab_deletePeer(dptab_t *dptab, playerHdl_t dest);
  If hops>0, the variable is sent automatically to any current or future
  subscribers; when it arrives there, it is stored with hops=hops-1.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_set(dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen, void *buf, size_t len, int hops, playerHdl_t src);
+DP_API dp_result_t dptab_set(dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen, void *buf, size_t len, sint32 hops, playerHdl_t src);
 
 /*--------------------------------------------------------------------------
  Delete a particular item from a table.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_delete(dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen);
+DP_API dp_result_t dptab_delete(dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen);
 
 /*--------------------------------------------------------------------------
  Delete items with a particular source tag from a table.
@@ -718,7 +718,7 @@ DP_API dp_result_t dptab_delete_bySrc(dptab_t *dptab, dptab_table_t *table, play
 
  Returns dp_RES_OK if any were deleted; dp_RES_EMPTY if no elements matched.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int seconds);
+DP_API dp_result_t dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, sint32 seconds);
 
 /*--------------------------------------------------------------------------
  Given a table pointer and a subkey, get the value of item 'subkey'.
@@ -731,14 +731,14 @@ DP_API dp_result_t dptab_delete_byAge(dptab_t *dptab, dptab_table_t *table, int 
  *pbuf is filled with the item's buffer address, and
  *plen is filled with the item's length.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_get_bykey(dptab_table_t *table, const char *subkey, int subkeylen, void **pbuf, size_t *plen);
+DP_API dp_result_t dptab_get_bykey(dptab_table_t *table, const char *subkey, size_t subkeylen, void **pbuf, size_t *plen);
 
 /*--------------------------------------------------------------------------
  Given a table pointer and an index,
  retrieve the buffer and subkey of the nth item in the given table.
  Caller must have obtained 'table' via a call to dptab_get_table().
 
- On entry, psubkey should point to a single short,
+ On entry, psubkey should point to a single sint16,
  pbuf should point to a void *, and
  plen should point to a size_t.
 
@@ -748,12 +748,12 @@ DP_API dp_result_t dptab_get_bykey(dptab_table_t *table, const char *subkey, int
 
  If n >= dptab_tableSize(table), returns dp_RES_EMPTY.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_get_byindex(dptab_table_t *table, int n, void **pbuf, size_t *plen, char *psubkey, int *psubkeylen);
+DP_API dp_result_t dptab_get_byindex(dptab_table_t *table, sint32 n, void **pbuf, size_t *plen, char *psubkey, sint32 *psubkeylen);
 
 /*--------------------------------------------------------------------------
  Get number of elements in a table.
 --------------------------------------------------------------------------*/
-DP_API int dptab_tableSize(dptab_table_t *table);
+DP_API sint32 dptab_tableSize(dptab_table_t *table);
 
 /*********** Explicit network calls ***********/
 
@@ -764,12 +764,12 @@ DP_API int dptab_tableSize(dptab_table_t *table);
  Hops is the number of hops left - if hops is 0, it will not be
  resent by the destination.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_send(dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen, playerHdl_t dest, int hops);
+DP_API dp_result_t dptab_send(dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen, playerHdl_t dest, sint32 hops);
 
 /*--------------------------------------------------------------------------
  Send deletion of item 'key' to a particular destination.
 --------------------------------------------------------------------------*/
-DP_API dp_result_t dptab_send_delete(dptab_t *dptab, dptab_table_t *table, char *subkey, int subkeylen, playerHdl_t dest, int hops);
+DP_API dp_result_t dptab_send_delete(dptab_t *dptab, dptab_table_t *table, char *subkey, sint32 subkeylen, playerHdl_t dest, sint32 hops);
 
 /*********** Packet-handling ***********/
 
@@ -798,8 +798,8 @@ DP_API dp_result_t dptab_handlePacket(dptab_t *dptab, playerHdl_t src, size_t le
 /* Delete a variable */
 #define dptab_DELETE_PACKET_ID		dppt_MAKE('d','*')
 typedef struct {
-	unsigned char keylen;
-	unsigned char subkeylen;
+	uint8 keylen;
+	uint8 subkeylen;
 	char key[1];			/* key, then subkey; dummy size. */
 } PACK dptab_delete_packet_t;
 
@@ -810,11 +810,11 @@ typedef struct {
 #define dptab_INITIAL_PACKET_ID		dppt_MAKE('d','!')
 typedef struct {
 	size_t len;			/* length of user data */
-	long crc;				/* checksum */
-	unsigned char xferid;
-	unsigned char keylen;
-	unsigned char subkeylen;
-	unsigned char hops;	/* hops left before variable dies */
+	sint32 crc;				/* checksum */
+	uint8 xferid;
+	uint8 keylen;
+	uint8 subkeylen;
+	uint8 hops;	/* hops left before variable dies */
 	char key[1];			/* key, then subkey; dummy size. */
 } PACK dptab_initial_packet_t;
 
@@ -824,7 +824,7 @@ typedef struct {
 /* 2nd, 3rd, etc. packets are sent with this packet type and header. */
 #define dptab_BODY_PACKET_ID		dppt_MAKE('d','@')
 typedef struct {
-	unsigned char xferid;	/* Refers back to key in first packet */
+	uint8 xferid;	/* Refers back to key in first packet */
 } PACK dptab_body_packet_t;
 #define dptab_BODY_MAXLEN (dpio_MAXLEN_RELIABLE - sizeof(dptab_body_packet_t) - sizeof(dp_packetType_t))
 
@@ -833,12 +833,12 @@ typedef struct {
 #if 0
 /* Can't represent this in C */
 typedef struct {
-	unsigned char hops;		/* all vars in pkt have same hop count */
-	unsigned char subkeylen;	/* all vars in pkt have same subkeylen */
-	unsigned char keylen;
+	uint8 hops;		/* all vars in pkt have same hop count */
+	uint8 subkeylen;	/* all vars in pkt have same subkeylen */
+	uint8 keylen;
 	char key[keylen];			/* table's key in master table. */
 	array of {
-		unsigned char len;			/* length of user data */
+		uint8 len;			/* length of user data */
 		char subkey[keylen];		/* item's subkey in table. */
 		char data[len];			/* actual data of transfer */
 	}
@@ -863,15 +863,15 @@ typedef struct {
 	dp_result_t err;
 
 	/* Enough info to identify the transmission in question. */
-	unsigned char xferid;
+	uint8 xferid;
 } PACK dptab_reply_packet_t;
 #endif
 
 /* Deleting a table entry */
 #define dptab_DELITEM_PACKET_ID		dppt_MAKE('d','$')
 typedef struct {
-	unsigned char keylen;
-	unsigned char subkeylen;
+	uint8 keylen;
+	uint8 subkeylen;
 	char key[1];			/* key, then subkey; dummy size. */
 } PACK dptab_delitem_packet_t;
 
@@ -880,7 +880,7 @@ typedef struct {
  */
 #define dptab_SUBSCRIBE_PACKET_ID		dppt_MAKE('d','^')
 typedef struct {
-	unsigned char keylen;
+	uint8 keylen;
 	char key[1];			/* key; dummy size. */
 } PACK dptab_subscribe_packet_t;
 

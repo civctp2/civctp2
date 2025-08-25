@@ -27,7 +27,7 @@ void DebugAssert_Close (void)
 {
 }
 
-void DebugAssert_Assert (const char *module_name, int module_line, const char *log_class, const char *condition_string)
+void DebugAssert_Assert (const char *module_name, size_t module_line, const char *log_class, const char *condition_string)
 {
 	Log_Enable (log_class);
 

@@ -40,6 +40,7 @@ HFONT				g_hFont;
 #define k_FONT_FILE_NAME	"ArialBd.ttf"
 #define k_FONT_FACE_NAME	"Arial Bold"
 
+#ifdef __AUI_USE_DIRECTX__
 namespace
 {
 	LONG RoundToNearest(double const a_Rational)
@@ -47,6 +48,7 @@ namespace
 		return static_cast<LONG>(0.5 + a_Rational);
 	}
 };	// namespace
+#endif
 
 void textutils_Initialize(void)
 {

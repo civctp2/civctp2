@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ extern sint32						g_is565Format;
 
 
 LoadSaveMapWindow::LoadSaveMapWindow(AUI_ERRCODE *retval, uint32 id,
-		MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
+		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
 		: c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 {
 	m_fileList = NULL;
@@ -94,7 +94,7 @@ LoadSaveMapWindow::LoadSaveMapWindow(AUI_ERRCODE *retval, uint32 id,
 	InitCommonLdl(ldlBlock);
 }
 
-AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			tabGroupBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			tabBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -106,7 +106,7 @@ AUI_ERRCODE LoadSaveMapWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	sprintf( block, "%s.%s", ldlBlock, "Name" );
 	AddTitle( block );
 
-	AddOk( loadsavemapscreen_executePress, NULL, "c3_PopupOk" );
+	AddOk( loadsavemapscreen_executePress, nullptr, "c3_PopupOk" );
 	AddCancel( loadsavemapscreen_backPress );
 
 	m_deleteButton = spNew_c3_Button(
@@ -544,19 +544,19 @@ void LoadSaveMapWindow::SetRadarMap(SaveMapInfo *info)
 	surface->Unlock(buffer);
 }
 
-void LoadSaveMapWindow::SetGameMapName(MBCHAR *name)
+void LoadSaveMapWindow::SetGameMapName(const MBCHAR *name)
 {
 	if (!m_gameMapTextBox) return;
 	m_gameMapTextBox->SetFieldText(name);
 }
 
-void LoadSaveMapWindow::SetSaveMapName(MBCHAR *name)
+void LoadSaveMapWindow::SetSaveMapName(const MBCHAR *name)
 {
 	if (!m_saveMapTextBox) return;
 	m_saveMapTextBox->SetFieldText(name);
 }
 
-void LoadSaveMapWindow::SetNote(MBCHAR *note)
+void LoadSaveMapWindow::SetNote(const MBCHAR *note)
 {
 	if (!m_noteTextBox) return;
 	m_noteTextBox->SetFieldText(note);
@@ -685,7 +685,7 @@ void LoadSaveMapWindow::EnableFields( BOOL enable )
 
 
 
-LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, GameMapInfo *info)
+LSMGameMapsListItem::LSMGameMapsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, GameMapInfo *info)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -728,7 +728,7 @@ sint32 LSMGameMapsListItem::Compare(c3_ListItem *item2, uint32 column)
 }
 
 
-LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, MBCHAR *ldlBlock, SaveMapInfo *info)
+LSMSaveMapsListItem::LSMSaveMapsListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, SaveMapInfo *info)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),

@@ -56,7 +56,7 @@ ctp2_Spinner::ctp2_Spinner(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	bool displayValue )
 	:
 	aui_ImageBase( ldlBlock ),
@@ -72,9 +72,9 @@ ctp2_Spinner::ctp2_Spinner(
 	SetDisplay();
 }
 
-void ctp2_Spinner::ActionCallback(aui_Control *control, uint32 state, uint32 data, void *cookie)
+void ctp2_Spinner::ActionCallback(aui_Control *control, uint32 state, uint32 data, Cookie cookie)
 {
-	ctp2_Spinner *spinner = (ctp2_Spinner *)cookie;
+	ctp2_Spinner *spinner = (ctp2_Spinner *)cookie.m_voidPtr;
 
 	Assert(spinner);
 	if(!spinner)

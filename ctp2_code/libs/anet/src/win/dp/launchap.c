@@ -44,15 +44,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 static dp_result_t notifystub(HANDLE hprocess)
 {
 	char strhandle[MAX_HSTR];
-	int nwrite;
-	unsigned long tag = DPSTUB_TAG_PROCHDL;
+	sint32 nwrite;
+	uint32 tag = DPSTUB_TAG_PROCHDL;
 	HANDLE hstub, hspawn, hpipe;
 
 	if (!GetEnvironmentVariable(DPSTUB, strhandle, MAX_HSTR)) {
 		DPRINT(("launchap: could not find stub\n"));
 		return dp_RES_EMPTY;
 	}
-	sscanf(strhandle, "%x", &hstub);
+	sscanf(strhandle, "%p", &hstub);
 /*	DPRINT(("launchap: Got stub handle %x\n", hstub)); */
 	if (!DuplicateHandle(GetCurrentProcess(), hprocess, hstub, &hspawn, 0, FALSE, DUPLICATE_SAME_ACCESS)) {
 		DPRINT(("launchap: duplicating handle error %x.\n", GetLastError()));
@@ -63,7 +63,7 @@ static dp_result_t notifystub(HANDLE hprocess)
 		DPRINT(("launchap: could not find stub pipe write handle\n"));
 		return dp_RES_BUG;
 	}
-	sscanf(strhandle, "%x", &hpipe);
+	sscanf(strhandle, "%p", &hpipe);
 	if (!WriteFile(hpipe, (char *)&tag, sizeof(tag), &nwrite, NULL) ||
 		!WriteFile(hpipe, (char *)&hspawn, sizeof(hspawn), &nwrite, NULL)) {
 		DPRINT(("launchap: writing error %x.\n", GetLastError()));
@@ -93,7 +93,7 @@ DP_API dp_result_t dpLaunchApp(dp_appParam_t *appParam)
 
 DP_API dp_result_t dpLaunchApp2(dp_appParam_t *appParam, dpLaunchApp_result_t *result)
 {
-	int status;
+	sint32 status;
 	char cmd[MAX_PATH*2];
 	STARTUPINFO si;
 	PROCESS_INFORMATION pi;

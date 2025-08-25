@@ -20,7 +20,7 @@ const sint32 ctp2_TabButton::k_CTP2_TAB_BUTTON_LAYER_FLAG_RIGHT		= 128;
 const sint32 ctp2_TabButton::k_CTP2_TAB_BUTTON_LAYER_FLAG_ACTIVE	= 256;
 
 ctp2_TabButton::ctp2_TabButton(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
-							   ControlActionCallback *ActionFunc, void *cookie) :
+							   ControlActionCallback *ActionFunc, Cookie cookie) :
 aui_ImageBase(ldlBlock),
 aui_TextBase(ldlBlock, (MBCHAR const *) NULL),
 ctp2_Button(retval, id, ldlBlock, ActionFunc, cookie)

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -48,9 +48,9 @@
 ns_ChatBox::ns_ChatBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -123,7 +123,7 @@ void ns_ChatBox::Receive(NETFunc::Player *p, TYPE t, char *m) {
 	AppendText( buf, color, bold, italic );
 }
 
-AUI_ERRCODE ns_ChatBox::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_ChatBox::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = InitCommon();
 	Assert( AUI_SUCCESS(errcode) );
@@ -172,10 +172,10 @@ ns_ChatBox::~ns_ChatBox()
 	if (m_inputField)
 	{
 		delete m_inputField->GetAction();
-        delete m_inputField;
+		delete m_inputField;
 	}
 
-    delete m_textstyleSystem;
+	delete m_textstyleSystem;
 	delete m_textstyleChat;
 	delete m_textstyleWhisper;
 }

@@ -27,7 +27,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef __SAP_H_INCLUDED__
 #define __SAP_H_INCLUDED__
 
-#define SAP_SOCKET               		(unsigned short)0x0452
+#include "types.h"
+
+#define SAP_SOCKET               		(uint16)0x0452
 
 #define GENERAL_SERVICE_QUERY    		1
 #define GENERAL_SERVICE_RESPONSE 		2
@@ -38,33 +40,33 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define NOT_SUPPORTED            		1
 #define INVALID_QUERY_TYPE       		2
 
-#define SAP_SUCCESSFUL			 		(short)0x0000
-#define SAP_QUERY_IN_PROGRESS			(short)0x0001
-#define SAP_QUERY_ABORTED				(short)0xFFFA
-#define SAP_QUERY_NOT_FOUND				(short)0xFFFB
-#define SAP_SERVICE_ALREADY_ADVERTISED	(short)0xFFFC
-#define SAP_INVALID_ARG			 		(short)0xFFFD
-#define SAP_NO_MEM				 		(short)0xFFFE
-#define SAP_NO_RESPONSES		 		(short)0xFFFF
+#define SAP_SUCCESSFUL			 		(sint16)0x0000
+#define SAP_QUERY_IN_PROGRESS			(sint16)0x0001
+#define SAP_QUERY_ABORTED				(sint16)0xFFFA
+#define SAP_QUERY_NOT_FOUND				(sint16)0xFFFB
+#define SAP_SERVICE_ALREADY_ADVERTISED	(sint16)0xFFFC
+#define SAP_INVALID_ARG			 		(sint16)0xFFFD
+#define SAP_NO_MEM				 		(sint16)0xFFFE
+#define SAP_NO_RESPONSES		 		(sint16)0xFFFF
 
 #if defined(powerc) || defined (__powerc)
 #pragma options align=mac68k
 #endif
 typedef struct
  {
-    unsigned short   SAPPacketType;          /* 2 or 4 */
-    unsigned short   serverType;             /* assigned by Novell */
-    unsigned char    serverName[48];         /* service name */
-	unsigned long    serverNet;              /* server internetwork address */
-	unsigned char    serverNode[6];
-	unsigned short   serverSocket;
-    unsigned short   interveningNetworks;    /* # of networks packet must traverse */
+    uint16   SAPPacketType;          /* 2 or 4 */
+    uint16   serverType;             /* assigned by Novell */
+    uint8    serverName[48];         /* service name */
+	uint32    serverNet;              /* server internetwork address */
+	uint8    serverNode[6];
+	uint16   serverSocket;
+    uint16   interveningNetworks;    /* # of networks packet must traverse */
  } T_SAP_ID_PACKET;
 
 typedef struct
  {
-   unsigned short    queryType;               /* 1 or 3 */
-   unsigned short    serverType;              /* assigned by Novell */
+   uint16    queryType;               /* 1 or 3 */
+   uint16    serverType;              /* assigned by Novell */
  } SERVICE_QUERY_PACKET;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -78,21 +80,21 @@ typedef struct
 #endif
 typedef struct serverInfo
  {
-	unsigned short    serverType;          /* assigned by Novell */
-	unsigned char     serverName[48];      /* service name */
-	unsigned long     serverNet;           /* server internetwork address */
-	unsigned char     serverNode[6];
-	unsigned short    serverSocket;
-	unsigned short    interveningNetworks; /* # of networks packet must traverse */
+	uint16    serverType;          /* assigned by Novell */
+	uint8     serverName[48];      /* service name */
+	uint32     serverNet;           /* server internetwork address */
+	uint8     serverNode[6];
+	uint16    serverSocket;
+	uint16    interveningNetworks; /* # of networks packet must traverse */
 } serverInfo;
 
 typedef struct SAPResponse
  {
-    unsigned short      SAPPacketType;       /* 2 or 4 */
+    uint16      SAPPacketType;       /* 2 or 4 */
     serverInfo 			responses[SAP_RESPONSES_PER_PACKET];
     struct SAPResponse *next;
-    unsigned long       signature;
-    short             	count;
+    uint32       signature;
+    sint16             	count;
  } SAP_RESPONSE_LIST_ENTRY;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -133,13 +135,13 @@ typedef QSCompProcPtr QSCompUPP;
 #endif
 typedef struct queryInfo
 {
-	unsigned short			queryType;
-	unsigned short			serviceType;
-	unsigned short			retryCount;
-	unsigned long			retryInterval;
-	unsigned short			num_recv_ecbs;
+	uint16			queryType;
+	uint16			serviceType;
+	uint16			retryCount;
+	uint32			retryInterval;
+	uint16			num_recv_ecbs;
 	SAP_RESPONSE_LIST_ENTRY	*sap_entries;
-	short					status;
+	sint16					status;
 #ifdef REGISTER_A0_COMPATIBILITY
 	QSCompProcPtr			completion_routine;
 #else
@@ -154,25 +156,25 @@ typedef struct queryInfo
 /*
  * SAP APIs
  */
-extern pascal short AbortQueryServices(
+extern pascal sint16 AbortQueryServices(
          queryInfoPtr    query_info );
 
-extern pascal short  AdvertiseService(
-         unsigned short  __serviceType,
+extern pascal sint16  AdvertiseService(
+         uint16  __serviceType,
          char            *__serviceName,
-         unsigned short  __serviceSocket,
-		 unsigned long	 *__advertisingHandle );
+         uint16  __serviceSocket,
+		 uint32	 *__advertisingHandle );
 
-extern pascal short FreeQueryServicesList(
+extern pascal sint16 FreeQueryServicesList(
          SAP_RESPONSE_LIST_ENTRY *__listP );
 
-extern pascal short QueryServices(
+extern pascal sint16 QueryServices(
          queryInfoPtr    query_info,
 		 char            async );
 
-extern pascal short SapRelinquishControl(void);
+extern pascal sint16 SapRelinquishControl(void);
 
-extern pascal short ShutdownAdvertising(
-         unsigned long   __advertisingHandle );
+extern pascal sint16 ShutdownAdvertising(
+         uint32   __advertisingHandle );
 
 #endif  /* __SAP_H_INCLUDED__ */

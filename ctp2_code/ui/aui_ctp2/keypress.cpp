@@ -367,7 +367,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 			}
 			else if (g_battleViewWindow)
 			{
-				battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+				battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 			}
 			else
 			{
@@ -732,7 +732,7 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		&& !g_turn->IsEmail()
 		){
 			close_AllScreens();
-			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			optionsscreen_mapeditorPress(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 		}
 		break;
 
@@ -778,6 +778,8 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 
 				break;
 			}
+			default:
+				break;
 		}
 	}
 	break;

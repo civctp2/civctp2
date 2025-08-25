@@ -110,7 +110,7 @@ class DiplomaticRequestData : public GameObj
 		void Reject(BOOL fromServer = FALSE) ;
 		void Serialize(CivArchive &archive) ;
 		ATTITUDE_TYPE GetAttitude(PLAYER_INDEX p1, PLAYER_INDEX p2) ;
-		MBCHAR *GetRequestString(void) ;
+		const MBCHAR *GetRequestString(void) ;
 
 		sint32 GetTone() const;
 

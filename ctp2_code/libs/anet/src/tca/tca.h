@@ -52,7 +52,7 @@ typedef struct {
 typedef struct {
 	char response[tca_LEN_RESPONSE];
 	char unamelen;
-	short uname[tcapw_LEN_USERNAME /*unamelen*/];    /* VARIABLE LENGTH USERNAME */
+	sint16 uname[tcapw_LEN_USERNAME /*unamelen*/];    /* VARIABLE LENGTH USERNAME */
 } PACK tca_response_t;
 
 /* A password or email change request from a user, created by
@@ -60,8 +60,8 @@ typedef struct {
  */
 typedef struct {
 	char pwchange[tca_LEN_PWCHANGE];
-	unsigned long int flags;    /* | of tcapw_entry_FLAGS_* set by user */
-	unsigned char emaillen;
+	uint32 flags;    /* | of tcapw_entry_FLAGS_* set by user */
+	uint8 emaillen;
 	char email[tcapw_MAXLEN_EMAIL];
 } PACK tca_pwchange_t;
 
@@ -69,12 +69,12 @@ typedef struct {
  */
 typedef struct {
 	char newuser[tca_LEN_NEWUSER];
-	unsigned long int flags;    /* | of tcapw_entry_FLAGS_* set by user */
-	unsigned char unamelen;
-	unsigned char emaillen;
-	char storage[tcapw_LEN_USERNAME*sizeof(short) + tcapw_MAXLEN_EMAIL];
+	uint32 flags;    /* | of tcapw_entry_FLAGS_* set by user */
+	uint8 unamelen;
+	uint8 emaillen;
+	char storage[tcapw_LEN_USERNAME*sizeof(sint16) + tcapw_MAXLEN_EMAIL];
 	/* VARIABLE LENGTH USERNAME AND EMAIL EMBEDDED IN storage:
-	 * short uname[unamelen];
+	 * sint16 uname[unamelen];
 	 * char email[emaillen];
 	 */
 } PACK tca_newuser_t;
@@ -179,7 +179,7 @@ dp_result_t tca_response_validate(tca_t *tca, const tca_challenge_t *challenge, 
   Returns dp_RES_OK on success,
           dp_RES_BAD on bad args.
 --------------------------------------------------------------------------*/
-dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, tca_response_t *response, int *responselen);
+dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, tca_response_t *response, sint32 *responselen);
 
 /*--------------------------------------------------------------------------
   Generate a password or email change request.
@@ -189,7 +189,7 @@ dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, 
   Returns dp_RES_OK on success,
           dp_RES_BAD on bad args.
 --------------------------------------------------------------------------*/
-dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_hpw_t *oldhpw, const tcapw_hpw_t *newhpw, int flags, const char *email, tca_pwchange_t *pwchange, int *pwchangelen);
+dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_hpw_t *oldhpw, const tcapw_hpw_t *newhpw, sint32 flags, const char *email, tca_pwchange_t *pwchange, sint32 *pwchangelen);
 
 /*--------------------------------------------------------------------------
   Change the user's password if the challenge response contained in pwchange
@@ -214,7 +214,7 @@ dp_result_t tca_pwchange_validate(tca_t *tca, tcapw_uid_t uid, const tca_challen
   Returns dp_RES_OK on success,
           dp_RES_BAD on bad args.
 --------------------------------------------------------------------------*/
-dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *newusername, const tcapw_hpw_t *newhpw, int flags, const char *email, tca_newuser_t *newuser, int *newuserlen);
+dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *newusername, const tcapw_hpw_t *newhpw, sint32 flags, const char *email, tca_newuser_t *newuser, sint32 *newuserlen);
 
 /*--------------------------------------------------------------------------
   Create a new user with the username and password contained in newuser

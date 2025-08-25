@@ -37,16 +37,16 @@ void usage(char * cmd)
 	exit(1);
 }
 
-int main(int argc, char ** argv)
+sint32 main(sint32 argc, char ** argv)
 {
 	PROCESS_INFORMATION pi;
 	STARTUPINFO si;
 	DWORD res;
 	DWORD res1;
 	char cmdLines[2][1024];
-	int lineNo;
+	sint32 lineNo;
 	FILE *stream;
-	int i;
+	sint32 i;
 
 	if (argc != 2) {
 		usage(argv[0]);
@@ -60,7 +60,7 @@ int main(int argc, char ** argv)
 		usage(argv[0]);
 	}
 	for (i=0; i < 2; i++) {
-		int len;
+		sint32 len;
 		if( fgets( cmdLines[i], sizeof(cmdLines[i]), stream ) == NULL) {
 			printf( "fgets error\n" );
 			exit(1);

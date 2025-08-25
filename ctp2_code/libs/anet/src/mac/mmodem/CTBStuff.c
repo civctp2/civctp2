@@ -59,8 +59,8 @@ OSErr	FindPrefs(FSSpec* where)
 	Str255	theString;
 	Str255	name;
 	FSSpec	spec;
-	short		foundVRefNum;
-	long		foundDirID;
+	sint16		foundVRefNum;
+	sint32		foundDirID;
 	// Look for the prefs in the folder
 	GetIndString(theString, kTransportPath, 1);
 	p2cstr(theString);
@@ -83,10 +83,10 @@ OSErr GetConfig(Ptr config)
 {
 	OSErr			error = noErr;
 	FSSpec		where;
-	short			ref;
+	sint16			ref;
 	Handle		theString;
 	Ptr			temp = nil;
-	long			len;
+	sint32			len;
 	config[0] = '\0';											// Start without a name
 	error = FindPrefs(&where);
 	ref = FSpOpenResFile(&where, fsRdWrPerm);
@@ -116,8 +116,8 @@ OSErr GetConfig(Ptr config)
 OSErr VerifyToolExists(char* toolName)
 {
 	Str255	tempName;
-	short		index;
-	short		result;
+	sint16		index;
+	sint16		result;
 	OSErr		error = noErr;
 	result = CMGetProcID(toolName);
 	if (result == -1) {
@@ -131,7 +131,7 @@ OSErr GetToolname(char* toolName)
 {
 	OSErr			error = noErr;
 	FSSpec		where;
-	short			ref;
+	sint16			ref;
 	Handle		theString;
 	toolName[0] = '\0';													// Start without a name
 	error = FindPrefs(&where);
@@ -162,7 +162,7 @@ OSErr PutToolname(char* toolName)
 }
 
 OSErr CreateToolNameRes(StringPtr toolName) {
-	short			ref;
+	sint16			ref;
 	FSSpec		prefs;
 	OSErr			error;
 	Handle		theStrings;
@@ -206,11 +206,11 @@ OSErr CreateToolNameRes(StringPtr toolName) {
 
 OSErr CreateConfigRes(Ptr configPtr)
 {
-	short			ref;
+	sint16			ref;
 	FSSpec		prefs;
 	OSErr			error;
 	Handle		theStrings;
-	long			len;
+	sint32			len;
 	char*			where;
 	//	build the 'STR ' resource
 
@@ -268,12 +268,12 @@ OSErr ConfigureConnection(ConnHandle* connection)
 {
 	Str255			toolName;
 	Point				where;
-	short				result = -1;
+	sint16				result = -1;
 	//Ptr				configStream;
 	EventRecord		event;
 	Rect				dialogLoc;
 	FSSpec			prefs;
-	short				ref;
+	sint16				ref;
 	OSErr				error;
 	THz				myZone;
 	myZone = GetZone();
@@ -284,7 +284,7 @@ OSErr ConfigureConnection(ConnHandle* connection)
 		//	put our A5 value into the connection record so that the search callbacks
 		//	can get it and restore it
 
-		CMSetUserData(*connection, (long) LMGetCurrentA5());
+		CMSetUserData(*connection, (sint32) LMGetCurrentA5());
 
 		// CMChoose Dialog has to hang off this point (global coordinates)
 
@@ -323,15 +323,15 @@ OSErr InitializeConnection(Boolean readPrefs, ConnHandle* connection)
 {
 	Handle				theStrings;
 	CMBufferSizes		bufSizes;
-	short					procID;
+	sint16					procID;
 	Str255				toolName;
 	OSErr					error;
 	FSSpec				where;
-	short					ref;
+	sint16					ref;
 	char*					end;
 	Ptr					tempString;
 	char*					here;
-	short					baud;
+	sint16					baud;
 	Boolean				prefsChanged = false;
 	THz					myZone;
 	*connection = nil;
@@ -480,7 +480,7 @@ Boolean InitializeCommToolBox(void)
 	return true;
 }
 
-int config_ctb(ConnHandle* connection)
+sint32 config_ctb(ConnHandle* connection)
 {
  	OSErr		error = noErr;
 	Boolean	loaded;
@@ -513,10 +513,10 @@ int config_ctb(ConnHandle* connection)
 	return error;
 }
 
-OSErr GetData(unsigned long* value) {
+OSErr GetData(uint32* value) {
 	OSErr			error = noErr;
 	FSSpec		where;
-	short			ref;
+	sint16			ref;
 	Handle		theString;
 
 	//	get the pointer to the serial structure in the system heap from the prefs file
@@ -526,7 +526,7 @@ OSErr GetData(unsigned long* value) {
 		theString = Get1Resource(kSerPtrResType, kSerPtrRes);			// Should look in most recent file first
 		if (theString != nil) {
 			HLock(theString);
-			memcpy(value, *theString, sizeof(unsigned long));
+			memcpy(value, *theString, sizeof(uint32));
 			HUnlock(theString);
 			ReleaseResource(theString);
 		} else {
@@ -544,10 +544,10 @@ OSErr GetData(unsigned long* value) {
 	return error;
 }
 
-OSErr SetData(unsigned long value) {
+OSErr SetData(uint32 value) {
 	OSErr			err = noErr;
 	FSSpec		where;
-	short			ref;
+	sint16			ref;
 	Handle		aHand;
 
 	//	write the address of the serial structure into a resource for use in the next
@@ -569,7 +569,7 @@ OSErr SetData(unsigned long value) {
 		//	if we're not resuming, we need to save this address out
 		//	to the prefs file
 
-		err = PtrToHand(&value, &aHand, sizeof(unsigned long));
+		err = PtrToHand(&value, &aHand, sizeof(uint32));
 		if ( (err == noErr) && (aHand != nil) ){
 
 			//	add the handles to the resource file

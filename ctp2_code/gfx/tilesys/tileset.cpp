@@ -462,7 +462,7 @@ void TileSet::LoadMapIcons(void)
 	for (sint32 i = 0; i < g_theMapIconDB->NumRecords(); ++i)
 	{
 
-		sprintf(name, g_theMapIconDB->Get(i)->GetValue());
+		sprintf(name, "%s", g_theMapIconDB->Get(i)->GetValue());
 
 		if (g_civPaths->FindFile(C3DIR_PICTURES, name, path, TRUE, FALSE) == NULL) {
 
@@ -475,7 +475,7 @@ void TileSet::LoadMapIcons(void)
 			}
 			else
 			{
-				sprintf(path, "%s.rim", path);
+				strcat(path, ".rim");
 			}
 
 			size_t  testlen = 0;

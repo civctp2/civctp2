@@ -23,27 +23,21 @@ typedef void (CTP2MenuCallback) (
 		ctp2_Menu *menu,
 		CTP2_MENU_ACTION action,
 		sint32 itemIndex,
-		void *cookie);
+		Cookie cookie);
 
-class ctp2_Menu {
-  private:
-	class Item {
+class ctp2_Menu
+{
+private:
+	class Item
+	{
 	public:
 
-		Item() : m_item(NULL), m_shortcut(NULL), m_cookie(NULL) { }
-
-
-
-
-
-
-
-
+		Item() : m_item(NULL), m_shortcut(NULL), m_cookie(nullptr) { }
 		~Item() { delete m_shortcut; }
 
 		ctp2_ListItem *m_item;
 		MBCHAR *m_shortcut;
-		void *m_cookie;
+		Cookie m_cookie;
 	};
 
 	ctp2_Window *m_window;
@@ -59,16 +53,15 @@ class ctp2_Menu {
 	aui_Region *m_siblingArea;
 
 	void Reformat(ctp2_Menu::Item *item);
-	ctp2_Menu::Item *CreateItem(MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut, const MBCHAR *icon, void *cookie);
+	ctp2_Menu::Item *CreateItem(const MBCHAR *block, const MBCHAR *text, const MBCHAR *shortcut, const MBCHAR *icon, Cookie cookie);
 	void Init(const MBCHAR *block, bool atMouse, CTP2MenuCallback *callback);
 
 	void ListCallback(aui_Control *control, uint32 action, uint32 data);
-	static void StaticListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void StaticListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	void Resize();
 
-  public:
-
+public:
 
 	ctp2_Menu(bool atMouse, CTP2MenuCallback *callback);
 
@@ -77,8 +70,8 @@ class ctp2_Menu {
 	~ctp2_Menu();
 
 
-	void AddItem(const MBCHAR *text, const MBCHAR *shortcut, void *cookie);
-	void AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, void *cookie);
+	void AddItem(const MBCHAR *text, const MBCHAR *shortcut, Cookie cookie);
+	void AddItemWithIcon(const MBCHAR *text, const MBCHAR *icon, const MBCHAR *shortcut, Cookie cookie);
 
 	void Open();
 
@@ -96,7 +89,7 @@ class ctp2_Menu {
 
 	void SetCallback(CTP2MenuCallback *callback);
 
-	static void WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, void *cookie, bool &passEventOn);
+	static void WeaklyModalCancel(aui_MouseEvent *event, ctp2_Window *window, Cookie cookie, bool &passEventOn);
 
 	void	Clear();
 

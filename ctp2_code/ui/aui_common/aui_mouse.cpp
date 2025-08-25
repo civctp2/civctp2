@@ -59,8 +59,8 @@ aui_Mouse::aui_Mouse
 	const MBCHAR *   ldlBlock
 )
 :
-	aui_Base    (),
-	aui_Input   ()
+	aui_Input   (),
+	aui_Base    ()
 {
 	*retval = InitCommonLdl( ldlBlock );
 	Assert( AUI_SUCCESS(*retval) );

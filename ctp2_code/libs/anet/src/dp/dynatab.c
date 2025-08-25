@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -63,8 +63,8 @@ MSVC's warning level is set to 4.
 #include <assert.h>
 #include <stdlib.h>
 #include <string.h>
-#include "dp2.h"
 #include "dynatab.h"
+#include "dp2.h"
 #include "dpmem.h"
 
 /* Re-enable MSVC warnings (#@$&%#^& MS) */
@@ -90,6 +90,9 @@ dynatab_t *dynatab_create(size_t element_size)
 	pdt->unit = element_size;
 	pdt->n_used = 0;
 	pdt->n_alloced = 0;
+
+	DPRINT(("dynatab_create: %p of size %zu\n", pdt, element_size));
+
 	return pdt;
 }
 
@@ -119,7 +122,7 @@ void dynatab_removeAll(dynatab_t *tab)
  Remove the given element of the table.
  WARNING: Silently does nothing if subscript is out of range.
 -----------------------------------------------------------------------*/
-void dynatab_remove(dynatab_t *tab, int subscript)
+void dynatab_remove(dynatab_t *tab, sint32 subscript)
 {
 	assert(tab != NULL);
 
@@ -145,14 +148,14 @@ void dynatab_remove(dynatab_t *tab, int subscript)
  Start all elements with 0.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *dynatab_subscript_grow(dynatab_t *tab, int subscript)
+void *dynatab_subscript_grow(dynatab_t *tab, sint32 subscript)
 {
 	assert(tab != NULL);
 	if (subscript < 0)
 		return NULL;
 	if (subscript >= tab->n_alloced) {
 		void *newbuf;
-		int new_n_alloced = tab->n_alloced + 16;
+		sint32 new_n_alloced = tab->n_alloced + 16;
 		if (new_n_alloced < subscript + 1)
 			new_n_alloced = subscript + 16;
 
@@ -175,6 +178,8 @@ void *dynatab_subscript_grow(dynatab_t *tab, int subscript)
 	if (tab->n_used < subscript + 1)
 		tab->n_used = subscript + 1;
 
+	DPRINT(("dynatab_subscript_grow: %p of size %zu has grown to %d\n", tab, tab->unit, tab->n_used));
+
 	return ((char *)tab->buf) + (subscript * tab->unit);
 }
 
@@ -183,7 +188,7 @@ void *dynatab_subscript_grow(dynatab_t *tab, int subscript)
  Grows the table.
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
-void *dynatab_subscript_insert(dynatab_t *tab, int n)
+void *dynatab_subscript_insert(dynatab_t *tab, sint32 n)
 {
 	void *p;
 
@@ -195,7 +200,7 @@ void *dynatab_subscript_insert(dynatab_t *tab, int n)
 
 	if (tab->n_used >= tab->n_alloced) {
 		void *newbuf;
-		int new_n_alloced = tab->n_alloced + 16;
+		sint32 new_n_alloced = tab->n_alloced + 16;
 		if (new_n_alloced < tab->n_used + 1)
 			new_n_alloced = tab->n_used + 16;
 
@@ -240,7 +245,7 @@ void *dynatab_subscript_insert(dynatab_t *tab, int n)
  Returns NULL on failure.
 -----------------------------------------------------------------------*/
 #ifdef dyatab_NONINLINE
-void *dynatab_subscript(dynatab_t *tab, int subscript)
+void *dynatab_subscript(dynatab_t *tab, sint32 subscript)
 {
 	assert(tab != NULL);
 	if (subscript < 0 || subscript >= tab->n_used)
@@ -253,12 +258,12 @@ void *dynatab_subscript(dynatab_t *tab, int subscript)
  Return the index of the element of the table that holds addr.
  If the table doesn't hold addr, return dynatab_NONE.
 -----------------------------------------------------------------------*/
-int					/* Index of addr, or dynatab_NONE */
+sint32					/* Index of addr, or dynatab_NONE */
 dynatab_find(
 	dynatab_t *tab,	/* table to search */
 	void* addr)		/* value to search for */
 {
-	int i;
+	sint32 i;
 
 	assert(tab != NULL);
 	assert(addr != NULL);
@@ -275,9 +280,9 @@ dynatab_find(
 /*****************/
 
 typedef struct {
-	int magic;
-	int n_used;
-	size_t unit;
+	sint32 magic;
+	sint32 n_used;
+	uint32 unit;
 } dynatab_freeze_t;
 #define dynatab_MAGIC 0x9473
 
@@ -290,11 +295,18 @@ typedef struct {
 void dynatab_freeze(dynatab_t *tab, FILE *fp)
 {
 	dynatab_freeze_t d;
-	int i;
+	size_t i;
 
-	d.magic = dynatab_MAGIC;
+	size_t datalen = tab->unit - sizeof(dptab_varinfo_t);
+
+	d.magic  = dynatab_MAGIC;
 	d.n_used = tab->n_used;
-	d.unit = tab->unit;
+	d.unit   = (uint32)(datalen + sizeof(playerHdl_t) + sizeof(sint32) + sizeof(uint32));
+//	These are the types of the following, see for loop below
+//	This is necessary to have servers.dat compatible between Windows and Linux
+//	d.unit   = (uint32)tab->unit - datalen + sizeof(varInfo->src) + sizeof(varInfo->hops) + sizeof(arrived);
+
+
 assert(d.n_used <= 5000);
 	DPRINT(("dynatab_freeze: Saving %d elements of size %d.\n", d.n_used, d.unit));
 	i = fwrite(&d, sizeof(d), 1, fp);
@@ -303,10 +315,29 @@ assert(d.n_used <= 5000);
 		;
 	}
 	if (tab->n_used > 0) {
-		i = fwrite(tab->buf, tab->unit, tab->n_used, fp);
-		if (i != tab->n_used) {
-			DPRINT(("dynatab_freeze: Error writing element %d.\n", i));
-			;
+		size_t datalen = tab->unit - sizeof(dptab_varinfo_t);
+		for(uint8* p = tab->buf; p < (uint8*)tab->buf + tab->unit * d.n_used; p += tab->unit) {
+			if (fwrite(p, sizeof(char), datalen, fp) != datalen) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
+
+			dptab_varinfo_t* varInfo = (dptab_varinfo_t*)((char*)p + datalen);
+
+			if (fwrite(&varInfo->src,  sizeof(varInfo->src),  1, fp) != 1) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
+			if (fwrite(&varInfo->hops, sizeof(varInfo->hops), 1, fp) != 1) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
+
+			uint32 arrived = (uint32)varInfo->arrived;
+			if (fwrite(&arrived, sizeof(arrived), 1, fp) != 1) {
+				DPRINT(("dynatab_freeze: Error writing element %p.\n", p));
+				;
+			}
 		}
 	}
 }
@@ -321,7 +352,7 @@ assert(d.n_used <= 5000);
 -------------------------------------------------------------------------*/
 void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 {
-	int i;
+	size_t i;
 	void *p;
 	dynatab_freeze_t d;
 
@@ -337,18 +368,42 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 		return NULL;
 	}
 	DPRINT(("dynatab_thaw: Reading %d elements of size %d.\n", d.n_used, d.unit));
-	tab->unit = d.unit;
+	// This is needed to assure compatibilty of servers.dat files between Linux
+	// and Windows. On 32 and 64 bit Windows, clock_t is 4 bytes, while on 
+	// 64 bit Linux it is 8 bytes.
+	tab->unit = (size_t)d.unit - sizeof(uint32) + sizeof(clock_t);
 	if (d.n_used != 0) {
 		p = dynatab_subscript_grow(tab, d.n_used-1);
 		if (!p) {
-			DPRINT(("dynatab_thaw: Could not allocate element %d\n", i));
+			DPRINT(("dynatab_thaw: Could not allocate element %p\n", p));
 			return NULL;
 		}
-		i = fread(tab->buf, tab->unit, d.n_used, fp);
-		if (i != tab->n_used) {
-			/*  Read failed */
-			DPRINT(("dynatab_thaw: Could not read element %d\n", i));
-			return NULL;
+
+		size_t datalen = tab->unit - sizeof(dptab_varinfo_t);
+		for(uint8* p = tab->buf; p < (uint8*)tab->buf + tab->unit * d.n_used; p += tab->unit) {
+			if(fread(p, sizeof(char), datalen, fp) != datalen) {
+				DPRINT(("dynatab_thaw: error reading buf %p\n", p));
+				return NULL;
+			}
+
+			/* Seperate these so that we do not have a problem with packing*/
+			dptab_varinfo_t* varInfo = (dptab_varinfo_t*)((char*)p + datalen);
+
+			if(fread(&varInfo->src, sizeof(varInfo->src), 1, fp) != 1) {
+				DPRINT(("dynatab_thaw: error reading varInfo->src %p\n", p));
+				return NULL;
+			}
+			if(fread(&varInfo->hops, sizeof(varInfo->hops), 1, fp) != 1) {
+				DPRINT(("dynatab_thaw: error reading varInfo->hops %p\n", p));
+				return NULL;
+			}
+
+			uint32 arrived = 0; /* This needs to be 32 bit for compatibilty, clock_t is 32 bit on 64 bit Windows and 64 bit on 64 bit Linux */
+			if(fread(&arrived, sizeof(arrived), 1, fp) != 1) {
+				DPRINT(("dynatab_thaw: error reading varInfo->arrived %p\n", p));
+				return NULL;
+			}
+			varInfo->arrived = (clock_t)arrived;
 		}
 	} else {
 		/*  Kludge: force non-NULL buffer */
@@ -356,7 +411,7 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 		p = dynatab_subscript_grow(tab, 1);
 	}
 	tab->n_used = d.n_used;
-	DPRINT(("dynatab_thaw: successful.\n"));
+	DPRINT(("dynatab_thaw: %p of size %zu successful.\n", tab, tab->unit));
 	return (void *) tab->buf;
 }
 
@@ -366,13 +421,13 @@ void *dynatab_thaw(dynatab_t *tab, FILE *fp)
 
 void test1(dynatab_t *pt)
 {
-	int i;
+	sint32 i;
 	FILE *fp;
 	dynatab_t *th;
 
 	for (i=32; i>=0; i--) {
 	/* for (i=0; i<33; i++) { */
-		int *p = dynatab_subscript_grow(pt, i);
+		sint32 *p = dynatab_subscript_grow(pt, i);
 		if (p == NULL) {
 			printf("grow1: test failed on i=%d\n", i);
 			exit(1);
@@ -385,7 +440,7 @@ void test1(dynatab_t *pt)
 		printf(".");
 	}
 	for (i=0; i<33; i++) {
-		int *p = dynatab_subscript(pt, i);
+		sint32 *p = dynatab_subscript(pt, i);
 		if (p == NULL) {
 			printf("subscript2: test failed\n");
 			exit(1);
@@ -406,7 +461,7 @@ void test1(dynatab_t *pt)
 
 	/* Insert an out-of-order value in middle */
 	{
-		int *p = dynatab_subscript_insert(pt, 10);
+		sint32 *p = dynatab_subscript_insert(pt, 10);
 		if (p == NULL) {
 			printf("insert1: test failed\n");
 			exit(1);
@@ -418,8 +473,8 @@ void test1(dynatab_t *pt)
 		*p = 1000;
 
 		for (i=0; i<34; i++) {
-			int *p = dynatab_subscript(pt, i);
-			int val;
+			sint32 *p = dynatab_subscript(pt, i);
+			sint32 val;
 
 			if (p == NULL) {
 				printf("insert subscript2: test failed\n");
@@ -451,7 +506,7 @@ void test1(dynatab_t *pt)
 		perror("closing spam.dat");
 		exit(1);
 	}
-	th = dynatab_create(sizeof(int));
+	th = dynatab_create(sizeof(sint32));
 	if (!th) exit(1);
 
 	fp = fopen("spam.dat", "rb");
@@ -469,7 +524,7 @@ void test1(dynatab_t *pt)
 		exit(1);
 	}
 	for (i=0; i<33; i++) {
-		int *p = dynatab_subscript(th, i);
+		sint32 *p = dynatab_subscript(th, i);
 		if (p == NULL) {
 			printf("subscript2: test failed\n");
 			exit(1);
@@ -484,14 +539,14 @@ void test1(dynatab_t *pt)
 		}
 	}
 	for (i = 0; i < 20; i++) {	/* Don't remove them all */
-		int *p = dynatab_subscript(th, 0);
-		int val = *p;
+		sint32 *p = dynatab_subscript(th, 0);
+		sint32 val = *p;
 		if (p == NULL) {
 			printf("subscript3: test failed\n");
 			exit(1);
 		}
 		dynatab_remove(th, 0);
-		if (val == *((int*)dynatab_subscript(th, 0))) {
+		if (val == *((sint32*)dynatab_subscript(th, 0))) {
 			printf("remove test: test failed\n");
 			exit(1);
 		}
@@ -510,11 +565,11 @@ void test1(dynatab_t *pt)
 #define NTABS 100
 main()
 {
-	int i;
+	sint32 i;
 	dynatab_t *pt[NTABS];
 
 	for (i=0;i<NTABS;i++) {
-		pt[i] = dynatab_create(sizeof(int));
+		pt[i] = dynatab_create(sizeof(sint32));
 		if (!pt[i]) {
 			printf("create: test failed\n");
 			exit(1);
@@ -525,7 +580,7 @@ main()
 		}
 	}
 	for (i=0;i<NTABS;i++) {
-		int h;
+		sint32 h;
 		h = _heapchk();
 		if (h != _HEAPOK) {
 			printf("heapchk: test failed\n");

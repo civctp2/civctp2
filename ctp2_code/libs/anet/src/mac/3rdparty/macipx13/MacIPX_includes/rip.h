@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 #define ROUTE_ENTRIES_PER_PACKET	50
-#define ROUTER_SOCKET				(unsigned short)0x0453
+#define ROUTER_SOCKET				(uint16)0x0453
 #define MIN_ROUTE_PACKET			40
 #define RIP_PACKET_TYPE				1
 #define ROUTE_REQUEST				1
@@ -42,38 +42,38 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma options align=mac68k
 #endif
 typedef struct routeEntry {
-	unsigned long		targetNet;
-	unsigned short		targetHops;
-	unsigned short		targetTime;
+	uint32		targetNet;
+	uint16		targetHops;
+	uint16		targetTime;
 } routeEntry_t;
 
 typedef struct routePacket {
-	unsigned short		checksum;		/* always 0xffff */
-	unsigned short		packetLen;		/* length of data and IPX header */
-	unsigned char		transportCtl;	/* transport control */
-	unsigned char		packetType;		/* packet type */
-	unsigned long		destNet;    	/* destination address */
-	unsigned char		destNode[6];
-	unsigned short		destSocket;
-	unsigned long		sourceNet;  	/* source address */
-	unsigned char		sourceNode[6];
-	unsigned short		sourceSocket;
-	unsigned short		operation;
+	uint16		checksum;		/* always 0xffff */
+	uint16		packetLen;		/* length of data and IPX header */
+	uint8		transportCtl;	/* transport control */
+	uint8		packetType;		/* packet type */
+	uint32		destNet;    	/* destination address */
+	uint8		destNode[6];
+	uint16		destSocket;
+	uint32		sourceNet;  	/* source address */
+	uint8		sourceNode[6];
+	uint16		sourceSocket;
+	uint16		operation;
 	routeEntry_t		routeTable[ROUTE_ENTRIES_PER_PACKET];
 } routePacket_t;
 
 typedef struct routeRequestPacket {
-	unsigned short		checksum;		/* always 0xffff */
-	unsigned short		packetLen;		/* length of data and IPX header */
-	unsigned char		transportCtl;	/* transport control */
-	unsigned char		packetType;		/* packet type */
-	unsigned long		destNet;    	/* destination address */
-	unsigned char		destNode[6];
-	unsigned short		destSocket;
-	unsigned long		sourceNet;  	/* source address */
-	unsigned char		sourceNode[6];
-	unsigned short		sourceSocket;
-	unsigned short		operation;
+	uint16		checksum;		/* always 0xffff */
+	uint16		packetLen;		/* length of data and IPX header */
+	uint8		transportCtl;	/* transport control */
+	uint8		packetType;		/* packet type */
+	uint32		destNet;    	/* destination address */
+	uint8		destNode[6];
+	uint16		destSocket;
+	uint32		sourceNet;  	/* source address */
+	uint8		sourceNode[6];
+	uint16		sourceSocket;
+	uint16		operation;
 	routeEntry_t		routeRequest;
 } routeRequestPacket_t;
 #if defined(powerc) || defined(__powerc)

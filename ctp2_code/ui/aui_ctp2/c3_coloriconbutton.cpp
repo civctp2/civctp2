@@ -30,10 +30,10 @@ c3_ColorIconButton::c3_ColorIconButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *icon,
+	const MBCHAR *pattern,
+	const MBCHAR *icon,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( 1, AUI_IMAGEBASE_BLTTYPE_STRETCH),
 	aui_TextBase(NULL),
@@ -50,9 +50,9 @@ c3_ColorIconButton::c3_ColorIconButton(
 c3_ColorIconButton::c3_ColorIconButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -122,7 +122,7 @@ void c3_ColorIconButton::ResizePictureRect(void)
 	}
 }
 
-void c3_ColorIconButton::SetIcon(MBCHAR *name)
+void c3_ColorIconButton::SetIcon(const MBCHAR *name)
 {
 	if (name == NULL) return;
 
@@ -138,24 +138,16 @@ void c3_ColorIconButton::SetIcon(MBCHAR *name)
 	else
 		SetImage(NULL, 0);
 
-
-
-
-
-
-
-
-
-
 	ResizePictureRect();
 }
 
-AUI_ERRCODE c3_ColorIconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
+AUI_ERRCODE c3_ColorIconButton::InitCommon( const MBCHAR *ldlBlock, BOOL isLDL)
 {
-	MBCHAR		*name;
+	const MBCHAR		*name;
 
-	if (isLDL) {
-        ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	if (isLDL)
+	{
+		ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 

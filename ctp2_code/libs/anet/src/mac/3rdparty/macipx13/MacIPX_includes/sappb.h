@@ -62,17 +62,17 @@ typedef struct {
 	queryInfoPtr			query_info;
 	char					async;
 	THz						appZone;
-	unsigned long			appA5;
+	uint32			appA5;
 } QuerySrvc;
 
 typedef struct SAPpb {
 	char					fill12[12];
 	IOCompletionUPP			ioCompletion;
-	short					ioResult;
+	sint16					ioResult;
 	char					*ioNamePtr;
-	short					ioVRefNum;
-	short					ioCRefNum;
-	short					csCode;
+	sint16					ioVRefNum;
+	sint16					ioCRefNum;
+	sint16					csCode;
 	union {
 		AdvertiseSrvc	adv_service;
 		QuerySrvc		query_service;

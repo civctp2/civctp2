@@ -45,10 +45,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, size_t len)
 {
 	static char buf[768];
-	int i;
+	size_t i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -59,7 +59,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 /* DPRINT a scorerep's contents for debugging */
 static void scorerep_print(const scorerep_t *rep)
 {
-	int i;
+	sint32 i;
 	DPRINT(("*** flags:0x%x id:%d uid:%d leaverid:%d leaveruid:%d\n",
 		rep->flags, rep->id, rep->uid, rep->leaverid, rep->leaveruid));
 	if (!rep->players) {
@@ -140,7 +140,7 @@ dp_result_t scorerep_setLeaver(scorerep_t *rep, dpid_t dpId, dp_uid_t uid)
  representation in the given scorerep_t.
  Overwrites the previous value of this score for the given player.
 --------------------------------------------------------------------------*/
-dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId, const char *blob, unsigned short bloblen)
+dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, sint32 scoreId, const char *blob, uint16 bloblen)
 {
 	scorerep_player_t *player;
 
@@ -190,10 +190,10 @@ dp_result_t scorerep_set(scorerep_t *rep, dpid_t dpId, dp_uid_t uid, int scoreId
  Other flags are simply stored in the report for interpretation by the
  receiver.
 --------------------------------------------------------------------------*/
-dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorerep_buf_t *repbuf)
+dp_result_t scorerep_toBuf(const scorerep_t *rep, sint32 flags, dpid_t id, scorerep_buf_t *repbuf)
 {
-	int i;
-	short nPlayers;
+	sint32 i;
+	sint16 nPlayers;
 	char *pbuf;
 	scorerep_player_t *player;
 
@@ -203,16 +203,16 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 
 	/* save information from dpReportScore2 in the following format:
 	 * struct {
-	 * 	short score_flag;	    // last argument of dpReportScoreStart
-	 *  short sessType;         // Session type of game
-	 *  short submitter_id;     // id of submitting player
-	 *  long  submitter_uid;    // uid of submitting player
-	 *  short leaver_id;		// id of leaving player
-	 *  short leaver_uid;		// uid of leaving player
-	 * 	short nPlayers;
-	 *	short ids[nPlayers];	// rows; player id's
-	 *	long uids[nPlayers];	// user id's associated with those players
-	 *  short bloblen[nPlayers];  // lengths of the players' score blobs
+	 * 	sint16   score_flag;       // last argument of dpReportScoreStart
+	 *  sint16   sessType;         // Session type of game
+	 *  sint16   submitter_id;     // id of submitting player
+	 *  sint32  submitter_uid;     // uid of submitting player
+	 *  sint16   leaver_id;        // id of leaving player
+	 *  sint16   leaver_uid;       // uid of leaving player
+	 * 	sint16   nPlayers;
+	 *	sint16   ids[nPlayers];    // rows; player id's
+	 *	sint32   uids[nPlayers];   // user id's associated with those players
+	 *  sint16 bloblen[nPlayers];   // lengths of the players' score blobs
 	 *	char blobs[nPlayers][bloblen[nPlayers]];  // score blobs
 	 * }
 	 */
@@ -239,8 +239,8 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 
 	DPRINT(("scorerep_toBuf: writing nPlayers:%d flag:0x%x, sesstype:%d myid:%d myuid:%d id:%d uid:%d\n", nPlayers, flags, rep->sessType, rep->id, rep->uid, id, player->uid));
 	pbuf = repbuf->buf;
-	*pbuf++ = dpGETSHORT_FIRSTBYTE((short)flags);
-	*pbuf++ = dpGETSHORT_SECONDBYTE((short)flags);
+	*pbuf++ = dpGETSHORT_FIRSTBYTE((sint16)flags);
+	*pbuf++ = dpGETSHORT_SECONDBYTE((sint16)flags);
 	*pbuf++ = dpGETSHORT_FIRSTBYTE(rep->sessType);
 	*pbuf++ = dpGETSHORT_SECONDBYTE(rep->sessType);
 	*pbuf++ = dpGETSHORT_FIRSTBYTE(rep->id);
@@ -314,7 +314,7 @@ dp_result_t scorerep_toBuf(const scorerep_t *rep, long flags, dpid_t id, scorere
 		ASSERTMEM();
 		scorerep_ASSERT_VALID(rep);
 	} else {
-		size_t len = (size_t)(pbuf - repbuf->buf) + nPlayers * (sizeof(long) + 2*sizeof(short));  /* length so far, without blobs */
+		size_t len = (size_t)(pbuf - repbuf->buf) + nPlayers * (sizeof(sint32) + 2*sizeof(sint16));  /* length so far, without blobs */
 
 		if (len > scorerep_MAX_BUFLEN) {
 			DPRINT(("scorerep_toBuf: rep (nP:%d) is too large for repbuf\n", nPlayers));
@@ -404,11 +404,11 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 {
 	dp_result_t err;
 	const char *pbuf;
-	int i;
-	short nPlayers;
+	sint32 i;
+	sint16 nPlayers;
 	dpid_t *ids;
 	dp_uid_t *uids;
-	unsigned short *bloblens;
+	uint16 *bloblens;
 
 	precondition(rep);
 	precondition(repbuf);
@@ -420,25 +420,25 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 	 */
 	pbuf = repbuf->buf;
 	rep->flags = dpMAKESHORT(pbuf[0], pbuf[1]);
-	pbuf += sizeof(short);
+	pbuf += sizeof(sint16);
 	rep->sessType = dpMAKESHORT(pbuf[0], pbuf[1]);
-	pbuf += sizeof(short);
+	pbuf += sizeof(sint16);
 	rep->id = dpMAKESHORT(pbuf[0], pbuf[1]);
-	pbuf += sizeof(short);
+	pbuf += sizeof(sint16);
 	rep->uid = dpMAKELONG(pbuf[0], pbuf[1], pbuf[2], pbuf[3]);
-	pbuf += sizeof(long);
+	pbuf += sizeof(sint32);
 	rep->leaverid = dpMAKESHORT(pbuf[0], pbuf[1]);
-	pbuf += sizeof(short);
+	pbuf += sizeof(sint16);
 	rep->leaveruid = dpMAKELONG(pbuf[0], pbuf[1], pbuf[2], pbuf[3]);
-	pbuf += sizeof(long);
+	pbuf += sizeof(sint32);
 	nPlayers = dpMAKESHORT(pbuf[0], pbuf[1]);
-	pbuf += sizeof(short);
+	pbuf += sizeof(sint16);
 	ASSERTMEM();
 
 	DPRINT(("scorerep_fromBuf: reading %d Players from buf:%s\n", nPlayers, hexstring(repbuf->buf, repbuf->len)));
 	if (nPlayers <= 0)
 		return dp_RES_EMPTY;
-	if (repbuf->len < (size_t)(pbuf - repbuf->buf) + nPlayers*(sizeof(long) + 2*sizeof(short))) {
+	if (repbuf->len < (size_t)(pbuf - repbuf->buf) + nPlayers*(sizeof(sint32) + 2*sizeof(sint16))) {
 		DPRINT(("scorerep_fromBuf: repbuf->len:%d is too small for %d players.\n", repbuf->len, nPlayers));
 		return dp_RES_BAD;
 	}
@@ -447,18 +447,18 @@ dp_result_t scorerep_fromBuf(scorerep_t *rep, const scorerep_buf_t *repbuf)
 		return dp_RES_BAD;
 	}
 
-	ids = (short *)pbuf;
-	pbuf += sizeof(short) * nPlayers;
-	uids = (long *)pbuf;
-	pbuf += sizeof(long) * nPlayers;
-	bloblens = (short *)pbuf;
-	pbuf += sizeof(short) * nPlayers;
+	ids = (sint16 *)pbuf;
+	pbuf += sizeof(sint16) * nPlayers;
+	uids = (sint32 *)pbuf;
+	pbuf += sizeof(sint32) * nPlayers;
+	bloblens = (sint16 *)pbuf;
+	pbuf += sizeof(sint16) * nPlayers;
 
 	for (i = 0; i < nPlayers; i++) {
 		char *c;
 		dpid_t id;
 		dp_uid_t uid;
-		unsigned short bloblen;
+		uint16 bloblen;
 
 		c = (char *)(ids + i);
 		id = dpMAKESHORT(c[0], c[1]);
@@ -497,7 +497,7 @@ dp_result_t scorerep_player_toBuf(const scorerep_player_t *player, scorerep_buf_
 
 	/* save in the following format:
 	 * struct {
-	 *	short bloblen;
+	 *	sint16 bloblen;
 	 * 	char blob[bloblen];
 	 * }
 	 */
@@ -542,7 +542,7 @@ dp_result_t scorerep_player_fromBuf(scorerep_player_t *player, const scorerep_bu
 
 	pbuf = repbuf->buf;
 	player->bloblen = dpMAKESHORT(pbuf[0], pbuf[1]);
-	pbuf += sizeof(short);
+	pbuf += sizeof(sint16);
 
 	if (player->bloblen > scorerep_MAX_BLOBLEN) {
 		DPRINT(("scorerep_player_fromBuf: bloblen %d is out of range (0-%d)\n", player->bloblen, scorerep_MAX_BLOBLEN));

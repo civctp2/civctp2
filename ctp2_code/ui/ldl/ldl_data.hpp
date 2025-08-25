@@ -81,10 +81,10 @@ class ldl_datablock {
 		m_attributes.AddTail(attr);
 	}
 
-	void AddAttribute(char *name, char *str) {
-		m_attributes.AddTail(new ldl_attributeValue<char *>(name, ATTRIBUTE_TYPE_STRING, str));
+	void AddAttribute(const char *name, const char *str) {
+		m_attributes.AddTail(new ldl_attributeValue<const char *>(name, ATTRIBUTE_TYPE_STRING, str));
 	}
-	void AddAttribute(char *name, int value) {
+	void AddAttribute(const char *name, int value) {
 		m_attributes.AddTail(new ldl_attributeValue<int>(name, ATTRIBUTE_TYPE_INT, value));
 	}
 
@@ -112,8 +112,8 @@ public:
 	int GetAttributeType(const char *szName);
 
 	// function used for templates -only-
-	bool AttributeNameTaken(char *szName);
-	void SetValue(char *name, int value);
+	bool AttributeNameTaken(const char *szName);
+	void SetValue(const char *name, int value);
 
 /* ------ functions found in ldl_data_info.cpp ------ */
 	// used to return datablock values.

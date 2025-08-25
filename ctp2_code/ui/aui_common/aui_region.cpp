@@ -51,7 +51,7 @@
 
 extern SoundManager		*g_soundManager;
 
-static MBCHAR *k_AUI_REGION_LDL_BLINDNESS	=	"mouseblind";
+static const MBCHAR *k_AUI_REGION_LDL_BLINDNESS	=	"mouseblind";
 
 aui_Region *                aui_Region::s_whichSeesMouse        = NULL;
 aui_Region *                aui_Region::s_editChild             = NULL;

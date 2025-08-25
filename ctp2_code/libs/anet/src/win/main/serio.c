@@ -101,7 +101,7 @@ HANDLE serio_get_handle(serio_t *serio)
  Call with a pointer to an uninitizlized serio_t.
  If you call this, don't call serio_open_handle().
 -------------------------------------------------------------------------*/
-serio_res_t serio_open(serio_t *serio, long baud, const char *portname)
+serio_res_t serio_open(serio_t *serio, sint32 baud, const char *portname)
 {
 	COMMTIMEOUTS	CommTimeOuts ;
 	DCB				dcb ;
@@ -225,8 +225,8 @@ serio_res_t serio_close(serio_t *serio)
 serio_res_t serio_poll(serio_t *serio)
 {
 	size_t cbTransfer;
-	int len;
-	int osErr;
+	sint32 len;
+	sint32 osErr;
 
 	serio_ASSERT(serio);
 	DPRINT(("%d serio_poll: entry: tx.Internal %d pending %d\n", clock(), serio->tx.overlap.Internal, serio->tx.pending));
@@ -234,7 +234,7 @@ serio_res_t serio_poll(serio_t *serio)
 	/* If a write has completed, update the head. */
 	if (serio->tx.pending) {
 		if (GetOverlappedResult(serio->port, &serio->tx.overlap, &cbTransfer, FALSE)) {
-			int old_head = serio->tx.head;
+			sint32 old_head = serio->tx.head;
 			serio->tx.pending = FALSE;
 			serio->tx.head += cbTransfer;
 			serio->tx.head = serio_WRAP(serio->tx.head);
@@ -260,7 +260,7 @@ serio_res_t serio_poll(serio_t *serio)
 			assert(len > 0);
 			DPRINT(("%d serio_poll: WriteFile(%d bytes)\n", clock(), len));
 			if (WriteFile(serio->port, serio->tx.buf+serio->tx.head, len, &cbTransfer, &serio->tx.overlap)) {
-				int old_head = serio->tx.head;
+				sint32 old_head = serio->tx.head;
 				serio->tx.head += len;
 				serio->tx.head = serio_WRAP(serio->tx.head);
 				DPRINT(("%d serio_poll: WriteFile completed immediately?! old_head %d, len %d; new head %d\n", clock(), old_head, len, serio->tx.head));
@@ -283,7 +283,7 @@ serio_res_t serio_poll(serio_t *serio)
 	/* If a read has completed, update the tail. */
 	if (serio->rx.pending) {
 		if (GetOverlappedResult(serio->port, &serio->rx.overlap, &cbTransfer, FALSE)) {
-			int old_tail = serio->rx.tail;
+			sint32 old_tail = serio->rx.tail;
 			serio->rx.pending = FALSE;
 			serio->rx.tail += cbTransfer;
 			serio->rx.tail = serio_WRAP(serio->rx.tail);
@@ -313,7 +313,7 @@ serio_res_t serio_poll(serio_t *serio)
 		if (len > 0) {
 			DPRINT(("%d serio_poll: rx: ReadFile(%d bytes)\n", clock(), len));
 			if (ReadFile(serio->port, serio->rx.buf+serio->rx.tail, len, &cbTransfer, &serio->rx.overlap)) {
-				int old_tail = serio->rx.tail;
+				sint32 old_tail = serio->rx.tail;
 				serio->rx.tail += cbTransfer;
 				serio->rx.tail = serio_WRAP(serio->rx.tail);
 				DPRINT(("%d serio_poll: rx: ReadFile completed immediately?! old_tail %d, len %d; new tail %d\n", clock(), old_tail, len, serio->rx.tail));
@@ -355,7 +355,7 @@ serio_res_t serio_write(serio_t *serio, void *buf, size_t len)
 #else
 	size_t free_bytes;
 	size_t n_copy;
-	int old_tail;
+	sint32 old_tail;
 
 	serio_ASSERT(serio);
 
@@ -380,7 +380,7 @@ serio_res_t serio_write(serio_t *serio, void *buf, size_t len)
 	old_tail = serio->tx.tail;
 	serio->tx.tail += n_copy;
 	serio->tx.tail = serio_WRAP(serio->tx.tail);
-	((int)buf) += n_copy;
+	((sint32)buf) += n_copy;
 	len -= n_copy;
 
 	/* handle the part after the wrap */
@@ -424,8 +424,8 @@ serio_res_t serio_read(serio_t *serio, void *buf, size_t len, size_t *n_received
 	return serio_RES_EMPTY;
 #else
 	size_t n_copy;
-	int old_head;
-	int n;
+	sint32 old_head;
+	sint32 n;
 
 	serio_ASSERT(serio);
 
@@ -447,13 +447,13 @@ serio_res_t serio_read(serio_t *serio, void *buf, size_t len, size_t *n_received
 	if (n_copy >= (size_t)n)
 		n_copy = n;
 	n = serio->rx.tail - serio->rx.head;
-	if ((n > 0) && ((int)n_copy > n))
+	if ((n > 0) && ((sint32)n_copy > n))
 		n_copy = (size_t)n;
 	memcpy(buf, serio->rx.buf + serio->rx.head, n_copy);
 	old_head = serio->rx.head;
 	serio->rx.head += n_copy;
 	serio->rx.head = serio_WRAP(serio->rx.head);
-	((int)buf) += n_copy;
+	((sint32)buf) += n_copy;
 	len -= n_copy;
 	*n_received = n_copy;
 

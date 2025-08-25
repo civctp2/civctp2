@@ -22,6 +22,20 @@ CTP2_WIN32_MILES_INC=\
 	-I$(ctp2_code)/libs/miles
 CTP2_WIN32_ZLIB_INC=\
 	-I$(ctp2_code)/libs/zlib
+# Anet is missing here
+else
+
+if DEBUG
+CTP2_LIBANET_LDADD = \
+	libs/anet/src/linux/dp/libdp2d.la
+else
+if LOGGING
+CTP2_LIBANET_LDADD = \
+	libs/anet/src/linux/dp/libdp2l.la
+else
+if PROFILE
+CTP2_LIBANET_LDADD = \
+	libs/anet/src/linux/dp/libdp2p.la
 else
 CTP2_LIBANET_LDADD = \
 	libs/anet/src/linux/dp/libdp2.la
@@ -29,6 +43,10 @@ CTP2_LIBANET_LDADD = \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2d.a \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2p.a \
 #	$(ctp2_code)/libs/anet/linux86/lib/dp2l.a
+endif
+endif
+endif
+
 CTP2_LIBOSNOWIN32_LDADD = \
 	os/nowin32/libosnowin32.la
 CTP2_LIBTTF_LDADD = \

@@ -107,10 +107,10 @@ protected:
 	uint16 * m_transparencies;
 
 	sint32   m_animPos;
-	bool     m_finished;
 
 	uint16   m_playbackTime;
 	uint16   m_delay; // Not used but read and set from sprite file
+	bool     m_finished;
 };
 
 #endif

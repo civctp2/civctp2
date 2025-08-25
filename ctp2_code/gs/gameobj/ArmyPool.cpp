@@ -66,7 +66,7 @@ void ArmyPool::Remove(Army army)
 
 void ArmyPool::Serialize(CivArchive &archive)
 {
-	sint32 count, i;
+	sint32 count;
 
 #define ARMYPOOL_MAGIC 0xBeefCafe
 	if(archive.IsStoring()) {
@@ -74,13 +74,13 @@ void ArmyPool::Serialize(CivArchive &archive)
 		ObjPool::Serialize(archive);
 
 		count = 0;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
 			if(m_table[i])
 				count++;
 		}
 
 		archive << count;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
 			if(m_table[i])
 				((ArmyData*)(m_table[i]))->Serialize(archive);
 		}
@@ -88,7 +88,7 @@ void ArmyPool::Serialize(CivArchive &archive)
 		archive.TestMagic(ARMYPOOL_MAGIC);
 		ObjPool::Serialize(archive);
 		archive >> count;
-		for(i = 0; i < count; i++) {
+		for(sint32 i = 0; i < count; i++) {
 			ArmyData *data = new ArmyData(archive);
 			Insert(data);
 		}

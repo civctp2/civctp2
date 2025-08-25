@@ -38,6 +38,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define _tcpabi_udp_h
 // ---------------- UDP ---------------
 
+#include "types.h"
+
 /* flags for tcpabi_udp_open() call */
 #define UDP_OPEN_NORMAL    0
 #define UDP_OPEN_ASYNCH    128
@@ -69,34 +71,34 @@ typedef enum {
 } tcpabi_error;
 
 typedef struct {
-   unsigned long     ip_src;        // local IP address
-   unsigned short    port_loc;      // local port  -- NOTE: diff from tcp201
-   unsigned long     ip_dst;        // remote IP address
-   unsigned short    port_rem;      // remote port -- NOTE: diff from tcp201
-   unsigned char     ip_prot;
-   unsigned char     active;
+   uint32     ip_src;        // local IP address
+   uint16    port_loc;      // local port  -- NOTE: diff from tcp201
+   uint32     ip_dst;        // remote IP address
+   uint16    port_rem;      // remote port -- NOTE: diff from tcp201
+   uint8     ip_prot;
+   uint8     active;
 } tcpabi_session_info_t;
 
-unsigned tcpabi_udp_open( unsigned long ip_dst, unsigned dst_port,
-                     unsigned src_port,
-                     unsigned char flags, unsigned *local_port );
-int tcpabi_udp_close( unsigned handle, unsigned char flags );
-int tcpabi_udp_recv( unsigned handle, void *buf, unsigned len,
-                   unsigned timeout, unsigned char flags,
-                   unsigned *ttltos, unsigned *id );
-int tcpabi_udp_send( unsigned handle, void *buf, unsigned len,
-                       unsigned ttltos, unsigned id, unsigned char flags );
-int tcpabi_udp_status( unsigned handle, unsigned char flags, unsigned *size_next,
+uint32 tcpabi_udp_open( uint32 ip_dst, uint32 dst_port,
+                     uint32 src_port,
+                     uint8 flags, uint32 *local_port );
+sint32 tcpabi_udp_close( uint32 handle, uint8 flags );
+sint32 tcpabi_udp_recv( uint32 handle, void *buf, uint32 len,
+                   uint32 timeout, uint8 flags,
+                   uint32 *ttltos, uint32 *id );
+sint32 tcpabi_udp_send( uint32 handle, void *buf, uint32 len,
+                       uint32 ttltos, uint32 id, uint8 flags );
+sint32 tcpabi_udp_status( uint32 handle, uint8 flags, uint32 *size_next,
                            tcpabi_session_info_t **info );
 
-int tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, unsigned len);
-int tcpabi_udp_broadcast(void *buf, unsigned len);
+sint32 tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, uint32 len);
+sint32 tcpabi_udp_broadcast(void *buf, uint32 len);
 
 void AddAddressToList(InetHost newAddress);
-void AddAddressListToList(InetHost* newAddressList, short count);
+void AddAddressListToList(InetHost* newAddressList, sint16 count);
 void InitAddressList(void);
 
-short GetSendCount(InetHost theAddress);
-void ChangeSendCount(InetHost theAddress, short newCount);
+sint16 GetSendCount(InetHost theAddress);
+void ChangeSendCount(InetHost theAddress, sint16 newCount);
 
 #endif

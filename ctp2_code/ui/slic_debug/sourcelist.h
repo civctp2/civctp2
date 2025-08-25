@@ -20,7 +20,7 @@ class SourceListItem : public c3_ListItem
 {
 public:
 	SourceListItem(AUI_ERRCODE *retval, sint32 index, SlicSegment *segment, MBCHAR *line,
-				   sint32 lineNumber, MBCHAR *ldlBlock);
+				   sint32 lineNumber, const MBCHAR *ldlBlock);
 
 	virtual void Update();
 
@@ -40,7 +40,7 @@ public:
 protected:
 	SourceListItem() : c3_ListItem() {}
 
-	AUI_ERRCODE InitCommonLdl(SlicSegment *segment, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(SlicSegment *segment, const MBCHAR *ldlBlock);
 
 private:
 	friend class SourceList;
@@ -57,7 +57,7 @@ private:
 class SourceList : public KeyboardHandler
 {
 public:
-	SourceList(SourceListCallback *callback = NULL, MBCHAR *ldlBlock = NULL);
+	SourceList(SourceListCallback *callback = NULL, const MBCHAR *ldlBlock = NULL);
 	virtual ~SourceList();
 
 	c3_PopupWindow *m_window;
@@ -73,7 +73,7 @@ public:
 	SlicSegment *m_segment;
 
 public:
-	sint32 Initialize(MBCHAR *ldlBlock);
+	sint32 Initialize(const MBCHAR *ldlBlock);
 	void   Cleanup();
 	sint32 UpdateData();
 

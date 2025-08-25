@@ -41,7 +41,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
         -1 on failure.
 --------------------------------------------------------------------------*/
 #if defined(logprint_ENABLED)
-int logprint_setFile(const char *file);
+#include "types.h"
+
+sint32 logprint_setFile(const char *file);
 #else
 #define logprint_setFile(f) (-1)
 #endif

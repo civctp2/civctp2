@@ -87,7 +87,7 @@ void messagemodal_DestroyModalMessage( void )
 MessageModal::MessageModal(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	Message data,
 	AUI_WINDOW_TYPE type )
@@ -100,7 +100,7 @@ MessageModal::MessageModal(
 }
 
 
-AUI_ERRCODE MessageModal::InitCommon( MBCHAR *ldlBlock, Message data )
+AUI_ERRCODE MessageModal::InitCommon( const MBCHAR *ldlBlock, Message data )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -181,7 +181,7 @@ AUI_ERRCODE MessageModal::InitCommon( MBCHAR *ldlBlock, Message data )
 
 
 
-AUI_ERRCODE MessageModal::CreateStandardTextBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageModal::CreateStandardTextBox( const MBCHAR *ldlBlock )
 {
 	MBCHAR			textBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -206,7 +206,7 @@ AUI_ERRCODE MessageModal::CreateStandardTextBox( MBCHAR *ldlBlock )
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE MessageModal::CreateEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageModal::CreateEyePointBox( const MBCHAR *ldlBlock )
 {
 	switch( m_message.AccessData()->GetEyePointStyle())
 	{
@@ -224,7 +224,7 @@ AUI_ERRCODE MessageModal::CreateEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageModal::CreateStandardEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageModal::CreateStandardEyePointBox( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -238,7 +238,7 @@ AUI_ERRCODE MessageModal::CreateStandardEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageModal::CreateDropdownEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageModal::CreateDropdownEyePointBox( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -252,7 +252,7 @@ AUI_ERRCODE MessageModal::CreateDropdownEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageModal::CreateListboxEyePointBox( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageModal::CreateListboxEyePointBox( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
@@ -266,7 +266,7 @@ AUI_ERRCODE MessageModal::CreateListboxEyePointBox( MBCHAR *ldlBlock )
 }
 
 
-AUI_ERRCODE MessageModal::CreateResponses( MBCHAR *ldlBlock )
+AUI_ERRCODE MessageModal::CreateResponses( const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	ctp2_Button		*lastbutton = NULL;

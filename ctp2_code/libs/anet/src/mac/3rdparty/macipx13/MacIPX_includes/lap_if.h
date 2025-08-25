@@ -78,12 +78,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #ifndef _TYPES_
 /*
- * some unsigned types
+ * some uint32 types
  */
-typedef  unsigned char 	u_char;
-typedef  unsigned int  	u_int;
-typedef  unsigned long 	u_long;
-typedef  unsigned short u_short;
+// These may be problematic. If it makes problem replace u_* in the code.
+typedef  uint8   u_char;
+typedef  uint32  u_int;
+typedef  uint32  u_long;
+typedef  uint16  u_short;
 #endif
 
 /*
@@ -92,17 +93,17 @@ typedef  unsigned short u_short;
 typedef  OSErr 		(*CloseProcPtr) 	(void);
 typedef  void  		(*SendCompProcPtr) 	(ParmBlkPtr paramBlock,
                                          WDS *wds_p,
-										 long status);
+										 sint32 status);
 typedef  OSErr 		(*SendProcPtr) 		(ParmBlkPtr paramBlock,
                                          WDS *wds_p,
 										 char *dest_addr,
 										 SendCompProcPtr send_completion);
 typedef  void  		(*PHProcPtr)		(void);
-typedef  OSErr 		(*LapMainProcPtr) 	(long code,
+typedef  OSErr 		(*LapMainProcPtr) 	(sint32 code,
 										 void *ptr,
 										 u_long *len);
-typedef  Boolean  	(*DialogProcPtr) 	(long slot_num);
-typedef  OSErr  	(*SlotProcPtr) 		(long *slot_num);
+typedef  Boolean  	(*DialogProcPtr) 	(sint32 slot_num);
+typedef  OSErr  	(*SlotProcPtr) 		(sint32 *slot_num);
 typedef	 OSErr		(*SocketProcPtr)	(char *socket_addr);
 typedef  void		(*SysTimeProcPtr)	(void);
 
@@ -110,14 +111,14 @@ typedef  void		(*SysTimeProcPtr)	(void);
  * IPX protocol type for Ethernet, Token Ring, and what else???
  */
 #ifndef IPX_PROTOCOL_TYPE
-#define	IPX_PROTOCOL_TYPE		(unsigned short)0x8137
+#define	IPX_PROTOCOL_TYPE		(uint16)0x8137
 #endif
 
 /*
  * Novell SAP for 802.2 headers
  */
 #ifndef NOVELL_SAP
-#define NOVELL_SAP				(unsigned char)0xE0
+#define NOVELL_SAP				(uint8)0xE0
 #endif
 
 #endif /* __LAP_IF__ */

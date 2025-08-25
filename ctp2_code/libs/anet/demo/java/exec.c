@@ -22,12 +22,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <string.h>
 #include <process.h>
 #include <direct.h>
+#include "types.h"
 
-int main(int argc, char **argv)		//argv = {gameDrive:gameDir, gameCommand}
+sint32 main(sint32 argc, char **argv)		//argv = {gameDrive:gameDir, gameCommand}
 {
-	int i;
+	sint32 i;
 	char currentDrive, newDrive;
-	int driveVal;
+	sint32 driveVal;
 	char *path;
 	char **cmdargv = argv+2;
 

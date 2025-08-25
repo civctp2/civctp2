@@ -48,6 +48,7 @@
 //----------------------------------------------------------------------------
 
 enum C3DIR {
+	C3DIR_APPBASE	= -2,
 	C3DIR_DIRECT	= -1,
 
 	C3DIR_BASE,
@@ -66,6 +67,7 @@ enum C3DIR {
 	C3DIR_CURSORS,
 	C3DIR_SOUNDS,
 	C3DIR_VIDEOS,
+	C3DIR_MUSIC,
 
 	C3DIR_MAX
 };

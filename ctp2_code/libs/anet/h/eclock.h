@@ -50,7 +50,15 @@ clock_t eclock_sparc(void);
 #include <unistd.h>
 #include <time.h>
 #include <sys/times.h>
-#define ECLOCKS_PER_SEC CLOCKS_PER_SEC /*CLK_TCK */
+
+#ifndef CLK_TCK
+/* CLOCKS_PER_SEC and CLK_TCK are not identical as some people claim */
+/* on the internet */
+extern long int __sysconf (int);
+#define CLK_TCK ((__clock_t) __sysconf (2))	/* 2 is _SC_CLK_TCK */
+#endif
+
+#define ECLOCKS_PER_SEC CLK_TCK
 
 #define eclock() times(NULL)
 

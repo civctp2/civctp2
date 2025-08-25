@@ -154,7 +154,7 @@ template <class T> void DAPriorityQueue<T>::ShiftDown(const sint32 start_idx)
 {
     Assert(0 < start_idx);
 
-    register sint32 current_idx = start_idx;
+    sint32 current_idx = start_idx;
 
 #ifdef _DEBUG
     sint32 finite_count=0;

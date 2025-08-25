@@ -30,22 +30,22 @@ Initial revision
 #define _DP_PORTABLE_H 1
 
 /* Construct portable multibyte representation of short integers */
-#define dpGETSHORT_FIRSTBYTE(s) (unsigned char)((s) & 0xff)
-#define dpGETSHORT_SECONDBYTE(s) (unsigned char)(((s) >> 8) & 0xff)
+#define dpGETSHORT_FIRSTBYTE(s) (uint8)((s) & 0xff)
+#define dpGETSHORT_SECONDBYTE(s) (uint8)(((s) >> 8) & 0xff)
 
 /* Construct portable multibyte representation of long integers */
-#define dpGETLONG_FIRSTBYTE(s)  (unsigned char)((s) & 0xff)
-#define dpGETLONG_SECONDBYTE(s) (unsigned char)(((s) >> 8) & 0xff)
-#define dpGETLONG_THIRDBYTE(s)  (unsigned char)(((s) >> 16) & 0xff)
-#define dpGETLONG_FOURTHBYTE(s) (unsigned char)(((s) >> 24) & 0xff)
+#define dpGETLONG_FIRSTBYTE(s)  (uint8)((s) & 0xff)
+#define dpGETLONG_SECONDBYTE(s) (uint8)(((s) >> 8) & 0xff)
+#define dpGETLONG_THIRDBYTE(s)  (uint8)(((s) >> 16) & 0xff)
+#define dpGETLONG_FOURTHBYTE(s) (uint8)(((s) >> 24) & 0xff)
 
 /* Retrieve short integers from portable multibyte representation */
-#define dpMAKESHORT(first,second) ((unsigned char)(first) |\
-								 (((unsigned short)((unsigned char)(second)))<<8))
+#define dpMAKESHORT(first,second) ((uint8)(first) |\
+								 (((uint16)((uint8)(second)))<<8))
 
 /* Retrieve long integers from portable multibyte representation */
 #define dpMAKELONG(first,second,third,fourth) (   \
-		(unsigned long)dpMAKESHORT(first,second) |\
-		((unsigned long)dpMAKESHORT(third, fourth)) << 16)
+		(uint32)dpMAKESHORT(first,second) |\
+		((uint32)dpMAKESHORT(third, fourth)) << 16)
 
 #endif /* _DP_PORTABLE_H */

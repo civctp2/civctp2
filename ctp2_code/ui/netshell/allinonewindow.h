@@ -345,7 +345,7 @@ protected:
 
 
 
-	static void PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 
 
@@ -412,22 +412,22 @@ void AllinoneAgesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 void AllinoneMapSizeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 void AllinoneWorldShapeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 void AllinoneTribeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 
 
 
@@ -441,16 +441,16 @@ void AllinoneMoreRulesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 void AllinoneWorldTypeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 
 #endif

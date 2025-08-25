@@ -18,10 +18,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 */
 
 #include "GCLHack.h"
-void ReadBuffer(PORT* port, char* buffer, short len)
+void ReadBuffer(PORT* port, char* buffer, sint16 len)
 {
 }
-OSErr WriteBuffer(PORT*port, char* buffer, short len)
+OSErr WriteBuffer(PORT*port, char* buffer, sint16 len)
 {
 	return noErr;
 }
@@ -31,36 +31,36 @@ void ClearTXBuffer(PORT* port){
 }
 void PortClose(PORT* port){
 }
-void exchange_ramp(PORT* port, long Id)
+void exchange_ramp(PORT* port, sint32 Id)
 {
 }
 
 #if 0 // MAD
-int getch(void)
+sint32 getch(void)
 {
 	return 0;
 }
-int kbhit(void)
+sint32 kbhit(void)
 {
 	return 0;
 }
 #endif
 
-short HMSetDialingMethod(PORT* port, short method)
+sint16 HMSetDialingMethod(PORT* port, sint16 method)
 {
 }
-int ReadChar(PORT* port)
-{
-	return 0;
-}
-void SetDtr(PORT* port, int state)
-{
-}
-short HMDial(PORT* port, char* phonenum)
+sint32 ReadChar(PORT* port)
 {
 	return 0;
 }
-short HMSetRegister(PORT* port, short reg, short value)
+void SetDtr(PORT* port, sint32 state)
+{
+}
+sint16 HMDial(PORT* port, char* phonenum)
+{
+	return 0;
+}
+sint16 HMSetRegister(PORT* port, sint16 reg, sint16 value)
 {
 	return 0;
 }

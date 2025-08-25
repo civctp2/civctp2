@@ -78,7 +78,7 @@ extern MBCHAR                       g_scenarioName[k_SCENARIO_NAME_MAX];
 
 
 
-ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
+ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, const MBCHAR *ldlBlock)
 {
 	Assert(AUI_SUCCESS(*retval));
 
@@ -87,12 +87,8 @@ ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(ldlBlock);
 
-
-
-
-
 	m_available		= (ctp2_ListBox *)aui_Ldl::GetObject(ldlBlock, "AvailableListBox");
-	m_available->SetActionFuncAndCookie(ScenarioSelect, NULL);
+	m_available->SetActionFuncAndCookie(ScenarioSelect, nullptr);
 
 	m_window->SetType(AUI_WINDOW_TYPE_FLOATING);
 	m_window->SetStronglyModal(TRUE);
@@ -105,10 +101,10 @@ ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	m_NewButton = (ctp2_Button *)aui_Ldl::GetObject(ldlBlock, "NewButton");
 	m_BackButton = (ctp2_Button *)aui_Ldl::GetObject(ldlBlock, "CancelButton");
 
-	m_LoadButton->SetActionFuncAndCookie(OkPress, NULL);
-	m_SaveButton->SetActionFuncAndCookie(SavePress, NULL);
-	m_NewButton->SetActionFuncAndCookie(NewPress, NULL);
-	m_BackButton->SetActionFuncAndCookie(BackPress, NULL);
+	m_LoadButton->SetActionFuncAndCookie(OkPress, nullptr);
+	m_SaveButton->SetActionFuncAndCookie(SavePress, nullptr);
+	m_NewButton->SetActionFuncAndCookie(NewPress, nullptr);
+	m_BackButton->SetActionFuncAndCookie(BackPress, nullptr);
 
 
 
@@ -129,13 +125,13 @@ ScenarioWindow::ScenarioWindow(AUI_ERRCODE *retval, MBCHAR *ldlBlock)
 	m_exitCallback = NULL;
 
 	m_newPackWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot("NewPackWindow");
-	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.OkButton", NewPackOk, NULL);
-	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.CancelButton", NewPackCancel, NULL);
+	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.OkButton", NewPackOk, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("NewPackWindow.CancelButton", NewPackCancel, nullptr);
 	m_newPackWindow->SetType(AUI_WINDOW_TYPE_POPUP);
 
 	m_newScenWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot("NewScenWindow");
-	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.OkButton", NewScenOk, NULL);
-	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.CancelButton", NewScenCancel, NULL);
+	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.OkButton", NewScenOk, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("NewScenWindow.CancelButton", NewScenCancel, nullptr);
 	m_newScenWindow->SetType(AUI_WINDOW_TYPE_POPUP);
 }
 
@@ -143,7 +139,7 @@ void ScenarioWindow::FillListWithScenarios(ctp2_ListBox *available)
 {
 	int					i=0;
 	ScenarioPack		*scenPack;
-	MBCHAR				*ldlBlock = "ScenarioListItem";
+	const MBCHAR		*ldlBlock = "ScenarioListItem";
 
 	scenPack = m_scenarioPack;
 
@@ -294,8 +290,11 @@ void ScenarioWindow::SetMode(SCENARIO_WINDOW_MODE mode)
 			m_SaveButton->Hide();
 			m_NewButton->Show();
 			break;
-
+		default:
+			Assert(false); // Maybe fine
+			break;
 	}
+
 	m_mode = mode;
 	s_ScenarioWindow->m_window->ShouldDraw(TRUE);
 }
@@ -378,7 +377,7 @@ void ScenarioWindow::SetExitCallback(aui_Control::ControlActionCallback *callbac
 	}
 }
 
-void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if(s_ScenarioWindow) {
@@ -394,7 +393,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 
 			if (action == (uint32)AUI_LISTBOX_ACTION_SELECT) {
 				if (myitem) {
-					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserDataPtr());
 				}
 			} else
 
@@ -402,7 +401,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 			if (action == (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 
 				if (myitem) {
-					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenarioPack((ScenarioPack *)myitem->GetUserDataPtr());
 				}
 
 				if(s_ScenarioWindow->GetMode() == SCENARIO_WINDOW_MODE_LOAD_PACK) {
@@ -433,7 +432,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 			if (action == (uint32)AUI_LISTBOX_ACTION_SELECT) {
 				if( myitem ) {
 
-					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserDataPtr());
 				}
 			} else
 
@@ -441,7 +440,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 			if (action == (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 				if( myitem ) {
 
-					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserData());
+					s_ScenarioWindow->SetScenario((Scenario *)myitem->GetUserDataPtr());
 				}
 
 				if(s_ScenarioWindow->GetMode() == SCENARIO_WINDOW_MODE_LOAD_SCEN) {
@@ -474,7 +473,7 @@ void ScenarioWindow::ScenarioSelect(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void ScenarioWindow::CancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::CancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (action != uint32(AUI_BUTTON_ACTION_EXECUTE)) return;
 
@@ -493,7 +492,7 @@ void ScenarioWindow::CancelPress(aui_Control *control, uint32 action, uint32 dat
 		}
 }
 
-void ScenarioWindow::OkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::OkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (action != uint32(AUI_BUTTON_ACTION_EXECUTE)) return;
 
@@ -521,7 +520,7 @@ void ScenarioWindow::OkPress(aui_Control *control, uint32 action, uint32 data, v
 
 }
 
-void ScenarioWindow::SavePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::SavePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (action != uint32(AUI_BUTTON_ACTION_EXECUTE)) return;
 
@@ -568,7 +567,7 @@ void ScenarioWindow::SavePress(aui_Control *control, uint32 action, uint32 data,
 	}
 }
 
-void ScenarioWindow::NewPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::NewPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (action != uint32(AUI_BUTTON_ACTION_EXECUTE)) return;
 
@@ -589,7 +588,7 @@ void ScenarioWindow::NewPress(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void ScenarioWindow::BackPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::BackPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -609,6 +608,9 @@ void ScenarioWindow::BackPress(aui_Control *control, uint32 action, uint32 data,
 			break;
 		case SCENARIO_WINDOW_MODE_LOAD_SCEN:
 			s_ScenarioWindow->SetMode(SCENARIO_WINDOW_MODE_LOAD_PACK);
+			break;
+		default:
+			Assert(false); // Maybe fine
 			break;
 	}
 }
@@ -660,7 +662,7 @@ void ScenarioWindow::LoadScenarioGame( void )
 	}
 }
 
-void ScenarioWindow::NewPackOk(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::NewPackOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -715,7 +717,7 @@ void ScenarioWindow::NewPackOk(aui_Control *control, uint32 action, uint32 data,
 	}
 }
 
-void ScenarioWindow::NewPackCancel(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::NewPackCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -726,7 +728,7 @@ void ScenarioWindow::NewPackCancel(aui_Control *control, uint32 action, uint32 d
 	}
 }
 
-void ScenarioWindow::NewScenOk(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::NewScenOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -782,7 +784,7 @@ void ScenarioWindow::NewScenOk(aui_Control *control, uint32 action, uint32 data,
 	}
 }
 
-void ScenarioWindow::NewScenCancel(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScenarioWindow::NewScenCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 

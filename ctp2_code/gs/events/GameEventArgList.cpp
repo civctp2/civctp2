@@ -49,7 +49,7 @@ GameEventArgList::GameEventArgList(const GAME_EVENT_ARGUMENT* argTypes, const vo
 		m_argLists[argType] = NULL;
 	}
 	
-	char *argString = g_eventDescriptions[eventType].args;
+	const char *argString = g_eventDescriptions[eventType].args;
 
 	uint32 currentArg = 0;
 	while(1) {

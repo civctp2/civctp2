@@ -55,11 +55,11 @@ sint32 spnewgameplayersscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
 void spnewgameplayersscreen_Cleanup();
 
-void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers);
 
-void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
+void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 #endif

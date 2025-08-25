@@ -32,25 +32,24 @@ Installation InstallationPool::Create(sint32 owner,
 
 void InstallationPool::Serialize(CivArchive &archive)
 {
-	sint32	i,
-			count = 0 ;
+	sint32 count = 0;
 
 	InstallationData *instData;
 
 #define INSTPOOL_MAGIC 0x529FA3D1
 
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
 	if(archive.IsStoring()) {
 		archive.PerformMagic(INSTPOOL_MAGIC) ;
 		ObjPool::Serialize(archive);
 
-		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if(m_table[i])
 				count++;
 
 		archive<<count;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
 			if(m_table[i])
 				((InstallationData*)(m_table[i]))->Serialize(archive);
 		}
@@ -59,7 +58,7 @@ void InstallationPool::Serialize(CivArchive &archive)
 		ObjPool::Serialize(archive);
 
 		archive>>count;
-		for (i=0; i<count; i++) {
+		for (sint32 i = 0; i < count; i++) {
 			instData = new InstallationData(archive);
 			Insert(instData);
 		}
@@ -68,8 +67,8 @@ void InstallationPool::Serialize(CivArchive &archive)
 
 void InstallationPool::RebuildQuadTree()
 {
-	sint32 i;
-	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++) {
+	for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+	{
 		if(m_table[i])
 			((InstallationData*)(m_table[i]))->RebuildQuadTree();
 	}

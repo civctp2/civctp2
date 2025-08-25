@@ -162,7 +162,7 @@ void musicscreen_Cleanup()
 	allocated::clear(s_musicScreen);
 }
 
-void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	c3_Switch *musicSwitch = (c3_Switch *)control;
 
@@ -196,13 +196,13 @@ void musicscreen_checkPress(aui_Control *control, uint32 action, uint32 data, vo
 		break;
 	}
 }
-void musicscreen_selectTrackPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void musicscreen_selectTrackPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( musicscreen_removeMyWindow(action) ) {
 		musictrackscreen_displayMyWindow();
 	}
 }
-void musicscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void musicscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

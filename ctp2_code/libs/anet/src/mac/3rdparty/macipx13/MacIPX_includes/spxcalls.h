@@ -33,6 +33,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "ipxcalls.h"
 #endif
 
+#include "types.h"
 /*
  * The SPX ECB is the same as the IPX ECB.
  */
@@ -49,24 +50,24 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma options align=mac68k
 #endif
 typedef struct {
-   unsigned short          checksum;
-   unsigned short          packetLen;
-   unsigned char           transportCtl;
-   unsigned char           packetType;
-   unsigned long           destNet;
-   unsigned char           destNode[6];
-   unsigned short          destSocket;
-   unsigned long           sourceNet;
-   unsigned char           sourceNode[6];
-   unsigned short          sourceSocket;
+   uint16          checksum;
+   uint16          packetLen;
+   uint8           transportCtl;
+   uint8           packetType;
+   uint32           destNet;
+   uint8           destNode[6];
+   uint16          destSocket;
+   uint32           sourceNet;
+   uint8           sourceNode[6];
+   uint16          sourceSocket;
 
-   unsigned char           connectionCtl;
-   unsigned char           dataStreamType;
-   unsigned short          sourceConnectID;
-   unsigned short          destConnectID;
-   unsigned short          sequenceNumber;
-   unsigned short          ackNumber;
-   unsigned short          allocNumber;
+   uint8           connectionCtl;
+   uint8           dataStreamType;
+   uint16          sourceConnectID;
+   uint16          destConnectID;
+   uint16          sequenceNumber;
+   uint16          ackNumber;
+   uint16          allocNumber;
 } SPX_HEADER;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -80,29 +81,29 @@ typedef struct {
 #pragma options align=mac68k
 #endif
 typedef struct SPX_ConnStruct {
-   unsigned char           sStatus;
-   unsigned char           sFlags;
-   unsigned short          sSourceConnectID;
-   unsigned short          sDestConnectID;
-   unsigned short          sSequenceNumber;
-   unsigned short          sAckNumber;
-   unsigned short          sAllocNumber;
+   uint8           sStatus;
+   uint8           sFlags;
+   uint16          sSourceConnectID;
+   uint16          sDestConnectID;
+   uint16          sSequenceNumber;
+   uint16          sAckNumber;
+   uint16          sAllocNumber;
 
-   unsigned short          sRemoteAckNumber;
-   unsigned short          sRemoteAllocNumber;
+   uint16          sRemoteAckNumber;
+   uint16          sRemoteAllocNumber;
 
-   unsigned short          sLocalSocket;
-   unsigned char           sImmediateAddress[6];
+   uint16          sLocalSocket;
+   uint8           sImmediateAddress[6];
 
-   unsigned long           sRemoteNet;
-   unsigned char           sRemoteNode[6];
-   unsigned short          sRemoteSocket;
+   uint32           sRemoteNet;
+   uint8           sRemoteNode[6];
+   uint16          sRemoteSocket;
 
-   unsigned char           sRetransmitCount;
-   unsigned char           sRetransmitMax;
-   unsigned short          sRoundTripTimer;
-   unsigned short          sRetransmittedPackets;
-   unsigned short          sSuppressedPackets;
+   uint8           sRetransmitCount;
+   uint8           sRetransmitMax;
+   uint16          sRoundTripTimer;
+   uint16          sRetransmittedPackets;
+   uint16          sSuppressedPackets;
 } SPX_SESSION;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -112,34 +113,34 @@ typedef struct SPX_ConnStruct {
 #pragma options align=mac68k
 #endif
 typedef struct {
-	unsigned long		spxMaxUsedConnections;
-	unsigned long		spxEstablishConnectionRequests;
-	unsigned long		spxEstablishConnectionFails;
-	unsigned long		spxListenConnectionRequests;
-	unsigned long		spxListenConnectionFails;
-	unsigned long		spxOutRequests;
-	unsigned long		spxOutAckRequests;
-	unsigned long		spxOutWindowClosed;
-	unsigned long		spxOutMalformedPackets;
-	unsigned long		spxOutIpxFailures;
-	unsigned long		spxOutUnknownConnIDs;
-	unsigned long		spxOutRetransmits;
-	unsigned long		spxOutAckFailures;
-	unsigned long		spxOutNoAckReceived;
-	unsigned long		spxConnectionAborted;
-	unsigned long		spxInRequests;
-	unsigned long		spxInFails;
-	unsigned long		spxInReceives;
-	unsigned long		spxInUnknownConnIDs;
-	unsigned long		spxInDelivers;
-	unsigned long		spxInNoRcvBuffs;
-	unsigned long		spxInWindowClosed;
-	unsigned long		spxInHdrErrors;
-	unsigned long		spxInBadChecksum;
-	unsigned long		spxInUnknownSocket;
-	unsigned long		spxSuppressedPackets;
-	unsigned long		spxWatchdogDestroySessions;
-	unsigned long		spxNoInternalECBs;
+	uint32		spxMaxUsedConnections;
+	uint32		spxEstablishConnectionRequests;
+	uint32		spxEstablishConnectionFails;
+	uint32		spxListenConnectionRequests;
+	uint32		spxListenConnectionFails;
+	uint32		spxOutRequests;
+	uint32		spxOutAckRequests;
+	uint32		spxOutWindowClosed;
+	uint32		spxOutMalformedPackets;
+	uint32		spxOutIpxFailures;
+	uint32		spxOutUnknownConnIDs;
+	uint32		spxOutRetransmits;
+	uint32		spxOutAckFailures;
+	uint32		spxOutNoAckReceived;
+	uint32		spxConnectionAborted;
+	uint32		spxInRequests;
+	uint32		spxInFails;
+	uint32		spxInReceives;
+	uint32		spxInUnknownConnIDs;
+	uint32		spxInDelivers;
+	uint32		spxInNoRcvBuffs;
+	uint32		spxInWindowClosed;
+	uint32		spxInHdrErrors;
+	uint32		spxInBadChecksum;
+	uint32		spxInUnknownSocket;
+	uint32		spxSuppressedPackets;
+	uint32		spxWatchdogDestroySessions;
+	uint32		spxNoInternalECBs;
 } SPX_STATS;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -166,39 +167,39 @@ typedef struct {
 #define SpxInitialize			IpxInitialize
 
 #ifndef COMPONENT_BUILD
-extern pascal short SpxAbortConnection(unsigned short connection, SPX_ECB *ecb);
-extern pascal short SpxCancelEvent(SPX_ECB *ecb);
-extern pascal short SpxCheckSocket(unsigned short socket);
-extern pascal short SpxCloseSocket(unsigned short socket);
-extern pascal short SpxEstablishConnection(unsigned short socket, SPX_ECB *ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection);
-extern pascal short SpxEstablishConnection2(unsigned short socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection);
-extern pascal short SpxGetConfiguration(unsigned short *maxConn, unsigned short *availConn);
-extern pascal short SpxGetConnectionStatus(unsigned short connection, SPX_SESSION *buffer);
-extern pascal short SpxGetStatistics(SPX_STATS *buffer, unsigned long *buflen);
-extern pascal short SpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned short *revision);
-extern pascal short SpxListenForConnection(unsigned short socket, SPX_ECB *ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection);
-extern pascal short SpxListenForConnection2(unsigned short socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection);
-extern pascal short SpxListenForConnectionPacket(unsigned short connection, SPX_ECB *ecb);
-extern pascal short SpxOpenSocket(unsigned short *socket, unsigned char flags);
-extern pascal short SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb);
-extern pascal short SpxTerminateConnection(unsigned short connection, SPX_ECB *ecb);
+extern pascal sint16 SpxAbortConnection(uint16 connection, SPX_ECB *ecb);
+extern pascal sint16 SpxCancelEvent(SPX_ECB *ecb);
+extern pascal sint16 SpxCheckSocket(uint16 socket);
+extern pascal sint16 SpxCloseSocket(uint16 socket);
+extern pascal sint16 SpxEstablishConnection(uint16 socket, SPX_ECB *ecb, uint8 retryCount, uint8 flags, uint16 *connection);
+extern pascal sint16 SpxEstablishConnection2(uint16 socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, uint8 retryCount, uint8 flags, uint16 *connection);
+extern pascal sint16 SpxGetConfiguration(uint16 *maxConn, uint16 *availConn);
+extern pascal sint16 SpxGetConnectionStatus(uint16 connection, SPX_SESSION *buffer);
+extern pascal sint16 SpxGetStatistics(SPX_STATS *buffer, uint32 *buflen);
+extern pascal sint16 SpxGetVersion(uint8 *majorVersion, uint8 *minorVersion, uint16 *revision);
+extern pascal sint16 SpxListenForConnection(uint16 socket, SPX_ECB *ecb, uint8 retryCount, uint8 flags, uint16 *connection);
+extern pascal sint16 SpxListenForConnection2(uint16 socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, uint8 retryCount, uint8 flags, uint16 *connection);
+extern pascal sint16 SpxListenForConnectionPacket(uint16 connection, SPX_ECB *ecb);
+extern pascal sint16 SpxOpenSocket(uint16 *socket, uint8 flags);
+extern pascal sint16 SpxSendSequencedPacket(uint16 connection, SPX_ECB *ecb);
+extern pascal sint16 SpxTerminateConnection(uint16 connection, SPX_ECB *ecb);
 #else
-extern pascal short SpxAbortConnection(unsigned short connection, SPX_ECB *ecb, short drvrRefNum);
-extern pascal short SpxCancelEvent(SPX_ECB *ecb, short drvrRefNum);
-extern pascal short SpxCheckSocket(unsigned short socket, short drvrRefNum);
-extern pascal short SpxCloseSocket(unsigned short socket, short drvrRefNum);
-extern pascal short SpxEstablishConnection(unsigned short socket, SPX_ECB *ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection, short drvrRefNum);
-extern pascal short SpxEstablishConnection2(unsigned short socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection, short drvrRefNum);
-extern pascal short SpxGetConfiguration(unsigned short *maxConn, unsigned short *availConn, short drvrRefNum);
-extern pascal short SpxGetConnectionStatus(unsigned short connection, SPX_SESSION *buffer, short drvrRefNum);
-extern pascal short SpxGetStatistics(SPX_STATS *buffer, unsigned long *buflen, short drvrRefNum);
-extern pascal short SpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned short *revision, short drvrRefNum);
-extern pascal short SpxListenForConnection(unsigned short socket, SPX_ECB *ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection, short drvrRefNum);
-extern pascal short SpxListenForConnection2(unsigned short socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, unsigned char retryCount, unsigned char flags, unsigned short *connection, short drvrRefNum);
-extern pascal short SpxListenForConnectionPacket(unsigned short connection, SPX_ECB *ecb, short drvrRefNum);
-extern pascal short SpxOpenSocket(unsigned short *socket, unsigned char flags, short drvrRefNum);
-extern pascal short SpxSendSequencedPacket(unsigned short connection, SPX_ECB *ecb, short drvrRefNum);
-extern pascal short SpxTerminateConnection(unsigned short connection, SPX_ECB *ecb, short drvrRefNum);
+extern pascal sint16 SpxAbortConnection(uint16 connection, SPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 SpxCancelEvent(SPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 SpxCheckSocket(uint16 socket, sint16 drvrRefNum);
+extern pascal sint16 SpxCloseSocket(uint16 socket, sint16 drvrRefNum);
+extern pascal sint16 SpxEstablishConnection(uint16 socket, SPX_ECB *ecb, uint8 retryCount, uint8 flags, uint16 *connection, sint16 drvrRefNum);
+extern pascal sint16 SpxEstablishConnection2(uint16 socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, uint8 retryCount, uint8 flags, uint16 *connection, sint16 drvrRefNum);
+extern pascal sint16 SpxGetConfiguration(uint16 *maxConn, uint16 *availConn, sint16 drvrRefNum);
+extern pascal sint16 SpxGetConnectionStatus(uint16 connection, SPX_SESSION *buffer, sint16 drvrRefNum);
+extern pascal sint16 SpxGetStatistics(SPX_STATS *buffer, uint32 *buflen, sint16 drvrRefNum);
+extern pascal sint16 SpxGetVersion(uint8 *majorVersion, uint8 *minorVersion, uint16 *revision, sint16 drvrRefNum);
+extern pascal sint16 SpxListenForConnection(uint16 socket, SPX_ECB *ecb, uint8 retryCount, uint8 flags, uint16 *connection, sint16 drvrRefNum);
+extern pascal sint16 SpxListenForConnection2(uint16 socket, SPX_ECB *ecb, SPX_ECB *recv_ecb, uint8 retryCount, uint8 flags, uint16 *connection, sint16 drvrRefNum);
+extern pascal sint16 SpxListenForConnectionPacket(uint16 connection, SPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 SpxOpenSocket(uint16 *socket, uint8 flags, sint16 drvrRefNum);
+extern pascal sint16 SpxSendSequencedPacket(uint16 connection, SPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 SpxTerminateConnection(uint16 connection, SPX_ECB *ecb, sint16 drvrRefNum);
 #endif
 
 #endif  /* __SPXCALLS_INCLUDED__ */

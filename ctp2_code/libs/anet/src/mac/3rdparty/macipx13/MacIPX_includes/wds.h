@@ -30,8 +30,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if defined(powerc) || defined (__powerc)
 #pragma options align=mac68k
 #endif
+
+#include "types.h"
+
 typedef struct wds {
-	short	len;
+	sint16	len;
 	char	*data;
 } WDS, RDS;
 #if defined(powerc) || defined(__powerc)

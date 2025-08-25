@@ -58,7 +58,7 @@ C3Slider::C3Slider(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR const *) NULL ),
@@ -103,7 +103,7 @@ C3Slider::C3Slider(
 	BOOL isVertical,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -296,10 +296,9 @@ AUI_ERRCODE C3Slider::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-void C3SliderThumbActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3SliderThumbActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
-	aui_Ranger *ranger = (aui_Ranger *)cookie;
+	aui_Ranger *ranger = (aui_Ranger *)cookie.m_voidPtr;
 
 	sint32		sound = -1;
 	static aui_Ranger *oldRanger = 0;
@@ -339,12 +338,12 @@ void C3SliderThumbActionCallback( aui_Control *control, uint32 action, uint32 da
 }
 
 
-void C3SliderButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void C3SliderButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_PRESS ) return;
 
-	aui_Ranger *ranger = (aui_Ranger *)cookie;
+	aui_Ranger *ranger = (aui_Ranger *)cookie.m_voidPtr;
 	aui_Button *button = (aui_Button *)control;
 
 	sint32		sound = -1;

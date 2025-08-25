@@ -91,7 +91,7 @@ void AgreementPool::Serialize(CivArchive &archive)
 
 
 Agreement AgreementPool::Create(PLAYER_INDEX owner, PLAYER_INDEX recipient, AGREEMENT_TYPE request)
-	{
+{
 	AgreementData* newData;
 	Agreement newAgreement(NewKey(k_BIT_GAME_OBJ_TYPE_AGREEMENT));
 
@@ -105,7 +105,7 @@ Agreement AgreementPool::Create(PLAYER_INDEX owner, PLAYER_INDEX recipient, AGRE
 		g_player[recipient]->AddAgreement(newAgreement) ;
 
 	return (newAgreement) ;
-	}
+}
 
 
 
@@ -119,8 +119,8 @@ Agreement AgreementPool::Create(PLAYER_INDEX owner, PLAYER_INDEX recipient, AGRE
 
 
 void AgreementPool::EndRound(void)
-	{
-	sint32	i ;
+{
+	size_t	i;
 
 	AgreementDynamicArray	expired ;
 
@@ -160,8 +160,8 @@ void AgreementPool::EndRound(void)
 
 		}
 
-    expired.KillList() ;
-	}
+	expired.KillList() ;
+}
 
 AgreementData *AgreementPool::AccessAgreement(const Agreement id)
 {

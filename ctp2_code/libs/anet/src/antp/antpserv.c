@@ -44,7 +44,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -57,7 +57,7 @@ dp_dprintf(
 #define DPRINT(a)
 #endif
 /* fake functions so we don't have to include dp2.lib */
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
@@ -91,9 +91,9 @@ static void checksys()
 {
 #ifdef _DEBUG
 	char *memptr[MAX_MEM];
-	int fd[MAX_FD];
+	sint32 fd[MAX_FD];
 	const char file[] = "/dev/null";
-	int i;
+	sint32 i;
 
 	for (i = 0; i < MAX_MEM; i++) {
 		memptr[i] = (char *)malloc(1024*1024);
@@ -153,7 +153,7 @@ static const char *antp_nextword(const char *str)
  Returns TRUE if allowed,
  		 FALSE if not.
 --------------------------------------------------------------------------*/
-static int antp_validateAddr(struct sockaddr_in addr)
+static sint32 antp_validateAddr(struct sockaddr_in addr)
 {
 	if (!strncmp(inet_ntoa(addr.sin_addr), "206.17.", 7))
 		return TRUE;
@@ -164,19 +164,19 @@ static int antp_validateAddr(struct sockaddr_in addr)
  Read an ANTP/1.0 request on <sockfd> and send an appropriate response back.
  Only files in <BaseDir> may be requested.
 --------------------------------------------------------------------------*/
-static void antp_handleRequest(int sockfd, const char *BaseDir)
+static void antp_handleRequest(sint32 sockfd, const char *BaseDir)
 {
 	dp_result_t err;
 	char buf[BUFLEN];
-	int nbytes;
+	sint32 nbytes;
 	char *pbuf;
-	int bNewline;
-	int RequestCmd;
-	int state;
+	sint32 bNewline;
+	sint32 RequestCmd;
+	sint32 state;
 	char file[URL_MAXLEN];
-	long offset;
-	long length;
-	long total;
+	sint32 offset;
+	sint32 length;
+	sint32 total;
 	FILE *fp;
 	time_t now;
 	time_t timeout;
@@ -190,12 +190,12 @@ static void antp_handleRequest(int sockfd, const char *BaseDir)
 	bNewline = TRUE;
 	RequestCmd = CMD_NONE;
 	state = STATE_READREQUEST;
-	while ((long)(now - timeout) < 0) {
+	while ((sint32)(now - timeout) < 0) {
 		char *pline;
 		char *c;
 
 		now = time(NULL);
-		if ((long)(now - next_checksys) >= 0) {
+		if ((sint32)(now - next_checksys) >= 0) {
 			DPRINT(("server: t:%d system resources:\n", now));
 			checksys();
 			next_checksys = now + 60;
@@ -525,13 +525,13 @@ static void antp_handleRequest(int sockfd, const char *BaseDir)
 	}
 }
 
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
-	int sockfd;
+	sint32 sockfd;
 	struct sockaddr_in my_addr;
-	int MyPort;
+	sint32 MyPort;
 	char BaseDir[URL_MAXLEN];
-	int pid;
+	sint32 pid;
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
 
@@ -586,9 +586,9 @@ Usage: %s <Port> <BaseDir>\n\
 	}
 
 	while (1) {
-		int newsock;
+		sint32 newsock;
 		struct sockaddr_in client_addr;
-		int client_addrlen;
+		sint32 client_addrlen;
 
 		/* ACCEPT A CONNECTION AND THEN CREATE A CHILD TO DO THE WORK */
 		/* LOOP BACK AND WAIT FOR ANOTHER CONNECTION */

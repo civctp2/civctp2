@@ -42,6 +42,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <time.h>
 #include <stddef.h>
 
+#include "types.h"
+
 #define delay_MAXPKTLEN 600   /* >= dpio_MAXLEN_GATHER + sizeof(rxPktResp) */
 
 typedef struct {
@@ -54,9 +56,9 @@ typedef struct {
 #define delay_QSIZE 100       /* number of packets that can be in pipe and buffers */
 typedef struct {
 	delay_pkt_t q[delay_QSIZE];
-	int head;
-	int tail;
-	int bytes_per_sec;
+	sint32 head;
+	sint32 tail;
+	sint32 bytes_per_sec;
 	clock_t invariant_delay;
 } delay_t;
 
@@ -79,7 +81,7 @@ void delay_destroy(delay_t *pq);
  Caller should provide current value of clock().
  Returns 0 on success, nonzero on discard.
 -----------------------------------------------------------------------*/
-int delay_put(delay_t *q, void *buf, size_t len, clock_t now);
+sint32 delay_put(delay_t *q, void *buf, size_t len, clock_t now);
 
 /*-----------------------------------------------------------------------
  Get data out of a queue.
@@ -95,7 +97,7 @@ size_t delay_get(delay_t *q, void *buf, size_t buflen, clock_t now);
  Returns the new value upon success.
  You can query the old value by trying to set to -1.
 -----------------------------------------------------------------------*/
-int delay_setBytesPerSec(delay_t *q, int bytesPerSec);
+sint32 delay_setBytesPerSec(delay_t *q, sint32 bytesPerSec);
 
 /*-----------------------------------------------------------------------
  Set invariant delay of the pipe - how long it takes a packet to
@@ -105,5 +107,5 @@ int delay_setBytesPerSec(delay_t *q, int bytesPerSec);
  Returns the new value upon success.
  You can query the old value by trying to set to -1.
 -----------------------------------------------------------------------*/
-int delay_setDelayMillisec(delay_t *q, int invariantDelay);
+sint32 delay_setDelayMillisec(delay_t *q, sint32 invariantDelay);
 #endif

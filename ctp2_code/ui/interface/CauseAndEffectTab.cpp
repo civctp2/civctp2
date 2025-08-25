@@ -26,14 +26,14 @@
 //
 // - Use the same science percentage everywhere.
 // - Added optimize sliders button and according callback function to allow
-//   the player to optimize sliders, automaticly. - April 8th 2005 Martin Gühmann
+//   the player to optimize sliders, automaticly. - April 8th 2005 Martin GÃ¼hmann
 // - Backwards compatibility crash prevention
 // - All food, production and gold values are now updated, when a single
 //   slider is moved, because happiness modifies crime, crime modifies
 //   losses and production modifies pollution and pollution modifies crime.
 //   This means all the values are modified even if only a single slider
-//   is moved. Jul 7th 2005 Martin Gühmann
-// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin Gühmann)
+//   is moved. Jul 7th 2005 Martin GÃ¼hmann
+// - Added preparations for city resource calculation replacement. (Aug 12th 2005 Martin GÃ¼hmann)
 // - Added SupportGold and CommodityGold to totalsaving calculation
 // - TODO: need to expand this window and break down income (add franchises, advertsing etc)
 // - Added more information to empire manager domestic tab. (22-Jul-2009 Maq)
@@ -74,27 +74,21 @@
 static sint32 k_ONE_FIVE__NEG_TWO_TWO_CONVERSION = 3;
 static sint32 k_ZERO_FOUR__NEG_TWO_TWO_CONVERSION = 2;
 
-CauseAndEffectTab::CauseAndEffectTab(MBCHAR *ldlBlock) :
+CauseAndEffectTab::CauseAndEffectTab(const MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_detailsButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 	"DomesticDialog.DetailsButton"))),
 m_optimizeSliderButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
-	"DomesticDialog.OptimizeSlidersButton"))), // Added by Martin Gühmann
+	"DomesticDialog.OptimizeSlidersButton"))), // Added by Martin GÃ¼hmann
 m_numberOfCities(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"CitiesValue"))),
 m_population(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"PopulationValue"))),
 
-m_productionPublicWorksSpinner(static_cast<ctp2_Spinner*>(aui_Ldl::GetObject(ldlBlock,
-	"PWSpinner"))),
-
 m_happinessValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"HappinessValue"))),
 m_happinessBar(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"HappinessBar"))),
-
-m_commerceScienceTaxSpinner(static_cast<ctp2_Spinner*>(aui_Ldl::GetObject(ldlBlock,
-	"ScieTaxSpinner"))),
 
 m_government(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"CurrentGovernment"))),
@@ -138,6 +132,9 @@ m_summaryFoodStored(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 
 m_productionWorkdaySpinner(static_cast<C3Slider*>(aui_Ldl::GetObject(ldlBlock,
 	"Production.Modify.Primary.Slider"))),
+m_productionPublicWorksSpinner(static_cast<ctp2_Spinner*>(aui_Ldl::GetObject(ldlBlock,
+	"PWSpinner"))),
+
 m_productionHappinessValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Production.Modify.Primary.Value"))),
 m_productionCurValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -184,6 +181,8 @@ m_summaryProductionCityUse(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock
 
 m_commerceWagesSpinner(static_cast<C3Slider*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.Modify.Primary.Slider"))),
+m_commerceScienceTaxSpinner(static_cast<ctp2_Spinner*>(aui_Ldl::GetObject(ldlBlock,
+	"ScieTaxSpinner"))),
 m_commerceHappinessValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.Modify.Primary.Value"))),
 m_commerceCurValue(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -199,6 +198,10 @@ m_detailsCommerceBuildingUpkeep(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldl
 	"Commerce.InformationDetails.Upkeep.Value"))),
 m_detailsCommerceTotal(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationDetails.Collected.Value"))),
+m_detailsCommerceScieCrime(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+	"Commerce.InformationDetails.ScieCrime.Value"))),
+m_detailsCommerceGoldCrime(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+	"Commerce.InformationDetails.GoldCrime.Value"))),
 m_detailsCommerceScienceBasic(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationDetails.BasicScience.Value"))),
 m_detailsGoldFromCommerce(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -217,6 +220,8 @@ m_detailsCommerceFeatWonderGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldl
 	"Commerce.InformationDetails.FeatsWondersGold.Value"))),
 m_detailsCommerceTradeGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationDetails.TradeGold.Value"))),
+m_detailsCommerceConversionsGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
+	"Commerce.InformationDetails.ConversionsGold.Value"))),
 m_detailsCommerceScienceGov(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationDetails.ScieGovBonus.Value"))),
 m_detailsCommerceGoldGov(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -233,12 +238,6 @@ m_detailsCommerceScience(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationDetails.Science.Value"))),
 m_detailsCommerceSavings(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationDetails.Savings.Value"))),
-m_detailsCommerceConversionsGold(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
-	"Commerce.InformationDetails.ConversionsGold.Value"))),
-m_detailsCommerceScieCrime(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
-	"Commerce.InformationDetails.ScieCrime.Value"))),
-m_detailsCommerceGoldCrime(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
-	"Commerce.InformationDetails.GoldCrime.Value"))),
 m_summaryCommerceTotal(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
 	"Commerce.InformationSummary.Collected.Value"))),
 m_summaryCommerceScieSubTotal(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock,
@@ -1117,7 +1116,7 @@ void CauseAndEffectTab::UpdateCities()
 AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
                                                           aui_Surface *surface,
                                                           RECT &rect,
-                                                          void *cookie)
+                                                          Cookie cookie)
 {
 	if(g_selected_item == NULL)
 		return(AUI_ERRCODE_OK);
@@ -1165,12 +1164,12 @@ AUI_ERRCODE CauseAndEffectTab::HappinessBarActionCallback(ctp2_Static *control,
 void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
                                                      uint32 action,
                                                      uint32 data,
-                                                     void *cookie)
+                                                     Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1193,12 +1192,12 @@ void CauseAndEffectTab::RationsSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1222,12 +1221,12 @@ void CauseAndEffectTab::WorkdaySpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1247,12 +1246,12 @@ void CauseAndEffectTab::PublicWorksSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1275,12 +1274,12 @@ void CauseAndEffectTab::WagesSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;
 
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	ctp2_Spinner *spinner = static_cast<ctp2_Spinner*>(control);
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -1301,15 +1300,15 @@ void CauseAndEffectTab::ScienceTaxSpinnerActionCallback(aui_Control *control,
 }
 
 void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<CauseAndEffectTab*>(cookie)->DisplayDetails(
-		!(static_cast<CauseAndEffectTab*>(cookie)->m_displayDetails));
+	static_cast<CauseAndEffectTab*>(cookie.m_voidPtr)->DisplayDetails(
+		!(static_cast<CauseAndEffectTab*>(cookie.m_voidPtr)->m_displayDetails));
 
-	static_cast<CauseAndEffectTab*>(cookie)->m_tabPanel->ShouldDraw(TRUE);
+	static_cast<CauseAndEffectTab*>(cookie.m_voidPtr)->m_tabPanel->ShouldDraw(TRUE);
 }
 
 //----------------------------------------------------------------------------
@@ -1331,7 +1330,7 @@ void CauseAndEffectTab::DetailsButtonActionCallback(aui_Control *control,
 //
 //----------------------------------------------------------------------------
 void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
@@ -1355,7 +1354,7 @@ void CauseAndEffectTab::OptimizeSlidersButtonActionCallback(aui_Control *control
 	UpdateCities();
 
 	// Update tab
-	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie);
+	CauseAndEffectTab *tab = static_cast<CauseAndEffectTab*>(cookie.m_voidPtr);
 	tab->UpdateFoodValues();
 	tab->UpdateFoodSpinners();
 	tab->UpdateProductionValues();
@@ -1383,9 +1382,9 @@ void CauseAndEffectTab::DetailsShowCallback(aui_Region *region,
 void CauseAndEffectTab::CauseAndEffectTabActionCallback(aui_Control *control,
                                                         uint32 action,
                                                         uint32 data,
-                                                        void *cookie)
+                                                        Cookie cookie)
 {
-	CauseAndEffectTab * tab = reinterpret_cast<CauseAndEffectTab *>(cookie);
+	CauseAndEffectTab * tab = static_cast<CauseAndEffectTab *>(cookie.m_voidPtr);
 
 	if (action == ctp2_Tab::ACTION_ACTIVATED)
 	{

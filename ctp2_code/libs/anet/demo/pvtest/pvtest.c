@@ -40,19 +40,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* Contents of each variable */
 typedef struct {
-	dpid_t from;	/* Who created it */
-	int    key;		/* 1 for first variable, 2 for second, etc */
-	char padding[300];
+	dpid_t  from;	/* Who created it */
+	sint32  key;		/* 1 for first variable, 2 for second, etc */
+	char    padding[300];
 } pvtest_t;
 
-int my_nPlayer;
+sint32 my_nPlayer;
 dpid_t my_Player[dp_MAXREALPLAYERS];
 dpid_t lowestId = dp_ID_NONE;
 
 /*-------------------------------------------------------------------------
  Call to quit chat.
 -------------------------------------------------------------------------*/
-static void quit(dp_t *myDP, int exit_code)
+static void quit(dp_t *myDP, sint32 exit_code)
 {
 	if (myDP) {
 		dpClose(myDP);
@@ -66,7 +66,7 @@ static void quit(dp_t *myDP, int exit_code)
 /*-------------------------------------------------------------------------
  Callback triggered by listing players.
 -------------------------------------------------------------------------*/
-static void dp_FAR dp_PASCAL my_listPlayers_cb(dpid_t id, char_t * name, long flags, void *context)
+static void dp_FAR dp_PASCAL my_listPlayers_cb(dpid_t id, char_t * name, sint32 flags, void *context)
 {
 	(void) context;
 
@@ -157,18 +157,18 @@ dp_result_t chat_broadcast(dp_t *myDP, char *message)
 	return err;
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
-	int exitCode = 0;
+	sint32 exitCode = 0;
 	dp_t *myDP;
 	dp_result_t err;
 	char freezefile[100];
 	char kbuf[MAX_MESSAGE] = "";
 	clock_t tstart = 0;
 	clock_t tfinish = 0;
-	int setkey;			/* last variable set */
-	int sendkey;		/* last variable sent */
-	int vars_received;
+	sint32 setkey;			/* last variable set */
+	sint32 sendkey;		/* last variable sent */
+	sint32 vars_received;
 
 	if (argc < 2) {
 		strcpy(freezefile, "freeze.dat");
@@ -194,7 +194,7 @@ int main(int argc, char **argv)
 			union {
 				dp_user_addPlayer_packet_t addPlayer;
 				dp_user_delPlayer_packet_t delPlayer;
-				unsigned char buf[dpio_MAXLEN_UNRELIABLE];
+				uint8 buf[dpio_MAXLEN_UNRELIABLE];
 			} u PACK;
 		} pkt;
 		size_t pktsize;
@@ -218,8 +218,8 @@ int main(int argc, char **argv)
 			sendkey = setkey;
 		}
 		if (raw_kbhit()) {
-			int len = strlen(kbuf);
-			int ch = 0;
+			sint32 len = strlen(kbuf);
+			sint32 ch = 0;
 			if (len >= MAX_MESSAGE) {
 				printf("\npvtest: Message too long. Truncating and sending.\n");
 				err = chat_broadcast(myDP, kbuf);
@@ -235,7 +235,7 @@ int main(int argc, char **argv)
 				continue;
 			}
 			if (ch == 4 || ch == 17) {		/* ^D, ^Q */
-				int i;
+				sint32 i;
 				if (my_Player[0] == lowestId) {
 					twait = HOST_WAIT * ECLOCKS_PER_SEC;
 				} else {

@@ -42,10 +42,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 #include "sbd.h"
+#include "types.h"
 
 typedef struct {
 	/* public: (read only) */
-	int sock;		/* TCP socket handle */
+	sint32 sock;		/* TCP socket handle */
 
 	/* private: */
 	char buf[sbd_HEADERLEN + sbd_MAXLEN];	/* data to send */
@@ -58,7 +59,7 @@ typedef struct {
  in preparation for sending the len bytes of binary data in buf.
  Returns NULL on failure.
 ------------------------------------------------------------------------*/
-sbdclnt_t *sbdclnt_create(const char *buf, size_t len, const char *hostname, short port);
+sbdclnt_t *sbdclnt_create(const char *buf, size_t len, const char *hostname, sint16 port);
 
 /*------------------------------------------------------------------------
  Destroy an instance of the sbdclnt module.

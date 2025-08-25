@@ -35,14 +35,14 @@ void ldlif_start_block(void *names);
 void *ldlif_end_block(void *names);
 void *ldlif_add_empty_block(void *names);
 
-void ldlif_add_bool_attribute(char *name, int val);
-void ldlif_add_int_attribute(char *name, int val);
-void ldlif_add_float_attribute(char *name, double val);
-void ldlif_add_string_attribute(char *name, char *val);
+void ldlif_add_bool_attribute(const char *name, int val);
+void ldlif_add_int_attribute(const char *name, int val);
+void ldlif_add_float_attribute(const char *name, double val);
+void ldlif_add_string_attribute(const char *name, const char *val);
 
 void ldlif_indent_log(int indent);
 void ldlif_init_log();
-void ldlif_log(char *fmt, ...);
+void ldlif_log(const char *fmt, ...);
 
 void ldlif_allocate_stuff();
 void ldlif_deallocate_stuff();

@@ -33,8 +33,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Input buffering done here solely to allow us to handle ^C.
  * This is stupid.
  */
-static int KeyBoard_Quit = 0;
-int input_buffer_len;
+static sint32 KeyBoard_Quit = 0;
+sint32 input_buffer_len;
 char input_buffer[255];
 
 #if 0
@@ -46,9 +46,9 @@ static void raw_stuffc(c)
 	input_buffer_len++;
 }
 
-static int raw_pullc()
+static sint32 raw_pullc()
 {
-   int i;
+   sint32 i;
    char ch;
    if (!input_buffer_len) return(-1);
    ch = input_buffer[0];
@@ -64,7 +64,7 @@ static int raw_pullc()
  Call with 1 to install, 0 to deinstall raw mode
 --------------------------------------------------------------------------*/
 void raw_set_stdio(init)
-    int init;
+    sint32 init;
 {
     struct sgttyb  newtty;
     struct tchars tc;
@@ -103,7 +103,7 @@ void raw_set_stdio(init)
 /*--------------------------------------------------------------------------
  Return -1 if no key, 3 if user hit interrupt key, otherwise return key.
 --------------------------------------------------------------------------*/
-int raw_getc()
+sint32 raw_getc()
 {
     char c;
 
@@ -121,12 +121,12 @@ int raw_getc()
 /*--------------------------------------------------------------------------
  Return 0 if no key ready, 1 if key ready.
 --------------------------------------------------------------------------*/
-int raw_kbhit()
+sint32 raw_kbhit()
 {
     struct timeval wait;
-    int readfd, writefd, exceptfd, ret;
+    sint32 readfd, writefd, exceptfd, ret;
 
-    /* extern int select(int, int *, int *, int *, struct timeval *); */
+    /* extern sint32 select(sint32, sint32 *, sint32 *, sint32 *, struct timeval *); */
 
     wait.tv_sec = 0;
     wait.tv_usec = 100;	/* should be nonzero to avoid spinning? */
@@ -142,14 +142,14 @@ int raw_kbhit()
  Get the size of the terminal
 --------------------------------------------------------------------------*/
 void raw_get_term_dimensions(cols, rows)
-    int *cols;
-    int *rows;
+    sint32 *cols;
+    sint32 *rows;
 {
     struct winsize wind_struct;
 
    ioctl(2,TIOCGWINSZ,&wind_struct);
-   *cols = (int) wind_struct.ws_col;
-   *rows = (int) wind_struct.ws_row;
+   *cols = (sint32) wind_struct.ws_col;
+   *rows = (sint32) wind_struct.ws_row;
    if (*rows <= 0) *rows = 24;
    if (*cols <= 0) *cols = 80;
 }

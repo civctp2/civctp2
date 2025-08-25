@@ -558,6 +558,11 @@ protected:
 
 	RECT			m_mapBounds;
 
+private:
+	// m_mapViewRect is const so that it can only be updated by UpdateAndClipMapViewRect
+	const RECT		m_mapViewRect;
+
+protected:
 	double			m_scale;
 	sint32			m_smoothOffsetX,m_smoothOffsetY;
 	sint32			m_smoothLastX,m_smoothLastY;
@@ -597,9 +602,6 @@ protected:
 private:
 	void DrawUnfinishedPath(aui_Surface & surface, const Army & army);
 	void DrawUnfinishedTurnCount(aui_Surface & surface, const Army & army);
-
-	// m_mapViewRect is const so that it can only be updated by UpdateAndClipMapViewRect
-	const RECT m_mapViewRect;
 
 	sint32 GetMinMapLeft()   const { return m_mapBounds.left   - (m_mapViewRect.right  - m_mapViewRect.left) / 2; }
 	sint32 GetMaxMapRight()  const { return m_mapBounds.right  + (m_mapViewRect.right  - m_mapViewRect.left) / 2; }

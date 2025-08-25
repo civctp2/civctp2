@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired.
-// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civ selection button bank by list box. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -122,7 +122,7 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 	for(sint32 i = 0; i < s_CivListBox->NumItems(); ++i)
 	{
 		ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetItemByIndex(i);
-		if(index == reinterpret_cast<sint32>(item->GetUserData()))
+		if(index == item->GetUserDataSint32())
 		{
 			s_CivListBox->SelectItem(i);
 		}
@@ -181,7 +181,7 @@ void spnewgametribescreen_setTribeIndex( sint32 index, MBCHAR *lname )
 	}
 }
 
-sint32	spnewgametribescreen_displayMyWindow( void *cookie, BOOL edit )
+sint32	spnewgametribescreen_displayMyWindow( Cookie cookie, BOOL edit )
 {
 	sint32 retval = g_spNewGameTribeScreen ? 0 : spnewgametribescreen_Initialize();
 
@@ -205,7 +205,7 @@ sint32 spnewgametribescreen_removeMyWindow(uint32 action, MBCHAR *lname)
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return 0;
 
 	ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetSelectedItem();
-	sint32 index   = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 index   = item->GetUserDataSint32();
 
 	if ( lname )
 		s_leaderNameTextField->GetFieldText( lname, 100 );
@@ -229,7 +229,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	s_tribeIndex = INDEX_TRIBE_INVALID;
 	if ( g_spNewGameTribeScreen ) {
 		if(callback) {
-			g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+			g_spNewGameTribeScreen->Ok()->SetActionFuncAndCookie(callback, nullptr);
 		}
 		return AUI_ERRCODE_OK;
 	}
@@ -239,7 +239,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 	{
 		g_spNewGameTribeScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(g_spNewGameTribeScreen, errcode) );
-		if ( !AUI_NEWOK(g_spNewGameTribeScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(g_spNewGameTribeScreen, errcode) ) return errcode;
 
 		g_spNewGameTribeScreen->Resize(g_spNewGameTribeScreen->Width(),g_spNewGameTribeScreen->Height());
 		g_spNewGameTribeScreen->GrabRegion()->Resize(g_spNewGameTribeScreen->Width(),g_spNewGameTribeScreen->Height());
@@ -291,7 +291,7 @@ AUI_ERRCODE spnewgametribescreen_Initialize( aui_Control::ControlActionCallback 
 
 	s_CivListBox->SetForceSelect(TRUE);
 	s_CivListBox->SetMultiSelect(FALSE);
-	s_CivListBox->SetActionFuncAndCookie(spnewgametribescreen_switchPress, NULL);
+	s_CivListBox->SetActionFuncAndCookie(spnewgametribescreen_switchPress, nullptr);
 
 	return AUI_ERRCODE_OK;
 }
@@ -348,17 +348,17 @@ GENDER spnewgametribescreen_getGender(void)
 }
 
 //action buttons
-void spnewgametribescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	spnewgametribescreen_removeMyWindow(action);
 }
 
-void spnewgametribescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	spnewgametribescreen_removeMyWindow(action);
 }
 
-void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	const sint32 size = 100;
 	MBCHAR lname[ size + 1 ];
@@ -367,13 +367,13 @@ void spnewgametribescreen_backPress(aui_Control *control, uint32 action, uint32 
 	spnewgametribescreen_removeMyWindow(action, lname);
 }
 
-void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	//this is for the text boxes and updated once selected
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
 
 	ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetSelectedItem();
-	sint32 civ = reinterpret_cast<sint32>(item->GetUserData());
+	sint32 civ = item->GetUserDataSint32();
 	StringId nameString;
 
 	if ( s_maleRadio->GetState() )
@@ -384,7 +384,7 @@ void spnewgametribescreen_switchPress(aui_Control *control, uint32 action, uint3
 	s_leaderNameTextField->SetFieldText( g_theStringDB->GetNameStr(nameString) );
 }
 
-void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
@@ -392,7 +392,7 @@ void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 
 
 	if(item)
 	{
-		sint32 civ = reinterpret_cast<sint32>(item->GetUserData());
+		sint32 civ = item->GetUserDataSint32();
 
 		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameMale();
 
@@ -400,7 +400,7 @@ void spnewgametribescreen_malePress(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
@@ -408,7 +408,7 @@ void spnewgametribescreen_femalePress(aui_Control *control, uint32 action, uint3
 
 	if(item)
 	{
-		sint32 civ = reinterpret_cast<sint32>(item->GetUserData());
+		sint32 civ = item->GetUserDataSint32();
 
 		StringId const  nameString  = g_theCivilisationDB->Get(civ)->GetLeaderNameFemale();
 
@@ -426,7 +426,7 @@ void spnewgametribescreen_addTribeNoDuplicate(sint32 tribe)
 	for(sint32 i = 0; i < s_CivListBox->NumItems(); i++)
 	{
 		ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetItemByIndex(i);
-		if(tribe == reinterpret_cast<sint32>(item->GetUserData()))
+		if(tribe == item->GetUserDataSint32())
 		{
 			return;
 		}
@@ -457,7 +457,7 @@ void spnewgametribescreen_addTribe(sint32 tribe)
 		if(!item)
 			return;
 
-		item->SetUserData((void *)tribe);
+		item->SetUserData(tribe);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -475,7 +475,7 @@ void spnewgametribescreen_removeTribe(sint32 tribe)
 	for(sint32 i = s_CivListBox->NumItems() - 1; i >= 0; i--)
 	{
 		ctp2_ListItem *item = (ctp2_ListItem *)s_CivListBox->GetItemByIndex(i);
-		if(tribe == reinterpret_cast<sint32>(item->GetUserData()))
+		if(tribe == item->GetUserDataSint32())
 		{
 			s_CivListBox->RemoveItemByIndex(i);
 			delete item;

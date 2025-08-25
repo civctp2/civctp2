@@ -42,7 +42,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define DPRINT(s) printf s
 
-int nApps = 0;
+sint32 nApps = 0;
 //OSErr exitcode = noErr;
 Boolean relaunch = true;
 
@@ -50,7 +50,7 @@ Boolean relaunch = true;
  Decrements the launched application count for app died event; used by apple event handler.
  Commented out section gets the exit code of died event; not implemented correcly now.
 --------------------------------------------------------------------------*/
-pascal OSErr myHandleAppDied(AppleEvent *event, AppleEvent *reply, long refcon)
+pascal OSErr myHandleAppDied(AppleEvent *event, AppleEvent *reply, sint32 refcon)
 {
 //	DescType dType;
 //	Size size;
@@ -95,8 +95,8 @@ OSErr myHandleHLEvent(EventRecord *event)
 	if (event->message == STUB_EVENTID && pttolong(event->where) == STUB_LAUNCLASS) {
 		LaunchParamBlockRec launchParams;
 		TargetID sender;
-		unsigned long msgRefcon, msglen;
-//		unsigned long sendRefcon, myOpts;
+		uint32 msgRefcon, msglen;
+//		uint32 sendRefcon, myOpts;
 		msglen = sizeof(LaunchParamBlockRec);
 		err = AcceptHighLevelEvent(&sender, &msgRefcon, &launchParams, &msglen);
 		if (err != noErr) {
@@ -114,8 +114,8 @@ OSErr myHandleHLEvent(EventRecord *event)
 		DPRINT(("got launch request\n"));
 	} else if (event->message == STUB_EVENTID && pttolong(event->where) == STUB_OBITCLASS) {
 		TargetID sender;
-		unsigned long msgRefcon;
-		unsigned long msglen = 0;
+		uint32 msgRefcon;
+		uint32 msglen = 0;
 		err = AcceptHighLevelEvent(&sender, &msgRefcon, nil, &msglen);
 		if (err != noErr) {
 			DPRINT(("accept high level event error %d\n", err));;

@@ -60,14 +60,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 //	This code creates STR resources in the currently open file for saving preferences information
 
 OSErr CreateRes(Ptr configPtr,StringPtr toolName) {
-	short			volRefNum;
-	long			dirID;
+	sint16			volRefNum;
+	sint32			dirID;
 	FSSpec			theFileSpec;
 	OSErr			theErr;
 	Handle			theStrings;
 	Ptr				inPtr;
-	long			theStringsSize;
-	short			fRefNum;
+	sint32			theStringsSize;
+	sint16			fRefNum;
 
 	c2pstr(configPtr);
 	//	build the 'STR ' resource

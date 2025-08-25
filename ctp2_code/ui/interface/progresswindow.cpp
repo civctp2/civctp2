@@ -40,7 +40,7 @@ extern C3UI *   g_c3ui;
 
 void ProgressWindow::BeginProgress(
 	ProgressWindow *&progwin,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 maxval,
 	sint32 x, sint32 y)
 {
@@ -128,7 +128,7 @@ void ProgressWindow::EndProgress( ProgressWindow *&progwin )
 
 ProgressWindow::ProgressWindow(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 x, sint32 y)
 	:
 	c3_PopupWindow(

@@ -151,60 +151,59 @@ class DipWizard
 	static const MBCHAR *GetCategoryName(DIP_WIZ_PROP_TAB tab);
 	static void UpdateButtons();
 
-	static void ToneButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PropListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ExchListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NationCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ToneButtonCallback       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PropListCallback         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ExchListCallback         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void NationCallback           (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void BackCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NextCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SendCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void BackCallback             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void NextCallback             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CancelCallback           (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SendCallback             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void ProposalTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ExchangeTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ProposalTabCallback      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ExchangeTabCallback      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void AcceptCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void RejectCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CheckIntelligence(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void AcceptCallback           (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void RejectCallback           (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CheckIntelligence        (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void ProcessMenuSelection(sint32 itemIndex, void *cookie);
+	static void ProcessMenuSelection     (sint32 itemIndex, Cookie cookie);
 	static void ProcessMenuCancel();
-	static void MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
+	static void MenuCallback             (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
 
-	static bool ProposalContextMenu(sint32 proposal);
-	static void AddCityItems(ctp2_Menu *menu, sint32 player);
-	static void AddAgreementItems(ctp2_Menu *menu, sint32 player);
-	static void AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 receiver);
-	static void AddStopResearchItems(ctp2_Menu *menu, sint32 playerId);
-	static bool AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg);
-	static void GoldOk(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PollutionOk(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PercentOk(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GoldCancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PollutionCancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PercentCancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void RequestGoldValue(sint32 player);
-	static void AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiver);
-	static void RequestPollutionValue(sint32 player);
-	static void RequestPercentValue();
+	static bool ProposalContextMenu      (sint32 proposal);
+	static void AddCityItems             (ctp2_Menu *menu, sint32 player);
+	static void AddAgreementItems        (ctp2_Menu *menu, sint32 player);
+	static void AddAdvanceItems          (ctp2_Menu *menu, sint32 sender, sint32 receiver);
+	static void AddStopResearchItems     (ctp2_Menu *menu, sint32 playerId);
+	static bool AddThreatData            (SlicObject &so, sint32 threat, const DiplomacyArg &arg);
+	static void GoldOk                   (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PollutionOk              (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PercentOk                (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GoldCancel               (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PollutionCancel          (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PercentCancel            (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void RequestGoldValue         (sint32 player);
+	static void AddThirdPartyItems       (ctp2_Menu *menu, sint32 sender, sint32 receiver);
+	static void RequestPollutionValue    (sint32 player);
+	static void RequestPercentValue      ();
 
-	static void ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
-	static bool ThreatContextMenu(sint32 threat);
-	static void ThreatListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ThreatMenuCallback       (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
+	static bool ThreatContextMenu        (sint32 threat);
+	static void ThreatListCallback       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
+	static void InitializeEvents         ();
 
-	static void InitializeEvents();
+	static void NotifyResponse           (const Response &resp, sint32 responder, sint32 other_player);
+	static void NotifyThreatRejected     (const Response &resp, const Response &sender_response, sint32 responder, sint32 other_player);
 
-	static void NotifyResponse(const Response &resp, sint32 responder, sint32 other_player);
-	static void NotifyThreatRejected(const Response &resp, const Response &sender_response, sint32 responder, sint32 other_player);
+	static void DisplayDiplomat          (sint32 player);
+	static void DisplayResponseDiplomat  (sint32 player);
+	static void DisplayParchment         (sint32 player);
 
-	static void DisplayDiplomat(sint32 player);
-	static void DisplayResponseDiplomat(sint32 player);
-	static void DisplayParchment(sint32 player);
-
-	static aui_Window *GetWindow();
+	static aui_Window *GetWindow         ();
 
 };
 

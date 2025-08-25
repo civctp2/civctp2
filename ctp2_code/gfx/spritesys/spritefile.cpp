@@ -1391,10 +1391,9 @@ SPRITEFILEERR SpriteFile::Open(SPRITEFILETYPE *type)
 SPRITEFILEERR SpriteFile::Read(Sprite **s, Anim **anim)
 {
 	uint32			soffset=0, aoffset=0;
-	SPRITEFILEERR	err;
 
-	err = ReadData((void *)&soffset, sizeof(soffset));
-	err = ReadData((void *)&aoffset, sizeof(aoffset));
+	ReadData((void *)&soffset, sizeof(soffset));
+	ReadData((void *)&aoffset, sizeof(aoffset));
 
 	*s = new Sprite;
 	ReadSpriteDataFull(*s);
@@ -1408,10 +1407,9 @@ SPRITEFILEERR SpriteFile::Read(Sprite **s, Anim **anim)
 SPRITEFILEERR SpriteFile::Read(FacedSprite **s, Anim **anim)
 {
 	uint32			soffset=0, aoffset=0;
-	SPRITEFILEERR	err;
 
-	err = ReadData((void *)&soffset, sizeof(soffset));
-	err = ReadData((void *)&aoffset, sizeof(aoffset));
+	ReadData((void *)&soffset, sizeof(soffset));
+	ReadData((void *)&aoffset, sizeof(aoffset));
 
 	*s = new FacedSprite;
 	ReadFacedSpriteDataFull(*s);
@@ -1425,10 +1423,9 @@ SPRITEFILEERR SpriteFile::Read(FacedSprite **s, Anim **anim)
 SPRITEFILEERR SpriteFile::Read(FacedSpriteWshadow **s, Anim **anim)
 {
 	uint32			soffset=0, aoffset=0;
-	SPRITEFILEERR	err;
 
-	err = ReadData((void *)&soffset, sizeof(soffset));
-	err = ReadData((void *)&aoffset, sizeof(aoffset));
+	ReadData((void *)&soffset, sizeof(soffset));
+	ReadData((void *)&aoffset, sizeof(aoffset));
 
 	*s = new FacedSpriteWshadow;
 	ReadFacedSpriteWshadowData(*s);
@@ -1443,13 +1440,6 @@ SPRITEFILEERR SpriteFile::Read(SpriteGroup **s, Anim **anim)
 {
 	return SPRITEFILEERR_OK;
 }
-
-
-
-
-
-
-
 
 
 SPRITEFILEERR
@@ -2393,7 +2383,6 @@ uint8 *
 SpriteFile::DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualLen)
 {
  size_t  src_len=CompressedLen;
- size_t  dst_len=ActualLen;
 
  uint8  *ReturnVal  = new uint8[ActualLen];
  uint8  *p_src_first=(uint8 *)Data;
@@ -2408,8 +2397,7 @@ SpriteFile::DeCompressData_LZW1(void *Data, size_t CompressedLen, size_t ActualL
  if (*p_src_first==LZW1_FLAG_COPY)
  {
 	memcpy(p_dst_first,p_src_first+LZW1_FLAG_BYTES,src_len-LZW1_FLAG_BYTES);
-    dst_len=src_len-LZW1_FLAG_BYTES;
-	return ReturnVal;
+  	return ReturnVal;
  }
 
  while (p_src<p_src_post)

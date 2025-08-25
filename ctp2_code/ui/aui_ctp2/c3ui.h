@@ -84,21 +84,21 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *ldlFilename = NULL,
+		const MBCHAR *ldlFilename = NULL,
 		BOOL useExclusiveMode = FALSE );
 	virtual ~C3UI();
 
 	aui_Resource<Pattern>	*GetPatternResource( void ) const { return m_patternResource; }
 
-	Pattern	*LoadPattern( MBCHAR const * name )
+	Pattern	*LoadPattern( const MBCHAR * name )
 		{ return m_patternResource->Load(name); }
 
 	AUI_ERRCODE	UnloadPattern( Pattern *resource )
 		{ return m_patternResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadPattern(MBCHAR const * name)
+	AUI_ERRCODE	UnloadPattern(const MBCHAR * name)
 		{ return m_patternResource->Unload(name); }
 
-	AUI_ERRCODE	AddPatternSearchPath(MBCHAR const * path)
+	AUI_ERRCODE	AddPatternSearchPath(const MBCHAR * path)
 		{ return m_patternResource->AddSearchPath(path); }
 	AUI_ERRCODE	RemovePatternSearchPath(MBCHAR const * path)
 		{ return m_patternResource->RemoveSearchPath(path); }
@@ -113,9 +113,9 @@ public:
 	AUI_ERRCODE	UnloadIcon(MBCHAR const * name)
 		{ return m_iconResource->Unload(name); }
 
-	AUI_ERRCODE	AddIconSearchPath(MBCHAR const * path)
+	AUI_ERRCODE	AddIconSearchPath(const MBCHAR * path)
 		{ return m_iconResource->AddSearchPath(path); }
-	AUI_ERRCODE	RemoveIconSearchPath(MBCHAR const * path)
+	AUI_ERRCODE	RemoveIconSearchPath(const MBCHAR * path)
 		{ return m_iconResource->RemoveSearchPath(path); }
 
 	aui_Resource<Picture>	*GetPictureResource( void ) const { return m_pictureResource; }
@@ -125,12 +125,12 @@ public:
 
 	AUI_ERRCODE	UnloadPicture( Picture *resource )
 		{ return m_pictureResource->Unload( resource ); }
-	AUI_ERRCODE	UnloadPicture(MBCHAR const * name)
+	AUI_ERRCODE	UnloadPicture(const MBCHAR * name)
 		{ return m_pictureResource->Unload(name); }
 
-	AUI_ERRCODE	AddPictureSearchPath(MBCHAR const * path)
+	AUI_ERRCODE	AddPictureSearchPath(const MBCHAR * path)
 		{ return m_pictureResource->AddSearchPath(path); }
-	AUI_ERRCODE	RemovePictureSearchPath(MBCHAR const *path)
+	AUI_ERRCODE	RemovePictureSearchPath(const MBCHAR *path)
 		{ return m_pictureResource->RemoveSearchPath(path); }
 
     void        RegisterCleanup(UiCleanupCallback);

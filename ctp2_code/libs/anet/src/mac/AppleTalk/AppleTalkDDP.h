@@ -39,6 +39,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include	<OpenTransport.h>
 #include	<OpenTptAppleTalk.h>
+#include "types.h"
 
 // ---------------- UDP ---------------
 
@@ -74,22 +75,22 @@ typedef enum {
 
 typedef struct {
    DDPAddress			ip_src;        // local AppleTalk address
-   unsigned short		port_loc;      // local port  -- NOTE: diff from tcp201
+   uint16		port_loc;      // local port  -- NOTE: diff from tcp201
    DDPAddress			ip_dst;        // remote AppleTalk address
-   unsigned short		port_rem;      // remote port -- NOTE: diff from tcp201
-   unsigned char		ip_prot;
-   unsigned char		active;
+   uint16		port_rem;      // remote port -- NOTE: diff from tcp201
+   uint8		ip_prot;
+   uint8		active;
 } atalk_session_info_t;
 
-unsigned atalk_ddp_open(DDPAddress* ip_dst, unsigned char flags, unsigned *local_port );
-int atalk_ddp_close( unsigned handle, unsigned char flags );
-int atalk_ddp_recv( unsigned handle, void *buf, unsigned len,
-                   unsigned timeout, unsigned char flags,
-                   unsigned *ttltos, unsigned *id );
-int atalk_ddp_send( unsigned handle, void *buf, unsigned len,
-                       unsigned ttltos, unsigned id, unsigned char flags );
-int atalk_ddp_status( unsigned handle, unsigned char flags, unsigned *size_next,
+uint32 atalk_ddp_open(DDPAddress* ip_dst, uint8 flags, uint32 *local_port );
+sint32 atalk_ddp_close( uint32 handle, uint8 flags );
+sint32 atalk_ddp_recv( uint32 handle, void *buf, uint32 len,
+                   uint32 timeout, uint8 flags,
+                   uint32 *ttltos, uint32 *id );
+sint32 atalk_ddp_send( uint32 handle, void *buf, uint32 len,
+                       uint32 ttltos, uint32 id, uint8 flags );
+sint32 atalk_ddp_status( uint32 handle, uint8 flags, uint32 *size_next,
                            atalk_session_info_t **info );
-int atalk_ddp_broadcast(void *buf, unsigned len);
+sint32 atalk_ddp_broadcast(void *buf, uint32 len);
 
 #endif

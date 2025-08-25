@@ -53,35 +53,35 @@ InfoWindow::InfoWindow(void)
 	m_window        (static_cast<ctp2_Window*>
                         (aui_Ldl::BuildHierarchyFromRoot("InfoDialog"))
                     ),
-	m_closeButton   (NULL),
-	m_ranking_tab   (NULL),
+    m_closeButton   (NULL),
+    m_ranking_tab   (NULL),
     m_score_tab     (new ScoreTab()),
     m_wonder_tab    (NULL)
 {
 	Assert(m_window);
 
-    m_ranking_tab   = new RankingTab(m_window);
+	m_ranking_tab   = new RankingTab(m_window);
 	m_wonder_tab    = new WonderTab(m_window);
 
-    m_closeButton   = static_cast<ctp2_Button*>
-                        (aui_Ldl::GetObject("InfoDialog.CloseButton"));
-    Assert(m_closeButton);
-    if (m_closeButton)
-    {
-	    m_closeButton->SetActionFuncAndCookie(&CloseButtonActionCallback, this);
-    }
+	m_closeButton   = static_cast<ctp2_Button*>
+	                    (aui_Ldl::GetObject("InfoDialog.CloseButton"));
+	Assert(m_closeButton);
+	if (m_closeButton)
+	{
+		m_closeButton->SetActionFuncAndCookie(&CloseButtonActionCallback, this);
+	}
 }
 
 InfoWindow::~InfoWindow(void)
 {
-    delete m_ranking_tab;
-    delete m_score_tab;
-    delete m_wonder_tab;
+	delete m_ranking_tab;
+	delete m_score_tab;
+	delete m_wonder_tab;
 
-    if (m_window)
-    {
-        aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
-    }
+	if (m_window)
+	{
+		aui_Ldl::DeleteHierarchyFromRoot("InfoDialog");
+	}
 }
 
 void InfoWindow::SelectRankingTab(void)
@@ -155,15 +155,15 @@ void InfoWindow::Hide()
 void InfoWindow::CloseButtonActionCallback
 (
     aui_Control *   control,
-	uint32          action,
+    uint32          action,
     uint32          data,
-    void *          cookie
+    Cookie          cookie
 )
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<InfoWindow*>(cookie)->Hide();
+	static_cast<InfoWindow*>(cookie.m_voidPtr)->Hide();
 }
 
 //----------------------------------------------------------------------------
@@ -184,5 +184,5 @@ void InfoWindow::CloseButtonActionCallback
 void InfoWindow::Cleanup(void)
 {
 	Close();
-    allocated::clear(s_InfoWindow);
+	allocated::clear(s_InfoWindow);
 }

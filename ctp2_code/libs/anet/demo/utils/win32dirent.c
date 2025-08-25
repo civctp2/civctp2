@@ -44,14 +44,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define DIR_INTERNAL
 /* POSIX-style directory structure */
 typedef struct {
-	unsigned		d_loc;
+	uint32		d_loc;
 	struct dirent	d_buf;
 	char			d_name[MAX_PATH];
 } DIR;
 
 #include "win32dirent.h"
 
-int dirent_errno;
+sint32 dirent_errno;
 
 /*------------------------------------------------------------------------
  Open a directory <dir> for reading at the first entry.
@@ -65,8 +65,8 @@ int dirent_errno;
 DIR *opendir(const char *dir)
 {
 	DIR *dirp;
-	int len;
-	int i;
+	sint32 len;
+	sint32 i;
 	char *p;
 
 	if (NULL == (dirp = (DIR *)malloc(sizeof(DIR)))) {
@@ -116,7 +116,7 @@ DIR *opendir(const char *dir)
  dirent_errno is set to 0 on success or to one of the following on error:
 	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
-int closedir(DIR *dirp)
+sint32 closedir(DIR *dirp)
 {
 	if (NULL == dirp) {
 		dirent_errno = EINVAL;
@@ -137,7 +137,7 @@ int closedir(DIR *dirp)
  dirent_errno is set to 0 on success or to one of the following on error:
 	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
-int rewinddir(DIR *dirp)
+sint32 rewinddir(DIR *dirp)
 {
 	if (NULL == dirp) {
 		dirent_errno = EINVAL;
@@ -158,9 +158,9 @@ int rewinddir(DIR *dirp)
 	EINVAL - Bad dirp, probably not opened or already closed.
 	EOF - Attempt to seek past end of directory.
 ------------------------------------------------------------------------*/
-int seekdir(DIR *dirp, int offset)
+sint32 seekdir(DIR *dirp, sint32 offset)
 {
-	int i;
+	sint32 i;
 
 	if (NULL == dirp) {
 		dirent_errno = EINVAL;
@@ -182,7 +182,7 @@ int seekdir(DIR *dirp, int offset)
  dirent_errno is set to 0 on success or to one of the following on error:
 	EINVAL - Bad dirp, probably not opened or already closed.
 ------------------------------------------------------------------------*/
-int telldir(DIR *dirp)
+sint32 telldir(DIR *dirp)
 {
 	if (NULL == dirp) {
 		dirent_errno = EINVAL;
@@ -233,14 +233,14 @@ struct dirent *readdir(DIR *dirp)
 	EINVAL - Bad args, probably null.
 	EOF - Attempt to seek past end of directory.
 ------------------------------------------------------------------------*/
-int scandir(const char *dir,
+sint32 scandir(const char *dir,
 		struct dirent ***namelist,
-		int (*selector)(struct dirent *),
-		int (__cdecl *cmp)(const struct dirent **, const struct dirent **))
+		sint32 (*selector)(struct dirent *),
+		sint32 (__cdecl *cmp)(const struct dirent **, const struct dirent **))
 {
 	DIR *dirp;
-	int n_match = 0;
-	int n = 0;
+	sint32 n_match = 0;
+	sint32 n = 0;
 	struct dirent *direntp;
 
 	if ((NULL == dir) || (NULL == namelist) || (NULL == cmp)) {
@@ -255,7 +255,7 @@ printf("scandir: opendir(%s) err:%d\n", dir, dirent_errno);
 printf("scandir: opened %s\n", dirp->d_name);
 	while (NULL != (direntp = readdir(dirp))) {
 		if (NULL == direntp) {
-			int temperr = dirent_errno;
+			sint32 temperr = dirent_errno;
 printf("scandir: readdir(%s[%d]) err:%d\n", dirp->d_name, n, dirent_errno);
 			closedir(dirp);
 			dirent_errno = temperr;
@@ -269,7 +269,7 @@ printf("scandir: readdir(%s[%d]) err:%d\n", dirp->d_name, n, dirent_errno);
 				temp = (struct dirent **)realloc(*namelist,
 					(n_match + 1)*sizeof(struct dirent *));
 			if (NULL == temp) {
-				int i;
+				sint32 i;
 
 printf("scandir: realloc(list[%d]) failed\n", n_match);
 				/* free anything we have so far */
@@ -286,7 +286,7 @@ printf("scandir: realloc(list[%d]) failed\n", n_match);
 			(*namelist)[n_match] =
 				(struct dirent *)malloc(sizeof(struct dirent));
 			if (NULL == (*namelist)[n_match]) {
-				int i;
+				sint32 i;
 
 printf("scandir: malloc(list[%d]->dirent) failed\n", n_match);
 				/* free anything we have so far */
@@ -313,7 +313,7 @@ printf("scandir: malloc(list[%d]->dirent) failed\n", n_match);
 /*------------------------------------------------------------------------
  Comparison function for alphabetically sorting struct dirent *'s.
 ------------------------------------------------------------------------*/
-int __cdecl alphasort(const struct dirent **a, const struct dirent **b)
+sint32 __cdecl alphasort(const struct dirent **a, const struct dirent **b)
 {
-    return strncmp((*a)->d_name, (*b)->d_name, MAX_PATH);
+	return strncmp((*a)->d_name, (*b)->d_name, MAX_PATH);
 }

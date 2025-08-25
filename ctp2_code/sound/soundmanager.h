@@ -94,12 +94,12 @@ public:
 
 	void AddGameSound(const GAMESOUNDS &sound);
 	void AddSound(const SOUNDTYPE &type, const uint32 &associatedObject,
-                  const sint32 &soundID, sint32 x=0, sint32 y=0);
+	              const sint32 &soundID, sint32 x=0, sint32 y=0);
 	void AddLoopingSound(const SOUNDTYPE &type,
-                         const uint32 &associatedObject,
-                         const sint32 &soundID, sint32 x=0, sint32 y=0);
+	                     const uint32 &associatedObject,
+	                     const sint32 &soundID, sint32 x=0, sint32 y=0);
 	void TerminateLoopingSound(const SOUNDTYPE &type,
-                               const uint32 &associatedObject);
+	                           const uint32 &associatedObject);
 	void TerminateAllLoopingSounds(const SOUNDTYPE &type);
 	void TerminateSounds(const SOUNDTYPE &type);
 	void TerminateAllSounds(void);
@@ -107,12 +107,12 @@ public:
 	void SetVolume(const SOUNDTYPE &type, const uint32 &volume);
 	void SetMasterVolume(const uint32 &volume);
 	CivSound *FindSound(const SOUNDTYPE &type,
-                        const uint32 &associatedObject);
+	                    const uint32 &associatedObject);
 	CivSound *FindLoopingSound(const SOUNDTYPE &type,
-                               const uint32 &associatedObject);
+	                           const uint32 &associatedObject);
 	void SetPosition(const SOUNDTYPE &type,
-                     const uint32 &associatedObject,
-                     const sint32 &x, const sint32 &y);
+	                 const uint32 &associatedObject,
+	                 const sint32 &x, const sint32 &y);
 
 	void		StartMusic();
 	void		StartMusic(const sint32 &trackNum);
@@ -157,7 +157,7 @@ private:
 	BOOL					m_usePlaySound;
 
 #if defined(USE_SDL)
-	BOOL					m_useOggTracks;
+	sint32					m_useOggTracks;
 	Mix_Music				*m_oggTrack;
 #else // USE_SDL
 	HREDBOOK				m_redbook;

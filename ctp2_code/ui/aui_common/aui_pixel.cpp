@@ -107,7 +107,7 @@ AUI_ERRCODE aui_Pixel::Convert24To16Dither(
 
 
 
-            if ((skipb != -1) &&
+            if ((skipb != static_cast<uint32>(-1)) &&
                 (fb == skipb) && (fg == skipg) && (fr == skipr)) {
 
                 sr = fr;
@@ -328,7 +328,7 @@ double **aui_Pixel::MakeEdge(uint8 *image, sint32 width, sint32 height)
 
 void aui_Pixel::SeedRandom(uint32 seed)
 {
-	uint32 dum;
+	uint32 dum; // Needed
 	uint32 j;
 
 	srand(seed);

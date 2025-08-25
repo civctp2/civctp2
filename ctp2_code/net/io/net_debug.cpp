@@ -3,7 +3,7 @@
 #include "net_types.h"
 
 #ifdef _DEBUG
-char* netdebug_NetErrToString(NET_ERR err)
+const char* netdebug_NetErrToString(NET_ERR err)
 {
 	switch(err) {
 	case NET_ERR_OK:	return "NET_ERR_OK";

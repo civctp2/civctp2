@@ -232,26 +232,26 @@ void optionsscreen_Cleanup()
 
 
 
-void optionsscreen_graphicsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_graphicsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	graphicsscreen_displayMyWindow();
 
 }
-void optionsscreen_soundPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_soundPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	soundscreen_displayMyWindow();
 }
-void optionsscreen_musicPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_musicPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	musicscreen_displayMyWindow();
 }
-void optionsscreen_savegamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_savegamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -268,7 +268,7 @@ void optionsscreen_savegamePress(aui_Control *control, uint32 action, uint32 dat
 
 	loadsavescreen_displayMyWindow( type );
 }
-void optionsscreen_savescenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_savescenarioPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -281,51 +281,51 @@ void optionsscreen_savescenarioPress(aui_Control *control, uint32 action, uint32
 	loadsavescreen_displayMyWindow( type );
 }
 
-void optionsscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	optionwarningscreen_displayMyWindow(OWS_LOAD);
 }
-void optionsscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	optionwarningscreen_displayMyWindow(OWS_NEWGAME);
 }
-void optionsscreen_restartPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_restartPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	optionwarningscreen_displayMyWindow(OWS_RESTART);
 }
-void optionsscreen_quitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_quitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	optionwarningscreen_displayMyWindow(OWS_QUIT);
 }
-void optionsscreen_quitToShellPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_quitToShellPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	optionwarningscreen_displayMyWindow(OWS_QUITTOSHELL);
 }
-void optionsscreen_returnPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_returnPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	optionsscreen_removeMyWindow(action);
 }
-void optionsscreen_gameplayPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_gameplayPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	gameplayoptions_displayMyWindow();
 }
 
-void optionsscreen_AcceptWarningCallback(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_AcceptWarningCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 	g_launchIntoCheatMode = TRUE;
 	ScenarioEditor::Display();
 }
 
-void optionsscreen_ConfirmScoreWarning(bool confirm, void *data)
+void optionsscreen_ConfirmScoreWarning(bool confirm, Cookie data)
 {
 	if(confirm) {
 		g_theGameSettings->SetKeepScore(FALSE);
@@ -333,7 +333,7 @@ void optionsscreen_ConfirmScoreWarning(bool confirm, void *data)
 	}
 }
 
-void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -354,14 +354,14 @@ void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 da
 	}
 }
 
-void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	open_KeyMappingScreen();
 }
 
-void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

@@ -32,11 +32,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if defined(SPARC) || defined(__POWERPC__)
 #define SWAB(v)		(v)
 #else
-#define SWAB(v)		((unsigned short) ((v) << 8) | (unsigned char) ((v) >> 8))
+#define SWAB(v)		((uint16) ((v) << 8) | (uint8) ((v) >> 8))
 #endif
 
 /* Need to simulate this function for tca_freeze/thaw to compile */
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -53,14 +53,14 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
           dp_RES_BAD if bad args, i.e. input contains an extended (> 127)
 		              ascii char or *in or *out is NULL;
 --------------------------------------------------------------------------*/
-dp_result_t tcapw_ascii2ucs2(tcapw_t *tcapw, const char *in, short *out, int maxchars)
+dp_result_t tcapw_ascii2ucs2(tcapw_t *tcapw, const char *in, sint16 *out, sint32 maxchars)
 {
-	int i;
+	sint32 i;
 
 	if (in == NULL || out == NULL)
 		return dp_RES_BAD;
 
-	memset(out, 0, maxchars * sizeof(short));
+	memset(out, 0, maxchars * sizeof(sint16));
 	for(i=0; in[i] && i < maxchars; i++) {
 		if (in[i] & 0x80)
 			return dp_RES_BAD;
@@ -79,9 +79,9 @@ dp_result_t tcapw_ascii2ucs2(tcapw_t *tcapw, const char *in, short *out, int max
   Returns length of output string on success,
           -1 on error.
 --------------------------------------------------------------------------*/
-int tcapw_ucs22ascii(tcapw_t *tcapw, const short *in, char *out, int maxchars)
+sint32 tcapw_ucs22ascii(tcapw_t *tcapw, const sint16 *in, char *out, sint32 maxchars)
 {
-	int i;
+	sint32 i;
 
 	if (in == NULL || out == NULL)
 		return -1;
@@ -107,7 +107,7 @@ void test_tcapw()
 	tcapw_uname_t uname1, uname2, uname3;
 	tcapw_uid_t uid1, uid2;
 	char email[] = "user@host";
-	int flags = 0;
+	sint32 flags = 0;
 
 	char namebuf[256];
 	dp_result_t res;
@@ -262,7 +262,7 @@ void test_tcapw()
 	assert(!res);
 
 	{
-		int i;
+		sint32 i;
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
@@ -296,7 +296,7 @@ void test_tcapw()
 	assert(!res);
 
 	{
-		int i;
+		sint32 i;
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
@@ -348,7 +348,7 @@ void test_tcapw()
 	assert(res);
 
 	{
-		int i;
+		sint32 i;
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
@@ -380,9 +380,9 @@ void test_tca()
 	tca_response_t response;
 	tca_pwchange_t pwchange;
 	tca_newuser_t newuser;
-	int pktlen;
+	sint32 pktlen;
 	char email[] = "user@host";
-	int flags = 0;
+	sint32 flags = 0;
 
 	/* Assume a database named pw.dat has been created
 	 * with user2/pass2b and user3/pass3.
@@ -401,7 +401,7 @@ void test_tca()
 	assert(tcapw);
 
 	{
-		int i;
+		sint32 i;
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
@@ -430,10 +430,10 @@ void test_tca()
 	DPRINT(("Testing 1 - generating challenge\n"));
 	tca_challenge_generate(tca, &challenge);
 	{
-		int i;
+		sint32 i;
 		printf("challenge:");
 		for (i=0; i<tca_LEN_CHALLENGE; i++)
-			printf(" %2.2x", (unsigned char)challenge.challenge[i]);
+			printf(" %2.2x", (uint8)challenge.challenge[i]);
 		printf("\n");
 	}
 	res = tcapw_password_hash(tcac->tdb, &pw, &hpw);
@@ -577,7 +577,7 @@ void test_tca()
 
 	DPRINT(("Added user4, failed (correctly) to add user5\n"));
 	{
-		int i;
+		sint32 i;
 		assoctab_item_t *a;
 		tcapw_entry_t *p;
 		char namebuf[tcapw_LEN_USERNAME];
@@ -605,7 +605,7 @@ void test_tca()
 
 void test_tca_speed()
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 	tca_t *tca, *tcac;
 	char name[tcapw_LEN_USERNAME];
@@ -616,7 +616,7 @@ void test_tca_speed()
 	tcapw_uid_t uid;
 	tca_challenge_t challenge;
 	tca_response_t response;
-	int pktlen;
+	sint32 pktlen;
 
 	tca = tca_create();
 	tcac = tca_create();
@@ -781,7 +781,7 @@ void test_tca_speed()
 	assert(!err);
 }
 
-int main()
+sint32 main()
 {
 	test_tcapw();
 	test_tca();

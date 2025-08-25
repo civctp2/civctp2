@@ -35,6 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <arpa/inet.h>
 #include <netdb.h>
 #include <assert.h>
+#include <stdlib.h>
 
 #include "anet.h"
 #include "bhttp.h"
@@ -47,10 +48,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #if defined(_DEBUG) || defined(DPRNT)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 8; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -60,7 +61,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 
 static void bhttp_assertValid(bhttp_t *bhttp)
 {
-	int h, n = 0;
+	sint32 h, n = 0;
 	for (h = 0; h <= bhttp->sockmax; h++)
 		if (FD_ISSET(h, &bhttp->rfds) || FD_ISSET(h, &bhttp->wfds))
 			n++;
@@ -78,14 +79,14 @@ static void bhttp_assertValid(bhttp_t *bhttp)
  Create an instance of the bhttp module, listening on port for new
  connections.
 ------------------------------------------------------------------------*/
-bhttp_t *bhttp_create(unsigned short port, bhttp_url2buf_t url2buf_cb, void *url2buf_context)
+bhttp_t *bhttp_create(uint16 port, bhttp_url2buf_t url2buf_cb, void *url2buf_context)
 {
 	clock_t now = eclock();
 	bhttp_t *bhttp;
 	struct protoent *pe;
 	struct sockaddr_in addr;
-	int sockin;
-	int flags;
+	sint32 sockin;
+	sint32 flags;
 
 	if (!url2buf_cb)
 		return NULL;
@@ -147,7 +148,7 @@ bhttp_t *bhttp_create(unsigned short port, bhttp_url2buf_t url2buf_cb, void *url
 ------------------------------------------------------------------------*/
 void bhttp_destroy(bhttp_t *bhttp)
 {
-	int i;
+	sint32 i;
 
 	if (!bhttp)
 		return;
@@ -166,7 +167,7 @@ void bhttp_destroy(bhttp_t *bhttp)
  Returns 0 on success,
  		 -1 on failure.
 ------------------------------------------------------------------------*/
-static int bhttp_handleOpened(bhttp_t *bhttp, int h)
+static sint32 bhttp_handleOpened(bhttp_t *bhttp, sint32 h)
 {
 	clock_t now = eclock();
 	bhttp_conn_t *pc;
@@ -198,7 +199,7 @@ static int bhttp_handleOpened(bhttp_t *bhttp, int h)
 static char*
 bufgets( bhttp_conn_t *pc )
 {
-	int i;
+	sint32 i;
 	char c;
 
 	for ( i = pc->ipos; pc->ipos < pc->ilen; ++pc->ipos) {
@@ -221,7 +222,7 @@ bufgets( bhttp_conn_t *pc )
  Parse the http header already received for this connection.
  Return 0 on success.
 ------------------------------------------------------------------------*/
-static int parse_request(bhttp_conn_t *pc)
+static sint32 parse_request(bhttp_conn_t *pc)
 {
 	char *line;
 
@@ -244,11 +245,11 @@ static int parse_request(bhttp_conn_t *pc)
  		 -1 on error caller should close the handle and call handleClosed,
  On completion, the length read is returned.
 ------------------------------------------------------------------------*/
-static int bhttp_readData(bhttp_conn_t *pc, int h)
+static sint32 bhttp_readData(bhttp_conn_t *pc, sint32 h)
 {
-	int nRecvd;
-	int nToRecv;
-	int old_istate;
+	sint32 nRecvd;
+	sint32 nToRecv;
+	sint32 old_istate;
 
 	if (!pc || (h == -1))
 		return -1;
@@ -370,10 +371,10 @@ static int bhttp_readData(bhttp_conn_t *pc, int h)
  On completion, the length written is returned and the files descriptor
  is removed from wfds.
 ------------------------------------------------------------------------*/
-static int bhttp_writeData(bhttp_conn_t *pc, int h)
+static sint32 bhttp_writeData(bhttp_conn_t *pc, sint32 h)
 {
-	int nWritten;
-	int nToWrite;
+	sint32 nWritten;
+	sint32 nToWrite;
 
 	if (!pc || (h == -1))
 		return -1;
@@ -417,7 +418,7 @@ static int bhttp_writeData(bhttp_conn_t *pc, int h)
 /*------------------------------------------------------------------------
  Clean up any data associated with the given handle.
 ------------------------------------------------------------------------*/
-static void bhttp_handleClosed(bhttp_t *bhttp, int h)
+static void bhttp_handleClosed(bhttp_t *bhttp, sint32 h)
 {
 	if (!bhttp || (h == -1)) {
 		DPRINT(("bhttp_handleClosed: bad params (h:%d)\n", h));
@@ -443,9 +444,9 @@ static void bhttp_handleClosed(bhttp_t *bhttp, int h)
  into *wfds.
  Returns the maximum socket set.
 ------------------------------------------------------------------------*/
-int bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds)
+sint32 bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds)
 {
-	int sock;
+	sint32 sock;
 
 	FD_SET(bhttp->sockin, rfds);	/* always listen for new connections */
 	DPRINT(("bhttp_getfds: checking socks:%d", bhttp->sockin));
@@ -468,7 +469,7 @@ int bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds)
 /*------------------------------------------------------------------------
  Return descriptive name for given http result code.
 ------------------------------------------------------------------------*/
-static const char *httpResult2a(int result)
+static const char *httpResult2a(sint32 result)
 {
 	switch (result) {
 	case 200: return "OK";
@@ -485,7 +486,7 @@ static const char *httpResult2a(int result)
  Returns 0 on success.
  Returns -1 on failure.
 ------------------------------------------------------------------------*/
-static int bhttp_formatOutputBuffer(bhttp_t *bhttp, int h, int status, char *type, char *content)
+static sint32 bhttp_formatOutputBuffer(bhttp_t *bhttp, sint32 h, sint32 status, char *type, char *content)
 {
 	bhttp_conn_t *pc;
 	time_t now;
@@ -511,7 +512,7 @@ static int bhttp_formatOutputBuffer(bhttp_t *bhttp, int h, int status, char *typ
         modbuf );
 	if (content) {
 		/* Terminate the http header with a blank line, follow it with the content for this URL */
-		pc->olen += sprintf(pc->obuf+pc->olen, "Content-length: %d\r\n\r\n%s", strlen(content), content);
+		pc->olen += sprintf(pc->obuf+pc->olen, "Content-length: %zu\r\n\r\n%s", strlen(content), content);
 	} else {
 		/* Terminate the http header with a blank line */
 		pc->olen += sprintf(pc->obuf+pc->olen, "\r\n");
@@ -532,11 +533,11 @@ static int bhttp_formatOutputBuffer(bhttp_t *bhttp, int h, int status, char *typ
  Returns -1 on error; detailed error message is printed to log file if
  this is a debug build.
 ------------------------------------------------------------------------*/
-int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
+sint32 bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, sint32 nsocks)
 {
 	clock_t now;
-	int sock;
-	int i;
+	sint32 sock;
+	sint32 i;
 
 	if (!bhttp || !bhttp->conns)
 		return -1;
@@ -545,15 +546,15 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 	bhttp->cursock = 0;	/* FIXME: should be min(socks) */
 	bhttp->nsocks = nsocks;
 	if (FD_ISSET(bhttp->sockin, rfds) && (bhttp->nsocks > 0)) {
-		int newsock;
+		sint32 newsock;
 		struct sockaddr_in client_addr;
-		int len = sizeof(struct sockaddr_in);
+		sint32 len = sizeof(struct sockaddr_in);
 
 		newsock = accept(bhttp->sockin, (struct sockaddr *)&client_addr,&len);
 		if (newsock == -1) {
 			DPRINT(("bhttp_poll: accept error:%d on sock:%d\n", errno, bhttp->sockin));
 		} else {
-			int flags;
+			sint32 flags;
 
 #ifdef VERBOSE
 			DPRINT(("bhttp_poll: accepting connection from %s on sock:%d\n", inet_ntoa(client_addr.sin_addr), newsock));
@@ -574,9 +575,9 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 	}
 
 	while ((bhttp->cursock <= bhttp->sockmax) && (bhttp->nsocks > 0)) {
-		int used = FALSE;
-		int len;
-		int h = bhttp->cursock;
+		sint32 used = FALSE;
+		sint32 len;
+		sint32 h = bhttp->cursock;
 		bhttp_conn_t *pc = NULL;
 
 		if (FD_ISSET(h, rfds)
@@ -595,7 +596,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 				/* silently fails */
 			} else if (len > 0) {
 				char buf[1024];
-				int buflen;
+				sint32 buflen;
 				bhttp_url2buf_result_t urlResult;
 #ifdef VERBOSE
 				DPRINT(("bhttp_poll: h:%d finished receiving data\n", h));
@@ -647,7 +648,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 	}
 
 	now = eclock();
-	if ((long)(now - bhttp->t_last_poll) < 10 * ECLOCKS_PER_SEC)
+	if ((sint32)(now - bhttp->t_last_poll) < 10 * ECLOCKS_PER_SEC)
 		return 0;	/* don't poll more than once every 10s */
 	bhttp->t_last_poll = now;
 #ifdef VERBOSE
@@ -660,7 +661,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 	for (i = bhttp->conns->n_used - 1; i >= 0; i--) {
 		assoctab_item_t *pi;
 		bhttp_conn_t *pc;
-		int h;
+		sint32 h;
  		pi = assoctab_getkey(bhttp->conns, i);
 		if (!pi) {
 			DPRINT(("bhttp_poll: assoctab_getkey(%d) returns NULL?\n", i));
@@ -672,7 +673,7 @@ int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks)
 			DPRINT(("bhttp_poll: conns[%d] == NULL?\n", i));
 			return -1;
 		}
-		if ((long)(now - pc->t_connect) > bhttp_CONN_TIMEOUT * ECLOCKS_PER_SEC) {
+		if ((sint32)(now - pc->t_connect) > bhttp_CONN_TIMEOUT * ECLOCKS_PER_SEC) {
 			DPRINT(("bhttp_poll: h:%d timed out\n", h));
 			bhttp_handleClosed(bhttp, h);
 			if (-1 == close(h)) {

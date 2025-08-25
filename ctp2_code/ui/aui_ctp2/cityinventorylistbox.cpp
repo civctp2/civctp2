@@ -26,7 +26,7 @@
 // Modifications from the original Activision code:
 //
 // - Made government modified for units work here even if the class is not
-//   used. (July 29th 2006 Martin Gühmann)
+//   used. (July 29th 2006 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -69,9 +69,9 @@ extern	DebugWindow			*g_debugWindow;
 
 CityInventoryListBox::CityInventoryListBox(AUI_ERRCODE *retval,
 			uint32 id,
-			MBCHAR *ldlBlock,
+			const MBCHAR *ldlBlock,
 			ControlActionCallback *ActionFunc,
-			void *cookie )
+			Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -87,9 +87,9 @@ CityInventoryListBox::CityInventoryListBox (
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
+		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc,
-		void *cookie):
+		Cookie cookie):
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
 	C3ListBox(retval, id, x, y, width, height, pattern, ActionFunc, cookie)
@@ -101,7 +101,7 @@ CityInventoryListBox::~CityInventoryListBox()
 {
 }
 
-AUI_ERRCODE CityInventoryListBox::InitCommon(MBCHAR *ldlBlock)
+AUI_ERRCODE CityInventoryListBox::InitCommon(const MBCHAR *ldlBlock)
 {
 	m_buildMode = 0;
 	return AUI_ERRCODE_OK;
@@ -351,15 +351,12 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 		bn = bq->GetHead();
 	}
 
-	if (text) {
-
-
-		sprintf(str,"");
-
+	if (text)
+	{
+		str[0] = '\0';
 	}
-
-	else if (bn) {
-
+	else if (bn)
+	{
 		sint32 govType   = g_player[unit.GetOwner()]->GetGovernmentType();
 		sint32 completed = bq->GetPercentCompleted(unit.GetData()->GetCityData()->GetStoredCityProduction());
 
@@ -371,13 +368,10 @@ sint32 CityInventoryListBox::UpdateImage( const Unit &unit )
 			sprintf(str, "%s", g_theStringDB->GetNameStr(g_theUnitDB->Get(bn->m_type, govType)->m_name));
 
 		}
-
 	}
-
-	else {
-
-		sprintf(str,"");
-
+	else
+	{
+		str[0] = '\0';
 	}
 
 	return 0;

@@ -80,12 +80,12 @@ public:
 	);
 
 protected:
-	int chunk_size;
-	int initial_size;
-	int max_chunks;
-	int chunks;
-
 	std::vector<LIST_DATA_TYPE> data_list;
+
+	int chunk_size;
+	int max_chunks;
+	int initial_size;
+	int chunks;
 };
 
 template <typename LIST_DATA_TYPE>

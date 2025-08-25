@@ -47,12 +47,12 @@ typedef struct {
 	/* private: */
 	/* Input buffer */
 	char ibuf[bhttp_IBUF_LEN];
-	int ipos;			/* current index in buf */
+	sint32 ipos;			/* current index in buf */
 	size_t ilen;		/* length of data expected or zero if not read yet */
-	int istate;			/* bhttp_ISTATE_* */
+	sint32 istate;			/* bhttp_ISTATE_* */
 	/* Output buffer */
 	char obuf[bhttp_OBUF_LEN];
-	int opos;			/* current index in obuf */
+	sint32 opos;			/* current index in obuf */
 	size_t olen;		/* Total length of data to send */
 	/* Misc */
 	clock_t t_connect;	/* time this handle connected */
@@ -63,23 +63,23 @@ typedef struct {
 
 /* Structure for callback to pass back the results of fetching a given URL */
 typedef struct {
-	int httpResultCode;
+	sint32 httpResultCode;
 	char mimeType[64];
 } bhttp_url2buf_result_t;
 
-typedef int (*bhttp_url2buf_t)(char *context, const char *url, char *buf, int buflen, bhttp_url2buf_result_t *result);
+typedef sint32 (*bhttp_url2buf_t)(char *context, const char *url, char *buf, sint32 buflen, bhttp_url2buf_result_t *result);
 
 /* Instance data for bhttp module */
 typedef struct {
 	/* private: */
-	int sockin;				/* socket on which to listen for connections */
+	sint32 sockin;				/* socket on which to listen for connections */
 	fd_set rfds;			/* fd_set of all currently listening sockets */
 	fd_set wfds;			/* fd_set of all currently writing sockets */
-	int sockmax;			/* maximum socket in fds */
+	sint32 sockmax;			/* maximum socket in fds */
 	assoctab_t *conns;		/* bhttp_conn_t's indexed by sockfd */
 	clock_t t_last_poll;	/* eclock() of last poll */
-	int cursock;			/* next sock to check in poll */
-	int nsocks;				/* number of socks to check in poll */
+	sint32 cursock;			/* next sock to check in poll */
+	sint32 nsocks;				/* number of socks to check in poll */
 	bhttp_url2buf_t url2buf_cb;	/* Get content for URL */
 	void *url2buf_context;
 } bhttp_t;
@@ -88,7 +88,7 @@ typedef struct {
  Create an instance of the bhttp module, listening on port for new
  connections.
 ------------------------------------------------------------------------*/
-bhttp_t *bhttp_create(unsigned short port, bhttp_url2buf_t url2buf_cb, void *url2buf_context);
+bhttp_t *bhttp_create(uint16 port, bhttp_url2buf_t url2buf_cb, void *url2buf_context);
 
 /*------------------------------------------------------------------------
  Destroy an instance of the bhttp module.
@@ -100,7 +100,7 @@ void bhttp_destroy(bhttp_t *bhttp);
  into *wfds.
  Returns the maximum socket set.
 ------------------------------------------------------------------------*/
-int bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds);
+sint32 bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds);
 
 /*------------------------------------------------------------------------
  Handle any new connections, data, or handle state changes.
@@ -114,6 +114,6 @@ int bhttp_getfds(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds);
  Returns -1 on error; detailed error message is printed to log file if
  this is a debug build.
 ------------------------------------------------------------------------*/
-int bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, int nsocks);
+sint32 bhttp_poll(bhttp_t *bhttp, fd_set *rfds, fd_set *wfds, sint32 nsocks);
 
 #endif

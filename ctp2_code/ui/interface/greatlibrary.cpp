@@ -416,7 +416,7 @@ int GreatLibrary::Get_Object_Index_From_Name
 	return index;
 }
 
-void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -425,7 +425,7 @@ void greatlibrary_SetGoalCallback( aui_Control *control, uint32 action, uint32 d
 
 }
 
-void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -440,14 +440,14 @@ void greatlibrary_ExitCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_BackCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Back();
 }
 
-void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_ForwardCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -459,14 +459,14 @@ void GreatLibrary::kh_Close()
 	close_GreatLibrary();
 }
 
-void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_IndexButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_ON ) return;
 
 	if ( g_greatLibrary ) g_greatLibrary->HandleIndexButton( (ctp2_Button *)control );
 }
 
-void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
@@ -477,18 +477,18 @@ void greatlibrary_TechBoxActionCallback( aui_Control *control, uint32 action, ui
 	}
 }
 
-void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_SearchWordActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
 	g_greatLibrary->Force_A_Search();
 }
 
-void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numPreReq = chart ? chart->GetNumPreReq() : 0;
 
 	for ( sint32 i = 0;i < numPreReq;i++ )
@@ -500,11 +500,11 @@ void greatlibrary_PrereqActionCallback( aui_Control *control, uint32 action, uin
 	}
 }
 
-void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numEitherPreReq = chart ? chart->GetNumEitherPreReq() : 0;
 
 	for ( sint32 i = 0;i < numEitherPreReq;i++ )
@@ -516,11 +516,11 @@ void greatlibrary_EitherPrereqActionCallback( aui_Control *control, uint32 actio
 	}
 }
 
-void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void greatlibrary_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numLeadsTo = chart ? chart->GetNumLeadsTo() : 0;
 
 	for ( sint32 i = 0;i < numLeadsTo;i++ )
@@ -537,13 +537,13 @@ void GreatLibrary_Topics_List_Callback
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie
+	Cookie cookie
 )
 {
 	g_greatLibrary->HandleListButton(control, action, data, cookie);
 }
 
-void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) {
 		return;
@@ -552,11 +552,11 @@ void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint3
 	ctp2_Button * sortByAgeButton = static_cast<ctp2_Button*>(control);
 	sortByAgeButton->SetToggleState(!sortByAgeButton->GetToggleState());
 
-	GreatLibrary * greatLibrary = static_cast<GreatLibrary*>(cookie);
+	GreatLibrary * greatLibrary = static_cast<GreatLibrary*>(cookie.m_voidPtr);
 	greatLibrary->UpdateList(greatLibrary->m_listDatabase);
 }
 
-TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, MBCHAR * ldlBlock)
+TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, const MBCHAR * ldlBlock)
 :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -570,7 +570,7 @@ TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database
 	*retval = InitCommonLdl(ldlBlock);
 }
 
-AUI_ERRCODE TechListItem::InitCommonLdl(MBCHAR const * ldlBlock)
+AUI_ERRCODE TechListItem::InitCommonLdl(const MBCHAR * ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf(block, "%s.%s", ldlBlock, "Name");
@@ -731,6 +731,7 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	m_conceptButton          (NULL),
 	m_goodsButton            (NULL),
 	m_ordersButton           (NULL),
+	m_sortByAgeButton        (NULL),
 	m_topics_list            (NULL),
 	m_indexLeft              (NULL),
 	m_indexMiddle            (NULL),
@@ -745,8 +746,7 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 	m_search_results         (),
 	m_history                (),
 	m_history_position       (0),
-	m_window                 (NULL),
-	m_sortByAgeButton        (NULL)
+	m_window                 (NULL)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -808,16 +808,16 @@ GreatLibrary::GreatLibrary(sint32 theMode)
 void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 {
 	m_okButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "OkButton");
-	m_okButton->SetActionFuncAndCookie(greatlibrary_ExitCallback, NULL);
+	m_okButton->SetActionFuncAndCookie(greatlibrary_ExitCallback, nullptr);
 
 	m_backButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "BackButton");
-	m_backButton->SetActionFuncAndCookie(greatlibrary_BackCallback, NULL);
+	m_backButton->SetActionFuncAndCookie(greatlibrary_BackCallback, nullptr);
 
 	m_forwardButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "ForwardButton");
-	m_forwardButton->SetActionFuncAndCookie(greatlibrary_ForwardCallback, NULL);
+	m_forwardButton->SetActionFuncAndCookie(greatlibrary_ForwardCallback, nullptr);
 
 	m_setGoalButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "SetGoalButton");
-	m_setGoalButton->SetActionFuncAndCookie(greatlibrary_SetGoalCallback, NULL);
+	m_setGoalButton->SetActionFuncAndCookie(greatlibrary_SetGoalCallback, nullptr);
 
 	m_categoryText = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Category");
 	m_categoryText->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_UNITS"));
@@ -826,13 +826,13 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	m_searchLabel->SetText(g_theStringDB->GetNameStr("str_ldl_SEARCH_WORD"));
 
 	m_techRequirementsText = (ctp2_HyperTextBox *)aui_Ldl::GetObject(windowBlock, "RequirementsText");
-	m_techRequirementsText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, NULL);
+	m_techRequirementsText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, nullptr);
 
 	m_techVariablesText = (ctp2_HyperTextBox *)aui_Ldl::GetObject(windowBlock, "VariablesText");
-	m_techVariablesText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, NULL);
+	m_techVariablesText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, nullptr);
 
 	m_search_word = (ctp2_TextField *)aui_Ldl::GetObject(windowBlock, "SearchWord");
-	m_search_word->SetActionFuncAndCookie(greatlibrary_SearchWordActionCallback, NULL);
+	m_search_word->SetActionFuncAndCookie(greatlibrary_SearchWordActionCallback, nullptr);
 
 	m_itemLabel = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "ItemLabel");
 
@@ -867,7 +867,7 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	m_string = new aui_StringTable( &errcode, "LibraryStrings");
 
 	ctp2_Static *control = (ctp2_Static *)aui_Ldl::GetObject(windowBlock, "Tabs.TechTreeTab.TabPanel");
-	m_techTree = new Chart(&errcode, aui_UniqueId(), "TechTree", NULL, NULL);
+	m_techTree = new Chart(&errcode, aui_UniqueId(), "TechTree", NULL, nullptr);
 	control->AddChild(m_techTree);
 
 	sint32 i;
@@ -892,13 +892,13 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	m_techTab = (ctp2_Tab *)aui_Ldl::GetObject(windowBlock, "Tabs.TechTreeTab");
 
 	m_techGameplayText = (ctp2_HyperTextBox *)aui_Ldl::GetObject(windowBlock, "Tabs.Gameplay.TabPanel.GameplayText");
-	m_techGameplayText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, NULL);
+	m_techGameplayText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, nullptr);
 
 	m_techHistoricalText = (ctp2_HyperTextBox *)aui_Ldl::GetObject(windowBlock, "Tabs.Historical.TabPanel.HistoricalText");
-	m_techHistoricalText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, NULL);
+	m_techHistoricalText->SetActionFuncAndCookie(greatlibrary_TechBoxActionCallback, nullptr);
 
 	m_topics_list = (ctp2_ListBox *)aui_Ldl::GetObject(windowBlock, "IndexSheet");
-	m_topics_list->SetActionFuncAndCookie( GreatLibrary_Topics_List_Callback, NULL );
+	m_topics_list->SetActionFuncAndCookie( GreatLibrary_Topics_List_Callback, nullptr );
 
     MBCHAR const    controlBlock[]  = "IndexButtonSwitchGroup";
 	ctp2_Static *   switchGroup = static_cast<ctp2_Static *>
@@ -908,46 +908,46 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 	MBCHAR		buttonBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( buttonBlock, "%s.%s", controlBlock, "UnitsButton" );
 	m_unitsButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_unitsButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_unitsButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "GoodsButton" );
 	m_goodsButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_goodsButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_goodsButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "OrdersButton" );
 	m_ordersButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_ordersButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_ordersButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "ImproveButton" );
 	m_improveButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_improveButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_improveButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "WondersButton" );
 	m_wondersButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_wondersButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_wondersButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "AdvancesButton" );
 	m_advancesButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_advancesButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_advancesButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "GovernButton" );
 	m_governButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_governButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_governButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "TerrainButton" );
 	m_terrainButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_terrainButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_terrainButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "TileImpButton" );
 	m_tileimpButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_tileimpButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_tileimpButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr );
 
 	sprintf( buttonBlock, "%s.%s", controlBlock, "ConceptButton" );
 	m_conceptButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, buttonBlock);
-	m_conceptButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, NULL );
+	m_conceptButton->SetActionFuncAndCookie( greatlibrary_IndexButtonCallback, nullptr);
 
 	m_sortByAgeButton = (ctp2_Button *)aui_Ldl::GetObject(windowBlock, "SortByAgeButton");
-	m_sortByAgeButton->SetActionFuncAndCookie(SortByAgeCallback, this);
+	m_sortByAgeButton->SetActionFuncAndCookie(SortByAgeCallback, nullptr);
 	if (m_history.size() == 0)
 	{
 		m_forwardButton->Enable(FALSE);
@@ -957,11 +957,11 @@ void GreatLibrary::Initialize(MBCHAR const * windowBlock)
 
 GreatLibrary::~GreatLibrary( void )
 {
-    delete m_window;
-    delete m_techTree;
-    delete m_string;
+	delete m_window;
+	delete m_techTree;
+	delete m_string;
 #ifdef __AUI_USE_DIRECTX__
-    delete m_techMovie;
+	delete m_techMovie;
 #endif // __AUI_USE_DIRECTX__
 }
 
@@ -998,8 +998,8 @@ void GreatLibrary::Remove(void)
 
 sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_to_history )
 {
-    if (theMode < 0)
-        return 0;
+	if (theMode < 0)
+		return 0;
 
 	m_selectedIndex = theMode;
 
@@ -1085,6 +1085,8 @@ sint32 GreatLibrary::SetLibrary( sint32 theMode, DATABASE theDatabase, bool add_
 		so.AddInt(theMode);
 		enableGoal = true;
 		m_itemLabel->SetText(g_theTerrainImprovementDB->Get(theMode)->GetNameText());
+		break;
+	default:
 		break;
 	}
 
@@ -1672,23 +1674,26 @@ void GreatLibrary::HandleListButton
 	aui_Control *   control,
 	uint32          action,
 	uint32          data,
-	void *          cookie
+	Cookie          cookie
 )
 {
 	if (AUI_LISTBOX_ACTION_SELECT == action)
-    {
+	{
 		ctp2_ListItem *item = (ctp2_ListItem *) m_topics_list->GetSelectedItem();
 
 		if (item)
 		{
-		    int const   index = reinterpret_cast<int>(item->GetUserData());
-		    if (index >= 0) {
-			    SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
-		    } else {
-			    m_topics_list->SelectItem(m_topics_list->GetSelectedItemIndex() + 1);
-		    }
-        }
-    }
+			sint32 const   index = item->GetUserDataSint32();
+			if (index >= 0)
+			{
+				SetLibrary(GetIndexFromAlpha(index, m_listDatabase), m_listDatabase);
+			}
+			else
+			{
+				m_topics_list->SelectItem(m_topics_list->GetSelectedItemIndex() + 1);
+			}
+		}
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -2070,7 +2075,7 @@ void GreatLibrary::Forward()
 void GreatLibrary::Add_Item_To_Topics_List
 (
 	const MBCHAR *name,
-	int index
+	sint32 index
 )
 {
 	Assert(m_topics_list);
@@ -2088,7 +2093,7 @@ void GreatLibrary::Add_Item_To_Topics_List
 
 	box->SetText(name);
 	item->Enable(index != CTPRecord::INDEX_INVALID);
-	item->SetUserData((void *) index);
+	item->SetUserData(index);
 	m_topics_list->AddItem(item);
 }
 

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -94,7 +94,7 @@ sint32 graphicsresscreen_removeMyWindow(uint32 action)
 }
 
 
-void ScreenResListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void ScreenResListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -129,7 +129,7 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 	{
 		s_graphicsResScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_graphicsResScreen, errcode) );
-		if ( !AUI_NEWOK(s_graphicsResScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_graphicsResScreen, errcode) ) return errcode;
 
 		s_graphicsResScreen->Resize(s_graphicsResScreen->Width(),s_graphicsResScreen->Height());
 		s_graphicsResScreen->GrabRegion()->Resize(s_graphicsResScreen->Width(),s_graphicsResScreen->Height());
@@ -140,7 +140,7 @@ AUI_ERRCODE graphicsresscreen_Initialize( void )
 	s_graphicsResScreen->AddClose( graphicsresscreen_acceptPress );
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "ResList" );
-	s_resList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, ScreenResListCallback, NULL);
+	s_resList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, ScreenResListCallback, nullptr);
 	Assert( AUI_NEWOK(s_resList, errcode) );
 	if ( !AUI_NEWOK(s_resList, errcode) ) return errcode;
 
@@ -208,7 +208,7 @@ AUI_ERRCODE graphicsresscreen_Cleanup()
 
 
 
-void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( graphicsresscreen_removeMyWindow(action) ) {
 		if (s_selectedDisplayMode) {
@@ -229,7 +229,7 @@ void graphicsresscreen_acceptPress(aui_Control *control, uint32 action, uint32 d
 
 
 
-ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, MBCHAR *ldlBlock)
+ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -243,7 +243,7 @@ ScreenResListItem::ScreenResListItem(AUI_ERRCODE *retval, CTPDisplayMode *mode, 
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE ScreenResListItem::InitCommonLdl(CTPDisplayMode *mode, MBCHAR *ldlBlock)
+AUI_ERRCODE ScreenResListItem::InitCommonLdl(CTPDisplayMode *mode, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

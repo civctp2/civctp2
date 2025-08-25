@@ -43,21 +43,21 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define strlen					bindery_strlen
 
 #ifdef strlen
-typedef unsigned long			size_t;
+//typedef uint32			size_t; // This should be defined
 #endif /* strlen */
 
 /*
  * Prototypes
  */
-short		call_bindery(Binderypb *pb);
+sint16		call_bindery(Binderypb *pb);
 #ifdef strlen
 size_t		bindery_strlen(char *s);
 #else
 #include <String.h>
 #endif /* strlen */
 
-pascal short
-MacIPXCreateConnectionWithServer(unsigned char *serverAddress)
+pascal sint16
+MacIPXCreateConnectionWithServer(uint8 *serverAddress)
 {
 	Binderypb	bindery_pb;
 
@@ -66,7 +66,7 @@ MacIPXCreateConnectionWithServer(unsigned char *serverAddress)
 	return (call_bindery(&bindery_pb));
 }
 
-pascal short
+pascal sint16
 MacIPXDestroyConnectionWithServer()
 {
 	Binderypb	bindery_pb;
@@ -75,17 +75,17 @@ MacIPXDestroyConnectionWithServer()
 	return (call_bindery(&bindery_pb));
 }
 
-pascal short
-MacIPXReadPropertyValue(char *objectName, unsigned short objectType, char *propertyName,
-					unsigned char segmentNumber, unsigned char *propertyValue,
-					unsigned char *moreSegments, unsigned char *propertyFlags)
+pascal sint16
+MacIPXReadPropertyValue(char *objectName, uint16 objectType, char *propertyName,
+					uint8 segmentNumber, uint8 *propertyValue,
+					uint8 *moreSegments, uint8 *propertyFlags)
 {
 	Binderypb	bindery_pb;
 
 	if ((strlen(objectName) > 47) || (strlen(propertyName) > 15)) {
 		return (ERR_INVALID_NAME);
 	}
-	if (propertyValue == (unsigned char *)0) {
+	if (propertyValue == (uint8 *)0) {
 		return (ERR_INVALID_ARG);
 	}
 	bindery_pb.csCode = BINDERY_READ_PROP_VALUE;
@@ -99,9 +99,9 @@ MacIPXReadPropertyValue(char *objectName, unsigned short objectType, char *prope
 	return (call_bindery(&bindery_pb));
 }
 
-pascal short
-MacIPXScanBinderyObject(char *searchObjectName, unsigned short searchObjectType, long *objectID,
-					char *objectName, unsigned short *objectType, char *objectHasProperties,
+pascal sint16
+MacIPXScanBinderyObject(char *searchObjectName, uint16 searchObjectType, sint32 *objectID,
+					char *objectName, uint16 *objectType, char *objectHasProperties,
 					char *objectFlag, char *objectSecurity)
 {
 	Binderypb	bindery_pb;
@@ -109,7 +109,7 @@ MacIPXScanBinderyObject(char *searchObjectName, unsigned short searchObjectType,
 	if (strlen(searchObjectName) > 47) {
 		return (ERR_INVALID_NAME);
 	}
-	if (objectID == (long *)0) {
+	if (objectID == (sint32 *)0) {
 		return (ERR_INVALID_ARG);
 	}
 	bindery_pb.csCode = BINDERY_SCAN_BINDERY_OBJECT;
@@ -124,17 +124,17 @@ MacIPXScanBinderyObject(char *searchObjectName, unsigned short searchObjectType,
 	return (call_bindery(&bindery_pb));
 }
 
-short
+sint16
 call_bindery(Binderypb *pb)
 {
-	short			status;
+	sint16			status;
 	Binderypb		bindery_pb;
 	char			binderyDrvrName[11];
 
 	binderyDrvrName[0] = 0x0A;
 	binderyDrvrName[1] = '.';
-	*(long *)&binderyDrvrName[2] = 'NVL_';
-	*(long *)&binderyDrvrName[6] = 'BNDR';
+	*(sint32 *)&binderyDrvrName[2] = 'NVL_';
+	*(sint32 *)&binderyDrvrName[6] = 'BNDR';
 	binderyDrvrName[10] = 'Y';
 	bindery_pb.ioNamePtr = binderyDrvrName;
 	bindery_pb.csCode = 0; /* We're actually setting the read/write permission here */

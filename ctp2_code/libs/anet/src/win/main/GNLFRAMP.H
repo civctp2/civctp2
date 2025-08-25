@@ -14,11 +14,13 @@
 #define gnlframp_h
 
 #include "commlib.h"
+#include "types.h"
+
 /*---------------------------------------------------------------------------
  Send a ramp and our ID to the other system, get their ramp and ID.
  print any differences in the ramp to both DPRINT and fdprint.
  If session ID's are the same, print warning to both DPRINT and fdprint.
 ---------------------------------------------------------------------------*/
-void exchange_ramp(PORT *port, long sessionID);
+void exchange_ramp(PORT *port, sint32 sessionID);
 
 #endif

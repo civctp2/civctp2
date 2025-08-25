@@ -76,26 +76,26 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*
  * Globals
  */
-static short			MacIPXDrvrRefNum;
+static sint16			MacIPXDrvrRefNum;
 #endif
 
 /*
  * Prototypes
  */
-short					find_ipx_drvr(short *drvrRefNum);
+sint16					find_ipx_drvr(sint16 *drvrRefNum);
 #ifdef CANNOT_USE_GLOBALS
-extern void				Ipx_set_drvr_ref_num(long drvrRefNum);
-extern long				Ipx_get_drvr_ref_num(void);
+extern void				Ipx_set_drvr_ref_num(sint32 drvrRefNum);
+extern sint32				Ipx_get_drvr_ref_num(void);
 #endif
 #if !defined(powerc) && !defined (__powerc)
-extern unsigned long	IpxGetRegisterA5(void);
+extern uint32	IpxGetRegisterA5(void);
 #endif
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxCancelEvent(unsigned short socketNetOrder, IPX_ECB *ecb)
+IpxCancelEvent(uint16 socketNetOrder, IPX_ECB *ecb)
 #else
-IpxCancelEvent(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
+IpxCancelEvent(uint16 socketNetOrder, IPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
@@ -127,11 +127,11 @@ IpxCancelEvent(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxCheckSocket(unsigned short socketNetOrder)
+IpxCheckSocket(uint16 socketNetOrder)
 #else
-IpxCheckSocket(unsigned short socketNetOrder, short drvRefNum)
+IpxCheckSocket(uint16 socketNetOrder, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
@@ -145,11 +145,11 @@ IpxCheckSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxCloseSocket(unsigned short socketNetOrder)
+IpxCloseSocket(uint16 socketNetOrder)
 #else
-IpxCloseSocket(unsigned short socketNetOrder, short drvRefNum)
+IpxCloseSocket(uint16 socketNetOrder, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
@@ -163,16 +163,16 @@ IpxCloseSocket(unsigned short socketNetOrder, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetInfo(IPX_CONFIG_INFO *buffer, unsigned long *buflen)
+IpxGetInfo(IPX_CONFIG_INFO *buffer, uint32 *buflen)
 #else
-IpxGetInfo(IPX_CONFIG_INFO *buffer, unsigned long *buflen, short drvRefNum)
+IpxGetInfo(IPX_CONFIG_INFO *buffer, uint32 *buflen, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
 
-	if ((buffer == (IPX_CONFIG_INFO *)0) || (buflen == (unsigned long *)0)) {
+	if ((buffer == (IPX_CONFIG_INFO *)0) || (buflen == (uint32 *)0)) {
 		return (IPX_BAD_PARAMETER);
 	}
 	ipx_pb.csCode = IPXGETINFO;
@@ -185,16 +185,16 @@ IpxGetInfo(IPX_CONFIG_INFO *buffer, unsigned long *buflen, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetInternetworkAddress(unsigned char *networkAddress)
+IpxGetInternetworkAddress(uint8 *networkAddress)
 #else
-IpxGetInternetworkAddress(unsigned char *networkAddress, short drvRefNum)
+IpxGetInternetworkAddress(uint8 *networkAddress, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
 
-	if (networkAddress == (unsigned char *)0) {
+	if (networkAddress == (uint8 *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
 	ipx_pb.csCode = IPXGETINTERNETWORKADDRESS;
@@ -206,18 +206,18 @@ IpxGetInternetworkAddress(unsigned char *networkAddress, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetLocalTarget(unsigned char *networkAddress, IPX_ECB *ecb,
-					unsigned long *transportTime)
+IpxGetLocalTarget(uint8 *networkAddress, IPX_ECB *ecb,
+					uint32 *transportTime)
 #else
-IpxGetLocalTarget(unsigned char *networkAddress, IPX_ECB *ecb,
-					unsigned long *transportTime, short drvRefNum)
+IpxGetLocalTarget(uint8 *networkAddress, IPX_ECB *ecb,
+					uint32 *transportTime, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
 
-	if (networkAddress == (unsigned char *)0) {
+	if (networkAddress == (uint8 *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
 	/*
@@ -239,19 +239,19 @@ IpxGetLocalTarget(unsigned char *networkAddress, IPX_ECB *ecb,
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetLocalTargetAsynch(unsigned char *networkAddress, IPX_ECB *ecb,
-						IPX_ECB *recv_ecb, unsigned long *transportTime)
+IpxGetLocalTargetAsynch(uint8 *networkAddress, IPX_ECB *ecb,
+						IPX_ECB *recv_ecb, uint32 *transportTime)
 #else
-IpxGetLocalTargetAsynch(unsigned char *networkAddress, IPX_ECB *ecb,
-						IPX_ECB *recv_ecb, unsigned long *transportTime, short drvRefNum)
+IpxGetLocalTargetAsynch(uint8 *networkAddress, IPX_ECB *ecb,
+						IPX_ECB *recv_ecb, uint32 *transportTime, sint16 drvRefNum)
 #endif
 {
 	IPXpb		*ipx_pb;
-	short		status;
+	sint16		status;
 
-	if (networkAddress == (unsigned char *)0) {
+	if (networkAddress == (uint8 *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
 	/*
@@ -296,16 +296,16 @@ IpxGetLocalTargetAsynch(unsigned char *networkAddress, IPX_ECB *ecb,
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetMaxPacketSize(unsigned long *maxPktSize)
+IpxGetMaxPacketSize(uint32 *maxPktSize)
 #else
-IpxGetMaxPacketSize(unsigned long *maxPktSize, short drvRefNum)
+IpxGetMaxPacketSize(uint32 *maxPktSize, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
 
-	if (maxPktSize == (unsigned long *)0) {
+	if (maxPktSize == (uint32 *)0) {
 		return (IPX_BAD_PARAMETER);
 	}
 	ipx_pb.csCode = IPXGETMAXPKTSIZE;
@@ -317,20 +317,20 @@ IpxGetMaxPacketSize(unsigned long *maxPktSize, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetStatistics(IPX_STATS *buffer, unsigned long *buflen)
+IpxGetStatistics(IPX_STATS *buffer, uint32 *buflen)
 #else
-IpxGetStatistics(IPX_STATS *buffer, unsigned long *buflen, short drvRefNum)
+IpxGetStatistics(IPX_STATS *buffer, uint32 *buflen, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
 
-	if ((buffer == (IPX_STATS *)0) || (buflen == (unsigned long *)0)) {
+	if ((buffer == (IPX_STATS *)0) || (buflen == (uint32 *)0)) {
 		return (IPX_BAD_PARAMETER);
 	}
 	ipx_pb.csCode = IPXGETSTATISTICS;
-	ipx_pb.csParams.getStats.buffer = (unsigned char *)buffer;
+	ipx_pb.csParams.getStats.buffer = (uint8 *)buffer;
 	ipx_pb.csParams.getStats.buflen = buflen;
 #ifndef	COMPONENT_BUILD
 	return (call_ipx(&ipx_pb, FALSE));
@@ -339,13 +339,13 @@ IpxGetStatistics(IPX_STATS *buffer, unsigned long *buflen, short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion,
-				unsigned short *revision)
+IpxGetVersion(uint8 *majorVersion, uint8 *minorVersion,
+				uint16 *revision)
 #else
-IpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion,
-				unsigned short *revision, short drvRefNum)
+IpxGetVersion(uint8 *majorVersion, uint8 *minorVersion,
+				uint16 *revision, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
@@ -365,20 +365,20 @@ IpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion,
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
 IpxInitialize()
 #else
-IpxInitialize(short *drvRefNumPtr)
+IpxInitialize(sint16 *drvRefNumPtr)
 #endif
 {
-	short	drvrRefNum, status;
+	sint16	drvrRefNum, status;
 
 	status = find_ipx_drvr(&drvrRefNum);
 	if (status == 0) {
 #ifndef	COMPONENT_BUILD
 #ifdef CANNOT_USE_GLOBALS
-		Ipx_set_drvr_ref_num((long)drvrRefNum);
+		Ipx_set_drvr_ref_num((sint32)drvrRefNum);
 #else
 		MacIPXDrvrRefNum = drvrRefNum;
 #endif
@@ -389,14 +389,14 @@ IpxInitialize(short *drvRefNumPtr)
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxOpenLookAheadSocket(unsigned short *socketNetOrder, RecvLookAheadHandlerUPP handler,
-						unsigned short numBytes, long userData, unsigned char flags)
+IpxOpenLookAheadSocket(uint16 *socketNetOrder, RecvLookAheadHandlerUPP handler,
+						uint16 numBytes, sint32 userData, uint8 flags)
 #else
-IpxOpenLookAheadSocket(unsigned short *socketNetOrder, RecvLookAheadHandlerUPP handler,
-						unsigned short numBytes, long userData, unsigned char flags,
-						short drvrRefNum)
+IpxOpenLookAheadSocket(uint16 *socketNetOrder, RecvLookAheadHandlerUPP handler,
+						uint16 numBytes, sint32 userData, uint8 flags,
+						sint16 drvrRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
@@ -422,11 +422,11 @@ IpxOpenLookAheadSocket(unsigned short *socketNetOrder, RecvLookAheadHandlerUPP h
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags)
+IpxOpenSocket(uint16 *socketNetOrder, uint8 flags)
 #else
-IpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags, short drvRefNum)
+IpxOpenSocket(uint16 *socketNetOrder, uint8 flags, sint16 drvRefNum)
 #endif
 {
 	IPXpb		ipx_pb;
@@ -441,15 +441,15 @@ IpxOpenSocket(unsigned short *socketNetOrder, unsigned char flags, short drvRefN
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxReceive(unsigned short socketNetOrder, IPX_ECB *ecb)
+IpxReceive(uint16 socketNetOrder, IPX_ECB *ecb)
 #else
-IpxReceive(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
+IpxReceive(uint16 socketNetOrder, IPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	IPXpb		*ipx_pb;
-	short		status;
+	sint16		status;
 
 #ifndef NO_ECB_CHECKS
 	/*
@@ -489,11 +489,11 @@ IpxReceive(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
 IpxRelinquishControl()
 #else
-IpxRelinquishControl(short drvRefNum)
+IpxRelinquishControl(sint16 drvRefNum)
 #endif
 {
 	IPXpb	ipx_pb;
@@ -506,17 +506,17 @@ IpxRelinquishControl(short drvRefNum)
 #endif
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxScheduleIpxEvent(unsigned short socketNetOrder, unsigned long timeTicks,
+IpxScheduleIpxEvent(uint16 socketNetOrder, uint32 timeTicks,
 					IPX_ECB *ecb)
 #else
-IpxScheduleIpxEvent(unsigned short socketNetOrder, unsigned long timeTicks,
-					IPX_ECB *ecb, short drvRefNum)
+IpxScheduleIpxEvent(uint16 socketNetOrder, uint32 timeTicks,
+					IPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	IPXpb		*ipx_pb;
-	short		status;
+	sint16		status;
 
 #ifndef NO_ECB_CHECKS
 	if (ecb == (IPX_ECB *)0) {
@@ -527,7 +527,7 @@ IpxScheduleIpxEvent(unsigned short socketNetOrder, unsigned long timeTicks,
 	/*
 	 * Check whether the delay time is greater than 1 hour
 	 */
-	if (timeTicks > (unsigned long)0x34BC0) {
+	if (timeTicks > (uint32)0x34BC0) {
 		ecb->status = IPX_BAD_PARAMETER;
 		return (IPX_BAD_PARAMETER);
 	}
@@ -557,15 +557,15 @@ IpxScheduleIpxEvent(unsigned short socketNetOrder, unsigned long timeTicks,
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxSend(unsigned short socketNetOrder, IPX_ECB *ecb)
+IpxSend(uint16 socketNetOrder, IPX_ECB *ecb)
 #else
-IpxSend(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
+IpxSend(uint16 socketNetOrder, IPX_ECB *ecb, sint16 drvRefNum)
 #endif
 {
 	IPXpb		*ipx_pb;
-	short		status;
+	sint16		status;
 
 #ifndef NO_ECB_CHECKS
 	/*
@@ -605,15 +605,15 @@ IpxSend(unsigned short socketNetOrder, IPX_ECB *ecb, short drvRefNum)
 	return (status);
 }
 
-pascal short
+pascal sint16
 #ifndef	COMPONENT_BUILD
-IpxSend2(unsigned short socketNetOrder, IPX_ECB *ecb, unsigned char flags)
+IpxSend2(uint16 socketNetOrder, IPX_ECB *ecb, uint8 flags)
 #else
-IpxSend2(unsigned short socketNetOrder, IPX_ECB *ecb, unsigned char flags, short drvRefNum)
+IpxSend2(uint16 socketNetOrder, IPX_ECB *ecb, uint8 flags, sint16 drvRefNum)
 #endif
 {
 	IPXpb	*ipx_pb;
-	short	status;
+	sint16	status;
 
 	/*
 	 * This routine is identical to IpxSend, EXCEPT that it allows
@@ -666,18 +666,18 @@ IpxSend2(unsigned short socketNetOrder, IPX_ECB *ecb, unsigned char flags, short
 	return (status);
 }
 
-short
+sint16
 #ifndef	COMPONENT_BUILD
-call_ipx(IPXpb *ipx_pb, int async)
+call_ipx(IPXpb *ipx_pb, sint32 async)
 #else
-call_ipx(IPXpb *ipx_pb, int async, short drvRefNum)
+call_ipx(IPXpb *ipx_pb, sint32 async, sint16 drvRefNum)
 #endif
 {
-	short	err;
+	sint16	err;
 
 #ifndef	COMPONENT_BUILD
 #ifdef CANNOT_USE_GLOBALS
-	ipx_pb->ioCRefNum = (short)Ipx_get_drvr_ref_num();
+	ipx_pb->ioCRefNum = (sint16)Ipx_get_drvr_ref_num();
 #else
 	ipx_pb->ioCRefNum = MacIPXDrvrRefNum;
 #endif
@@ -692,10 +692,10 @@ call_ipx(IPXpb *ipx_pb, int async, short drvRefNum)
 	if (async) {
 		err = PBControlAsync((ParmBlkPtr)ipx_pb);
 		if (err) {
-			if (err == (short)0xFFEB) {
+			if (err == (sint16)0xFFEB) {
 				/* 0xFFEB == -21 driver not found */
 				err = IPX_NOT_INSTALLED;
-			} else if (err == (short)0xFFE4) {
+			} else if (err == (sint16)0xFFE4) {
 				/* 0xFFE4 == -28 driver not open */
 				err = IPX_NOT_INSTALLED;
 			}
@@ -704,10 +704,10 @@ call_ipx(IPXpb *ipx_pb, int async, short drvRefNum)
 	} else {
 		(void)PBControlSync((ParmBlkPtr)ipx_pb);
 		if (ipx_pb->ioResult) {
-			if (ipx_pb->ioResult == (short)0xFFEB) {
+			if (ipx_pb->ioResult == (sint16)0xFFEB) {
 				/* 0xFFEB == -21 driver not found */
 				ipx_pb->ioResult = IPX_NOT_INSTALLED;
-			} else if (ipx_pb->ioResult == (short)0xFFE4) {
+			} else if (ipx_pb->ioResult == (sint16)0xFFE4) {
 				/* 0xFFE4 == -28 driver not open */
 				ipx_pb->ioResult = IPX_NOT_INSTALLED;
 			}
@@ -716,16 +716,16 @@ call_ipx(IPXpb *ipx_pb, int async, short drvRefNum)
 	}
 }
 
-short
-find_ipx_drvr(short *drvrRefNum)
+sint16
+find_ipx_drvr(sint16 *drvrRefNum)
 {
 	char		drvr_name[10];
 	IPXpb		ipx_pb;
 
 	drvr_name[0] = 0x08;
 	drvr_name[1] = '.';
-	*(long *)&drvr_name[2] = 'NVL_';
-	*(long *)&drvr_name[6] = 'IPX ';
+	*(sint32 *)&drvr_name[2] = 'NVL_';
+	*(sint32 *)&drvr_name[6] = 'IPX ';
 	ipx_pb.ioNamePtr = drvr_name;
 	ipx_pb.csCode = 0; /* We're actually setting the read/write permission here */
 	(void)PBOpen((ParmBlkPtr)&ipx_pb, FALSE);
@@ -741,7 +741,7 @@ find_ipx_drvr(short *drvrRefNum)
  */
 #ifdef CANNOT_USE_GLOBALS
 static void
-Ipx_set_drvr_ref_num(long refNum)
+Ipx_set_drvr_ref_num(sint32 refNum)
 {
 	asm {
 		lea		@private_storage, a0
@@ -761,7 +761,7 @@ extern Ipx_get_drvr_ref_num:
 #endif /* CANNOT_USE_GLOBALS */
 
 #if !defined(powerc) && !defined (__powerc)
-unsigned long
+uint32
 IpxGetRegisterA5()
 {
 	asm {
@@ -790,7 +790,7 @@ IpxGetECBFromRegisterA0()
  */
 #ifdef CANNOT_USE_GLOBALS
 static asm void
-Ipx_set_drvr_ref_num(long refNum)
+Ipx_set_drvr_ref_num(sint32 refNum)
 {
 	lea		private_storage, a0
 	move.l	4(a7), (a0)
@@ -809,7 +809,7 @@ L1:
 #endif /* CANNOT_USE_GLOBALS */
 
 #if !defined(powerc) && !defined (__powerc)
-asm unsigned long
+asm uint32
 IpxGetRegisterA5()
 {
 	move.l	a5, d0

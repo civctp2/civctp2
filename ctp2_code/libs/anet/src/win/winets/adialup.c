@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --------------------------------------------------------------------------*/
 #include <windows.h>
 #include <ras.h>
+#include "types.h"
+#include "adialup.h"
 
 #if 0
 #include <stdio.h>
@@ -36,11 +38,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /*--------------------------------------------------------------------------
  Return TRUE if autodial is enabled.
 --------------------------------------------------------------------------*/
-int adialup_autodial_enabled(void)
+sint32 adialup_autodial_enabled(void)
 {
 	HKEY hKey;
-	unsigned long werr;
-	int enableAutodial;
+	uint32 werr;
+	sint32 enableAutodial;
 	size_t len;
 
 	/* First, check to see if EnableAutodial is set in the registry. */
@@ -60,7 +62,7 @@ int adialup_autodial_enabled(void)
 	len = sizeof(enableAutodial);
 	werr = RegQueryValueEx(hKey,
 			"EnableAutodial",
-			NULL, NULL, (void *)&enableAutodial, &len);
+			NULL, NULL, (void *)&enableAutodial, (LPDWORD)&len);
 	CloseHandle(hKey);
 	if (werr != ERROR_SUCCESS) {
 		DPRINT(("autodial_enabled: Can't find %s in subkey %s, error %d\n",
@@ -83,11 +85,10 @@ int adialup_autodial_enabled(void)
  Enable or disable autodial.
  Return TRUE on success.
 --------------------------------------------------------------------------*/
-int adialup_autodial_set(int enable)
+sint32 adialup_autodial_set(sint32 enable)
 {
 	HKEY hKey;
-	unsigned long werr;
-	size_t len;
+	uint32 werr;
 
 	/* Open the registry folder */
 	werr = RegOpenKeyEx(HKEY_CURRENT_USER,
@@ -122,16 +123,15 @@ typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
  or if there are no dialup connections, active or not.
  Return FALSE if there are dialup connections, but none are active.
 --------------------------------------------------------------------------*/
-int adialup_is_active(void)
+sint32 adialup_is_active(void)
 {
 	/* See if RAS reports any good connections. */
-	HRASCONN hrasconn;
 	RASCONNSTATUS rasconnstatus;
 	RASCONN rasconnArray[adialup_MAXCONNS];
 	DWORD cConnections;
 	DWORD werr;
 	size_t rasconnLen;
-	int i;
+	DWORD i;
 	HANDLE hlib;
 	pfnRasEnumConnections_t pfnRasEnumConnections = NULL;
 	pfnRasGetConnectStatus_t pfnRasGetConnectStatus = NULL;
@@ -155,7 +155,7 @@ int adialup_is_active(void)
 	rasconnArray[0].dwSize = sizeof(rasconnArray[0]);
 	rasconnLen = sizeof(rasconnArray);
 	cConnections = adialup_MAXCONNS;
-	werr = pfnRasEnumConnections( rasconnArray, &rasconnLen,  &cConnections);
+	werr = pfnRasEnumConnections( rasconnArray, (LPDWORD)&rasconnLen,  &cConnections);
 	if (werr) {
 		DPRINT(("adialup_is_active: RasEnumConnections fails, err %d\n", werr));
 		FreeLibrary(hlib);
@@ -185,7 +185,7 @@ int adialup_is_active(void)
 /*--------------------------------------------------------------------------
  Return TRUE if Internet activity is likely to trigger an autodial.
 --------------------------------------------------------------------------*/
-int adialup_willdial(void)
+sint32 adialup_willdial(void)
 {
 	return adialup_autodial_enabled() && !adialup_is_active();
 }
@@ -196,7 +196,7 @@ int adialup_willdial(void)
  Compile with
  cl adialup.c advapi32.lib
 --------------------------------------------------------------------------*/
-main(int argc, char *argv[])
+main(sint32 argc, char *argv[])
 {
 	printf("adialup_willdial returns %d\n", adialup_willdial());
 	if (argc == 2)

@@ -29,12 +29,12 @@ Pixel16 *RGB32ToRGB16(char *buf, uint16 width, uint16 height)
 	for(int i=0; i<width*height; i++) {
 		uint32_t pix = *srcPixel;
 		uint16_t r, g, b;
-		uint8_t a;
+//		uint8_t a;
 
 		r = (uint16_t) ((pix & 0x000000FF) >> 0);
 		g = (uint16_t) ((pix & 0x0000FF00) >> 8);
 		b = (uint16_t) ((pix & 0x00FF0000) >> 16);
-		a = (uint8_t) ((pix & 0xFF000000) >> 24);
+//		a = (uint8_t) ((pix & 0xFF000000) >> 24);
 
 		if (g_is565Format)
 			*destPixel = (uint16_t)(((r & 0xF8) << 8) | ((g & 0xFC) << 3) | ((b & 0xF8) >> 3));		

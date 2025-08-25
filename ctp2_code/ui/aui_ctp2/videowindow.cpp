@@ -29,8 +29,8 @@ VideoWindow::VideoWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
-	MBCHAR *name,
+	const MBCHAR *pattern,
+	const MBCHAR *name,
 	BOOL modal,
 	AUI_WINDOW_TYPE type )
 	:
@@ -74,7 +74,7 @@ AUI_ERRCODE VideoWindow::InitCommon( void )
 }
 
 
-AUI_ERRCODE VideoWindow::CreateVideoSurface(MBCHAR *name, BOOL modal)
+AUI_ERRCODE VideoWindow::CreateVideoSurface(const MBCHAR *name, BOOL modal)
 {
 #ifdef __AUI_USE_DIRECTX__
 	HRESULT			hr;

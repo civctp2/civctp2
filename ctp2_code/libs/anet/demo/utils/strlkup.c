@@ -32,7 +32,7 @@ StrLookup StrLookup_Global_Object = NULL;
 
 /* The comparison routine for doing STRLOOKUPs
  */
-static int compare_table( const void *elem1, const void *elem2 )
+static sint32 compare_table( const void *elem1, const void *elem2 )
 {
 	return strcmp(((Table_ptr) elem1)->index, ((Table_ptr) elem2)->index);
 }
@@ -42,9 +42,9 @@ static int compare_table( const void *elem1, const void *elem2 )
  */
 static char *str_convert(char *buffer)
 {
-	int inpos = 0, outpos = 0;
+	sint32 inpos = 0, outpos = 0;
 	char num[4];
-	int digits, chrcode;
+	sint32 digits, chrcode;
 
 	if (!buffer) return NULL;
 	/* Scan the string to the nul terminator
@@ -151,7 +151,7 @@ static char *str_convert(char *buffer)
 
 /* Read lines from a file until a blank line is encountered
  */
-static char *read_until_blank_line(FILE *fp, int *line_num)
+static char *read_until_blank_line(FILE *fp, sint32 *line_num)
 {
 	char buffer[256], *str_read = NULL;
 
@@ -193,7 +193,7 @@ static char *read_until_blank_line(FILE *fp, int *line_num)
 /* Build a translation string from an english string with debugging options
  */
 static void do_options(char **english, char **xlation,
-	int options, int line_num)
+	sint32 options, sint32 line_num)
 {
 	char *xl_temp;
 
@@ -201,7 +201,7 @@ static void do_options(char **english, char **xlation,
 		/* Elbonian mode; built a bigger version of the English string
 		 * with extra vowels.  Assumes character set is ISO-Latin.
 		 */
-		int length = strlen(*xlation), inpos = 0, outpos = 0;
+		sint32 length = strlen(*xlation), inpos = 0, outpos = 0;
 
 		/* First, allocate a temporary string */
 		if (!(xl_temp = malloc(length * 2 + 1))) return;
@@ -237,7 +237,7 @@ static void do_options(char **english, char **xlation,
 		*xlation = xl_temp;
 	}
 	if (options & STARS) {
-		int length = strlen(*xlation), i;
+		sint32 length = strlen(*xlation), i;
 
 		/* Change all non-space characters in the string to stars,
 		 * EXCEPT the first and last, which are dollar signs */
@@ -249,7 +249,7 @@ static void do_options(char **english, char **xlation,
 	}
 	if (options & LINENUM) {
 		/* Prepend the linenumber to the translated string */
-		int length = strlen(*xlation) + 10;
+		sint32 length = strlen(*xlation) + 10;
 
 		/* Allocate a temporary holding string */
 		if (!(xl_temp = malloc(length))) return;
@@ -264,8 +264,8 @@ static void do_options(char **english, char **xlation,
 /* Get an English string and its translated equivalent from a file
  * Sets the xlat_options if an :OPTIONS: keyword is encountered
  */
-static int get_string_pair(FILE *fp, char **english, char **xlation,
-	int *xlat_options, int *line_num)
+static sint32 get_string_pair(FILE *fp, char **english, char **xlation,
+	sint32 *xlat_options, sint32 *line_num)
 {
 	char buffer[256];
 
@@ -295,10 +295,10 @@ static int get_string_pair(FILE *fp, char **english, char **xlation,
 			/* Get the options from the file and process them */
 			char *optstr = read_until_blank_line(fp, line_num);
 			if (optstr) {
-				int i;
+				size_t i;
 
 				/* Convert the whole string to lower case */
-				for (i = 0; i < (int)strlen(optstr); i++) {
+				for (i = 0; i < strlen(optstr); i++) {
 					if (isupper(optstr[i])) optstr[i] = _tolower(optstr[i]);
 				}
 				if (strstr(optstr, "elbonian")) *xlat_options |= ELBONIAN;
@@ -323,7 +323,7 @@ StrLookup StrLookupCreate(char *filename)
 	char *index_string;
 	char *xlated_string;
 	FILE *fp;
-	int allocated = 0, xlat_options = 0, linenum = 0;
+	sint32 allocated = 0, xlat_options = 0, linenum = 0;
 
 	/* Open the file, lang.txt if none specified */
 	if (!filename) filename = "lang.txt";
@@ -367,7 +367,7 @@ StrLookup StrLookupCreate(char *filename)
 
 void StrLookupDestroy(StrLookup obj)
 {
-	int i;
+	sint32 i;
 
 	if (obj && obj->lookup_table) {
 		for (i = 0; i < obj->stringcount; i++) {
@@ -400,13 +400,13 @@ char *StrLookupFind(StrLookup obj, char *string)
  * argument number associated with the format spec, and fmt is the
  * standard C format spec
  */
-int StrLookupFormat(char *buffer, char *fmt, ...)
+sint32 StrLookupFormat(char *buffer, char *fmt, ...)
 {
 	va_list args;
 	char *fmt2,				/* An intermediate fmt string */
 		**fmtspec = NULL,	/* Array storage for the format specs */
 		*ptr, *ptr2;		/* Temporary pointers */
-	int i,
+	sint32 i,
 		nfmtspec = 0,		/* Number of format specs encountered */
 		totalfmtlen = 0;	/* Total length of the format specifiers */
 
@@ -423,7 +423,7 @@ int StrLookupFormat(char *buffer, char *fmt, ...)
 	/* Start hunting for extended format specifiers %number:fmt */
 	while ((ptr2 = strchr(ptr, '%')) != NULL) {
 		size_t fmtlen;
-		int fmtn;
+		sint32 fmtn;
 
 		/* We have one; copy skipped string to the intermediate */
 		if (ptr2 - ptr) strncat(fmt2, ptr, ptr2 - ptr);
@@ -504,7 +504,7 @@ int StrLookupFormat(char *buffer, char *fmt, ...)
 	buffer[0] = '\0';
 	ptr = fmt2;
 	while ((ptr2 = strchr(ptr, '%')) != NULL) {
-		int fmtn;
+		sint32 fmtn;
 
 		/* We have a format spec number; copy skipped stuff to the output */
 		if (ptr2 - ptr) strncat(buffer, ptr, ptr2 - ptr);

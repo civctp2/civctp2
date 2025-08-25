@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * startup entry point for this shared library.
  * Only needed to give the shared library access to its resource fork.
  */
-short	gResFileID = -1;
+sint16	gResFileID = -1;
 FSSpec*	gFragSpec;
 OSErr __myinitialize(CFragInitBlockPtr ibp) {
 	OSErr	err = noErr;
@@ -54,7 +54,7 @@ OSErr __myinitialize(CFragInitBlockPtr ibp) {
  */
 
 void __myterminate(CFragInitBlockPtr ibp) {
-	short	i;
+	sint16	i;
 
 	if (gResFileID != -1) {
 		CloseResFile(gResFileID);

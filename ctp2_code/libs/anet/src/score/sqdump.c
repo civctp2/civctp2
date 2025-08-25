@@ -31,10 +31,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 							 */
 
 /* Convert a binary buffer to hex notation. Don't use twice in one statement! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -42,7 +42,7 @@ static const char *hexstring(const unsigned char *binstr, int len)
 	return buf;
 }
 
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
 	dp_result_t err;
 	time_t now;
@@ -69,7 +69,7 @@ Usage: sqdump wmqDir\n\
 	next_get = now;
 	while (1) {
 		char sessid[dp_KEY_MAXLEN];
-		int sessidlen;
+		sint32 sessidlen;
 		dp_species_t sessType;
 		sq_message_t msg;
 
@@ -78,7 +78,7 @@ Usage: sqdump wmqDir\n\
 			err = sq_get(sessid, &sessidlen, &sessType, &msg);
 			if (err == dp_RES_OK) {
 				if (!memcmp(msg.recordTag, wmq_RECORDTAG_SCORE, 2)) {
-					int i;
+					sint32 i;
 
 					printf("t:%d - Score Report for sessType:%d sessid:%s\n",
 						now, sessType, hexstring(sessid, sessidlen));
@@ -116,7 +116,7 @@ Usage: sqdump wmqDir\n\
 		}
 		if ((now - next_get) < 0) {
 			/* Everything is waiting for time to pass, so sleep */
-			int time_to_next_event = next_get - now;
+			sint32 time_to_next_event = next_get - now;
 			sleep(time_to_next_event);
 		}
 	}

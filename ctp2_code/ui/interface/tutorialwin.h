@@ -22,7 +22,7 @@ public:
 	TutorialWin( void );
 	~TutorialWin( void );
 
-	sint32 Initialize( MBCHAR *windowBlock );
+	sint32 Initialize( const MBCHAR *windowBlock );
 protected:
 
 	c3_ListBox		*m_list;
@@ -43,7 +43,7 @@ public:
 	sint32 HandleButton( c3_Button *button );
 	sint32 HandleSwitch( c3_Switch *button );
 
-	sint32 AddToList( MBCHAR *text, sint32 index );
+	sint32 AddToList( const MBCHAR *text, sint32 index );
 
 	void ClearList( void ) { m_list->Clear(); }
 };

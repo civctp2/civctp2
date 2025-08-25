@@ -11,8 +11,8 @@ AUI_ERRCODE spnewgamerandomcustomscreen_Initialize(
 	aui_Control::ControlActionCallback *callback = NULL );
 AUI_ERRCODE spnewgamerandomcustomscreen_Cleanup();
 
-void spnewgamerandomcustomscreen_acceptPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamerandomcustomscreen_cancelPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamerandomcustomscreen_backPress( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamerandomcustomscreen_acceptPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamerandomcustomscreen_cancelPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamerandomcustomscreen_backPress( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 #endif

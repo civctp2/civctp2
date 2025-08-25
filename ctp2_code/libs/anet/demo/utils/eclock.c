@@ -58,7 +58,7 @@ clock_t eclock(void)
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if (defined _WIN32)
 #pragma warning( disable : 4201 4214 4115 )

@@ -43,33 +43,20 @@
 
 extern C3UI						*g_c3ui;
 
-
-
-
-
 C3FancyWindow::C3FancyWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	MBCHAR ldlBorder[k_NUM_BORDERS][ k_AUI_LDL_MAXBLOCK + 1 ],
 	AUI_WINDOW_TYPE type,
 	bool bevel,
-	void (*exitCallBack)( aui_Control *, uint32, uint32, void *))
+	void (*exitCallBack)( aui_Control *, uint32, uint32, Cookie ))
 	: C3Window(retval, id, ldlBlock, bpp, type,bevel), m_exit(NULL)
 {
 	*retval = InitCommon();
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
-
-
-
-
-
-
-
-
-
 
 	m_originalDimensions.x = 546;
 	m_originalDimensions.y = 173;
@@ -100,9 +87,6 @@ C3FancyWindow::C3FancyWindow(
 	g_c3ui->BringWindowToTop(this);
 	BringBorderToTop();
 }
-
-
-
 
 C3FancyWindow::~C3FancyWindow()
 {

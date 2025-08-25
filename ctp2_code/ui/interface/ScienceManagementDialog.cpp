@@ -286,12 +286,12 @@ void ScienceManagementDialog::UpdateAdvanceList()
 {
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
-	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
+	for(sint32 index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
 
 		aui_Switch *header = m_advanceList->GetHeaderSwitchByIndex(index+1);
 
 		header->SetDrawCallbackAndCookie(ColorHeaderActionCallback,
-			reinterpret_cast<void*>(index), false);
+			index, false);
 
 		if (player && player->HasEmbassyWith(index))
 		{
@@ -335,7 +335,7 @@ ctp2_ListItem *ScienceManagementDialog::CreateAdvanceItem(const AdvanceRecord *a
 	if (!item)
 		return NULL;
 
-	item->SetUserData(reinterpret_cast<void*>(advance->GetIndex()));
+	item->SetUserData(advance->GetIndex());
 	item->SetCompareCallback(CompareAdvance);
 
 	if (UpdateAdvanceItem(item, advance))
@@ -362,7 +362,7 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 		label->SetText(advance->GetNameText());
 	}
 
-	for(int index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
+	for(sint32 index = 1; index <= k_SMD_CIVILIZATION_COLUMNS; index++) {
 
 		if(ctp2_Static *column = GetListItemColumn(item, k_SCI_COL_ADVANCE + index)) {
 
@@ -370,13 +370,12 @@ BOOL ScienceManagementDialog::UpdateAdvanceItem(ctp2_ListItem *item,
 				((index == g_selected_item->GetVisiblePlayer()) ||
 				player->HasEmbassyWith(index))) {
 
-				column->SetDrawCallbackAndCookie(ColorBoxActionCallback,
-					reinterpret_cast<void*>(index));
+				column->SetDrawCallbackAndCookie(ColorBoxActionCallback, index);
 
 				discovered = TRUE;
 			} else {
 
-				column->SetDrawCallbackAndCookie(NULL, NULL);
+				column->SetDrawCallbackAndCookie(NULL, nullptr);
 			}
 		}
 	}
@@ -391,18 +390,18 @@ ctp2_Static *ScienceManagementDialog::GetListItemColumn(ctp2_ListItem *item,
 }
 
 void ScienceManagementDialog::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<ScienceManagementDialog*>(cookie)->Hide();
+	static_cast<ScienceManagementDialog*>(cookie.m_voidPtr)->Hide();
 }
 
 
 void ScienceManagementDialog::HyperlinkActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(CTP2_HYPERLINK_ACTION_EXECUTE))
@@ -419,7 +418,7 @@ void ScienceManagementDialog::HyperlinkActionCallback(aui_Control *control,
 }
 
 void ScienceManagementDialog::EditResearchButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -432,7 +431,7 @@ void ScienceManagementDialog::EditResearchButtonActionCallback(aui_Control *cont
 AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
 													aui_Surface *surface,
 													RECT &rect,
-													void *cookie )
+													Cookie cookie )
 {
 	if(!g_selected_item)
 		return AUI_ERRCODE_OK;
@@ -469,7 +468,7 @@ AUI_ERRCODE ScienceManagementDialog::DrawScienceBar(ctp2_Static *control,
 }
 
 AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+	aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 
 	RECT colorRect = rect;
@@ -479,11 +478,11 @@ AUI_ERRCODE ScienceManagementDialog::ColorBoxActionCallback(ctp2_Static *control
 	colorRect.bottom	-= 1;
 
 	return(g_c3ui->TheBlitter()->ColorBlt16(surface, &colorRect,
-		g_colorSet->GetPlayerColor(reinterpret_cast<sint32>(cookie)), 0));
+		g_colorSet->GetPlayerColor(cookie.m_sin32Type), 0));
 }
 
 AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *control,
-	aui_Surface *surface, RECT &rect, void *cookie)
+	aui_Surface *surface, RECT &rect, Cookie cookie)
 {
 
 	RECT colorRect = rect;
@@ -492,12 +491,9 @@ AUI_ERRCODE ScienceManagementDialog::ColorHeaderActionCallback(aui_Switch *contr
 	colorRect.right		-= 1;
 	colorRect.bottom	-= 1;
 
-	sint32 index = reinterpret_cast<sint32>(cookie);
+	sint32 index = cookie.m_sin32Type;
 
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
-
-
-
 
 	if(!player || ((index != g_selected_item->GetVisiblePlayer()) &&
 		!player->HasContactWith(index)))
@@ -515,9 +511,9 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 	const AdvanceRecord *advance1 = g_theAdvanceDB->Get(
-		reinterpret_cast<sint32>(item1->GetUserData()));
+		item1->GetUserDataSint32());
 	const AdvanceRecord *advance2 = g_theAdvanceDB->Get(
-		reinterpret_cast<sint32>(item2->GetUserData()));
+		item2->GetUserDataSint32());
 
 
 	if(!column || ((column != g_selected_item->GetVisiblePlayer()) &&
@@ -542,21 +538,21 @@ sint32 ScienceManagementDialog::CompareAdvance(ctp2_ListItem *item1,
 
 
 void ScienceManagementDialog::AdvanceListCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_LISTBOX_ACTION_SELECT)
 		return;
 
-	ScienceManagementDialog *pMe = static_cast<ScienceManagementDialog*>(cookie);
+	ScienceManagementDialog *pMe = static_cast<ScienceManagementDialog*>(cookie.m_voidPtr);
 
 	if (!(pMe && pMe->m_scienceDescription))
-        return;
+		return;
 
 	ctp2_ListBox *  listbox = static_cast<ctp2_ListBox*>(control);
 	ctp2_ListItem * item    = listbox ? (ctp2_ListItem *)listbox->GetSelectedItem() : NULL;
 	if (!item) return;
 
-	sint32          index   = reinterpret_cast<sint32>(item->GetUserData());
+	sint32          index   = item->GetUserDataSint32();
 
 	MBCHAR givesText[k_MAX_GL_ENTRY];
 	MBCHAR linkText[k_MAX_GL_ENTRY];

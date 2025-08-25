@@ -37,17 +37,17 @@ char action;
 char name[tcapw_LEN_USERNAME];
 char password[tcapw_LEN_PW];
 char email[tcapw_MAXLEN_EMAIL];
-int flags;
+sint32 flags;
 
 /*----------------------------------------------------------------------------
   Processes the command line arguments.  Some arguments are handled
   directly by this routine.  Others simply result in an update to
   the global switches data structure.
 ----------------------------------------------------------------------------*/
-void ProcessCommandLine(int argc, char **argv)
+void ProcessCommandLine(sint32 argc, char **argv)
 {
 	char *chptr;
-	int   i;
+	sint32   i;
 
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] == '/' || argv[i][0] == '-') {
@@ -107,7 +107,7 @@ A simple command line tcapw database editor.\n");
 	}
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
 	tcapw_t *tcapw = NULL;
 

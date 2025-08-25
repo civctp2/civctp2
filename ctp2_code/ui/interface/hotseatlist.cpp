@@ -25,10 +25,10 @@
 // Modifications from the original Activision code:
 //
 // - Memory leaks repaired, cleanup in destructor.
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 21st 2006 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standartized code (May 21st 2006 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -85,7 +85,7 @@ bool        *s_legalCivList = NULL;
 bool         s_playerCivsLocked;
 
 
-void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -130,7 +130,7 @@ void HotseatListButtonActionCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
+HotseatList::HotseatList( HotseatListCallback *callback, const MBCHAR *ldlBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -156,7 +156,7 @@ HotseatList::HotseatList( HotseatListCallback *callback, MBCHAR *ldlBlock )
 	Initialize( windowBlock );
 }
 
-sint32 HotseatList::Initialize( MBCHAR *windowBlock )
+sint32 HotseatList::Initialize( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -170,7 +170,7 @@ sint32 HotseatList::Initialize( MBCHAR *windowBlock )
 	m_window->AddOk(HotseatListButtonActionCallback);
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "PlayerList" );
-	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	m_list->SetAbsorbancy(FALSE);
 	Assert( AUI_NEWOK(m_list, errcode) );
 	if ( !AUI_NEWOK(m_list, errcode) ) return -1;
@@ -357,8 +357,8 @@ sint32 HotseatList::ChooseNextOpenCiv(HotseatListItem *curItem, sint32 curCiv)
 }
 
 HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-								 sint32 civ, bool isHuman, MBCHAR *email,
-								 MBCHAR *ldlBlock)
+								 sint32 civ, bool isHuman, const MBCHAR *email,
+								 const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -375,45 +375,45 @@ HotseatListItem::HotseatListItem(AUI_ERRCODE *retval, sint32 index,
 }
 
 void HotseatAIToggleCallback(aui_Control *control, uint32 action, uint32 data,
-							 void *cookie)
+							 Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->SetHuman(!item->IsHuman());
 }
 
 void HotseatCivCallback(aui_Control *control, uint32 action, uint32 data,
-						void *cookie)
+						Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->ChooseCiv();
 }
 
 void HotseatEmailCallback(aui_Control *control, uint32 action, uint32 data,
-						void *cookie)
+						Cookie cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->EnterEmail();
 }
 
 void HotseatNameCallback(aui_Control *control, uint32 action, uint32 data,
-						void *cookie)
+						Cookie cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) return;
 
-	HotseatListItem *item = (HotseatListItem *)cookie;
+	HotseatListItem *item = (HotseatListItem *)cookie.m_voidPtr;
 	item->Update();
 }
 
 AUI_ERRCODE HotseatListItem::InitCommonLdl(sint32 civ,
 										   bool isHuman,
-										   MBCHAR *email,
-										   MBCHAR *ldlBlock)
+										   const MBCHAR *email,
+										   const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

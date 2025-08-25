@@ -27,7 +27,7 @@
 // - Repaired memory leaks.
 // - Removed assert to prevent lots of pop-ups with e.g. the LOTR scenario.
 // - GetText function now returns FALSE if there is no proper string to
-//   retrieve, so that this can be checked if. - Nov 5th 2004 Martin Gühmann
+//   retrieve, so that this can be checked if. - Nov 5th 2004 Martin GÃ¼hmann
 // - Added validity checks to GetPos.
 //
 //----------------------------------------------------------------------------
@@ -632,7 +632,7 @@ BOOL SlicSymbolData::GetText(MBCHAR *text, sint32 maxLen) const
 			break;
 		default:
 			sprintf(text, "??? (Symbol type %d)", GetType());
-// Added by Martin Gühmann to figure out whether there is a string for a given slic symbol.
+// Added by Martin GÃ¼hmann to figure out whether there is a string for a given slic symbol.
 			return FALSE;
 			break;
 	}
@@ -670,26 +670,26 @@ void SlicSymbolData::GetDebugText(MBCHAR *text, sint32 len) const
 			break;
 		case SLIC_SYM_CITY:
 			if(GetCity(city)) {
-				sprintf(text, "City %lx: %s", city.m_id,
+				sprintf(text, "City %x: %s", city.m_id,
 						city.GetName());
 			} else {
-				sprintf(text, "Invalid city (%lx?)", m_val.m_city_id);
+				sprintf(text, "Invalid city (%x?)", m_val.m_city_id);
 			}
 			break;
 		case SLIC_SYM_UNIT:
 			if(GetUnit(u)) {
 
-				sprintf(text, "Unit %lx: %s", u.m_id,
+				sprintf(text, "Unit %x: %s", u.m_id,
 						u.IsValid() ? u.GetName() : "<DEAD>");
 			} else {
-				sprintf(text, "Invalid unit (%lx?)", m_val.m_unit_id);
+				sprintf(text, "Invalid unit (%x?)", m_val.m_unit_id);
 			}
 			break;
 		case SLIC_SYM_ARMY:
 			if(GetArmy(army)) {
-				sprintf(text, "Army %lx", army.m_id);
+				sprintf(text, "Army %x", army.m_id);
 			} else {
-				sprintf(text, "Invalid army (%lx?)", m_val.m_army_id);
+				sprintf(text, "Invalid army (%x?)", m_val.m_army_id);
 			}
 			break;
 		case SLIC_SYM_LOCATION:
@@ -807,6 +807,8 @@ void SlicSymbolData::SetType(SLIC_SYM type)
 		case SLIC_SYM_SVAR:
 			res = g_theStringDB->GetStringID(GetName(), m_val.m_string_value);
 			Assert(res);
+			break;
+		default:
 			break;
 	}
 }
@@ -1033,6 +1035,8 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 
 			case SLIC_SYM_UNDEFINED:
 				break;
+			default:
+				break;
 		}
 	}
 	else
@@ -1106,6 +1110,8 @@ void SlicSymbolData::Serialize(CivArchive &archive)
 				Assert(FALSE);
 				break;
 			case SLIC_SYM_UNDEFINED:
+				break;
+			default:
 				break;
 		}
 	}

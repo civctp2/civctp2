@@ -48,9 +48,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 		time_t t;				// 4 bytes, rcdoffset 0 - time of record
 		char serverTag[6];		// 6 bytes, rcdoffset 4 - binary IP:port
 		char recordTag[2];		// 2 bytes, rcdoffset 10 - type of data
-		unsigned short datalen;	// 2 bytes, rcdoffset 12 - data length
+		uint16 datalen;	// 2 bytes, rcdoffset 12 - data length
 		char data[datalen];		// datalen bytes, rcdoffset 14
-		unsigned short datalen;	// 2 bytes, rcdoffset 14+datalen -
+		uint16 datalen;	// 2 bytes, rcdoffset 14+datalen -
 								// allows backstepping through records
 		char magic[4];			// 4 bytes, rcdoffset 16+datalen - wmqMagic
 	} wmq_record[*];
@@ -82,10 +82,10 @@ static const char wmqMagic[4] = "WMQ1";		/* WMQ version 1.0 */
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-static const char *hexstring(const unsigned char *binstr, int len)
+static const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -104,9 +104,9 @@ static const char *hexstring(const unsigned char *binstr, int len)
 static dp_result_t wmq_terminate(const char *filename)
 {
 	FILE *fp = fopen(filename, "r+b");
-	unsigned char buf[wmq_HEADER_LEN];
+	uint8 buf[wmq_HEADER_LEN];
 	time_t timestamp;
-	long offset;
+	sint32 offset;
 
 	DPRINT(("wmq_terminate: checking file %s\n", filename));
 	if (fp == NULL) {
@@ -172,10 +172,10 @@ static dp_result_t wmq_terminate(const char *filename)
  Create a web message queue.  Directory is where data files live.
  openForWrite is either 0 for reading or 1 for writing.
 --------------------------------------------------------------------------*/
-wmq_t *wmq_create(const char *dir, int openForWrite)
+wmq_t *wmq_create(const char *dir, sint32 openForWrite)
 {
 	wmq_t *wmq;
-	int dirlen = strlen(dir);
+	sint32 dirlen = strlen(dir);
 
 	if (openForWrite != 0 && openForWrite != 1) {
 		DPRINT(("wmq_create: %d is not a valid value for openForWrite.\n", openForWrite));
@@ -228,7 +228,7 @@ void wmq_destroy(wmq_t *wmq)
  serverTag, generally the binary IP:port address.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, int serverTagLen)
+dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, sint32 serverTagLen)
 {
 	precondition(wmq);
 	precondition(serverTag);
@@ -251,7 +251,7 @@ dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, int serverTagLen
  *ptime is set to the time associated with the most recent record read;
  *poffset is set to the offset in the file holding that record.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_tell(wmq_t *wmq, long *poffset, time_t *ptime)
+dp_result_t wmq_tell(wmq_t *wmq, sint32 *poffset, time_t *ptime)
 {
 	precondition(wmq);
 	precondition(poffset && ptime);
@@ -281,13 +281,13 @@ dp_result_t wmq_tell(wmq_t *wmq, long *poffset, time_t *ptime)
  		 dp_RES_EMPTY if no appropriate file exists yet - wmq is untouched,
 		 dp_RES_BADSIZE if the file is corrupted - wmq is closed.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_seek(wmq_t *wmq, time_t when, long offset)
+dp_result_t wmq_seek(wmq_t *wmq, time_t when, sint32 offset)
 {
 	dp_result_t err;
 	struct tm *gmt = gmtime(&when);
 	char filepath[wmq_DIR_MAXLEN + 24];
 	char *file;
-	long real_offset;
+	sint32 real_offset;
 	char buf[wmq_HEADER_LEN];
 
 	precondition(wmq);
@@ -303,7 +303,7 @@ dp_result_t wmq_seek(wmq_t *wmq, time_t when, long offset)
 	DPRINT(("wmq_seek: seeking file %s offset %d\n", filepath, offset));
 
 	if (wmq->openForWrite == 1) {
-		int terminated = FALSE;
+		sint32 terminated = FALSE;
 
 		if (wmq->fp != NULL) {
 			memset(buf, 0, 4);	/* a zero timestamp */
@@ -519,8 +519,8 @@ dp_result_t wmq_seek_byTime(wmq_t *wmq, time_t when)
 	 */
 	while (1) {
 		time_t timestamp;
-		long record_start;
-		unsigned short datalen;
+		sint32 record_start;
+		uint16 datalen;
 
 		record_start = ftell(wmq->fp);
 		if (fread(buf, 4, 1, wmq->fp) != 1) {
@@ -596,12 +596,12 @@ dp_result_t wmq_flush(wmq_t *wmq)
 
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_put(wmq_t *wmq, time_t now, const char *recordTag, const char *data, unsigned short datalen)
+dp_result_t wmq_put(wmq_t *wmq, time_t now, const char *recordTag, const char *data, uint16 datalen)
 {
 	return wmq_putServer(wmq, now, NULL, recordTag, data, datalen);
 }
 
-dp_result_t wmq_putServer(wmq_t *wmq, time_t now, const char *serverTag, const char *recordTag, const char *data, unsigned short datalen)
+dp_result_t wmq_putServer(wmq_t *wmq, time_t now, const char *serverTag, const char *recordTag, const char *data, uint16 datalen)
 {
 	dp_result_t err;
 	char buf[4];
@@ -697,8 +697,8 @@ dp_result_t wmq_get(wmq_t *wmq, wmq_record_t *record)
 {
 	dp_result_t err;
 	char buf[4];
-	long record_start;
-	unsigned short enddatalen;
+	sint32 record_start;
+	uint16 enddatalen;
 
 	precondition(wmq);
 	precondition(wmq->openForWrite == 0);
@@ -811,13 +811,13 @@ dp_result_t wmq_get(wmq_t *wmq, wmq_record_t *record)
  Restore with wmq_restorePosition.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_savePosition(wmq_t *wmq, int fd)
+dp_result_t wmq_savePosition(wmq_t *wmq, sint32 fd)
 {
 #ifdef UNIX
 	char buf[8];
 	char *pbuf = buf;
 	time_t t;
-	long offset;
+	sint32 offset;
 
 	precondition(wmq);
 	precondition(fd >= 0);
@@ -852,13 +852,13 @@ dp_result_t wmq_savePosition(wmq_t *wmq, int fd)
  Returns dp_RES_OK on success,
  		 dp_RES_EMPTY if the file is empty.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_restorePosition(wmq_t *wmq, int fd)
+dp_result_t wmq_restorePosition(wmq_t *wmq, sint32 fd)
 {
 #ifdef UNIX
 	char buf[8];
-	long filelen;
+	sint32 filelen;
 	time_t t;
-	long offset;
+	sint32 offset;
 
 	precondition(wmq);
 	precondition(fd >= 0);

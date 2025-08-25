@@ -83,7 +83,7 @@ namespace
 	sint32 const CITY_PRODUCTION_HALTED	= 0x7fffffff;
 }
 
-CityControlPanel::CityControlPanel(MBCHAR *ldlBlock) :
+CityControlPanel::CityControlPanel(const MBCHAR *ldlBlock) :
 m_buildItemLabel(static_cast<ctp2_Static*>(
 				 aui_Ldl::GetObject(ldlBlock,
 				 "CityTab.TabPanel.BuildProgress.Title"))),
@@ -195,13 +195,13 @@ void CityControlPanel::Update()
 	UpdateGovernor();
 }
 
-void CityControlPanel::PrevCityButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void CityControlPanel::PrevCityButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie);
+	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie.m_voidPtr);
 	sint32 numberOfItems = cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 	if (numberOfItems < 2) {
 		return;
@@ -212,13 +212,13 @@ void CityControlPanel::PrevCityButtonActionCallback(aui_Control * control, uint3
 	cityControlPanel->Update();
 }
 
-void CityControlPanel::NextCityButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void CityControlPanel::NextCityButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie);
+	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie.m_voidPtr);
 	sint32 numberOfItems = cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
 	if(numberOfItems < 2) {
 		return;
@@ -230,7 +230,7 @@ void CityControlPanel::NextCityButtonActionCallback(aui_Control * control, uint3
 }
 
 void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -241,7 +241,7 @@ void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
 		return;
 
 	CityControlPanel *cityControlPanel =
-		static_cast<CityControlPanel*>(cookie);
+		static_cast<CityControlPanel*>(cookie.m_voidPtr);
 
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
@@ -262,22 +262,22 @@ void CityControlPanel::EditBuildQueueButtonActionCallback(aui_Control *control,
 }
 
 void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control * control, uint32 action, uint32 data,
-		void * cookie)
+	Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
 	Unit selectedCity;
-	if (!((CityControlPanel*)cookie)->GetSelectedCity(selectedCity)) {
+	if (!((CityControlPanel*)cookie.m_voidPtr)->GetSelectedCity(selectedCity)) {
 		return;
 	}
 
 	if (!selectedCity.GetCityData()->AlreadyBoughtFront())
 	{
 		selectedCity.GetCityData()->AddBuyFront();
-		((CityControlPanel *) cookie)->m_currentTurns = 0; // Force update of city control panel
-		((CityControlPanel *) cookie)->Update();
+		((CityControlPanel *) cookie.m_voidPtr)->m_currentTurns = 0; // Force update of city control panel
+		((CityControlPanel *) cookie.m_voidPtr)->Update();
 		CityWindow::UpdateCity(selectedCity);
 		EditQueue::UpdateCity(selectedCity);
 		NationalManagementDialog::UpdateCity(selectedCity);
@@ -285,7 +285,7 @@ void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control * control, u
 }
 
 void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -296,7 +296,7 @@ void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
 		return;
 
 	CityControlPanel *cityControlPanel =
-		static_cast<CityControlPanel*>(cookie);
+		static_cast<CityControlPanel*>(cookie.m_voidPtr);
 
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
@@ -319,7 +319,7 @@ void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
 }
 
 void CityControlPanel::SelectGovernorActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
@@ -332,7 +332,7 @@ void CityControlPanel::SelectGovernorActionCallback(aui_Control *control,
 		return;
 
 	CityControlPanel *cityControlPanel =
-		static_cast<CityControlPanel*>(cookie);
+		static_cast<CityControlPanel*>(cookie.m_voidPtr);
 
 	sint32 numberOfItems =
 		cityControlPanel->m_cityListDropDown->GetListBox()->NumItems();
@@ -356,7 +356,7 @@ bool CityControlPanel::GetSelectedCity(Unit & selectedCity)
 		return false;
 	}
 
-	selectedCity.m_id = (uint32)selItem->GetUserData();
+	selectedCity.m_id = selItem->GetUserDataUint32();
 	return selectedCity.IsValid();
 }
 
@@ -368,7 +368,7 @@ bool CityControlPanel::GetSelectedCity(Unit & selectedCity)
 //              city list.
 //
 //----------------------------------------------------------------------------
-void CityControlPanel::CitySelectActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void CityControlPanel::CitySelectActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT)) {
 		return;
@@ -378,7 +378,7 @@ void CityControlPanel::CitySelectActionCallback(aui_Control * control, uint32 ac
 		return;
 	}
 
-	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie);
+	CityControlPanel * cityControlPanel = static_cast<CityControlPanel*>(cookie.m_voidPtr);
 	Unit newSelectedCity;
 	if (!cityControlPanel->GetSelectedCity(newSelectedCity)) {
 		return;
@@ -474,7 +474,7 @@ void CityControlPanel::UpdateBuildItem()
 	m_currentItem		= head ? head->m_type : -1;
 	m_currentTurns		= turns;
 	m_buildItemProgressBar->SetDrawCallbackAndCookie
-		(ProgressDrawCallback, (void *) m_currentCity.m_id);
+		(ProgressDrawCallback, m_currentCity.m_id);
 
 	if(numberOfItems < 1) {
 		ClearBuildItem();
@@ -682,7 +682,7 @@ void CityControlPanel::UpdateCityList()
 		label->SetText(player->GetCityFromIndex(cityIndex).GetName());
 
 		// Fill userdata of the dropdown list with the city ID
-		listItem->SetUserData(reinterpret_cast<void*>(player->GetCityFromIndex(cityIndex).m_id));
+		listItem->SetUserData(player->GetCityFromIndex(cityIndex).m_id);
 
 		// Add the item to the list
 		m_cityListDropDown->AddItem(listItem);
@@ -799,7 +799,7 @@ void CityControlPanel::SelectedCity()
 	for(sint32 i = 0; i < numberOfItems; i++)
 	{
 		ctp2_ListItem * item = static_cast<ctp2_ListItem*>(m_cityListDropDown->GetListBox()->GetItemByIndex(i));
-		if (item && (uint32)item->GetUserData() == newCity.m_id)
+		if (item && item->GetUserDataUint32() == newCity.m_id)
 		{
 			m_cityListDropDown->SetSelectedItem(i);
 			break;
@@ -839,12 +839,12 @@ void CityControlPanel::Activated()
 AUI_ERRCODE CityControlPanel::ProgressDrawCallback(ctp2_Static *control,
 												   aui_Surface *surface,
 												   RECT &rect,
-												   void *cookie)
+												   Cookie cookie)
 {
 	g_c3ui->TheBlitter()->ColorBlt(surface, &rect, RGB(0,0,0), 0);
 
 	Unit city;
-	city.m_id = (uint32)cookie;
+	city.m_id = cookie.m_uin32Type;
 	if (!city.IsValid()) {
 		return AUI_ERRCODE_OK;
 	}

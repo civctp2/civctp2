@@ -15,11 +15,11 @@ aui_Button::aui_Button(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
-	aui_Control     (retval, id, ldlBlock, ActionFunc, cookie),
+    aui_ImageBase( ldlBlock ),
+    aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
+    aui_Control     (retval, id, ldlBlock, ActionFunc, cookie),
     m_isRepeating   (false),
     m_repeatCount   (0)
 {
@@ -38,11 +38,11 @@ aui_Button::aui_Button(
 	sint32 width,
 	sint32 height,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
-	aui_Control     (retval, id, x, y, width, height, ActionFunc, cookie),
+    aui_ImageBase( (sint32)0 ),
+    aui_TextBase( NULL ),
+    aui_Control     (retval, id, x, y, width, height, ActionFunc, cookie),
     m_isRepeating   (false),
     m_repeatCount   (0)
 {

@@ -21,7 +21,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Sound added by Martin Gühmann
+// - Sound added by Martin GÃ¼hmann
 // - Crash fixed when there is no sound defined (for mod).
 // - Moved network handling from TerrainImprovementData constructor to prevent
 //   reporting the temporary when completing the tile improvement.
@@ -147,8 +147,7 @@ void
 TerrainImprovementPool::Serialize(CivArchive &archive)
 {
 	TerrainImprovementData *data;
-	sint32	i,
-			count = 0 ;
+	sint32 count = 0;
 
 #define TERRIMPROVEPOOL_MAGIC 0x11223344
 
@@ -159,12 +158,12 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 		archive.PerformMagic(TERRIMPROVEPOOL_MAGIC);
 		ObjPool::Serialize(archive);
 
-		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if(m_table[i])
 				count++;
 
 		archive<<count;
-		for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 		{
 			if(m_table[i])
 				((TerrainImprovementData*)(m_table[i]))->Serialize(archive);
@@ -176,7 +175,7 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 		ObjPool::Serialize(archive);
 
 		archive>>count;
-		for (i=0; i<count; i++)
+		for(sint32 i = 0; i < count; i++)
 		{
 			data = new TerrainImprovementData(archive);
 			Insert(data);

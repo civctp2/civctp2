@@ -59,19 +59,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 dpio_t *dpio = NULL;
 
 static char		adrString[256];
-static int		packetLen;
-static int		dropPercent;
+static sint32		packetLen;
+static sint32		dropPercent;
 char        	commDLLName[256];
 commInitReq_t	commInitReq;		/*  Parameters needed by some comm drivers. */
 char			modeministr[256];
 char			phonenum[256];
 
 playerHdl_t		AllPlayers[MAX_PLAYERS];	/* Player array for multiplayer */
-int 			N_Players=0;				/* Number of multiplayer players */
+sint32 			N_Players=0;				/* Number of multiplayer players */
 
 clock_t			Now;
 
-int useReliable = FALSE;
+sint32 useReliable = FALSE;
 
 /*  Get a list of player addresses from an external file */
 /*  Create the array of playerHdl AllPlayers from this list */
@@ -129,15 +129,15 @@ void readPlayerAddresses (char *playerFname)
 /*  If otherPlayer is NULL or empty, prompt user for other player's address. */
 /*  If broadcast is TRUE, ignore otherPlayer, as we don't need to know other */
 /*  address to broadcast. */
-void chatTest(char *otherPlayer, int broadcast)
+void chatTest(char *otherPlayer, sint32 broadcast)
 {
-    commDriverInfoResp_t 	infoResp;
-    commPlayerInfoReq_t  	playerReq;
-    commPlayerInfoResp_t 	playerResp;
-    commPrintAddrReq_t		printReq;
-    commPrintAddrResp_t		printResp;
-    commScanAddrReq_t		scanReq;
-    commScanAddrResp_t		scanResp;
+	commDriverInfoResp_t 	infoResp;
+	commPlayerInfoReq_t  	playerReq;
+	commPlayerInfoResp_t 	playerResp;
+	commPrintAddrReq_t		printReq;
+	commPrintAddrResp_t		printResp;
+	commScanAddrReq_t		scanReq;
+	commScanAddrResp_t		scanResp;
 	char					printable[50];
 	char					adrBuf[16];
 	playerHdl_t				src;
@@ -152,21 +152,21 @@ void chatTest(char *otherPlayer, int broadcast)
 		return;
 	}
 
-    /*  find out info about this driver */
-    if (commDriverInfo(NULL, &infoResp))
+	/*  find out info about this driver */
+	if (commDriverInfo(NULL, &infoResp))
 		if (!infoResp.status)
 			printf("%s, Version %x\n", infoResp.info->name, infoResp.info->version);
 
-    /*  Find out about this player */
-    playerReq.player = PLAYER_ME;
-    if (!commPlayerInfo(&playerReq, &playerResp)) {
+	/*  Find out about this player */
+	playerReq.player = PLAYER_ME;
+	if (!commPlayerInfo(&playerReq, &playerResp)) {
 		printf("Unable to get player %d info, error: %d\n", PLAYER_ME, playerResp.status);
 		return;
-    }
-    /*  print out player info */
+	}
+	/*  print out player info */
 	if (playerResp.name != NULL)
 		printf("Player name: %s\n", playerResp.name);
-	printf("Player address: %p -> %x\n", playerResp.address, *(long *)playerResp.address);
+	printf("Player address: %p -> %x\n", playerResp.address, *(sint32 *)playerResp.address);
 
 	/*  Print out our address (normally used only during debugging, */
 	/*   but in this chat test, you need to see it so you can yell it */
@@ -175,10 +175,10 @@ void chatTest(char *otherPlayer, int broadcast)
 	printReq.address = playerResp.address;
 	printReq.printable = printable;
 	printReq.size = sizeof(printable);
-    if (!commPrintAddr(&printReq, &printResp)) {
+	if (!commPrintAddr(&printReq, &printResp)) {
 		printf("Unable to print player address, error: %d\n", printResp.status);
 		return;
-    }
+	}
 	printf("My address is %s\n", printable);
 
 	if (!broadcast) {
@@ -282,9 +282,9 @@ void chatTest(char *otherPlayer, int broadcast)
        raw_end();
 }
 
-void fillRamp(char *buffer, int len)
+void fillRamp(char *buffer, sint32 len)
 {
-	int	i;
+	sint32	i;
 
 	for (i=1; i<=len; i++) buffer[i-1]=(i&15)+'A';
 	/* buffer[len-1]=13; */
@@ -292,10 +292,10 @@ void fillRamp(char *buffer, int len)
 
 #if 0
 
-int badRamp(char *buffer, int len)
+sint32 badRamp(char *buffer, sint32 len)
 {
-	int 	status = 0;
-	int		i;
+	sint32 	status = 0;
+	sint32		i;
 
 	for (i=1; i<=len; i++)
 		if (buffer[i-1]!=((i&15)+'A')) {
@@ -309,12 +309,12 @@ int badRamp(char *buffer, int len)
 #define INTERVAL	(CLOCKS_PER_SEC/5)
 #define NPACKETS	50
 
-void packetTest(int packetLen)
+void packetTest(sint32 packetLen)
 {
-	int			sent = 0;
-	int			sendfailed = 0;
-	int			got = 0;
-	int			gotok = 0;
+	sint32			sent = 0;
+	sint32			sendfailed = 0;
+	sint32			got = 0;
+	sint32			gotok = 0;
 	clock_t		first = 0;
 	clock_t		next = 0;
 	clock_t		last = 0;
@@ -323,7 +323,7 @@ void packetTest(int packetLen)
 	char		buf[1000];
 	char		ch;
 	/*  rough guess at size of commbuf in packets */
-	int			prestuff=1024/(packetLen+20);
+	sint32			prestuff=1024/(packetLen+20);
 
 	commTxPktReq_t	txReq;
 	commTxPktResp_t	txResp;
@@ -402,11 +402,11 @@ void packetTest(int packetLen)
 
 /*  be the reciever: direction = 0 */
 /*  be the sender:   direction = 1 */
-void onewayTest(int packetLen, int direction)
+void onewayTest(sint32 packetLen, sint32 direction)
 {
-	int			started = 0;
-	int			txrx = 0;
-	int			txrxok = 0;
+	sint32			started = 0;
+	sint32			txrx = 0;
+	sint32			txrxok = 0;
 	float		duration = 0.0;
 	char		buf[1000];
 	char		ch;
@@ -476,10 +476,10 @@ void onewayTest(int packetLen, int direction)
 }
 #endif
 
-void onewayTestTx(int packetLen)
+void onewayTestTx(sint32 packetLen)
 {
-	int			txrx = 0;
-	int			txrxok = 0;
+	sint32			txrx = 0;
+	sint32			txrxok = 0;
 	float		duration = 0.0;
 	char		buf[1000];
 	clock_t		first;
@@ -518,7 +518,7 @@ void onewayTestTx(int packetLen)
 }
 #if 1
 
-void quickTest(int packetLen)
+void quickTest(sint32 packetLen)
 {
 	char		buf[1000];
 	commTxPktReq_t		txReq;
@@ -548,9 +548,9 @@ void quickTest(int packetLen)
    handled directly by this routine.  Others simply result in an update to
    the global switches data structure
  * ======================================================================== */
-void ProcessCommandLine(int argc, char **argv) {
+void ProcessCommandLine(sint32 argc, char **argv) {
   char *chptr;
-  int   i;
+  sint32   i;
 
   commDLLName[0] = 0;
   adrString[0] = 0;
@@ -670,7 +670,7 @@ void ProcessCommandLine(int argc, char **argv) {
 
 /*  end of ProcessCommandLine() */
 
-int main( int argc, char *argv[] )
+sint32 main( sint32 argc, char *argv[] )
 {
 	char			cmd;
 	dp_result_t err;

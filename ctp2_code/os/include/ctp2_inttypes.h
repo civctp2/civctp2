@@ -9,16 +9,16 @@
 
 #if defined(_MSC_VER)
 
-typedef char          schar;
+typedef          char        schar;
 typedef unsigned char        uchar;
 
-typedef char          sint8;
+typedef          char        sint8;
 typedef unsigned char        uint8;
-typedef short int     sint16;
+typedef          short int   sint16;
 typedef unsigned short int   uint16;
-typedef int           sint32;
+typedef          int         sint32;
 typedef unsigned int         uint32;
-typedef __int64       sint64;
+typedef          __int64     sint64;
 typedef unsigned __int64     uint64;
 
 typedef char                 CHAR;

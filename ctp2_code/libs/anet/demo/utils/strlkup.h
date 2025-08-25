@@ -46,9 +46,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 extern "C" {
 #endif
 
+#include "types.h"
+
 typedef struct _StrLookup
 {
-	long stringcount;				/* Number of strings in the slow array */
+	sint32 stringcount;				/* Number of strings in the slow array */
 	struct StrLookup_table {
 		char *index;				/* English */
 		char *string;				/* Translation */
@@ -60,7 +62,7 @@ typedef struct StrLookup_table *Table_ptr;
 StrLookup	StrLookupCreate(char *filename);
 void		StrLookupDestroy(StrLookup obj);
 char *		StrLookupFind(StrLookup obj, char *string);
-int			StrLookupFormat(char *buffer, char *fmt, ...);
+sint32		StrLookupFormat(char *buffer, char *fmt, ...);
 
 extern StrLookup StrLookup_Global_Object;
 

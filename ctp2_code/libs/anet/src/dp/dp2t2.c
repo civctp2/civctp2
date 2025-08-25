@@ -29,9 +29,9 @@ char *masterServerHostname = NULL;	/* NULL = we are a master server ourself */
 
 /*-------------------------------------------------------*/
 /* Convert a key to ASCII for debug printing */
-static char *key2buf(char *key, int keylen, char *buf)
+static char *key2buf(char *key, sint32 keylen, char *buf)
 {
-	int i;
+	sint32 i;
 
 	if (keylen > hkeytab_MAXLEN)
 		return "key too long";
@@ -53,7 +53,7 @@ static char key2a_buf2[256];
 /*-------------------------------------------------------*/
 
 /* Print out incoming variable adds or deletes. */
-int dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err)
+sint32 dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t err)
 {
 	dptab_table_t *sessions = (dptab_table_t *)context;
 
@@ -106,7 +106,7 @@ void addClient(dp_t *dp, playerHdl_t src)
 	}
 }
 
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
 	dp_t *mydp;
 	dp_transport_t theTransport;
@@ -154,7 +154,7 @@ main(int argc, char **argv)
 	 * add a subscription for the sessions table.
 	 */
 	started = eclock();
-	while ((long)(eclock() - started) < (40 * ECLOCKS_PER_SEC)) {
+	while ((sint32)(eclock() - started) < (40 * ECLOCKS_PER_SEC)) {
 		dpid_t idTo;
 		char pkt[512];
 		size_t size;
@@ -165,7 +165,7 @@ main(int argc, char **argv)
 		err = dpReceive(mydp, (dpid_t *)&src, &idTo, 1, &pkt, &size);
 		assert ((err == dp_RES_EMPTY) || (err == dp_RES_OK));
 		if (err == dp_RES_OK) {
-			dp_packetType_t id = *(short *)pkt;
+			dp_packetType_t id = *(sint16 *)pkt;
 			switch (id) {
 			case dppt_MAKE('e','1'):
 				printf("server: Got add request from h:%x.\n", src);

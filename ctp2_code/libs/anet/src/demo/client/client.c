@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "dprint.h"
 
 static char		adrString[256];
-static int		packetLen;
+static sint32		packetLen;
 char        	CommDLLName[256];
 commInitReq_t	commInitReq;		/*  Parameters needed by some comm drivers. */
 char			modeministr[256];
@@ -52,7 +52,7 @@ dpid_t          myGameHost = dp_ID_NONE;
 dpid_t          myID = dp_ID_NONE;
 dp_t            *myDP;
 
-int pleaseQuit = 0;
+sint32 pleaseQuit = 0;
 
 #define SPECIES_LOBBY 100		/* unique identifier for our lobby */
 #define SPECIES_NETSNAKE 101	/* unique identifier for netsnake */
@@ -78,11 +78,11 @@ void stuffChatText(char *from, char *txt)
 -------------------------------------------------------------------------*/
 typedef struct {
 	dp_result_t err;
-	int count;
+	sint32 count;
 	char *name;
 } erasePlayerContext_t;
 
-void erasePlayerCallback(dpid_t id, char_t *name, long flags, void *context)
+void erasePlayerCallback(dpid_t id, char_t *name, sint32 flags, void *context)
 {
 	erasePlayerContext_t *pc = context;
 	char buf[512];
@@ -131,7 +131,7 @@ void ErasePlayerByName(char *name)
 /*-------------------------------------------------------------------------
  Stuff to support PingPlayerByName().
 -------------------------------------------------------------------------*/
-void ping_callback(dp_karma_t karma, time_t avg_ms, int loss_pct)
+void ping_callback(dp_karma_t karma, time_t avg_ms, sint32 loss_pct)
 {
 	char buf[256];
 
@@ -144,15 +144,15 @@ void ping_callback(dp_karma_t karma, time_t avg_ms, int loss_pct)
 
 typedef struct {
 	dp_result_t err;
-	int count;
+	sint32 count;
 	char *name;
 } pingPlayerContext_t;
 
-void pingPlayerCallback(dpid_t id, char_t *name, long flags, void *context)
+void pingPlayerCallback(dpid_t id, char_t *name, sint32 flags, void *context)
 {
 	pingPlayerContext_t *pc = context;
 	char buf[512];
-	int karma = time(0);	/* unique identifier for this ping */
+	sint32 karma = time(0);	/* unique identifier for this ping */
 
 	if ((pc->count == 0)
 	&&  (strnicmp(pc->name, name, strlen(name)) == 0)) {
@@ -225,7 +225,7 @@ void	create_sess_cb(dp_session_t *ps, void *context)
  Given a line of text from the user, if it's a slash command, execute it,
  and return 1.  Otherwise, return 0.
 -------------------------------------------------------------------------*/
-int processChatCommand(const char *szChatText)
+sint32 processChatCommand(const char *szChatText)
 {
 	char *arg1, *arg2, *c, string[255], buf[255];
 	dp_session_t  sess;
@@ -352,9 +352,9 @@ void    SendChatMessage( char *szChatText )
    handled directly by this routine.  Others simply result in an update to
    the global switches data structure
  * ======================================================================== */
-void ProcessCommandLine(int argc, char **argv) {
+void ProcessCommandLine(sint32 argc, char **argv) {
   char *chptr;
-  int   i;
+  sint32   i;
 
   CommDLLName[0] = 0;
   adrString[0] = 0;
@@ -462,7 +462,7 @@ void ProcessCommandLine(int argc, char **argv) {
   }
 }
 
-int main( int argc, char *argv[] )
+sint32 main( sint32 argc, char *argv[] )
 {
 	dp_result_t   err;
 	commInitReq_t commInitReq;
@@ -531,11 +531,11 @@ int main( int argc, char *argv[] )
 			} u;
 		} pkt;
 		size_t size;
-		int ch = 0;
+		sint32 ch = 0;
 
 		if (kbhit()) {
 			/* Accumulate keys into keyboard buffer.  Allow backspace. */
-			int len = strlen(kbuf);
+			sint32 len = strlen(kbuf);
 			ch = getche();
 			if (ch == 8) {
 				if (len > 0)

@@ -25,6 +25,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef aneterr_h
 #define aneterr_h
 
+#include "types.h"
+
 /* Delivery service types */
 #define dp_SEND_UNRELIABLE 0
 #define dp_SEND_RELIABLE 1
@@ -45,7 +47,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define dp_SEND_RESERVE_THREEQUARTERS 6
 
 /*  Packet ID definitions */
-typedef unsigned short dp_packetType_t;
+typedef uint16 dp_packetType_t;
 
 #define sizeof_dpio_reliable_header 5
 
@@ -59,25 +61,25 @@ typedef unsigned short dp_packetType_t;
 								 * for system use as group ids, etc.
 								 */
 #define dp_ID_NONE		(dp_MAXDPIDS+1)
-typedef unsigned short dpid_t;	/* Id for a player.  Unique among players
+typedef uint16 dpid_t;	/* Id for a player.  Unique among players
 								 * currently in the session, but may be reused
 								 * after ~16000 players have come and gone.
 								 */
 
-typedef unsigned long dp_uid_t;			/*  Unique id for user. Never reused. */
+typedef uint32 dp_uid_t;			/*  Unique id for user. Never reused. */
 #define dp_UID_NONE 0
 
 #define dp_KARMA_NONE	0
-typedef short dp_karma_t;	/*  Sort of like a UUID or GUID, but dynamic. */
+typedef sint16 dp_karma_t;	/*  Sort of like a UUID or GUID, but dynamic. */
 
 /* 2 byte network byte order unicode character type */
-typedef short dp_netchar_t;
+typedef sint16 dp_netchar_t;
 
 /*  return type of all dp functions. */
-typedef int dp_result_t;
+typedef sint32 dp_result_t;
 
 /* type to distinguish one game type from another */
-typedef unsigned short dp_species_t;
+typedef uint16 dp_species_t;
 /* Special value for dp_species_t: */
 #define DP_ILLEGAL_SPECIES	0xFFFF
 

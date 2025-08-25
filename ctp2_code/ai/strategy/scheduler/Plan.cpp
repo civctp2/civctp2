@@ -75,11 +75,11 @@
 // - Prevented crashes, and cleaned up the code somewhat.
 // - Deferred some derefences until used (hopefully preventing crashes).
 // - Restored old plan sorting and added a bonus for goals which may need many
-//   units. (25-Jan-2008 Martin Gühmann)
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
-// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+//   units. (25-Jan-2008 Martin GÃ¼hmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin GÃ¼hmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin GÃ¼hmann)
 // - Simplified the class design: m_matches replaced, since it just contained
-//   pne agent pointer. (27-Aug-2008 Martin Gühmann)
+//   pne agent pointer. (27-Aug-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -118,8 +118,8 @@
 //----------------------------------------------------------------------------
 Plan::Plan()
 :
-    m_matching_value    (Goal::BAD_UTILITY),
     m_the_agent         (NULL),
+    m_matching_value    (Goal::BAD_UTILITY),
     m_needs_cargo       (false),
     m_needs_transporter (false),
     m_cannot_be_used    (false)

@@ -16,7 +16,7 @@ private:
 	SlicSegment *m_segment;
 
 public:
-	SlicRecord(sint32 owner, MBCHAR *title, MBCHAR *text,
+	SlicRecord(sint32 owner, const MBCHAR *title, const MBCHAR *text,
 			   SlicSegment *segment);
 	SlicRecord(CivArchive &archive);
 	~SlicRecord();

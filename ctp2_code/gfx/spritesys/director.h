@@ -130,7 +130,7 @@ public:
 	virtual void AddTerminateFaceoff(const Unit &faceroffer) = 0;
 	virtual void AddTerminateSound(const Unit &unit) = 0;
 	virtual void AddInvokeThroneRoom() = 0;
-	virtual void AddInvokeResearchAdvance(MBCHAR *text) = 0;
+	virtual void AddInvokeResearchAdvance(const MBCHAR *text) = 0;
 	virtual void AddBeginScheduler(sint32 player) = 0;
 
 	// Animations

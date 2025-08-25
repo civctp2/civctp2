@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <ctype.h>
 #include "stricmp.h"
 
-int stricmp(const char *s1, const char *s2)
+sint32 stricmp(const char *s1, const char *s2)
 {
     char c1, c2;
     while (1)
@@ -42,9 +42,9 @@ int stricmp(const char *s1, const char *s2)
     }
 }
 
-int strnicmp(const char *s1, const char *s2, int n)
+sint32 strnicmp(const char *s1, const char *s2, sint32 n)
 {
-    int i;
+    sint32 i;
     char c1, c2;
     for (i=0; i<n; i++)
     {

@@ -26,7 +26,7 @@
 //
 // - Event handlers declared in a notation that is more standard C++.
 // - Prevented crash in destructor after using the default constructor.
-// - Added a constom status bar text for orders. (13-Sep-2008 Martin Gühmann)
+// - Added a constom status bar text for orders. (13-Sep-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -55,6 +55,18 @@ class aui_StringTable;
 #define k_AUI_CONTROL_LDL_TIPWINDOW			"tipwindow"
 #define k_AUI_CONTROL_LDL_STRINGTABLE		"stringtable"
 
+union Cookie
+{
+	Cookie(void* ptr = nullptr) : m_voidPtr(ptr) {};
+	Cookie(sint32 data)         : m_voidPtr(nullptr) { m_sin32Type = data; }; // Make sure that the whole union is nulled
+	Cookie(uint32 data)         : m_voidPtr(nullptr) { m_uin32Type = data; }; // Make sure that the whole union is nulled
+
+	Cookie& operator=(void* ptr) { m_voidPtr = ptr; return *this; }
+
+	void*  m_voidPtr;
+	sint32 m_sin32Type;
+	uint32 m_uin32Type;
+};
 
 class aui_Control
 :
@@ -68,14 +80,14 @@ public:
 		aui_Control *control,
 		uint32 state,
 		uint32 data,
-		void *cookie );
+		Cookie cookie );
 
 	aui_Control(
 		AUI_ERRCODE *retval,
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_Control(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -84,7 +96,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~aui_Control();
 
 	virtual BOOL IsThisA( uint32 classId )
@@ -111,7 +123,10 @@ protected:
 		aui_Region          (),
 		aui_SoundBase       (),
 		m_stringTable       (NULL),
+		m_window            (NULL),
+		m_tip               (NULL),
 		m_allocatedTip      (false),
+		m_showingTip        (false),
 		m_statusText        (NULL),
 		m_statusTextCopy    (NULL),
 		m_numberOfLayers    (0),
@@ -124,14 +139,12 @@ protected:
 	AUI_ERRCODE InitCommonLdl(
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc,
-		void *cookie );
+		Cookie cookie );
 	AUI_ERRCODE InitCommon(
 		ControlActionCallback *ActionFunc,
-		void *cookie );
+		Cookie cookie );
 
 public:
-
-	aui_StringTable *m_stringTable;
 
 	virtual AUI_ERRCODE ResetThis( void );
 
@@ -180,12 +193,12 @@ public:
 
 	AUI_ERRCODE SetActionFuncAndCookie(
 		ControlActionCallback *ActionFunc,
-		void *cookie );
+		Cookie cookie );
 
 	ControlActionCallback *GetActionFunc( void ) const
 	{ return m_ActionFunc; }
 
-	void *GetCookie( void ) const
+	Cookie GetCookie( void ) const
 	{ Assert( m_ActionFunc != NULL ); return m_cookie; }
 
 	aui_Action *SetAction( aui_Action *action );
@@ -237,31 +250,6 @@ public:
 
 protected:
 
-	union
-	{
-		void *m_cookie;
-		aui_Action *m_action;
-	};
-	ControlActionCallback *m_ActionFunc;
-
-	aui_Window		*m_window;
-	aui_Window		*m_tip;
-	BOOL			m_allocatedTip;
-	BOOL			m_showingTip;
-
-	uint32			m_startWaitTime;
-	uint32			m_timeOut;
-
-	uint32			m_repeatTime;
-	uint32			m_lastRepeatTime;
-
-	aui_KeyboardEvent	m_keyboardEvent;
-	aui_JoystickEvent	m_joystickEvent;
-
-	uint32 m_actionKey;
-	uint32 m_keyboardAction;
-
-
 	typedef void (KeyboardEventCallback)( aui_KeyboardEvent *mouseData );
 	typedef void (JoystickEventCallback)( aui_JoystickEvent *mouseData );
 
@@ -281,22 +269,13 @@ protected:
 
 	virtual void	MouseNoChange(aui_MouseEvent * mouseData);
 
-private:
-
-	const MBCHAR *m_statusText;
-	MBCHAR *m_statusTextCopy;
-
-
-
-
 public:
-
 
 	void ExchangeImage(sint32 layerIndex, sint32 imageIndex,
 		const MBCHAR *imageName);
 
 
-	virtual AUI_ERRCODE	Resize(sint32 width, sint32 height);
+	virtual AUI_ERRCODE Resize(sint32 width, sint32 height);
 
 	virtual void SendKeyboardAction();
 	virtual bool HandleKey(uint32 wParam);
@@ -344,9 +323,9 @@ private:
 	static const sint32 k_AUI_CONTROL_LAYER_FLAG_ENABLED;
 
 	static uint32           s_controlClassId;
-    /// The control that owns the mouse
+	/// The control that owns the mouse
 	static aui_Control *    s_whichOwnsMouse;
-    /// The control that has the focus
+	/// The control that has the focus
 	static aui_Control *    s_whichHasFocus;
 
 	void InitializeLayerFlags(ldl_datablock *theBlock,
@@ -439,10 +418,41 @@ private:
 
 	void InitializeImageLayers(ldl_datablock *theBlock);
 
+
+public:
+	aui_StringTable *m_stringTable;
+
+protected:
+	union
+	{
+		Cookie m_cookie;
+		aui_Action *m_action;
+	};
+	ControlActionCallback *m_ActionFunc;
+
+	aui_Window		*m_window;
+	aui_Window		*m_tip;
+	bool			m_allocatedTip;
+	bool			m_showingTip;
+
+	uint32			m_startWaitTime;
+	uint32			m_timeOut;
+
+	uint32			m_repeatTime;
+	uint32			m_lastRepeatTime;
+
+	aui_KeyboardEvent	m_keyboardEvent;
+	aui_JoystickEvent	m_joystickEvent;
+
+	uint32 m_actionKey;
+	uint32 m_keyboardAction;
+
+private:
+	const MBCHAR *m_statusText;
+	MBCHAR *m_statusTextCopy;
+
 	sint32 m_numberOfLayers;
-
 	sint32 m_imagesPerLayer;
-
 
 	aui_ImageList *m_imageLayerList;
 
@@ -451,7 +461,6 @@ private:
 	sint32 m_renderFlags;
 
 	sint32 m_focusIndex;
-
 };
 
 #endif

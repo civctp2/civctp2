@@ -180,9 +180,9 @@ void ns_HPlayerItem::SetCivpoints( sint32 civpoints )
 {
 	aui_Control::ControlActionCallback *actionFunc =
 		m_civpointsButton->GetActionFunc();
-	void *cookie = m_civpointsButton->GetCookie();
+	Cookie cookie = m_civpointsButton->GetCookie();
 
-	m_civpointsButton->SetActionFuncAndCookie( NULL, NULL );
+	m_civpointsButton->SetActionFuncAndCookie( NULL, nullptr );
 	m_civpointsButton->SetValue( civpoints );
 	m_civpointsButton->SetActionFuncAndCookie( actionFunc, cookie );
 }
@@ -191,9 +191,9 @@ void ns_HPlayerItem::SetPwpoints( sint32 pwpoints )
 {
 	aui_Control::ControlActionCallback *actionFunc =
 		m_pwpointsButton->GetActionFunc();
-	void *cookie = m_pwpointsButton->GetCookie();
+	Cookie cookie = m_pwpointsButton->GetCookie();
 
-	m_pwpointsButton->SetActionFuncAndCookie( NULL, NULL );
+	m_pwpointsButton->SetActionFuncAndCookie( NULL, nullptr );
 	m_pwpointsButton->SetValue( pwpoints );
 	m_pwpointsButton->SetActionFuncAndCookie( actionFunc, cookie );
 }

@@ -68,7 +68,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if (defined WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -85,7 +85,7 @@ MSVC's warning level is set to 4.
 
 #if 0
 #define USE_MY_ASSERT 1
-#define assert(x) myassert((int)(x), __LINE__)
+#define assert(x) myassert((sint32)(x), __LINE__)
 #else
 #include <assert.h>
 #endif
@@ -145,15 +145,15 @@ typedef struct tabtResult_s {
 	float singleSmallTime;
 	float deleteTime;
 
-	int thisHost;		/* 0..n_hosts-1; if 0, this host is master */
+	sint32 thisHost;		/* 0..n_hosts-1; if 0, this host is master */
 
-	int n_hosts;
-	int loops;
+	sint32 n_hosts;
+	sint32 loops;
 
 	char *driver;
 	char *exe;
 
-	int packetLoss;
+	sint32 packetLoss;
 } tabtResult_t;
 
 /**
@@ -177,9 +177,9 @@ clock_t dpio_now;
 /*-------------------------------------------------------------------------
  Convert a key to ASCII for debug printing
 -------------------------------------------------------------------------*/
-static char *key2buf(char *key, int keylen, char *buf)
+static char *key2buf(char *key, sint32 keylen, char *buf)
 {
-	int i;
+	sint32 i;
 
 	if (keylen > hkeytab_MAXLEN)
 		return "key too long";
@@ -253,7 +253,7 @@ readReport(
 			if (strcmpi(test, "singleSmallTime") == 0)
 				res->singleSmallTime = val;
 			if (strcmpi(test, "pktloss") == 0)
-				res->packetLoss = (int)val;
+				res->packetLoss = (sint32)val;
 		}
 	}
 }
@@ -264,7 +264,7 @@ readReport(
 void
 abortTest(
 	FILE* log,
-	int exitCode,
+	sint32 exitCode,
 	char* message,
 	tabtResult_t* res)
 {
@@ -281,7 +281,7 @@ abortTest(
  Useful when assertions print and exit, instead of going to a debugger.
 -------------------------------------------------------------------------*/
 #if USE_MY_ASSERT
-void myassert(int x, int lineno)
+void myassert(sint32 x, sint32 lineno)
 {
 	if (!(x)) {
 		char buf[256];
@@ -295,7 +295,7 @@ void myassert(int x, int lineno)
 /*-------------------------------------------------------------------------
  Timeout
 -------------------------------------------------------------------------*/
-int timer_handler(int sigtype)
+sint32 timer_handler(sint32 sigtype)
 {
 	(void) sigtype;
 
@@ -310,7 +310,7 @@ int timer_handler(int sigtype)
 -------------------------------------------------------------------------*/
 void
 signalHandler(
-	int sigId)
+	sint32 sigId)
 {
 	(void) sigId;
 	abortTest(logFile, 4, "Test terminated at user request.\n", &results);
@@ -321,18 +321,18 @@ signalHandler(
  an old one is deleted.
  Note the time of the callback in the result block.
 -------------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 table_cb(
 	dptab_t *dptab,			/* table owner */
 	dptab_table_t *table,	/* table */
 	playerHdl_t src,		/* */
 	playerHdl_t dest,		/* */
 	char *subkey,			/* key of variable */
-	int subkeylen,			/* number of bytes in subkey */
+	sint32 subkeylen,			/* number of bytes in subkey */
 	void *buf,				/* pointer to variable */
 	size_t sent,
 	size_t total,
-	int seconds_left,
+	sint32 seconds_left,
 	void *context,			/* whatever we gave it */
 	dp_result_t err)		/* operation completed upon variable */
 {
@@ -525,12 +525,12 @@ void poll_test(dpio_t *dpio, dptab_t *tab)
  and the variable's trip around the ring looks like this:
     h1 -> h2 -> h3 -> h4 -> h1 again
 -------------------------------------------------------------------------*/
-int
+sint32
 run_one_node(
-	int childNum,
+	sint32 childNum,
 	char *sNextAdr,
-	int loopTotal,
-	int endLoopAt)
+	sint32 loopTotal,
+	sint32 endLoopAt)
 {
 	dptab_t *tab;
 	dp_result_t err;
@@ -540,7 +540,7 @@ run_one_node(
 	dptab_table_t *table2;
 	dpio_t *dpio;
 	playerHdl_t dest;
-	unsigned char adrBuf[dp_MAX_ADR_LEN];
+	uint8 adrBuf[dp_MAX_ADR_LEN];
 	commInitReq_t commInitReq;
 	commScanAddrReq_t		scanReq;
 	commScanAddrResp_t		scanResp;
@@ -549,8 +549,8 @@ run_one_node(
 	char dplogname[200];
 
 	char fname[256];
-	int startLoopAt = 0;
-	int i;
+	sint32 startLoopAt = 0;
+	sint32 i;
 
 	/* Set a timeout of 30 seconds */
 	signal(SIGTIMER, timer_handler);
@@ -579,10 +579,10 @@ run_one_node(
 		assert (thawFile != NULL);
 
 		/* Read everything from our file */
-		fread(&startLoopAt,sizeof(int),1,thawFile);
-		fread(&loopTotal,sizeof(int),1,thawFile);
-		fread(&it_num,sizeof(int),1,thawFile);
-		fread(&(results.n_hosts),sizeof(int),1,thawFile);
+		fread(&startLoopAt,sizeof(sint32),1,thawFile);
+		fread(&loopTotal,sizeof(sint32),1,thawFile);
+		fread(&it_num,sizeof(sint32),1,thawFile);
+		fread(&(results.n_hosts),sizeof(sint32),1,thawFile);
 		sprintf(dplogname, "dpt%d.%d.log", childNum, startLoopAt);
 		dp_setLogFname(dplogname);
 
@@ -643,11 +643,11 @@ run_one_node(
 		/* 2. Create tables */
 		printf("Node %d step 2\n", childNum);
 		key[0] = 1;
-		err = dptab_createTable(tab, &table, key, 1, sizeof(int), NULL, NULL, table_cb, NULL);
+		err = dptab_createTable(tab, &table, key, 1, sizeof(sint32), NULL, NULL, table_cb, NULL);
 		assert(err == dp_RES_OK);
 		if(childNum == 0) {
 			key[0] = 2;
-			err = dptab_createTable(tab, &table2, key, 1, sizeof(int), NULL, NULL, table_cb, NULL);
+			err = dptab_createTable(tab, &table2, key, 1, sizeof(sint32), NULL, NULL, table_cb, NULL);
 			assert(err == dp_RES_OK);
 		}
 
@@ -718,7 +718,7 @@ run_one_node(
 		printf("Node %d waiting for IT(%d).\n", childNum, i);
 		do {				/* Wait for IT */
 			poll_test(dpio, tab);
-		} while (((int) it_num) < (i & 0x7F));
+		} while (((sint32) it_num) < (i & 0x7F));
 		if(childNum != 0) {	/* Slaves send IT after getting one. */
 			(*(dp_packetType_t *)nbuf) = PKT_IT;
 			nbuf[sizeof(dp_packetType_t)] = (char) i;
@@ -745,8 +745,8 @@ run_one_node(
 		/* Do it here to force an xfer to be saved and restored. */
 		if(i == endLoopAt) {
 			FILE* freezeFile;
-			int result;
-			int proc;
+			sint32 result;
+			sint32 proc;
 
 			/* Find our file */
 			sprintf(fname, FREEZENAME, childNum);
@@ -755,10 +755,10 @@ run_one_node(
 			assert (freezeFile != NULL);
 
 			/* Write everything to our file */
-			fwrite(&i,sizeof(int),1,freezeFile);
-			fwrite(&loopTotal,sizeof(int),1,freezeFile);
-			fwrite(&it_num,sizeof(int),1,freezeFile);
-			fwrite(&(results.n_hosts),sizeof(int),1,freezeFile);
+			fwrite(&i,sizeof(sint32),1,freezeFile);
+			fwrite(&loopTotal,sizeof(sint32),1,freezeFile);
+			fwrite(&it_num,sizeof(sint32),1,freezeFile);
+			fwrite(&(results.n_hosts),sizeof(sint32),1,freezeFile);
 
 			err = dpio_freeze(dpio, freezeFile);
 			assert(err == dp_RES_OK);
@@ -813,7 +813,7 @@ run_one_node(
 	/* Ack packets for four more seconds just in case */
 	{
 		clock_t start = eclock();
-		while ((long)(eclock() - start) < 4 * ECLOCKS_PER_SEC) {
+		while ((sint32)(eclock() - start) < 4 * ECLOCKS_PER_SEC) {
 			dpio_now = eclock();
 			dpio_update(dpio);
 		}
@@ -826,22 +826,22 @@ run_one_node(
  Run n copies of the test.
  Return value is 0 on success.
 -------------------------------------------------------------------------*/
-int					/* */
+sint32					/* */
 run_n_nodes(
 	char *exe,		/* */
-	int loops)		/* */
+	sint32 loops)		/* */
 {
 	char *childArgs[7] = {NULL, NULL, "nhosts", "nloops", "childnum", "nextadr.possibly.internet.address:maybeWithPortNumber", NULL};
-	int* procs = NULL;
-	int* result = NULL;
-	int i;
+	sint32* procs = NULL;
+	sint32* result = NULL;
+	sint32 i;
 
 	childArgs[0] = exe;
 	childArgs[1] = results.driver;
 
-	if ((procs = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
+	if ((procs = (sint32 *) malloc(results.n_hosts * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate process handle storage.\n", NULL);
-	if((result = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
+	if((result = (sint32 *) malloc(results.n_hosts * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate result storage.\n", NULL);
 
 	/* Start tests */
@@ -894,9 +894,9 @@ run_n_nodes(
 /*-------------------------------------------------------------------------
  Entry point
 -------------------------------------------------------------------------*/
-int						/* Success (0) or failure (nonzero) */
+sint32						/* Success (0) or failure (nonzero) */
 main(
-	int argc,			/* number of arguments */
+	sint32 argc,			/* number of arguments */
 	char *argv[] )		/* value of arguments */
 {
 	logFile = stdout;
@@ -966,7 +966,7 @@ Hostnum is 0..nhosts-1\n",
 
 		return run_n_nodes(argv[0], results.loops);
 	} else {
-		int stop = 0;
+		sint32 stop = 0;
 		results.thisHost = atoi(argv[4]);
 		if (results.thisHost < 0 || results.thisHost > 200) {
 			sprintf(buf, "Invalid childnum (%s)\n%s", argv[4], usage);

@@ -50,13 +50,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 /* globals for use by main, echo_server/echo_client */
-int n_connects = 0;
+sint32 n_connects = 0;
 
 /* globals for use by main, ProcessCommandLine */
 char commDLLName[256];
-int server;
+sint32 server;
 char servernames[4][256];
-int n_servers = 0;
+sint32 n_servers = 0;
 commInitReq_t commInitReq; /*  Parameters needed by some comm drivers. */
 char phonenum[256];
 char modeministr[256];
@@ -68,8 +68,8 @@ char pass1[tcapw_LEN_PW+1];
 wchar_t secretcode[tcapw_LEN_PW];
 
 /* Globals for detecting callbacks and other events */
-int waiting_for_update = FALSE;
-int got_callback = FALSE;
+sint32 waiting_for_update = FALSE;
+sint32 got_callback = FALSE;
 char sessname[255];
 dpid_t id;
 
@@ -79,10 +79,10 @@ dpid_t id;
 
 #ifdef _DEBUG
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-const char *hexstring(const unsigned char *binstr, int len)
+const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -93,9 +93,9 @@ const char *hexstring(const unsigned char *binstr, int len)
 
 #ifdef _DEBUG
 /* Convert a key to ASCII for debug printing */
-char *key2buf(const char *key, int keylen, char *buf)
+char *key2buf(const char *key, sint32 keylen, char *buf)
 {
-	int i;
+	sint32 i;
 
 	if (keylen > dp_KEY_MAXLEN)
 		return "key too long";
@@ -127,10 +127,10 @@ char key2a_buf2[256];
 
 /* There are two addresses: 0 and 1.  All packets are from the other address. */
 struct {
-	int len;
+	sint32 len;
 	char buf[256];
 } simnetbuf[2], simlocalbuf[2];	 /* receive buffer & local buffer */
-int sim_my_rx = 0;		/* offset I receive into */
+sint32 sim_my_rx = 0;		/* offset I receive into */
 
 dpioOpenHdlCallback_t simnet_openhdlcb = NULL;
 void *simnet_openhdlcontext = NULL;
@@ -141,7 +141,7 @@ dp_result_t dpio_get(
 	playerHdl_t *psrc,
 	void *buffer,
 	size_t *psize,
-	int *flags)
+	sint32 *flags)
 {
 	(void) dpio;
 	if (simnetbuf[sim_my_rx].len) {
@@ -149,7 +149,7 @@ dp_result_t dpio_get(
 		memcpy(buffer, simnetbuf[sim_my_rx].buf, simnetbuf[sim_my_rx].len);
 		*psize = simnetbuf[sim_my_rx].len;
 		simnetbuf[sim_my_rx].len = 0;
-		printf("sim dpio_get: %d got packet of size %d from %d: %s\n", sim_my_rx, *psize, *psrc, hexstring((unsigned char *)buffer, *psize));
+		printf("sim dpio_get: %d got packet of size %d from %d: %s\n", sim_my_rx, *psize, *psrc, hexstring((uint8 *)buffer, *psize));
 
 		if (flags)
 			*flags = dpio_GET_RELIABLE;
@@ -160,7 +160,7 @@ dp_result_t dpio_get(
 		memcpy(buffer, simlocalbuf[sim_my_rx].buf, simlocalbuf[sim_my_rx].len);
 		*psize = simlocalbuf[sim_my_rx].len;
 		simlocalbuf[sim_my_rx].len = 0;
-		printf("sim dpio_get: %d got local packet of size %d: %s\n", sim_my_rx, *psize, hexstring((unsigned char *)buffer, *psize));
+		printf("sim dpio_get: %d got local packet of size %d: %s\n", sim_my_rx, *psize, hexstring((uint8 *)buffer, *psize));
 
 		if (flags)
 			*flags = dpio_GET_RELIABLE;
@@ -169,7 +169,7 @@ dp_result_t dpio_get(
 	return dp_RES_EMPTY;
 }
 
-int retry_fraction = 0;
+sint32 retry_fraction = 0;
 
 /* Send a packet */
 /* Returns dp_RES_FULL retry_fraction percent of the time to test the packet
@@ -178,16 +178,16 @@ int retry_fraction = 0;
 dp_result_t dpio_put_reliable2(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest, /* If error occurs, dest with error indicated here */
-	int flags)
+	sint32 flags)
 {
 	static retry_sum = 0;
 
-	DPRINT(("sim dpio_put: h:%d sending packet of size %d to h:%x\n", sim_my_rx, size, (int)(*dests)));
-	if ((int)(*dests) == (1 - sim_my_rx)) {
+	DPRINT(("sim dpio_put: h:%d sending packet of size %d to h:%x\n", sim_my_rx, size, (sint32)(*dests)));
+	if ((sint32)(*dests) == (1 - sim_my_rx)) {
 		if (simnetbuf[1 - sim_my_rx].len) {
 			printf("sim dpio_put: output buffer full\n");
 			exit(1);
@@ -201,7 +201,7 @@ dp_result_t dpio_put_reliable2(
 		memcpy(simnetbuf[1 - sim_my_rx].buf, buffer, size);
 		simnetbuf[1 - sim_my_rx].len = size;
 		return dp_RES_OK;
-	} else if (*dests == PLAYER_ME || (int)(*dests) == sim_my_rx) {
+	} else if (*dests == PLAYER_ME || (sint32)(*dests) == sim_my_rx) {
 		if (simlocalbuf[sim_my_rx].len) {
 			printf("sim dpio_put: local buffer full\n");
 			exit(1);
@@ -218,7 +218,7 @@ dp_result_t dpio_put_reliable2(
 dp_result_t dpio_put_unreliable(
 	dpio_t  *dpio,
 	const playerHdl_t *dests,/* Vector of destinations */
-	int nDests,             /* Size of destination vector */
+	sint32 nDests,             /* Size of destination vector */
 	void *buffer,
 	size_t size,
 	playerHdl_t *errDest) /* If error occurs, dest with error indicated here */
@@ -251,14 +251,14 @@ playerHdl_t dpio_openHdl2(dpio_t *dpio, void *adr, void *adr2)
 	return SIMNET_H_SERVER;
 }
 
-short dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h)
+sint16 dpio_getHdlRemoteCapabilities(dpio_t *dpio, playerHdl_t h)
 {
 	return 0x01;
 }
-int dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h)
+sint32 dpio_getHdlTxPktsFree(dpio_t *dpio, playerHdl_t h)
 {
-	if (((int)h == (1 - sim_my_rx) && simnetbuf[1 - sim_my_rx].len) ||
-		(((int)h == sim_my_rx || h==PLAYER_ME) && simlocalbuf[sim_my_rx].len))
+	if (((sint32)h == (1 - sim_my_rx) && simnetbuf[1 - sim_my_rx].len) ||
+		(((sint32)h == sim_my_rx || h==PLAYER_ME) && simlocalbuf[sim_my_rx].len))
 		return 0;
 	else
 		return 4;
@@ -297,15 +297,15 @@ dp_result_t dpio_printAdr(dpio_t *dpio, const char *adrbuf, size_t adrlen, char 
 	sprintf(buf, "%d", *adrbuf);
 	return dp_RES_OK;
 }
-int dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
+sint32 dpio_scanAdr(dpio_t *dpio, char *hostname, char *adrbuf, size_t buflen)
 {
-	int adr;
+	sint32 adr;
 	sscanf(hostname, "%d", &adr);
 	*adrbuf = adr;
 	DPRINT(("simnet_scanAdr(%s) -> %d\n", hostname, adr));
 	return 1;
 }
-dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, int *len)
+dp_result_t dpio_hdl2adr(dpio_t *dpio, playerHdl_t h, void *adr, sint32 *len)
 {
 	if (h != PLAYER_ME) {
 		printf("dpio_hdl2adr: bad\n");
@@ -341,7 +341,7 @@ dp_result_t dpio_closeHdl(dpio_t *dpio, playerHdl_t h)
 	return dp_RES_OK;
 }
 
-dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, int *len)
+dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, sint32 *len)
 {
 	DPRINT(("simnet dpio_hdl2adr2: not implemented\n"));
 	return dp_RES_BUG;
@@ -349,7 +349,7 @@ dp_result_t dpio_hdl2adr2(dpio_t *dpio, playerHdl_t h, void *adr, void *adr2, in
 
 #define dpReadyToFreeze(dp) dp_RES_OK
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure(%d, %s, %s)\n",
 			lineno, file, linetxt);
@@ -357,14 +357,14 @@ dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
 	return dp_RES_OK;
 }
 
-int cdecl
+sint32 cdecl
 dp_dprintf(
 	const char *	__format,	/* printf-style format (or NULL) */
 	...)						/* printf-style arguments on stack (if any) */
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -440,7 +440,7 @@ DP_API dp_result_t dpCreate(
 	return dp_RES_OK;
 }
 
-dp_result_t dpDestroy(dp_t *dp, int flags)
+dp_result_t dpDestroy(dp_t *dp, sint32 flags)
 {
 	precondition(dp);
 	DPRINT(("dpDestroy: entering, flags:%d\n", flags));
@@ -465,12 +465,12 @@ DP_API dp_result_t DP_APIX dpReceive(
 	dp_t   *dp,
 	dpid_t *idFrom,
 	dpid_t *idTo,
-	int    flags,
+	sint32    flags,
 	void *buffer,
 	size_t *size)
 {
 	dp_result_t err;
-	int get_flags;
+	sint32 get_flags;
 	playerHdl_t src;
 	char *pktbuf = (char *)buffer;
 	tserv_event_t result;
@@ -483,7 +483,7 @@ DP_API dp_result_t DP_APIX dpReceive(
 	if (err != dp_RES_OK) {
 		playerHdl_t h;
 
-		if (((long)(dp->now - dp->next_beacon)) > 0) {
+		if (((sint32)(dp->now - dp->next_beacon)) > 0) {
 			/* poll to propagate any dptab table changes twice a second */
 			dp->next_beacon = dp->now + ECLOCKS_PER_SEC/2;
 			DPRINT(("sim dpReceive: calling dptab_update t:%d next_t:%d\n", dp->now, dp->next_beacon));
@@ -495,7 +495,7 @@ DP_API dp_result_t DP_APIX dpReceive(
 			waiting_for_update = FALSE;
 		}
 		if (dp->hGameServer == PLAYER_ME &&
-			((long)(dp->now - dp->next_beacon2)) > 0) {
+			((sint32)(dp->now - dp->next_beacon2)) > 0) {
 			/* server polls for complete score reports every 3 seconds or so */
 			dp->next_beacon2 = dp->now + ECLOCKS_PER_SEC * 3;
 			DPRINT(("sim dpReceive: calling servscor_poll t:%d next_t:%d\n", dp->now, dp->next_beacon2));
@@ -582,7 +582,7 @@ DP_API dp_result_t DP_APIX dpSetGameServerEx(dp_t *dp, char *masterHostName, dp_
 {
 	dp_result_t err;
 	char serveraddr[dp_MAX_ADR_LEN];
-	int addrlen;
+	sint32 addrlen;
 
 	if (masterHostName) {  /* We are connecting */
 		dp->tca = tca_create();
@@ -642,7 +642,7 @@ dp_uid_t dpGetPlayerUid(dp_t *dp, dpid_t id)
 	return dp->tserv->userinfo.uid;
 }
 
-dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessid, int *sessidlen, dp_species_t *sessType)
+dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessid, sint32 *sessidlen, dp_species_t *sessType)
 {
 	if (PLAYER_NONE != tserv_uid2hdl(dp->tserv, uid)) {
 		/* If the uid is logged in, it's in this session. */
@@ -660,7 +660,7 @@ dp_result_t dpSendObjectDelta(
 	dp_object_t *data,
 	dptab_table_t *tab,
 	char *subkey,
-	int subkeylen)
+	sint32 subkeylen)
 {
 	playerHdl_t dest;
 	size_t pktlen;
@@ -744,10 +744,10 @@ dpid_t dpGetMyId(dp_t *dp)
   directly by this routine.  Others simply result in an update to
   the global switches data structure.
 ----------------------------------------------------------------------------*/
-void ProcessCommandLine(int argc, char **argv)
+void ProcessCommandLine(sint32 argc, char **argv)
 {
 	char *chptr;
-	int   i;
+	sint32   i;
 
 	servernames[n_servers][0] = '\0';
 	commDLLName[0] = '\0';
@@ -855,7 +855,7 @@ connect to.\n");
  Callback (ick) called by dpio when a handle is opened or closed.
  err is either dp_RES_OPENED, dp_RES_HOST_NOT_RESPONDING, or dp_RES_CLOSED.
 ----------------------------------------------------------------------------*/
-void server_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *context)
+void server_openhdl_cb(playerHdl_t hdl, sint32 n_hdls, dp_result_t err, void *context)
 {
 	dp_t *dp = context;
 	if (!context) return;
@@ -891,7 +891,7 @@ void server_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *conte
  Callback (ick) called by dpio when a handle is opened or closed.
  err is either dp_RES_OPENED, dp_RES_HOST_NOT_RESPONDING, or dp_RES_CLOSED.
 ----------------------------------------------------------------------------*/
-void client_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *context)
+void client_openhdl_cb(playerHdl_t hdl, sint32 n_hdls, dp_result_t err, void *context)
 {
 	dp_result_t dptab_err;
 	dp_t *dp = context;
@@ -910,7 +910,7 @@ void client_openhdl_cb(playerHdl_t hdl, int n_hdls, dp_result_t err, void *conte
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when joining a session.
 -------------------------------------------------------------------------*/
-int dp_PASCAL dpscoret_join_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context) {
+sint32 dp_PASCAL dpscoret_join_sess_cb(dp_session_t *ps, sint32 *pTimeout, sint32 flags, void *context) {
 	if (ps) {
 		DPRINT(("join_sess_cb: Joined session %s.\n", ps->sessionName));
 		printf("join_sess_cb: Joined session %s.\n", ps->sessionName);
@@ -933,7 +933,7 @@ int dp_PASCAL dpscoret_join_sess_cb(dp_session_t *ps, long *pTimeout, long flags
 /*-------------------------------------------------------------------------
  Callback triggered by creating a player.
 -------------------------------------------------------------------------*/
-static void dp_PASCAL dpscoret_create_player_cb(dpid_t id, char_t *name, long flags, void *context)
+static void dp_PASCAL dpscoret_create_player_cb(dpid_t id, char_t *name, sint32 flags, void *context)
 {
 	dpid_t *pMy_id = (dpid_t *)context;
 
@@ -957,13 +957,13 @@ static void dp_PASCAL dpscoret_create_player_cb(dpid_t id, char_t *name, long fl
 /*----------------------------------------------------------------------------
  The server calls this periodically to get and process packets.
 ----------------------------------------------------------------------------*/
-void server_poll(dp_t *myDP, int init)
+void server_poll(dp_t *myDP, sint32 init)
 {
 	dp_result_t err;
 	dpid_t src, dest;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
-	int res;
+	sint32 res;
 	tserv_event_t event;
 
 	myDP->now = eclock();
@@ -1043,25 +1043,25 @@ void server_poll(dp_t *myDP, int init)
  which goes thru the normal login sequence.
  Returns TRUE when test complete.
 ----------------------------------------------------------------------------*/
-int client_poll(dp_t *myDP, int init)
+sint32 client_poll(dp_t *myDP, sint32 init)
 {
 	dp_result_t err;
 	dpid_t src, dest;
 	char pktbuf[dpio_MAXLEN_UNRELIABLE];
 	size_t pktlen;
-	int got_result = FALSE;
-	int got_delta = FALSE;
+	sint32 got_result = FALSE;
+	sint32 got_delta = FALSE;
 	tserv_event_t result;
 	dp_objectDelta_packet_t *delta;
-	int done = FALSE;
+	sint32 done = FALSE;
 	char *servername = servernames[0];
 
-	static int client_state = 0;
+	static sint32 client_state = 0;
 	static dp_uid_t uid = dp_UID_NONE;
 	static clock_t deadline;
-	static long oldscoreVal[6];
-	static int got_scoreval[6];
-	static int got_oldmax[2];
+	static sint32 oldscoreVal[6];
+	static sint32 got_scoreval[6];
+	static sint32 got_oldmax[2];
 
 	myDP->now = eclock();
 
@@ -1224,8 +1224,8 @@ int client_poll(dp_t *myDP, int init)
 			assert(!err);
 		}
 #endif
-		memset(oldscoreVal, 0, sizeof(long) * 6);
-		memset(got_oldmax, 0, sizeof(int) * 2);
+		memset(oldscoreVal, 0, sizeof(sint32) * 6);
+		memset(got_oldmax, 0, sizeof(sint32) * 2);
 		deadline = myDP->now + ECLOCKS_PER_SEC * 2;
 		client_state += 10;
 		printf("CLIENT: going to state %d\n", client_state);
@@ -1233,7 +1233,7 @@ int client_poll(dp_t *myDP, int init)
 
 	case 170:  /* (dpscore) Wait for deltas.  Won't get any if server
 				* hasn't seen scores from our sesstype before */
-		if ((long)(myDP->now - deadline) >= 0) {
+		if ((sint32)(myDP->now - deadline) >= 0) {
 			DPRINT(("CLIENT: Received no new deltas by deadline, leaving.\n"));
 			client_state += 10;
 			printf("CLIENT: going to state %d\n", client_state);
@@ -1243,7 +1243,7 @@ int client_poll(dp_t *myDP, int init)
 			dp_scoreInfo_t *psi;
 			scorerep_buf_t repbuf;
 			dp_uid_t delta_uid;
-			int i;
+			sint32 i;
 
 			/* delta packet:
 			 *  flags:  dp_OBJECTDELTA_FLAG_LOCAL/INOPENSESS/ISHOST;
@@ -1267,12 +1267,12 @@ int client_poll(dp_t *myDP, int init)
 			DPRINT(("CLIENT: got delta, scores:"));
 			assert(player.scores);
 			for (i = 0; i < player.scores->n_used; i++) {
-				int scoreId;
-				long scoreVal;
+				sint32 scoreId;
+				sint32 scoreVal;
 				assoctab_item_t *pe = assoctab_getkey(player.scores, i);
 				assert(pe);
 				scoreId = pe->key & ~(dp_SCOREID_MAX | dp_SCOREID_SUM);
-				scoreVal = *((long *)pe->value);
+				scoreVal = *((sint32 *)pe->value);
 				DPRINT((" %s%s%d->%d", ((pe->key & dp_SCOREID_MAX) ? "MAX" : ""), ((pe->key & dp_SCOREID_SUM) ? "SUM" : ""), scoreId, scoreVal));
 				if (delta_uid == uid && scoreId >= 1 && scoreId < 3) {
 					if (pe->key & dp_SCOREID_MAX) {
@@ -1295,11 +1295,11 @@ int client_poll(dp_t *myDP, int init)
 		err = dpReportScoreStart(myDP, 0);
 		assert(!err);
 		{
-			int scoreId;
-			long scoreVal;
+			sint32 scoreId;
+			sint32 scoreVal;
 			/* Send the previous max - 10 and + 10 */
 			for (scoreId = 1; scoreId < 3; scoreId++) {
-				scoreVal = oldscoreVal[scoreId-1 + 4] + (long)scoreId * 20 - 30;
+				scoreVal = oldscoreVal[scoreId-1 + 4] + (sint32)scoreId * 20 - 30;
 				err = dpReportScore2(myDP, id, scoreId, scoreVal);
 				assert(!err);
 			}
@@ -1326,7 +1326,7 @@ int client_poll(dp_t *myDP, int init)
 		if (dpReadyToFreeze(myDP) != dp_RES_BUSY)
 			waiting_for_update = FALSE;
 #endif
-		memset(got_scoreval, 0, sizeof(int) * 6);
+		memset(got_scoreval, 0, sizeof(sint32) * 6);
 		/* May have to wait up to 61 secs for a servscor_poll, dptab_update */
 		deadline = myDP->now + ECLOCKS_PER_SEC * 70;
 		client_state += 10;
@@ -1334,8 +1334,8 @@ int client_poll(dp_t *myDP, int init)
 		break;
 
 	case 200:  /* (dpscore) Wait for deltas */
-		if ((long)(myDP->now - deadline) >= 0) {
-			int i;
+		if ((sint32)(myDP->now - deadline) >= 0) {
+			sint32 i;
 			DPRINT(("CLIENT: Received no new deltas by deadline, leaving.\n"));
 			DPRINT(("CLIENT: got_scorevals :"));
 			for (i = 0; i < 6; i++) {
@@ -1351,7 +1351,7 @@ int client_poll(dp_t *myDP, int init)
 			dp_scoreInfo_t *psi;
 			scorerep_buf_t repbuf;
 			dp_uid_t delta_uid;
-			int i;
+			sint32 i;
 
 			/* delta packet:
 			 *  flags:  dp_OBJECTDELTA_FLAG_LOCAL/INOPENSESS/ISHOST;
@@ -1375,15 +1375,15 @@ int client_poll(dp_t *myDP, int init)
 			DPRINT(("CLIENT: got delta, scores:"));
 			assert(player.scores);
 			for (i = 0; i < player.scores->n_used; i++) {
-				int scoreId;
-				long scoreVal;
+				sint32 scoreId;
+				sint32 scoreVal;
 				assoctab_item_t *pe = assoctab_getkey(player.scores, i);
 				assert(pe);
 				scoreId = pe->key & ~(dp_SCOREID_MAX | dp_SCOREID_SUM);
-				scoreVal = *((long *)pe->value);
+				scoreVal = *((sint32 *)pe->value);
 				DPRINT((" %s%s%d:", ((pe->key & dp_SCOREID_MAX) ? "MAX" : ""), ((pe->key & dp_SCOREID_SUM) ? "SUM" : ""), scoreId));
 				if (delta_uid == uid && scoreId >= 1 && scoreId < 3) {
-					long expectedVal;
+					sint32 expectedVal;
 					if (pe->key & dp_SCOREID_MAX) {
 						/* expect max(oldmax, oldmax +/- 10);
 						 * if oldmax is undefined, submitted value
@@ -1401,13 +1401,13 @@ int client_poll(dp_t *myDP, int init)
 						/* expect sum(oldsum, oldmax +/- 10);
 						 * oldsum, oldmax = 0 if undefined.
 						 */
-						expectedVal = oldscoreVal[scoreId-1 + 2] + oldscoreVal[scoreId-1 + 4] + (long)scoreId*20 - 30;
+						expectedVal = oldscoreVal[scoreId-1 + 2] + oldscoreVal[scoreId-1 + 4] + (sint32)scoreId*20 - 30;
 						DPRINT(("%d->%d(=?%d) ", oldscoreVal[scoreId-1 + 2], scoreVal, expectedVal));
 						assert(scoreVal == expectedVal);
 						got_scoreval[scoreId-1 + 2] = TRUE;
 					} else {
 						/* expect oldmax +/- 10; (oldmax = 0 if undefined) */
-						expectedVal = oldscoreVal[scoreId-1 + 4] + (long)scoreId*20 - 30;
+						expectedVal = oldscoreVal[scoreId-1 + 4] + (sint32)scoreId*20 - 30;
 						DPRINT(("%d->%d(=?%d) ", oldscoreVal[scoreId-1], scoreVal, expectedVal));
 						assert(scoreVal == expectedVal);
 						got_scoreval[scoreId-1] = TRUE;
@@ -1523,7 +1523,7 @@ void create_db()
 }
 #endif /* not dpscoret_CLIENT_ONLY */
 
-int dpscore_test()
+sint32 dpscore_test()
 {
 	dp_result_t err;
 	dp_transport_t transport;
@@ -1566,7 +1566,7 @@ int dpscore_test()
 		exit(1);
 #else
 		char serveraddr[dp_MAX_ADR_LEN];
-		int addrlen = dp_MAX_ADR_LEN;
+		sint32 addrlen = dp_MAX_ADR_LEN;
 		char printable[50];
 
 		DPRINT(("dpscoret: initializing server\n"));
@@ -1594,7 +1594,7 @@ int dpscore_test()
 
 	raw_init();
 	while (1) {
-		int charFromUser = 0;
+		sint32 charFromUser = 0;
 		if (raw_kbhit()) {
 			charFromUser = raw_getc();
 			if (charFromUser == 27 /* Esc */) {
@@ -1640,7 +1640,7 @@ int dpscore_test()
     return 0;
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
 #ifndef SIMNET
 	if (argc < 2) {

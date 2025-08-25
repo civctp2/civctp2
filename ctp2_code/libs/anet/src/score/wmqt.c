@@ -33,7 +33,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -44,20 +44,20 @@ dp_dprintf(
 	return len;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
 }
 
-int test_wmq(int write)
+sint32 test_wmq(sint32 write)
 {
 	dp_result_t err;
 	time_t now, t_last, t_start;
 	wmq_t *wmq;
 	char buf[10];
 	char *pbuf;
-	unsigned short len;
+	uint16 len;
 
 	t_start = time(NULL);
 	if (write) {
@@ -101,7 +101,7 @@ int test_wmq(int write)
 		}
 	} else {
 		time_t data;
-		long offset_old = 0;
+		sint32 offset_old = 0;
 		time_t t_old = t_start;
 		wmq_record_t record;
 
@@ -146,8 +146,8 @@ int test_wmq(int write)
 			assert(data == wmq->t);
 
 			if (!(wmq->t % 15)) {
-				long offset_cur;
-				long t_cur;
+				sint32 offset_cur;
+				sint32 t_cur;
 
 				err = wmq_tell(wmq, &offset_cur, &t_cur);
 				assert(!err);
@@ -188,10 +188,10 @@ int test_wmq(int write)
 	return 0;
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
-	int ret;
-	int write;
+	sint32 ret;
+	sint32 write;
 
 	if (argc < 2) {
 		printf("\
@@ -208,7 +208,7 @@ Usage: %s (1|0) [dir] [tag]\n\
 		WMQDir[wmq_DIR_MAXLEN-1] = '\0';
 	}
 	if (argc > 3) {
-		int temp[4];
+		sint32 temp[4];
 		if ((sscanf(argv[3], "%d.%d.%d.%d",
 			&(temp[0]), &(temp[1]), &(temp[2]), &(temp[3])) != 4)
 		||  ((temp[0] & 0xff) != temp[0]) || ((temp[1] & 0xff) != temp[1])

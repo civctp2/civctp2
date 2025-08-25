@@ -26,8 +26,8 @@
 //
 // - Code strucure improvements: multiple include guard added, cleanup in
 //   destructor.
-// - Increased the number of players in a HotSeat and PBEM game. (4-Dec-2007 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
+// - Increased the number of players in a HotSeat and PBEM game. (4-Dec-2007 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -49,8 +49,8 @@ typedef void (HotseatListCallback)(sint32 launch,
 								   sint32 player,
 								   sint32 civ,
 								   BOOL human,
-								   MBCHAR *name,
-								   MBCHAR *email);
+								   const MBCHAR *name,
+								   const MBCHAR *email);
 
 #define k_MAX_HOTSEAT_PLAYERS k_MAX_PLAYERS
 
@@ -59,8 +59,8 @@ class HotseatListItem : public c3_ListItem
 public:
 
 	HotseatListItem(AUI_ERRCODE *retval, sint32 index,
-					sint32 civ, bool isHuman, MBCHAR *email,
-					MBCHAR *ldlBlock);
+					sint32 civ, bool isHuman, const MBCHAR *email,
+					const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -81,7 +81,7 @@ protected:
 	HotseatListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(sint32 civ, bool isHuman, MBCHAR *email, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(sint32 civ, bool isHuman, const MBCHAR *email, const MBCHAR *ldlBlock);
 
 public:
 
@@ -98,7 +98,7 @@ private:
 class HotseatList : public KeyboardHandler
 {
 public:
-	HotseatList( HotseatListCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+	HotseatList( HotseatListCallback *callback = NULL, const MBCHAR *ldlBlock = NULL );
 	virtual ~HotseatList();
 
 	c3_PopupWindow	*m_window;
@@ -110,7 +110,7 @@ public:
 	HotseatListItem *m_items[k_MAX_HOTSEAT_PLAYERS];
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
+	sint32 Initialize ( const MBCHAR *ldlBlock );
 	sint32 UpdateData ( void );
 
 	sint32 EnableButtons( void );

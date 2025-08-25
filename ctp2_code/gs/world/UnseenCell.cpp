@@ -92,31 +92,31 @@ namespace
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell(const MapPoint & point)
 :
+	m_tileInfo                      (NULL),
+	m_installations                 (new PointerList<UnseenInstallationInfo>),
+	m_improvements                  (new PointerList<UnseenImprovementInfo>),
+	m_cityName                      (NULL),
+	m_actor                         (NULL),
+	m_slaveBits                     (0x0000),
 	m_env                           (0),
+	m_visibleCityOwner              (0),
+	m_point                         (point),
 	m_terrain_type                  (TERRAIN_UNKNOWN),
 	m_move_cost                     (MOVECOST_UNKNOWN),
 	m_flags                         (0x0000),
+	m_citySize                      (0),
+	m_cityOwner                     (0),
+	m_citySpriteIndex               (-1),
+#ifdef BATTLE_FLAGS
+	m_battleFlags                   (0),
+#endif
 	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
 	m_nanoInfectedOwner             (0x00),
 	m_convertedOwner                (0x00),
 	m_franchiseOwner                (0x00),
 	m_injoinedOwner                 (0x00),
 	m_happinessAttackOwner          (0x00),
-	m_citySize                      (0),
-	m_cityOwner                     (0),
-	m_citySpriteIndex               (-1),
-	m_cell_owner                    (PLAYER_UNASSIGNED),
-	m_slaveBits                     (0x0000),
-#ifdef BATTLE_FLAGS
-	m_battleFlags                   (0),
-#endif
-	m_tileInfo                      (NULL),
-	m_point                         (point),
-	m_installations                 (new PointerList<UnseenInstallationInfo>),
-	m_improvements                  (new PointerList<UnseenImprovementInfo>),
-	m_cityName                      (NULL),
-	m_actor                         (NULL),
-	m_visibleCityOwner              (0)
+	m_cell_owner                    (PLAYER_UNASSIGNED)
 {
 	if (g_theWorld->GetTileInfo(point))
 	{
@@ -252,31 +252,31 @@ UnseenCell::UnseenCell(const MapPoint & point)
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell()
 :
+	m_tileInfo                      (NULL),
+	m_installations                 (new PointerList<UnseenInstallationInfo>),
+	m_improvements                  (new PointerList<UnseenImprovementInfo>),
+	m_cityName                      (NULL),
+	m_actor                         (NULL),
+	m_slaveBits                     (0x0000),
 	m_env                           (0),
+	m_visibleCityOwner              (0),
+	m_point                         (),
 	m_terrain_type                  (TERRAIN_UNKNOWN),
 	m_move_cost                     (MOVECOST_UNKNOWN),
 	m_flags                         (0x0000),
+	m_citySize                      (0),
+	m_cityOwner                     (0),
+	m_citySpriteIndex               (-1),
+#ifdef BATTLE_FLAGS
+	m_battleFlags                   (0),
+#endif
 	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
 	m_nanoInfectedOwner             (0x00),
 	m_convertedOwner                (0x00),
 	m_franchiseOwner                (0x00),
 	m_injoinedOwner                 (0x00),
 	m_happinessAttackOwner          (0x00),
-	m_citySize                      (0),
-	m_cityOwner                     (0),
-	m_citySpriteIndex               (-1),
-	m_cell_owner                    (PLAYER_UNASSIGNED),
-	m_slaveBits                     (0x0000),
-#ifdef BATTLE_FLAGS
-	m_battleFlags                   (0),
-#endif
-	m_tileInfo                      (NULL),
-	m_point                         (),
-	m_installations                 (new PointerList<UnseenInstallationInfo>),
-	m_improvements                  (new PointerList<UnseenImprovementInfo>),
-	m_cityName                      (NULL),
-	m_actor                         (NULL),
-	m_visibleCityOwner              (0)
+	m_cell_owner                    (PLAYER_UNASSIGNED)
 {
 }
 
@@ -349,31 +349,31 @@ UnseenCell::UnseenCell(UnseenCell *old)
 //----------------------------------------------------------------------------
 UnseenCell::UnseenCell(CivArchive &archive)
 :
+	m_tileInfo                      (NULL),
+	m_installations                 (NULL),
+	m_improvements                  (NULL),
+	m_cityName                      (NULL),
+	m_actor                         (NULL),
+	m_slaveBits                     (0x0000),
 	m_env                           (0),
+	m_visibleCityOwner              (0),
+	m_point                         (),
 	m_terrain_type                  (TERRAIN_UNKNOWN),
 	m_move_cost                     (MOVECOST_UNKNOWN),
 	m_flags                         (0x0000),
+	m_citySize                      (0),
+	m_cityOwner                     (0),
+	m_citySpriteIndex               (-1),
+#ifdef BATTLE_FLAGS
+	m_battleFlags                   (0),
+#endif
 	m_bioInfectedOwner              (0x00), /// @todo Check PLAYER_UNASSIGNED?
 	m_nanoInfectedOwner             (0x00),
 	m_convertedOwner                (0x00),
 	m_franchiseOwner                (0x00),
 	m_injoinedOwner                 (0x00),
 	m_happinessAttackOwner          (0x00),
-	m_citySize                      (0),
-	m_cityOwner                     (0),
-	m_citySpriteIndex               (-1),
-	m_cell_owner                    (PLAYER_UNASSIGNED),
-	m_slaveBits                     (0x0000),
-#ifdef BATTLE_FLAGS
-	m_battleFlags                   (0),
-#endif
-	m_tileInfo                      (NULL),
-	m_point                         (),
-	m_installations                 (NULL),
-	m_improvements                  (NULL),
-	m_cityName                      (NULL),
-	m_actor                         (NULL),
-	m_visibleCityOwner              (0)
+	m_cell_owner                    (PLAYER_UNASSIGNED)
 {
 	Serialize(archive);
 }
@@ -885,7 +885,7 @@ void UnseenCell::Serialize(CivArchive &archive)
 	else
 	{
 		// Needed for data padding in the original implementation
-		sint8 empty = 0;
+		sint8 empty = 0; // Needed for compatibility
 
 		m_point.Serialize(archive);
 

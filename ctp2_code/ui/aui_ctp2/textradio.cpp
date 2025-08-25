@@ -17,9 +17,9 @@
 TextRadio::TextRadio(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -36,10 +36,10 @@ TextRadio::TextRadio(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 	:
 	aui_ImageBase( (sint32)0 ),
@@ -52,10 +52,6 @@ TextRadio::TextRadio(
 
 AUI_ERRCODE TextRadio::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
-
-
-
-
 	if ( IsHidden() ) return AUI_ERRCODE_OK;
 
 	if ( !surface ) surface = m_window->TheSurface();

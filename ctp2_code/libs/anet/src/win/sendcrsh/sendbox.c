@@ -31,8 +31,8 @@ static struct {
 	HWND hwnd;
 	HWND hComments;
 	HWND hCRC;
-	int commentLen;
-	int buttonClicked;
+	sint32 commentLen;
+	sint32 buttonClicked;
 	clock_t timeout;
 } sendbox;
 
@@ -85,7 +85,7 @@ static BOOL CALLBACK SendboxProc(HWND hDlg, UINT iMsg, WPARAM wParam, LPARAM lPa
  timeout seconds if the user does not interact with it.
  Returns 0 on success, non-zero on failure.
 --------------------------------------------------------------------------*/
-int sendbox_create(int iCmdShow, char *signature, int commentLen, int timeout)
+sint32 sendbox_create(sint32 iCmdShow, char *signature, sint32 commentLen, sint32 timeout)
 {
 	HINSTANCE hInstance = GetModuleHandle(NULL);
 	clock_t now = eclock();
@@ -120,11 +120,11 @@ int sendbox_create(int iCmdShow, char *signature, int commentLen, int timeout)
          sendbox_CLICKED_CANCEL if the user clicked cancel,
 		 sendbox_CLICKED_OK if the user clicked OK.
 --------------------------------------------------------------------------*/
-int sendbox_poll(char *comment)
+sint32 sendbox_poll(char *comment)
 {
 	MSG msg;
-	int bUserInput = 0;
-	const int oldButtonClicked = sendbox.buttonClicked;
+	sint32 bUserInput = 0;
+	const sint32 oldButtonClicked = sendbox.buttonClicked;
 	clock_t now = eclock();
 
 	while ((oldButtonClicked == sendbox.buttonClicked)
@@ -146,7 +146,7 @@ int sendbox_poll(char *comment)
 		comment[sendbox.commentLen-1] = '\0';
 		DPRINT(("sendbox_poll: t:%d, got comment:%d\n", now, comment));
 	}
-	if (sendbox.timeout && (long)(now - sendbox.timeout) > 0) {
+	if (sendbox.timeout && (sint32)(now - sendbox.timeout) > 0) {
 		DPRINT(("sendbox_poll: t:%d, timed out waiting for input\n", now));
 		sendbox.buttonClicked = sendbox_CLICKED_CANCEL;
 	}
@@ -165,10 +165,10 @@ void sendbox_destroy()
 #if 0
 #include <assert.h>
 /* test code */
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
-                   PSTR szCmdLine, int iCmdShow)
+sint32 WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
+                   PSTR szCmdLine, sint32 iCmdShow)
 {
-	int clicked;
+	sint32 clicked;
 	char comments[32];
 	HINSTANCE hTest = GetModuleHandle(NULL);
 	assert(hInstance == hTest);

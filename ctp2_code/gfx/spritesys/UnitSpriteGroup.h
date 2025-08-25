@@ -60,7 +60,7 @@ public:
 	void			LoadIndexed(MBCHAR const * filename, GAME_ACTION index);
 	void			LoadFull(MBCHAR const * filename);
 
-	bool			GetImageFileName(MBCHAR * name, char * format, ...);
+	bool			GetImageFileName(MBCHAR * name, const char * format, ...);
 
 	void			Save(MBCHAR const * filename, unsigned int version_id, unsigned int compression_mode);
 

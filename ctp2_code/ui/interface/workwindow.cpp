@@ -16,7 +16,7 @@ extern TiledMap *g_tiledMap;
 WorkWindow::WorkWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -36,7 +36,7 @@ WorkWindow::WorkWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type)
 	:
 	C3Window( retval, id, x, y, width, height, bpp, pattern, type )

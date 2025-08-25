@@ -109,16 +109,16 @@ typedef	struct {		// Lots of system registers in one convenient place
 
 typedef struct rminfo {
 
- long EDI;
- long ESI;
- long EBP;
- long reserved_by_system;
- long EBX;
- long EDX;
- long ECX;
- long EAX;
- short flags;
- short ES,DS,FS,GS,IP,CS,SP,SS;
+ sint32 EDI;
+ sint32 ESI;
+ sint32 EBP;
+ sint32 reserved_by_system;
+ sint32 EBX;
+ sint32 EDX;
+ sint32 ECX;
+ sint32 EAX;
+ sint16 flags;
+ sint16 ES,DS,FS,GS,IP,CS,SP,SS;
 } rmregs_t;
 
 #endif
@@ -150,17 +150,17 @@ pascal void ipx2_send_callback(IPX_ECB *ecb) {
  Only one of these may exist at a time, since multiple ones would
  compete for the same source of rx packets.
 -----------------------------------------------------------------------*/
-ipx2_t *ipx2_create(int socket, int *status)
+ipx2_t *ipx2_create(sint32 socket, sint32 *status)
 {
 	ipx2_t	*ipx;
 	ipx2_hdl_t bh;
 	nw_adr_t ba;
-	int i;
+	sint32 i;
 	//regs_t	regs;
 	//nw_segptr_t spOut;
 	char *fpOut;
 	ipx2_result_t stat;
-	short		localSocket = socket;
+	sint16		localSocket = socket;
 
 	//	set up the UPPs for the callbacks
 
@@ -185,7 +185,7 @@ ipx2_t *ipx2_create(int socket, int *status)
 	ipx->peers = NULL;
 	ipx->rx = ipx->tx = NULL;
 
-	stat = IpxOpenSocket((unsigned short *)&localSocket, (unsigned char) WANT_BROADCASTS);
+	stat = IpxOpenSocket((uint16 *)&localSocket, (uint8) WANT_BROADCASTS);
 	if (stat != ipx2_RES_OK) {
 		//printf("create: couldn't call IPX\n");
 		free(ipx);
@@ -224,7 +224,7 @@ ipx2_t *ipx2_create(int socket, int *status)
 	// Allocate the me handle.
 	fpOut = (char *)ipx->rx->scratch.flat.p;
 
-	IpxGetInternetworkAddress((unsigned char *)fpOut);
+	IpxGetInternetworkAddress((uint8 *)fpOut);
 	bh = ipx2_adr2hdl(ipx, (nw_adr_t *)fpOut, 1);
 	//printf("My address is: ");
 	//printAdr((nw_adr_t *)fpOut);
@@ -283,9 +283,9 @@ void ipx2_destroy(ipx2_t *ipx)
  16 bytes each.)
  Returns ipx2_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
-ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, int insert) {
+ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, sint32 insert) {
 	// Search peer tab.  If not found, append it.
-	int n;
+	sint32 n;
 	ipx2_hdl_t h;
 	ipx2_peer_t *peer;
 	//nw_segptr_t spIn;
@@ -293,7 +293,7 @@ ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, int insert) {
 	char *fpIn;
 	char *fpOut;
 	//regs_t					regs;
-	unsigned long		targetTime;
+	uint32		targetTime;
 	IPX_ECB						temp_ECB;
 	IpxNetAddress			targetAddress;
 
@@ -315,7 +315,7 @@ ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, int insert) {
 	memcpy(&targetAddress.netNode, adr, sizeof(nw_adr_t));
 	targetAddress.socket = ipx->socket;
 
-	IpxGetLocalTarget((unsigned char*) &targetAddress, &temp_ECB, &targetTime);
+	IpxGetLocalTarget((uint8*) &targetAddress, &temp_ECB, &targetTime);
 	memcpy(peer->immedAddress, temp_ECB.immediateAddress, sizeof(nw_nodeAdr_t));
 	return h;
 }
@@ -412,7 +412,7 @@ ipx2_result_t ipx2_get(ipx2_t *ipx, void *buf, size_t *plen, ipx2_hdl_t *srcHdl,
 	ipxq_pkt_t *pp;
 	size_t len;
 	//regs_t	regs;
-	int maxloops = ipxq_MAXELS;
+	sint32 maxloops = ipxq_MAXELS;
 
 	//printf("ipx2_get:\n");
 	if (*plen < 1 || *plen > (10 * ipxq_MAX_USERDATALEN) || !buf || !srcHdl) {

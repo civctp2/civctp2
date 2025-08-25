@@ -38,15 +38,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define	DRAWMARGIN	(8*1024)
 
-void *MyNewPtr(long x) {
+void *MyNewPtr(sint32 x) {
 	return NewPtr(x);
 }
 
-void *MyNewPtrClear(long x) {
+void *MyNewPtrClear(sint32 x) {
 	return NewPtrClear(x);
 }
 
-void* MyRealloc(void* x, long y) {
+void* MyRealloc(void* x, sint32 y) {
 	void*	newx;
 
 	if (x == nil) {
@@ -60,7 +60,7 @@ void* MyRealloc(void* x, long y) {
 		SetPtrSize(x, y);
 		err = MemError();
 		if (err != noErr) {
-			long		originalsize;
+			sint32		originalsize;
 
 			//	there isn't room to increase the size, allocate a new
 			//	block and copy all of the data
@@ -101,14 +101,14 @@ void MEM_free_lock(void* thePtr) {
 	MyDisposePtr(thePtr);
 }
 
-long Mymsize(void *x) {
+sint32 Mymsize(void *x) {
 	return GetPtrSize((Ptr)x);
 }
 
-unsigned char *HeapReAlloc(HANDLE hHeap, unsigned long flags, char * obj, size_t size) {
+uint8 *HeapReAlloc(HANDLE hHeap, uint32 flags, char * obj, size_t size) {
 	Ptr				newBlock;
 	OSErr			error;
-	unsigned long	originalsize;
+	uint32	originalsize;
 
 	/* Get the current size */
 	originalsize = GetPtrSize(obj);
@@ -129,13 +129,13 @@ unsigned char *HeapReAlloc(HANDLE hHeap, unsigned long flags, char * obj, size_t
 		DisposePtr(obj);
 	}
 
-	return (unsigned char *)newBlock;
+	return (uint8 *)newBlock;
 }
 
 #pragma segment Main
-void* NewPtrAlign(long numbytes) {
-	unsigned char*	p = nil;
-	unsigned char		d;
+void* NewPtrAlign(sint32 numbytes) {
+	uint8*	p = nil;
+	uint8		d;
 
 #define	kAlignTo		32
 #define	kAlignExtra		(kAlignTo*2)
@@ -144,8 +144,8 @@ void* NewPtrAlign(long numbytes) {
 	//	this routine allocates and clears an aligned block of memory. The memory
 	//	is aligned to 32 byte boundaries
 
-	p = (unsigned char*) NewPtrClear(numbytes + kAlignExtra + DRAWMARGIN);
-	d = kAlignExtra - ((unsigned long) p & kAlignToMask);
+	p = (uint8*) NewPtrClear(numbytes + kAlignExtra + DRAWMARGIN);
+	d = kAlignExtra - ((uint32) p & kAlignToMask);
 	p += d;
 	p[-1] = d;				//	save offset from real pointer to returned pointer
 	p += DRAWMARGIN / 2;	//	leave some extra space before and after drawing buffer
@@ -155,13 +155,13 @@ void* NewPtrAlign(long numbytes) {
 
 #pragma segment Main
 void DisposePtrAlign(void* thePtr) {
-	unsigned char*	p;
+	uint8*	p;
 
 	if (thePtr != nil) {
 
 		//	compute the real pointer and dispose of it
 
-		p = (unsigned char*) thePtr;
+		p = (uint8*) thePtr;
 		p -= DRAWMARGIN / 2;			//	find the base address we started from
 		p -= p[-1];
 		DisposePtr((Ptr) p);
@@ -190,7 +190,7 @@ void FreeObject(void* theObject) {
 #define	kObjectCacheSize	2048
 
 OBJECT**	gObjectCache = nil;
-short		gObjectStack = 0;
+sint16		gObjectStack = 0;
 
 void* GetNewObject(void) {
 	OBJECT*		theObject;
@@ -250,15 +250,15 @@ void FreeObject(void* theObject) {
 #define	kMemoryShift		8
 
 void**		gMemoryCache[kMemoryCaches] = { nil };
-short		gMemoryStackIndex[kMemoryCaches] = { 0 };
+sint16		gMemoryStackIndex[kMemoryCaches] = { 0 };
 
-void FreeSomeMemory(long theSize) {
-	long		totalFreed = 0;
-	long		currentFreeSize;
-	short		whichCache;
+void FreeSomeMemory(sint32 theSize) {
+	sint32		totalFreed = 0;
+	sint32		currentFreeSize;
+	sint16		whichCache;
 	void*		thePtr = nil;
 	Boolean		done = false;
-	long		bigmem;
+	sint32		bigmem;
 
 	//	this routine goes through the list of free blocks and deallocates blocks until
 	//	more than the amount specified has been freed, or, there is nothing else to free
@@ -306,7 +306,7 @@ void FreeSomeMemory(long theSize) {
 
 #endif
 
-void* GetMemory(long theSize) {
+void* GetMemory(sint32 theSize) {
 	void*		thePtr = nil;
 
 	#ifdef USEMALLOC
@@ -315,7 +315,7 @@ void* GetMemory(long theSize) {
 
 	#else
 
-		long		whichCache;
+		sint32		whichCache;
 
 		//	there are kMemoryCaches possible lists of memory blocks in 128 byte increments. We need
 		//	to compute which list the memory block is in and then allocate it
@@ -385,8 +385,8 @@ void FreeMemory(void* theObject) {
 
 	#else
 
-		long		whichCache;
-		long		theSize;
+		sint32		whichCache;
+		sint32		theSize;
 
 		theSize = GetPtrSize(theObject);
 		whichCache = (theSize - 1) >> kMemoryShift;

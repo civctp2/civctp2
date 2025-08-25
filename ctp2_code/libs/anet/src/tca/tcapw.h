@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define tcapw_MAXLEN_EMAIL 64
 
 /* A numerical code for a user */
-typedef int tcapw_uid_t;
+typedef sint32 tcapw_uid_t;
 #define tcapw_UID_NONE 0
 
 /* All structures sent over the network should be packed.  This is done
@@ -84,8 +84,8 @@ typedef struct {
 	tcapw_uname_t uname;
 	tcapw_hpw_t hpw;
 	char email[tcapw_MAXLEN_EMAIL];		/* User's email address */
-	int flags PACK;				/* Bitwise OR of tcapw_entry_FLAGS_* */
-	unsigned short int secretcode;
+	sint32 flags PACK;				/* Bitwise OR of tcapw_entry_FLAGS_* */
+	uint16 secretcode;
                              	/* A secret code emailed to the user
 								 * to validate their email address.
 								 */
@@ -158,7 +158,7 @@ dp_result_t tcapw_password_hash(tcapw_t *tcapw, const tcapw_pw_t *pw, tcapw_hpw_
 		  dp_RES_BAD on bad args,
 		  dp_RES_BUG if finding a uid fails.
 --------------------------------------------------------------------------*/
-dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, int flags, const char *email, tcapw_uid_t *uid);
+dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, sint32 flags, const char *email, tcapw_uid_t *uid);
 
 /*--------------------------------------------------------------------------
   Delete a user's password entry given his uid.
@@ -177,7 +177,7 @@ dp_result_t tcapw_entry_delete(tcapw_t *tcapw, tcapw_uid_t uid);
           dp_RES_BAD on bad args,
 		  dp_RES_BUG on internal error.
 --------------------------------------------------------------------------*/
-dp_result_t tcapw_entry_change(tcapw_t *tcapw, tcapw_uid_t uid, const tcapw_hpw_t *new_hpw, int flags, const char *email);
+dp_result_t tcapw_entry_change(tcapw_t *tcapw, tcapw_uid_t uid, const tcapw_hpw_t *new_hpw, sint32 flags, const char *email);
 
 /*--------------------------------------------------------------------------
   Retrieve a user's password entry given his uid.
@@ -208,8 +208,8 @@ dp_result_t tcapw_entry_find_byname(tcapw_t *tcapw, const tcapw_uname_t *usernam
 dp_result_t tcapw_get_secretcode(const tcapw_entry_t *pe, dp_netchar_t *secretcode);
 
 #ifdef _DEBUG
-const char *tcapw_u2ascii(const short *ucs, int maxlen);
-const char *tcapw_hexprint(const unsigned char *binstr, int len);
+const char *tcapw_u2ascii(const sint16 *ucs, sint32 maxlen);
+const char *tcapw_hexprint(const uint8 *binstr, sint32 len);
 #else
 #define tcapw_u2ascii(a, b) "NDEBUG"
 #define tcapw_hexprint(a, b) "NDEBUG"

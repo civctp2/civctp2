@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Zero fills to maxlen if 'from' is null terminated.
  Returns the length copied.
 --------------------------------------------------------------------------*/
-int mywcs_wchar2netchar(dp_netchar_t *ncs, const wchar_t *wcs, const int maxlen);
+sint32 mywcs_wchar2netchar(dp_netchar_t *ncs, const wchar_t *wcs, const sint32 maxlen);
 
 /*--------------------------------------------------------------------------
  Convert up to a maximum of maxlen characters from a 2 byte network byte
@@ -44,13 +44,13 @@ int mywcs_wchar2netchar(dp_netchar_t *ncs, const wchar_t *wcs, const int maxlen)
  Zero fills to maxlen if 'from' is null terminated.
  Returns the length copied.
 --------------------------------------------------------------------------*/
-int mywcs_netchar2wchar(wchar_t *wcs, const dp_netchar_t *ncs, const int maxlen);
+sint32 mywcs_netchar2wchar(wchar_t *wcs, const dp_netchar_t *ncs, const sint32 maxlen);
 
 /*--------------------------------------------------------------------------
   Return the length of a null terminated UCS2 string (of either byte order),
   up to length maxlen.
 --------------------------------------------------------------------------*/
-int mywcs_lenn(const short *ucs2, const int maxlen);
+sint32 mywcs_lenn(const sint16 *ucs2, const sint32 maxlen);
 
 /*--------------------------------------------------------------------------
   Copy up to a maximum of maxlen characters from 'from' to 'to',
@@ -58,7 +58,7 @@ int mywcs_lenn(const short *ucs2, const int maxlen);
   Zero fills to maxlen if 'from' is null terminated.
   Returns the length copied (i.e. mywcs_lenn(from, maxlen))
 --------------------------------------------------------------------------*/
-int mywcs_ncpy0(short *to, const short *from, const int maxlen);
+sint32 mywcs_ncpy0(sint16 *to, const sint16 *from, const sint32 maxlen);
 
 /*--------------------------------------------------------------------------
   Copy up to a maximum of maxlen characters from 'from' to 'to',
@@ -66,7 +66,7 @@ int mywcs_ncpy0(short *to, const short *from, const int maxlen);
   Zero fills to maxlen if 'from' is null terminated.
   Returns the length copied (i.e. mywcs_lenn(from, maxlen))
 --------------------------------------------------------------------------*/
-int mywcs_swabncpy0(short *to, const short *from, const int maxlen);
+sint32 mywcs_swabncpy0(sint16 *to, const sint16 *from, const sint32 maxlen);
 
 /*--------------------------------------------------------------------------
  Convert a string from the local character set into a native byte order
@@ -89,7 +89,7 @@ int mywcs_swabncpy0(short *to, const short *from, const int maxlen);
  Note: this is different in several ways from the standard C function
  mbstowcs().
 --------------------------------------------------------------------------*/
-int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr);
+sint32 mywcs_frommbs(wchar_t *wcbuf, sint32 wcbuflen, const char *mbstr);
 
 /*--------------------------------------------------------------------------
  Convert a native byte order Unicode string into the local character set.
@@ -112,12 +112,12 @@ int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr);
  Note: this is different in several ways from the standard C function
  wcstombs().
 --------------------------------------------------------------------------*/
-int mywcs_tombs(char *buf, int buflen, const wchar_t *wstr);
+sint32 mywcs_tombs(char *buf, sint32 buflen, const wchar_t *wstr);
 
 /*--------------------------------------------------------------------------
  Compare at most n bytes of s1 and s2.
  Return difference of the first nonidentical character, or zero.
 --------------------------------------------------------------------------*/
-int mywcs_ncmp(const short *s1, const short *s2, size_t n);
+sint32 mywcs_ncmp(const sint16 *s1, const sint16 *s2, size_t n);
 
 #endif

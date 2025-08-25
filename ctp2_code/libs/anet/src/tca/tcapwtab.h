@@ -36,7 +36,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  suitable for restoration with tcapwtab_thaw_encrypted.
  Saves the wmq position (timestamp, offset) and lastuid in the header.
 -------------------------------------------------------------------------*/
-void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8], time_t timestamp, long offset, dp_uid_t lastuid);
+void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8], time_t timestamp, sint32 offset, dp_uid_t lastuid);
 
 /*-------------------------------------------------------------------------
  Read the dynatab (encrypted with key) from the given file.
@@ -48,6 +48,6 @@ void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key
  Assumes that the items contain no pointers or other data that needs to
  be modified to reflect new conditions upon thawing.
 -------------------------------------------------------------------------*/
-void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8], time_t *timestamp, long *offset, dp_uid_t *lastuid);
+void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8], time_t *timestamp, sint32 *offset, dp_uid_t *lastuid);
 
 #endif

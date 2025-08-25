@@ -525,12 +525,12 @@ NET_ERR NetThread::Idle()
 	return NET_ERR_OK;
 }
 
-NET_ERR NetThread::SetName(char* name)
+NET_ERR NetThread::SetName(const char* name)
 {
 	return NET_ERR_NOTIMPLEMENTED;
 }
 
-NET_ERR NetThread::SetLobby(char* serverName)
+NET_ERR NetThread::SetLobby(const char* serverName)
 {
 	return NET_ERR_NOTIMPLEMENTED;
 }
@@ -646,7 +646,7 @@ void NetThread::PacketReady(sint32 from, uint8* buf, sint32 size)
 	Unlock();
 }
 
-void NetThread::AddPlayer(uint16 id, char* name)
+void NetThread::AddPlayer(uint16 id, const char* name)
 {
 	Lock();
 	DPRINTF(k_DBG_NET, ("AddPlayer(%d, %s)\n", id, name));

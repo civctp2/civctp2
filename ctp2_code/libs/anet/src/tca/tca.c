@@ -224,10 +224,10 @@ dp_result_t tca_challenge_generate(tca_t *tca, tca_challenge_t *challenge)
 	MD5_CTX context;
 	time_t ctime;   /* calendar time */
 	clock_t ptime;  /* processor time (obviously not independant of ctime) */
-	unsigned long rnd[3];
-	unsigned long l;
-	unsigned char c[8];
-	unsigned char digest[16];
+	uint32 rnd[3];
+	uint32 l;
+	uint8 c[8];
+	uint8 digest[16];
 
 	if (tca == NULL || challenge == NULL)
 		return dp_RES_BAD;
@@ -238,10 +238,10 @@ dp_result_t tca_challenge_generate(tca_t *tca, tca_challenge_t *challenge)
 	rnd[0] = rand() & 0x7f;   /* 7 bits  (should call srand()) at some point */
 	rnd[1] = rand() & 0x7f;   /* 7 bits */
 	rnd[2] = rand() & 0x7f;   /* 7 bits */
-	l = ((unsigned long)ptime) | (rnd[0] << 10) | (rnd[1] << 17) | (rnd[0] << 24);
+	l = ((uint32)ptime) | (rnd[0] << 10) | (rnd[1] << 17) | (rnd[0] << 24);
 
 	memcpy(c, &ctime, 4);  /* if time_t and long are not 4 bytes, this might lose important bits */
-	memcpy(&c[4], &l, 4);
+	memcpy(&c[4], &l, 4);  /* ToDo check if this is a problem */
 
 	MD5Init(&context);
 	MD5Update(&context, c, 8);           /* MD5 the varying string */
@@ -268,7 +268,7 @@ dp_result_t tca_response_validate(tca_t *tca, const tca_challenge_t *challenge, 
 	dp_result_t err;
 	tcapw_uname_t uname;
 	tcapw_entry_t entry;
-	unsigned char buf[tca_LEN_CHALLENGE];
+	uint8 buf[tca_LEN_CHALLENGE];
 	char correct_response[tca_LEN_RESPONSE];
 
 	if (tca == NULL || challenge == NULL || response == NULL || uid == NULL) {
@@ -312,10 +312,10 @@ dp_result_t tca_response_validate(tca_t *tca, const tca_challenge_t *challenge, 
   Returns dp_RES_OK on success,
           dp_RES_BAD on bad args.
 --------------------------------------------------------------------------*/
-dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, tca_response_t *response, int *responselen)
+dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, tca_response_t *response, sint32 *responselen)
 {
     MD5_CTX context;
-	unsigned char buf[tca_LEN_CHALLENGE];
+	uint8 buf[tca_LEN_CHALLENGE];
 
 	if (tca == NULL || challenge == NULL || username == NULL || hpw == NULL || response == NULL || responselen == NULL)
 		return dp_RES_BAD;
@@ -333,7 +333,7 @@ dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, 
 	DPRINT(("tca_response_generate: response %s\n", tcapw_hexprint(response->response, tca_LEN_RESPONSE)));
 
 	/* packet length is max length minus unused characters in uname */
-	*responselen = sizeof(*response) - (tcapw_LEN_USERNAME - response->unamelen)*sizeof(short);
+	*responselen = sizeof(*response) - (tcapw_LEN_USERNAME - response->unamelen)*sizeof(sint16);
 	return dp_RES_OK;
 }
 
@@ -345,11 +345,11 @@ dp_result_t tca_response_generate(tca_t *tca, const tca_challenge_t *challenge, 
   Returns dp_RES_OK on success,
           dp_RES_BAD on bad args.
 --------------------------------------------------------------------------*/
-dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_hpw_t *oldhpw, const tcapw_hpw_t *newhpw, int flags, const char *email, tca_pwchange_t *pwchange, int *pwchangelen)
+dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_hpw_t *oldhpw, const tcapw_hpw_t *newhpw, sint32 flags, const char *email, tca_pwchange_t *pwchange, sint32 *pwchangelen)
 {
 	MD5_CTX context;
 	tca_response_t response;
-	unsigned char buf[tca_LEN_CHALLENGE];
+	uint8 buf[tca_LEN_CHALLENGE];
 
 	if (tca == NULL || challenge == NULL || oldhpw == NULL || newhpw == NULL || pwchange == NULL || email == NULL)
 		return dp_RES_BAD;
@@ -358,13 +358,13 @@ dp_result_t tca_pwchange_generate(tca_t *tca, const tca_challenge_t *challenge, 
 	DPRINT(("tca_pwchange_generate: hpw %s\n", tcapw_hexprint(oldhpw->hpw, tcapw_LEN_HASHPW)));
 	DPRINT(("tca_pwchange_generate: newhpw %s\n", tcapw_hexprint(newhpw->hpw, tcapw_LEN_HASHPW)));
 
-	pwchange->emaillen = strlen(email);
+	pwchange->emaillen = (uint8)strlen(email);
 	if (pwchange->emaillen > tcapw_MAXLEN_EMAIL)
 		pwchange->emaillen = tcapw_MAXLEN_EMAIL;
 	strncpy(pwchange->email, email, tcapw_MAXLEN_EMAIL);
 	pwchange->flags = flags;
 
-  	desDkey(oldhpw->hpw, EN0);
+	desDkey(oldhpw->hpw, EN0);
 	Ddes(challenge->challenge, buf);
 
 	MD5Init(&context);
@@ -400,7 +400,7 @@ dp_result_t tca_pwchange_validate(tca_t *tca, tcapw_uid_t uid, const tca_challen
 	char correct_response[tca_LEN_RESPONSE];
 	char buf[tca_LEN_RESPONSE];  /* tca_LEN_RESPONSE >= tcapw_LEN_HASHPW */
 	char email[tcapw_MAXLEN_EMAIL];
-	int flags;
+	sint32 flags;
 
 	if (tca == NULL || challenge == NULL || uid == tcapw_UID_NONE || pwchange == NULL)
 		return dp_RES_BAD;
@@ -458,10 +458,10 @@ const char newuser_magic2[9] = "o35(v&:T";
   Returns dp_RES_OK on success,
           dp_RES_BAD on bad args.
 --------------------------------------------------------------------------*/
-dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *newusername, const tcapw_hpw_t *newhpw, int flags, const char *email, tca_newuser_t *newuser, int *newuserlen)
+dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, const tcapw_uname_t *newusername, const tcapw_hpw_t *newhpw, sint32 flags, const char *email, tca_newuser_t *newuser, sint32 *newuserlen)
 {
 	MD5_CTX context;
-	unsigned char buf[16];
+	uint8 buf[16];
 
 	if (tca == NULL || challenge == NULL || newusername == NULL || newhpw == NULL || newuser == NULL || newuserlen == NULL || email == NULL)
 		return dp_RES_BAD;
@@ -474,12 +474,12 @@ dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, c
 	 * MD5(another magic string + the challenge that the server just sent)
 	 * as the key.
 	 */
-	newuser->unamelen = mywcs_ncpy0((short *)newuser->storage, newusername->uname, tcapw_LEN_USERNAME);
-	newuser->emaillen = strlen(email);
+	newuser->unamelen = mywcs_ncpy0((sint16 *)newuser->storage, newusername->uname, tcapw_LEN_USERNAME);
+	newuser->emaillen = (uint8)strlen(email);
 	newuser->flags = flags;
 	if (newuser->emaillen > tcapw_MAXLEN_EMAIL)
 		newuser->emaillen = tcapw_MAXLEN_EMAIL;
-	strncpy(newuser->storage + newuser->unamelen * sizeof(short), email, tcapw_MAXLEN_EMAIL);
+	strncpy(newuser->storage + newuser->unamelen * sizeof(sint16), email, tcapw_MAXLEN_EMAIL);
 
 	MD5Init(&context);
 	MD5Update(&context, newuser_magic2, 8);
@@ -493,7 +493,7 @@ dp_result_t tca_newuser_generate(tca_t *tca, const tca_challenge_t *challenge, c
 	DPRINT(("tca_newuser_generate: newuser %s\n", tcapw_hexprint(newuser->newuser, tcapw_LEN_HASHPW)));
 
 	/* packet length is max length minus unused characters in uname, email */
-	*newuserlen = sizeof(*newuser) - (tcapw_LEN_USERNAME - newuser->unamelen)*sizeof(short) - (tcapw_MAXLEN_EMAIL - newuser->emaillen)*sizeof(char);
+	*newuserlen = sizeof(*newuser) - (tcapw_LEN_USERNAME - newuser->unamelen)*sizeof(sint16) - (tcapw_MAXLEN_EMAIL - newuser->emaillen)*sizeof(char);
 	return dp_RES_OK;
 }
 
@@ -513,10 +513,10 @@ dp_result_t tca_newuser_validate(tca_t *tca, const tca_challenge_t *challenge, t
 	MD5_CTX context;
 	tcapw_hpw_t hpw;
 	tcapw_uname_t uname;
-	unsigned char buf[16];
+	uint8 buf[16];
 	char test_magic[8];
 	char email[tcapw_MAXLEN_EMAIL + 1];
-	int flags;
+	sint32 flags;
 
 	if (tca == NULL || challenge == NULL || newuser == NULL || uid == NULL)
 		return dp_RES_BAD;
@@ -542,8 +542,8 @@ dp_result_t tca_newuser_validate(tca_t *tca, const tca_challenge_t *challenge, t
 
 	/* the magic matches, so try to add the user */
 	memset(&uname, 0, sizeof(tcapw_uname_t));
-	mywcs_ncpy0(uname.uname, (short *)newuser->storage, newuser->unamelen);
-	strncpy(email, newuser->storage + newuser->unamelen * sizeof(short), tcapw_MAXLEN_EMAIL);
+	mywcs_ncpy0(uname.uname, (sint16 *)newuser->storage, newuser->unamelen);
+	strncpy(email, newuser->storage + newuser->unamelen * sizeof(sint16), tcapw_MAXLEN_EMAIL);
 	email[newuser->emaillen] = '\0';
 	/* caller can only set client settable flags */
 	/*** Server only flags default to 0, currently! ***/
@@ -569,7 +569,7 @@ dp_result_t tca_secretcode_validate(tca_t *tca, tcapw_uid_t uid, const tca_chall
 	MD5_CTX context;
 	dp_result_t err;
 	tcapw_entry_t entry;
-	unsigned char buf[tca_LEN_CHALLENGE];
+	uint8 buf[tca_LEN_CHALLENGE];
 	char correct_response[tca_LEN_RESPONSE];
 	tcapw_pw_t pw;
 	tcapw_hpw_t hpw;

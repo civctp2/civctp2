@@ -25,7 +25,7 @@ public:
 		Picture *pictureActiveOn = NULL,
 		Picture *pictureActiveOff = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = nullptr,
 		BOOL selected = FALSE );
 	virtual ~PictureSwitch() {}
 

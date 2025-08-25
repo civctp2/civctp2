@@ -37,13 +37,13 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define AVG_RECORD_SIZE 64
 #define NSORTKEY 5
 enum sortindex { KEY_NINST, KEY_SESSTYPE, KEY_VERSION, KEY_FSTKNAME, KEY_FSTKADR };
-static int sortlist[NSORTKEY];
+static sint32 sortlist[NSORTKEY];
 
 typedef struct {
-	unsigned long retaddr;
-	unsigned int ninst;
-	unsigned int buflen;
-	unsigned char *buf; /* contains same info as aeh_buf_t's buf field */
+	uint32 retaddr;
+	uint32 ninst;
+	uint32 buflen;
+	uint8 *buf; /* contains same info as aeh_buf_t's buf field */
 } aehrec_entry_t;
 
 typedef struct aehrec_s {
@@ -52,15 +52,15 @@ typedef struct aehrec_s {
 } aehrec_t;
 static aehrec_t *aeharray[HASHSIZE];
 
-static unsigned int naehsort = 0;
-static unsigned int naehsortmax = 0;
+static uint32 naehsort = 0;
+static uint32 naehsortmax = 0;
 typedef struct {
-	unsigned long sortkey[NSORTKEY];
+	uint32 sortkey[NSORTKEY];
 	aehrec_entry_t *aehrec; /* pointer to binary aeh record */
 } aehsort_t;
 static aehsort_t *aehsort; /* array of aehsort_t */
 
-static int bQuiet = 0;
+static sint32 bQuiet = 0;
 
 static void printUsage(void)
 {
@@ -91,10 +91,10 @@ Options:\n\
 	exit(1);
 }
 
-static int writeSort(aehlog_t *aehlog)
+static sint32 writeSort(aehlog_t *aehlog)
 {
-	int err;
-	unsigned int i;
+	sint32 err;
+	uint32 i;
 	for (i = 0; i < naehsort; i++) {
 		aeh_buf_t aehbuf;
 		aehbuf.buflen = aehsort[i].aehrec->buflen;
@@ -108,7 +108,7 @@ static int writeSort(aehlog_t *aehlog)
 	return 0;
 }
 
-static int comparecrc(const void *p1, const void *p2)
+static sint32 comparecrc(const void *p1, const void *p2)
 {
 	if ((*((aeh_modfile_t **)p1))->crc < (*((aeh_modfile_t **)p2))->crc)
 		return -1;
@@ -117,9 +117,9 @@ static int comparecrc(const void *p1, const void *p2)
 	return 0;
 }
 
-static int comparekey(const void *p1, const void *p2)
+static sint32 comparekey(const void *p1, const void *p2)
 {
-	int i, cmp;
+	sint32 i, cmp;
 	for (i = 0; i < NSORTKEY && sortlist[i] >= 0; i++) {
 		if (sortlist[i] == KEY_FSTKNAME) {
 			if ((cmp = strcmp((char*)(((aehsort_t*)p1)->sortkey[sortlist[i]]),
@@ -138,7 +138,7 @@ static int comparekey(const void *p1, const void *p2)
 /* sorts modules in an aeh record by module crc */
 static void sortmod(aeh_t *aeh, aeh_buf_t *aehbuf)
 {
-	unsigned int i, j;
+	uint32 i, j;
 	aeh_modfile_t *modfile;
 	aeh_modfile_t **pmodfile;
 
@@ -172,24 +172,24 @@ static void sortmod(aeh_t *aeh, aeh_buf_t *aehbuf)
 /* sorts records by keys specified in command-line argument */
 static void sortkey()
 {
-	unsigned int i;
+	uint32 i;
 	/* add ninst to sortkey field if sorting on ninst */
 	for (i = 0; i < NSORTKEY; i++)
 		if (sortlist[i] == KEY_NINST) break;
 	if (i < NSORTKEY) {
 		for (i = 0; i < naehsort; i++)
-			aehsort[i].sortkey[KEY_NINST] = (unsigned long)(~(aehsort[i].aehrec->ninst));
+			aehsort[i].sortkey[KEY_NINST] = (uint32)(~(aehsort[i].aehrec->ninst));
 	}
 	qsort(aehsort, naehsort, sizeof(*aehsort), comparekey);
 }
 
 /* adds records to sort array to be sorted later, merging identical records */
-static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag, int bNoSessDesc, int bNoSysDesc, int bNoMachInfo, int bNoExcpAddress, int bNoAssert)
+static sint32 arrayadd(aehlog_t *aehlog, uint16 thisSessType, sint32 bRetFlag, sint32 bNoSessDesc, sint32 bNoSysDesc, sint32 bNoMachInfo, sint32 bNoExcpAddress, sint32 bNoAssert)
 {
-	int err;
-	unsigned int ninst = 0;
+	sint32 err;
+	uint32 ninst = 0;
 	aeh_buf_t aehbuf;
-	/* int n_rec = 1; */
+	/* sint32 n_rec = 1; */
 
 	memset(&aehbuf, 0, sizeof(aeh_buf_t));
 	aehDPRINT(("arrayadd: processing %s\n", aehlog->path));
@@ -197,12 +197,12 @@ static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag,
 	while ((err = aehlog_readExceptionRecord(aehlog, &aehbuf, &ninst)) == aeh_RES_OK) {
 		aeh_t aeh;
 		aehrec_t *paehrec;
-		unsigned long crc;
-		unsigned long retaddr = 0;
-		unsigned short sessType = DP_ILLEGAL_SPECIES;
-		unsigned long version = 0;
+		uint32 crc;
+		uint32 retaddr = 0;
+		uint16 sessType = DP_ILLEGAL_SPECIES;
+		uint32 version = 0;
 		char *firststkname;
-		unsigned long firststkadr = 0;
+		uint32 firststkadr = 0;
 
 		firststkname = strdup("ZZZZZZ");
 		memset(&aeh, 0, sizeof(aeh_t));
@@ -220,7 +220,7 @@ static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag,
 
 		/* get session type, version, and stack info for sorting later */
 		sessType = aeh.app.sessionType;
-		version = ((unsigned long)(~aeh.app.major_version&0xffff))<<16;
+		version = ((uint32)(~aeh.app.major_version&0xffff))<<16;
 		version |= ~aeh.app.minor_version&0xffff;
 		if (aeh.nstk) {
 			firststkadr = aeh.stk[0].offset_addr;
@@ -240,7 +240,7 @@ static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag,
 		if (bNoSysDesc)
 			aeh_stripSysDesc(&aeh);
 		if (bNoMachInfo && aeh.ninfo) {
-			unsigned int id[1] = {aeh_WIN32info_ID};
+			uint32 id[1] = {aeh_WIN32info_ID};
 			aeh_stripInfoId(&aeh, 1, id);
 		}
 		if (bNoExcpAddress)
@@ -263,7 +263,7 @@ static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag,
 			/* allocate new entry in hash table and sort array */
 			aehrec_t *aehrecbuf = (aehrec_t *)malloc(sizeof(aehrec_t));
 			aehrecbuf->aehrec=(aehrec_entry_t *)malloc(sizeof(aehrec_entry_t));
-			aehrecbuf->aehrec->buf=(unsigned char *)malloc(aehbuf.buflen);
+			aehrecbuf->aehrec->buf=(uint8 *)malloc(aehbuf.buflen);
 			if (!aehrecbuf || !aehrecbuf->aehrec || !aehrecbuf->aehrec->buf) {
 				printf("error: cannot allocate memory for aehrec, naehsort %d\n", naehsort);
 				exit(1);
@@ -274,10 +274,10 @@ static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag,
 			memcpy(aehrecbuf->aehrec->buf, aehbuf.buf, aehbuf.buflen);
 			aehrecbuf->next = aeharray[crc];
 			aeharray[crc] = aehrecbuf;
-			aehsort[naehsort].sortkey[KEY_VERSION] = (unsigned long)version;
-			aehsort[naehsort].sortkey[KEY_SESSTYPE] = (unsigned long)sessType;
-			aehsort[naehsort].sortkey[KEY_FSTKNAME] = (unsigned long)strdup(firststkname);
-			aehsort[naehsort].sortkey[KEY_FSTKADR] = (unsigned long)firststkadr;
+			aehsort[naehsort].sortkey[KEY_VERSION] = (uint32)version;
+			aehsort[naehsort].sortkey[KEY_SESSTYPE] = (uint32)sessType;
+			aehsort[naehsort].sortkey[KEY_FSTKNAME] = (uint32)strdup(firststkname);
+			aehsort[naehsort].sortkey[KEY_FSTKADR] = (uint32)firststkadr;
 			aehsort[naehsort].aehrec = aehrecbuf->aehrec;
 			naehsort++;
 
@@ -309,7 +309,7 @@ static int arrayadd(aehlog_t *aehlog, unsigned short thisSessType, int bRetFlag,
 }
 
 /* initialize sort array */
-static int initarray(size_t fsize)
+static sint32 initarray(size_t fsize)
 {
 	naehsortmax = fsize / AVG_RECORD_SIZE;
 	aehsort = (aehsort_t *)malloc(naehsortmax * sizeof(aehsort_t));
@@ -324,7 +324,7 @@ static int initarray(size_t fsize)
 /* free memory allocated by sort array */
 static void destroyarray()
 {
-	unsigned int i;
+	uint32 i;
 	for (i = 0; i < HASHSIZE; i++) {
 		aehrec_t *curr = aeharray[i];
 		while (curr) {
@@ -344,18 +344,18 @@ static void destroyarray()
 	free(aehsort);
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
-	int err, iarg, iargst, ikey;
-	int bDefaultLog = 0;
-	int bRetFlag = 0;
-	int bNoAssert = 0;
-	int bRemoveOnErr = 0;
-	int bNoSessDesc = 0;
-	int bNoSysDesc = 0;
-	int bNoMachInfo = 0;
-	int bNoExcpAddress = 0;
-	unsigned short sessType = DP_ILLEGAL_SPECIES;
+	sint32 err, iarg, iargst, ikey;
+	sint32 bDefaultLog = 0;
+	sint32 bRetFlag = 0;
+	sint32 bNoAssert = 0;
+	sint32 bRemoveOnErr = 0;
+	sint32 bNoSessDesc = 0;
+	sint32 bNoSysDesc = 0;
+	sint32 bNoMachInfo = 0;
+	sint32 bNoExcpAddress = 0;
+	uint16 sessType = DP_ILLEGAL_SPECIES;
 	size_t fsize = 0;
 	aehlog_t aehlog;
 	char tmpfile[aeh_MAX_PATH];   /* buffer file path */
@@ -432,7 +432,7 @@ int main(int argc, char **argv)
 						break;
 					case 's':
 					{
-						int key;
+						sint32 key;
 						switch (tolower(*++argv[iarg])) {
 							case 'a':
 								key = KEY_FSTKADR;
@@ -487,7 +487,7 @@ int main(int argc, char **argv)
 	iargst = iarg;
 	if (iarg < argc) {
 		for (iarg = iargst; iarg < argc; iarg++) {
-			long size;
+			sint32 size;
 			err = aehlog_Create(argv[iarg], &aehlog);
 			if (err != aeh_RES_OK) {
 				printf("error doing aehlog_Create on input file %s\n", argv[iarg]);
@@ -521,7 +521,7 @@ int main(int argc, char **argv)
 			aehlog_close(&aehlog);
 		}
 	} else if (bDefaultLog) {
-		long size;
+		sint32 size;
 		/* get default logfile name */
 		err = aehlog_Create("", &aehlog);
 		if (err != aeh_RES_OK) {

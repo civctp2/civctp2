@@ -14,8 +14,8 @@ public:
 	TipWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
-		MBCHAR *text,
+		const MBCHAR *ldlBlock,
+		const MBCHAR *text,
 		sint32 bpp);
 	TipWindow(
 		AUI_ERRCODE *retval,
@@ -25,8 +25,8 @@ public:
 		sint32 width,
 		sint32 height,
 		sint32 bpp,
-		MBCHAR *pattern,
-		MBCHAR *text = NULL );
+		const MBCHAR *pattern,
+		const MBCHAR *text = NULL );
 
 	virtual ~TipWindow() {}
 

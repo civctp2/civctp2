@@ -38,10 +38,10 @@
 //   - INT GetProjectedScience(player) / INT GetProjectedScience(city)
 //   - INT GetStopResearchingAdvance(player,foreigner)
 //   - INT GetMostAtRiskCity(player, foreigner, &cityvar)
-//   These functions compile but still need to be tested. (April 22nd 2006 Martin Gühmann)
+//   These functions compile but still need to be tested. (April 22nd 2006 Martin GÃ¼hmann)
 // - Provided a default tone to ParseNewProposalSlicArgs
-//   if no tone is provided. (11-Oct-2007 Martin Gühmann)
-// - Fixed GetPersonalityType and made it compatibe with Diplomod. (22-Oct-2007 Martin Gühmann)
+//   if no tone is provided. (11-Oct-2007 Martin GÃ¼hmann)
+// - Fixed GetPersonalityType and made it compatibe with Diplomod. (22-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -728,7 +728,7 @@ SFN_ERROR Slic_ConsiderResponse::Call(SlicArgList *args)
 	Response response;
 
 	if (!ParseResponseSlicArgs(args, argNum, response))
-		SFN_ERROR_TYPE_ARGS;
+		return SFN_ERROR_TYPE_ARGS;
 
 	if (Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId))
 		Diplomat::GetDiplomat(response.receiverId).
@@ -753,7 +753,7 @@ SFN_ERROR Slic_SetResponse::Call(SlicArgList *args)
 	Response response;
 
 	if (!ParseResponseSlicArgs(args, argNum, response))
-		SFN_ERROR_TYPE_ARGS;
+		return SFN_ERROR_TYPE_ARGS;
 
 	if (Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId))
 		Diplomat::GetDiplomat(response.receiverId).
@@ -1358,7 +1358,7 @@ SFN_ERROR Slic_GetBorderIncursionBy::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastNewProposalType::Call(SlicArgList *args)
 {
-    if (args->Count() != 3)
+	if (args->Count() != 3)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1369,29 +1369,29 @@ SFN_ERROR Slic_GetLastNewProposalType::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, player))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if(player < 0 || player >= k_MAX_PLAYERS)
+	if(player < 0 || player >= k_MAX_PLAYERS)
 		return SFN_ERROR_OUT_OF_RANGE;
 
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if(foreigner < 0 || foreigner >= k_MAX_PLAYERS)
+	if(foreigner < 0 || foreigner >= k_MAX_PLAYERS)
 		return SFN_ERROR_OUT_OF_RANGE;
 
-    if(!args->GetInt(argNum++, type))
+	if(!args->GetInt(argNum++, type))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if(type<0 || type >1)
-        return SFN_ERROR_OUT_OF_RANGE;
+	if(type<0 || type >1)
+		return SFN_ERROR_OUT_OF_RANGE;
 
 	if(type==0){
-        m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastNewProposal(foreigner).detail.first_type;
-    }
+		m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastNewProposal(foreigner).detail.first_type;
+	}
 	else {
-        m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastNewProposal(foreigner).detail.second_type;
+		m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastNewProposal(foreigner).detail.second_type;
 	}
 
-    DPRINTF(k_DBG_SLIC, ("GetLastNewProposalType:sender %d, receiver %d, type %d returns %d\n",
+	DPRINTF(k_DBG_SLIC, ("GetLastNewProposalType:sender %d, receiver %d, type %d returns %d\n",
 		player,foreigner, type, m_result.m_int));
 
 	return SFN_ERROR_OK;
@@ -1410,7 +1410,7 @@ SFN_ERROR Slic_GetLastNewProposalArg::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
 {
-    if (args->Count() != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1425,7 +1425,7 @@ SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
 
 	m_result.m_int = Diplomat::GetDiplomat(player).GetMyLastNewProposal(foreigner).detail.tone;
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetLastNewProposalTone:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetLastNewProposalTone:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -1436,7 +1436,7 @@ SFN_ERROR Slic_GetLastNewProposalTone::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
 {
-    if (args->Count() != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1449,9 +1449,9 @@ SFN_ERROR Slic_GetLastResponseType::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    m_result.m_int = Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type;
+	m_result.m_int = Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type;
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetLastResponseType:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetLastResponseType:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -1478,27 +1478,33 @@ SFN_ERROR Slic_GetLastCounterResponseType::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if(!args->GetInt(argNum++, dtype))
+	if(!args->GetInt(argNum++, dtype))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if ( Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type == RESPONSE_COUNTER ){
-	    if(dtype==0){
-            m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).counter.first_type;
+	if ( Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type == RESPONSE_COUNTER )
+	{
+		if(dtype==0)
+		{
+			m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).counter.first_type;
 		}
-	    else {
-		     if(dtype==1){
-                 m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).counter.second_type;
-			 }
-		     else {
-			      if(dtype<0 || dtype >1){
-                      return SFN_ERROR_OUT_OF_RANGE;
-				  }
-			 }
+		else
+		{
+			if(dtype==1)
+			{
+				m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).counter.second_type;
+			}
+			else
+			{
+				if(dtype<0 || dtype >1)
+				{
+					return SFN_ERROR_OUT_OF_RANGE;
+				}
+			}
 		}
 	}
 	else m_result.m_int =0;
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetLastCounterResponseType:player %d, foreigner %d, dtype %d, returns %d\n",player,foreigner,dtype, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetLastCounterResponseType:player %d, foreigner %d, dtype %d, returns %d\n",player,foreigner,dtype, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }
@@ -1515,7 +1521,7 @@ SFN_ERROR Slic_GetLastCounterResponseArg::Call(SlicArgList *args)
 
 SFN_ERROR Slic_GetLastThreatResponseType::Call(SlicArgList *args)
 {
-    if (args->Count() != 2)
+	if (args->Count() != 2)
 		return SFN_ERROR_NUM_ARGS;
 
 	sint32 argNum = 0;
@@ -1528,14 +1534,16 @@ SFN_ERROR Slic_GetLastThreatResponseType::Call(SlicArgList *args)
 	if(!args->GetPlayer(argNum++, foreigner))
 		return SFN_ERROR_TYPE_ARGS;
 
-    if ( Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type == RESPONSE_THREATEN ){
-        m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).threat.type;
-    }
-	else{
-	    m_result.m_int = 0;
-    }
+	if ( Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).type == RESPONSE_THREATEN )
+	{
+		m_result.m_int =Diplomat::GetDiplomat(player).GetMyLastResponse(foreigner).threat.type;
+	}
+	else
+	{
+		m_result.m_int = 0;
+	}
 
-    DPRINTF(k_DBG_SLIC, ("Slic_GetLastThreatResponseType:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
+	DPRINTF(k_DBG_SLIC, ("Slic_GetLastThreatResponseType:player %d, foreigner %d, returns %d\n",player,foreigner, m_result.m_int));
 
 	return SFN_ERROR_OK;
 }

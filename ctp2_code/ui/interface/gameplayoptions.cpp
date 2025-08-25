@@ -26,7 +26,7 @@
 //
 // - 7 modifications required to add a button
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - added citycapture options
 // - added show enemy health
 // - added show debug AI text
@@ -213,7 +213,7 @@ AUI_ERRCODE gameplayoptions_Initialize( void )
 		AUI_WINDOW_TYPE_FLOATING,
 		false);
 	Assert( AUI_NEWOK(s_gameplayoptionsWindow, errcode) );
-	if ( !AUI_NEWOK(s_gameplayoptionsWindow, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_gameplayoptionsWindow, errcode) ) return errcode;
 
 	s_gameplayoptionsWindow->SetStronglyModal(TRUE);
 
@@ -303,12 +303,12 @@ AUI_ERRCODE gameplayoptions_Cleanup()
 #undef mycleanup
 }
 
-void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
-	uint32 checkbox = *((uint32*)cookie);
+	uint32 checkbox = *((uint32*)cookie.m_voidPtr);
 	void (ProfileDB::*func)(BOOL) = 0;
 	uint32 state = data;
 
@@ -342,7 +342,7 @@ void gameplayoptions_checkPress(aui_Control *control, uint32 action, uint32 data
 	if(func)
 		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
-void gameplayoptions_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void gameplayoptions_exitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	g_theProfileDB->SetLeftHandedMouse(s_leftHandedMouseFlag);
 
@@ -351,7 +351,7 @@ void gameplayoptions_exitPress(aui_Control *control, uint32 action, uint32 data,
 	gameplayoptions_removeMyWindow(action);
 }
 
-void gameplayoptions_mouseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void gameplayoptions_mouseSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 

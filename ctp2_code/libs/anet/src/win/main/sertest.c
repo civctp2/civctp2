@@ -21,7 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include "ser.h"
 
-void quit(int i)
+void quit(sint32 i)
 {
 	Sleep(100);
 	exit(i);
@@ -34,7 +34,7 @@ void quit(int i)
 void ser_get_blocking(ser_t *ser, void *buf, size_t len, size_t len_want)
 {
 	size_t len_got;
-	int i;
+	sint32 i;
 	ser_result_t err;
 
 	for (i = 1; i <= 10; i++) {
@@ -60,12 +60,12 @@ void ser_get_blocking(ser_t *ser, void *buf, size_t len, size_t len_want)
 }
 
 // stupid sanity check to help flush out bugs
-void test1 (int portnum)
+void test1 (sint32 portnum)
 {
 	char tbuf[ser_USERMAXPACK];
 	char rbuf[ser_USERMAXPACK];
 	ser_result_t err;
-	int testnum;
+	sint32 testnum;
 
 	ser_t *ser;
 	ser = ser_create();
@@ -83,7 +83,7 @@ void test1 (int portnum)
 	gets(tbuf);
 
 	for (testnum = 0; testnum < 100; testnum++) {
-		int i;
+		sint32 i;
 		ser_put(ser,  "Test\x70"" 7", 7 );
 		ser_put(ser,  "Test 4", 6 );
 		ser_put(ser,  "Test 5", 6 );
@@ -133,10 +133,10 @@ void test1 (int portnum)
 	//printf("pass\n");
 }
 
-void main(int argc, char **argv)
+void main(sint32 argc, char **argv)
 {
-	int i;
-	int portnum = 0;
+	sint32 i;
+	sint32 portnum = 0;
 
 	for (i = 1; i < argc; ++i) {
 		if (argv[i][0] != '-') {

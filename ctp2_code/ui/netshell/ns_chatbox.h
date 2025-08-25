@@ -19,9 +19,9 @@ public:
 	ns_ChatBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_ChatBox();
 
 	NETFunc::Player *GetPlayer();
@@ -44,7 +44,7 @@ protected:
 	aui_TextBase *m_textstyleChat;
 	aui_TextBase *m_textstyleWhisper;
 
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 	AUI_ERRCODE	CreateComponents( void );
 

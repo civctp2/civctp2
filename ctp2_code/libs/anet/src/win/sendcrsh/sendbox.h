@@ -28,6 +28,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define sendbox_CLICKED_OK			1
 #define sendbox_CLICKED_CANCEL		2
 
+#include "types.h"
+
 /*--------------------------------------------------------------------------
  Create and show the send dialog box.
  The CRC field will display signature.
@@ -36,7 +38,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  timeout seconds if the user does not interact with it.
  Returns 0 on success, non-zero on failure.
 --------------------------------------------------------------------------*/
-int sendbox_create(int iCmdShow, char *signature, int commentLen, int timeout);
+int sendbox_create(sint32 iCmdShow, char *signature, sint32 commentLen, sint32 timeout);
 
 /*--------------------------------------------------------------------------
  Process any window events for the send dialog box.

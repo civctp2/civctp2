@@ -183,7 +183,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 **************************************************************************************/
 
 static ser_t *  ser            = NULL;
-static int      already_hungup = FALSE;
+static sint32      already_hungup = FALSE;
 
 /*************************************************************************************
 
@@ -197,7 +197,7 @@ static int      already_hungup = FALSE;
  *  Return FALSE on error.
  */
 
-DLLEXPORT int cdecl commNoOp(commNoOpReq_t *req, commNoOpResp_t *resp)
+DLLEXPORT sint32 cdecl commNoOp(commNoOpReq_t *req, commNoOpResp_t *resp)
 
 {
   resp->status = comm_STATUS_OK;
@@ -209,7 +209,7 @@ DLLEXPORT int cdecl commNoOp(commNoOpReq_t *req, commNoOpResp_t *resp)
 /*-------------------------------------------------------------------------
  Return true if the given com port is available.
 -------------------------------------------------------------------------*/
-static int commPortIsAvailable(const char *name)
+static sint32 commPortIsAvailable(const char *name)
 {
 	SECURITY_ATTRIBUTES SecurityAttributes;
 	HANDLE h;
@@ -234,18 +234,18 @@ static int commPortIsAvailable(const char *name)
  List the available comm ports.
  Implemented only for serial and modem drivers.
 -------------------------------------------------------------------------*/
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commEnumPorts(
 	commEnumPortsReq_t *	req,		/* Request (or NULL) */
 	commEnumPortsResp_t *	resp)		/* Response (or NULL) */
 {
-	int i;
-	int nports;
+	sint32 i;
+	sint32 nports;
 	commPortName_t *pPort;
-	int keys[10];
-	int nkeys;
+	sint32 keys[10];
+	sint32 nkeys;
 	regmo_t regmo;
-	int err;
+	sint32 err;
 
 	if (!resp) {
 		DPRINT(("commEnumPorts: bug: resp is null!\n"));
@@ -303,18 +303,18 @@ commEnumPorts(
  Notifies stub of new serial handle or ask it to destroy its copy (by
  passing INVALID_HANDLE_VALUE) so new one can be created.
 -------------------------------------------------------------------------*/
-static int notifystub(HANDLE hser)
+static sint32 notifystub(HANDLE hser)
 {
 	char strhandle[MAX_HSTR];
 	char *pstrhandle;
-	int nwrite;
+	sint32 nwrite;
 	HANDLE hstubser, hstub, hpipe;
-	unsigned long tag = DPSTUB_TAG_SERHDL;
+	uint32 tag = DPSTUB_TAG_SERHDL;
 	/* get stub handle values */
 	if (!GetEnvironmentVariable(DPSTUB,strhandle,MAX_HSTR) ||
-		(sscanf(strhandle, "%x", &hstub) != 1) ||
+		(sscanf(strhandle, "%p", &hstub) != 1) ||
 		!GetEnvironmentVariable(DPSTUBWPIPE,strhandle,MAX_HSTR) ||
-		(sscanf(strhandle, "%x", &hpipe) != 1)) {
+		(sscanf(strhandle, "%p", &hpipe) != 1)) {
 		DPRINT(("wmodem: err: couldn't get stub env vars\n"));
 		return comm_STATUS_BAD;
 	}
@@ -336,7 +336,7 @@ static int notifystub(HANDLE hser)
 	 * of serial handle; stub will do the same thing so that processes it
 	 * launches have this set the same too */
 	if (hser != INVALID_HANDLE_VALUE) {
-		sprintf(strhandle, "%x", hstubser);
+		sprintf(strhandle, "%p", hstubser);
 		pstrhandle = strhandle;
 	} else
 		pstrhandle = NULL;
@@ -361,15 +361,15 @@ static int notifystub(HANDLE hser)
  Time is in clock ticks, unlike the Greenleaf function of the similar name.
 -------------------------------------------------------------------------*/
 
-static int myHMInputLine(ser_t *ser, int timeout, char *buf, size_t buflen, long *stop)
+static sint32 myHMInputLine(ser_t *ser, sint32 timeout, char *buf, size_t buflen, size_t *stop)
 {
 	DWORD	dwReadLength;
-	int	tStartTime = clock();
+	sint32	tStartTime = clock();
 	char *p = buf;
 
 	assert(buf && ser && buflen > 0);
 
-	while (((long)(clock() - tStartTime) < timeout) && (buflen > 0)) {
+	while (((sint32)(clock() - tStartTime) < timeout) && (buflen > 0)) {
 		if (stop && *stop) {
 			*p++ = 0;
 			return 0;
@@ -394,7 +394,7 @@ static int myHMInputLine(ser_t *ser, int timeout, char *buf, size_t buflen, long
 	return timeout;
 }
 
-static int logfd = __ERROR;
+static sint32 logfd = __ERROR;
 
 /*************************************************************************************
 
@@ -424,9 +424,9 @@ void fdprint(char *msg)
  Call dp_dprintf_set(my_ddprintf) to force DPRINT's to go to our own log file.
 --------------------------------------------------------------------------*/
 
-int cdecl my_ddprintf(const char *	__format,  ...)
+sint32 cdecl my_ddprintf(const char *	__format,  ...)
 {
-    int     len;
+    sint32     len;
     char    buf[1024];
   	va_list	argptr;
 
@@ -451,12 +451,12 @@ int cdecl my_ddprintf(const char *	__format,  ...)
 // Send a command and get OK.
 // Returns zero on success.
 
-static int MyHMSendString(ser_t *ser, char *s, long *stop)
+static sint32 MyHMSendString(ser_t *ser, char *s, size_t *stop)
 {
   char response[256];
-  int ok = FALSE;
+  sint32 ok = FALSE;
   serio_res_t err;
-  int timeout = 10 * CLOCKS_PER_SEC;
+  sint32 timeout = 10 * CLOCKS_PER_SEC;
 
   assert(ser && s);
 
@@ -507,7 +507,7 @@ static int MyHMSendString(ser_t *ser, char *s, long *stop)
 // Send a command and get OK.
 // Returns zero on success.
 
-static int MyHMDial(ser_t *ser, char *s, int dialing_method)
+static sint32 MyHMDial(ser_t *ser, char *s, sint32 dialing_method)
 {
   char buf[256];
   serio_res_t err;
@@ -546,10 +546,10 @@ static int MyHMDial(ser_t *ser, char *s, int dialing_method)
 // Reset the modem.
 // Tries ntries times.
 // Returns zero on success.
-static int MyHMReset(ser_t *ser, int ntries, long *stop)
+static sint32 MyHMReset(ser_t *ser, sint32 ntries, size_t *stop)
 
 {
-	int i;
+	sint32 i;
 
 	for (i = 0; i < ntries; i++)
 	{
@@ -568,7 +568,7 @@ static int MyHMReset(ser_t *ser, int ntries, long *stop)
 
 **************************************************************************************/
 
-void serio_Sleep(serio_t *serio, int ms)
+void serio_Sleep(serio_t *serio, sint32 ms)
 {
 	while (ms > 0) {
 		serio_poll(serio);
@@ -584,8 +584,8 @@ void serio_Sleep(serio_t *serio, int ms)
 static void HangUp(void)
 
 {
-	int err;
-	int i;
+	sint32 err;
+	sint32 i;
 
 	DPRINT(("HangUp: Starting at %ld\n", time(0)));
 
@@ -651,21 +651,21 @@ static void HangUp(void)
  communications.
 -------------------------------------------------------------------------*/
 
-DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
+DLLEXPORT sint32 cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 
 {
-	long *stop;
+	size_t *stop;
 	commInitResp_t  respDummy;
-	int				timeout;
+	sint32				timeout;
 	char            response[256];
 	char *          init = "ATQ0V1&K0";  // Hangup, cancel autoanswer if DTR drops; rts/cts flow control (from USR sportster manual)
 	char            message[256];
 	char strhandle[MAX_HSTR];
 	regmo_t regmo;
-	int use_regmo;
-	int i;
-	int mode;
-	int bNewConnection = 0;
+	sint32 use_regmo;
+	sint32 i;
+	sint32 mode;
+	sint32 bNewConnection = 0;
 
 	already_hungup = FALSE;
 	if (resp == NULL) resp = &respDummy;
@@ -709,7 +709,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 		DPRINT(("wmodem:commInit: reusing old handle %x\n", req->baseadr));
 	} else {
 		char szPortName[64];
-		int err;
+		sint32 err;
 
 		if (req->portnum >= 0x8000) {
 			err = regmo_get(&regmo, req->portnum - 0x8000);
@@ -728,9 +728,9 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 			/* If user happens to pick a com port which has an
 			 * attached winmodem, use its init string
 			 */
-			int keys[10];
-			int nkeys;
-			int i;
+			sint32 keys[10];
+			sint32 nkeys;
+			sint32 i;
 			nkeys = regmo_enum(keys, 10);
 			for (i=0; i<nkeys; i++) {
 				err = regmo_get(&regmo, keys[i]);
@@ -753,7 +753,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 		}
 		if ((resp->status = ser_config(ser, req->baud, szPortName)) != ser_RES_OK)
 			return FALSE;
-		req->baseadr = (long) serio_get_handle(&ser->serio);
+		req->baseadr = (sint32) serio_get_handle(&ser->serio);
 		if (GetEnvironmentVariable(DPSTUB,strhandle,MAX_HSTR))
 			bNewConnection = 1;
 	}
@@ -792,23 +792,23 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 
 	/* Set up a variable to look at if the user wants to stop dialing or answering */
 	if (12345 == req->hwirq)
-		stop = (long *) req->swint;
+		stop = (size_t *) req->swint;
 	else
 		stop = 0;
 
-    /* Don't check result of reset, since some modems don't return result
+	/* Don't check result of reset, since some modems don't return result
 	 * codes by default (e.g. USRobotics that have dipswitches)
 	 */
 	MyHMReset(ser, 2, stop);
 	if (stop && *stop) {
 		resp->status = comm_STATUS_NO_RESPONSE;
-	    ser_destroy(ser);
-	    ser = NULL;
+		ser_destroy(ser);
+		ser = NULL;
 		fdclose();
 		return FALSE;
 	}
 
-    /* Send an init string that hopefully gets the modem to do status codes */
+	/* Send an init string that hopefully gets the modem to do status codes */
 	DPRINT(("commInit: about to send init strings... regmo.Init[0] = %s\n", regmo.Init[0]));
 	for (i=0; (i<regmo_N_INIT) && regmo.Init[i][0]; i++) {
 		fdprint("sending '");
@@ -872,7 +872,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
 	}
 
 	do {  // Wait for the connection to be established
-		int err;
+		sint32 err;
 
 		timeout = myHMInputLine(ser,timeout,response,sizeof(response), stop);
 		if (timeout < 0) {
@@ -942,7 +942,7 @@ DLLEXPORT int cdecl commInit(commInitReq_t *req, commInitResp_t *resp)
  *  Return FALSE on error.
  */
 
-DLLEXPORT int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
+DLLEXPORT sint32 cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
 
 {
   if (ser && (!req || (req->flags == 0)))
@@ -985,7 +985,7 @@ DLLEXPORT int cdecl commTerm(commTermReq_t *req, commTermResp_t *resp)
  *  Return TRUE if info was retrieved.
  */
 
-DLLEXPORT int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+DLLEXPORT sint32 cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 
 {
   // We plan to make dpEnumTransports scan through the DLL file looking
@@ -1037,7 +1037,7 @@ DLLEXPORT int cdecl commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_
  *  another station.
  */
 
-DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
+DLLEXPORT sint32 cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 
 {
   static ser_adr_t kludgeAdr;
@@ -1089,7 +1089,7 @@ DLLEXPORT int cdecl commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_
  *  time.
  */
 
-DLLEXPORT int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
+DLLEXPORT sint32 cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
 
 {
   commTxFullReq_t reqDummy;
@@ -1118,7 +1118,7 @@ DLLEXPORT int cdecl commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
  *  that the packet has been (or ever will be) sent.
  */
 
-DLLEXPORT int cdecl commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp)
+DLLEXPORT sint32 cdecl commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp)
 
 {
   commTxPktResp_t   respDummy;
@@ -1155,7 +1155,7 @@ DLLEXPORT int cdecl commTxPkt( commTxPktReq_t *req, commTxPktResp_t *resp)
  *  Return TRUE if a packet was retrieved.
  */
 
-DLLEXPORT int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
+DLLEXPORT sint32 cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
 
 {
   commPeekPktReq_t  reqDummy;
@@ -1181,7 +1181,7 @@ DLLEXPORT int cdecl commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
  *  Return TRUE if a packet was retrieved.
  */
 
-DLLEXPORT int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
+DLLEXPORT sint32 cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
 
 {
   commRxPktReq_t   reqDummy;
@@ -1218,7 +1218,7 @@ DLLEXPORT int cdecl commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
  *  Return TRUE if the string was parsed successfully.
  */
 
-DLLEXPORT int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
+DLLEXPORT sint32 cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
 
 {
   commScanAddrReq_t  reqDummy;
@@ -1257,7 +1257,7 @@ DLLEXPORT int cdecl commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *res
  *  Return TRUE if the buffer was formatted successfully.
  */
 
-DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
+DLLEXPORT sint32 cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
 
 {
   commPrintAddrReq_t  reqDummy;
@@ -1305,7 +1305,7 @@ DLLEXPORT int cdecl commPrintAddr(commPrintAddrReq_t *req, commPrintAddrResp_t *
  *  Return TRUE if the pseudo-player handle was generated.
  */
 
-DLLEXPORT int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
+DLLEXPORT sint32 cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
 
 {
   req  = req;
@@ -1326,7 +1326,7 @@ DLLEXPORT int cdecl commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_
  *  Return TRUE if the pseudo-player handle was invalidated.
  */
 
-DLLEXPORT int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
+DLLEXPORT sint32 cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
 
 {
   req  = req;
@@ -1347,7 +1347,7 @@ DLLEXPORT int cdecl commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *
  *  Return TRUE if the players were all added.
  */
 
-DLLEXPORT int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
+DLLEXPORT sint32 cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
 {
     req = req;
     resp = resp;
@@ -1365,7 +1365,7 @@ DLLEXPORT int cdecl commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *res
  *  Set driver parameters.
  */
 
-DLLEXPORT int cdecl commSetParam(commSetParamReq_t * req, commSetParamResp_t *  resp)
+DLLEXPORT sint32 cdecl commSetParam(commSetParamReq_t * req, commSetParamResp_t *  resp)
 
 {
 	commSetParamReq_t reqDummy;
@@ -1419,7 +1419,7 @@ DLLEXPORT int cdecl commSetParam(commSetParamReq_t * req, commSetParamResp_t *  
  *
  */
 
-DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
+DLLEXPORT sint32 cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 
 {
   commSayHiReq_t  reqDummy;
@@ -1472,7 +1472,7 @@ DLLEXPORT int cdecl commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
  *  Return TRUE if the link was successfully broken.
  */
 
-DLLEXPORT int cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
+DLLEXPORT sint32 cdecl commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
 
 {
   commSayByeReq_t  reqDummy;

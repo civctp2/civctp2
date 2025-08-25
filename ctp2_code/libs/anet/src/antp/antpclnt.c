@@ -45,7 +45,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -58,7 +58,7 @@ dp_dprintf(
 #define DPRINT(a)
 #endif
 /* fake functions so we don't have to include dp2.lib */
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
@@ -92,9 +92,9 @@ static void checksys()
 {
 #ifdef _DEBUG
 	char *memptr[MAX_MEM];
-	int fd[MAX_FD];
+	sint32 fd[MAX_FD];
 	const char file[] = "/dev/null";
-	int i;
+	sint32 i;
 
 	for (i = 0; i < MAX_MEM; i++) {
 		memptr[i] = (char *)malloc(1024*1024);
@@ -127,25 +127,25 @@ static void checksys()
 	return;
 }
 
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
 	dp_result_t err;
 	time_t now;
 	antpget_t *antpget[MAX_URLS];
 	antpget_url_t url[MAX_URLS];
-	long offset[MAX_URLS];
-	int sock[MAX_URLS];
-	int state[MAX_URLS];
-	int retries[MAX_URLS];
+	sint32 offset[MAX_URLS];
+	sint32 sock[MAX_URLS];
+	sint32 state[MAX_URLS];
+	sint32 retries[MAX_URLS];
 	time_t next_retry[MAX_URLS];
 	char localdir[MAX_URLS][80];
 	FILE *localfp[MAX_URLS];
-	int nurls;
+	sint32 nurls;
 	char buf[BUFLEN];
-	int nread;
+	sint32 nread;
 	FILE *antpfile;
 	char temppath[antpget_URL_MAXLEN];
-	int quit = FALSE;
+	sint32 quit = FALSE;
 	time_t next_checksys;
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
@@ -254,10 +254,10 @@ Usage: %s <filelist>\n\
 		fd_set rfds;
 		fd_set wfds;
 		struct timeval tv;
-		int i;
-		int nsocks;
-		int ndisc = 0;
-		int sockmax;
+		sint32 i;
+		sint32 nsocks;
+		sint32 ndisc = 0;
+		sint32 sockmax;
 
 		tv.tv_sec = 5;
 		tv.tv_usec = 0;
@@ -271,7 +271,7 @@ Usage: %s <filelist>\n\
 				switch (state[i]) {
 				case STATE_WAIT:
 					/* Wait for retry to check for more data */
-					if ((long)(now - next_retry[i]) < 0)
+					if ((sint32)(now - next_retry[i]) < 0)
 						continue;
 					/* Done waiting, send a get */
 					state[i] = STATE_SENDGET;
@@ -301,7 +301,7 @@ Usage: %s <filelist>\n\
 		}
 
 		now = time(NULL);
-		if ((long)(now - next_checksys) >= 0) {
+		if ((sint32)(now - next_checksys) >= 0) {
 			DPRINT(("server: t:%d system resources:\n", now));
 			checksys();
 			next_checksys = now + 60;
@@ -314,7 +314,7 @@ Usage: %s <filelist>\n\
 			switch(state[i]) {
 			case STATE_DISCONNECTED:
 				/* Reconnect if we're ready */
-				if (((long)(now - next_retry[i]) >= 0) && (sock[i] >= 0)) {
+				if (((sint32)(now - next_retry[i]) >= 0) && (sock[i] >= 0)) {
 					err = antpget_connect(antpget[i]);
 					if (err == dp_RES_HOST_NOT_RESPONDING) {
 						retries[i]++;
@@ -374,7 +374,7 @@ Usage: %s <filelist>\n\
 						continue;
 					} else if (err == dp_RES_EMPTY) {
 						size_t newLength;
-						int j;
+						sint32 j;
 
 						for (j = 0; j < header->nlines; j++)
 							DPRINT(("%s:%d/%s> %s\n", url[i].host, url[i].port,
@@ -442,14 +442,14 @@ Usage: %s <filelist>\n\
 
 			case STATE_READDATA:
 				if (FD_ISSET(sock[i], &rfds)) {
-					int total = 0;
+					sint32 total = 0;
 
 					do {
 						/* keep reading until we get a partial buffer */
 						err = antpget_readData(antpget[i], buf, BUFLEN, &nread);
 						if (((err == dp_RES_OK) || (err == dp_RES_EMPTY))
 						&&  (nread > 0)) {
-							int j;
+							sint32 j;
 
 							offset[i] += nread;
 							total += nread;
@@ -462,7 +462,7 @@ Usage: %s <filelist>\n\
 									DPRINT(("\n%s:%d/%s> ", url[i].host,
 											url[i].port, url[i].path));
 								else
-									DPRINT(("\\%02x", (unsigned char)buf[j]));
+									DPRINT(("\\%02x", (uint8)buf[j]));
 							}
 							DPRINT(("\n")); */
 							if (fwrite(buf, nread, 1, localfp[i]) != 1) {

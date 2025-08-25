@@ -18,7 +18,7 @@ public:
 	AttractWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_POPUP);
 
@@ -36,8 +36,8 @@ public:
 public:
 	void DrawAttractiveStuff(void);
 	void ClearWindow(void);
-	void HighlightControl(MBCHAR *ldlName);
-	void RemoveControl(MBCHAR *ldlName);
+	void HighlightControl(const MBCHAR *ldlName);
+	void RemoveControl(const MBCHAR *ldlName);
 
 	void RemoveRegion(aui_Region *region);
 	void AddRegion(aui_Region *region);

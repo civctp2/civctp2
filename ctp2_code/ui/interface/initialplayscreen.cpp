@@ -74,7 +74,7 @@ namespace Os
 }
 
 static C3Window				*s_initplayWindow		= NULL;
-static MBCHAR				*s_initplayWindowLDLBlock = "InitPlayWindow";
+static const MBCHAR			*s_initplayWindowLDLBlock = "InitPlayWindow";
 
 sint32	initialplayscreen_displayMyWindow()
 {
@@ -109,7 +109,7 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 
 	AUI_ERRCODE errcode =
         aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "SpriteTestButton",
-										spritetest_spPress, NULL);
+										spritetest_spPress, nullptr);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	if (!g_runSpriteEditor){
@@ -118,42 +118,42 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 	}
 	
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton",
-											initialplayscreen_emailPress, NULL);
+											initialplayscreen_emailPress, nullptr);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "HotseatButton",
-											initialplayscreen_hotseatPress, NULL);
+											initialplayscreen_hotseatPress, nullptr);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "MPButton",
-											initialplayscreen_mpPress, NULL);
+											initialplayscreen_mpPress, nullptr);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "QuitButton",
-											initialplayscreen_quitPress, NULL);
+											initialplayscreen_quitPress, nullptr);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "CreditsButton",
-											initialplayscreen_creditsPress, NULL);
+											initialplayscreen_creditsPress, nullptr);
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	if (aui_Ldl::GetObject(s_initplayWindowLDLBlock, "NewGameButton"))
     {
 	    // Assume Apolyton initial screen layout
 	    (void) aui_Ldl::SetActionFuncAndCookie
-            (s_initplayWindowLDLBlock, "NewGameButton", initialplayscreen_newgamePress, NULL);
+            (s_initplayWindowLDLBlock, "NewGameButton", initialplayscreen_newgamePress, nullptr);
 	    (void) aui_Ldl::SetActionFuncAndCookie
-            (s_initplayWindowLDLBlock, "LoadGameButton", initialplayscreen_loadgamePress, NULL);
+            (s_initplayWindowLDLBlock, "LoadGameButton", initialplayscreen_loadgamePress, nullptr);
 	    (void) aui_Ldl::SetActionFuncAndCookie
-            (s_initplayWindowLDLBlock, "TutorialButton", initialplayscreen_tutorialPress, NULL);
+            (s_initplayWindowLDLBlock, "TutorialButton", initialplayscreen_tutorialPress, nullptr);
 	    (void) aui_Ldl::SetActionFuncAndCookie
-            (s_initplayWindowLDLBlock, "OptionsButton", initialplayscreen_optionsPress, NULL);
+            (s_initplayWindowLDLBlock, "OptionsButton", initialplayscreen_optionsPress, nullptr);
     }
     else
     {
         // Original game layout compatibility handler (sort of)
         (void) aui_Ldl::SetActionFuncAndCookie
-            (s_initplayWindowLDLBlock, "SPButton", initialplayscreen_newgamePress, NULL);
+            (s_initplayWindowLDLBlock, "SPButton", initialplayscreen_newgamePress, nullptr);
     }
 
 	// Display executable version
@@ -190,7 +190,7 @@ void initialplayscreen_Cleanup(void)
 
 
 void
-spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+spritetest_spPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -216,7 +216,7 @@ spritetest_spPress(aui_Control *control, uint32 action, uint32 data, void *cooki
 }
 
 void
-initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -225,7 +225,7 @@ initialplayscreen_mpPress(aui_Control *control, uint32 action, uint32 data, void
 	NetShell::Enter( k_NS_FLAGS_CREATE );
 }
 
-void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -235,7 +235,7 @@ void initialplayscreen_hotseatPress(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -246,19 +246,19 @@ void initialplayscreen_emailPress(aui_Control *control, uint32 action, uint32 da
 }
 
 void
-initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_loadPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 		loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 }
 void
-initialplayscreen_continuePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_continuePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 }
 void
-initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -266,13 +266,13 @@ initialplayscreen_instantPress(aui_Control *control, uint32 action, uint32 data,
 	g_civApp->PostStartGameAction();
 }
 void
-initialplayscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 }
 
 void
-initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -281,7 +281,7 @@ initialplayscreen_quitPress(aui_Control *control, uint32 action, uint32 data, vo
 	ExitGame();
 }
 void
-initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -289,21 +289,21 @@ initialplayscreen_creditsPress(aui_Control *control, uint32 action, uint32 data,
 }
 
 // Code for new buttons taked from spscreen.cpp (and altered)
-void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 	if(initialplayscreen_removeMyWindow(action))
 		spnewgamescreen_displayMyWindow();
 }
 
-void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	loadsavescreen_displayMyWindow(LSS_LOAD_GAME);
 }
 
-void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -320,7 +320,7 @@ void initialplayscreen_tutorialPress(aui_Control *control, uint32 action, uint32
 	}
 }
 
-void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void initialplayscreen_optionsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 

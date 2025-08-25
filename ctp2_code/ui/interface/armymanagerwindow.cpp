@@ -80,7 +80,7 @@
 extern C3UI *g_c3ui;
 
 static ArmyManagerWindow *s_armyWindow = NULL;
-static MBCHAR *s_armyWindowBlock = "ArmyManager";
+static const MBCHAR *s_armyWindowBlock = "ArmyManager";
 
 ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 {
@@ -93,25 +93,25 @@ ArmyManagerWindow::ArmyManagerWindow(AUI_ERRCODE *err)
 		return;
 	}
 
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "NewArmyButton", ArmyManagerWindow::NewArmy, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "CloseButton", ArmyManagerWindow::Close, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmiesList", ArmyManagerWindow::List, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddButton", ArmyManagerWindow::Add, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddAllButton", ArmyManagerWindow::AddAll, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveButton", ArmyManagerWindow::Remove, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveAllButton", ArmyManagerWindow::RemoveAll, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "NewArmyButton", ArmyManagerWindow::NewArmy, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "CloseButton", ArmyManagerWindow::Close, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmiesList", ArmyManagerWindow::List, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddButton", ArmyManagerWindow::Add, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "AddAllButton", ArmyManagerWindow::AddAll, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveButton", ArmyManagerWindow::Remove, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "RemoveAllButton", ArmyManagerWindow::RemoveAll, nullptr);
 	aui_Ldl::SetActionFuncAndCookie(s_armyWindowBlock, "ArmyName", ArmyManagerWindow::ArmyNameChanged, this);
 
-	sint32 i;
-	for(i = 0; i < k_MAX_ARMY_SIZE; i++) {
+	for(sint32 i = 0; i < k_MAX_ARMY_SIZE; i++)
+	{
 		MBCHAR name[k_MAX_NAME_LEN];
 		sprintf(name, "%s.InArmyBox.Unit%d", s_armyWindowBlock, i);
-		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::InArmy, NULL);
-		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy,(void *)i);
+		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::InArmy, nullptr);
+		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackInArmy, i);
 
 		sprintf(name, "%s.OutOfArmyBox.Unit%d", s_armyWindowBlock, i);
-		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::OutOfArmy, NULL);
-		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy,(void *)i);
+		aui_Ldl::SetActionFuncAndCookie(name, ArmyManagerWindow::OutOfArmy, nullptr);
+		(static_cast<ctp2_Static*>(aui_Ldl::GetObject(name,"UnitHealth")))->SetDrawCallbackAndCookie(ArmyManagerWindow::DrawHealthCallbackOutOfArmy, i);
 	}
 
 	*err = AUI_ERRCODE_OK;
@@ -425,7 +425,7 @@ void ArmyManagerWindow::UpdateArmyName()
 
 void ArmyManagerWindow::UpdateArmyItem(ctp2_ListItem * item)
 {
-	ArmyListNode * node = (ArmyListNode *)item->GetUserData();
+	ArmyListNode * node = (ArmyListNode *)item->GetUserDataPtr();
 	Assert(node);
 	if (!node) {
 		return;
@@ -494,7 +494,7 @@ void ArmyManagerWindow::RemoveDeadArmies()
 
 		while(walk.IsValid()) {
 			ctp2_ListItem *item = (ctp2_ListItem *)armyList->GetItemByIndex(i);
-			Assert((ArmyListNode *)item->GetUserData() == walk.GetObj());
+			Assert((ArmyListNode *)item->GetUserDataPtr() == walk.GetObj());
 			if((walk.GetObj()->m_army.m_id != 0) &&
 			   !g_theArmyPool->IsValid(walk.GetObj()->m_army)) {
 				walk.Remove();
@@ -571,7 +571,7 @@ void ArmyManagerWindow::FillArmies()
 	UpdateList();
 }
 
-void ArmyManagerWindow::NewArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::NewArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -588,7 +588,7 @@ void ArmyManagerWindow::NewArmy(aui_Control *control, uint32 action, uint32 data
 	s_armyWindow->Update();
 }
 
-void ArmyManagerWindow::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -603,7 +603,7 @@ void ArmyManagerWindow::Close(aui_Control *control, uint32 action, uint32 data, 
 	Hide();
 }
 
-void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT) return;
 	Assert(s_armyWindow);
@@ -617,7 +617,7 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 
 	ctp2_ListItem *selItem = (ctp2_ListItem *)lb->GetSelectedItem();
 	if(selItem) {
-		ArmyListNode *node = (ArmyListNode *)selItem->GetUserData();
+		ArmyListNode *node = (ArmyListNode *)selItem->GetUserDataPtr();
 		s_armyWindow->m_army = node->m_army;
 
 		if(g_theArmyPool->IsValid(node->m_army) &&
@@ -646,7 +646,7 @@ void ArmyManagerWindow::List(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-void ArmyManagerWindow::Add(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::Add(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -656,7 +656,7 @@ void ArmyManagerWindow::Add(aui_Control *control, uint32 action, uint32 data, vo
 	s_armyWindow->AddSelectedUnits();
 }
 
-void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -677,7 +677,7 @@ void ArmyManagerWindow::AddAll(aui_Control *control, uint32 action, uint32 data,
 	s_armyWindow->AddSelectedUnits();
 }
 
-void ArmyManagerWindow::RemoveAll(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::RemoveAll(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -713,7 +713,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	}
 	else
 	{
-		node = (ArmyListNode *)item->GetUserData();
+		node = (ArmyListNode *)item->GetUserDataPtr();
 	}
 
 	sint32 i;
@@ -789,7 +789,7 @@ void ArmyManagerWindow::AddSelectedUnits()
 	Update();
 }
 
-void ArmyManagerWindow::Remove(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::Remove(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -812,7 +812,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 		return;
 	}
 
-	ArmyListNode *node = (ArmyListNode *)item->GetUserData();
+	ArmyListNode *node = (ArmyListNode *)item->GetUserDataPtr();
 
 	Army theArmy;
 	if((node->m_army.m_id == 0) || (node->m_army.Num() < 1)) {
@@ -861,7 +861,7 @@ void ArmyManagerWindow::RemoveSelectedUnits()
 	NotifySelection();
 }
 
-void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_SWITCH_ACTION_DOUBLECLICK)
 	{
@@ -891,7 +891,7 @@ void ArmyManagerWindow::InArmy(aui_Control *control, uint32 action, uint32 data,
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.RemoveAllButton")))->Enable(enableRemoveAllButton);
 }
 
-void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_SWITCH_ACTION_DOUBLECLICK)
 	{
@@ -924,13 +924,13 @@ void ArmyManagerWindow::OutOfArmy(aui_Control *control, uint32 action, uint32 da
 	(static_cast<ctp2_Button*>(aui_Ldl::GetObject("ArmyManager.AddAllButton")))->Enable(enableAddAllButton);
 }
 
-void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_TEXTFIELD_ACTION_EXECUTE) {
 		return;
 	}
 
-	ArmyManagerWindow * armyManagerWindow = static_cast<ArmyManagerWindow *>(cookie);
+	ArmyManagerWindow * armyManagerWindow = static_cast<ArmyManagerWindow *>(cookie.m_voidPtr);
 	Assert(armyManagerWindow);
 	if (!armyManagerWindow) {
 		return;
@@ -943,12 +943,14 @@ void ArmyManagerWindow::ArmyNameChanged(aui_Control * control, uint32 action, ui
 	armyList->ShouldDraw();
 }
 
-AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
+AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie)
 {
-	if (s_armyWindow->m_inArmy[(int)cookie].IsValid())
+	sint32 armyIndex = cookie.m_sin32Type;
+
+	if (s_armyWindow->m_inArmy[armyIndex].IsValid())
 	{
-		sint32 const maxhp		= s_armyWindow->m_inArmy[(int)cookie]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
-		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_inArmy[(int)cookie].GetHP());
+		sint32 const maxhp		= s_armyWindow->m_inArmy[armyIndex]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
+		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_inArmy[armyIndex].GetHP());
 		sint32 const width		= rect.right - rect.left;
 		sint32 const hpwidth	= width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):
@@ -962,12 +964,14 @@ AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackInArmy(ctp2_Static *control, au
 	return AUI_ERRCODE_OK;
 }
 
-AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie)
+AUI_ERRCODE ArmyManagerWindow::DrawHealthCallbackOutOfArmy(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie)
 {
-	if (s_armyWindow->m_outOfArmy[(int)cookie].IsValid())
+	sint32 armyIndex = cookie.m_sin32Type;
+
+	if (s_armyWindow->m_outOfArmy[armyIndex].IsValid())
 	{
-		sint32 const maxhp		= s_armyWindow->m_outOfArmy[(int)cookie]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
-		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_outOfArmy[(int)cookie].GetHP());
+		sint32 const maxhp		= s_armyWindow->m_outOfArmy[armyIndex]->CalculateTotalHP();//.GetDBRec()->GetMaxHP();
+		sint32 const curhp		= static_cast<sint32>(s_armyWindow->m_outOfArmy[armyIndex].GetHP());
 		sint32 const width		= rect.right - rect.left;
 		sint32 const hpwidth	= width * curhp / maxhp;
 		Pixel16 drawColor=(	hpwidth > (width/2)?g_colorSet->GetColor(COLOR_GREEN):

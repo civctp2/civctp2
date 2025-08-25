@@ -71,6 +71,6 @@ dp_result_t dp_subscribeExceptions(dptab_t *dptab, playerHdl_t h);
  Return: dp_RES_BAD if couldn't write buf to file
          otherwise, dp_RES_OK
 --------------------------------------------------------------------------*/
-dp_result_t dp_handleExceptionPacket(unsigned char *buf, unsigned int buflen, unsigned int fmaxsize, aehlog_t *aehlog);
+dp_result_t dp_handleExceptionPacket(uint8 *buf, size_t buflen, size_t fmaxsize, aehlog_t *aehlog);
 
 #endif

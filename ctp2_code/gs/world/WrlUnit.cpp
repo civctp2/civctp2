@@ -106,38 +106,38 @@ BOOL World::IsCellZoc(const PLAYER_INDEX &owner, const MapPoint &pos,
 	CellUnitList *a;
 	sint32 i;
 
-    if (is_check_only_visible) {
-        if (g_player[owner]->IsVisible(pos) == FALSE) {
-            return FALSE;
-        }
-    }
+	if (is_check_only_visible) {
+		if (g_player[owner]->IsVisible(pos) == FALSE) {
+			return FALSE;
+		}
+	}
 
-    a = GetArmyPtr(pos);
+	a = GetArmyPtr(pos);
 
-    if(!a)
+	if(!a)
 		return FALSE;
 
 	sint32 n = a->Num();
-    if (n < 1)
-        return FALSE;
+	if (n < 1)
+		return FALSE;
 
-    if (!player_isEnemy(owner, a->GetOwner()))
-        return FALSE;
+	if (!player_isEnemy(owner, a->GetOwner()))
+		return FALSE;
 
 	if(is_check_only_visible && !a->IsVisible(owner)) {
 
 		return FALSE;
 	}
 
-    for (i=0; i<n; i++) {
-        if (!a->Get(i).IsNoZoc()) {
+	for (i=0; i<n; i++) {
+		if (!a->Get(i).IsNoZoc()) {
 			if(!is_check_only_visible ||
 			   a->Get(i).GetVisibility() & (1 << owner)) {
 				return TRUE;
 			}
-        }
-    }
-    return FALSE;
+		}
+	}
+	return FALSE;
 }
 
 BOOL World::IsMoveZOC(PLAYER_INDEX owner, const MapPoint &start,

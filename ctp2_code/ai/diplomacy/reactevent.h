@@ -8,4 +8,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __REACT_EVENT_H__
+#endif // __REACT_EVENT_H__

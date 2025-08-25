@@ -9,4 +9,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __MOTIVATION_EVENT_H__
+#endif // __MOTIVATION_EVENT_H__

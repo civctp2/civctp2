@@ -237,7 +237,7 @@ Token::Token
 /// This is the same as above: only the parameter order differs.
 Token::Token
 (
-	 char *         fn,
+	 const char *   fn,
 	 sint32         n,
 	 TokenData *    it,
 	 C3DIR	        dir

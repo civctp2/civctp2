@@ -26,9 +26,9 @@
 //
 // - Added a private static variable and the accoriding access function
 //   to allow newly created cities to have the size displayed in the
-//   city pop spinner, by Martin Gühmann.
-// - Added GetLastPlayer() to get the last player in the game, by Martin Gühmann.
-// - Added a callback function for civ city style spinner. (Jan 4th 2005 Martin Gühmann)
+//   city pop spinner, by Martin GÃ¼hmann.
+// - Added GetLastPlayer() to get the last player in the game, by Martin GÃ¼hmann.
+// - Added a callback function for civ city style spinner. (Jan 4th 2005 Martin GÃ¼hmann)
 // - Fixed debug AI button. (10-Apr-2009 Maq)
 //
 //----------------------------------------------------------------------------
@@ -135,7 +135,7 @@ class ScenarioEditor {
 	sint32 m_brushSize;
 	sint32 m_unitIndex;
 	sint32 m_cityStyle;
-	//Added by Martin Gühmann to add the pop number
+	//Added by Martin GÃ¼hmann to add the pop number
 	//displayed in the CityPopSpinner to new created cities.
 	sint32 m_newPopSize;
 	SCEN_START_LOC_MODE m_startLocMode;
@@ -185,7 +185,7 @@ class ScenarioEditor {
 	static sint32 UnitIndex();
 	static bool PlaceCityMode();
 	static sint32 CityStyle();
-	//Function added by Martin Gühmann so that the
+	//Function added by Martin GÃ¼hmann so that the
 	//pop size displayed in the CityPopSpinner can
 	//be added to newly created cities.
 	static sint32 CitySize();
@@ -198,59 +198,59 @@ class ScenarioEditor {
 	static bool PaintGoodsMode();
 	static sint32 PaintGood();
 
-	static void TerrainSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void TerrainImprovementSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void UnitSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CityStyleSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void TerrainSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void TerrainImprovementSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void UnitSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CityStyleSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	void SetTab(SCEN_TAB tab);
-	static void TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void TabCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void UnitTabButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void UnitTabButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void ToggleLabels(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ToggleLabels(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void CityPopSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CityAddBuildings(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CityAddWonders(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Exit(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CityPopSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CityAddBuildings(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CityAddWonders(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Exit(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void CivAddAdvances(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CivCityStyleSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CivAddRemovePlayer(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CivModeSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CivAddAdvances(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CivCityStyleSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CivAddRemovePlayer(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CivModeSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	void SetCivSwitches();
 	void UpdateCivMode();
 	void SetupNations();
 	void UpdatePlayerSelect();
 
-	static void PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void PlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 
 	void ShowAddList(SCEN_ADD addtype);
 	bool UpdateAddList(SCEN_ADD addtype);
 
-	static void CloseAddStuff(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddLeftList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddRightList(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CloseAddStuff(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AddLeftList(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AddRightList(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void AddAddItem(ctp2_ListBox *list, const MBCHAR *text, sint32 userData);
-	static void AddAddButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddRemoveButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void AddAddButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AddRemoveButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void BrushSize(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void BrushSize(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void LoadScenario(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SaveScenario(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SaveScenarioAs(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NameTheScenarioCallback(MBCHAR *text, sint32 accepted, void *data);
-	static void LoadMap(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SaveMap(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void LoadScenario(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SaveScenario(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SaveScenarioAs(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void NameTheScenarioCallback(const MBCHAR *text, sint32 accepted, void *data);
+	static void LoadMap(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SaveMap(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static bool WorldHasPlayerOrCiv(sint32 playerOrCiv, sint32 &index);
 	static void PlaceFlag(MapPoint &pos);
 	static void GetLabel(MBCHAR *labelString, sint32 playerOrCiv);
 
-	static void RegionButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void RegionButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static bool DrawRegion();
 	static bool SelectRegion();
 	static void StartRegion(MapPoint &pos);
@@ -261,61 +261,61 @@ class ScenarioEditor {
 	static sint32 GetRegionHeight();
 	void Copy();
 	void Cut();
-	static void CutRegion(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CopyRegion(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CutRegion(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CopyRegion(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void Paste(MapPoint &pos);
-	static void PasteRegion(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void PasteRegion(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void SaveClip(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void LoadClip(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void SaveClip(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void LoadClip(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, void *cookie);
+	static void FileAction(FileDialog *dialog, uint32 action, const MBCHAR *filePath, Cookie cookie);
 
-	static void Rules(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void MapSize(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ChangeMapSizeCallback(bool response, void *userData);
-	static void Year(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Barbarians(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Difficulty(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Rules(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void MapSize(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ChangeMapSizeCallback(bool response, Cookie userData);
+	static void Year(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Barbarians(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Difficulty(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void SetXWrap(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SetYWrap(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void SetXWrap(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SetYWrap(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void SetGovernment(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SetPlayerNation(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void SetGovernment(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SetPlayerNation(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void CityName(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void LeaderName(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CityName(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void LeaderName(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void EraseMode(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void EraseMode(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void WorldTabSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void WorldTabSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void ClearWorld(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ExploreButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void UnexploreButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void FogButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ClearWorld(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ExploreButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void UnexploreButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void FogButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	void SetupGlobalControls();
 	void UpdatePlayerCount();
 
-	void AddDropDownItem(ctp2_DropDown *dd, MBCHAR *ldlblock, const char * item);
+	void AddDropDownItem(ctp2_DropDown *dd, const MBCHAR *ldlblock, const char * item);
 	sint32 GetNumPlayers();
 	sint32 GetLastPlayer();
-	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ExcludeSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void LimitPlayerChoice(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ExcludeSwitch(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static void DisableErase(void);
-	static void ReloadSlic(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void RemoveGoods(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GenerateGoods(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddPW(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AddGold(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ReloadSlic(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void RemoveGoods(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GenerateGoods(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AddPW(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AddGold(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void ResetButts();
-	static void FindPosNow(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void FindPosNow(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	//emod
-	static void ShowEnemyHealth(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DebugAI(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ShowEnemyHealth(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void DebugAI(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 };
 
 #endif

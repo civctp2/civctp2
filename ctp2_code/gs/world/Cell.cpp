@@ -1153,7 +1153,7 @@ bool Cell::HasTerrainImprovementOrInFuture(sint32 type) const
 		}
 		else if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_IMPROVEMENT_DB)
 		{
-			if((m_objects->Access(i).m_id & k_ID_KEY_MASK) == type)
+			if(static_cast<sint32>(m_objects->Access(i).m_id & k_ID_KEY_MASK) == type)
 				return true;
 		}
 	}

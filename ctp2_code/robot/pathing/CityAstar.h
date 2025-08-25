@@ -82,8 +82,8 @@ public:
 private:
 	bool m_pathRoad;
 	bool m_pathLand;
-	uint32 m_pathPenalizeCantEnter;
 	bool m_simpleDistance;
+	uint32 m_pathPenalizeCantEnter;
 	MapPoint m_start;
 	MapPoint m_dest;
 };

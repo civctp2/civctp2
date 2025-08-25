@@ -25,8 +25,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -68,16 +68,9 @@ extern AgreementPool *g_theAgreementPool;
 #include "Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
 
-
-
-
-
-
-
-
 AgreementData::AgreementData(const ID id) : GameObj(id.m_id)
 {
-    Init();
+	Init();
 
 	m_agreement = AGREEMENT_TYPE_NULL ;
 
@@ -90,20 +83,12 @@ AgreementData::AgreementData(const ID id) : GameObj(id.m_id)
 	m_recipientPollution = 0;
 }
 
-
-
-
-
-
-
-
-
 AgreementData::AgreementData(const ID id, const PLAYER_INDEX owner,
    const PLAYER_INDEX recipient, const AGREEMENT_TYPE agreement) : GameObj(id.m_id)
 {
-    Init();
+	Init();
 
-    m_id = id;
+	m_id = id;
 	m_agreement = agreement ;
 
 	m_round = g_turn->GetRound() ;
@@ -129,43 +114,32 @@ AgreementData::AgreementData(const ID id, const PLAYER_INDEX owner,
 
 AgreementData::AgreementData(CivArchive &archive) : GameObj(0)
 {
-    Init();
-    Serialize(archive);
+	Init();
+	Serialize(archive);
 }
 
 void AgreementData::Init()
 {
-    m_owner = -1;
+	m_owner = -1;
 	m_recipient = -1;
-    m_thirdParty = -1;
+	m_thirdParty = -1;
 	m_agreement = AGREEMENT_TYPE_NULL;
 
 	m_round = -1;
-    m_expires = k_EXPIRATION_NEVER;
+	m_expires = k_EXPIRATION_NEVER;
 	m_isBroken = FALSE;
-    m_targetCity = Unit();
+	m_targetCity = Unit();
 }
-
-
-
-
-
-
-
-
-
-
-
 
 void AgreementData::Serialize(CivArchive &archive)
 {
-    CHECKSERIALIZE
+	CHECKSERIALIZE
 
-    GameObj::Serialize(archive);
+	GameObj::Serialize(archive);
 	uint8 hasChild;
 
 	if (archive.IsStoring())
-		{
+	{
 		archive.PutSINT32(m_owner) ;
 		archive.PutSINT32(m_recipient) ;
 		archive.PutSINT32(m_thirdParty) ;
@@ -189,9 +163,9 @@ void AgreementData::Serialize(CivArchive &archive)
 		if (m_greater)
 			((AgreementData *)(m_greater))->Serialize(archive) ;
 
-		}
+	}
 	else
-		{
+	{
 		m_owner = (PLAYER_INDEX)(archive.GetSINT32()) ;
 		m_recipient = (PLAYER_INDEX)(archive.GetSINT32()) ;
 		m_thirdParty = (PLAYER_INDEX)(archive.GetSINT32()) ;
@@ -214,19 +188,11 @@ void AgreementData::Serialize(CivArchive &archive)
 			m_greater = new AgreementData(archive);
 		else
 			m_greater = NULL;
-		}
+	}
 }
 
-
-
-
-
-
-
-
-
 void AgreementData::MakeAgreement(PLAYER_INDEX owner, PLAYER_INDEX recipient, AGREEMENT_TYPE agreement)
-	{
+{
 	m_owner = owner ;
 	m_recipient = recipient ;
 	m_agreement = agreement ;
@@ -238,303 +204,79 @@ void AgreementData::MakeAgreement(PLAYER_INDEX owner, PLAYER_INDEX recipient, AG
 	m_thirdParty = PLAYER_INDEX_INVALID ;
 
 #ifdef _DEBUG
-        if (g_theDiplomacyLog) {
-            g_theDiplomacyLog->LogMakeAgreement(m_owner, m_recipient, m_thirdParty,
-                m_agreement);
-        }
+		if (g_theDiplomacyLog)
+		{
+			g_theDiplomacyLog->LogMakeAgreement(m_owner, m_recipient, m_thirdParty,
+ 		    m_agreement);
+ 		}
 #endif // _DEBUG
 
 	ENQUEUE();
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 void AgreementData::SetTarget(const Unit &city)
-	{
+{
 	m_targetCity = city ;
-	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 void AgreementData::Dump(const sint32 i)
-	{
-	MBCHAR	s[_MAX_PATH] ;
+{
+	MBCHAR	s[_MAX_PATH];
+	MBCHAR	d[_MAX_PATH];
 
-	sprintf(s, "%d (%d) - P%d & P%d agree to ", i, m_expires, m_owner, m_recipient) ;
+	sprintf(s, "%d (%d) - P%d & P%d agree to ", i, m_expires, m_owner, m_recipient);
 	switch (m_agreement)
-		{
-		case AGREEMENT_TYPE_DEMAND_STOP_TRADE :
-			sprintf(s, "%s stop trade with P%d", s, m_thirdParty) ;
-			break ;
+	{
+		case AGREEMENT_TYPE_DEMAND_STOP_TRADE:
+			sprintf(d, " stop trade with P%d", m_thirdParty);
+			strcat(s, d);
+			break;
 
-		case AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS :
-			sprintf(s, "%s leave the lands", s) ;
-			break ;
+		case AGREEMENT_TYPE_DEMAND_LEAVE_OUR_LANDS:
+			strcat(s, " leave the lands");
+			break;
 
-		case AGREEMENT_TYPE_REDUCE_POLLUTION :
-			sprintf(s, "%s reduce pollution", s) ;
-			break ;
+		case AGREEMENT_TYPE_REDUCE_POLLUTION:
+			strcat(s, " reduce pollution");
+			break;
 
-		case AGREEMENT_TYPE_CEASE_FIRE :
-			sprintf(s, "%s cease fire", s) ;
-			break ;
+		case AGREEMENT_TYPE_CEASE_FIRE:
+			strcat(s, " cease fire");
+			break;
 
 		case AGREEMENT_TYPE_PACT_CAPTURE_CITY :
-			sprintf(s, "%s capture city %d", s, m_targetCity.m_id) ;
-			break ;
+			sprintf(d, " capture city %d", m_targetCity.m_id);
+			strcat(s, d);
+			break;
 
-		case AGREEMENT_TYPE_PACT_END_POLLUTION :
-			sprintf(s, "%s end pollution", s) ;
-			break ;
+		case AGREEMENT_TYPE_PACT_END_POLLUTION:
+			strcat(s, " end pollution");
+			break;
 
-		default :
-			sprintf(s, "%s \"Unknown diplomatic agreement type\"", s) ;
-			break ;
-
-		}
-
-	DPRINTF(k_DBG_INFO, ("%s\n", s)) ;
+		default:
+			strcat(s, " \"Unknown diplomatic agreement type\"");
+			break;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+	DPRINTF(k_DBG_INFO, ("%s\n", s));
+}
 
 void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpanded)
-	{
+{
 	Civilisation	*civ = NULL;
 
 	if (indexId >= 2)
-		{
+	{
 		if (m_agreement != AGREEMENT_TYPE_DEMAND_STOP_TRADE)
-
-			{
+		{
 			c3errors_ErrorDialogFromDB("AGREEMENT_ERROR", "AGREEMENT_ERROR_NOT_DEMAND_STOP_TRADE") ;
 			return;
-			}
-
 		}
 
+	}
+
 	switch (indexId)
-		{
+	{
 		case 0 :
 			civ = g_player[m_owner]->GetCivilisation() ;
 			break ;
@@ -551,10 +293,10 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 			c3errors_ErrorDialogFromDB("AGREEMENT_ERROR", "AGREEMENT_ERROR_INDEX_OUT_OF_BOUNDS") ;
 			return ;
 
-		}
+	}
 
 	switch (memberId)
-		{
+	{
 		case 0 :
 			strcpy(sExpanded, civ->GetLeaderName()) ;
 			break ;
@@ -572,232 +314,28 @@ void AgreementData::ExtractPlayer(sint32 indexId, sint32 memberId, MBCHAR *sExpa
 			break ;
 
 		case 4 :
-			sprintf(sExpanded, "%ld", g_player[civ->GetOwner()]->GetGold()) ;
+			sprintf(sExpanded, "%d", g_player[civ->GetOwner()]->GetGold()) ;
 			break ;
 
 		default :
 			c3errors_ErrorDialogFromDB("AGREEMENT_ERROR", "AGREEMENT_ERROR_UNKNOWN_PLAYER_MEMBER") ;
 			return;
-
-		}
-
 	}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+}
 
 void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
-	{
+{
 #define MAX_MEMBERS	15
 	struct
-		{
-		MBCHAR	*sClass ;
+	{
+		const MBCHAR	*sClass ;
 
-		MBCHAR	*sMember[MAX_MEMBERS] ;
-		} varList[]={	{ "city",		{ "name", "population", "happiness", "production", "food", "pos", "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "slaves", NULL } },
-						{ "gold",		{ "amount", NULL } },
-						{ "player",		{ "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "gold", NULL } },
-						{ "advance",	{ "name", "index", "prerequisites", "leadsto", NULL } },
-						{ NULL } } ;
+		const MBCHAR	*sMember[MAX_MEMBERS] ;
+	} varList[]={	{ "city",		{ "name", "population", "happiness", "production", "food", "pos", "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "slaves", NULL } },
+					{ "gold",		{ "amount", NULL } },
+					{ "player",		{ "leader_name", "civ_name_singular", "civ_name_plural", "country_name", "gold", NULL } },
+					{ "advance",	{ "name", "index", "prerequisites", "leadsto", NULL } },
+					{ NULL } } ;
 
 	MBCHAR	*pInput,
 			*pOutput,
@@ -951,22 +489,12 @@ void AgreementData::Interpret(MBCHAR *msg, MBCHAR *sInterpreted)
 	*pOutput = 0 ;
 	}
 
-
-
-
-
-
-
-
-
-
-
 void AgreementData::ToString(MBCHAR *s)
-	{
+{
 	MBCHAR	msg[_MAX_PATH] ;
 
 	switch (m_agreement)
-		{
+	{
 		case AGREEMENT_TYPE_DEMAND_ADVANCE :
 			strcpy(msg, "DIPxxx3_AGREEMENT_DEMAND_ADVANCE") ;
 			break ;
@@ -1047,28 +575,15 @@ void AgreementData::ToString(MBCHAR *s)
 			Assert(FALSE) ;
 
 			c3errors_ErrorDialogFromDB("AGREEMENT_ERROR", "AGREEMENT_ERROR_UNKNOWN_AGREEMENT") ;
-			sprintf(s, "%s \"Unknown diplomatic agreement type\"", s) ;
+			strcat(s, " \"Unknown diplomatic agreement type\"") ;
 			break ;
-
-		}
-
-	Interpret(msg, s) ;
 	}
 
-
-
-
-
-
-
-
-
-
-
-
+	Interpret(msg, s) ;
+}
 
 sint32 AgreementData::DecrementTurns(void)
-	{
+{
 	if (m_expires == k_EXPIRATION_NEVER)
 		return (k_EXPIRATION_NEVER) ;
 
@@ -1077,24 +592,13 @@ sint32 AgreementData::DecrementTurns(void)
 
 	ENQUEUE();
 	return (m_expires) ;
-	}
-
-
-
-
-
-
-
-
-
-
+}
 
 void AgreementData::EndTurn(void)
-	{
+{
 	DecrementTurns() ;
 	ENQUEUE();
-	}
-
+}
 
 void AgreementData::RecipientIsViolating(PLAYER_INDEX curPlayer, BOOL force)
 {

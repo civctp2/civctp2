@@ -18,10 +18,10 @@ class c3_ListBox : public aui_ListBox, public PatternBase
 public:
 	c3_ListBox() : aui_ListBox() {}
 	c3_ListBox(AUI_ERRCODE *retval,	uint32 id, const MBCHAR *ldlBlock,
-							ControlActionCallback *ActionFunc=NULL, void *cookie=NULL );
+							ControlActionCallback *ActionFunc=NULL, Cookie cookie = nullptr );
 	c3_ListBox(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 							const MBCHAR *pattern, sint32 bevelwidth = 0, sint32 beveltype = 0,
-							ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
+							ControlActionCallback *ActionFunc = NULL, Cookie cookie = nullptr);
 
 	~c3_ListBox();
 

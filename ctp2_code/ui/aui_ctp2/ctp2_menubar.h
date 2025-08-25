@@ -64,7 +64,7 @@ public:
 	virtual ~ctp2_MenuBar() {}
 
 	ctp2_Menu		*GetMenu(const MBCHAR *ldlParent, const MBCHAR *menuname);
-	void			SetMenuCallback	(ctp2_Menu *menu,CTP2MenuCallback *callback);
+	void			SetMenuCallback(ctp2_Menu *menu, CTP2MenuCallback *callback);
 	void			AddMenuItem
 	(
 	    ctp2_Menu *     menu,

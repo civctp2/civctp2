@@ -40,7 +40,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #define sendcrsh_COMMENT_MAXLEN	70
 
-int winCmdShow;
+sint32 winCmdShow;
 
 /*--------------------------------------------------------------------------
  Generic startup code.
@@ -53,11 +53,11 @@ int winCmdShow;
 /*-------------------------------------------------------------------------
  Parse commandline into words; double quotes protect words with spaces.
 --------------------------------------------------------------------------*/
-static int my_setargv(char *lpszCmdLine, char **argv, int maxargv)
+static sint32 my_setargv(char *lpszCmdLine, char **argv, sint32 maxargv)
 {
 	char *p;
 	char *argcopy;
-	int argi;
+	sint32 argi;
 
 	/* Copy arguments so we can write over them with nulls. */
 	argcopy = malloc(strlen(lpszCmdLine)+1);
@@ -101,11 +101,11 @@ static int my_setargv(char *lpszCmdLine, char **argv, int maxargv)
 	return argi;
 }
 
-int main(int argc, char **argv);
+sint32 main(sint32 argc, char **argv);
 
 #define MAXARGS 4
 
-int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine, int iCmdShow)
+sint32 WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine, sint32 iCmdShow)
 {
 	char *argv[MAXARGS];
 
@@ -123,11 +123,11 @@ int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
  Returns ninst in the space provided.
  Returns the offset of the record read or -1 on error.
 --------------------------------------------------------------------------*/
-static int getLastRecord(char *buf, int len, aeh_t *aeh, int *ninst)
+static sint32 getLastRecord(char *buf, sint32 len, aeh_t *aeh, sint32 *ninst)
 {
 	aeh_buf_t aehbuf;
-	int pos = 0;
-	int recordlen = 0;
+	sint32 pos = 0;
+	sint32 recordlen = 0;
 
 	/* find the last record in buf */
 	do {
@@ -151,7 +151,7 @@ static int getLastRecord(char *buf, int len, aeh_t *aeh, int *ninst)
 /*--------------------------------------------------------------------------
  Returns 1 if the anet library set up our environment or 0 if not.
 --------------------------------------------------------------------------*/
-static int checkEnvironment()
+static sint32 checkEnvironment()
 {
 	char envval[256];
 	DWORD envlen;
@@ -180,7 +180,7 @@ static int checkEnvironment()
 /*--------------------------------------------------------------------------
  Returns 1 if this is the only instance of sendcrsh running or 0 if not.
 --------------------------------------------------------------------------*/
-static int checkUnique()
+static sint32 checkUnique()
 {
 	static char szMutexName[] = "MySendcrshMutex9283";
 	HANDLE hMutex;
@@ -201,11 +201,11 @@ static int checkUnique()
 /*--------------------------------------------------------------------------
  Convert len*2 hex digit characters in hexbuf into len bytes in buf.
  Returns buf on success,
- 		 NULL on error (invalid hex digit, short hexbuf)
+ 		 NULL on error (invalid hex digit, sint16 hexbuf)
 --------------------------------------------------------------------------*/
-static char *hex2buf(const char *hexbuf, char *buf, int len)
+static char *hex2buf(const char *hexbuf, char *buf, sint32 len)
 {
-	int i;
+	sint32 i;
 
 	if (!hexbuf || !buf || !len)
 		return 0;
@@ -219,11 +219,11 @@ static char *hex2buf(const char *hexbuf, char *buf, int len)
 }
 
 #ifdef logprint_ENABLED
-void dumpbuf(const char *buf, int len)
+void dumpbuf(const char *buf, sint32 len)
 {
-	int i;
+	sint32 i;
 	for (i = 0; i < len; i++) {
-		DPRINT(("%02x", (unsigned char)buf[i]));
+		DPRINT(("%02x", (uint8)buf[i]));
 		if (!((i+1)%32)) {
 			DPRINT(("\n"));
 		}
@@ -234,21 +234,21 @@ void dumpbuf(const char *buf, int len)
 #define dumpbuf(buf,len)
 #endif
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
 	sbdclnt_t *sbdclnt;
-	int port;
-	int clicked;
+	sint32 port;
+	sint32 clicked;
 	clock_t timeout;
 	aeh_t aeh;
-	int ninst;
+	sint32 ninst;
 	char comments[sendcrsh_COMMENT_MAXLEN];
-	int len, lensent;
+	sint32 len, lensent;
 	char buf[sbd_MAXLEN];
-	int pos;
-	unsigned long crc;
+	sint32 pos;
+	uint32 crc;
 	char signature[10];
-	int i = 0;
+	sint32 i = 0;
 
 	logprint_setFile("sendcrsh.log");
 
@@ -331,10 +331,10 @@ int main(int argc, char **argv)
 	/* add the comments to the buffer */
 	if (comments[0]) {
 		aeh_buf_t aehbuf;
-		int commentlen = strlen(comments);
-		int nwritten;
+		sint32 commentlen = strlen(comments);
+		sint32 nwritten;
 
-		if ((len + sizeof(unsigned int /* aeh_info_t.id */) + sizeof(commentlen) + commentlen) > sbd_MAXLEN) {
+		if ((len + sizeof(uint32 /* aeh_info_t.id */) + sizeof(commentlen) + commentlen) > sbd_MAXLEN) {
 			DPRINT(("no room in buf for comment\n"));
 			return 1;
 		}
@@ -360,12 +360,12 @@ int main(int argc, char **argv)
 	aeh_Destroy(&aeh);
 
 	/* send the buffer */
-	sbdclnt = sbdclnt_create(buf, len, argv[1], (unsigned short)port);
+	sbdclnt = sbdclnt_create(buf, len, argv[1], (uint16)port);
 	if (sbdclnt == NULL) {
 		DPRINT(("sbdclnt_create failed\n"));
 		return 1;
 	}
-	while ((long)(eclock() - timeout) < 0) {
+	while ((sint32)(eclock() - timeout) < 0) {
 		lensent = sbdclnt_poll(sbdclnt);
 		if (lensent != 0)
 			break;

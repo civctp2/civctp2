@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Seperated the NewProposal event from the Response event so that the
-//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin Gühmann)
+//   NewProposal event can be called from slic witout any problems. (17-Oct-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -600,7 +600,7 @@ STDEHANDLER(ReducePollution_NewProposalEvent)
 		new_proposal.receiverId = receiver;
 		new_proposal.detail.first_type = PROPOSAL_REQUEST_REDUCE_POLLUTION;
 		new_proposal.detail.first_arg.pollution = target_pollution;
-		new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;
+		new_proposal.detail.tone = tone;
 
 		if (!sender_diplomat.GetNewProposalTimeout(new_proposal, 20))
 		{
@@ -1005,7 +1005,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 	else if (sender_diplomat.GetPersonality()->GetDiscoveryDiplomatic())
 	{
 		reduce_percent = 0.1;
-		tone = DIPLOMATIC_TONE_EQUAL;
+		tone = DIPLOMATIC_TONE_INDIGNANT;
 	}
 
 	reduce_percent = ProposalAnalysis::RoundPercentReduction(reduce_percent);
@@ -1022,7 +1022,7 @@ STDEHANDLER(PollutionPact_NewProposalEvent)
 	new_proposal.detail.first_type = PROPOSAL_TREATY_POLLUTION_PACT;
 	new_proposal.detail.first_arg.pollution =
 		static_cast<sint32>((1.0 - reduce_percent) * receiver_pollution);
-	new_proposal.detail.tone = DIPLOMATIC_TONE_EQUAL;
+	new_proposal.detail.tone = tone;
 
 	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ) )
 	{
@@ -1863,7 +1863,7 @@ STDEHANDLER(RequestCity_NewProposalEvent)
 	new_proposal.detail.first_arg.cityId = city.m_id;
 
 	if (sender_diplomat.GetNewProposalTimeout( new_proposal, 20 ))
-		GEV_HD_Continue;
+		return GEV_HD_Continue;
 
 	sender_diplomat.ConsiderNewProposal(receiver, new_proposal);
 

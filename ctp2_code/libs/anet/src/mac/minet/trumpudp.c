@@ -40,11 +40,11 @@ extern EndpointRef		gUDPEndpoint;
 
 typedef struct {
 	InetAddress dest_addr;			//	OT destination address
-	unsigned long ipDest;			//	destination address
-	unsigned long portDest;			//	destination port
-	unsigned long	portSource;		//	source port;
-	unsigned char	flags;
-	unsigned char inUse;
+	uint32 ipDest;			//	destination address
+	uint32 portDest;			//	destination port
+	uint32	portSource;		//	source port;
+	uint8	flags;
+	uint8 inUse;
 } DestStruct;
 
 DestStruct*				gDests = nil;
@@ -53,28 +53,28 @@ tcpabi_session_info_t	gSessionInfo;
 #define	kMaxAddressesIP	32								//	maximum addresses we broadcast to
 
 typedef struct {
-	unsigned short		packetType;
-	unsigned short		addressCount;
+	uint16		packetType;
+	uint16		addressCount;
 	InetHost				addressList[kMaxAddressesIP];
 } AddressListStruct;
 
 //typedef struct {
 //	InetHost			address;
-//	short				lastCountSent;
+//	sint16				lastCountSent;
 //} SendCountStruct;
 
 AddressListStruct		gAddressList;
 
-//short					gSendCountCount;
+//sint16					gSendCountCount;
 //SendCountStruct			gSendCount[kMaxAddressesIP];
 
 #define	MAX_PLAYERS	10
 #define	MAX_DESTS	(MAX_PLAYERS*2)
 
-unsigned tcpabi_udp_open( unsigned long ip_dst, unsigned dst_port,
-                     unsigned src_port,
-                     unsigned char flags, unsigned *local_port ) {
-	unsigned long		i;
+uint32 tcpabi_udp_open( uint32 ip_dst, uint32 dst_port,
+                     uint32 src_port,
+                     uint8 flags, uint32 *local_port ) {
+	uint32		i;
 
 	//	save all of the paramaters in our array and return the index
 	//	that we just used
@@ -105,7 +105,7 @@ unsigned tcpabi_udp_open( unsigned long ip_dst, unsigned dst_port,
 	return i;
 }
 
-int tcpabi_udp_close( unsigned handle, unsigned char flags ) {
+sint32 tcpabi_udp_close( uint32 handle, uint8 flags ) {
 	gDests[handle].inUse = false;
 	//gDests[handle].dest_addr = 0;
 	gDests[handle].ipDest = 0;
@@ -114,18 +114,18 @@ int tcpabi_udp_close( unsigned handle, unsigned char flags ) {
 	gDests[handle].flags = flags;
 }
 
-int tcpabi_udp_recv( unsigned handle, void *buf, unsigned len,
-                   unsigned timeout, unsigned char flags,
-                   unsigned *ttltos, unsigned *id ) {
+sint32 tcpabi_udp_recv( uint32 handle, void *buf, uint32 len,
+                   uint32 timeout, uint8 flags,
+                   uint32 *ttltos, uint32 *id ) {
 
 	//	this method reads a packet and returns the
 	//	size of the data read and sets up the senders
 	//	address for the status routine
 
-	unsigned char		recvBuf[sizeof(InetAddress) + udpMaxRawData + 1];
+	uint8		recvBuf[sizeof(InetAddress) + udpMaxRawData + 1];
 	AddressListStruct*	addressList;
 	InetAddress*		srcAddress;
-	unsigned long		theSize = udpMaxRawData;
+	uint32		theSize = udpMaxRawData;
 	Boolean				gotPacket;
 	extern otq_t*		gInQueue;
 
@@ -161,7 +161,7 @@ int tcpabi_udp_recv( unsigned handle, void *buf, unsigned len,
 			//	from the enumerate sessions packets
 
 			if (addressList->packetType == dp_SESSION_PACKET_ID) {
-			//	short		lastSendCount;
+			//	sint16		lastSendCount;
 
 				//	we first check to see how many addresses we have sent to this address
 				//	already. If we don't have any new ones, there is no point in wasting bandwidth
@@ -186,14 +186,14 @@ int tcpabi_udp_recv( unsigned handle, void *buf, unsigned len,
 	return theSize;
 }
 
-int tcpabi_udp_send( unsigned handle, void *buf, unsigned len, unsigned ttltos, unsigned id, unsigned char flags ) {
+sint32 tcpabi_udp_send( uint32 handle, void *buf, uint32 len, uint32 ttltos, uint32 id, uint8 flags ) {
 	TUnitData	udata;
 	OSStatus	err;
 	OTResult	theResult;
 
 	udata.addr.maxlen = sizeof(gDests[handle].dest_addr);
 	udata.addr.len = sizeof(gDests[handle].dest_addr);
-	udata.addr.buf = (unsigned char *) &gDests[handle].dest_addr;
+	udata.addr.buf = (uint8 *) &gDests[handle].dest_addr;
 
 	udata.opt.maxlen = 0;
 	udata.opt.len = 0;
@@ -201,7 +201,7 @@ int tcpabi_udp_send( unsigned handle, void *buf, unsigned len, unsigned ttltos, 
 
 	udata.udata.maxlen = len;
 	udata.udata.len = len;
-	udata.udata.buf = (unsigned char *)buf;
+	udata.udata.buf = (uint8 *)buf;
 
 	do {
 		err = OTSndUData(gUDPEndpoint, &udata);
@@ -217,7 +217,7 @@ int tcpabi_udp_send( unsigned handle, void *buf, unsigned len, unsigned ttltos, 
 	return err;
 }
 
-int tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, unsigned len) {
+sint32 tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, uint32 len) {
 	TUnitData	udata;
 	OSStatus	err;
 	OTResult	theResult;
@@ -226,7 +226,7 @@ int tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, unsigned len)
 
 	udata.addr.maxlen = sizeof(InetAddress);
 	udata.addr.len = sizeof(InetAddress);
-	udata.addr.buf = (unsigned char *) theAddress;
+	udata.addr.buf = (uint8 *) theAddress;
 
 	udata.opt.maxlen = 0;
 	udata.opt.len = 0;
@@ -234,7 +234,7 @@ int tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, unsigned len)
 
 	udata.udata.maxlen = len;
 	udata.udata.len = len;
-	udata.udata.buf = (unsigned char *)buf;
+	udata.udata.buf = (uint8 *)buf;
 
 	do {
 		err = OTSndUData(gUDPEndpoint, &udata);
@@ -254,16 +254,16 @@ int tcpabi_udp_send_to_address(InetAddress* theAddress, void *buf, unsigned len)
 	return err;
 }
 
-int tcpabi_udp_status( unsigned handle, unsigned char flags, unsigned *size_next,
+sint32 tcpabi_udp_status( uint32 handle, uint8 flags, uint32 *size_next,
                            tcpabi_session_info_t **info ) {
 	*info = &gSessionInfo;
 }
 
-int tcpabi_udp_broadcast(void *buf, unsigned len) {
+sint32 tcpabi_udp_broadcast(void *buf, uint32 len) {
 	OSStatus			err = noErr;
 	TUnitData			udata;
 	OTResult			theResult;
-	short				i;
+	sint16				i;
 	InetAddress			currentAddress;
 
 	//	this method sends the specified packet to our list of
@@ -280,7 +280,7 @@ int tcpabi_udp_broadcast(void *buf, unsigned len) {
 
 		udata.addr.maxlen = sizeof(InetAddress);
 		udata.addr.len = sizeof(InetAddress);
-		udata.addr.buf = (unsigned char *) &currentAddress;
+		udata.addr.buf = (uint8 *) &currentAddress;
 
 		udata.opt.maxlen = 0;
 		udata.opt.len = 0;
@@ -288,7 +288,7 @@ int tcpabi_udp_broadcast(void *buf, unsigned len) {
 
 		udata.udata.maxlen = len;
 		udata.udata.len = len;
-		udata.udata.buf = (unsigned char *)buf;
+		udata.udata.buf = (uint8 *)buf;
 
 		do {
 			err = OTSndUData(gUDPEndpoint, &udata);
@@ -307,7 +307,7 @@ int tcpabi_udp_broadcast(void *buf, unsigned len) {
 }
 
 void AddAddressToList(InetHost newAddress) {
-	short						i;
+	sint16						i;
 	Boolean						found = false;
 	extern InetInterfaceInfo	gInetInfo;
 
@@ -339,8 +339,8 @@ void AddAddressToList(InetHost newAddress) {
 
 }
 
-void AddAddressListToList(InetHost* newAddressList, short count) {
-	short		i;
+void AddAddressListToList(InetHost* newAddressList, sint16 count) {
+	sint16		i;
 
 	//	if the list is full, bail out
 
@@ -368,9 +368,9 @@ void InitAddressList(void) {
 }
 
 /*
-void ChangeSendCount(InetHost theAddress, short newCount) {
-	short		i;
-	short		index = -1;
+void ChangeSendCount(InetHost theAddress, sint16 newCount) {
+	sint16		i;
+	sint16		index = -1;
 
 	//	this routine sets the count for the specified address. If the address
 	//	is not in the list, it is added at the end
@@ -407,10 +407,10 @@ void ChangeSendCount(InetHost theAddress, short newCount) {
 
 }
 
-short GetSendCount(InetHost theAddress) {
-	short	i;
-	short	result = -1;
-	short	index = -1;
+sint16 GetSendCount(InetHost theAddress) {
+	sint16	i;
+	sint16	result = -1;
+	sint16	index = -1;
 
 	//	search for this address in the list
 

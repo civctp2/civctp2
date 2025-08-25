@@ -24,8 +24,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added get and set methods for the bombard members. (30-Apr-2008 Martin Gühmann)
-// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin Gühmann)
+// - Added get and set methods for the bombard members. (30-Apr-2008 Martin GÃ¼hmann)
+// - Redesigned AI, so that the matching algorithm is now a greedy algorithm. (13-Aug-2008 Martin GÃ¼hmann)
 //   - Added following methods: NothingNeeded, GetTotalMissingStrength, HasEnough, and Log_Debug_Infor
 //
 //----------------------------------------------------------------------------
@@ -51,10 +51,10 @@ public:
 	: m_attack_str       (0.0),
 	  m_defense_str      (0.0),
 	  m_ranged_str       (0.0),
-	  m_value            (0.0),
 	  m_land_bombard_str (0.0),
 	  m_water_bombard_str(0.0),
 	  m_air_bombard_str  (0.0),
+	  m_value            (0.0),
 	  m_agent_count      (agent_count),
 	  m_transport        (0),
 	  m_defenders        (0),
@@ -113,7 +113,7 @@ public:
 	void Set_To_The_Maximum(Squad_Strength);
 
 	bool NothingNeeded() const;
-	void Log_Debug_Info(const int & log, sint32 playerId, sint32 goalType, char * text) const;
+	void Log_Debug_Info(const int & log, sint32 playerId, sint32 goalType, const char * text) const;
 	bool HasEnough(const Squad_Strength & otherStrength, bool ignoreBombard = false) const;
 	float GetTotalMissing(const Squad_Strength & otherStrength) const;
 

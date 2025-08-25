@@ -112,30 +112,30 @@ namespace
 BuildQueue::BuildQueue()
 :
 	m_list                      (new PointerList<BuildNode>),
+	m_name                      (NULL),
+	m_frontWhenBuilt            (NULL),
 	m_owner                     (PLAYER_UNASSIGNED),
 	m_city                      (),
 	m_wonderStarted             (NOTHING_THIS_TURN),
 	m_wonderStopped             (NOTHING_THIS_TURN),
 	m_wonderComplete            (NOTHING_THIS_TURN),
-	m_frontWhenBuilt            (NULL),
 	m_settler_pending           (false),
-	m_popcoststobuild_pending   (false),          // EMOD
-	m_name                      (NULL)
+	m_popcoststobuild_pending   (false)          // EMOD
 {
 }
 /* Doesn't seem to copy m_list properly
 BuildQueue::BuildQueue(BuildQueue & copy)
 :
 	m_list(copy.m_list),
+	m_name(NULL),
+	m_frontWhenBuilt(NULL),
 	m_owner(copy.m_owner),
 	m_city(copy.m_owner),
 	m_wonderStarted(copy.m_owner),
 	m_wonderStopped(copy.m_owner),
 	m_wonderComplete(copy.m_owner),
-	m_frontWhenBuilt(NULL),
 	m_settler_pending(copy.m_owner),
-	m_popcoststobuild_pending(copy.m_owner),          // EMOD
-	m_name(NULL)
+	m_popcoststobuild_pending(copy.m_owner)          // EMOD
 {
 	SetName(copy.m_name);
 	if(copy.m_frontWhenBuilt != NULL)

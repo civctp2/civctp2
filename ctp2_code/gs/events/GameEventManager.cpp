@@ -511,7 +511,7 @@ GAME_EVENT_ERR GameEventManager::ActivateHook
 	return m_hooks[type]->Activate(args, 0, resumeIndex);
 }
 
-char *GameEventManager::ArgCharToName(char want)
+const char *GameEventManager::ArgCharToName(char want)
 {
 	switch(want) {
 		case GEAC_ARMY: return "GEA_Army";
@@ -532,7 +532,7 @@ char *GameEventManager::ArgCharToName(char want)
 	}
 }
 
-char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
+const char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
 {
 	switch(want) {
 		case GEA_Army: return "GEA_Army";
@@ -553,7 +553,7 @@ char *GameEventManager::ArgToName(GAME_EVENT_ARGUMENT want)
 	}
 }
 
-GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(char arg)
+GAME_EVENT_ARGUMENT GameEventManager::ArgCharToIndex(const char arg)
 {
 	switch(arg) {
 		case GEAC_ARMY: return GEA_Army;
@@ -677,7 +677,7 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 		return false;
 
 	GameEventDescription *desc = &g_eventDescriptions[type];
-	char *argString = desc->args;
+	const char *argString = desc->args;
 
 	bool done = false;
 	GAME_EVENT_ARGUMENT nextArg;
@@ -691,11 +691,6 @@ bool GameEventManager::VerifyArgs(GAME_EVENT type, const GAME_EVENT_ARGUMENT* ar
 
 		if(nextArg == GEA_End && *argString == 0)
 			return true;
-
-
-
-
-
 
 		if(!isOptional) {
 
@@ -853,9 +848,8 @@ void GameEventManager::Dump()
 
 		fprintf(f, "%d: GEV_%s(", (sint32)ev, g_eventDescriptions[ev].name);
 
-		char *argString = g_eventDescriptions[ev].args;
+		const char *argString = g_eventDescriptions[ev].args;
 		BOOL first = TRUE;
-
 
 		while(*argString) {
 			Assert(*argString == '%' || *argString == '&' || *argString == '$');
@@ -865,7 +859,6 @@ void GameEventManager::Dump()
 				{
 				fprintf(f, " [");
 				}
-
 
 			argString++;
 			if(!(*argString)) {
@@ -880,10 +873,9 @@ void GameEventManager::Dump()
 			argString++;
 
 			if(optional)
-				{
+			{
 				fprintf(f, "]");
-				}
-
+			}
 		}
 
 		fprintf(f, "): %s\n", g_eventDescriptions[ev].description);

@@ -80,9 +80,9 @@ scorsend: send a score report to a server\n\
 	exit(1);
 }
 
-int dp_PASCAL myCommThaw_cb(int status, void *context)
+sint32 dp_PASCAL myCommThaw_cb(sint32 status, void *context)
 {
-	static int status_old = -1;
+	static sint32 status_old = -1;
 
 	if (status != status_old) {
 		PRINT(("Connecting status:%d\n", status));
@@ -91,17 +91,17 @@ int dp_PASCAL myCommThaw_cb(int status, void *context)
 	return TRUE;  /* don't cancel */
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
-	int argi;
+	sint32 argi;
 	dp_t *dp = NULL;
 	dp_result_t err;
 	dp_appParam_t app;
 	dp_launchParams_t params;
-	int score;
+	sint32 score;
 	char scorebuf[3];
-	int send_score = FALSE;
-	int quit_wait = 1000;
+	sint32 send_score = FALSE;
+	sint32 quit_wait = 1000;
 
 	char	GameName[MAX_PATH]="";
 	char	GamePath[MAX_PATH]="";
@@ -121,9 +121,9 @@ int main(int argc, char **argv)
 	params.Maxplayers=4;
 
 	for (argi=1; argi<argc; argi++) {
-		int c = argv[argi][0];
-		int c1 = argv[argi][1];
-		int c2 = argv[argi][2];
+		sint32 c = argv[argi][0];
+		sint32 c1 = argv[argi][1];
+		sint32 c2 = argv[argi][2];
 		char *arg;
 
 		if (c != '-') continue;
@@ -324,11 +324,11 @@ int main(int argc, char **argv)
 
 	if (dp) {
 		char key[dp_KEY_MAXLEN];
-		int keylen;
+		sint32 keylen;
 		dp_session_t sess;
 		size_t size = sizeof(sess);
 		dpid_t myid = dp_ID_NONE;
-		int do_shutdown = 0;
+		sint32 do_shutdown = 0;
 
 		err = dpGetSessionDesc(dp, &sess, &size);
 		if (err != dp_RES_OK) {

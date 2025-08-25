@@ -87,7 +87,7 @@ aui_Control::aui_Control
 	uint32                  id,
 	const MBCHAR *          ldlBlock,
 	ControlActionCallback * ActionFunc,
-	void *                  cookie
+	Cookie                  cookie
 )
 :
 	aui_ImageBase           (ldlBlock),
@@ -95,13 +95,17 @@ aui_Control::aui_Control
 	aui_Region              (retval, id, ldlBlock),
 	aui_SoundBase           (ldlBlock),
 	m_stringTable           (NULL),
+	m_window                (NULL),
+	m_tip                   (NULL),
 	m_allocatedTip          (false),
+	m_showingTip            (false),
 	m_statusText            (NULL),
+	m_statusTextCopy        (NULL),
 	m_numberOfLayers        (0),
 	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_statusTextCopy        (NULL)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 {
 	if (AUI_SUCCESS(*retval))
 	{
@@ -119,7 +123,7 @@ aui_Control::aui_Control
 	sint32                  width,
 	sint32                  height,
 	ControlActionCallback * ActionFunc,
-	void *                  cookie
+	Cookie                  cookie
 )
 :
 	aui_ImageBase           ((sint32) 0),
@@ -127,14 +131,17 @@ aui_Control::aui_Control
 	aui_Region              (retval, id, x, y, width, height),
 	aui_SoundBase           ((const MBCHAR **) NULL),
 	m_stringTable           (NULL),
+	m_window                (NULL),
+	m_tip                   (NULL),
 	m_allocatedTip          (false),
+	m_showingTip            (false),
 	m_statusText            (NULL),
+	m_statusTextCopy        (NULL),
 	m_numberOfLayers        (0),
 	m_imagesPerLayer        (0),
 	m_imageLayerList        (NULL),
 	m_layerRenderFlags      (NULL),
-	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS),
-	m_statusTextCopy        (NULL)
+	m_renderFlags           (k_AUI_CONTROL_LAYER_FLAG_ALWAYS)
 {
 	if (AUI_SUCCESS(*retval))
 	{
@@ -146,7 +153,7 @@ aui_Control::aui_Control
 AUI_ERRCODE aui_Control::InitCommonLdl(
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -226,7 +233,7 @@ AUI_ERRCODE aui_Control::InitCommonLdl(
 
 AUI_ERRCODE aui_Control::InitCommon(
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 {
 	m_window = NULL,
 	m_allocatedTip = FALSE,
@@ -268,7 +275,7 @@ aui_Control::~aui_Control()
 
 AUI_ERRCODE aui_Control::SetActionFuncAndCookie(
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 {
 	m_ActionFunc = ActionFunc;
 

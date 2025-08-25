@@ -270,7 +270,7 @@ getLatest(
 {
 	dptab_table_t *ptApps;
 	char key[dptab_KEY_MAXLEN];
-	int keylen = 0;
+	sint32 keylen = 0;
 	dp_result_t err;
 
 	assert(dp != NULL);
@@ -360,7 +360,7 @@ dpGetAppVersion(
 {
 	dp_result_t err;
 	char cwd[256];
-	int len;
+	size_t len;
 	CHAR	 GameName[MAX_VALUE_NAME];
 	CHAR	 GamePath[MAX_PATH];
 	CHAR	 GameArgs[MAX_PATH];
@@ -368,8 +368,8 @@ dpGetAppVersion(
 	CHAR	 GameShellOpts[MAX_PATH];
 	dp_appParam_t appParam;
 
-    precondition(dp);
-    precondition(app);
+	precondition(dp);
+	precondition(app);
 
 	DPRINT(("dpGetAppVersion:\n"));
 
@@ -443,7 +443,7 @@ static void showErr()
 DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 {
 #if defined(ANET_ORIGINAL)
-	int res;
+	sint32 res;
 	char productCode[256];
 
 #ifdef BIND_UPDATER_LATE
@@ -649,7 +649,7 @@ dpEnumApp(
 				if (bData) {
 					Param = _strlwr(ValueName);
 					if(!strcmp("cwd", Param)) {
-						int len = strlen(bData);
+						size_t len = strlen(bData);
 						strcpy(appParam.cwd, bData);
 						/* remove trailing slashes */
 						if ((len > 3) && (appParam.cwd[len - 1] == '\\')) {
@@ -662,7 +662,7 @@ dpEnumApp(
 //					} else if(!strcmp("cmdline", Param)) {
 //						strcpy(appParam.args, bData);
 //					} else if(!strcmp("sessiontype", Param)) {
-//						appParam.sessionType = (dp_species_t) (*(int *)bData);
+//						appParam.sessionType = (dp_species_t) (*(sint32 *)bData);
 					}
 				} else {
 					DPRINT(("dpEnumApp: got a NULL bData\n"));

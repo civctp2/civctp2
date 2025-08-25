@@ -46,7 +46,7 @@
 IntroMovieWindow::IntroMovieWindow(
 									 AUI_ERRCODE *retval,
 									 uint32 id,
-									 MBCHAR *ldlBlock,
+									 const MBCHAR *ldlBlock,
 									 sint32 bpp,
 									 AUI_WINDOW_TYPE type )
 									 :
@@ -66,7 +66,7 @@ IntroMovieWindow::IntroMovieWindow(
 									 sint32 width,
 									 sint32 height,
 									 sint32 bpp,
-									 MBCHAR *pattern,
+									 const MBCHAR *pattern,
 									 AUI_WINDOW_TYPE type)
 									 :
 C3Window( retval, id, x, y, width, height, bpp, pattern, type )
@@ -87,7 +87,7 @@ IntroMovieWindow::~IntroMovieWindow()
 
 
 
-AUI_ERRCODE IntroMovieWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE IntroMovieWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			buttonBlock[k_AUI_LDL_MAXBLOCK+1];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
@@ -109,7 +109,7 @@ AUI_ERRCODE IntroMovieWindow::InitCommon(void)
 }
 
 
-void IntroMovieWindow::SetMovie(MBCHAR *filename)
+void IntroMovieWindow::SetMovie(const MBCHAR *filename)
 {
 	if (!m_movieButton) return;
 

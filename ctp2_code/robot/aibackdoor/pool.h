@@ -78,9 +78,9 @@ protected:
 
 	bool Prepare_New_Chunk();
 
+	int count;
 	int chunk_size;
 	int max_chunks;
-	int count;
 	int next_element;
 
 	list_array<DATA_TYPE *> chunks;
@@ -118,10 +118,10 @@ Pool<DATA_TYPE>::Pool
 	int i_max_chunks
 )
 :   count                   (0),
-    chunks                  (INITIAL_CHUNK_LIST_SIZE),
     chunk_size              (i_chunk_size),
     max_chunks              (i_max_chunks),
     next_element            (0),
+    chunks                  (INITIAL_CHUNK_LIST_SIZE),
     next_free_element_list  (i_chunk_size, i_chunk_size, i_max_chunks)
 {
 	Assert(chunk_size > 0);

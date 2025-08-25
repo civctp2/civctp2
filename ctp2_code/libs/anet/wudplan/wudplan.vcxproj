@@ -165,7 +165,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -185,7 +185,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;DPRNT;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -203,7 +203,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;DPRNT;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -221,7 +221,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;DPRNT;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -239,7 +239,7 @@
       <Optimization>Disabled</Optimization>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>_DEBUG;DPRNT;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -259,7 +259,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -281,7 +281,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -303,7 +303,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <SDLCheck>true</SDLCheck>
       <ConformanceMode>true</ConformanceMode>
-      <AdditionalIncludeDirectories>..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>..\h\;..\..\h\;..\src\win\h\;..\demo\utils\;..\demo\utils\bad\</AdditionalIncludeDirectories>
       <PreprocessorDefinitions>NDEBUG;WIN32;_WINDOWS;DYNALINK;dp_ANET2;TCP_LAN;_CRT_SECURE_NO_DEPRECATE;_CRT_NONSTDC_NO_DEPRECATE;WINDOWS_IGNORE_PACKING_MISMATCH</PreprocessorDefinitions>
       <StructMemberAlignment>1Byte</StructMemberAlignment>
     </ClCompile>
@@ -318,7 +318,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\demo\utils\bad\unistd.h" />
+    <ClInclude Include="..\demo\utils\unistd-win.h" />
     <ClInclude Include="..\demo\utils\logpkt.h" />
     <ClInclude Include="..\h\anet.h" />
     <ClInclude Include="..\h\aneterr.h" />
@@ -343,6 +343,7 @@
     <ClInclude Include="..\h\eclock.h" />
     <ClInclude Include="..\h\hkeytab.h" />
     <ClInclude Include="..\h\q.h" />
+    <ClInclude Include="..\h\types.h" />
     <ClInclude Include="..\src\score\scorerep.h" />
     <ClInclude Include="..\src\tca\tca.h" />
     <ClInclude Include="..\src\tca\tcapw.h" />

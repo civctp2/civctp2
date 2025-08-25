@@ -26,7 +26,7 @@
 //
 // - Memory leaks repaired.
 // - Replaced old difficulty and risk level selection button banks by new
-//   list boxes. (8-Jul-2007 Martin Gühmann)
+//   list boxes. (8-Jul-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -117,7 +117,7 @@ sint32	spnewgamediffscreen_displayMyWindow(BOOL viewMode,BOOL reinit)
 
 	if(reinit)
 	{
-		s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(spnewgamediffscreen_backPress,NULL);
+		s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(spnewgamediffscreen_backPress, nullptr);
 	}
 
 	AUI_ERRCODE auiErr;
@@ -161,7 +161,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 
 	if ( s_spNewGameDiffScreen ) {
 		if(callback) {
-			s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+			s_spNewGameDiffScreen->Ok()->SetActionFuncAndCookie(callback, nullptr);
 		}
 		return AUI_ERRCODE_OK;
 	}
@@ -171,7 +171,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 	{
 		s_spNewGameDiffScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGameDiffScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_spNewGameDiffScreen, errcode) ) return errcode;
 
 		s_spNewGameDiffScreen->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
 		s_spNewGameDiffScreen->GrabRegion()->Resize(s_spNewGameDiffScreen->Width(),s_spNewGameDiffScreen->Height());
@@ -202,7 +202,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		if(!item)
 			break;
 
-		item->SetUserData((void *)i);
+		item->SetUserData(i);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -229,7 +229,7 @@ AUI_ERRCODE spnewgamediffscreen_Initialize( aui_Control::ControlActionCallback *
 		if(!item)
 			break;
 
-		item->SetUserData((void *)i);
+		item->SetUserData(i);
 
 		ctp2_Static *text = (ctp2_Static *)item->GetChildByIndex(0);
 		Assert(text);
@@ -295,7 +295,7 @@ AUI_ERRCODE spnewgamediffscreen_Cleanup()
 	return AUI_ERRCODE_OK;
 }
 
-void spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamediffscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	spnewgamediffscreen_removeMyWindow(action) ;
 }

@@ -26,7 +26,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #if defined(SPARC) || defined(__POWERPC__)
 #define mywcs_SWAB(v) (v)
 #else
-#define mywcs_SWAB(v) ((unsigned short)((v) << 8) | (unsigned char)((v) >> 8))
+#define mywcs_SWAB(v) ((uint16)((v) << 8) | (uint8)((v) >> 8))
 #endif
 
 /*--------------------------------------------------------------------------
@@ -35,12 +35,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Zero fills to maxlen if 'from' is null terminated.
  Returns the length copied.
 --------------------------------------------------------------------------*/
-int mywcs_wchar2netchar(dp_netchar_t *ncs, const wchar_t *wcs, const int maxlen)
+sint32 mywcs_wchar2netchar(dp_netchar_t *ncs, const wchar_t *wcs, const sint32 maxlen)
 {
-	int i;
-	int len;
+	sint32 i;
+	sint32 len;
 	for (len = 0; wcs[len] != 0 && len < maxlen; len++)
-		ncs[len] = mywcs_SWAB((unsigned short)wcs[len]);
+		ncs[len] = mywcs_SWAB((uint16)wcs[len]);
 	for (i = len; i < maxlen; i++)
 		ncs[i] = 0;
 	return len;
@@ -52,10 +52,10 @@ int mywcs_wchar2netchar(dp_netchar_t *ncs, const wchar_t *wcs, const int maxlen)
  Zero fills to maxlen if 'from' is null terminated.
  Returns the length copied.
 --------------------------------------------------------------------------*/
-int mywcs_netchar2wchar(wchar_t *wcs, const dp_netchar_t *ncs, const int maxlen)
+sint32 mywcs_netchar2wchar(wchar_t *wcs, const dp_netchar_t *ncs, const sint32 maxlen)
 {
-	int i;
-	int len;
+	sint32 i;
+	sint32 len;
 	for (len = 0; ncs[len] != 0 && len < maxlen; len++)
 		wcs[len] = (wchar_t)mywcs_SWAB(ncs[len]);
 	for (i = len; i < maxlen; i++)
@@ -67,9 +67,9 @@ int mywcs_netchar2wchar(wchar_t *wcs, const dp_netchar_t *ncs, const int maxlen)
   Return the length of a null terminated UCS2 string (of either byte order),
   up to length maxlen.
 --------------------------------------------------------------------------*/
-int mywcs_lenn(const short *ucs2, const int maxlen)
+sint32 mywcs_lenn(const sint16 *ucs2, const sint32 maxlen)
 {
-	int i;
+	sint32 i;
 	for (i = 0; ucs2[i] != 0 && i < maxlen; i++);
 	return i;
 }
@@ -80,10 +80,10 @@ int mywcs_lenn(const short *ucs2, const int maxlen)
   Zero fills to maxlen if 'from' is null terminated.
   Returns the length copied (i.e. mywcs_lenn(from, maxlen))
 --------------------------------------------------------------------------*/
-int mywcs_ncpy0(short *to, const short *from, const int maxlen)
+sint32 mywcs_ncpy0(sint16 *to, const sint16 *from, const sint32 maxlen)
 {
-	int i;
-	int len;
+	sint32 i;
+	sint32 len;
 	for (len = 0; from[len] != 0 && len < maxlen; len++)
 		to[len] = from[len];
 	for (i = len; i < maxlen; i++)
@@ -97,10 +97,10 @@ int mywcs_ncpy0(short *to, const short *from, const int maxlen)
   Zero fills to maxlen if 'from' is null terminated.
   Returns the length copied (i.e. mywcs_lenn(from, maxlen))
 --------------------------------------------------------------------------*/
-int mywcs_swabncpy0(short *to, const short *from, const int maxlen)
+sint32 mywcs_swabncpy0(sint16 *to, const sint16 *from, const sint32 maxlen)
 {
-	int i;
-	int len;
+	sint32 i;
+	sint32 len;
 	for (len = 0; from[len] != 0 && len < maxlen; len++)
 		to[len] = mywcs_SWAB(from[len]);
 	for (i = len; i < maxlen; i++)
@@ -129,9 +129,9 @@ int mywcs_swabncpy0(short *to, const short *from, const int maxlen)
  Note: this is different in several ways from the standard C function
  mbstowcs().
 --------------------------------------------------------------------------*/
-int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr)
+sint32 mywcs_frommbs(wchar_t *wcbuf, sint32 wcbuflen, const char *mbstr)
 {
-	int wlen;
+	sint32 wlen;
 
 	if (!wcbuf || !wcbuflen || !mbstr || ((char *)wcbuf == mbstr))
 		return -1;
@@ -156,7 +156,7 @@ int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr)
 
 	/* Only support 7-bit ASCII; zero fill the upper 9 bits. */
 	for (wlen=0; mbstr[wlen] && (wlen < wcbuflen); wlen++) {
-		if ((unsigned)mbstr[wlen] > 0x7f) {
+		if ((uint32)mbstr[wlen] > 0x7f) {
 			wlen = -1;
 			break;
 		}
@@ -190,9 +190,9 @@ int mywcs_frommbs(wchar_t *wcbuf, int wcbuflen, const char *mbstr)
  Note: this is different in several ways from the standard C function
  wcstombs().
 --------------------------------------------------------------------------*/
-int mywcs_tombs(char *buf, int buflen, const wchar_t *wstr)
+sint32 mywcs_tombs(char *buf, sint32 buflen, const wchar_t *wstr)
 {
-	int bytes;
+	sint32 bytes;
 
 	if (!buf || !buflen || !wstr || (buf == (char *)wstr))
 		return -1;
@@ -219,7 +219,7 @@ int mywcs_tombs(char *buf, int buflen, const wchar_t *wstr)
 
 	/* Only support 7-bit ASCII. */
 	for (bytes=0; wstr[bytes] && (bytes < buflen); bytes++) {
-		if ((unsigned long)wstr[bytes] > 0x7f) {
+		if ((uint32)wstr[bytes] > 0x7f) {
 			bytes = -1;
 			break;
 		}
@@ -237,7 +237,7 @@ int mywcs_tombs(char *buf, int buflen, const wchar_t *wstr)
  Compare at most n bytes of s1 and s2.
  Return difference of the first nonidentical character, or zero.
 --------------------------------------------------------------------------*/
-int mywcs_ncmp(const short *s1, const short *s2, size_t n)
+sint32 mywcs_ncmp(const sint16 *s1, const sint16 *s2, size_t n)
 {
 	if (n == 0)
 		return (0);

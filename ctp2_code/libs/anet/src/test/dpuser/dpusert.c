@@ -40,15 +40,15 @@ clock_t	now;
 /* globals for use by main, ProcessCommandLine */
 char commDLLName[256];
 char servernames[4][256];
-int n_servers = 0;
+sint32 n_servers = 0;
 commInitReq_t commInitReq; /*  Parameters needed by some comm drivers. */
 char phonenum[256];
 char modeministr[256];
-unsigned short sessiontype = 65;
+uint16 sessiontype = 65;
 
 char secretcode[16];
-int disconnect_wait;  /* time to wait to disconnect after dpReadyToFreeze */
-long total_logins = 1000;  /* total number of logins for speed test. 0=infinite */
+sint32 disconnect_wait;  /* time to wait to disconnect after dpReadyToFreeze */
+sint32 total_logins = 1000;  /* total number of logins for speed test. 0=infinite */
 char user1[tcapw_LEN_USERNAME+1];  /* username and pass to use in speed test */
 char pass1[tcapw_LEN_PW+1];
 
@@ -57,10 +57,10 @@ char pass1[tcapw_LEN_PW+1];
   directly by this routine.  Others simply result in an update to
   the global switches data structure.
 ----------------------------------------------------------------------------*/
-void ProcessCommandLine(int argc, char **argv)
+void ProcessCommandLine(sint32 argc, char **argv)
 {
 	char *chptr;
-	int   i;
+	sint32   i;
 
 	servernames[n_servers][0] = '\0';
 	commDLLName[0] = '\0';
@@ -175,7 +175,7 @@ connect to.\n");
  which goes thru the normal login sequence.
  Returns TRUE when test complete.
 ----------------------------------------------------------------------------*/
-int client_poll(int init)
+sint32 client_poll(sint32 init)
 {
 	dp_result_t err;
 	dpid_t src;
@@ -184,11 +184,11 @@ int client_poll(int init)
 	dp_account_packet_t *pkt;
 	size_t pktlen;
 	tserv_event_t result;
-	int got_result;
-	int done = FALSE;
+	sint32 got_result;
+	sint32 done = FALSE;
 	char *servername = servernames[0];
 
-	static int client_state = 0;
+	static sint32 client_state = 0;
 	static dp_uid_t uid = dp_UID_NONE;
 	static clock_t deadline;
 
@@ -286,7 +286,7 @@ int client_poll(int init)
 			printf("client: still busy? going back to state %d\n", client_state);
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -369,7 +369,7 @@ int client_poll(int init)
 			printf("client: still busy? going back to state %d\n", client_state);
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -430,7 +430,7 @@ int client_poll(int init)
 			printf("client: still busy? going back to state %d\n", client_state);
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -509,7 +509,7 @@ int client_poll(int init)
 			printf("client: still busy? going back to state %d\n", client_state);
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -666,7 +666,7 @@ int client_poll(int init)
 			printf("client: still busy? going back to state %d\n", client_state);
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -727,7 +727,7 @@ int client_poll(int init)
 			printf("client: still busy? going back to state %d\n", client_state);
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			DPRINT(("client: Done waiting for peer to close (%d)\n", client_state));
 			client_state += 5;
 			printf("client: going to state %d\n", client_state);
@@ -747,7 +747,7 @@ int client_poll(int init)
  which goes thru the normal login sequence repeatedly to measure speed.
  Returns TRUE when test complete.
 ----------------------------------------------------------------------------*/
-int client_poll_speedtest(int init)
+sint32 client_poll_speedtest(sint32 init)
 {
 	dp_result_t err;
 	dpid_t src;
@@ -756,15 +756,15 @@ int client_poll_speedtest(int init)
 	dp_account_packet_t *pkt;
 	size_t pktlen;
 	tserv_event_t result;
-	int got_result;
-	int done = FALSE;
+	sint32 got_result;
+	sint32 done = FALSE;
 	char *servername;
 
-	static int client_state = 0;
+	static sint32 client_state = 0;
 	static dp_uid_t uid = dp_UID_NONE;
 	static clock_t deadline;
 	static clock_t t_start = 0;
-	static int n_logins = 0;
+	static sint32 n_logins = 0;
 
 	now = eclock();
 	if (init) {
@@ -858,7 +858,7 @@ int client_poll_speedtest(int init)
 			client_state -= 5;
 			break;
 		}
-		if ((long)(now - deadline) >= 0) {
+		if ((sint32)(now - deadline) >= 0) {
 			n_logins++;
 			printf(".");
 			if (!(n_logins%20)) {
@@ -881,7 +881,7 @@ int client_poll_speedtest(int init)
 	return done;
 }
 
-void tserv_test(int which)
+void tserv_test(sint32 which)
 {
 	dp_result_t err;
 	dp_transport_t transport;
@@ -911,7 +911,7 @@ void tserv_test(int which)
 
 	raw_init();
 	while (1) {
-		int charFromUser = 0;
+		sint32 charFromUser = 0;
 		if (raw_kbhit()) {
 			charFromUser = raw_getc();
 			if (charFromUser == 27 /* Esc */) {
@@ -939,9 +939,9 @@ void tserv_test(int which)
 	raw_end();
 }
 
-int main(int argc, char *argv[])
+sint32 main(sint32 argc, char *argv[])
 {
-	int exitCode;
+	sint32 exitCode;
 
 	/* The modem driver and loopback drivers use the random number
 	 * generator, so initialize it here.  Games should do this, too.

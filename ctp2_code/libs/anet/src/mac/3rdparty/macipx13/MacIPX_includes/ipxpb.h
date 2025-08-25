@@ -47,93 +47,93 @@ typedef	ProcPtr	IOCompletionUPP;
 #pragma options align=mac68k
 #endif
 typedef struct IPXCancelEvt {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	IPX_ECB					*ecb;
 } IPXCancelEvt;
 
 typedef struct IPXCheckSkt {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 } IPXCheckSkt;
 
 typedef struct IPXCloseSkt {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 } IPXCloseSkt;
 
 typedef struct IPXGetInetAddr {
-	unsigned char			*networkAddress;
+	uint8			*networkAddress;
 } IPXGetInetAddr;
 
 typedef struct IPXGetInfo {
 	IPX_CONFIG_INFO			*buf;
-	unsigned long			*buflen;
+	uint32			*buflen;
 } IPXGetInfo;
 
 typedef struct IPXGetLocalTgt {
-	unsigned char			*networkAddress;
+	uint8			*networkAddress;
 	IPX_ECB					*ecb;
-	unsigned long			*transportTime;
+	uint32			*transportTime;
 } IPXGetLocalTgt;
 
 typedef struct IPXGetLocalTgtAsynch {
-	unsigned char			*networkAddress;
+	uint8			*networkAddress;
 	IPX_ECB					*resp_ecb;
 	IPX_ECB					*recv_ecb;
-	unsigned long			*transportTime;
+	uint32			*transportTime;
 } IPXGetLocalTgtAsynch;
 
 typedef struct IPXGetMaxPktSze {
-	unsigned long			*maxPktSize;
+	uint32			*maxPktSize;
 } IPXGetMaxPktSze;
 
 typedef struct IPXGetStats {
-	unsigned char			*buffer;
-	unsigned long			*buflen;
+	uint8			*buffer;
+	uint32			*buflen;
 } IPXGetStats;
 
 typedef struct IPXGetVersion {
-	unsigned char			*majorVersion;
-	unsigned char			*minorVersion;
-	unsigned short			*revision;
+	uint8			*majorVersion;
+	uint8			*minorVersion;
+	uint16			*revision;
 } IPXGetVersion;
 
 typedef struct IPXOpenLookAheadSkt {
-	unsigned short			*socketNumber;
+	uint16			*socketNumber;
 	RecvLookAheadHandlerUPP	handler;
-	unsigned short			numBytes;
-	long					userData;
+	uint16			numBytes;
+	sint32					userData;
 	void					*savedA5;
-	unsigned char			flags;
+	uint8			flags;
 } IPXOpenLookAheadSkt;
 
 typedef struct IPXOpenSkt {
-	unsigned short			*socketNumber;
-	unsigned char			flags;
+	uint16			*socketNumber;
+	uint8			flags;
 } IPXOpenSkt;
 
 typedef struct IPXRcv {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	IPX_ECB					*ecb;
 } IPXRcv;
 
 typedef struct IPXsched {
-	unsigned short			socketNumber;
-	unsigned long			timeTicks;
+	uint16			socketNumber;
+	uint32			timeTicks;
 	IPX_ECB					*ecb;
 } IPXSched;
 
 typedef struct IPXSnd {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	IPX_ECB					*ecb;
 } IPXSnd;
 
 typedef struct IPXpb {
 	char					fill12[12];
 	IOCompletionUPP			ioCompletion;
-	short					ioResult;
+	sint16					ioResult;
 	char					*ioNamePtr;
-	short					ioVRefNum;
-	short					ioCRefNum;
-	short					csCode;
+	sint16					ioVRefNum;
+	sint16					ioCRefNum;
+	sint16					csCode;
 	union {
 		IPXCancelEvt			cancel;
 		IPXCheckSkt				check;
@@ -181,9 +181,9 @@ typedef struct IPXpb {
  * Prototypes
  */
 #ifndef COMPONENT_BUILD
-extern short	call_ipx(IPXpb *pb, int async);
+extern sint16	call_ipx(IPXpb *pb, sint32 async);
 #else
-extern short	call_ipx(IPXpb *pb, int async, short drvrRefNum);
+extern sint16	call_ipx(IPXpb *pb, sint32 async, sint16 drvrRefNum);
 #endif
 
 #endif /* __IPXPB_INCLUDED__ */

@@ -66,7 +66,7 @@ protected:
 
 	EndGameWindow() : C3Window() {}
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 	void CleanPointers();
 

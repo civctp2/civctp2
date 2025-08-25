@@ -23,7 +23,7 @@ MessageBoxDialog *s_messageBoxDialog;
 void MessageBoxDialog::Information(const MBCHAR *message,
 								   const MBCHAR *id,
 								   MessageCallback callback,
-								   void *userData,
+								   Cookie userData,
 								   const MBCHAR *okText,
 								   bool allowDontShow)
 {
@@ -51,7 +51,7 @@ void MessageBoxDialog::Information(const MBCHAR *message,
 void MessageBoxDialog::Query(const MBCHAR *message,
 							 const MBCHAR *id,
 							 MessageCallback callback,
-							 void *userData,
+							 Cookie userData,
 							 const MBCHAR *okText,
 							 const MBCHAR *cancelText)
 {
@@ -74,7 +74,7 @@ void MessageBoxDialog::Query(const MBCHAR *message,
 
 void MessageBoxDialog::TextQuery(const MBCHAR *message,
 								 MessageTextCallback callback,
-								 void *userData,
+								 Cookie userData,
 								 const MBCHAR *okText,
 								 const MBCHAR *cancelText,
 								 const MBCHAR *defaultText)
@@ -91,7 +91,7 @@ void MessageBoxDialog::TextQuery(const MBCHAR *message,
 MessageBoxDialog::MessageBoxDialog(const MBCHAR *message,
 								   const MBCHAR *id,
 								   void *callback,
-								   void *userData,
+								   Cookie userData,
 								   const MBCHAR *okText,
 								   const MBCHAR *cancelText) :
 m_window(static_cast<ctp2_Window*>(
@@ -193,9 +193,9 @@ class DismissMessageBoxAction : public aui_Action
 {
 public:
 	DismissMessageBoxAction(MessageBoxDialog * dialog)
-    :   aui_Action  (),
-        m_dialog    (dialog)
-    { ; };
+	:   aui_Action  (),
+	    m_dialog    (dialog)
+	{ ; };
 	virtual ~DismissMessageBoxAction(void) { ; };
 
 	virtual void	Execute
@@ -204,22 +204,22 @@ public:
 		uint32			action,
 		uint32			data
 	)
-    {
-        delete  m_dialog;
-    };
+	{
+		delete  m_dialog;
+	};
 
 private:
 	MessageBoxDialog *  m_dialog;
 };
 
 void MessageBoxDialog::ButtonActionCallback(bool response, aui_Control * control, uint32 action, uint32 data,
-		void * cookie)
+		Cookie cookie)
 {
 	if (action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE)) {
 		return;
 	}
 
-	MessageBoxDialog * dialog = static_cast<MessageBoxDialog*>(cookie);
+	MessageBoxDialog * dialog = static_cast<MessageBoxDialog*>(cookie.m_voidPtr);
 	if (dialog->m_closing) {
 		return;
 	}
@@ -249,14 +249,14 @@ void MessageBoxDialog::ButtonActionCallback(bool response, aui_Control * control
 }
 
 void MessageBoxDialog::TextFieldActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != AUI_TEXTFIELD_ACTION_EXECUTE)
 		return;
 
 	MessageBoxDialog *dialog =
-		static_cast<MessageBoxDialog*>(cookie);
+		static_cast<MessageBoxDialog*>(cookie.m_voidPtr);
 
 	if(dialog->m_closing) {
 
@@ -283,14 +283,14 @@ void MessageBoxDialog::TextFieldActionCallback(aui_Control *control,
 }
 
 void MessageBoxDialog::DontShowButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
 	MessageBoxDialog *dialog =
-		static_cast<MessageBoxDialog*>(cookie);
+		static_cast<MessageBoxDialog*>(cookie.m_voidPtr);
 
 	dialog->m_dontShowButton->SetToggleState(!dialog->m_dontShowButton->GetToggleState());
 }

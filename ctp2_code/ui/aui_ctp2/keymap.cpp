@@ -179,7 +179,7 @@ KEYMAP::KEYMAP(BOOL useDefault)
 
 	FILE *fin = NULL;
 	if(!useDefault)
-		fin = c3files_fopen(C3DIR_DIRECT, "userkeymap.txt", "r");
+		fin = c3files_fopen(C3DIR_APPBASE, "userkeymap.txt", "r");
 	if(!fin)
 		fin = c3files_fopen(C3DIR_UIDATA, "keymap.txt", "r");
 
@@ -370,7 +370,7 @@ sint32 KEYMAP::remap_key( KEY_FUNCTION keyFunc, uint32 wParam, uint32 oldKeycode
 
 void KEYMAP::save()
 {
-	FILE *file = c3files_fopen(C3DIR_DIRECT, "userkeymap.txt", "w");
+	FILE *file = c3files_fopen(C3DIR_APPBASE, "userkeymap.txt", "w");
 	Assert(file);
 	if(!file) {
 		c3errors_ErrorDialog("keymap.txt", "Could not open userkeymap.txt");

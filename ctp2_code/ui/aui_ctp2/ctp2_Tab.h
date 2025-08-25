@@ -23,7 +23,7 @@ public:
 	};
 
 	ctp2_Tab(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
-		ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
+		ControlActionCallback *ActionFunc = NULL, Cookie cookie = nullptr);
 
 	virtual ~ctp2_Tab();
 
@@ -43,7 +43,7 @@ public:
 private:
 
 	static void TabButtonActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	ctp2_TabGroup *m_tabGroup;
 

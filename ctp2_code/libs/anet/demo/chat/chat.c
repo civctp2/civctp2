@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define MAX_MESSAGE 200
 
 dpid_t my_id = dp_ID_NONE;
-int quitState = 0; /* set to 1 to start quit sequence */
+sint32 quitState = 0; /* set to 1 to start quit sequence */
 
 /* Any program that gets compressed by pecomp must import these two function,
  * but doesn't need really to call them.
@@ -49,7 +49,7 @@ DP_API void foo()
 /*-------------------------------------------------------------------------
  Call to quit chat.
 -------------------------------------------------------------------------*/
-static void quit(dp_t *myDP, int exit_code)
+static void quit(dp_t *myDP, sint32 exit_code)
 {
 	if (myDP) {
 		dpDestroy(myDP, 0);	/* go ahead and hang up */
@@ -122,7 +122,7 @@ static const char *status2a(dp_result_t status)
  Returns 0 on error
  		 1 on success
 -------------------------------------------------------------------------*/
-static int cdToAppDir(void)
+static sint32 cdToAppDir(void)
 {
 	char dir[MAX_PATH];
 	char *chop;
@@ -144,10 +144,10 @@ static int cdToAppDir(void)
  In order to support filenames with spaces, ignore the standard argv,
  and compute one that obeys double quotes.
 --------------------------------------------------------------------------*/
-static int getargv(char argv[][MAX_PATH], int maxargc)
+static sint32 getargv(char argv[][MAX_PATH], sint32 maxargc)
 {
 	char	*p, *q;
-	int		argc;
+	sint32		argc;
 
 	p = GetCommandLine();
 	printf("Command line:%s\n", p);
@@ -179,17 +179,17 @@ static int getargv(char argv[][MAX_PATH], int maxargc)
 /*-------------------------------------------------------------------------
  Initialize session and run main chat loop
  ------------------------------------------------------------------------*/
-int chat(int sysargc, char **sysargv)
+sint32 chat(sint32 sysargc, char **sysargv)
 {
 	char	argv[MAX_ARGS][MAX_PATH];
-	int		argc;
-	int exitCode = 0;
+	sint32		argc;
+	sint32 exitCode = 0;
 	dp_t *myDP;
 	dp_result_t err = dp_RES_OK;
 	char freezefile[100];
 	char kbuf[MAX_MESSAGE] = "";
 	char masterHostName[64];
-	int keylen;
+	sint32 keylen;
 	char key[dp_MAX_ADR_LEN + 3];
 	dp_session_t sess;
 	char cwdbuf[MAX_PATH];
@@ -253,8 +253,8 @@ int chat(int sysargc, char **sysargv)
 #if 0
 	{
 		char	key[dp_KEY_MAXLEN];
-		int		keylen;
-		int		i;
+		sint32		keylen;
+		sint32		i;
 
 		printf(" (id=");
 		dpGetSessionId(myDP, &sess, key, &keylen);
@@ -278,7 +278,7 @@ int chat(int sysargc, char **sysargv)
 			dp_packetType_t type PACK;
 			union {
 				dp_objectDelta_packet_t	delta;
-				unsigned char buf[dpio_MAXLEN_UNRELIABLE];
+				uint8 buf[dpio_MAXLEN_UNRELIABLE];
 			} u PACK;
 		} pkt;
 		size_t pktsize;
@@ -292,8 +292,8 @@ int chat(int sysargc, char **sysargv)
 		}
 
 		if (raw_kbhit()) {
-			int len = strlen(kbuf);
-			int ch = 0;
+			sint32 len = strlen(kbuf);
+			sint32 ch = 0;
 			if (len >= MAX_MESSAGE) {
 				printf("\nchat: Message too long. Truncating and sending.\n");
 				err = chat_broadcast(myDP, kbuf);
@@ -318,9 +318,9 @@ int chat(int sysargc, char **sysargv)
 				continue;
 			}
 			if (ch == 24) {			/* ^X  - force divide-by-zero crash */
-				int i, j;
+				sint32 i, j;
 				j = 10;
-				i = (int)strchr("a", 'b');		/* result is zero, but compiler doesn't know that */
+				i = (sint32)strchr("a", 'b');		/* result is zero, but compiler doesn't know that */
 				j /= i;
 				printf("Result of division by zero is %d\n", j);
 			}
@@ -445,9 +445,9 @@ static LONG __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
 	return (EXCEPTION_CONTINUE_SEARCH);
 }
 
-int _cdecl main( int argc, char *argv[] )
+sint32 _cdecl main( sint32 argc, char *argv[] )
 {
-	int retVal = 0;
+	sint32 retVal = 0;
 	__try {
 		retVal = chat(argc, argv);
 	} __except(Debug_ExceptionFilter(GetExceptionInformation())) {

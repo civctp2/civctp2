@@ -23,7 +23,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Added functionality to support pattern information saving
 //
 //----------------------------------------------------------------------------
@@ -35,7 +35,6 @@
 #include "c3_popupwindow.h"
 
 #include "aui.h"
-#include "aui_control.h"
 #include "aui_ldl.h"
 #include "aui_uniqueid.h"
 #include "c3_button.h"
@@ -224,7 +223,7 @@ sint32 c3_PopupWindow::AddTitle(const MBCHAR *titleBlock )
 		AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 		m_title = new c3_Static(&errcode, aui_UniqueId(), "c3_PopupTitle");
 		TestControl(m_title);
-		char *ldlBlock = "c3_PopupTitle.c3_PopupTitleText";
+		const char *ldlBlock = "c3_PopupTitle.c3_PopupTitleText";
 		m_titleText =
 			new c3_Static
 		        (&errcode,
@@ -247,8 +246,8 @@ sint32 c3_PopupWindow::AddTitle(const MBCHAR *titleBlock )
 
 sint32 c3_PopupWindow::AddCancel
 (
-	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
-	void *cookie,
+	void (*actionFunc)( aui_Control *, uint32, uint32, Cookie),
+	Cookie cookie,
 	const MBCHAR *buttonBlock
 )
 {
@@ -272,8 +271,8 @@ sint32 c3_PopupWindow::AddCancel
 
 sint32 c3_PopupWindow::AddOk
 (
-	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
-	void *cookie,
+	void (*actionFunc)( aui_Control *, uint32, uint32, Cookie),
+	Cookie cookie,
 	const MBCHAR *buttonBlock
 )
 {
@@ -296,8 +295,8 @@ sint32 c3_PopupWindow::AddOk
 
 sint32 c3_PopupWindow::AddClose
 (
-	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
-	void *cookie,
+	void (*actionFunc)( aui_Control *, uint32, uint32, Cookie),
+	Cookie cookie,
 	const MBCHAR *buttonBlock
 )
 {
@@ -306,8 +305,8 @@ sint32 c3_PopupWindow::AddClose
 
 sint32 c3_PopupWindow::AddYes
 (
-	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
-	void *cookie,
+	void (*actionFunc)( aui_Control *, uint32, uint32, Cookie),
+	Cookie cookie,
 	const MBCHAR *buttonBlock
 )
 {
@@ -316,8 +315,8 @@ sint32 c3_PopupWindow::AddYes
 
 sint32 c3_PopupWindow::AddNo
 (
-	void (*actionFunc)( aui_Control *, uint32, uint32, void *),
-	void *cookie,
+	void (*actionFunc)( aui_Control *, uint32, uint32, Cookie),
+	Cookie cookie,
 	const MBCHAR *buttonBlock
 )
 {

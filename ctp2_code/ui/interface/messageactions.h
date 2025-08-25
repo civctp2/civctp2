@@ -130,16 +130,16 @@ class MessageDropdownAction : public aui_Action
 {
 public:
 	MessageDropdownAction
-    (
-        MessageWindow * window,
-        c3_DropDown *   dropdown,
-        MessageModal *  modal = NULL
-    )
+	(
+	    MessageWindow * window,
+	    c3_DropDown *   dropdown,
+	    MessageModal *  modal = NULL
+	)
 	:   aui_Action  (),
-        m_window    (window),
-        m_dropdown  (dropdown),
-        m_modal     (modal)
-    { ; };
+	    m_window    (window),
+	    m_modal     (modal),
+	    m_dropdown  (dropdown)
+	{ ; };
 	virtual ~MessageDropdownAction(void) { ; };
 
 	virtual void	Execute
@@ -309,24 +309,24 @@ public:
 	);
 
 protected:
-	PLAYER_INDEX        m_index;
 	MessageIconWindow * m_iconWindow;
+	PLAYER_INDEX        m_index;
 };
 
 class ChangeOffsetMessageIconButtonAction : public aui_Action
 {
 public:
 	ChangeOffsetMessageIconButtonAction
-    (
-        sint32          offset,
-        MessageList *   list,
-		bool            flag = true
-    )
-    :   aui_Action      (),
-        m_offset        (offset),
-        m_messagelist   (list),
-        m_offsetflag    (flag)
-    { ; };
+	(
+	    sint32          offset,
+	    MessageList *   list,
+	    bool            flag = true
+	)
+	:   aui_Action      (),
+	    m_messagelist   (list),
+	    m_offset        (offset),
+	    m_offsetflag    (flag)
+	{ ; };
 	virtual ~ChangeOffsetMessageIconButtonAction(void) { ; };
 
 	virtual void	Execute
@@ -339,9 +339,9 @@ public:
 	void SetList(MessageList * newlist) { m_messagelist = newlist; };
 
 protected:
+	MessageList	*   m_messagelist;
 	sint32			m_offset;
 	bool			m_offsetflag;
-	MessageList	*   m_messagelist;
 };
 
 class ChangeOffsetDestroyButtonAction : public aui_Action

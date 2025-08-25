@@ -24,14 +24,14 @@
 //
 // Modifications from the original Activision code:
 //
-// - Redisign of the single player new game players screen by Martin Gühmann.
+// - Redisign of the single player new game players screen by Martin GÃ¼hmann.
 //   Instead of buttons to determine the number of players in a new game
 //   this screen now allows the player to specify the player index he wants
 //   to use determines the player color, he can also specify how many civs
 //   should be in the game at the start and how many civs in the game should
 //   be maximal in the game. The maximum number of players in one game is
 //   currently 32 and is hard encoded somewhere else.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -214,7 +214,7 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	{
 		s_spNewGamePlayersScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 		Assert( AUI_NEWOK(s_spNewGamePlayersScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGamePlayersScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_spNewGamePlayersScreen, errcode) ) return errcode;
 
 		s_spNewGamePlayersScreen->Resize(s_spNewGamePlayersScreen->Width(),s_spNewGamePlayersScreen->Height());
 		s_spNewGamePlayersScreen->GrabRegion()->Resize(s_spNewGamePlayersScreen->Width(),s_spNewGamePlayersScreen->Height());
@@ -233,8 +233,8 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	sprintf( controlBlock, "%s.%s", windowBlock, "NumPlayerSpinner");
 	if (aui_Ldl::IsValid(controlBlock))
 	{
-		s_num_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
-		s_num_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_NumPlayerSpinner, NULL);
+		s_num_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, nullptr);
+		s_num_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_NumPlayerSpinner, nullptr);
 		s_num_player_spinner->SetValue(g_theProfileDB->GetNPlayers() - 1, 0);
 		if(s_num_player_spinner->GetMaximumX() >= k_MAX_PLAYERS){
 			s_num_player_spinner->SetMaximum(k_MAX_PLAYERS-1, 0);
@@ -249,8 +249,8 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	sprintf( controlBlock, "%s.%s", windowBlock, "MaxPlayerSpinner");
 	if (aui_Ldl::IsValid(controlBlock))
 	{
-		s_max_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, NULL);
-		s_max_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_MaxPlayerSpinner, NULL);
+		s_max_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock, spnewgameplayersscreen_NumPlayerSpinner, nullptr);
+		s_max_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_MaxPlayerSpinner, nullptr);
 		s_max_player_spinner->SetValue(g_theProfileDB->GetMaxPlayers() - 1, 0);
 		if(s_max_player_spinner->GetMaximumX() >= k_MAX_PLAYERS){
 			s_max_player_spinner->SetMaximum(k_MAX_PLAYERS-1, 0);
@@ -266,7 +266,7 @@ AUI_ERRCODE spnewgameplayersscreen_Initialize( aui_Control::ControlActionCallbac
 	if (aui_Ldl::IsValid(controlBlock))
 	{
 		s_player_spinner = new ctp2_Spinner(&errcode, aui_UniqueId(), controlBlock);
-		s_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_PlayerSpinner, NULL);
+		s_player_spinner->SetSpinnerCallback(spnewgameplayersscreen_PlayerSpinner, nullptr);
 		s_player_spinner->SetValue(g_theProfileDB->GetPlayerIndex(), 0);
 		s_player_spinner->SetMaximum(g_theProfileDB->GetNPlayers() - 1, 0);
 		s_spNewGamePlayersScreen->AddControl(s_player_spinner);
@@ -334,7 +334,7 @@ void spnewgameplayersscreen_Cleanup()
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : -
 //
@@ -344,7 +344,7 @@ void spnewgameplayersscreen_Cleanup()
 //              back button is pressed
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgameplayersscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	spnewgameplayersscreen_removeMyWindow(action);
 }
@@ -381,7 +381,7 @@ void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers)
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : s_num_player_spinner
 //
@@ -391,7 +391,7 @@ void spnewgameplayersscreen_SetMaxPlayers(sint32 maxPlayers)
 //              s_num_player_spinner
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
 
@@ -410,7 +410,7 @@ void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : s_max_player_spinner
 //
@@ -420,7 +420,7 @@ void spnewgameplayersscreen_NumPlayerSpinner(aui_Control *control, uint32 action
 //              s_max_player_spinner changes
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
 
@@ -436,7 +436,7 @@ void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action
 // Parameters : aui_Control *control
 //              uint32 action
 //              uint32 data
-//              void *cookie
+//              Cookie cookie
 //
 // Globals    : s_player_spinner
 //
@@ -446,7 +446,7 @@ void spnewgameplayersscreen_MaxPlayerSpinner(aui_Control *control, uint32 action
 //               s_player_spinner changes
 //
 //----------------------------------------------------------------------------
-void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void spnewgameplayersscreen_PlayerSpinner(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE) return;
 

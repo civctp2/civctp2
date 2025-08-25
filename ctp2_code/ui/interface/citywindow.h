@@ -58,6 +58,7 @@ class ctp2_HyperTextBox;
 class ctp2_Button;
 class aui_Image;
 class aui_Region;
+union Cookie;
 
 template <class T> class PointerList;
 
@@ -105,50 +106,50 @@ public:
 	static void NotifyBuildChange(const Unit & city);
 	static void Project(const Unit & city);
 
-	static void PopulateQueueList(const Unit & city, ctp2_ListBox * listBox, char * itemBlock);
+	static void PopulateQueueList(const Unit & city, ctp2_ListBox * listBox, const char * itemBlock);
 
 private:
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void NextCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PreviousCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Resource(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void WorkerSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GovernorToggle(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GovernorPriority(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void EditQueue(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void OpenNationalManager(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void BuildListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void InventoryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SelectCity(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Buy(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Sell(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CityList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ShowStatistics(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Close                (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void NextCity             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PreviousCity         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Resource             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void WorkerSpinnerCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GovernorToggle       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GovernorPriority     (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void EditQueue            (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void OpenNationalManager  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void BuildListSelect      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void InventoryListSelect  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SelectCity           (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Buy                  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Sell                 (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CityList             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ShowStatistics       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void BuildTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void BuildTabCallback     (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void OptimizeSpecialists(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void OptimizeSpecialists  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE DrawGrowthBar(ctp2_Static *control,
 									 aui_Surface *surface,
 									 RECT &rect,
-									 void *cookie );
+									 Cookie cookie );
 	static AUI_ERRCODE DrawHappinessBar(ctp2_Static *control,
 										aui_Surface *surface,
 										RECT &rect,
-										void *cookie );
+										Cookie cookie );
 	static AUI_ERRCODE DrawEfficiencyBar(ctp2_Static *control,
 									 aui_Surface *surface,
 									 RECT &rect,
-									 void *cookie );
+									 Cookie  cookie );
 	static AUI_ERRCODE DrawResourceMap(ctp2_Static *control,
 									   aui_Surface *surface,
 									   RECT &rect,
-									   void *cookie );
+									   Cookie cookie );
 	static AUI_ERRCODE DrawBuildBar(ctp2_Static *control,
 									 aui_Surface *surface,
 									 RECT &rect,
-									 void *cookie );
+									 Cookie cookie );
 
 	void SetCity(const Unit & city);
 	void Update();
@@ -172,16 +173,16 @@ private:
 	static AUI_ERRCODE DrawHappyIcons(ctp2_Static *control,
 									aui_Surface *surface,
 									RECT &rect,
-									void *cookie );
+									Cookie cookie );
 	static AUI_ERRCODE DrawUnhappyIcons(ctp2_Static *control,
 									  aui_Surface *surface,
 									  RECT &rect,
-									  void *cookie );
+									  Cookie cookie );
 
-	static void UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DisbandQuery(bool result, void *ud);
-	static void DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void UnitButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ActivateUnitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void DisbandQuery(bool result, Cookie ud);
+	static void DisbandUnitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	ctp2_Window *m_window;
 	ctp2_Window *m_statsWindow;

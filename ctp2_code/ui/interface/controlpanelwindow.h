@@ -27,7 +27,7 @@
 //
 // - Cleaned up structure
 // - Removed unused methods: FillBank, ClearButtons and AddButton.
-//   (Aug 16th 2005 Martin Gühmann)
+//   (Aug 16th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -58,6 +58,7 @@
 #define k_CONTROLPANEL_CIVTAB_MODE          8
 
 class ControlPanelWindow;
+union Cookie;
 
 enum CP_SELECT
 {
@@ -197,7 +198,7 @@ public:
 	ControlPanelWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_BACKGROUND );
 
@@ -230,12 +231,12 @@ public:
 	void    BuildUnitList();
 	void    BuildUnitListBox();
 	void    BuildCityList(const MapPoint &pos);
-	void    AppendItem(ctp2_ListBox *,MBCHAR *string);
+	void    AppendItem(ctp2_ListBox *, const MBCHAR *string);
 
 	void    Select  ();
 	void    Deselect();
 
-	void    HappinessRedisplay(aui_Surface *surface,RECT &rect,void *cookie);
+	void    HappinessRedisplay(aui_Surface *surface, RECT &rect, Cookie cookie);
 
 	void    BuildMainMenu     ();
 	void    BuildCivMenu      ();
@@ -252,8 +253,8 @@ public:
 	static void RebuildMenus  ();
 
 	void    ResetTabGroup();
-	void    CreateTabGroup(MBCHAR *ldlBlock);
-	void    CreateTab(sint32 which,MBCHAR *name);
+	void    CreateTabGroup(const MBCHAR *ldlBlock);
+	void    CreateTab(sint32 which, const MBCHAR *name);
 
 	void    CreateTileImpBanks ();
 	void    ActivateTileImpBank(unsigned int group_id);
@@ -267,7 +268,7 @@ public:
 	void    InitCivTab();
 
 	static void TabCallback(aui_Control *control, uint32 action,
-	                        uint32 data, void *cookie);
+	                        uint32 data, Cookie cookie);
 
 	void    InitMessageTab();
 	void    AddMessage(Message &message,bool initializing=false);
@@ -301,7 +302,7 @@ public:
 	void    TerraformButtonRedisplay    (uint32 player_id,uint32 index);
 
 	void    BeginOrderDelivery();
-	static void PerformOrderAfterConfirmation(bool response, void *userData);
+	static void PerformOrderAfterConfirmation(bool response, Cookie userData);
 
 	void    BeginOrderDelivery(OrderRecord *rec);
 
@@ -350,7 +351,7 @@ private:
 
 	BOOL    CursorOverControlPanel();
 
-	void    SetControlText(aui_Control *control,MBCHAR *fmt,...);
+	void    SetControlText(aui_Control *control, const MBCHAR *fmt, ...);
 
 	ctp2_MenuBar    *m_mainMenuBar;
 
@@ -419,7 +420,7 @@ private:
 	aui_ProgressBar     *m_progressBar;
 };
 
-void ThrowPartyUtilityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data);
+void ThrowPartyUtilityDialogBoxCallback(const MBCHAR *text, sint32 val2, void *data);
 void GotoCityUtilityDialogBoxCallback  (Unit city, sint32 val2);
 
 void controlpanelwindow_Update(Unit *city = NULL);

@@ -21,7 +21,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	c3_Slidometer(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -31,9 +31,9 @@ public:
 		sint32 height,
 		BOOL isVertical,
 		const MBCHAR *pattern,
-		sint32 percentFilled = NULL,
+		sint32 percentFilled = 0,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~c3_Slidometer() {}
 
 protected:

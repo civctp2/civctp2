@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS			"Angebot stornieren"
 str_ldl_No_item_selected_in_list		"Kein Objekt in der Liste gewählt!"
 str_ldl_Foreign_Attitude			"Gesinnung"
 str_ldl_Local					"Lokal"
-str_ldl_mp_dbase_out_of_synch			"Fehlerhafte Daten. Kehre zur Lobby zurück."
+str_ldl_mp_dbase_out_of_synch			"Datenbanken oder Slic-Code sind nicht synchron.\n Kehre zur Lobby zurück."
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 
@@ -1186,7 +1186,7 @@ str_ldl_Unit_Help				"Hilfe zu Einheiten"
 str_ldl_UNIT_MOVEMENT				"Truppenbewegung"
 str_ldl_UNIT_STATUS				"Einheitenübersicht"
 str_ldl_Units					"Einheiten"
-str_ldl_Unix_Internet			"Unix-Internet: Eure Verbindung zum Internet auf Unix-Systemen"
+str_ldl_Unix_Internet			"Unix-Internet erfordert eine aktive Verbindung zum Internet."
 str_ldl_UNLOAD_ALL				"Alle entladen"
 str_ldl_Unpredictable				"Unberechenbar"
 str_ldl_Untarnished				"Unfehlbar"

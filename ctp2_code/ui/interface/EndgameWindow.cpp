@@ -447,7 +447,7 @@ protected:
 
 	c3_Animation() : c3_Blend() {}
 
-	void InitCommonLdl(MBCHAR *ldlBlock);
+	void InitCommonLdl(const MBCHAR *ldlBlock);
 
 	void UpdateAnimation(sint32 deltaTime);
 
@@ -488,7 +488,7 @@ AUI_ERRCODE c3_Animation::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void c3_Animation::InitCommonLdl(MBCHAR *ldlBlock)
+void c3_Animation::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	AUI_ERRCODE errcode;
@@ -878,7 +878,7 @@ AUI_ERRCODE EndGameWindow::Idle()
 	return AUI_ERRCODE_OK;
 }
 
-void EndGameWindow::InitCommonLdl(MBCHAR *ldlBlock)
+void EndGameWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 
 	AUI_ERRCODE errcode;

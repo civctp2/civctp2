@@ -29,7 +29,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "eclock.h"
 #include "dpio.h"
 
-int nextid = 0;
+sint32 nextid = 0;
 
 /*--------------------------------------------------------------------------
  Structure holding the state of a dpio test object.
@@ -42,20 +42,20 @@ typedef struct {
 	FILE *logfp;
 
 	/* Which test object this is */
-	int id;
+	sint32 id;
 
 	/* id of peer, handle to peer */
-	int idPeer;
+	sint32 idPeer;
 	playerHdl_t hPeer;
 
 	dp_result_t dpio_status;
 
 	/* Number of packets in test */
-	int pkts_desired;
+	sint32 pkts_desired;
 
 	/* Number of packets xferd so far */
-	int pkts_rx;
-	int pkts_tx;
+	sint32 pkts_rx;
+	sint32 pkts_tx;
 } dpiot1_t;
 
 /*--------------------------------------------------------------------------
@@ -65,10 +65,10 @@ typedef struct {
  Test patterns length depends on npkt.
  Test pattern data depends on id and npkt.
 --------------------------------------------------------------------------*/
-static int testramp_fill(int id, int npkt, char *buf)
+static sint32 testramp_fill(sint32 id, sint32 npkt, char *buf)
 {
-	int len;
-	int i;
+	sint32 len;
+	sint32 i;
 	char xor;
 	len = 2 + (npkt % (dpio_MAXLEN_RELIABLE-1));
 
@@ -88,10 +88,10 @@ static int testramp_fill(int id, int npkt, char *buf)
 
  Aborts with given error message if comparison fails.
 --------------------------------------------------------------------------*/
-static void testramp_compare(int id, int npkt, char *buf, int buflen, char *msg)
+static void testramp_compare(sint32 id, sint32 npkt, char *buf, sint32 buflen, char *msg)
 {
 	char refbuf[dpio_MAXLEN_RELIABLE];
-	int reflen;
+	sint32 reflen;
 
 	if (!buf) {
 		printf("%s: null buf\n", msg);
@@ -122,11 +122,11 @@ dpiot1_t *dpiot1_create()
 	commScanAddrResp_t		scanResp;
 	dp_result_t err;
 	dp_transport_t dll;
-	int i;
+	sint32 i;
 	char logfname[128];
 
 	char peeradr_printable[128];
-	unsigned char peeradr[dp_MAX_ADR_LEN];
+	uint8 peeradr[dp_MAX_ADR_LEN];
 
 	ptest = malloc(sizeof(dpiot1_t));
 	if (!ptest)
@@ -194,7 +194,7 @@ void dpiot1_peer_connect(dpiot1_t *ptest, char *peerAdr)
  Keeps sending test packets to peer, and checking packets from peer.
  Returns FALSE if done, TRUE if it still needs to be called.
 --------------------------------------------------------------------------*/
-int dpiot1_poll(dpiot1_t *ptest)
+sint32 dpiot1_poll(dpiot1_t *ptest)
 {
 	char key[10];
 	playerHdl_t src;
@@ -282,11 +282,11 @@ void dpiot1_destroy(dpiot1_t *ptest)
  and polls them until they cry uncle.  Any failure causes the
  subroutines to terminate the program with an error message.
 -----------------------------------------------------------------------*/
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
-	int i;
-	int running1;
-	int running2;
+	sint32 i;
+	sint32 running1;
+	sint32 running2;
 
 	for (i=0; i<2; i++) {
 		dpiot1_t *t1, *t2;

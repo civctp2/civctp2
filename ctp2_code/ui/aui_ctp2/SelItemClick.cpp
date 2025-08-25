@@ -1349,6 +1349,8 @@ void SelectedItem::MoveDrop(const MapPoint &pos, const aui_MouseEvent *data, boo
 				case SELECT_TYPE_LOCAL_CITY:
 					SelectCityClick(pos, data, doubleClick);
 					break;
+				default:
+					break;
 			}
 		}
 		else

@@ -325,7 +325,7 @@
     <ClCompile Include="..\src\win\wipx\ipx2win.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\demo\utils\bad\unistd.h" />
+    <ClInclude Include="..\demo\utils\unistd-win.h" />
     <ClInclude Include="..\demo\utils\logpkt.h" />
     <ClInclude Include="..\h\commapi.h" />
     <ClInclude Include="..\h\commerr.h" />
@@ -333,6 +333,7 @@
     <ClInclude Include="..\h\dppack1.h" />
     <ClInclude Include="..\h\dpunpack.h" />
     <ClInclude Include="..\h\eclock.h" />
+    <ClInclude Include="..\h\types.h" />
     <ClInclude Include="..\src\win\h\ddprint.h" />
     <ClInclude Include="..\src\win\wipx\ipx2win.h" />
     <ClInclude Include="..\src\win\wipx\nw.h" />

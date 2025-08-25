@@ -292,7 +292,7 @@ extern sint32                   g_isTileImpPadOn;
 extern sint32                   g_isCheatModeOn;
 extern CityAstar                g_city_astar;
 #ifdef _DEBUG
-extern BOOL                     g_ai_revolt;
+BOOL                            g_ai_revolt = TRUE;
 #endif
 
 #define k_PLAYER_VERSION_MAJOR	0
@@ -2819,8 +2819,6 @@ bool Player::GetSlaveCity(const MapPoint &pos, Unit &city)
 
 	max_eval = (max_eval > 0) ? std::min(max_eval, cityDistQueue.size()) : cityDistQueue.size();
 
-	CityDistQueue::iterator max_iter = cityDistQueue.begin() + max_eval;
-
 	std::sort(cityDistQueue.begin(), cityDistQueue.end(), std::less<CityDist>());
 
 	for(size_t t = 0; t < max_eval; ++t)
@@ -3424,7 +3422,8 @@ void Player::AcceptTradeBid(const Unit &fromCity, sint32 resource, const Unit &t
 										   fromCity.m_id, resource, toCity.m_id,
 										   price));
 	}
-	TradeRoute route = CreateTradeRoute(fromCity,
+
+	CreateTradeRoute(fromCity,
 					 ROUTE_TYPE_RESOURCE, resource,
 					 toCity,
 					 toCity.GetOwner(),
@@ -3741,7 +3740,7 @@ void Player::BuildResearchDialog(AdvanceType advance)
 
 		strcpy(messageStr, dstring);
 
-		sprintf(tempStr, "%#.3d", (sint32)advance);
+		sprintf(tempStr, "%.3d", (sint32)advance);
 
 		MBCHAR *p = strstr(messageStr, "000>");
 		if(p) {
@@ -5262,15 +5261,18 @@ void Player::GetSingularCivName(MBCHAR *s)
 
 void Player::DumpAllies(void)
 {
-	MBCHAR	s[_MAX_PATH];
+	MBCHAR s[_MAX_PATH];
+	MBCHAR d[_MAX_PATH];
 
 	DPRINTF(k_DBG_INFO, ("Dumping alliances for Player #%d", m_owner)) ;
 	s[0] = 0;
 	for(sint32 i=0; i<k_MAX_PLAYERS; i++)
 	{
 		if ((mask_alliance & (0x01<<i)) && (i != m_owner))
-			sprintf(s, "%s P%d, ", s, i) ;
-
+		{
+			sprintf(d, " P%d, ", i);
+			strcat(s, d);
+		}
 	}
 
 	if (strlen(s))
@@ -6647,7 +6649,7 @@ void Player::DisplayAdvances()
 
 	AdvanceType	adv ;
 
-	sprintf(s, "Advances, Player %ld:", m_owner);
+	sprintf(s, "Advances, Player %d:", m_owner);
 	g_debugWindow->AddText(s);
 
 		for (adv=0; adv<m_advances->GetNum(); adv++)
@@ -8132,7 +8134,6 @@ void Player::GiveArmyCommand(Army &army,
 	if(army.GetOwner() != m_owner)
 		return;
 
-	Unit aUnit = army.Access(0);
 	MapPoint apos;
 	army.GetPos(apos);
 	Unit aCity;

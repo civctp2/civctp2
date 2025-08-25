@@ -352,7 +352,6 @@ void TiledMap::DrawLegalMove
 	sint32			special_line_segment= -1;
 
 	COLOR			actual_line_color	= k_TURN_COLOR_GO;
-	COLOR			old_line_color		= k_TURN_COLOR_GO;// ??
 	COLOR			lineColor			=
 		goodPath.IsEnd() ? k_TURN_COLOR_STOP : k_TURN_COLOR_GO;
 
@@ -516,7 +515,6 @@ void TiledMap::DrawLegalMove
 	} // while goodPath
 	// draw red (bad) part
 	prevPos			= currPos;
-	old_line_color	= lineColor;
 
 	Path			badPath(g_selected_item->GetBadPath());
 //	sint32			badPath_old_index	= badPath.GetNextIndex(); // ??? not used
@@ -580,8 +578,6 @@ void TiledMap::DrawLegalMove
 		AddDirtyTileToMix(currPos);
 	}
 
-	old_line_color = actual_line_color;
-
 	while (!badPath.IsEnd())
 	{
 		prevPos = currPos;
@@ -624,7 +620,6 @@ void TiledMap::DrawLegalMove
 			{
 				actual_line_color = k_TURN_COLOR_STOP;
 			}
-			old_line_color = actual_line_color;
 
 			primitives_ClippedLine16(*pSurface, x1, y1, x2, y2, g_colorSet->GetColor(actual_line_color),
 					LF_ANTI_ALIASED);
@@ -636,7 +631,6 @@ void TiledMap::DrawLegalMove
 
 	// Restart to add the turn count boxes.
 
-	old_line_color			= actual_line_color;
 	goodPath				= *g_selected_item->GetGoodPath();
 	isFirstMove				= sel_army.GetFirstMoveThisTurn();
 	line_segment_count		= -1;

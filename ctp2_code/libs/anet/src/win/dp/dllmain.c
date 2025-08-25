@@ -30,11 +30,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 --------------------------------------------------------------------------*/
 
 #include <windows.h>
+#include "types.h"
 
 BOOL WINAPI DllMain (HANDLE hModule, DWORD fdwReason, LPVOID lpReserved)
 {
-	static int procRefCount = 0;
-	static int threadRefCount = 0;
+	static sint32 procRefCount = 0;
+	static sint32 threadRefCount = 0;
 
 	switch (fdwReason) {
 	case DLL_PROCESS_ATTACH:

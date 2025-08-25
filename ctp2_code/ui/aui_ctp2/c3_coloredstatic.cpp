@@ -17,7 +17,7 @@ extern aui_UI		*g_ui;
 c3_ColoredStatic::c3_ColoredStatic(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock )
+	const MBCHAR *ldlBlock )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -39,8 +39,8 @@ c3_ColoredStatic::c3_ColoredStatic(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	uint32 maxLength,
 	uint32 bevelWidth,
 	uint32 bevelType)
@@ -58,7 +58,7 @@ c3_ColoredStatic::c3_ColoredStatic(
 }
 
 
-AUI_ERRCODE c3_ColoredStatic::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE c3_ColoredStatic::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	return InitCommon();
 }

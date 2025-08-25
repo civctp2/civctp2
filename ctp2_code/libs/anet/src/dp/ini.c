@@ -77,7 +77,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -112,13 +112,13 @@ MSVC's warning level is set to 4.
 static char IniFileName[INI_MAXLINELEN] = dpini_DEFAULT_FILENAME;
 
 /* Offset within the .INI file (ULONG_MAX = EOF) */
-static unsigned long sectionOffset = ULONG_MAX;	/* Line after section header */
+static long sectionOffset = ULONG_MAX;	/* Line after section header */
 
 /*--------------------------------------------------------------------------
  Change the .INI file accessed by future calls.
 --------------------------------------------------------------------------*/
 DP_API void dpini_SetFile(
-	char *iniFileName)
+	const char *iniFileName)
 {
 	strncpy(IniFileName, iniFileName, sizeof(IniFileName));
 	IniFileName[sizeof(IniFileName)-1] = 0;
@@ -147,7 +147,7 @@ static char *
 stripSurroundingWhiteSpace(
 	char *	s)				/* The string */
 {
-	int i;					/* Temp */
+	size_t i;					/* Temp */
 
 	if (s != NULL) {
 		while (isspace(*s))		/* Strip off leading whitespace */
@@ -156,7 +156,7 @@ stripSurroundingWhiteSpace(
 		i = strlen(s);			/* Strip off trailing whitespace */
 		while (i-- > 0 && isspace(s[i]))
 			;
-		if (i != (int) strlen(s) - 1)
+		if (i != strlen(s) - 1)
 			s[i + 1] = '\0';
 	}
 
@@ -168,7 +168,7 @@ stripSurroundingWhiteSpace(
 
  Return non-zero on any error.
 --------------------------------------------------------------------------*/
-DP_API int
+DP_API sint32
 dpini_findSection(
 	char *	sectionWant)	/* Section we want, minus "[" and "]"; case-blind */
 {
@@ -233,7 +233,7 @@ dpini_findSection(
 DP_API const char *
 dpini_readParameter(
 	char *	paramWant,		/* Parameter we want, minus "="; case-blind */
-	int		verbatim)		/* Return everything after the "=" (else clean)? */
+	sint32		verbatim)		/* Return everything after the "=" (else clean)? */
 {
 	FILE *		fp;							/* .INI file */
 	char *		paramGot;					/* Parameter we got */
@@ -246,10 +246,21 @@ dpini_readParameter(
 			|| (fp = fopen(IniFileName, "rt")) == NULL)	/* Open .INI file */
 		return ("");
 
-	fseek(fp, sectionOffset, SEEK_SET);	/* Skip to place to start search from */
+	// Fix a wired problem on Windows that would keep it from opening the logs
+	// However, this seems just to fix the symptom and not the cause
+	if(sectionOffset < 0)
+	{
+		if(fgets(line, sizeof(line), fp) == NULL)
+			return "";
+	}
+	else
+	{
+		fseek(fp, sectionOffset, SEEK_SET);	/* Skip to place to start search from */
+	}
 
 									/* Strip white space off parameter name */
 	paramWant = stripSurroundingWhiteSpace(paramWant);
+
 
 	for ( ; ; ) {				/* Search for the parameter in current section */
 		valueGot = "";				/* Assume we'll read nothing */
@@ -349,7 +360,7 @@ static dp_result_t reltoabspath(char *relpath, char *cwd) {
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpReadAnetInf(const char *path, dp_appParam_t *pAppParam)
 {
-	int err;
+	sint32 err;
 	char ini[MAX_PATH];
 	char oldinibuf[MAX_PATH];
 	const char *oldini;
@@ -385,7 +396,7 @@ DP_API dp_result_t DP_APIX dpReadAnetInf(const char *path, dp_appParam_t *pAppPa
 		err = dp_RES_EMPTY;
 	} else {
 		/* Read info from the .ini file */
-        unsigned int val, val2; /* dummies to prevent sscanf from overwriting */
+		uint32 val, val2; /* dummies to prevent sscanf from overwriting */
 		strcpy(pAppParam->name, dpini_readParameter("Name", 0));
 		strcpy(pAppParam->path, dpini_readParameter("Run", 0));
 		strcpy(pAppParam->args, dpini_readParameter("Cmdline", 1));
@@ -398,20 +409,20 @@ DP_API dp_result_t DP_APIX dpReadAnetInf(const char *path, dp_appParam_t *pAppPa
 				pAppParam->current.major = dp_VERS_UNKNOWN;
 				pAppParam->current.minor = dp_VERS_UNKNOWN;
 			}
-            pAppParam->current.major = val;
-            pAppParam->current.minor = val2;
+			pAppParam->current.major = val;
+			pAppParam->current.minor = val2;
 			buf = dpini_readParameter("Platform", 1);
 			if (sscanf(buf, "%u", &val) != 1) {
 				DPRINT(("dpReadAnetInf: Bad platform spec\n"));
 				pAppParam->platform = dp_PLAT_UNKNOWN;
 			}
-            pAppParam->platform = val;
+			pAppParam->platform = val;
 			buf = dpini_readParameter("Language", 1);
 			if (sscanf(buf, "%u", &val) != 1) {
 				DPRINT(("dpReadAnetInf: Bad language spec\n"));
 				pAppParam->language = dp_LANG_UNKNOWN;
 			}
-            pAppParam->language = val;
+			pAppParam->language = val;
 		#else
 			(void) buf;
 		#endif
@@ -463,8 +474,8 @@ testcase test[TEST_MAX] = {
 
 void path_test(void)
 {
-	int word = 0;
-	int i, c;
+	sint32 word = 0;
+	sint32 i, c;
 	char relpath[200];
 	char cwd[200];
 	char *pr = &relpath[0];

@@ -52,7 +52,7 @@ typedef void (c3_UtilityPlayerListCallback)(sint32 player, sint32 val2, PLAYER_A
 class c3_UtilityCityListPopup
 {
 public:
-	c3_UtilityCityListPopup( c3_UtilityCityListCallback *callback, MBCHAR *ldlBlock = NULL );
+	c3_UtilityCityListPopup( c3_UtilityCityListCallback *callback, const MBCHAR *ldlBlock = NULL );
 	~c3_UtilityCityListPopup( void );
 
 	c3_PopupWindow	*m_window;
@@ -65,7 +65,7 @@ public:
 	c3_UtilityCityListCallback *m_callback;
 
 public:
-	sint32  Initialize(MBCHAR * ldlBlock);
+	sint32  Initialize(const MBCHAR * ldlBlock);
 	void    Cleanup(void);
 	sint32  UpdateData(void);
 
@@ -82,7 +82,7 @@ public:
 class c3_PiracyPopup
 {
 public:
-	c3_PiracyPopup( c3_PiracyCallback *callback, MBCHAR *ldlBlock = NULL );
+	c3_PiracyPopup( c3_PiracyCallback *callback, const MBCHAR *ldlBlock = NULL );
 	~c3_PiracyPopup( void );
 
 	c3_PopupWindow	*m_window;
@@ -95,7 +95,7 @@ public:
 	c3_PiracyCallback *m_callback;
 
 public:
-	sint32  Initialize(MBCHAR * ldlBlock);
+	sint32  Initialize(const MBCHAR * ldlBlock);
 	void    Cleanup(void);
 	sint32  UpdateData(void);
 
@@ -112,7 +112,7 @@ public:
 class c3_ExpelPopup
 {
 public:
-	c3_ExpelPopup( c3_ExpelCallback *callback, MBCHAR *ldlBlock = NULL );
+	c3_ExpelPopup( c3_ExpelCallback *callback, const MBCHAR *ldlBlock = NULL );
 	~c3_ExpelPopup( void );
 
 	c3_PopupWindow	*m_window;
@@ -125,7 +125,7 @@ public:
 	c3_ExpelCallback *m_callback;
 
 public:
-	sint32  Initialize(MBCHAR * ldlBlock);
+	sint32  Initialize(const MBCHAR * ldlBlock);
 	void    Cleanup(void);
 
 	void RemoveWindow( void );
@@ -142,7 +142,7 @@ class c3_UtilityTextFieldPopup
 {
 public:
 	c3_UtilityTextFieldPopup( c3_UtilityTextFieldCallback *callback, const MBCHAR *titleText, const MBCHAR *messageText,
-								const MBCHAR *defaultText, MBCHAR *ldlBlock = NULL, void *data = NULL,
+								const MBCHAR *defaultText, const MBCHAR *ldlBlock = NULL, void *data = NULL,
 							  bool wantEmpties = false);
 	~c3_UtilityTextFieldPopup( void );
 
@@ -166,7 +166,7 @@ public:
 	bool            m_wantEmpties;
 
 public:
-	sint32  Initialize(MBCHAR * ldlBlock);
+	sint32  Initialize(const MBCHAR * ldlBlock);
 	void    Cleanup(void);
 	sint32  UpdateData(void);
 
@@ -209,7 +209,7 @@ public:
 	sint32			m_type;
 
 private:
-	sint32 Initialize ( MBCHAR *ldlBlock );
+	sint32 Initialize ( const MBCHAR *ldlBlock );
 
 	c3_Static		*m_title_label;
 	c3_Static		*m_text;
@@ -275,21 +275,21 @@ public:
 	c3_AbortMessageCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
+	sint32 Initialize ( const MBCHAR *ldlBlock );
 	void Cleanup ( void );
-	sint32 UpdateData ( MBCHAR const *text );
+	sint32 UpdateData ( const MBCHAR *text );
 	sint32 UpdateMeter( sint32 percentFilled );
 
 	void RemoveWindow( void );
-	void DisplayWindow( MBCHAR const *text = NULL, sint32 percentFilled  = 0);
+	void DisplayWindow( const MBCHAR *text = NULL, sint32 percentFilled  = 0);
 
 	void kh_Close();
 };
 
 AUI_ACTION_BASIC(c3_UtilityAbortCleanupAction);
 
-void c3_AbortMessage( MBCHAR *text = NULL, sint32 type = 0, c3_UtilityTextMessageCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
-void c3_AbortUpdateData( MBCHAR *text, sint32 percentFilled );
+void c3_AbortMessage( const MBCHAR *text = NULL, sint32 type = 0, c3_UtilityTextMessageCallback *callback = NULL, const MBCHAR *ldlBlock = NULL );
+void c3_AbortUpdateData( const MBCHAR *text, sint32 percentFilled );
 void c3_RemoveAbortMessage( void );
 
 
@@ -300,7 +300,7 @@ void c3_RemoveAbortMessage( void );
 class c3_UtilityPlayerListPopup : public KeyboardHandler
 {
 public:
-	c3_UtilityPlayerListPopup( c3_UtilityPlayerListCallback *callback = NULL, MBCHAR *ldlBlock = NULL );
+	c3_UtilityPlayerListPopup( c3_UtilityPlayerListCallback *callback = NULL, const MBCHAR *ldlBlock = NULL );
 	virtual ~c3_UtilityPlayerListPopup( void );
 
 	c3_PopupWindow	*m_window;
@@ -315,7 +315,7 @@ public:
 	c3_UtilityPlayerListCallback *m_callback;
 
 public:
-	sint32 Initialize ( MBCHAR *ldlBlock );
+	sint32 Initialize ( const MBCHAR *ldlBlock );
 	void Cleanup ( void );
 	sint32 UpdateData ( void );
 
@@ -325,7 +325,7 @@ public:
 	void RemoveWindow( void );
 	void DisplayWindow( void );
 
-	void SetText( MBCHAR *s, sint32 index );
+	void SetText( const MBCHAR *s, sint32 index );
 
 	void kh_Close();
 };
@@ -338,7 +338,7 @@ class DoubleListItem : public c3_ListItem
 {
 public:
 
-	DoubleListItem(AUI_ERRCODE *retval, MBCHAR *name, sint32 value, MBCHAR *text, MBCHAR *ldlBlock);
+	DoubleListItem(AUI_ERRCODE *retval, const MBCHAR *name, sint32 value, const MBCHAR *text, const MBCHAR *ldlBlock);
 
 
 	virtual void Update(void);
@@ -346,13 +346,13 @@ public:
 	MBCHAR	*GetName( void ) { return m_name; }
 	sint32	GetValue( void ) { return m_value; }
 
-	sint32	SetSecondColumn( MBCHAR *s );
+	sint32	SetSecondColumn( const MBCHAR *s );
 
 protected:
 	DoubleListItem() : c3_ListItem() {}
 
 
-	AUI_ERRCODE InitCommonLdl(MBCHAR *name, sint32 value, MBCHAR *text, MBCHAR *ldlBlock);
+	AUI_ERRCODE InitCommonLdl(const MBCHAR *name, sint32 value, const MBCHAR *text, const MBCHAR *ldlBlock);
 
 public:
 
@@ -367,16 +367,16 @@ private:
 void c3Expel_Initialize( void );
 void c3Expel_Cleanup( void );
 
-void NameTheCityDialogBoxCallback(MBCHAR *text, sint32 val2, void *data);
+void NameTheCityDialogBoxCallback(const MBCHAR *text, sint32 val2, void *data);
 void c3_utilitydialogbox_NameCity(Unit city);
 void c3_utilitydialogbox_NameCityCleanup(void);
 
 
-void c3_utilitydialogbox_TextFieldDialog(MBCHAR *titleText,
-								   MBCHAR *defaultText,
-								   MBCHAR *messageText,
+void c3_utilitydialogbox_TextFieldDialog(const MBCHAR *titleText,
+								   const MBCHAR *defaultText,
+								   const MBCHAR *messageText,
 								   c3_UtilityTextFieldCallback *callback,
-								   MBCHAR *ldlBlock);
+								   const MBCHAR *ldlBlock);
 void c3_utilitydialogbox_CleanupTextFieldDialog(void);
 
 #endif

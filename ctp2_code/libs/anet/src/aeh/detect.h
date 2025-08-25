@@ -19,5 +19,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /* Finds display, 3D system info; slightly modifed from code by Ben Siron */
 
-void GetPrimaryDisplayDesc(char *desc, unsigned int *len);
-void Get3DHardware(char *sz3DCard, unsigned int stringlen);
+#include "types.h"
+
+void GetPrimaryDisplayDesc(char *desc, size_t *len);
+void Get3DHardware(char *sz3DCard, size_t stringlen);

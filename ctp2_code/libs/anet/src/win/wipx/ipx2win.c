@@ -71,14 +71,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 **************************************************************************************/
 
-static int getsockerror(void)
+static sint32 getsockerror(void)
 
 {
-  int err;
+  sint32 err;
 
   err = WSAGetLastError();
 
-  DPRINT(("Winsock error: %i\n", (int) err));
+  DPRINT(("Winsock error: %i\n", (sint32) err));
 
   return(err);
 }
@@ -94,16 +94,16 @@ void printaddr(IPXPEER *peer, char *string)
 {
   dp_dprintf("%s: %u.%u.%u.%u,%X.%X.%X.%X.%X.%X\n",
               string,
-              (int) peer->sa_netnum[0]  & 0xff,
-              (int) peer->sa_netnum[1]  & 0xff,
-              (int) peer->sa_netnum[2]  & 0xff,
-              (int) peer->sa_netnum[3]  & 0xff,
-              (int) peer->sa_nodenum[0] & 0xff,
-              (int) peer->sa_nodenum[1] & 0xff,
-              (int) peer->sa_nodenum[2] & 0xff,
-              (int) peer->sa_nodenum[3] & 0xff,
-              (int) peer->sa_nodenum[4] & 0xff,
-              (int) peer->sa_nodenum[5] & 0xff);
+              (sint32) peer->sa_netnum[0]  & 0xff,
+              (sint32) peer->sa_netnum[1]  & 0xff,
+              (sint32) peer->sa_netnum[2]  & 0xff,
+              (sint32) peer->sa_netnum[3]  & 0xff,
+              (sint32) peer->sa_nodenum[0] & 0xff,
+              (sint32) peer->sa_nodenum[1] & 0xff,
+              (sint32) peer->sa_nodenum[2] & 0xff,
+              (sint32) peer->sa_nodenum[3] & 0xff,
+              (sint32) peer->sa_nodenum[4] & 0xff,
+              (sint32) peer->sa_nodenum[5] & 0xff);
 }
 
 /*************************************************************************************
@@ -118,7 +118,7 @@ static BOOL gethostaddr(IPXINSTANCE *ipx)
   ULONG      uniqueID;
   IPXPEER *  peerptr;
   ULONG      nobytes;
-  int        addrlen;
+  sint32        addrlen;
   IPXPEER    addr;
   clock_t    waittime;
   ULONG      result;
@@ -174,13 +174,13 @@ static BOOL gethostaddr(IPXINSTANCE *ipx)
 // compete for the same source of rx packets.
 // Port is in host byte order.
 
-IPXINSTANCE * IPXWIN_Create(int port, int *status)
+IPXINSTANCE * IPXWIN_Create(sint32 port, sint32 *status)
 
 {
-  int           i;
+  sint32           i;
   IPXINSTANCE * ipxptr;
-  int           err;
-//  int           len;
+  sint32           err;
+//  sint32           len;
   IPXPEER *     peerptr;
   BOOL          broadcast;
 
@@ -277,7 +277,7 @@ void IPXWIN_Destroy(IPXINSTANCE *ipxptr)
 // 16 bytes each.)
 // Returns ipx2_HDL_NONE on failure.
 
-IPXHANDLE IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, int insert)
+IPXHANDLE IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, sint32 insert)
 
 {
   IPXHANDLE h;
@@ -315,7 +315,7 @@ IPXHANDLE IPXWIN_Address2Handle(IPXINSTANCE *ipx, IPXPEER *addr, int insert)
 // Given a handle, return the corresponding IPX address.
 // Returns ipx2_RES_EMPTY on failure.
 
-int IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr)
+sint32 IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr)
 
 {
   addr[0] = ipx->peers[handle];
@@ -333,10 +333,10 @@ int IPXWIN_Handle2Address(IPXINSTANCE *ipx, IPXHANDLE handle, IPXPEER *addr)
 // Copies len bytes from buf into internal packet queue.
 // Must have previously gotten handle for destination by calling ipx2_adr2hdl.
 
-int IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest)
+sint32 IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, size_t len, IPXHANDLE hdest)
 
 {
-  int        nobytes;
+  sint32        nobytes;
   IPXPEER *  peerptr;
 
 //  DPRINT(("IPXWIN_PutPacket() Called..\n"));
@@ -362,7 +362,7 @@ int IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest)
   //printaddr(peerptr, "IPXWIN_PutPacket(): ");
 
   // send the packet
-  nobytes = sendto(ipx->socket, (char *) bufptr, (int) len, 0, (struct sockaddr *) peerptr, sizeof(SOCKADDR_IPX));
+  nobytes = sendto(ipx->socket, (char *) bufptr, (sint32) len, 0, (struct sockaddr *) peerptr, sizeof(SOCKADDR_IPX));
   if ((nobytes == 0) || (nobytes == SOCKET_ERROR))  {
 	  getsockerror();
 	  return(ipx2_RES_FULL);
@@ -396,13 +396,13 @@ int IPXWIN_PutPacket(IPXINSTANCE *ipx, void *bufptr, ULONG len, IPXHANDLE hdest)
 // (ipx2_get could do this for you, but then the peer table might fill up
 // with all sorts of garbage addresses from hosts who sent you junk mail.)
 
-int IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *plen, IPXHANDLE *hsrc, IPXPEER *srcaddr)
+sint32 IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, size_t *plen, IPXHANDLE *hsrc, IPXPEER *srcaddr)
 
 {
-  int     addrlen;
+  sint32     addrlen;
   ULONG   nobytes;
   IPXPEER addr;
-  int origlen = *plen;
+  size_t origlen = *plen;
 
 //  DPRINT(("IPXWIN_GetPacket() Called..\n"));
 
@@ -415,16 +415,16 @@ int IPXWIN_GetPacket(IPXINSTANCE *ipx, void *bufptr, ULONG *plen, IPXHANDLE *hsr
 
   // read next packet
   addrlen = sizeof(SOCKADDR_IPX);
-  nobytes = recvfrom(ipx->socket, (char *) bufptr, (int) *plen, 0, (struct sockaddr *) &addr, &addrlen);
+  nobytes = recvfrom(ipx->socket, (char *) bufptr, (sint32) *plen, 0, (struct sockaddr *) &addr, &addrlen);
   if ((nobytes == 0) || (nobytes == SOCKET_ERROR))  {
 	if (nobytes == SOCKET_ERROR) {
-		int lastErr = WSAGetLastError();
+		sint32 lastErr = WSAGetLastError();
 		if (lastErr == WSAEWOULDBLOCK)
 			return ipx2_RES_EMPTY;
 
 		DPRINT(("IPXWIN_GetPacket: Winsock error: %i\n", lastErr));
 		if (lastErr == WSAEMSGSIZE) {
-			DPRINT(("IPXWIN_GetPacket: buflen was %d, got WSAEMSGSIZE\n", origlen));
+			DPRINT(("IPXWIN_GetPacket: buflen was %zu, got WSAEMSGSIZE\n", origlen));
 			return ipx2_RES_FULL;
 		}
 	}

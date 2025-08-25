@@ -81,12 +81,13 @@ class GoodyHut;
 class CellUnitList;
 class Army;
 class TerrainRecord;
+union Cookie;
 
 typedef Cell * CellPtr;
 typedef CellPtr * CellYarray;
 typedef CellYarray * CellXarray;
 
-typedef bool (FindDistanceCellCallback) (const MapPoint &pos, Cell *cell, void *cookie);
+typedef bool (FindDistanceCellCallback) (const MapPoint &pos, Cell *cell, Cookie cookie);
 
 template <class T> class PQueue;
 struct DistItem;
@@ -633,10 +634,10 @@ public:
 	void CDMove(sint32 costSoFar, const sint32 x, const sint32 y,
 				sint32 player, sint32 &numCitiesToVisit);
 	void FindDistances(sint32 player, const MapPoint &start, sint32 numHits,
-					   FindDistanceCellCallback *cb, void *cookie);
+					   FindDistanceCellCallback *cb, Cookie cookie);
 	void FDMove(sint32 costSoFar, const sint32 x, const sint32 y,
 				sint32 player, sint32 &numHitsNeeded, FindDistanceCellCallback *cb,
-				void *cookie);
+				Cookie cookie);
 
 	void ClearScratch();
 

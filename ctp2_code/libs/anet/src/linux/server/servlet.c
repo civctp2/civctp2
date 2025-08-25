@@ -215,7 +215,7 @@ static dp_result_t Session_CtoJava(jobject jSess, dp_session_t *s)
 	if (!jSess)
 		return dp_RES_BAD;
 
-	/* Save the int fields. */
+	/* Save the sint32 fields. */
 	(*env)->SetIntField(env, jSess, jasess.type,       0xffff & s->sessionType);
 	(*env)->SetIntField(env, jSess, jasess.maxPlayers, 0xffff & s->maxPlayers);
 	(*env)->SetIntField(env, jSess, jasess.curPlayers, 0xffff & s->currentPlayers);
@@ -256,12 +256,12 @@ static dp_result_t Session_CtoJava(jobject jSess, dp_session_t *s)
 	return dp_RES_OK;
 }
 
-int dp_PASCAL sess_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src,
-	playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent,
-	size_t total, int seconds_left, void *context, dp_result_t status)
+sint32 dp_PASCAL sess_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src,
+	playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent,
+	size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_result_t err;
-	int keylen;
+	sint32 keylen;
 	char classname[256];
 	jStruct *jstruct;
 	jobject jSession;
@@ -344,9 +344,9 @@ dp_result_t loadclass(char *classname, jStruct *jstruct, dp_t *dp)
 	return dp_RES_OK;
 }
 
-void printResults(int bDetailed)
+void printResults(sint32 bDetailed)
 {
-	int i;
+	sint32 i;
 	char *p;
 	assoctab_item_t *pi;
 	jStruct *jstruct;
@@ -373,10 +373,10 @@ void printResults(int bDetailed)
 #define WAIT_TIME 120 * ECLOCKS_PER_SEC
 boolean mySessOpen;
 
-int dp_PASCAL open_cb(dp_session_t *s, long *timeout, long flags, void *context)
+sint32 dp_PASCAL open_cb(dp_session_t *s, sint32 *timeout, sint32 flags, void *context)
 {
 	dp_result_t err;
-	int keylen;
+	sint32 keylen;
 	if (s == NULL) {
 		printf("Couldn't create session\n");
 		exit(1);
@@ -386,9 +386,9 @@ int dp_PASCAL open_cb(dp_session_t *s, long *timeout, long flags, void *context)
 	return dp_RES_OK;
 }
 
-void main(int argc, char **argv)
+void main(sint32 argc, char **argv)
 {
-	int i, bDestroy, bClose;
+	sint32 i, bDestroy, bClose;
 	clock_t tstart;
 
 	/* dp stuff */
@@ -435,7 +435,7 @@ void main(int argc, char **argv)
 		while (!mySessOpen) {
 			size = 512;
 			dpReceive(dp, &src, &dest, 0, buf, &size);
-			if ((long)(eclock() - tstart) > 10 * ECLOCKS_PER_SEC) {
+			if ((sint32)(eclock() - tstart) > 10 * ECLOCKS_PER_SEC) {
 				printf("Timed out waiting for session\n");
 				exit(1);
 			}

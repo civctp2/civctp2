@@ -35,7 +35,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef raw_h
 #define raw_h
 
-void raw_set_stdio(int raw);
+#include "types.h"
+
+void raw_set_stdio(sint32 raw);
 
 /* Set stdin and stdout to raw mode */
 #define raw_init() raw_set_stdio(1)
@@ -44,12 +46,12 @@ void raw_set_stdio(int raw);
 #define raw_end() raw_set_stdio(0)
 
 /* Check for char on stdin.  Returns nonzero if one is waiting, 0 if not. */
-int raw_kbhit(/* void */);
+sint32 raw_kbhit(/* void */);
 
 /* Return -1 if no char available, otherwise return char.
  * Return 3 if user hits the interrupt key (usually ^C, hence 3)
  */
-int raw_getc(/* void */);
+sint32 raw_getc(/* void */);
 
 #ifdef UNIX
 /* This allows us to use DOS-y putch on UNIX system, sort of */

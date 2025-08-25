@@ -35,7 +35,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 // Peer literals
 #define MAX_PEERS			100
 
-typedef int					LOOPHANDLE;  // Peer handle
+typedef sint32					LOOPHANDLE;  // Peer handle
 typedef DWORD				LOOPADDR;    // Winsock's address of peer
 typedef struct {
 	LOOPADDR	addr;
@@ -56,14 +56,14 @@ typedef struct _LOOPINSTANCE       // Loopback Instance Struct  (Gee, in C++, th
 {
   LOOPADDR		addr;			  // My "address"
 
-  int           nexthandle;       // next available peer handle (next unused peers[] element)
+  sint32           nexthandle;       // next available peer handle (next unused peers[] element)
   LOOPPEER		peers[MAX_PEERS]; // Peer info (indexed with peer handle)
 }
 LOOPINSTANCE;
 
 // substitution literals for DOS types
 #define loop_hdl_t		LOOPHANDLE
-#define loop_result_t	int
+#define loop_result_t	sint32
 #define loop_t			LOOPINSTANCE
 
 // LOOPWIN Function Result Codes.  same as interface our caller inherits from...
@@ -78,17 +78,17 @@ LOOPINSTANCE;
 
 // LOOPWIN Functions
 
-LOOPINSTANCE *	LOOPWIN_Create(int *status, long sessionId);
+LOOPINSTANCE *	LOOPWIN_Create(sint32 *status, sint32 sessionId);
 
 void			LOOPWIN_Destroy(LOOPINSTANCE *loop);
 
-LOOPHANDLE		LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, int insert);
+LOOPHANDLE		LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, sint32 insert);
 
-int				LOOPWIN_Handle2Address(LOOPINSTANCE *loop, LOOPHANDLE handle, LOOPADDR *addr);
+sint32				LOOPWIN_Handle2Address(LOOPINSTANCE *loop, LOOPHANDLE handle, LOOPADDR *addr);
 
-int				LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hdest);
+sint32				LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hdest);
 
-int				LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *len, LOOPHANDLE *hsrc, LOOPADDR *srcaddr);
+sint32				LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *len, LOOPHANDLE *hsrc, LOOPADDR *srcaddr);
 
 #define loop_create(stat, sessionId)             LOOPWIN_Create(stat, sessionId)
 

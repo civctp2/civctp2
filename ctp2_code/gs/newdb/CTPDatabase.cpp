@@ -68,20 +68,20 @@
 // - Modernised some code: e.g. implemented the modified records list as a
 //   std::vector, so we don't have to do the memory management ourselves.
 // - Prevented crash in Parse when m_numrecords is 0.
-// - Added the new civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Added Serialize method for datachecks. (Aug 23rd 2005 Martin Gühmann)
-// - Records can now be also parsed as quoted string. (Aug 26th 2005 Martin Gühmann)
-// - The new databases can now be ordered alphabethical like the old ones. (Aug 26th 2005 Martin Gühmann)
-// - Added the new risk database. (Aug 29th 2005 Martin Gühmann)
-// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
+// - Added the new civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Added Serialize method for datachecks. (Aug 23rd 2005 Martin GÃ¼hmann)
+// - Records can now be also parsed as quoted string. (Aug 26th 2005 Martin GÃ¼hmann)
+// - The new databases can now be ordered alphabethical like the old ones. (Aug 26th 2005 Martin GÃ¼hmann)
+// - Added the new risk database. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin GÃ¼hmann)
 // - If database records have no name a default name is generated. e.g.
-//   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
-// - Added new pollution database. (July 15th 2006 Martin Gühmann)
-// - Added new global warming database. (July 15th 2006 Martin Gühmann)
-// - Added new map icon database. (3-Mar-2007 Martin Gühmann)
-// - Added new map database. (27-Mar-2007 Martin Gühmann)
-// - Added new concept database. (31-Mar-2007 Martin Gühmann)
-// - Added new const database. (5-Aug-2007 Martin Gühmann)
+//   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin GÃ¼hman)
+// - Added new pollution database. (July 15th 2006 Martin GÃ¼hmann)
+// - Added new global warming database. (July 15th 2006 Martin GÃ¼hmann)
+// - Added new map icon database. (3-Mar-2007 Martin GÃ¼hmann)
+// - Added new map database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added new concept database. (31-Mar-2007 Martin GÃ¼hmann)
+// - Added new const database. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -100,10 +100,10 @@
 template <class T> CTPDatabase<T>::CTPDatabase()
 :
     m_numRecords        (0),
+    m_allocatedSize     (k_INITIAL_DB_SIZE),
     m_modifiedRecords   (),
     m_indexToAlpha      (NULL),
-    m_alphaToIndex      (NULL),
-    m_allocatedSize     (k_INITIAL_DB_SIZE)
+    m_alphaToIndex      (NULL)
 {
 	m_records       = new T *[m_allocatedSize];
 	m_modifiedList  = new PointerList<GovernmentModifiedRecordNode> *[m_allocatedSize];

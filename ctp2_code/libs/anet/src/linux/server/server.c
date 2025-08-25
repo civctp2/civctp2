@@ -133,9 +133,9 @@ dp_avgstat_t avgstat;
 #define GS_SLICE_PERHOUR 4 /* update GamesServedSlice every 15 min. */
 #define GSMAX GS_SLICE_PERHOUR * 24
 
-long GS_BEACON_INTERVAL()
+sint32 GS_BEACON_INTERVAL()
 {
-	static long hertz = 0;
+	static sint32 hertz = 0;
 
 	if(!hertz)
 		hertz = ECLOCKS_PER_SEC;
@@ -161,7 +161,7 @@ assoctab_t *GamesServed = NULL;
 /* assoctab indexed by session type of integer array containing number of games
  * served each GS_BEACON_INTERVAL for past 24 hrs. */
 assoctab_t *GamesServedSlice;
-static int gsindex = 0;
+static sint32 gsindex = 0;
 time_t StartTime;
 
 #define UUDPS_SOCKET_DEFAULT (0x52A1+commapi_NET_PORTOFFSET+1)
@@ -180,8 +180,8 @@ char AppsFile[128] = "";
 char AtvilogFile[128] = "";
 char WMQDirectory[128] = "";
 dp_species_t SessionType = DP_ILLEGAL_SPECIES;
-int Portnum = UUDPS_SOCKET_DEFAULT;
-int MaxPlayerHdls = 400;
+sint32 Portnum = UUDPS_SOCKET_DEFAULT;
+sint32 MaxPlayerHdls = 400;
 
 #define MERCNET_SESSIONTYPE ((dp_species_t) 1005+5)	/* must be same as in sstate.h */
 
@@ -203,10 +203,10 @@ int MaxPlayerHdls = 400;
 #define SERVER_MAXSESSIONS 1024
 struct {
 	dp_session_t s;			/* The session structure */
-	short notseen;			/* Number of enumSessions which this session hasn't been seen */
-	int max_activePlayers;	/* The max players seen in this session */
+	sint16 notseen;			/* Number of enumSessions which this session hasn't been seen */
+	sint32 max_activePlayers;	/* The max players seen in this session */
 } sessions[SERVER_MAXSESSIONS];	/* Extra room for dead sessions */
-int n_sessions;
+sint32 n_sessions;
 
 /* info sent to pinging hosts */
 static commSessInfo_t sessinfo;
@@ -219,20 +219,20 @@ typedef struct {
 
 /* Type to save room options read from room file */
 typedef struct {
-	int bEnablePlayerVars;
-	int maxPlayers;
+	sint32 bEnablePlayerVars;
+	sint32 maxPlayers;
 } ROOM_OPTS;
 
-int LobbyMaxPlayers = dp_MAXREALPLAYERS;  /* Size of lobbies, default = max */
+sint32 LobbyMaxPlayers = dp_MAXREALPLAYERS;  /* Size of lobbies, default = max */
 
 #define MAX_PAGES 90
 page_t pages[MAX_PAGES];	/* status page we periodically refresh */
-int npages = 0;				/* number of elements of pages[] used so far */
+sint32 npages = 0;				/* number of elements of pages[] used so far */
 
-int dpiofd = -1;			/* dpio socket file descriptor */
+sint32 dpiofd = -1;			/* dpio socket file descriptor */
 
-int pleaseQuit = FALSE;	/* Signal the main loop to quit */
-int pleaseUpdate = FALSE;	/* Signal the main loop to update */
+sint32 pleaseQuit = FALSE;	/* Signal the main loop to quit */
+sint32 pleaseUpdate = FALSE;	/* Signal the main loop to update */
 
 char Hostname[128];		/* Hostname of this host */
 
@@ -247,11 +247,11 @@ char Hostname[128];		/* Hostname of this host */
 ----------------------------------------------------------------------*/
 #if 1
 static void printAdr(
-	int adrLen,
-	const unsigned char adr[dp_MAX_ADR_LEN])
+	sint32 adrLen,
+	const uint8 adr[dp_MAX_ADR_LEN])
 {
 	char buf[256];
-	int i;
+	sint32 i;
 
 	buf[0] = 0;
 	for (i=0; i<adrLen-1; i++)
@@ -267,9 +267,9 @@ static void printAdr(
 #if 1
 #if 0 /* key2* are defined in dpprivy.h */
 /* Convert a key to ASCII for debug printing */
-static char *key2buf(const char *key, int keylen, char *buf)
+static char *key2buf(const char *key, sint32 keylen, char *buf)
 {
-	int i;
+	sint32 i;
 
 	if (keylen > hkeytab_MAXLEN)
 		return "key too long";
@@ -332,7 +332,7 @@ void statprint_fn(const char *buf, void *context)
 /*-------------------------------------------------------------------------
  Tell the main program to quit; used as a signal handler
 -------------------------------------------------------------------------*/
-void exitNow (int signal)
+void exitNow (sint32 signal)
 {
 	pleaseQuit = TRUE;
 }
@@ -340,7 +340,7 @@ void exitNow (int signal)
 /*-------------------------------------------------------------------------
  Tell the main program to update tables; used as a signal handler
 -------------------------------------------------------------------------*/
-void updateNow (int signal)
+void updateNow (sint32 signal)
 {
 	pleaseUpdate = TRUE;
 }
@@ -350,14 +350,14 @@ void updateNow (int signal)
  Returns the remainder of the input string (if any);
  places a pointer to the tag name in tagname and the tag value in arg.
 -------------------------------------------------------------------------*/
-char *FindTag(const char *inp, FILE *out, char **tagname, int *arg)
+char *FindTag(const char *inp, FILE *out, char **tagname, sint32 *arg)
 {
 	char *mark;
 
 	/* Search for the secret mark to go on to the bonus round */
 	mark = strchr(inp, '{');
 	if (mark) {
-		int wrote, leftlen;
+		sint32 wrote, leftlen;
 
 		/* Output up to the mark */
 		leftlen = mark - inp;
@@ -390,9 +390,9 @@ char *FindTag(const char *inp, FILE *out, char **tagname, int *arg)
 #define tagcompare(x, y) !strnicmp(x, y, strlen(y))
 
 /* get the next line from input string */
-static char *sgets(char *s, int n, const char *inp)
+static char *sgets(char *s, sint32 n, const char *inp)
 {
-	int ncpy = 0;
+	sint32 ncpy = 0;
 	char *ptr;
 	memset(s, 0, n);
 	if ((ptr = strchr(inp, '\n')))
@@ -410,7 +410,7 @@ void makeSessionTableCell(dp_session_t *s, FILE *out)
 	fprintf(out, "<TD ALIGN=CENTER>\n");
 #ifdef WEBLAUNCH
 	{
-		unsigned char *id = s->reserved2;
+		uint8 *id = s->reserved2;
 		char idstr[64];
 
 		sprintf(idstr, "%02x.%02x.%02x.%02x.%02x.%02x.%02x.%02x",
@@ -441,13 +441,13 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 							"Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
 	char *scan, *tagname, *line;
 	char linebuf[MAX_LINE];
-	int bSkipLine;
-	int value;
+	sint32 bSkipLine;
+	sint32 value;
 
     /* get the next line */
 	while ((sgets(linebuf, MAX_LINE, HTML))) {
-	  int *gameserv = NULL;
-	  int gameservcount = 0;
+	  sint32 *gameserv = NULL;
+	  sint32 gameservcount = 0;
 	  HTML += strlen(linebuf);
 	  /* Ignore this line if printing GAMESDAY and there are no current
 	   *  games, or games served in past 24 hrs. is too few.
@@ -460,12 +460,12 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 	  line = linebuf;
 	  while (scan = FindTag(line, NULL, &tagname, &value)) {
 		if (tagcompare(tagname, "GAMESDAY")) {
-			int *count = (GamesActive ? assoctab_subscript(
+			sint32 *count = (GamesActive ? assoctab_subscript(
 					GamesActive, value) : NULL);
 			/*DPRINT(("SERVER: MakeSessionWebPage: GamesActive %p count %p *count %d sessType %d\n", GamesActive, count, (count ? *count : 0), value));*/
 			if (!count || !*count) {
-				int i;
-				gameserv = (int *)assoctab_subscript(GamesServedSlice, value);
+				sint32 i;
+				gameserv = (sint32 *)assoctab_subscript(GamesServedSlice, value);
 				if (gameserv) {
 					for (gameservcount = 0, i = 0; i < GSMAX; i++)
 						gameservcount += gameserv[i];
@@ -488,8 +488,8 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 		/* Found a tag; figure out what it is */
 		if (tagcompare(tagname, "SPECIES")) {
 			/* Found SPECIES n, so output a table of matching sessions */
-			int i, nsessions = 0;
-			short ngames = 0;
+			sint32 i, nsessions = 0;
+			sint16 ngames = 0;
 			if (value > 0 && value < 65536)
 				ngames = sessinfo.games[value];
 			for (i = 0; i < n_sessions; i++) {
@@ -499,7 +499,7 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 			}
 
 			if (ngames) {
-				int trow = 1;
+				sint32 trow = 1;
 
 				/* Create a 2-column table of current games */
 				fputs("<TABLE BORDER=1 WIDTH=100%>\n", out);
@@ -523,7 +523,7 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 				fputs("<BR>No games currently in progress.<P>", out);
 			}
 			if (nsessions > ngames) {
-				int trow = 1;
+				sint32 trow = 1;
 
 				/* Create a 2-column table of current lobbies */
 				if (ngames)
@@ -549,7 +549,7 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 			/* Output the current time in local time */
 			time_t now = time(NULL);
 			struct tm *btime = localtime(&now);
-			int hour = btime->tm_hour % 12;
+			sint32 hour = btime->tm_hour % 12;
 			if (!hour) hour = 12;
 
 			fprintf(out, "%s, %d %s %4d %d:%02d:%02d %s %s",
@@ -560,7 +560,7 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 			/* Output the gameserver start time in local time */
 			time_t now = StartTime;
 			struct tm *btime = localtime(&now);
-			int hour = btime->tm_hour % 12;
+			sint32 hour = btime->tm_hour % 12;
 			if (!hour) hour = 12;
 
 			fprintf(out, "%s, %d %s %4d %d:%02d:%02d %s %s",
@@ -582,8 +582,8 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 			}
 			fprintf(out, "%d", gameservcount);
 		} else if (tagcompare(tagname, "PRINTGAMESDAY")) {
-			int i, count = 0;
-			int *gameserv = (int *)assoctab_subscript(GamesServedSlice, value);
+			sint32 i, count = 0;
+			sint32 *gameserv = (sint32 *)assoctab_subscript(GamesServedSlice, value);
 			if (gameserv) {
 				for (i = 0; i < GSMAX; i++)
 				 	count += gameserv[i];
@@ -593,17 +593,17 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 			fprintf(out, "%d", count);
 		} else if (tagcompare(tagname, "GAMES")) {
 			/* Output the gameserver games served counter */
-			int *pcount = assoctab_subscript(GamesServed, value);
-			int count = pcount ? *pcount : 0;
+			sint32 *pcount = assoctab_subscript(GamesServed, value);
+			sint32 count = pcount ? *pcount : 0;
 
 			fprintf(out, "%d", count);
 		} else if (tagcompare(tagname, "CURGAMES")) {
-			short n_games = 0;
+			sint16 n_games = 0;
 			if (value > 0 && value < 65536)
 				n_games = sessinfo.games[value];
 			fprintf(out, "%d", n_games);
 		} else if (tagcompare(tagname, "CURPLAYERS")) {
-			short n_players = 0;
+			sint16 n_players = 0;
 			if (value > 0 && value < 65536)
 				n_players = sessinfo.players[value];
 			fprintf(out, "%hd", n_players);
@@ -653,14 +653,14 @@ void MakeSessionWebPage(dp_t *dp, const char *HTML, FILE *out)
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, void *context)
+sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, void *context)
 {
 	dp_t *dp = (dp_t *) context;
-	int i;
+	sint32 i;
 
 	if (!sDesc) {
 		FILE *outHtml;
-		int act_sessions = 0;
+		sint32 act_sessions = 0;
 
 		/* First, delete any session that have timed out for too long */
 		for (i=n_sessions-1; i>=0; i--) {
@@ -674,7 +674,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
 				/* See if this was a completed game */
 				if (sessions[i].max_activePlayers > 1) {
 					/* FIXME: Shouldn't be including chat rooms in game count */
-					int *count = assoctab_subscript_grow(GamesServed,
+					sint32 *count = assoctab_subscript_grow(GamesServed,
 							sessions[i].s.sessionType);
 					if (count) {
 						(*count)++;
@@ -684,7 +684,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
 						DPRINT(("SERVER: bug: can't grow GamesServed\n"));
 					}
 					if (!(sessions[i].s.flags & dp_SESSION_FLAGS_ISLOBBY)) {
-						int *countslice = assoctab_subscript_grow(
+						sint32 *countslice = assoctab_subscript_grow(
 								GamesServedSlice, sessions[i].s.sessionType);
 						if (countslice) {
 							countslice[gsindex]++;
@@ -739,7 +739,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
 
 	/* Update instantaneous count of games of this type */
 	if (!(sDesc->flags & dp_SESSION_FLAGS_ISLOBBY)) {
-		int *count = assoctab_subscript_grow(
+		sint32 *count = assoctab_subscript_grow(
 				GamesActive, sDesc->sessionType);
 		if (count)
 			count[0]++;
@@ -775,7 +775,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout, long flags, v
  Copies session entries into session-specific session tables.
  Should also repack them in new, more efficient format.
 ----------------------------------------------------------------------*/
-int dp_PASCAL sessions_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status)
+sint32 dp_PASCAL sessions_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dptab_table_t *tab;
@@ -826,7 +826,7 @@ int dp_PASCAL sessions_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src,
  Eventually, we might use this opportunity to modify the session record
  on the fly...
 ----------------------------------------------------------------------*/
-int dp_PASCAL mysessions_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err)
+sint32 dp_PASCAL mysessions_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t err)
 {
 	dp_t *dp = (dp_t *)context;
 
@@ -963,7 +963,7 @@ char *parseRoomStr(char *c, ROOM_OPTS *roomopts)
 /*-------------------------------------------------------------------------
  Read in the HTML template file and get ready for HTML output
 -------------------------------------------------------------------------*/
-int SetHTMLFile(char *tplFile)
+sint32 SetHTMLFile(char *tplFile)
 {
 	FILE *inTpl;
 	struct stat statbuf;
@@ -996,9 +996,9 @@ int SetHTMLFile(char *tplFile)
 		return FALSE;
 	}
 	fsize = fread(pages[npages].template, 1, statbuf.st_size, inTpl);
-	if (statbuf.st_size != (int)(fsize)) {
+	if (statbuf.st_size != (sint32)(fsize)) {
 #ifndef WIN32
-		printf("Warning: read %d of %d bytes from file %s\n", fsize, statbuf.st_size, tplFile);
+		printf("Warning: read %ld of %ld bytes from file %s\n", fsize, statbuf.st_size, tplFile);
 #endif
 		if (!fsize) return FALSE;
 	}
@@ -1027,7 +1027,7 @@ int SetHTMLFile(char *tplFile)
 #define UPDATE_HTML_FILE "webpg.new"
 static void updateHTMLFile()
 {
-	int i;
+	sint32 i;
 	FILE *fp;
 	char buf[1024];
 	if (!(fp = fopen(UPDATE_HTML_FILE, "r")))
@@ -1048,8 +1048,8 @@ static void updateHTMLFile()
 /*-------------------------------------------------------------------------
  Read commandline arguments into globals.  Return 0 on success.
 -------------------------------------------------------------------------*/
-int ProcessCommandLine(int argc, char **argv) {
-	int   i;
+sint32 ProcessCommandLine(sint32 argc, char **argv) {
+	sint32   i;
 
 	CommDLLName[0] = 0;
 	RoomName[0] = 0;
@@ -1072,17 +1072,17 @@ int ProcessCommandLine(int argc, char **argv) {
 			switch(toupper(argv[i][1])) {
 			case 'A':   /*  apps file name */
 				if (!val) {
-					printf("Expected = after -%c in %s\n", argv[i][1]);
+					printf("Expected = after -%c in %s\n", argv[i][1], argv[i]);
 					return -1;
 				}
 				strncpy(AppsFile, val, sizeof(AppsFile));
 				AppsFile[sizeof(AppsFile)-1] = '\0';
-                DPRINT(("Loading application info from %s\n",AppsFile));
+               	DPRINT(("Loading application info from %s\n",AppsFile));
 				break;
 
 			case 'C':   /* Crashlog (atvilog.bin) name */
 				if (!val) {
-					printf("Expected = after -%c in %s\n", argv[i][1]);
+					printf("Expected = after -%c in %s\n", argv[i][1], argv[i]);
 					return -1;
 				}
 				strncpy(AtvilogFile, val, sizeof(AtvilogFile));
@@ -1220,7 +1220,7 @@ int ProcessCommandLine(int argc, char **argv) {
 	return 0;
 }
 
-static int dp_PASCAL joinsess_cb (dp_session_t *sDesc, long *timeout, long flags, void *context)
+static sint32 dp_PASCAL joinsess_cb (dp_session_t *sDesc, long *timeout, long flags, void *context)
 {
 	if (!sDesc) {
 		printf("Error creating session.\n");
@@ -1229,7 +1229,7 @@ static int dp_PASCAL joinsess_cb (dp_session_t *sDesc, long *timeout, long flags
 	return FALSE;
 }
 
-static int createRoom(dp_t *dp, char *roomName, int sessionType)
+static sint32 createRoom(dp_t *dp, char *roomName, sint32 sessionType)
 {
 	char *name;
 	dp_session_t  sess;
@@ -1271,7 +1271,7 @@ dp_t *dp;
 /*-------------------------------------------------------------------------
  Callback triggered by an incoming connection being established in dp.
 -------------------------------------------------------------------------*/
-void dp_PASCAL incoming_cb(void *adr, int len, int nhdls, dp_result_t err,
+void dp_PASCAL incoming_cb(void *adr, sint32 len, sint32 nhdls, dp_result_t err,
 	char *user, char *pass, void *context)
 {
 	char print_adr[256];
@@ -1280,14 +1280,14 @@ void dp_PASCAL incoming_cb(void *adr, int len, int nhdls, dp_result_t err,
 	if (!adr || !len) {
 		strcpy (print_adr, context);
 	} else {
-		int i;
+		sint32 i;
 
 		for (i = 0; i < len; i++)
-			sprintf(print_adr + 3*i, ":%02x", ((unsigned char *)adr)[i]);
+			sprintf(print_adr + 3*i, ":%02x", ((uint8 *)adr)[i]);
 	}
 	if (err == dp_RES_OPENED) {
-		printf("t:%d, %d conns, Opened host%s, h:%x\n", now, nhdls, print_adr, (playerHdl_t) pass);
-		DPRINT(("SERVER: t:%d, %d conns, Opened host%s\n", now, nhdls, print_adr));
+		printf("t:%ld, %d conns, Opened host%s, h:%x\n", now, nhdls, print_adr, (playerHdl_t) pass);
+		DPRINT(("SERVER: t:%ld, %d conns, Opened host%s\n", now, nhdls, print_adr));
 #ifdef dp_ANET2
 #ifndef WIN32		/* not in dll */
 		/* We don't need to send - client will send to us, and
@@ -1305,25 +1305,25 @@ void dp_PASCAL incoming_cb(void *adr, int len, int nhdls, dp_result_t err,
 		}
 
 	} else if (err == dp_RES_PEER_CLOSED) {
-		printf("t:%d, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass);
-		DPRINT(("SERVER: t:%d, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass));
+		printf("t:%ld, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass);
+		DPRINT(("SERVER: t:%ld, %d conns, Closing host%s h:%x\n", now, nhdls, print_adr, pass));
 		err = tserv_client_delete(dp->tserv, (playerHdl_t)pass);
 		if (err != dp_RES_OK) {
 			DPRINT(("SERVER: can't tserv_client_delete, err %d?\n", err));
 		}
 	} else if (err == dp_RES_CLOSED) {
-		printf("t:%d, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass);
-		DPRINT(("SERVER: t:%d, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass));
+		printf("t:%ld, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass);
+		DPRINT(("SERVER: t:%ld, %d conns, Closed host%s h:%x\n", now, nhdls, print_adr, pass));
 		err = tserv_client_delete(dp->tserv, (playerHdl_t)pass);
 		if (err != dp_RES_OK) {
 			DPRINT(("SERVER: can't tserv_client_delete, err %d?\n", err));
 		}
 	} else if (err == dp_RES_OK) {
-		printf("t:%d, %d conns, Opened host%s, already open\n", now, nhdls, print_adr);
-		DPRINT(("SERVER: t:%d, %d conns, Opened host%s, already open\n", now, nhdls, print_adr));
+		printf("t:%ld, %d conns, Opened host%s, already open\n", now, nhdls, print_adr);
+		DPRINT(("SERVER: t:%ld, %d conns, Opened host%s, already open\n", now, nhdls, print_adr));
 	} else if (err == dp_RES_HOST_NOT_RESPONDING) {
-		printf("t:%d, %d conns, Host%s not responding\n", now, nhdls, print_adr);
-		DPRINT(("SERVER: t:%d, %d conns, Host%s not responding\n", now, nhdls, print_adr));
+		printf("t:%ld, %d conns, Host%s not responding\n", now, nhdls, print_adr);
+		DPRINT(("SERVER: t:%ld, %d conns, Host%s not responding\n", now, nhdls, print_adr));
 	}
 	fflush(stdout);
 	(void) context;
@@ -1333,10 +1333,10 @@ void dp_PASCAL incoming_cb(void *adr, int len, int nhdls, dp_result_t err,
 /*--------------------------------------------------------------------------
  Callback triggered by an incoming exception record.
 --------------------------------------------------------------------------*/
-int dp_PASCAL exception_cb(
+sint32 dp_PASCAL exception_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	if (status != dp_RES_CREATED) return 0;  /* ignore all send/delete messages */
 	dp_handleExceptionRecords(buf, sent, aehlog_SERVER_MAXLEN, (aehlog_t *)context);
@@ -1348,13 +1348,13 @@ int dp_PASCAL exception_cb(
 /*--------------------------------------------------------------------------
  Read in the given text file, and create/update room entries.
 --------------------------------------------------------------------------*/
-static int updateRoom(
+static sint32 updateRoom(
     dp_t *dp,               /* DP to store table in */
     const char *fname)      /* Name of file to read from */
 {
 	FILE *fp;
-	int i, nsess;
-	int subkeylen;
+	sint32 i, nsess;
+	sint32 subkeylen;
 	char buf[256];
 	char key[dptab_KEY_MAXLEN];
 	char subkey[dptab_KEY_MAXLEN];
@@ -1362,7 +1362,7 @@ static int updateRoom(
 	dp_result_t err;
 
 	dp_session_t sess[MAX_LINES];
-	unsigned short utype[MAX_LINES];
+	uint16 utype[MAX_LINES];
 	char uname[MAX_LINES][256];
 	char ufullname[MAX_LINES][256];
 
@@ -1392,7 +1392,7 @@ static int updateRoom(
 	while (fgets(buf, sizeof(buf), fp)) {
 		ROOM_OPTS roomopts;
 		char namebuf[128], *name;
-		if (sscanf(buf, "%d %[^\n\r\f]", &utype[nsess], namebuf) != 2) {
+		if (sscanf(buf, "%hd %[^\n\r\f]", &utype[nsess], namebuf) != 2) {
 			printf("Bad line %s in room file; wanted 'type name'\n", buf);
 			fclose(fp);
 			break;
@@ -1412,7 +1412,7 @@ static int updateRoom(
 	/* For each line in the file, add new table entries */
 	err = dp_RES_OK;
 	for (i = 0; i < nsess; i++) {
-		int j, err1;
+		sint32 j, err1;
 		for (j = 0; j < dptab_tableSize(mysessions); j++) {
 			if ((sess[j].sessionType == utype[i]) &&
 				!strcmp(sess[j].sessionName, uname[i]))
@@ -1432,11 +1432,11 @@ static int updateRoom(
  Each entry has its ip address and port number as its key,
  and its hostname (possibly followed by a blank and a description).
 --------------------------------------------------------------------------*/
-static int updateServerTable(dp_t *dp, const char *fname)
+static sint32 updateServerTable(dp_t *dp, const char *fname)
 {
 	FILE *fp;
-	int i, nserver;
-	int subkeylen;
+	sint32 i, nserver;
+	sint32 subkeylen;
 	char buf[256];
 	char key[dptab_KEY_MAXLEN];
 	char subkey[dptab_KEY_MAXLEN];
@@ -1470,7 +1470,7 @@ static int updateServerTable(dp_t *dp, const char *fname)
 			printf("Bad line %s in server file; wanted 'ipadr hostname ...'\n", buf);
 			err = dp_RES_BAD;
 		} else {
-			int len = dpio_scanAdr(dp->dpio, ipadr, uadr[nserver], dp_MAX_ADR_LEN);
+			sint32 len = dpio_scanAdr(dp->dpio, ipadr, uadr[nserver], dp_MAX_ADR_LEN);
 			printf("len %d, myAdrLen %d\n", len, dp->dpio->myAdrLen);
 			if (len != dp->dpio->myAdrLen) {
 				printf("Can't resolve address %s\n", ipadr);
@@ -1497,7 +1497,7 @@ static int updateServerTable(dp_t *dp, const char *fname)
 	}
 	/* For each line in the file, add/update table entries */
 	for (i = 0; i < nserver; i++) {
-		int err1 = dptab_set(dp->dt, servers, uadr[i], dp->dpio->myAdrLen, uhostname[i], strlen(uhostname[i]), 4, PLAYER_ME);
+		sint32 err1 = dptab_set(dp->dt, servers, uadr[i], dp->dpio->myAdrLen, uhostname[i], strlen(uhostname[i]), 4, PLAYER_ME);
 		if (err1 != dp_RES_OK) {
 			printf("Can't update servers entry.\n");
 			err = err1;
@@ -1509,22 +1509,22 @@ static int updateServerTable(dp_t *dp, const char *fname)
 /*--------------------------------------------------------------------------
  Read in the given text file, and create/update app table entries.
 --------------------------------------------------------------------------*/
-static int updateAppTable(
+static sint32 updateAppTable(
     dp_t *dp,               /* DP to store table in */
     const char *fname)      /* Name of file to read from */
 {
 	FILE *fp;
-	int i, napp;
-	int subkeylen;
+	sint32 i, napp;
+	sint32 subkeylen;
 	char buf[256];
 	char key[dptab_KEY_MAXLEN];
 	char subkey[dptab_KEY_MAXLEN];
 	dptab_table_t *apps;
 	dp_result_t err;
 
-	unsigned short utype[MAX_LINES];
-	unsigned short uplat[MAX_LINES];
-	unsigned char ulang[MAX_LINES];
+	uint16 utype[MAX_LINES];
+	uint16 uplat[MAX_LINES];
+	uint8 ulang[MAX_LINES];
 	dp_version_t uver[MAX_LINES];
 
 	assert(dp != NULL);
@@ -1548,9 +1548,9 @@ static int updateAppTable(
 	napp = 0;
 	err = dp_RES_OK;
 	while (fgets(buf, sizeof(buf), fp)) {
-		unsigned int vmaj, vmin;
+		uint32 vmaj, vmin;
 		DPRINT(("loadAppTable: line is %s\n",buf));
-		if (sscanf(buf, "%u %u %u %u%*c%u\n",&utype[napp],&uplat[napp],&ulang[napp], &vmaj, &vmin) != 5) {
+		if (sscanf(buf, "%hu %hu %hhu %u%*c%u\n",&utype[napp],&uplat[napp],&ulang[napp], &vmaj, &vmin) != 5) {
 			printf("Bad line %s in apps file; wanted 'type platform language ...'\n", buf);
 			err = dp_RES_BAD;
 		} else {
@@ -1563,9 +1563,9 @@ static int updateAppTable(
 
 	/*For app table entry, delete those that no longer exist*/
 	for (i = dptab_tableSize(apps) - 1; i >= 0; i--) {
-		unsigned short type;
-		unsigned short plat;
-		unsigned char lang;
+		uint16 type;
+		uint16 plat;
+		uint8 lang;
 		size_t vlen, j;
 		dp_version_t *vbuf;
 		if (dptab_get_byindex(apps, i, (void**)&vbuf, &vlen, subkey, &subkeylen) != dp_RES_OK)
@@ -1583,8 +1583,8 @@ static int updateAppTable(
 	/* For each line in the file, add/update table entries */
 	for (i = 0; i < napp; i++) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen = 0;
-		int err1;
+		sint32 subkeylen = 0;
+		sint32 err1;
 		subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(utype[i]);
 		subkey[subkeylen++] = (char) dpGETSHORT_SECONDBYTE(utype[i]);
 		subkey[subkeylen++] = (char) dpGETSHORT_FIRSTBYTE(uplat[i]);
@@ -1600,9 +1600,9 @@ static int updateAppTable(
 	return (err == dp_RES_OK) ? 0 : 1;
 }
 
-int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
+sint32 thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 {
-	int j, gsmax, bufGsInd, gsTimeLeft;
+	sint32 j, gsmax, bufGsInd, gsTimeLeft;
 	char magic[9];
 	time_t bufStartTime;
 	fread(magic, 9, 1, fp);
@@ -1622,7 +1622,7 @@ int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 		printf("Bad freeze trailer\n");
 		fclose(fp);
  		assoctab_destroy(GamesServed);
-		GamesServed = assoctab_create(sizeof(int));
+		GamesServed = assoctab_create(sizeof(sint32));
 		return 1;
 	}
 	StartTime = bufStartTime;
@@ -1641,7 +1641,7 @@ int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 		printf("Can't thaw GamesServedSlice table\n");
 		fclose(fp);
  		assoctab_destroy(GamesServedSlice);
-		GamesServedSlice = assoctab_create(GSMAX * sizeof(int));
+		GamesServedSlice = assoctab_create(GSMAX * sizeof(sint32));
 		return 1;
 	}
 	fread(magic, 10, 1, fp);
@@ -1649,7 +1649,7 @@ int thawFreezeFile(FILE *fp, clock_t *gsBeacon)
 		printf("Bad freeze trailer2\n");
 		fclose(fp);
  		assoctab_destroy(GamesServedSlice);
-		GamesServedSlice = assoctab_create(GSMAX * sizeof(int));
+		GamesServedSlice = assoctab_create(GSMAX * sizeof(sint32));
 		return 1;
 	}
 	gsindex = bufGsInd;
@@ -1686,14 +1686,14 @@ static void sendMailToSubjBody(const char *to,
  make it easier for the game to recognize that it is being launched from
  a third party shell (in this case, a web browser).
 --------------------------------------------------------------------------*/
-int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf_result_t *urlResult)
+sint32 url2buf(char *context, const char *url, char *buf, sint32 buflen, bhttp_url2buf_result_t *urlResult)
 {
 	char reftype;
 	char sessid[12];
 	char playername[64];
 	char sessname[64];
-	int n;
-	int maxplayers;
+	sint32 n;
+	sint32 maxplayers;
 	dp_session_t sess;
 	dp_result_t err;
 	char serverAddress[64];
@@ -1710,7 +1710,7 @@ int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf
 		return sprintf(buf, "Error: bad URL %s", url);
 	}
 	if (reftype == 'h') {
-		int sesstype;
+		sint32 sesstype;
 		/* Host session via server */
 		n = sscanf(url+2, ".anet%d?sessname=%63[^&]&playername=%63[^&]&maxplayers=%d", &sesstype, sessname, playername, &maxplayers);
 		if (n < 1) {
@@ -1770,7 +1770,7 @@ int url2buf(char *context, const char *url, char *buf, int buflen, bhttp_url2buf
 }
 #endif
 
-int main( int argc, char *argv[] )
+sint32 main( sint32 argc, char *argv[] )
 {
 	dp_result_t   err;
 	commInitReq_t commInitReq;
@@ -1781,7 +1781,7 @@ int main( int argc, char *argv[] )
 #ifdef WEBLAUNCH
 	bhttp_t *bhttp;
 #endif
-	long temp;
+	sint32 temp;
 	FILE *fp;
 #ifdef dp_ANET2
 	aehlog_t aehlog;
@@ -1822,10 +1822,10 @@ int main( int argc, char *argv[] )
 
 	dp_enableDebugPrint(TRUE);
 
-	GamesServed = assoctab_create(sizeof(int));
+	GamesServed = assoctab_create(sizeof(sint32));
 	if (!GamesServed)
 		exit(1);
-	GamesServedSlice = assoctab_create(GSMAX * sizeof(int));
+	GamesServedSlice = assoctab_create(GSMAX * sizeof(sint32));
 	if (!GamesServedSlice)
 		exit(1);
 	gsindex = 0;
@@ -1883,7 +1883,7 @@ int main( int argc, char *argv[] )
 	}
 #endif
 	dpGetParameterLong(dp, dp_PARAMID_FILEDESC, &temp);
-	dpiofd = (int)temp;
+	dpiofd = (sint32)temp;
 	printf("dpGetParameterLong returns dpio filedesc:%d\n", dpiofd);
 
 #ifdef dp_STATS
@@ -1937,7 +1937,7 @@ int main( int argc, char *argv[] )
 		memset(&req, 0, sizeof(commSetParamReq_t));
 		req.reqLen = sizeof(commSetParamReq_t);
 		req.param_num = comm_PARAM_SESSIONINFO;
-		req.param_value = (int)&sessinfo;
+		req.param_pointer = (void*)&sessinfo;
 		if (commSetParam(&req, &resp, dp->dpio->commPtr) != 1) {
 			printf("Couldn't commSetParam on sessinfo, status %d\n", resp.status);
 			exit(1);
@@ -2011,7 +2011,7 @@ int main( int argc, char *argv[] )
 				dp_account_packet_t account;
 				dp_sessionResult_packet_t sessionRes;
 				char buf[1024];
-			} u PACK;
+			} u;
 		} pkt;
 #include "dpunpack.h"
 
@@ -2019,10 +2019,10 @@ int main( int argc, char *argv[] )
 		fd_set rfds;
 		fd_set wfds;
 		struct timeval tv;
-		int nsocks;
-		int sockmax;
-		int socktemp;
-		int sock;
+		sint32 nsocks;
+		sint32 sockmax;
+		sint32 socktemp;
+		sint32 sock;
 		clock_t now = eclock();
 
 		tv.tv_sec = 0;
@@ -2060,9 +2060,9 @@ int main( int argc, char *argv[] )
 #ifdef WIN32
 		Sleep(10); /* be a good citizen */
 #endif
-		if ((long)(now - enumBeacon) > 0) {
+		if ((sint32)(now - enumBeacon) > 0) {
 			dp_session_t  sess;
-			int i;
+			sint32 i;
 
 			/* Reset the beacon */
 			enumBeacon = now + ENUM_BEACON_INTERVAL;
@@ -2072,7 +2072,7 @@ int main( int argc, char *argv[] )
 
 			/* update games served list */
 			if (now - gsBeacon > 0) {
-				int j;
+				sint32 j;
 
 				/* Reset the beacon */
 				gsBeacon = now + GS_BEACON_INTERVAL();
@@ -2080,7 +2080,7 @@ int main( int argc, char *argv[] )
 				/* get GamesServedSlice's and zero its gsindex'th member */
 				gsindex = (gsindex == GSMAX - 1) ? 0 : gsindex + 1;
 				for (j = 0; j < GamesServedSlice->n_used; j++) {
-					int *gameslice = (int *)(((assoctab_item_t *)assoctab_getkey(GamesServedSlice, j))->value);
+					sint32 *gameslice = (sint32 *)(((assoctab_item_t *)assoctab_getkey(GamesServedSlice, j))->value);
 					gameslice[gsindex] = 0;
 				}
 			}
@@ -2094,7 +2094,7 @@ int main( int argc, char *argv[] )
 #endif
 			if (GamesActive)
 				assoctab_destroy(GamesActive);
-			GamesActive = assoctab_create(sizeof(int));
+			GamesActive = assoctab_create(sizeof(sint32));
 
 			DPRINT(("SERVER: Listing sessions using dpEnumSessions\n", err));
 			err = dpEnumSessions(dp, &sess, NULL, 0L, listSessions_cb, dp);
@@ -2116,8 +2116,8 @@ int main( int argc, char *argv[] )
 		sbdserv_startRead(sbdserv, nsocks);
 		while (1) {
 			char buf[sbd_MAXLEN];
-			int len;
-			int i;
+			sint32 len;
+			sint32 i;
 			len = sbdserv_poll(sbdserv, &rfds, buf);
 			if (len < 0) {
 				DPRINT(("SERVER: sbdserv_poll error!\n"));
@@ -2230,7 +2230,7 @@ int main( int argc, char *argv[] )
 			DPRINT(("SERVER: Error %d freezing communications.\n", err));
 		}
 		if ((fp = fopen(FreezeFile2, "wb")) != NULL) {
-			int j, gsmax, gsTimeLeft;
+			sint32 j, gsmax, gsTimeLeft;
 
 			fwrite("serverdat", 9, 1, fp);
 			fwrite(&StartTime, sizeof(StartTime), 1, fp);

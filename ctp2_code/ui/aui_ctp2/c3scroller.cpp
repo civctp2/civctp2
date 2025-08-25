@@ -23,13 +23,13 @@ C3Scroller::C3Scroller
 (
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
-	aui_ImageBase( ldlBlock ),
-	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
+    aui_ImageBase( ldlBlock ),
+    aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
     aui_Ranger      (),
     PatternBase     (),
     m_isVertical    (false)
@@ -54,13 +54,13 @@ C3Scroller::C3Scroller
 	Assert( AUI_SUCCESS(*retval) );
 	if ( !AUI_SUCCESS(*retval) ) return;
 
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if (!block)
-    {
-        *retval = AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-        return;
-    }
+	{
+		*retval = AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
+		return;
+	}
 
 	m_isVertical = block->GetBool("vertical");
 
@@ -82,13 +82,13 @@ C3Scroller::C3Scroller
 	sint32 width,
 	sint32 height,
 	bool isVertical,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie
+	Cookie cookie
 )
 :
-	aui_ImageBase( (sint32)0 ),
-	aui_TextBase( NULL ),
+    aui_ImageBase( (sint32)0 ),
+    aui_TextBase( NULL ),
     aui_Ranger      (),
     PatternBase     (),
     m_isVertical    (isVertical)
@@ -124,13 +124,13 @@ C3Scroller::C3Scroller
 AUI_ERRCODE C3Scroller::InitCommon()
 {
 	if (m_isVertical)
-    {
+	{
 		m_valX = m_minX = m_maxX = m_incX = m_pageX = 0;
-    }
+	}
 	else
-    {
+	{
 		m_valY = m_minY = m_maxY = m_incY = m_pageY = 0;
-    }
+	}
 
 	return AUI_ERRCODE_OK;
 }
@@ -180,16 +180,6 @@ AUI_ERRCODE C3Scroller::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	ToWindow( &rect );
 
 	if ( m_pattern ) m_pattern->Draw( surface, &rect );
-
-
-
-
-
-
-
-
-
-
 
 
 	primitives_BevelRect16( surface, &rect, 1, 1, 16, 16 );

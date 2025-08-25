@@ -36,7 +36,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -48,7 +48,7 @@ dp_dprintf(
 #endif
 
 /* fake functions so we don't have to include dp2.lib */
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
@@ -61,20 +61,20 @@ extern char DBFile[antpserv_MAXPATH];
  Returns 1 if allowed,
  		 0 if not.
 --------------------------------------------------------------------------*/
-static int antpservd_validateAddr(struct sockaddr_in addr)
+static sint32 antpservd_validateAddr(struct sockaddr_in addr)
 {
 	if (!strncmp(inet_ntoa(addr.sin_addr), "206.17.", 7))
 		return 1;
 	return 0;
 }
 
-void main(int argc, char *argv[])
+void main(sint32 argc, char *argv[])
 {
-	int sockfd;
+	sint32 sockfd;
 	struct sockaddr_in my_addr;
-	int MyPort;
+	sint32 MyPort;
 	char BaseDir[antpserv_MAXPATH];
-	int pid;
+	sint32 pid;
 
 	setlinebuf(stdout);  /* line buffer if we are redirecting */
 
@@ -136,9 +136,9 @@ Usage: %s <Port> <BaseDir>\n\
 	}
 
 	while (1) {
-		int newsock;
+		sint32 newsock;
 		struct sockaddr_in client_addr;
-		int client_addrlen;
+		sint32 client_addrlen;
 
 		/* ACCEPT A CONNECTION AND THEN CREATE A CHILD TO DO THE WORK */
 		/* LOOP BACK AND WAIT FOR ANOTHER CONNECTION */

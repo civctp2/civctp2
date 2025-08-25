@@ -63,7 +63,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *StateFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_Switch(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -72,7 +72,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *StateFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = nullptr,
 		sint32 state = 0,
 		sint32 numStates = k_AUI_SWITCH_DEFAULTNUMSTATES );
 	virtual ~aui_Switch() {}
@@ -96,9 +96,9 @@ public:
 		aui_Switch *control,
 		aui_Surface *surface,
 		RECT &rect,
-		void *cookie );
+		Cookie cookie );
 	void SetDrawCallbackAndCookie(SwitchDrawCallback *func,
-		void *cookie,bool exclusive=true);
+		Cookie cookie, bool exclusive=true);
 
 protected:
 	aui_Switch()
@@ -108,7 +108,7 @@ protected:
 		m_numStates             (k_AUI_SWITCH_DEFAULTNUMSTATES),
 		m_drawCallbackExclusive (true),
 		m_drawFunc              (NULL),
-		m_drawCookie            (NULL)
+		m_drawCookie            (nullptr)
 	{};
 
 	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
@@ -119,7 +119,7 @@ protected:
 
 	bool	m_drawCallbackExclusive;
 	SwitchDrawCallback *m_drawFunc;
-	void *m_drawCookie;
+	Cookie m_drawCookie;
 
 	virtual void	MouseLDragOver(aui_MouseEvent * mouseData);
 	virtual void	MouseLDragAway(aui_MouseEvent * mouseData);

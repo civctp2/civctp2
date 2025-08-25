@@ -13,19 +13,11 @@ struct MovieNameNode {
 	MBCHAR	m_movieFilename[_MAX_PATH];
 };
 
-class MovieDB {
-
-
-    sint32 m_size;
-
-
-
-
-
-
+class MovieDB
+{
+	sint32 m_size;
 
 	MovieNameNode *m_map;
-
 
 public:
 
@@ -35,15 +27,15 @@ public:
 
 	void	SetSize(sint32 size);
 
-	sint32	FindTypeIndex(char *str) const;
+	sint32	FindTypeIndex(const char *str) const;
 	MBCHAR	*GetMovieFilename(sint32 index) const;
-    void	SetName(sint32 count, char str[_MAX_PATH]);
-    void	SetMovieFilename(sint32 count, MBCHAR *s);
+	void	SetName(sint32 count, char str[_MAX_PATH]);
+	void	SetMovieFilename(sint32 count, const MBCHAR *s);
 
 	void	Serialize(CivArchive &archive) ;
 
 	sint32	ParseAMovie(Token *iconToken, sint32 count);
-	sint32	Parse(char *filename);
+	sint32	Parse(const char *filename);
 };
 
 #endif

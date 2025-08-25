@@ -43,7 +43,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Searches for stub and if it exists, notifies it of pending exit and if it
   wants NetShell relaunched (yes if status is zero) then exits application.
 --------------------------------------------------------------------------*/
-DP_API void dpExitFromApp(int status)
+DP_API void dpExitFromApp(sint32 status)
 {
 	OSErr err;
 	ProcessSerialNumber stubPSN;
@@ -51,10 +51,10 @@ DP_API void dpExitFromApp(int status)
 	if (!status) {
 		err = getstub(&stubPSN);
 		if (err == dp_RES_OK ) {
-			int done = 0;
+			sint32 done = 0;
 			TargetID sender;
-			unsigned long msgRefcon = REFCON;
-			unsigned long sendRefcon, myOpts, msglen;
+			uint32 msgRefcon = REFCON;
+			uint32 sendRefcon, myOpts, msglen;
 			EventRecord event;
 			event.what = kHighLevelEvent;
 			event.message = STUB_EVENTID;

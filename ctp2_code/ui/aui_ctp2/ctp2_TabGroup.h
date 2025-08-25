@@ -12,7 +12,7 @@ class ctp2_TabGroup : public aui_Control {
 public:
 
 	ctp2_TabGroup(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
-		ControlActionCallback *ActionFunc = NULL, void *cookie = NULL);
+		ControlActionCallback *ActionFunc = NULL, Cookie cookie = nullptr);
 
 	virtual ~ctp2_TabGroup();
 

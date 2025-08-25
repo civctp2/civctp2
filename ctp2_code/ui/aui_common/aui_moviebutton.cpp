@@ -19,7 +19,7 @@ aui_MovieButton::aui_MovieButton(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -45,7 +45,7 @@ aui_MovieButton::aui_MovieButton(
 	sint32 height,
 	const MBCHAR *movie,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -170,7 +170,7 @@ AUI_ERRCODE aui_MovieButton::Idle( void )
 			if (m_movie->IsFinished() && !(m_flags & k_AUI_MOVIE_PLAYFLAG_PLAYANDHOLD))
 			{
 				if (m_ActionFunc)
-					m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+					m_ActionFunc((aui_Control *)this, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 			}
 #if defined(__AUI_USE_SDL__)
 			else {

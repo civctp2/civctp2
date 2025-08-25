@@ -30,6 +30,9 @@ material generated from the software programs which are displayed
 on the screen such as icons, screen display looks, etc.
 
 $Log: types.h $
+Revision 1.2  2025/07/05 15:25:35  Martin Gühmann
+Add the typedefs from CTP2, so that we have predictable
+data length across different compilers
 Revision 1.1  1997/08/26 01:41:27  lbennett
 Initial revision
 -----------------------------------------------------------------------*/
@@ -38,9 +41,46 @@ Initial revision
 #if !defined(_TYPES_H_)
 #define _TYPES_H_
 
-typedef unsigned char u_char;
-typedef unsigned short int u_short;
-typedef unsigned int u_int;
-typedef unsigned long int u_long;
+//typedef unsigned char u_char;
+//typedef unsigned short int u_short;
+//typedef unsigned int u_int;
+//typedef unsigned long int u_long;
+
+#if defined(_MSC_VER)
+
+typedef          char        schar;
+typedef unsigned char        uchar;
+
+typedef          char        sint8;
+typedef unsigned char        uint8;
+typedef          short int   sint16;
+typedef unsigned short int   uint16;
+typedef          int         sint32;
+typedef unsigned int         uint32;
+typedef          __int64     sint64;
+typedef unsigned __int64     uint64;
+
+#else
+
+#if defined(HAVE_INTTYPES_H)
+#include <inttypes.h>
+#endif
+
+#include <stdint.h>
+
+
+typedef signed char          schar;
+typedef unsigned char        uchar;
+
+typedef int8_t               sint8;
+typedef uint8_t              uint8;
+typedef int16_t              sint16;
+typedef uint16_t             uint16;
+typedef int32_t              sint32;
+typedef uint32_t             uint32;
+typedef int64_t              sint64;
+typedef uint64_t             uint64;
+
+#endif // !defined(_MSC_VER)
 
 #endif /* Protect against double-inclusion */

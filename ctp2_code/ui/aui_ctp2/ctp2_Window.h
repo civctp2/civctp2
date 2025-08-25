@@ -37,12 +37,13 @@
 #include "aui_window.h"
 #include "patternbase.h"
 #include "pointerlist.h"
+#include "aui_control.h"
 
 class ctp2_Window;
 
 typedef void (CTP2WindowWeaklyModalCancelCallback) (aui_MouseEvent *event,
 													ctp2_Window *window,
-													void *cookie,
+													Cookie cookie,
 													bool &passEventOn);
 
 class ctp2_Window : public aui_Window, public PatternBase
@@ -76,7 +77,7 @@ public:
 		sint32 x = 0,
 		sint32 y = 0 );
 
-	void SetWeaklyModalCancelCallback(CTP2WindowWeaklyModalCancelCallback *cb, void *cookie) {
+	void SetWeaklyModalCancelCallback(CTP2WindowWeaklyModalCancelCallback *cb, Cookie cookie) {
 		m_weaklyModalCancelCallback = cb;
 		m_weaklyModalCancelCookie = cookie;
 	}
@@ -103,7 +104,7 @@ public:
 private:
 	bool m_bevel;
 	CTP2WindowWeaklyModalCancelCallback *m_weaklyModalCancelCallback;
-	void *m_weaklyModalCancelCookie;
+	Cookie m_weaklyModalCancelCookie;
 	PointerList<ctp2_Window> m_dockedWindows;
 	ctp2_Window *m_dockedTo;
 	ctp2_Window *m_dock;

@@ -9,4 +9,4 @@ class ResponseEventCallbacks
 	static void AddCallbacks();
 };
 
-#endif __RESPONSE_EVENT_H__
+#endif // __RESPONSE_EVENT_H__

@@ -25,9 +25,9 @@ sint32 spnewgamemapsizescreen_removeMyWindow(uint32 action);
 AUI_ERRCODE spnewgamemapsizescreen_Initialize( aui_Control::ControlActionCallback *callback = NULL );
 AUI_ERRCODE spnewgamemapsizescreen_Cleanup();
 
-void spnewgamemapsizescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamemapsizescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void spnewgamemapsizescreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamemapsizescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void spnewgamemapsizescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 sint32 spnewgamemapsizescreen_getMapSizeIndex( void );
 void spnewgamemapsizescreen_setMapSizeIndex( sint32 );

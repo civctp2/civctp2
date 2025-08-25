@@ -47,7 +47,7 @@ TCPINSTANCE *			/* TCP driver, or NULL for failure */
 TCPWIN_Create(
 	u_short maxHandles,	/* (input) Maximum number of allowed handles */
 	u_short* port,		/* (modified) Port (socket) number, or TCP_SOCKET_ANY */
-	int *status)		/* (output) status */
+	sint32 *status)		/* (output) status */
 {
 	TCPINSTANCE* pTcp;
 	TCPPEER peer;
@@ -142,7 +142,7 @@ TCPWIN_Address2Handle(
 
  Returns TCP_RES_OK on success, TCP_RES_EMPTY on failure.
 *****************************************************************************/
-int						/* status */
+sint32						/* status */
 TCPWIN_Handle2Address(
 	TCPINSTANCE *tcp,	/* (input) Current TCP instance */
 	TCPHANDLE handle,	/* (input) Handle to translate */
@@ -167,7 +167,7 @@ TCPWIN_Handle2Address(
  Copies len bytes from buf into internal packet queue.
  Must have previously gotten handle for destination by calling TCP_adr2hdl.
 *****************************************************************************/
-int						/* status */
+sint32						/* status */
 TCPWIN_PutPacket(
 	TCPINSTANCE *tcp,	/* (input) current TCP instance */
 	void *bufptr,		/* (input) packet to send */
@@ -214,7 +214,7 @@ TCPWIN_PutPacket(
  (TCP_get could do this for you, but then the peer table might fill up
  with all sorts of garbage addresses from hosts who sent you junk mail.)
 *****************************************************************************/
-int						/* status */
+sint32						/* status */
 TCPWIN_GetPacket(
 	TCPINSTANCE *tcp,	/* (input) Current TCP instance */
 	void *bufptr,		/* (output) Contents of packet */
@@ -223,7 +223,7 @@ TCPWIN_GetPacket(
 	TCPPEER *srcaddr)	/* (output) Address of sender */
 {
 	TCPPEER addr;
-	int status;
+	sint32 status;
 
 	/* do sanity checks */
 	assert(tcp != NULL);

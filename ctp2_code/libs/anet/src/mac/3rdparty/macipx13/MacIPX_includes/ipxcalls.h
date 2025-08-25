@@ -33,12 +33,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <OSUtils.h>
 #endif
 
+#include "types.h"
+
 /*
  * IPX_ECB status field busy (in-process) codes
  */
-#define ST_AESQ				(short)0x1002
-#define ST_ECBQ				(short)0x1004
-#define ST_SENDPACKET		(short)0x2001
+#define ST_AESQ				(sint16)0x1002
+#define ST_ECBQ				(sint16)0x1004
+#define ST_SENDPACKET		(sint16)0x2001
 
 /*
  * IPX_ECB flags field bit mask.  The comments have the following
@@ -56,7 +58,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #pragma options align=mac68k
 #endif
 typedef struct {
-   unsigned short		fragSize;
+   uint16		fragSize;
    void					*fragAddress;
 } IPXECBFrag;
 #if defined(powerc) || defined(__powerc)
@@ -107,22 +109,22 @@ typedef ESRProcPtr ESRUPP;
 #endif
 typedef struct IPX_ECBStruct {
    struct IPX_ECBStruct   *next;                		/* A */
-   unsigned char           APIWorkspace[42];    		/* A */
+   uint8           APIWorkspace[42];    		/* A */
    struct IPX_ECBStruct   *prev;                		/* A */
-   short                   status;              		/* q */
-   unsigned long           flags;               		/* q, s (IpxSend only) */
+   sint16                   status;              		/* q */
+   uint32           flags;               		/* q, s (IpxSend only) */
 #ifdef REGISTER_A0_COMPATIBILITY
    pascal void             (*ESRAddress)(void);			/* sr */
 #else
    ESRUPP                  ESRAddress;                  /* sr */
 #endif
-   unsigned char           immediateAddress[6]; 		/* s (IpxSend only) */
-   unsigned char           DrvrWorkspace[30];   		/* R */
-   unsigned char           UserWorkspace[4];    		/* u */
+   uint8           immediateAddress[6]; 		/* s (IpxSend only) */
+   uint8           DrvrWorkspace[30];   		/* R */
+   uint8           UserWorkspace[4];    		/* u */
    QHdrPtr                 MacOSQueue;          		/* sr */
-   unsigned long           savedA5;             		/* R */
-   unsigned short          dataLen;             		/* q */
-   unsigned short          fragCount;           		/* sr */
+   uint32           savedA5;             		/* R */
+   uint16          dataLen;             		/* q */
+   uint16          fragCount;           		/* sr */
    IPXECBFrag              DrvrFrag1[2];				/* R */
    IPXECBFrag              fragList[2];         		/* sr */
    IPXECBFrag              DrvrFrag2;					/* R */
@@ -135,16 +137,16 @@ typedef struct IPX_ECBStruct {
 #pragma options align=mac68k
 #endif
 typedef struct {
-   unsigned short          checksum;
-   unsigned short          packetLen;
-   unsigned char           transportCtl;
-   unsigned char           packetType;
-   unsigned long           destNet;
-   unsigned char           destNode[6];
-   unsigned short          destSocket;
-   unsigned long           sourceNet;
-   unsigned char           sourceNode[6];
-   unsigned short          sourceSocket;
+   uint16          checksum;
+   uint16          packetLen;
+   uint8           transportCtl;
+   uint8           packetType;
+   uint32           destNet;
+   uint8           destNode[6];
+   uint16          destSocket;
+   uint32           sourceNet;
+   uint8           sourceNode[6];
+   uint16          sourceSocket;
 } IPX_HEADER;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -156,24 +158,24 @@ typedef struct {
 #pragma options align=mac68k
 #endif
 typedef struct {
-	unsigned long	ipxInReceives;
-	unsigned long	ipxInRcvBufOverflows;
-	unsigned long	ipxInHdrErrors;
-	unsigned long	ipxInAddrErrors;
-	unsigned long	ipxInNoRcvBuffs;
-	unsigned long	ipxInLapErrors;
-	unsigned long	ipxInUnknownSocket;
-	unsigned long	ipxInDelivers;
-	unsigned long	ipxInRequests;
-	unsigned long	ipxInBadChecksum;
-	unsigned long	ipxOutRequests;
-	unsigned long	ipxOutMalformedRequests;
-	unsigned long	ipxOutNoRoutes;
-	unsigned long	ipxOutLapErrors;
-	unsigned long	ipxOutNoMemoryFails;
-	unsigned long	ipxMaxOpenSockets;
-	unsigned long	ipxOpenSocketFails;
-	unsigned long	ipxScheduleEvents;
+	uint32	ipxInReceives;
+	uint32	ipxInRcvBufOverflows;
+	uint32	ipxInHdrErrors;
+	uint32	ipxInAddrErrors;
+	uint32	ipxInNoRcvBuffs;
+	uint32	ipxInLapErrors;
+	uint32	ipxInUnknownSocket;
+	uint32	ipxInDelivers;
+	uint32	ipxInRequests;
+	uint32	ipxInBadChecksum;
+	uint32	ipxOutRequests;
+	uint32	ipxOutMalformedRequests;
+	uint32	ipxOutNoRoutes;
+	uint32	ipxOutLapErrors;
+	uint32	ipxOutNoMemoryFails;
+	uint32	ipxMaxOpenSockets;
+	uint32	ipxOpenSocketFails;
+	uint32	ipxScheduleEvents;
 } IPX_STATS;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -214,8 +216,8 @@ typedef struct {
 #pragma options align=mac68k
 #endif
 typedef struct {
-	unsigned long		supported_features;
-	unsigned long		retry_interval;
+	uint32		supported_features;
+	uint32		retry_interval;
 } IPX_CONFIG_INFO;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
@@ -237,16 +239,16 @@ typedef struct {
 typedef struct {
 	char			Reserved0[4];
 	void			*LookAheadPtr;
-	unsigned short	LookAheadLength;
+	uint16	LookAheadLength;
 	char			Reserved1[16];
 } LookAheadStructure;
 #if defined(powerc) || defined(__powerc)
 #pragma options align=reset
 #endif
 
-typedef pascal IPX_ECB * ((*RecvLookAheadHandler)(unsigned short socket,
+typedef pascal IPX_ECB * ((*RecvLookAheadHandler)(uint16 socket,
 									LookAheadStructure *LookAheadStruct,
-									long userData));
+									sint32 userData));
 
 #if USESROUTINEDESCRIPTORS
 enum  {
@@ -282,43 +284,43 @@ extern pascal IPX_ECB *IpxGetECBFromRegisterA0(void);
 #endif
 
 #ifndef COMPONENT_BUILD
-extern pascal short IpxCancelEvent(unsigned short socket, IPX_ECB  *ecb);
-extern pascal short IpxCheckSocket(unsigned short socket);
-extern pascal short IpxCloseSocket(unsigned short socket);
-extern pascal short	IpxGetInfo(IPX_CONFIG_INFO *buffer, unsigned long *buflen);
-extern pascal short IpxGetInternetworkAddress(unsigned char *address);
-extern pascal short IpxGetLocalTarget(unsigned char *target, IPX_ECB *ecb, unsigned long *timeToNet);
-extern pascal short IpxGetLocalTargetAsynch(unsigned char *target, IPX_ECB *ecb1, IPX_ECB *ecb2, unsigned long *timeToNet);
-extern pascal short IpxGetMaxPacketSize(unsigned long *maxPktSize);
-extern pascal short IpxGetStatistics(IPX_STATS *buffer, unsigned long *buflen);
-extern pascal short IpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned short *revision);
-extern pascal short IpxInitialize(void);
-extern pascal short IpxOpenLookAheadSocket(unsigned short *socket, RecvLookAheadHandlerUPP handler, unsigned short numBytes, long userData, unsigned char flags);
-extern pascal short IpxOpenSocket(unsigned short *socket, unsigned char flags);
-extern pascal short IpxReceive(unsigned short socket, IPX_ECB *ecb);
-extern pascal short IpxRelinquishControl(void);
-extern pascal short IpxScheduleIpxEvent(unsigned short socket, unsigned long timeTicks, IPX_ECB *ecb);
-extern pascal short IpxSend(unsigned short socket,IPX_ECB *ecb);
-extern pascal short IpxSend2(unsigned short socket, IPX_ECB *ecb, unsigned char flags);
+extern pascal sint16 IpxCancelEvent(uint16 socket, IPX_ECB  *ecb);
+extern pascal sint16 IpxCheckSocket(uint16 socket);
+extern pascal sint16 IpxCloseSocket(uint16 socket);
+extern pascal sint16	IpxGetInfo(IPX_CONFIG_INFO *buffer, uint32 *buflen);
+extern pascal sint16 IpxGetInternetworkAddress(uint8 *address);
+extern pascal sint16 IpxGetLocalTarget(uint8 *target, IPX_ECB *ecb, uint32 *timeToNet);
+extern pascal sint16 IpxGetLocalTargetAsynch(uint8 *target, IPX_ECB *ecb1, IPX_ECB *ecb2, uint32 *timeToNet);
+extern pascal sint16 IpxGetMaxPacketSize(uint32 *maxPktSize);
+extern pascal sint16 IpxGetStatistics(IPX_STATS *buffer, uint32 *buflen);
+extern pascal sint16 IpxGetVersion(uint8 *majorVersion, uint8 *minorVersion, uint16 *revision);
+extern pascal sint16 IpxInitialize(void);
+extern pascal sint16 IpxOpenLookAheadSocket(uint16 *socket, RecvLookAheadHandlerUPP handler, uint16 numBytes, sint32 userData, uint8 flags);
+extern pascal sint16 IpxOpenSocket(uint16 *socket, uint8 flags);
+extern pascal sint16 IpxReceive(uint16 socket, IPX_ECB *ecb);
+extern pascal sint16 IpxRelinquishControl(void);
+extern pascal sint16 IpxScheduleIpxEvent(uint16 socket, uint32 timeTicks, IPX_ECB *ecb);
+extern pascal sint16 IpxSend(uint16 socket,IPX_ECB *ecb);
+extern pascal sint16 IpxSend2(uint16 socket, IPX_ECB *ecb, uint8 flags);
 #else
-extern pascal short IpxCancelEvent(unsigned short socket, IPX_ECB *ecb, short drvrRefNum);
-extern pascal short IpxCheckSocket(unsigned short socket, short drvrRefNum);
-extern pascal short IpxCloseSocket(unsigned short socket, short drvrRefNum);
-extern pascal short	IpxGetInfo(IPX_CONFIG_INFO *buffer, unsigned long *buflen, short drvrRefNum);
-extern pascal short IpxGetInternetworkAddress(unsigned char *address, short drvrRefNum);
-extern pascal short IpxGetLocalTarget(unsigned char *target, IPX_ECB *ecb, unsigned long *timeToNet, short drvrRefNum);
-extern pascal short IpxGetLocalTargetAsynch(unsigned char *target, IPX_ECB *ecb1, IPX_ECB *ecb2, unsigned long *timeToNet, short drvrRefNum);
-extern pascal short IpxGetMaxPacketSize(unsigned long *maxPktSize, short drvrRefNum);
-extern pascal short IpxGetStatistics(IPX_STATS *buffer, unsigned long *buflen, short drvrRefNum);
-extern pascal short IpxGetVersion(unsigned char *majorVersion, unsigned char *minorVersion, unsigned short *revision, short drvrRefNum);
-extern pascal short IpxInitialize(short *drvrRefNumPtr);
-extern pascal short IpxOpenLookAheadSocket(unsigned short *socket, RecvLookAheadHandlerUPP handler, unsigned short numBytes, long userData, unsigned char flags, short drvrRefNum);
-extern pascal short IpxOpenSocket(unsigned short *socket, unsigned char flags, short drvrRefNum);
-extern pascal short IpxReceive(unsigned short socket, IPX_ECB *ecb, short drvrRefNum);
-extern pascal short IpxRelinquishControl(short drvrRefNum);
-extern pascal short IpxScheduleIpxEvent(unsigned short socket, unsigned long timeTicks, IPX_ECB *ecb, short drvrRefNum);
-extern pascal short IpxSend(unsigned short socket,IPX_ECB *ecb, short drvrRefNum);
-extern pascal short IpxSend2(unsigned short socket, IPX_ECB *ecb, unsigned char flags, short drvrRefNum);
+extern pascal sint16 IpxCancelEvent(uint16 socket, IPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 IpxCheckSocket(uint16 socket, sint16 drvrRefNum);
+extern pascal sint16 IpxCloseSocket(uint16 socket, sint16 drvrRefNum);
+extern pascal sint16	IpxGetInfo(IPX_CONFIG_INFO *buffer, uint32 *buflen, sint16 drvrRefNum);
+extern pascal sint16 IpxGetInternetworkAddress(uint8 *address, sint16 drvrRefNum);
+extern pascal sint16 IpxGetLocalTarget(uint8 *target, IPX_ECB *ecb, uint32 *timeToNet, sint16 drvrRefNum);
+extern pascal sint16 IpxGetLocalTargetAsynch(uint8 *target, IPX_ECB *ecb1, IPX_ECB *ecb2, uint32 *timeToNet, sint16 drvrRefNum);
+extern pascal sint16 IpxGetMaxPacketSize(uint32 *maxPktSize, sint16 drvrRefNum);
+extern pascal sint16 IpxGetStatistics(IPX_STATS *buffer, uint32 *buflen, sint16 drvrRefNum);
+extern pascal sint16 IpxGetVersion(uint8 *majorVersion, uint8 *minorVersion, uint16 *revision, sint16 drvrRefNum);
+extern pascal sint16 IpxInitialize(sint16 *drvrRefNumPtr);
+extern pascal sint16 IpxOpenLookAheadSocket(uint16 *socket, RecvLookAheadHandlerUPP handler, uint16 numBytes, sint32 userData, uint8 flags, sint16 drvrRefNum);
+extern pascal sint16 IpxOpenSocket(uint16 *socket, uint8 flags, sint16 drvrRefNum);
+extern pascal sint16 IpxReceive(uint16 socket, IPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 IpxRelinquishControl(sint16 drvrRefNum);
+extern pascal sint16 IpxScheduleIpxEvent(uint16 socket, uint32 timeTicks, IPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 IpxSend(uint16 socket,IPX_ECB *ecb, sint16 drvrRefNum);
+extern pascal sint16 IpxSend2(uint16 socket, IPX_ECB *ecb, uint8 flags, sint16 drvrRefNum);
 #endif
 
 #endif  /* __IPXCALLS_INCLUDED__ */

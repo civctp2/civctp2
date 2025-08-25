@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -50,7 +50,7 @@
 
 DialogBoxWindow::DialogBoxWindow(
 	AUI_ERRCODE *retval,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	aui_Action **actions )
 :
 	ns_Window	(retval,
@@ -79,7 +79,7 @@ AUI_ERRCODE DialogBoxWindow::InitCommon( void )
 }
 
 AUI_ERRCODE DialogBoxWindow::CreateControls(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	aui_Action **actions )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
@@ -317,7 +317,7 @@ DialogBoxWindow::~DialogBoxWindow()
 }
 
 DialogBoxWindow *DialogBoxWindow::PopUp(
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	aui_Action **actions )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
