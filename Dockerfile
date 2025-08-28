@@ -17,7 +17,7 @@ FROM system as builder
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y --no-install-recommends \
-    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
+    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev libavdevice-dev libavfilter-dev \
     byacc gcc g++ binutils-gold automake make libtool unzip flex git ca-certificates
 
 ### set default compilers
