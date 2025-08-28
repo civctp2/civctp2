@@ -22,7 +22,6 @@
 // - Generate debug version when set.
 //
 // ARCHIVE_TYPE_CHECK
-// linux // Why lower case?
 //
 //
 //----------------------------------------------------------------------------
@@ -262,7 +261,6 @@ void CivArchive::PutDoubleString(const double &val)
 	char buf[256];
 	sprintf(buf, "%8.8le", val);
 
-#ifndef linux
 	if(buf[0] != '-')
 	{
 		memmove(&buf[12], &buf[13], 3);
@@ -271,7 +269,7 @@ void CivArchive::PutDoubleString(const double &val)
 	{
 		memmove(&buf[13], &buf[14], 3);
 	}
-#endif
+
 	Store((uint8*)buf, strlen(buf));
 }
 
