@@ -41,11 +41,12 @@ alsire        { return ALLOWS_SINGLE_RECORD; }
 				  return STRINGVALUE;
 			  }
 -?[0-9]+\.[0-9]+ {
-				  yylval.fval = atof(yytext);
+				  yylval.fval = strtod(yytext, NULL);
 				  return FLOATVALUE;
 			  }
 -?[0-9]+	  {
-				  yylval.val = atoi(yytext);
+				  long tmpVal = strtol(yytext, NULL, 10);
+				  yylval.val = tmpVal > 0 ? min(tmpVal, INT_MAX) : max(tmpVal, INT_MIN);
 				  return NUMBER;
 			  }
 \.\.          { return RANGE; }

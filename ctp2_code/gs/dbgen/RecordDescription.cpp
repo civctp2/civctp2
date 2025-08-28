@@ -1123,7 +1123,8 @@ void RecordDescription::ExportPreBodyTokens(FILE *outfile)
 				case DATUM_INT:
 					fprintf(outfile, "    if(tok == k_Token_Int) {\n");
 					fprintf(outfile, "        s_ParsedTokens.SetBit(k_Token_%s_%s - k_Token_Custom_Base);\n", m_name, dat->m_name);
-					fprintf(outfile, "        m_%s = atoi(lex->GetTokenText());\n", dat->m_name);
+					fprintf(outfile, "        long tmpVal = strtol(lex->GetTokenText(), NULL, 10);\n");
+					fprintf(outfile, "        m_%s = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));\n", dat->m_name);
 					fprintf(outfile, "        tok = lex->GetToken();\n");
 					fprintf(outfile, "    }\n");
 					break;
