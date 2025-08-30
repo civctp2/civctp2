@@ -43,6 +43,7 @@
 #include "c3files.h"
 
 #include <ctype.h>
+#include <algorithm>
 
 extern "C" FILE *dblin;
 extern "C" char *dbltext;

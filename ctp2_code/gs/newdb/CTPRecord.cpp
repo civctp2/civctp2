@@ -38,6 +38,8 @@
 #include "DBTokens.h"
 #include "StrDB.h"
 
+#include <algorithm>
+
 #if !defined(HAVE_STATIC_CONST_INIT_DECL_BUG)
 sint32 const CTPRecord::INDEX_INVALID   = -1;
 #endif

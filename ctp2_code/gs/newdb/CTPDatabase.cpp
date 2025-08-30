@@ -94,6 +94,8 @@
 
 #include "GovernmentRecord.h"
 
+#include <algorithm>
+
 #define k_INITIAL_DB_SIZE 10
 #define k_GROW_DB_STEP 10
 
