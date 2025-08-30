@@ -455,7 +455,9 @@ template <class T> bool CTPDatabase<T>::GetRecordFromLexer(DBLexer * lex, sint32
 	sint32 tok = lex->GetToken();
 	if(tok != k_Token_Name) {
 		if(tok == k_Token_Int) {
-			index = atoi(lex->GetTokenText());
+			long tmpVal = strtol(lex->GetTokenText(), NULL, 10);
+			index = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));
+
 			return true;
 		}
 		else if(tok != k_Token_String){
@@ -497,7 +499,8 @@ template <class T> bool CTPDatabase<T>::GetCurrentRecordFromLexer(DBLexer *lex, 
 	sint32 tok = lex->GetCurrentToken();
 	if(tok != k_Token_Name) {
 		if(tok == k_Token_Int) {
-			index = atoi(lex->GetTokenText());
+			long tmpVal = strtol(lex->GetTokenText(), NULL, 10);
+			index = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));
 			return true;
 		}
 		else if(tok != k_Token_String){

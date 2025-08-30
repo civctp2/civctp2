@@ -231,7 +231,8 @@ bool DBLexer::GetIntAssignment(sint32 &value)
 		return false;
 	}
 
-	value = atoi(GetTokenText());
+	long tmpVal = strtol(GetTokenText(), NULL, 10);
+	value = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));
 	return true;
 }
 
@@ -242,7 +243,8 @@ bool DBLexer::GetInt(sint32 &value)
 		return false;
 	}
 
-	value = atoi(GetTokenText());
+	long tmpVal = strtol(GetTokenText(), NULL, 10);
+	value = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));
 	return true;
 }
 
@@ -250,7 +252,7 @@ bool DBLexer::GetFloatAssignment(double &value)
 {
 	sint32 tok = GetToken();
 	if(tok == k_Token_Float || tok == k_Token_Int) {
-		value = atof(GetTokenText());
+		value = strtod(GetTokenText(), NULL);
 		return true;
 	}
 	return false;
@@ -260,7 +262,7 @@ bool DBLexer::GetFloat(double &value)
 {
 	sint32 tok = GetCurrentToken();
 	if(tok == k_Token_Float || tok == k_Token_Int) {
-		value = atof(GetTokenText());
+		value = strtod(GetTokenText(), NULL);
 		return true;
 	}
 	return false;

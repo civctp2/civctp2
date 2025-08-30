@@ -53,7 +53,8 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 **array, sint32 *numElement
 	do
 	{
 		lex->GetToken();
-		sint32 value = atoi(lex->GetTokenText());
+		long   tmpVal = strtol(lex->GetTokenText(), NULL, 10);
+		sint32  value = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));
 		if(*numElements > 0)
 		{
 			sint32 *oldArray = *array;
@@ -86,7 +87,7 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double **array, sint32 *numEleme
 	do
 	{
 		lex->GetToken();
-		double value = atof(lex->GetTokenText());
+		double value = strtod(lex->GetTokenText(), NULL);
 		if(*numElements > 0)
 		{
 			double *oldArray = *array;
@@ -204,7 +205,8 @@ bool CTPRecord::ParseIntInArray(DBLexer *lex, sint32 *array, sint32 *numElements
 	do
 	{
 		lex->GetToken();
-		sint32 value = atoi(lex->GetTokenText());
+		long   tmpVal = strtol(lex->GetTokenText(), NULL, 10);
+		sint32  value = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));
 		if(*numElements >= maxSize) {
 			DBERROR(("Too many entries"));
 			return false;
@@ -229,7 +231,7 @@ bool CTPRecord::ParseFloatInArray(DBLexer *lex, double *array, sint32 *numElemen
 	do
 	{
 		lex->GetToken();
-		double value = atof(lex->GetTokenText());
+		double value = strtod(lex->GetTokenText(), NULL);
 		if(*numElements >= maxSize)
 		{
 			DBERROR(("Too many entries"));
