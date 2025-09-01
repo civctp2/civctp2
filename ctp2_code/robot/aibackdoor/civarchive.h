@@ -97,6 +97,7 @@ public:
 		void ResetForLoad(void);
 		uint8 *GetStream(void) { return (m_pbBaseMemory) ; }
 		size_t StreamLen(void) { return (m_ulLength) ; }
+		void DumpStream(const MBCHAR* fileName);
 
 		friend class GameFile ;
 		friend class GameMapFile ;
