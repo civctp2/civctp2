@@ -53,7 +53,7 @@
 extern StringDB						*g_theStringDB;
 extern Network						g_network;
 
-OptionsWindow::OptionsWindow( AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock, sint32 bpp,
+OptionsWindow::OptionsWindow( AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock, sint32 bpp,
 							 AUI_WINDOW_TYPE type, bool bevel) :
 c3_PopupWindow(retval,id,ldlBlock,bpp,type,bevel)
 {

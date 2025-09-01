@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Start the great library with the current research project of the player.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -276,7 +276,7 @@ void statswindow_ShowButtons( void )
 	}
 }
 
-void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	switch ( action ) {
@@ -296,7 +296,7 @@ void StatsSwitchActionCallback( aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void StatsButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -584,7 +584,7 @@ int StatsWindow_Cleanup( void )
 StatsWindow::StatsWindow(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	sint32 bpp,
 	AUI_WINDOW_TYPE type )
 	:
@@ -604,7 +604,7 @@ StatsWindow::StatsWindow(
 	sint32 width,
 	sint32 height,
 	sint32 bpp,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	AUI_WINDOW_TYPE type)
 	:
 	C3Window( retval, id, x, y, width, height, bpp, pattern, type )
@@ -625,7 +625,7 @@ AUI_ERRCODE StatsWindow::InitCommon(void)
 }
 
 
-AUI_ERRCODE StatsWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE StatsWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	InitCommon();
 	return C3Window::InitCommon();
@@ -663,7 +663,7 @@ BOOL StatsWindow::CheckCity( void )
 	}
 	else {
 
-		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_CITIES ),"SW_NO_CITIES",NULL, NULL, "str_ldl_MB_OK", false);
+		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_CITIES ),"SW_NO_CITIES",NULL, nullptr, "str_ldl_MB_OK", false);
 		return FALSE;
 	}
 }
@@ -677,7 +677,7 @@ BOOL StatsWindow::CheckUnit( void )
 	}
 	else {
 
-		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_UNITS ),"SW_NO_UNITS",NULL, NULL, "str_ldl_MB_OK", false);
+		MessageBoxDialog::Information(s_statsString->GetString( SW_NO_UNITS ),"SW_NO_UNITS",NULL, nullptr, "str_ldl_MB_OK", false);
 		return FALSE;
 	}
 }
@@ -698,7 +698,7 @@ BOOL StatsWindow::CheckDiplomacy( void )
 	}
 
 
-	MessageBoxDialog::Information(s_statsString->GetString( SW_NO_DIPLOMACY ),"SW_NO_DIPLOMACY",NULL, NULL, "str_ldl_MB_OK", false);
+	MessageBoxDialog::Information(s_statsString->GetString( SW_NO_DIPLOMACY ),"SW_NO_DIPLOMACY",NULL, nullptr, "str_ldl_MB_OK", false);
 	return FALSE;
 }
 

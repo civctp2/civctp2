@@ -71,7 +71,7 @@ class DiplomacyWindow {
 	sint32 m_sendThreat;
 	DiplomacyArg m_threatArg;
 
-	static char *sm_toneIcons[DIPLOMATIC_TONE_MAX];
+	static const char *sm_toneIcons[DIPLOMATIC_TONE_MAX];
 	bool m_selectingProgramatically;
 
   public:
@@ -107,41 +107,41 @@ class DiplomacyWindow {
 
 	static StringId GetProposalText(sint32 proposal, DIPLOMATIC_TONE tone, bool isExchange, bool useReciprocal);
 	StringId GetProposalSummaryText(sint32 proposal, DIPLOMATIC_TONE tone, bool isExchange, bool useReciprocal);
-	static bool AddProposalData(SlicObject &so, sint32 proposal, DiplomacyArg arg);
-	static bool AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg &arg);
+	static bool AddProposalData    (SlicObject &so, sint32 proposal, DiplomacyArg arg);
+	static bool AddThreatData      (SlicObject &so, sint32 threat, const DiplomacyArg &arg);
 
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ProposalsReceived(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Close              (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ProposalsReceived  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	void ShowReceivedProposalDetails();
-	static void Respond(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Accept(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Reject(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Counter(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Create(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Respond            (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Accept             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Reject             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Counter            (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Create             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	void SendProposal();
 	void SendCounter();
-	static void Send(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Send               (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void Civ(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static AUI_ERRCODE DrawCivColor(ctp2_Static *control, aui_Surface *surface, RECT &rect, void *cookie );
-	static void Tone(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Request(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Treaty(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Gift(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Exchange(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CreateList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ClearForm(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ProposalsMade(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ResponseOK(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ThreatenCounter(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void AcceptCounter(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void RejectCounter(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Civ                (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static AUI_ERRCODE DrawCivColor(ctp2_Static *control, aui_Surface *surface, RECT &rect, Cookie cookie );
+	static void Tone               (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Request            (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Treaty             (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Gift               (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Exchange           (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CreateList         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ClearForm          (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ProposalsMade      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ResponseOK         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ThreatenCounter    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void AcceptCounter      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void RejectCounter      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	bool ThreatContextMenu(sint32 threat);
-	static void ThreatList(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
-	static void MakeThreat(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CancelThreat(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	bool ThreatContextMenu         (sint32 threat);
+	static void ThreatList         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ThreatMenuCallback (ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
+	static void MakeThreat         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CancelThreat       (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	void SendThreat();
 
 	void Respond(RESPONSE_TYPE disposition);
@@ -156,30 +156,30 @@ class DiplomacyWindow {
 	void RequestPercentValue();
 
 	bool ProposalContextMenu(sint32 proposal);
-	void ProcessMenuSelection(sint32 itemIndex, void *cookie);
+	void ProcessMenuSelection(sint32 itemIndex, Cookie cookie);
 	void ProcessMenuCancel();
-	static void MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie);
+	static void MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie);
 
-	static void GoldSpinner(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GoldOk(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void GoldCancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void GoldSpinner    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GoldOk         (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void GoldCancel     (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void PollutionOk(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PollutionCancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void PollutionOk    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PollutionCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void PercentOk(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void PercentCancel(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void PercentOk      (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void PercentCancel  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void Intelligence(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DeclareWar(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void DeclareEmbargo(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SendMessage(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Details(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Intelligence   (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void DeclareWar     (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void DeclareEmbargo (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SendMessage    (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Details        (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static void TabPanelActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
-	static char **GetToneIcons() { return sm_toneIcons; }
+	static const char **GetToneIcons() { return sm_toneIcons; }
 
 	void SetSendProposal(sint32 prop);
 	void EnableRequests(bool enable);

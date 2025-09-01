@@ -191,6 +191,8 @@ void Anim::Process()
 		case ANIMTYPE_IDLE:
 			m_animPos = m_numFrames-1;
 			break;
+		default:
+			break;
 	}
 }
 
@@ -293,9 +295,9 @@ void Anim::Export(FILE * file)
 
 	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_NUM_FRAMES].keyword, m_numFrames);
 
-	fprintf(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_PLAYBACK_TIME].keyword, m_playbackTime);
+	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_PLAYBACK_TIME].keyword, m_playbackTime);
 
-	fprintf(file, "\t\t%s\t%ld\n", g_allTokens[TOKEN_ANIM_DELAY].keyword, m_delay);
+	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_ANIM_DELAY].keyword, m_delay);
 
 	fprintf(file, "\t\t%s", g_allTokens[TOKEN_ANIM_FRAME_DATA].keyword);
 	for (int i = 0; i < m_numFrames; i++)

@@ -12,7 +12,7 @@ void wondermoviewin_DisplayWonderMovie(sint32 id);
 
 void wondermoviewin_Cleanup();
 
-void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
+void wondermoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 AUI_ACTION_BASIC(CloseMovieAction);
 

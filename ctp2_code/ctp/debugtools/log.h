@@ -37,7 +37,7 @@ int Log_Enabled (LogClass log_class);
 
 int Log_OutputEnabled (void);
 
-void Log_Begin (const char *module_name, int module_line);
+void Log_Begin (const char *module_name, size_t module_line);
 #if defined(WIN32)
 void __cdecl Log_Middle (LogClass log_class, const char *format, ...);
 #else

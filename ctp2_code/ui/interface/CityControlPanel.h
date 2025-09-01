@@ -42,13 +42,14 @@ class ctp2_Static;
 class ctp2_DropDown;
 class CityData;
 class aui_Surface;
+union Cookie;
 
 #include "Unit.h"
 
 class CityControlPanel {
 public:
 
-	CityControlPanel(MBCHAR *ldlBlock);
+	CityControlPanel(const MBCHAR *ldlBlock);
 
 	void Update();
 
@@ -67,30 +68,30 @@ public:
 private:
 
 	static void PrevCityButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void NextCityButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void EditBuildQueueButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void RushBuyBuildButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void ToggleGovernorButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void SelectGovernorActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static void CitySelectActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE ProgressDrawCallback(ctp2_Static *control,
 											aui_Surface *surface,
 											RECT &rect,
-											void *cookie);
+											Cookie cookie);
 
 	bool GetSelectedCity(Unit & selectedCity);
 

@@ -198,8 +198,8 @@ struct DiplomacyArg
 {
 	DiplomacyArg()
 	:	playerId     (-1),
-		cityId       (-1),
-		armyId       (-1),
+		cityId       (0),
+		armyId       (0),
 		agreementId  (-1),
 		advanceType  (-1),
 		unitType     (-1),
@@ -264,8 +264,8 @@ struct DiplomacyArg
 	}
 
 	PLAYER_INDEX playerId;
-	sint32       cityId;
-	sint32       armyId;
+	uint32       cityId;
+	uint32       armyId;
 	sint32       agreementId;
 	sint32       advanceType;
 	sint32       unitType;

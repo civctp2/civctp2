@@ -386,7 +386,7 @@ bool BoundingRect::Get(const sint32 & index, MapPoint & pos, const sint32 & max_
 		Assert(false);
 		return false;
 	}
-#endif _DEBUG
+#endif // _DEBUG
 
 	return true;
 }

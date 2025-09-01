@@ -45,33 +45,35 @@
 //     addition to the standard parsed record syntax.
 //
 // - Added return type void to Init function to make .NET quiet about the
-//   missing return type, by Martin Gühmann.
+//   missing return type, by Martin GÃ¼hmann.
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged
-//   in that is set. - Sep. 28th 2004 Martin Gühmann
-// - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
+//   in that is set. - Sep. 28th 2004 Martin GÃ¼hmann
+// - Added serilization method export. (Aug 24th 2005 Martin GÃ¼hmann)
 // - Output files only have spaces instead of tabs as indent and indetion
-//   was fixed. (Aug 25th 2005 Martin Gühmann)
+//   was fixed. (Aug 25th 2005 Martin GÃ¼hmann)
 // - Added alias names and the possibility to have default values from
-//   other entries. (Aug 26th 2005 Martin Gühmann)
-// - Added accessors for slic database array access. (Sep 16th 2005 Martin Gühman)
-// - Made float arrays possible. (Sep 16th 2005 Martin Gühman)
-// - Made value of int databases accessable. (Sep 16th 2005 Martin Gühman)
+//   other entries. (Aug 26th 2005 Martin GÃ¼hmann)
+// - Added accessors for slic database array access. (Sep 16th 2005 Martin GÃ¼hman)
+// - Made float arrays possible. (Sep 16th 2005 Martin GÃ¼hman)
+// - Made value of int databases accessable. (Sep 16th 2005 Martin GÃ¼hman)
 // - If database records have no name a default name is generated. e.g.
-//   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin Gühman)
+//   DIFFICULTY_5 for the sixth entry in the DifficultyDB. (Jan 3rd 2006 Martin GÃ¼hman)
 // - Added ParseNum so that a certain number of entries can be parsed if
-//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
-// - Added default tokens for database records. (July 15th 2006 Martin Gühmann)
-// - Added map.txt support. (27-Mar-2007 Martin Gühmann)
-// - Added Const.txt support. (29-Jul-2007 Martin Gühmann)
+//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin GÃ¼hmann)
+// - Added default tokens for database records. (July 15th 2006 Martin GÃ¼hmann)
+// - Added map.txt support. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added Const.txt support. (29-Jul-2007 Martin GÃ¼hmann)
 // - Added support for default values taken from other databases like the
-//   Const database. (9-Dec-2007 Martin Gühmann)
+//   Const database. (9-Dec-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 #include "ctp2_config.h"
 #include "ctp2_inttypes.h"
 
+#if defined(_MSC_VER)
 #pragma warning(disable:4786)   // (Level ?)   identifier length over 255 (with templates)
+#endif
 
 #include <stdio.h>
 #include <string.h>
@@ -436,7 +438,7 @@ void RecordDescription::ExportBits(FILE *outfile)
 				fprintf(outfile, "//\n// m_flags%d: %s\n", bit / 32, m_name);
 			}
 			sprintf(nicename, "k_%s_%s_Bit", m_name, dat->m_name);
-			fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << (bit % 32));
+			fprintf(outfile, "#define %-40s 0x%08x\n", nicename, 1 << (bit % 32));
 			bit++;
 		}
 	}
@@ -458,7 +460,7 @@ void RecordDescription::ExportBits(FILE *outfile)
 			)
 			{
 				sprintf(nicename, "k_%s_%s_%s_Bit", m_name, dat->m_name, node->name);
-				fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << bit);
+				fprintf(outfile, "#define %-40s 0x%08x\n", nicename, 1 << bit);
 				bit++;
 				Assert(bit <= 32);
 			}
@@ -1121,7 +1123,8 @@ void RecordDescription::ExportPreBodyTokens(FILE *outfile)
 				case DATUM_INT:
 					fprintf(outfile, "    if(tok == k_Token_Int) {\n");
 					fprintf(outfile, "        s_ParsedTokens.SetBit(k_Token_%s_%s - k_Token_Custom_Base);\n", m_name, dat->m_name);
-					fprintf(outfile, "        m_%s = atoi(lex->GetTokenText());\n", dat->m_name);
+					fprintf(outfile, "        long tmpVal = strtol(lex->GetTokenText(), NULL, 10);\n");
+					fprintf(outfile, "        m_%s = static_cast<sint32>(tmpVal > 0 ? std::min<long>(tmpVal, INT_MAX) : std::max<long>(tmpVal, INT_MIN));\n", dat->m_name);
 					fprintf(outfile, "        tok = lex->GetToken();\n");
 					fprintf(outfile, "    }\n");
 					break;

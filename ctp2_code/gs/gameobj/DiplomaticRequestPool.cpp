@@ -22,40 +22,14 @@ extern TurnCount *g_turn;
 #include "Diplomacy_Log.h"
 extern Diplomacy_Log *g_theDiplomacyLog;
 
-
-
-
-
-
-
-
 DiplomaticRequestPool::DiplomaticRequestPool() : ObjPool(k_BIT_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST)
-	{
-	}
-
-
-
-
-
-
-
-
+{
+}
 
 DiplomaticRequestPool::DiplomaticRequestPool(CivArchive &archive) : ObjPool(k_BIT_GAME_OBJ_TYPE_DIPLOMATIC_REQUEST)
-	{
+{
 	Serialize(archive) ;
-	}
-
-
-
-
-
-
-
-
-
-
-
+}
 
 void DiplomaticRequestPool::Serialize(CivArchive &archive)
 {
@@ -87,25 +61,8 @@ void DiplomaticRequestPool::Serialize(CivArchive &archive)
 	}
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 DiplomaticRequest DiplomaticRequestPool::Create(PLAYER_INDEX owner, PLAYER_INDEX recipient, REQUEST_TYPE request)
-	{
+{
 	DiplomaticRequestData* newData;
 
 #ifdef _DEBUG
@@ -147,11 +104,7 @@ DiplomaticRequest DiplomaticRequestPool::Create(PLAYER_INDEX owner, PLAYER_INDEX
 		}
 #endif
 	return (newRequest) ;
-	}
-
-
-
-
+}
 
 DiplomaticRequestData *DiplomaticRequestPool::CreateData()
 {
@@ -162,38 +115,25 @@ DiplomaticRequestData *DiplomaticRequestPool::CreateData()
 	return newData;
 }
 
-
-
-
-
-
-
-
-
-
-
-
 void DiplomaticRequestPool::EndTurn(const PLAYER_INDEX sender)
-	{
-	sint32	i ;
-
+{
 	MessageDynamicArray	msgExpired;
 
-	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
-		{
+	for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+	{
 		if(m_table[i])
-			{
+		{
 			EndTurn((DiplomaticRequestData*)m_table[i], sender, msgExpired);
-			}
-
 		}
 
-	for(i = msgExpired.Num() - 1; i >= 0; i--)
-		{
+	}
+
+	for(sint32 i = msgExpired.Num() - 1; i >= 0; i--)
+	{
 		if(g_theMessagePool->IsValid(msgExpired[i]))
 			msgExpired[i].Kill();
-		}
 	}
+}
 
 void DiplomaticRequestPool::EndTurn(DiplomaticRequestData *top,
 									const PLAYER_INDEX sender,
@@ -203,5 +143,4 @@ void DiplomaticRequestPool::EndTurn(DiplomaticRequestData *top,
 		EndTurn(top->GetLesser(), sender, msgExpired);
 	if(top->GetGreater())
 		EndTurn(top->GetGreater(), sender, msgExpired);
-
 }

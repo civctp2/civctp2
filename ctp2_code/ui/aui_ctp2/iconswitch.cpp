@@ -15,11 +15,11 @@ IconSwitch::IconSwitch(
 	uint32 id,
 	sint32 x,
 	sint32 y,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	Icon *icon,
 	uint16 color,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 :
 	aui_ImageBase( (sint32)0 ),

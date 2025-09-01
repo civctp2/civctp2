@@ -9,6 +9,7 @@ class aui_Surface;
 class aui_Control;
 class ctp2_Button;
 class C3Slider;
+union Cookie;
 
 #include "Unit.h"
 #include "pointerlist.h"
@@ -67,7 +68,7 @@ class TradeManager
 	static AUI_ERRCODE Display();
 	static AUI_ERRCODE Hide();
 
-	static void TabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void TabCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	static void SetMode(TRADE_MANAGER_MODE mode);
 	static void Notify();
 	void Update();
@@ -76,31 +77,31 @@ class TradeManager
 	void UpdateAdviceText();
 	void UpdateSummaryList(ctp2_ListBox *summaryList, bool source= true);
 
-	static void Close(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void CreateRoute(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ShowAdvice(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void Summary(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void ListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void SummaryListSelect(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void CreateRoute(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ShowAdvice(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void Summary(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void ListSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SummaryListSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 	void FilterButtonActivated(aui_Control *control);
-	static void CityFilterButton(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CityFilterButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 	static sint32 CompareCreateItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 	static sint32 CompareSummaryItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column);
 	static AUI_ERRCODE DrawNationColumn(ctp2_Static *control,
 													  aui_Surface *surface,
 													  RECT &rect,
-													  void *cookie);
+													  Cookie cookie);
 	static AUI_ERRCODE DrawPiracyColumn(ctp2_Static *control,
 													  aui_Surface *surface,
 													  RECT &rect,
-													  void *cookie);
+													  Cookie cookie);
 
 	static void InitializeEvents();
 	static void CleanupEvents();
 
 	void SetNumCities(sint32 num);
-	static void NumCitiesSlider(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void NumCitiesSlider(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 };
 
 #endif

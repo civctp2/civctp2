@@ -36,36 +36,36 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* #include <unixlib.h> */
 /* #include <rms.h> */
 
-static int KeyBoard_Quit = 0;
-int INPUT_BUFFER_LEN;
+static sint32 KeyBoard_Quit = 0;
+sint32 INPUT_BUFFER_LEN;
 char INPUT_BUFFER[255];
 
 typedef struct {                /* I/O status block     */
-        short i_cond;           /* Condition value      */
-        short i_xfer;           /* Transfer count     */
-        long  i_info;           /* Device information     */
+        sint16 i_cond;           /* Condition value      */
+        sint16 i_xfer;           /* Transfer count     */
+        sint32  i_info;           /* Device information     */
 } iosb;
 
 typedef struct {                /* Terminal characteristics   */
         char  t_class;          /* Terminal class     */
         char  t_type;           /* Terminal type      */
-        short t_width;          /* Terminal width in characters   */
-        long  t_mandl;          /* Terminal's mode and length   */
-        long  t_extend;         /* Extended terminal characteristics  */
+        sint16 t_width;          /* Terminal width in characters   */
+        sint32  t_mandl;          /* Terminal's mode and length   */
+        sint32  t_extend;         /* Extended terminal characteristics  */
 }  termchar;
 
-short TTY_CHANNEL_GLOBAL;
+sint16 TTY_CHANNEL_GLOBAL;
 
 /*
  *      Exit Handler Control Block
  */
 static struct argument_block
   {
-      int forward_link;
-      int (*exit_routine)();
-      int arg_count;
-      int *status_address;
-      int exit_status;
+      sint32 forward_link;
+      sint32 (*exit_routine)();
+      sint32 arg_count;
+      sint32 *status_address;
+      sint32 exit_status;
   }
 exit_block =
   {
@@ -76,23 +76,23 @@ exit_block =
       0
   };
 
-int vms_input_buffer;
+sint32 vms_input_buffer;
 
 static struct vms_ast_iosb
 {
-    short status;
-    short offset;
-    short termlen;
-    short term;
+    sint16 status;
+    sint16 offset;
+    sint16 termlen;
+    sint16 term;
 } vms_ast_iosb;
 
 extern void vms_que_key_ast();
-int vms_event_flag;
-int event_flag_mask;
-int ast_stop_input = 0;
-int waiting_for_ast;
+sint32 vms_event_flag;
+sint32 event_flag_mask;
+sint32 ast_stop_input = 0;
+sint32 waiting_for_ast;
 
-int getkey_ast(int x)
+sint32 getkey_ast(sint32 x)
 {
    char c = -1;
 
@@ -116,8 +116,8 @@ int getkey_ast(int x)
 
 void vms_que_key_ast()
 {
-   static int trmmsk [2] = { 0, 0 };
-   int status;
+   static sint32 trmmsk [2] = { 0, 0 };
+   sint32 status;
 
    if (ast_stop_input) return;
    status = SYS$QIO (0, TTY_CHANNEL_GLOBAL,
@@ -136,7 +136,7 @@ void reset_tty()
  Call with 1 to install, 0 to deinstall raw mode
 --------------------------------------------------------------------------*/
 void raw_set_stdio(init)
-    int init;
+    sint32 init;
 {
     $DESCRIPTOR ( Term, "SYS$ERROR");
 
@@ -160,7 +160,7 @@ void raw_set_stdio(init)
 	/* allocate an event flag and clear it--- used by ast routines */
 	if (!vms_event_flag) LIB$GET_EF (&vms_event_flag);
 	SYS$CLREF (vms_event_flag);
-	event_flag_mask = ((unsigned) 1 << (vms_event_flag % 32));
+	event_flag_mask = ((uint32) 1 << (vms_event_flag % 32));
 
 	waiting_for_ast = 0;
 	ast_stop_input = 0;
@@ -173,7 +173,7 @@ void raw_set_stdio(init)
 
 static char getkey()
 {
-   int i, imax;
+   sint32 i, imax;
    char ch;
    if (!INPUT_BUFFER_LEN) return(3); /* kludge; was sys_getkey()); */
    ch = INPUT_BUFFER[0];
@@ -190,7 +190,7 @@ static char getkey()
 /*--------------------------------------------------------------------------
  Return -1 if no key, 3 if user hit interrupt key, otherwise return key.
 --------------------------------------------------------------------------*/
-int raw_getc()
+sint32 raw_getc()
 {
    char c;
 
@@ -219,7 +219,7 @@ int raw_getc()
 /*--------------------------------------------------------------------------
  Return 0 if no key ready, 1 if key ready.
 --------------------------------------------------------------------------*/
-int raw_kbhit()
+sint32 raw_kbhit()
 {
     if (KeyBoard_Quit) return 1;
     return(INPUT_BUFFER_LEN);
@@ -229,23 +229,23 @@ int raw_kbhit()
  Get the size of the terminal
 --------------------------------------------------------------------------*/
 void raw_get_term_dimensions(cols, rows)
-    int *cols;
-    int *rows;
+    sint32 *cols;
+    sint32 *rows;
 {
-   int status;
+   sint32 status;
    iosb iostatus;
    $DESCRIPTOR(devnam, "SYS$ERROR");
    struct
      {
-	short row_buflen;
-	short row_itmcod;
-	int *row_bufadr;
-	short *row_retlen;
-	short col_buflen;
-	short col_itmcod;
-	int *col_bufadr;
-	short *col_retlen;
-	int listend;
+	sint16 row_buflen;
+	sint16 row_itmcod;
+	sint32 *row_bufadr;
+	sint16 *row_retlen;
+	sint16 col_buflen;
+	sint16 col_itmcod;
+	sint32 *col_bufadr;
+	sint16 *col_retlen;
+	sint32 listend;
      }
    itmlst =
      {

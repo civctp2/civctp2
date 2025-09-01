@@ -234,7 +234,7 @@ sint32                g_is_debug_map_color;
 BOOL                  g_show_ai_dbg;
 bool                  g_doingFastRounds = false;
 
-extern BOOL           g_ai_revolt = TRUE;
+extern BOOL           g_ai_revolt;
 
 extern void WhackScreen();
 
@@ -1166,7 +1166,7 @@ void ShowVisCommand::Execute(sint32 argc, char **argv)
 
 		for(u = 0; u < g_player[p]->m_all_armies->Num(); u++) {
 			char buf[40];
-			sprintf(buf, "VIS: %lx", g_player[p]->m_all_armies->Access(u).Access(0).GetVisibility());
+			sprintf(buf, "VIS: %x", g_player[p]->m_all_armies->Access(u).Access(0).GetVisibility());
 			g_graphicsOptions->AddTextToArmy(g_player[p]->m_all_armies->Access(u), buf, 255, -1);
 		}
 	}
@@ -1932,14 +1932,14 @@ void SlicVariableCommand::Execute(sint32 argc, char **argv)
 				MapPoint pos;
 				char buf[1024];
 				if(sym->GetUnit(u)) {
-					sprintf(buf, "%s=Unit    %lx", sym->GetName(), u.m_id);
+					sprintf(buf, "%s=Unit    %x", sym->GetName(), u.m_id);
 					if(g_theUnitPool->IsValid(u)) {
 						sprintf(buf + strlen(buf), ", Type=%d", u.GetType());
 					} else {
 						sprintf(buf + strlen(buf), " [Invalid unit]");
 					}
 				} else if(sym->GetCity(u)) {
-					sprintf(buf, "%s=City    %lx", sym->GetName(), u.m_id);
+					sprintf(buf, "%s=City    %x", sym->GetName(), u.m_id);
 					if(!g_theUnitPool->IsValid(u)) {
 						strcat(buf, " [Invalid city]");
 					} else {
@@ -2507,8 +2507,7 @@ void SlicCommand::Execute(sint32 argc, char **argv)
 	outputBuf[0] = 0;
 	char catString = 0;
 	if(strnicmp(argv[0], "slic", strlen(argv[0])) == 0) {
-		sint32 res;
-		res = sliccmd_parse(SLICCMD_WATCH, buf, outputBuf, 1024, 0, &catString);
+		sliccmd_parse(SLICCMD_WATCH, buf, outputBuf, 1024, 0, &catString);
 		DPRINTF(k_DBG_SLIC, ("%s\n", outputBuf));
 	} else {
 		sliccmd_parse(SLICCMD_ASSN, buf, outputBuf, 1024, 1, &catString);
@@ -5562,7 +5561,7 @@ void CreateCommand::Execute(sint32 argc, char** argv)
 	        city = Unit();
         }
 
-        Unit newu = g_player[player]->CreateUnit(type, pos, city,
+        g_player[player]->CreateUnit(type, pos, city,
 										         FALSE, CAUSE_NEW_ARMY_INITIAL);
     }
 }
@@ -5612,9 +5611,10 @@ void LoadAIPCommand::Execute(sint32 argc, char **argv)
 	if (argc!=3)
 		return;
 
-	sint32 team_idx;
+	Assert(false);
+/*	sint32 team_idx;
 
-	team_idx = atoi(argv[2]);
+	team_idx = atoi(argv[2]);*/
 
 
 }
@@ -5634,11 +5634,12 @@ void LogAICommand::Execute(sint32 argc, char **argv)
 	if (argc!=3)
 		return;
 
-	sint32 team_idx;
+	Assert(false);
+/*	sint32 team_idx;
 	sint32 log_level;
 
 	log_level = atoi(argv[1]);
-	team_idx = atoi(argv[2]);
+	team_idx = atoi(argv[2]);*/
 
 
 }
@@ -5708,29 +5709,29 @@ void SeeWWRCommand::Execute(sint32 argc, char**argv)
 
 void SetWorkdayCommand::Execute(sint32 argc, char**argv)
 {
-    if(argc > 2)
-        return;
+	if(argc > 2)
+		return;
 
 	sint32 val = (PLAYER_INDEX)atoi(argv[1]);
-    g_player[g_selected_item->GetVisiblePlayer()]->SetWorkdayLevel(val);
+	g_player[g_selected_item->GetVisiblePlayer()]->SetWorkdayLevel(val);
 }
 
 void SetWagesCommand::Execute(sint32 argc, char** argv)
 {
-   	if(argc > 2)
-        return;
+	if(argc > 2)
+		return;
 
 	sint32 val = (PLAYER_INDEX)atoi(argv[1]);
-    g_player[g_selected_item->GetVisiblePlayer()]->SetWagesLevel(val);
+	g_player[g_selected_item->GetVisiblePlayer()]->SetWagesLevel(val);
 }
 
 void SetRationsCommand::Execute(sint32 argc, char** argv)
 {
-  	if(argc > 2)
-        return;
+	if(argc > 2)
+		return;
 
 	sint32 val = (PLAYER_INDEX)atoi(argv[1]);
-    g_player[g_selected_item->GetVisiblePlayer()]->SetRationsLevel(val);
+	g_player[g_selected_item->GetVisiblePlayer()]->SetRationsLevel(val);
 }
 
 void AddMaterialsCommand::Execute(sint32 argc, char **argv)
@@ -5751,12 +5752,12 @@ void AddMaterialsCommand::Execute(sint32 argc, char **argv)
 
 void SetMaterialsPercentCommand::Execute(sint32 argc, char** argv)
 {
-  	if(argc > 2)
-        return;
+	if(argc > 2)
+		return;
 
 	sint32 val = (PLAYER_INDEX)atoi(argv[1]);
-    double d = double (val) * 0.01;
-    g_player[g_selected_item->GetVisiblePlayer()]->SetMaterialsTax(d);
+	double d = double (val) * 0.01;
+	g_player[g_selected_item->GetVisiblePlayer()]->SetMaterialsTax(d);
 }
 
 void ThroneRoomUpgradeCommand::Execute(sint32 argc, char** argv)
@@ -5986,7 +5987,9 @@ void LeaksShowCommand::Execute(sint32 argc, char **argv)
 
 void SuperFastDebugModeCommand::Execute(sint32 argc, char **argv)
 {
-	BOOL		on;
+	Assert(false);
+
+/*	BOOL		on;
 
 	if(argc == 2) {
 		if (!strcmp(argv[1],"on")) {
@@ -5996,11 +5999,7 @@ void SuperFastDebugModeCommand::Execute(sint32 argc, char **argv)
 				on = FALSE;
 			}
 		}
-	}
-
-
-
-
+	}*/
 }
 
 void LoadDBCommand::Execute(sint32 argc, char **argv)
@@ -6256,11 +6255,12 @@ void LoadDBCommand::Execute(sint32 argc, char **argv)
 
 void DRayTestCode::Execute(sint32 argc, char **argv)
 {
-	int const curRound	= std::min<sint32>(NewTurnCount::GetCurrentRound(), 200);
+	Assert(false);
+/*	int const curRound	= std::min<sint32>(NewTurnCount::GetCurrentRound(), 200);
 	int turnStrength[200];
 	int i;
 	for(i=0; i<curRound; i++)
-		turnStrength[i] = g_player[g_selected_item->GetVisiblePlayer()]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,i);
+		turnStrength[i] = g_player[g_selected_item->GetVisiblePlayer()]->m_strengths->GetTurnStrength(STRENGTH_CAT_WONDERS,i);*/
 
 	return;
 }
@@ -6377,6 +6377,9 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 								i, tradeOffers->Get(j).GetOfferResource(),
 								(uint32)tradeOffers->Get(j).GetFromCity());
 						break;
+					case ROUTE_TYPE_SLAVE:
+						Assert(false);
+						break;
 				}
 				switch(tradeOffers->Get(j).GetAskingType()) {
 					case ROUTE_TYPE_RESOURCE:
@@ -6390,6 +6393,9 @@ void CommandLine::DisplayOutput(aui_Surface* surf)
 					case ROUTE_TYPE_FOOD:
 						sprintf(buf2, "%d food",
 								tradeOffers->Get(j).GetAskingResource());
+						break;
+					case ROUTE_TYPE_SLAVE:
+						Assert(false);
 						break;
 				}
 				strcat(buf, buf2);

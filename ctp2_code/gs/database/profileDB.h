@@ -138,7 +138,7 @@ enum WORLD_SHAPE
 class ProfileVar
 {
 public:
-    ProfileVar(char *name, PROF_VAR_TYPE type, sint32 *numValue,
+    ProfileVar(const char *name, PROF_VAR_TYPE type, sint32 *numValue,
                char *stringValue, bool visible)
     :
         m_name          (name),
@@ -148,7 +148,7 @@ public:
         m_visible       (visible)
     { ; }
 
-    char *m_name;
+    const char *m_name;
     PROF_VAR_TYPE m_type;
     sint32 *m_numValue;
     char *m_stringValue;
@@ -307,7 +307,6 @@ private:
     sint32 m_battleSpeed;
 
     sint32 m_showEnemyHealth;  //emod1 - already here but implementing a scenario editor switch
-    sint32 m_debugai;   //emod1
     sint32 m_scrollDelay;
 
     sint32 m_autoRenameCities;
@@ -387,7 +386,7 @@ private:
     sint32 m_AINoSinking;
     /// gold unit support
     sint32 m_GoldPerUnitSupport;
-    //gold per city
+    /// gold per city
     sint32 m_GoldPerCity;
     /// empty ai units spawn cheapest unit
     sint32 m_AIMilitiaUnit;
@@ -395,7 +394,11 @@ private:
     sint32 m_OneCityChallenge;
     /// energy demand-supply ratio affects production and gold
     sint32 m_NRG;
+    /// Show army goals
+    sint32 m_debugai;   //emod1
+    /// Destroyed cities leave ruins
     sint32 m_ruin;
+    /// Disables the city limit
     sint32 m_NoCityLimit;
     /// Shows the path along that a city governor would build a road
     sint32 m_DebugCityAstar;
@@ -443,7 +446,7 @@ public:
 
     BOOL Parse(FILE *file);
 
-    void Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
+    void Var(const char *name, PROF_VAR_TYPE type, sint32 *numValue,
              char *stringValue, bool visible = true);
     void Save();
 

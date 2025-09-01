@@ -15,9 +15,9 @@ public:
 	TextTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL);
+		Cookie cookie = nullptr);
 	TextTab(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -27,10 +27,10 @@ public:
 		sint32 height,
 		sint32 paneWidth,
 		sint32 paneHeight,
-		MBCHAR *pattern = NULL,
-		MBCHAR *text = NULL,
+		const MBCHAR *pattern = NULL,
+		const MBCHAR *text = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = nullptr,
 		BOOL selected = FALSE );
 	virtual ~TextTab() {}
 

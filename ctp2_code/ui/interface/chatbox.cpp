@@ -126,7 +126,7 @@ ChatBox::~ChatBox()
 	delete m_chatWindow;
 }
 
-void ChatBox::AddText(MBCHAR *text)
+void ChatBox::AddText(const MBCHAR *text)
 {
 	m_chatWindow->GetTextBox()->AppendHyperText(text);
 
@@ -151,7 +151,7 @@ void ChatBox::SetActive(bool active)
 	m_active = active;
 }
 
-void ChatBox::AddLine(sint32 playerNum, MBCHAR *text)
+void ChatBox::AddLine(sint32 playerNum, const MBCHAR *text)
 {
 	COLOR		color = g_colorSet->ComputePlayerColor(playerNum);
 	COLORREF	colorRef = g_colorSet->GetColorRef(color);
@@ -181,7 +181,7 @@ ChatWindow::ChatWindow
 (
     AUI_ERRCODE *   retval,
     uint32          id,
-    MBCHAR *        ldlBlock,
+    const MBCHAR *  ldlBlock,
     sint32          bpp,
     AUI_WINDOW_TYPE type,
     ChatBox *       parent
@@ -203,13 +203,13 @@ ChatWindow::~ChatWindow()
 	// m_chatBox not deleted: reference only
 }
 
-AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE ChatWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			controlBlock[k_AUI_LDL_MAXBLOCK + 1];
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 
 	sprintf(controlBlock, "%s.%s", ldlBlock, "ChatTextBox");
-	m_textBox = new c3_HyperTextBox(&errcode, aui_UniqueId(), controlBlock, NULL, NULL);
+	m_textBox = new c3_HyperTextBox(&errcode, aui_UniqueId(), controlBlock, NULL, nullptr);
 	Assert( AUI_NEWOK(m_textBox, errcode) );
 	if ( !AUI_NEWOK(m_textBox, errcode) ) return AUI_ERRCODE_MEMALLOCFAILED;
 	AddControl(m_textBox);
@@ -234,7 +234,7 @@ AUI_ERRCODE ChatWindow::InitCommonLdl(MBCHAR *ldlBlock)
 	return AUI_ERRCODE_OK;
 }
 
-void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF colorRef)
+void ChatWindow::ColorizeString(MBCHAR *destString, const MBCHAR *srcString, COLORREF colorRef)
 {
 	if (!destString) return;
 	if (!srcString) return;
@@ -254,12 +254,12 @@ void ChatWindow::ColorizeString(MBCHAR *destString, MBCHAR *srcString, COLORREF 
 	strcat(destString, colorString);
 }
 
-void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_TEXTFIELD_ACTION_EXECUTE)
 		return;
 
-	ChatWindow		*chatWindow = (ChatWindow *)cookie;
+	ChatWindow		*chatWindow = (ChatWindow *)cookie.m_voidPtr;
 
 	MBCHAR			str[k_CHATBOX_LINE_LENGTH];
 
@@ -280,7 +280,7 @@ void ChatWindow::ChatCallback(aui_Control *control, uint32 action, uint32 data, 
 	g_network.SendChatText(str, strlen(str));
 }
 
-BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
+BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 {
 	// Does nothing
 	if (!strcmp(s, "pacman"))
@@ -303,7 +303,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 		MSG	msg;
 #endif
 
-		MBCHAR * temp = s+4;
+		const MBCHAR * temp = s+4;
 		while (isspace(*temp))
 			temp++;
 
@@ -496,7 +496,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	// Turns the given player into a robot player
 	else if(!strncmp(s, "/attach", 7) && !g_network.IsActive())
 	{
-		MBCHAR *arg = s + 7;
+		const MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
 
@@ -534,7 +534,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	// Turns the given player into a human player
 	else if(!strncmp(s, "/detach", 7) && !g_network.IsActive())
 	{
-		MBCHAR *arg = s + 7;
+		const MBCHAR *arg = s + 7;
 		while(isspace(*arg))
 			arg++;
 
@@ -693,7 +693,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	// Displays the AI settle value of a cell on the map
 	else if(!strncmp(s, "/debugcells", 11)  && !g_network.IsActive())
 	{
-		MBCHAR *arg = s + 11;
+		const MBCHAR *arg = s + 11;
 		while (isspace(*arg))
 				arg++;
 
@@ -747,7 +747,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 
 	else if(!strncmp(s, "/beginscheduler", 15)  && !g_network.IsActive())
 	{
-		MBCHAR *arg = s + 15;
+		const MBCHAR *arg = s + 15;
 		while(isspace(*arg))
 			arg++;
 
@@ -824,7 +824,7 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 	// Sets the debug logging player
 	else if(!strncmp(s, "/debugplayer", 12) && !g_network.IsActive())
 	{
-		MBCHAR *arg = s + 12;
+		const MBCHAR *arg = s + 12;
 		while(isspace(*arg))
 			arg++;
 

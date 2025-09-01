@@ -9,4 +9,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __STRATEGIC_STATE_EVENT_H__
+#endif // __STRATEGIC_STATE_EVENT_H__

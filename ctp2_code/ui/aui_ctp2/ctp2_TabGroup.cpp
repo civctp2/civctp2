@@ -36,7 +36,7 @@
 #include "ctp2_TabButton.h"
 
 ctp2_TabGroup::ctp2_TabGroup(AUI_ERRCODE *retval, uint32 id, const MBCHAR *ldlBlock,
-							 ControlActionCallback *ActionFunc, void *cookie) :
+							 ControlActionCallback *ActionFunc, Cookie cookie) :
 aui_ImageBase(ldlBlock),
 aui_TextBase(ldlBlock, (const MBCHAR *) NULL),
 aui_Control(retval, id, ldlBlock, ActionFunc, cookie),

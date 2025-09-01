@@ -24,21 +24,21 @@
 //
 // Modifications from the original Activision code:
 //
-// - Members of substructs can now have default values, added by Martin Gühmann.
+// - Members of substructs can now have default values, added by Martin GÃ¼hmann.
 // - Modified AddBitPair function to allow bit pairs to have default values
 //   so that when two records are merged, only the bit is merged
-//   in that is set. - Sep. 28th 2004 Martin Gühmann
-// - Added serilization method export. (Aug 24th 2005 Martin Gühmann)
+//   in that is set. - Sep. 28th 2004 Martin GÃ¼hmann
+// - Added serilization method export. (Aug 24th 2005 Martin GÃ¼hmann)
 // - Output files only have spaces instead of tabs as indent and indention
-//   was fixed. (Aug 25th 2005 Martin Gühmann)
-// - Added alias names. (Aug 26th 2005 Martin Gühmann)
+//   was fixed. (Aug 25th 2005 Martin GÃ¼hmann)
+// - Added alias names. (Aug 26th 2005 Martin GÃ¼hmann)
 // - Costum structs can now include other custom structs, given both are
-//   direct members of the record class (Support for DiffDB). (Sep 15th 2005 Martin Gühmann)
-// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin Gühmann)
-// - Fixed subsubstruct generation so that it can be used in DiffDB.txt. (April 29th 2006 Martin Gühmann)
+//   direct members of the record class (Support for DiffDB). (Sep 15th 2005 Martin GÃ¼hmann)
+// - Parser for struct ADVANCE_CHANCES of DiffDB.txt can now be generated. (Jan 3rd 2006 Martin GÃ¼hmann)
+// - Fixed subsubstruct generation so that it can be used in DiffDB.txt. (April 29th 2006 Martin GÃ¼hmann)
 // - Added ParseNum so that a certain number of entries can be parsed if
-//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin Gühmann)
-// - Added map.txt support. (27-Mar-2007 Martin Gühmann)
+//   braces are missing so that the old pollution database can be supported. (July 15th 2006 Martin GÃ¼hmann)
+// - Added map.txt support. (27-Mar-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -80,7 +80,7 @@ void MemberClass::AddDatum(DATUM_TYPE type, struct namelist *nameInfo,
 	dat->m_maxSize = maxSize;
 	dat->m_subType = subType;
 
-	//Added by Martin Gühmann to allow struct members to have default values
+	//Added by Martin GÃ¼hmann to allow struct members to have default values
 	if(!(nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
 	&&   maxSize <= 0
 	){
@@ -118,13 +118,13 @@ void MemberClass::AddGroupedBits(char *name, struct namelist *list)
 	Assert("Group Bits in Member classes not yet supported" == 0);
 }
 
-//Added by Martin Gühmann
+//Added by Martin GÃ¼hmann
 void MemberClass::AddBitPair(struct namelist *nameInfo, sint32 minSize, sint32 maxSize, struct bitpairtype *pairtype)
 {
 	Datum *dat = new Datum(nameInfo->name, DATUM_BIT_PAIR);
 	dat->m_minSize = minSize;
 	dat->m_maxSize = maxSize;
-	// Added by Martin Gühmann for adding default values
+	// Added by Martin GÃ¼hmann for adding default values
 	if((nameInfo->flags & k_NAMEVALUE_HAS_VALUE)
 	|| (maxSize > 0)
 	){
@@ -169,7 +169,7 @@ void MemberClass::ExportBits(FILE *outfile)
 				fprintf(outfile, "//\n// m_flags%d: %s\n", bit / 32, m_name);
 			}
 			sprintf(nicename, "k_%s_%s_Bit", m_name, dat->m_name);
-			fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << (bit % 32));
+			fprintf(outfile, "#define %-40s 0x%08x\n", nicename, 1 << (bit % 32));
 			bit++;
 		}
 		walk.Next();
@@ -184,7 +184,7 @@ void MemberClass::ExportBits(FILE *outfile)
 			struct namelist *node = dat->m_groupList;
 			while(node) {
 				sprintf(nicename, "k_%s_%s_%s_Bit", m_name, dat->m_name, node->name);
-				fprintf(outfile, "#define %-40s 0x%08lx\n", nicename, 1 << bit);
+				fprintf(outfile, "#define %-40s 0x%08x\n", nicename, 1 << bit);
 				bit++;
 				Assert(bit <= 32);
 				node = node->next;

@@ -24,13 +24,13 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin Gühmann)
-// - Added the risk database for sync check. (Aug 29th 2005 Martin Gühmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
-// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Fixed SerializeDBs method to fix the database in saync check. (Aug 25th 2005 Martin GÃ¼hmann)
+// - Added the risk database for sync check. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin GÃ¼hmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -87,6 +87,7 @@
 #include "UnitBuildListRecord.h"
 #include "WonderRecord.h"
 #include "WonderBuildListRecord.h"
+#include "slicif.h"
 
 #include "civapp.h"
 #include "c3_utilitydialogbox.h"
@@ -97,6 +98,7 @@ extern ProfileDB               *g_theProfileDB;
 extern OzoneDatabase           *g_theUVDB;
 
 extern CivApp                  *g_civApp;
+extern MBCHAR                   g_slic_filename[_MAX_PATH];
 
 //----------------------------------------------------------------------------
 //
@@ -240,6 +242,21 @@ sint32 NetCRC::SerializeDBs()
 	CHECKDB(g_theWonderDB);            // 38
 	CHECKDB(g_theWonderBuildListDB);   // 39
 
+	// Check the loaded slic code, weather it is
+	// identical on both ends
+	// Technnically:                   // 40
+	if(dbnum < m_startAt || dbnum > m_stopAt) {
+		dbnum++; \
+	} else {
+		Assert(dbnum < k_MAX_DBS);
+		check = new CheckSum;
+		check->AddData(slicif_get_code(), slicif_get_code_size());
+		check->Done(m_db_crc[dbnum][0], m_db_crc[dbnum][1], m_db_crc[dbnum][2], m_db_crc[dbnum][3]);
+		delete check;
+		dbnum++;
+		numchecked++;
+	}
+
 	return numchecked;
 }
 
@@ -348,7 +365,7 @@ void NetCRC::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void NetCRC::Error(char *buf)
+void NetCRC::Error(const char *buf)
 {
 	extern void network_AbortCallback( sint32 type );
 

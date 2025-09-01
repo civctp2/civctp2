@@ -26,11 +26,11 @@ extern "C" {
 
 #include "commapi.h"
 
-typedef long ip_adr_t;
-typedef int trump_hdl_t;
+typedef sint32 ip_adr_t;
+typedef sint32 trump_hdl_t;
 
 void printAdr(ip_adr_t adr);
-trump_hdl_t trump_adr2hdl(ip_adr_t remoteadr, short localport, short remoteport, int insert);
+trump_hdl_t trump_adr2hdl(ip_adr_t remoteadr, sint16 localport, sint16 remoteport, sint32 insert);
 comm_status_t trump_hdl2adr(trump_hdl_t hdl, ip_adr_t *adr);
 
 #ifdef __cplusplus

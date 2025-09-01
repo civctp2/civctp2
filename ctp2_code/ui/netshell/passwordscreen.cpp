@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -297,7 +297,7 @@ AUI_ERRCODE passwordscreen_Initialize( void )
 		0,
 		AUI_WINDOW_TYPE_FLOATING);
 	Assert( AUI_NEWOK(s_passwordScreen, errcode) );
-	if ( !AUI_NEWOK(s_passwordScreen, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_passwordScreen, errcode) ) return errcode;
 
 	s_okButton = spNew_ctp2_Button(
 				&errcode,
@@ -467,7 +467,7 @@ void PasswordScreenCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( control == s_yesRadio )
 	{
@@ -495,7 +495,7 @@ void PasswordScreenCallback(
 			s_okButton,
 			AUI_BUTTON_ACTION_EXECUTE,
 			0,
-			NULL );
+			nullptr );
 	}
 	else if ( control == s_okButton )
 	{

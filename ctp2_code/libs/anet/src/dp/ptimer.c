@@ -82,7 +82,7 @@ void ptimer_dumpToFile(char *file)
 	now = eclock();
 	starttime = rdtsc();
 	/* the following is kludgy; for more accuracy, make the time cycle longer */
-	while ((long)(eclock() - now) < ECLOCKS_PER_SEC)
+	while ((sint32)(eclock() - now) < ECLOCKS_PER_SEC)
 		;
 	endtime = rdtsc();
 	rdtsc_per_sec = endtime - starttime;
@@ -90,7 +90,7 @@ void ptimer_dumpToFile(char *file)
 		file = "ptimer.log";
 	fp = fopen(file, "w");
 	if (fp) {
-		int i, j;
+		sint32 i, j;
 		fprintf(fp, "ticks per sec: %d\n", rdtsc_per_sec);
 		for (i = 0; i < NPMAX; i++) {
 			if (ptimer_data[i].desc)
@@ -108,7 +108,7 @@ void ptimer_dumpToFile(char *file)
 	}
 #if 0 /* time ptimer calls */
 	{
-		int i;
+		sint32 i;
 		for (i=0; i<100; i++) {
 			ptimer_Enter(0, "foo");
 			ptimer_Exit(0, i);

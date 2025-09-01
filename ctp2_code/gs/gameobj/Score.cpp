@@ -282,6 +282,9 @@ sint32 Score::GetPartialScoreCount(SCORE_CATEGORY cat)
 			}
 			break;
 		}
+
+		default:
+			break;
 	}
 	if(count<0)
 	{
@@ -308,6 +311,8 @@ sint32 Score::GetPartialScore(SCORE_CATEGORY cat)
 			value /= 100;
 			break;
 		}
+		default:
+			break;
 	}
 	return (sint32 )value;
 }
@@ -404,9 +409,14 @@ double Score::GetPartialScoreValue(SCORE_CATEGORY cat)
 				case kScoreWonderVictory:
 					return diff->m_wonder_victory_bonus;
 					break;
+				default:
+					Assert(false);
+					break;
 			}
 			break;
 		}
+		default:
+			break;
 	}
 	return (sint32)ret;
 
@@ -444,6 +454,8 @@ const MBCHAR *Score::GetPartialScoreItemized(SCORE_CATEGORY cat)
 		case SCORE_CAT_RANK:
 			formatStr = formatPercent;
 			break;
+		default:
+			break;
 	}
 
 	cpw_NumberToCommas((sint32 )value, commaValue);
@@ -471,27 +483,18 @@ const MBCHAR *Score::GetScoreString(SCORE_CATEGORY cat)
 		{
 			switch (m_victory_type)
 			{
-			case kScoreDefeat: return g_theStringDB->GetNameStr("SCORE_CAT_DEFEAT");
-			case kScoreGameInProgress: return g_theStringDB->GetNameStr("SCORE_CAT_IN_PROGRESS");
-			case kScoreWonderVictory: return g_theStringDB->GetNameStr("SCORE_CAT_WONDER_VICTORY");
-			case kScoreAlliedVictory: return g_theStringDB->GetNameStr("SCORE_CAT_ALLIED_VICTORY");
-			case kScoreSoloVictory: return g_theStringDB->GetNameStr("SCORE_CAT_SOLO_VICTORY");
+				case kScoreDefeat: return g_theStringDB->GetNameStr("SCORE_CAT_DEFEAT");
+				case kScoreGameInProgress: return g_theStringDB->GetNameStr("SCORE_CAT_IN_PROGRESS");
+				case kScoreWonderVictory: return g_theStringDB->GetNameStr("SCORE_CAT_WONDER_VICTORY");
+				case kScoreAlliedVictory: return g_theStringDB->GetNameStr("SCORE_CAT_ALLIED_VICTORY");
+				case kScoreSoloVictory: return g_theStringDB->GetNameStr("SCORE_CAT_SOLO_VICTORY");
+				default:
+					Assert(false);
+					return g_theStringDB->GetNameStr("SCORE_CAT_UNKNOWN");
 			}
 		}
-
-
-
-
-
-
-
-
-
-
-
-
 		default:
-			Assert(FALSE);
+			Assert(false);
 			return g_theStringDB->GetNameStr("SCORE_CAT_UNKNOWN");
 	}
 }

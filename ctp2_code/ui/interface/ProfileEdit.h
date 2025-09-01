@@ -2,6 +2,7 @@ class ctp2_Window;
 class ctp2_ListBox;
 
 class ProfileVar;
+union Cookie;
 
 class ProfileEdit
 {
@@ -20,12 +21,11 @@ class ProfileEdit
 	static AUI_ERRCODE Cleanup();
 	void FillList();
 
-	void SelectItem(ProfileVar *var);
-	static void ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ListCallback  (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-	static void ToggleBoolVar(aui_Control *control, uint32 action, uint32 data, void *cookie);
-    static void SetNumVar(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void ToggleBoolVar (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void SetNumVar     (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-    static void CloseWindow(aui_Control *control, uint32 action, uint32 data, void *cookie);
-	static void EnableMessages(aui_Control *control, uint32 action, uint32 data, void *cookie);
+	static void CloseWindow   (aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+	static void EnableMessages(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 };

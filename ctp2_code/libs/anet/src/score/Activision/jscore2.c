@@ -84,7 +84,7 @@ char *bytesBlob;
 
  Returns 0 on success.
 --------------------------------------------------------------------------*/
-int java_init(const char *dbAddr)
+sint32 java_init(const char *dbAddr)
 {
 	const char classname[] = "Activision/ScoreServletHandler";
 	jstring jdbAddr;
@@ -183,7 +183,7 @@ int java_init(const char *dbAddr)
 
  Return 0 on success.
 --------------------------------------------------------------------------*/
-int loadServlet(jobject jScoreReport, jServlet_t *jservlet)
+sint32 loadServlet(jobject jScoreReport, jServlet_t *jservlet)
 {
 	jclass jClass;
 
@@ -216,12 +216,12 @@ int loadServlet(jobject jScoreReport, jServlet_t *jservlet)
  Returns 0 on success or -1 on error.
  FIXME: needs error differentiation.  Some might want to be non-fatal.
 --------------------------------------------------------------------------*/
-int updateScore(int sessType, char *sessid, int sessidlen, scorerep_t *rep)
+sint32 updateScore(sint32 sessType, char *sessid, sint32 sessidlen, scorerep_t *rep)
 {
-	int err;
+	sint32 err;
 	jServlet_t *jservlet;
 	jobject jsrep;
-	int i;
+	sint32 i;
 
 	/* Stick sessid into our java byte array */
 	if (sessidlen != 8) {
@@ -265,7 +265,7 @@ int updateScore(int sessType, char *sessid, int sessidlen, scorerep_t *rep)
 
 	for (i = 0; i < rep->players->n_used; i++) {
 		assoctab_item_t *pi = assoctab_getkey(rep->players, i);
-		short id = (short)pi->key;
+		sint16 id = (sint16)pi->key;
 		scorerep_player_t *player = (scorerep_player_t *)(pi->value);
 
 		assert(player->bloblen <= scorerep_MAX_BLOBLEN);
@@ -289,7 +289,7 @@ int updateScore(int sessType, char *sessid, int sessidlen, scorerep_t *rep)
  Returns 0 on success or -1 on error.
  FIXME: needs error differentiation.  Some might want to be non-fatal.
 --------------------------------------------------------------------------*/
-int closeSession(int sessType, char *sessid, int sessidlen)
+sint32 closeSession(sint32 sessType, char *sessid, sint32 sessidlen)
 {
 	/* Stick sessid into our java byte array */
 	if (sessidlen != 8) {
@@ -310,15 +310,15 @@ int closeSession(int sessType, char *sessid, int sessidlen)
 	return 0;
 }
 
-static int jargv2argv(JNIEnv *env, jobjectArray jargv, char **argv, int maxargc)
+static sint32 jargv2argv(JNIEnv *env, jobjectArray jargv, char **argv, sint32 maxargc)
 {
-	int i;
+	sint32 i;
 	jsize jargc;
 
 	/* pull the first argument out of the jargv array */
 	jargc = (*env)->GetArrayLength(env, jargv);
 	for (i = 0; i < jargc && i < maxargc; i++) {
-		int len;
+		sint32 len;
 		jstring jstr;
 		const char *utf8temp;
 
@@ -347,7 +347,7 @@ JNIEXPORT void JNICALL Java_Activision_score_1init_c_1main(JNIEnv *_env, jclass 
 	time_t now;
 	time_t next_poll;
 	time_t next_get;
-	int argc;
+	sint32 argc;
 	char *argv[MAX_ARGC];
 	char *wmqDir;
 	char *dbAddr = NULL;
@@ -383,7 +383,7 @@ Usage: java Activision.score_init wmqDir [dbAddr]\n\
 	next_poll = now + POLL_INTERVAL;
 	while (1) {
 		char sessid[dp_KEY_MAXLEN];
-		int sessidlen;
+		sint32 sessidlen;
 		dp_species_t sessType;
 		sq_message_t msg;
 
@@ -437,7 +437,7 @@ Usage: java Activision.score_init wmqDir [dbAddr]\n\
 		}
 		if (((now - next_poll) < 0) && ((now - next_get) < 0)) {
 			/* Everything is waiting for time to pass, so sleep */
-			int time_to_next_event = ((next_poll < next_get) ?
+			sint32 time_to_next_event = ((next_poll < next_get) ?
 				(next_poll - now) : (next_get - now));
 			sleep(time_to_next_event);
 		}

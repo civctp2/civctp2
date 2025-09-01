@@ -41,7 +41,7 @@ LogClass LOG_MEMORY_FAIL = "MemoryFail";
 static LogClass LOG_LOG_CLASSES = "LogClasses";
 
 #define k_DEBUG_MAX_LOG_FILE_SIZE		(5 * 1024 * 1024)
-#define k_DEBUG_FILENAME				"logs" FILE_SEP "CivCTP_debug%#.3d.txt"
+#define k_DEBUG_FILENAME				"logs" FILE_SEP "CivCTP_debug%.3d.txt"
 
 static const int HashTableSize = 1024;
 
@@ -174,7 +174,7 @@ struct Logging
 {
 	bool				open;
 	const char *		module_name;
-	int					module_line;
+	size_t				module_line;
 
 	bool				to_file;
 	bool				to_debugger;
@@ -467,7 +467,7 @@ int Log_OutputEnabled (void)
 	return (logging->to_file | logging->to_debugger) ? 1 : 0;
 }
 
-void Log_Begin (const char *module_name, int module_line)
+void Log_Begin (const char *module_name, size_t module_line)
 {
 	Log_EnsureLogAllocated();
 
@@ -569,7 +569,7 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 		}
 	}
 
-	sprintf (message, "[%12s::%15s::%5d@%7lld] %s",
+	sprintf (message, "[%12s::%15s::%5zu@%7ld] %s",
 		log_class,
 		adjusted_module_scan,
 		logging->module_line,

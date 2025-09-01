@@ -154,9 +154,9 @@ extern "C" {
 #define dp_PING_MAX_NTOTAL 10
 typedef struct {
 	dp_karma_t karma;	/* send packets with this, ignore responses that differ. */
-	int n_total; /* how many to send. */
-	int n_sent;  /* how many sent so far */
-	int n_got;   /* how many we got so far */
+	sint32 n_total; /* how many to send. */
+	sint32 n_sent;  /* how many sent so far */
+	sint32 n_got;   /* how many we got so far */
 	time_t sent_at[dp_PING_MAX_NTOTAL];
 	time_t got_at[dp_PING_MAX_NTOTAL];
 	time_t next_send_time;
@@ -186,10 +186,10 @@ typedef struct {
 	dptab_table_t *grmyplayers[dp_MAX_GROUPS];
 	dptab_table_t *playervars;
 	char sess_subkey[dptab_KEY_MAXLEN];
-	int sess_subkeylen;
-	int old_numplayers;  /* currentPlayers from dp_session_t at last dpPoll */
+	sint32 sess_subkeylen;
+	sint32 old_numplayers;  /* currentPlayers from dp_session_t at last dpPoll */
 	dp_karma_t sessionKarma;
-	int hostid;			/* Next hostid (dpid/dp_PLAYERS_PER_HOST) to assign */
+	sint32 hostid;			/* Next hostid (dpid/dp_PLAYERS_PER_HOST) to assign */
 	dp_species_t sessionType;
 } dp_sessionContext_t;
 
@@ -236,8 +236,8 @@ typedef struct dp_s {
 	clock_t      next_beacon2;		/* whether it's time to do harder chores */
 	clock_t      next_beacon4;		/* whether it's time to do hardest chores */
 	clock_t      beacon_interval;	/* how often to do periodic stuff. */
-	int 		 check_timeout; 	/* look for timed out handles early */
-	int dpReceive_prevcall;		/* boolean, has dpReceive been called before? */
+	sint32		 check_timeout; 	/* look for timed out handles early */
+	sint32 dpReceive_prevcall;		/* boolean, has dpReceive been called before? */
 
 	dp_sessionContext_t *pSess;	/* The current session */
 
@@ -252,20 +252,20 @@ typedef struct dp_s {
 	 */
 	playerHdl_t hMaster;		/* Handle to current session master */
 	char sess_subkey[dptab_KEY_MAXLEN];	/* Subkey in sessions (and mysessions, if master) */
-	int sess_subkeylen;
+	sint32 sess_subkeylen;
 	dp_karma_t sess_karma;		/* for quick access by dpRecieve :-( */
 	dp_karma_t joinKarma;		/* so we can delete imposters */
-	int			pleaseJoinAny;	/* if set, join a server lobby on next dpPoll */
-	short		pleaseJoinAnyMask;	/* session flags mask to use with above */
+	sint32			pleaseJoinAny;	/* if set, join a server lobby on next dpPoll */
+	sint16			pleaseJoinAnyMask;	/* session flags mask to use with above */
 	dp_species_t	pleaseJoinAnySessType;
-	int			enableNewPlayers;
+	sint32			enableNewPlayers;
 
 	dpid_t		 firstId;		/* first id to hand out when creating players */
 	dpid_t		 nextId;		/* next id to hand out when creating players */
 	dpid_t		 firstGId;		/* first id to hand out when creating groups */
 	dpid_t		 nextGId;		/* next id to hand out when creating groups */
-	int			pleaseClose;	/* set this to close on next dpPoll */
-	int			closing;		/* set during dpClose; read by dp_sessions_cb */
+	sint32		pleaseClose;	/* set this to close on next dpPoll */
+	sint32		closing;		/* set during dpClose; read by dp_sessions_cb */
 
 	/* How to map from dpid's to comm layer addresses. */
 	/* Indexed by dpid.  Update whenever nPlayers is incremented. */
@@ -273,7 +273,7 @@ typedef struct dp_s {
 	assoctab_t	*dpid2commHdl;
 
 	/* Handle flags to use for connections to players in our session */
-	int peerHandleMode;			/* dpio_OPTION_* */
+	sint32 peerHandleMode;			/* dpio_OPTION_* */
 
 	/* Callback called when connections are opened */
 	dpOpenConnCallback_t openConn_callback;
@@ -310,7 +310,7 @@ typedef struct dp_s {
 	/* Following fields support elections aka. host migration. */
 	clock_t election_yield_deadline;	/* when people who can't see majority candidate die */
 	clock_t election_deadline;	/* when election is over */
-	int election_size;			/* number of votes needed to win election, or 0 if no election */
+	sint32 election_size;			/* number of votes needed to win election, or 0 if no election */
 	assoctab_t *election_votes;	/* indexed by handle; holds dp_election_vote_t; cleared on dpClose */
 	dp_session_t election_old_session;	/* Used by winner of election */
 
@@ -318,7 +318,7 @@ typedef struct dp_s {
 	dp_species_t defaultSessionType;
 
 	/* Following fields support master-selected sessions */
-	int select_keylen;
+	sint32 select_keylen;
 	char select_key[dptab_KEY_MAXLEN];
 
 	/* Following fields support dpEnumServersEx */
@@ -327,7 +327,7 @@ typedef struct dp_s {
 
 	/* Following fields support thread safety */
 #ifdef _WIN32
-	unsigned long threadId;		/* id of thread that called dpCreate() */
+	uint32 threadId;		/* id of thread that called dpCreate() */
 #endif
 
 	/* Following fields support score reporting */
@@ -336,10 +336,10 @@ typedef struct dp_s {
 	dptab_table_t *uid2sessionid;	/* tracks what session user is in */
 
 	/* Following fields support dpRequestObjectDeltas() */
-	int monitor_object_players;	/* TRUE if monitoring player table */
-	int monitor_player_latencies; /* TRUE if monitoring player latencies */
-	int monitor_object_sessions;/* TRUE if monitoring session table */
-	int monitor_object_servers;	/* TRUE if monitoring serverping table */
+	sint32 monitor_object_players;	/* TRUE if monitoring player table */
+	sint32 monitor_player_latencies; /* TRUE if monitoring player latencies */
+	sint32 monitor_object_sessions;/* TRUE if monitoring session table */
+	sint32 monitor_object_servers;	/* TRUE if monitoring serverping table */
 	dp_species_t monitor_object_servers_sessType; /* for player count */
 	/* Monitoring remote player lists controlled by callback on
 	 * the particular remote player table.
@@ -347,15 +347,15 @@ typedef struct dp_s {
 	/* Following fields used for dpEnumServersPoll() */
 	clock_t      next_serverping;			/* when to send next ping burst */
 	clock_t      serverping_interval;		/* 1..10 sec; adjusted on the fly */
-	int 		 serverping_rx_count; 		/* number of pings received */
-	int 		 serverping_rx_count_old;	/* ditto at last dpEnumServersPoll */
+	sint32 		 serverping_rx_count; 		/* number of pings received */
+	sint32 		 serverping_rx_count_old;	/* ditto at last dpEnumServersPoll */
 
 	/* Following fields support user login */
 	tserv_t *tserv;
 	tca_t *tca;
 
 	/* Following fields used by dpShutdown for nice connection closing */
-	int quitState;
+	sint32 quitState;
 	clock_t quitDeadline;
 
  	/* Following fields support packet buffering */
@@ -374,12 +374,12 @@ typedef struct dp_s {
 
 /* Launch parameters written by anetdrop and read by dpCreate */
 typedef struct {
-	int Host;
-	int Join;
-	int Wait;
-	int Maxplayers;
-	int EnablePlayervars;
-	int JoinAnyFlags;
+	sint32 Host;
+	sint32 Join;
+	sint32 Wait;
+	sint32 Maxplayers;
+	sint32 EnablePlayervars;
+	sint32 JoinAnyFlags;
 	char Driver[100];
 	char Sessname[100];
 	char Playname[100];

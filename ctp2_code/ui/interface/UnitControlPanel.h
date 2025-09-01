@@ -20,6 +20,7 @@ class ctp2_Static;
 class ctp2_Switch;
 class OrderRecord;
 struct aui_MouseEvent;
+union Cookie;
 
 #define k_MAX_CP_CARGO 5
 #define k_CP_CARGO_HEIGHT 4
@@ -33,7 +34,7 @@ public:
 		TRANSPORT_SELECTION,
 	};
 
-	UnitControlPanel(MBCHAR *ldlBlock);
+	UnitControlPanel(const MBCHAR *ldlBlock);
 
 	void Update();
 	void SelectedUnit();
@@ -59,22 +60,22 @@ private:
 	void UpdateMultiSelectionArmySymbols();
 
 	static void UnitDisplayGroupCallback(aui_Region * region, void * userData);
-	static void NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
-	static void OrderButtonActionCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void NextUnitButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void MultiButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void ArmyButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
+	static void OrderButtonActionCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
 	static AUI_ERRCODE HealthBarActionCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
-			void * cookie);
+			Cookie cookie);
 	static AUI_ERRCODE StackSymbolDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect,
-			void * cookie);
-	static AUI_ERRCODE FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
-	static AUI_ERRCODE DrawCargoCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, void * cookie);
+			Cookie cookie);
+	static AUI_ERRCODE FuelBarDrawCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, Cookie cookie);
+	static AUI_ERRCODE DrawCargoCallback(ctp2_Static * control, aui_Surface * surface, RECT & rect, Cookie cookie);
 
-	static void SingleSelectionArmySymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
-	static void StackSymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
-	static void TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
-	static void TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, void * cookie);
+	static void SingleSelectionArmySymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie);
+	static void StackSymbolImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie);
+	static void TransportImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie);
+	static void TransportSelectionImageCallback(ctp2_Static * control, aui_MouseEvent * event, Cookie cookie);
 
 	static bool SelectionContainsMultipleArmies();
 	static void LoadImage00(ctp2_Static * control);

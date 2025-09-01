@@ -905,19 +905,17 @@ sint16 TiledMap::TryRiver(BOOL bc, BOOL bn, BOOL bne, BOOL be, BOOL bse, BOOL bs
 {
 	if (!bc) return -1;
 
-	sint16		tc, tn, tne, te, tse, ts, tsw, tw, tnw;
-
 	for (uint16 i = 0; i < m_tileSet->GetNumRiverTransforms(); i++)
-    {
-		tn =	m_tileSet->GetRiverTransform(i, 2);
-		tne =	m_tileSet->GetRiverTransform(i, 5);
-		te =	m_tileSet->GetRiverTransform(i, 6);
-		tse =	m_tileSet->GetRiverTransform(i, 7);
-		tc =	m_tileSet->GetRiverTransform(i, 4);
-		ts =	m_tileSet->GetRiverTransform(i, 6);
-		tsw =	m_tileSet->GetRiverTransform(i, 3);
-		tw =	m_tileSet->GetRiverTransform(i, 0);
-		tnw =	m_tileSet->GetRiverTransform(i, 1);
+	{
+//		sint16 tn  = m_tileSet->GetRiverTransform(i, 2);
+		sint16 tne = m_tileSet->GetRiverTransform(i, 5);
+//		sint16 te  = m_tileSet->GetRiverTransform(i, 6);
+		sint16 tse = m_tileSet->GetRiverTransform(i, 7);
+		sint16 tc  = m_tileSet->GetRiverTransform(i, 4);
+//		sint16 ts  = m_tileSet->GetRiverTransform(i, 6);
+		sint16 tsw = m_tileSet->GetRiverTransform(i, 3);
+//		sint16 tw  = m_tileSet->GetRiverTransform(i, 0);
+		sint16 tnw = m_tileSet->GetRiverTransform(i, 1);
 
 		if (	((cwater && (tc == 2)) || (bc && (tc==1)))
 			&&	((bne && tne)	|| (!bne && !tne))
@@ -1577,26 +1575,8 @@ sint32 TiledMap::CalculateWrap
 	BaseTile * baseTile = m_tileSet->GetBaseTile(tileInfo->GetTileNum());
 	if (baseTile == NULL) return -1;
 
-	sint32  terrainType;
-	bool    fog = !m_localVision->IsVisible(tempPos);
-	if (fog)
-	{
-		UnseenCellCarton ucell;
-		if (m_localVision->GetLastSeen(tempPos, ucell))
-		{
-			terrainType = ucell.m_unseenCell->GetTerrainType();
-		}
-		else
-		{
-			terrainType = g_theWorld->GetTerrain(tempPos.x,tempPos.y);
-		}
-	}
-	else
-	{
-		terrainType = g_theWorld->GetTerrain(tempPos.x, tempPos.y);
-	}
-
-	sint16		river = tileInfo->GetRiverPiece();
+	bool      fog = !m_localVision->IsVisible(tempPos);
+	sint16  river = tileInfo->GetRiverPiece();
 
 	if (m_zoomLevel == k_ZOOM_LARGEST)
 	{
@@ -1748,27 +1728,7 @@ sint32 TiledMap::CalculateWrapClipped(
 		return 0;
 	}
 
-	sint32	terrainType;
-
 	bool    fog = !m_localVision->IsVisible(tempPos);
-
-	if (fog)
-	{
-		UnseenCellCarton ucell;
-
-		if (m_localVision->GetLastSeen(tempPos, ucell))
-        {
-			terrainType = ucell.m_unseenCell->GetTerrainType();
-        }
-		else
-        {
-			terrainType = g_theWorld->GetTerrain(tempPos.x,tempPos.y);
-        }
-	}
-	else
-	{
-		terrainType = g_theWorld->GetTerrain(tempPos.x, tempPos.y);
-	}
 
 	MapPoint    pos = tempPos;
 
@@ -3136,16 +3096,12 @@ sint32 TiledMap::DrawCityRadius1(const MapPoint &cpos, COLOR color)
 sint32 TiledMap::PaintColoredTile(sint32 x, sint32 y, COLOR color)
 {
 	uint8			*surfBase;
-	sint32			surfWidth;
-	sint32			surfHeight;
 	sint32			surfPitch;
 	aui_Surface		*surface;
 
 	surface = g_screenManager->GetSurface();
 
 	surfBase = g_screenManager->GetSurfBase();
-	surfWidth = g_screenManager->GetSurfWidth();
-	surfHeight = g_screenManager->GetSurfHeight();
 	surfPitch = g_screenManager->GetSurfPitch();
 
 	unsigned short	*destPixel;
@@ -3665,25 +3621,21 @@ sint32 TiledMap::RedrawHat(
 
 	TileInfo		*tileInfo;
 
-	sint32		terrainType;
 	bool		fog = !m_localVision->IsVisible(tempPos);
 	if (fog)
     {
 		UnseenCellCarton ucell;
 		if(m_localVision->GetLastSeen(tempPos, ucell))
 		{
-			terrainType = ucell.m_unseenCell->GetTerrainType();
 			tileInfo = ucell.m_unseenCell->GetTileInfo();
 		}
 		else
 		{
-			terrainType = g_theWorld->GetTerrain(tempPos.x,tempPos.y);
 			tileInfo = GetTileInfo(tempPos);
 		}
 	}
 	else
 	{
-		terrainType = g_theWorld->GetTerrain(tempPos.x, tempPos.y);
 		tileInfo = GetTileInfo(tempPos);
 	}
 
@@ -4588,11 +4540,11 @@ void TiledMap::HandleCheat(MapPoint &pos)
 
 					if (g_theWorld->HasCity(pos)) {
 						if (g_theWorld->GetCell(pos)->GetCity().GetOwner() == g_selected_item->GetVisiblePlayer()) {
-							Unit id1 = p->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
+							p->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
 						}
 					} else {
 
-						Unit id1 = p->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
+						p->CreateUnit(unitNum, pos, Unit(), FALSE, CAUSE_NEW_ARMY_CHEAT);
 					}
 				}
 			}
@@ -4873,7 +4825,6 @@ sint32
 TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint32 y, sint32 flags)
 {
 	uint8			*surfBase;
-	sint32			surfWidth;
 	sint32			surfHeight;
 	sint32			surfPitch;
 	sint32			errcode;
@@ -4889,14 +4840,12 @@ TiledMap::DrawOverlayClipped(aui_Surface *surface, Pixel16 *data, sint32 x, sint
 		if ( errcode != AUI_ERRCODE_OK )
 			return AUI_ERRCODE_SURFACELOCKFAILED;
 
-		surfWidth	= surface->Width();
 		surfHeight	= surface->Height();
 		surfPitch	= surface->Pitch();
 	}
 	else
 	{
 		surfBase	= m_surfBase;
-		surfWidth	= m_surfWidth;
 		surfHeight	= m_surfHeight;
 		surfPitch	= m_surfPitch;
 	}

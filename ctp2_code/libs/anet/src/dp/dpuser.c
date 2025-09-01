@@ -68,7 +68,7 @@ DP_API dp_result_t DP_APIX dpAccountCreateW(
 	dp_t *dp,
 	const wchar_t *username,
 	const wchar_t *password,
-	int flags,
+	sint32 flags,
 	const wchar_t *email)
 {
 	precondition(dp);
@@ -79,7 +79,7 @@ DP_API dp_result_t DP_APIX dpAccountCreateA(
 	dp_t *dp,
 	const char *username,
 	const char *password,
-	int flags,
+	sint32 flags,
 	const char *email)
 {
 	precondition(dp);
@@ -127,7 +127,7 @@ DP_API dp_result_t DP_APIX dpChangePasswordW(
 	dp_t *dp,
 	const wchar_t *password,
 	const wchar_t *newpassword,
-	int flags,
+	sint32 flags,
 	const wchar_t *email)
 {
 	precondition(dp);
@@ -138,7 +138,7 @@ DP_API dp_result_t DP_APIX dpChangePasswordA(
 	dp_t *dp,
 	const char *password,
 	const char *newpassword,
-	int flags,
+	sint32 flags,
 	const char *email)
 {
 	precondition(dp);
@@ -169,7 +169,7 @@ DP_API dp_uid_t DP_APIX dpGetPlayerUid(dp_t *dp, dpid_t id)
 	size_t len_used;
 	size_t len;
 	char subkey[dptab_KEY_MAXLEN];
-	int subkeylen;
+	sint32 subkeylen;
 
 	precondition(dp != NULL);
 	dp_assertValid(dp);
@@ -198,9 +198,9 @@ DP_API dp_uid_t DP_APIX dpGetPlayerUid(dp_t *dp, dpid_t id)
 		return dp_UID_NONE;
 	}
 
-	if ((unsigned long)player.karma == dp_UID_NONE)
+	if ((uint32)player.karma == dp_UID_NONE)
 		return dp_UID_NONE;  /* Better not let UID get to 131072! FIXME */
 
 	/* Kludge: only the lower 16 bits of uid available at moment */
-	return (dp_uid_t)(0x10000 + (unsigned long)(player.karma));
+	return (dp_uid_t)(0x10000 + (uint32)(player.karma));
 }

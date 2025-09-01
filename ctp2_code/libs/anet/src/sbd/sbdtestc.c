@@ -35,7 +35,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -47,14 +47,14 @@ dp_dprintf(
 }
 #endif
 
-void main (int argc, char *argv[])
+void main (sint32 argc, char *argv[])
 {
 	char *host;
-	unsigned short port;
-	int npkts;
+	uint16 port;
+	sint32 npkts;
 	size_t pktsize;
 	char buf[sbd_MAXLEN];
-	int i;
+	sint32 i;
 
 	if (argc <= 3) {
 		printf("Usage: %s <host> <port> <npkts> [pktsize]\n", argv[0]);
@@ -89,9 +89,9 @@ void main (int argc, char *argv[])
 		while (1) {
 			fd_set wfds;
 			struct timeval tv;
-			int nsocks;
+			sint32 nsocks;
 
-			if ((long)(eclock() - timeout) > 0) {
+			if ((sint32)(eclock() - timeout) > 0) {
 				printf("\nsend timed out\n");
 				exit(1);
 			}
@@ -108,7 +108,7 @@ void main (int argc, char *argv[])
 			}
 
 			if (FD_ISSET(sbdclnt->sock, &wfds)) {
-				int len = sbdclnt_poll(sbdclnt);
+				sint32 len = sbdclnt_poll(sbdclnt);
 				if (len < 0) {
 					printf("\nsbdclnt_poll error\n");
 					exit(1);

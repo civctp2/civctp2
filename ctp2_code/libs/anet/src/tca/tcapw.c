@@ -32,7 +32,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "../3rdparty/md5/md5.h"
 
 #ifdef _DEBUG
-const char *tcapw_u2ascii(const dp_netchar_t *ncs, int maxlen)
+const char *tcapw_u2ascii(const dp_netchar_t *ncs, sint32 maxlen)
 {
 	static char buf[256];
 	wchar_t wcs[256];
@@ -43,10 +43,10 @@ const char *tcapw_u2ascii(const dp_netchar_t *ncs, int maxlen)
 	return buf;
 }
 
-const char *tcapw_hexprint(const unsigned char *binstr, int len)
+const char *tcapw_hexprint(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -86,7 +86,7 @@ void tcapw_destroy(tcapw_t *tcapw)
 	free(tcapw);
 }
 
-const unsigned char freezekey[8] = "z8&2nD!G";
+const uint8 freezekey[8] = "z8&2nD!G";
 
 /*--------------------------------------------------------------------------
   Load a password database from disk.
@@ -162,7 +162,7 @@ dp_result_t tcapw_close(tcapw_t *tcapw)
 dp_result_t tcapw_password_hash(tcapw_t *tcapw, const tcapw_pw_t *pw, tcapw_hpw_t *hpw)
 {
 	MD5_CTX context;
-	int len_pw;
+	sint32 len_pw;
 
 	if (tcapw == NULL || pw == NULL || hpw == NULL)
 		return dp_RES_BAD;
@@ -172,7 +172,7 @@ dp_result_t tcapw_password_hash(tcapw_t *tcapw, const tcapw_pw_t *pw, tcapw_hpw_
 	memset((void *)(pw->pw + len_pw), 0, tcapw_LEN_PW - len_pw);
 
 	MD5Init(&context);
-	MD5Update(&context, (char *)pw->pw, tcapw_LEN_PW*sizeof(short));
+	MD5Update(&context, (char *)pw->pw, tcapw_LEN_PW*sizeof(sint16));
 	MD5Final(hpw->hpw, &context);
 	return dp_RES_OK;
 }
@@ -189,7 +189,7 @@ dp_result_t tcapw_password_hash(tcapw_t *tcapw, const tcapw_pw_t *pw, tcapw_hpw_
 		  dp_RES_BAD on bad args,
 		  dp_RES_BUG if finding a uid fails.
 --------------------------------------------------------------------------*/
-dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, int flags, const char *email, tcapw_uid_t *uid)
+dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, const tcapw_hpw_t *hpw, sint32 flags, const char *email, tcapw_uid_t *uid)
 {
 	dp_result_t err;
 	tcapw_entry_t *p;
@@ -230,7 +230,7 @@ dp_result_t tcapw_entry_create(tcapw_t *tcapw, const tcapw_uname_t *username, co
 	p->flags = flags;
 	p->created = time(NULL);
 	p->lastlogin = p->created;
-	p->secretcode = (unsigned short)((unsigned short)eclock()*(long)3001);
+	p->secretcode = (uint16)((uint16)eclock()*(sint32)3001);
 
 	return dp_RES_OK;
 }
@@ -261,7 +261,7 @@ dp_result_t tcapw_entry_delete(tcapw_t *tcapw, tcapw_uid_t uid)
           dp_RES_BAD on bad args,
 		  dp_RES_BUG on internal error.
 --------------------------------------------------------------------------*/
-dp_result_t tcapw_entry_change(tcapw_t *tcapw, tcapw_uid_t uid, const tcapw_hpw_t *new_hpw, int flags, const char *email)
+dp_result_t tcapw_entry_change(tcapw_t *tcapw, tcapw_uid_t uid, const tcapw_hpw_t *new_hpw, sint32 flags, const char *email)
 {
 	tcapw_entry_t *p;
 
@@ -305,7 +305,7 @@ dp_result_t tcapw_entry_find_byid(tcapw_t *tcapw, tcapw_uid_t uid, tcapw_entry_t
 --------------------------------------------------------------------------*/
 dp_result_t tcapw_entry_find_byname(tcapw_t *tcapw, const tcapw_uname_t *username, tcapw_entry_t *buf)
 {
-	int i;
+	sint32 i;
 	tcapw_entry_t *p;
 	assoctab_item_t *a;
 
@@ -334,9 +334,9 @@ dp_result_t tcapw_entry_find_byname(tcapw_t *tcapw, const tcapw_uname_t *usernam
 --------------------------------------------------------------------------*/
 dp_result_t tcapw_get_secretcode(const tcapw_entry_t *pe, dp_netchar_t *secretcode)
 {
-	short buf[6];  /* unsigned short int -> 5 digits + '\0' maximum */
-	short *c;
-	unsigned short x;
+	sint16 buf[6];  /* uint16 -> 5 digits + '\0' maximum */
+	sint16 *c;
+	uint16 x;
 
 	if (pe == NULL || secretcode == NULL) return dp_RES_BAD;
 	buf[5] = 0;

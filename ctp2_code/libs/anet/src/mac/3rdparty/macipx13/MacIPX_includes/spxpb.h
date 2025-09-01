@@ -35,6 +35,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "ipxpb.h"
 #endif
 
+#include "types.h"
+
 #if defined(powerc) || defined (__powerc)
 #pragma options align=mac68k
 #endif
@@ -43,96 +45,96 @@ typedef struct SPXCancelEvt {
 } SPXCancelEvt;
 
 typedef struct SPXCheckSkt {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 } SPXCheckSkt;
 
 typedef struct SPXCloseSkt {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 } SPXCloseSkt;
 
 typedef struct SPXEstabConn {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	SPX_ECB					*ecb;
-	unsigned char			retryCount;
-	unsigned char			flags;
-	unsigned short			*connection;
+	uint8			retryCount;
+	uint8			flags;
+	uint16			*connection;
 } SPXEstabConn;
 
 typedef struct SPXEstabConn2 {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	SPX_ECB					*ecb;
 	SPX_ECB					*listen_ecb;
-	unsigned char			retryCount;
-	unsigned char			flags;
-	unsigned short			*connection;
+	uint8			retryCount;
+	uint8			flags;
+	uint16			*connection;
 } SPXEstabConn2;
 
 typedef struct SPXGetConfig {
-	unsigned short			*maxConn;
-	unsigned short			*availConn;
+	uint16			*maxConn;
+	uint16			*availConn;
 } SPXGetConfig;
 
 typedef struct SPXGetConnStatus {
-	unsigned short			connection;
+	uint16			connection;
 	SPX_SESSION				*buffer;
 } SPXGetConnStatus;
 
 typedef struct SPXGetStats {
-	unsigned char			*buffer;
-	unsigned long			*buflen;
+	uint8			*buffer;
+	uint32			*buflen;
 } SPXGetStats;
 
 typedef struct SPXGetVersion {
-	unsigned char			*majorVersion;
-	unsigned char			*minorVersion;
-	unsigned short			*revision;
+	uint8			*majorVersion;
+	uint8			*minorVersion;
+	uint16			*revision;
 } SPXGetVersion;
 
 typedef struct SPXListenConn {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	SPX_ECB					*ecb;
-	unsigned char			retryCount;
-	unsigned char			flags;
-	unsigned short			*connection;
+	uint8			retryCount;
+	uint8			flags;
+	uint16			*connection;
 } SPXListenConn;
 
 typedef struct SPXListenConn2 {
-	unsigned short			socketNumber;
+	uint16			socketNumber;
 	SPX_ECB					*ecb;
 	SPX_ECB					*listen_ecb;
-	unsigned char			retryCount;
-	unsigned char			flags;
-	unsigned short			*connection;
+	uint8			retryCount;
+	uint8			flags;
+	uint16			*connection;
 } SPXListenConn2;
 
 typedef struct SPXListenSeqPkt {
-	unsigned short			connection;
+	uint16			connection;
 	SPX_ECB					*ecb;
 } SPXListenSeqPkt;
 
 typedef struct SPXOpenSkt {
-	unsigned short			*socketNumber;
-	unsigned char			flags;
+	uint16			*socketNumber;
+	uint8			flags;
 } SPXOpenSkt;
 
 typedef struct SPXSendSeqPkt {
-	unsigned short			connection;
+	uint16			connection;
 	SPX_ECB					*ecb;
 } SPXSendSeqPkt;
 
 typedef struct SPXTermConn {
-	unsigned short			connection;
+	uint16			connection;
 	SPX_ECB					*ecb;
 } SPXTermConn;
 
 typedef struct SPXpb {
 	char					fill12[12];
 	IOCompletionUPP			ioCompletion;
-	short					ioResult;
+	sint16					ioResult;
 	char					*ioNamePtr;
-	short					ioVRefNum;
-	short					ioCRefNum;
-	short					csCode;
+	sint16					ioVRefNum;
+	sint16					ioCRefNum;
+	sint16					csCode;
 	union {
 		SPXTermConn			abort;
 		SPXCancelEvt		cancel;
@@ -180,9 +182,9 @@ typedef struct SPXpb {
  * Prototypes
  */
 #ifndef COMPONENT_BUILD
-extern short	call_ipx(IPXpb *pb, int async);
+extern sint16	call_ipx(IPXpb *pb, sint32 async);
 #else
-extern short	call_ipx(IPXpb *pb, int async, short drvrRefNum);
+extern sint16	call_ipx(IPXpb *pb, sint32 async, sint16 drvrRefNum);
 #endif
 
 #endif /* __SPXPB_INCLUDED__ */

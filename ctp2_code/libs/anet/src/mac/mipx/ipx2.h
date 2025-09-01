@@ -56,7 +56,7 @@ typedef struct {
 // A peer handle.  Almost same as an ipx2_peer_t *, but doesn't
 // change if peer table is resized.  Plus, you can print them out
 // as integers and even understand them, which is nice for debugging.
-typedef int ipx2_hdl_t;			// Handles used in sending packets.
+typedef sint32 ipx2_hdl_t;			// Handles used in sending packets.
 #define ipx2_HDL_NONE -1
 #define ipx2_HDL_BROADCAST	0	// Right, the first entry in ipx2->peers is for broadcast.
 #define ipx2_HDL_ME			1	// The 2nd entry is for my own address.
@@ -73,11 +73,11 @@ typedef struct {
 
 	nw_segptr_t ipxEntryPoint;	// Real mode far call entry point to Hades.
 
-	short socket;				// What socket to close to clean up.
+	sint16 socket;				// What socket to close to clean up.
 } ipx2_t;
 
 // A result.  Lets you know if a call failed, and why.
-typedef int ipx2_result_t;		// Error/success status type.
+typedef sint32 ipx2_result_t;		// Error/success status type.
 // IPXWIN Function Result Codes.  same as interface our caller inherits from...
 #define ipx2_RES_OK		  comm_STATUS_OK
 #define ipx2_RES_FULL	  comm_STATUS_FULL
@@ -92,7 +92,7 @@ typedef int ipx2_result_t;		// Error/success status type.
  Only one of these may exist at a time, since multiple ones would
  compete for the same source of rx packets.
 -----------------------------------------------------------------------*/
-ipx2_t *ipx2_create(int socket, int *status);
+ipx2_t *ipx2_create(sint32 socket, sint32 *status);
 
 /*-----------------------------------------------------------------------
  Destroy an IPX driver.
@@ -114,7 +114,7 @@ void ipx2_destroy(ipx2_t *ipx);
  16 bytes each.)
  Returns ipx2_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
-ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, int insert);
+ipx2_hdl_t ipx2_adr2hdl(ipx2_t *ipx, nw_adr_t *adr, sint32 insert);
 
 /*-----------------------------------------------------------------------
  Given a handle, return the corresponding IPX address.

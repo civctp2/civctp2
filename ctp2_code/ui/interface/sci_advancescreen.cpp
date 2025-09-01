@@ -131,7 +131,7 @@ public:
 
 SciAdvanceScreenKeyboardHandler s_keyboardHandler;
 
-void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)CTP2_HYPERLINK_ACTION_EXECUTE ) return;
 
@@ -143,14 +143,14 @@ void sci_advancescreen_StatsCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void sci_advancescreen_GoalCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
 	open_GreatLibrary();
 }
 
-void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	switch ( action )
 	{
@@ -174,7 +174,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
 			if(!item) return;
 
-			g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
+			g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( item->GetUserDataSint32() );
 			if(g_scienceManagementDialog)
 			{
 				g_scienceManagementDialog->Update();
@@ -187,7 +187,7 @@ void sci_advancescreen_listAction( aui_Control *control, uint32 action, uint32 d
 	}
 }
 
-sint32	sci_advancescreen_displayMyWindow( MBCHAR *messageText, sint32 from)
+sint32	sci_advancescreen_displayMyWindow( const MBCHAR *messageText, sint32 from)
 {
 	Player *p = g_player[ g_selected_item->GetVisiblePlayer() ];
 	s_oldResearching = p->m_advances->GetResearching();
@@ -244,7 +244,7 @@ sint32 sci_advancescreen_removeMyWindow(uint32 action)
 	return 1;
 }
 
-AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
+AUI_ERRCODE sci_advancescreen_Initialize( const MBCHAR *messageText )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -260,7 +260,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 	{
 		s_sci_advanceScreen = new C3Window( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_STANDARD, false);
 		Assert( AUI_NEWOK(s_sci_advanceScreen, errcode) );
-		if ( !AUI_NEWOK(s_sci_advanceScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_sci_advanceScreen, errcode) ) return errcode;
 
 		s_sci_advanceScreen->Resize(s_sci_advanceScreen->Width(),s_sci_advanceScreen->Height());
 		s_sci_advanceScreen->GrabRegion()->Resize(s_sci_advanceScreen->Width(),20);
@@ -280,7 +280,7 @@ AUI_ERRCODE sci_advancescreen_Initialize( MBCHAR *messageText )
 		"SciAdvanceScreen.Background.GoalButton");
 
 	if(s_goal)
-		s_goal->SetActionFuncAndCookie(sci_advancescreen_GoalCallback, NULL);
+		s_goal->SetActionFuncAndCookie(sci_advancescreen_GoalCallback, nullptr);
 
 	s_name = new ctp2_Static(&errcode, aui_UniqueId(), "SciAdvanceScreen.Background.Name");
 
@@ -360,7 +360,7 @@ void sci_advancescreen_Cleanup(void)
 	s_scienceGoalTree = NULL;
 }
 
-void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -375,7 +375,7 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 			return;
 		}
 
-		g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( (long)item->GetUserData() );
+		g_player[g_selected_item->GetVisiblePlayer()]->SetResearching( item->GetUserDataSint32() );
 		if(g_scienceManagementDialog) {
 			g_scienceManagementDialog->Update();
 		}
@@ -385,7 +385,7 @@ void sci_advancescreen_backPress(aui_Control *control, uint32 action, uint32 dat
 	}
 }
 
-void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sci_advancescreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -473,7 +473,7 @@ sint32 sci_advancescreen_loadList( void )
 			{
 				child->SetText(str);
 			}
-			item->SetUserData((void*)i);
+			item->SetUserData(i);
 			item->SetCompareCallback(ScienceSortCallback);
 
 			s_advanceList->AddItem( item );
@@ -495,7 +495,7 @@ sint32 sci_advancescreen_loadList( void )
 		s_advanceList->SelectItem(index);
 		ctp2_ListItem *	item =
 			reinterpret_cast<ctp2_ListItem *>(s_advanceList->GetSelectedItem());
-		isIndexOk = (research == reinterpret_cast<sint32>(item->GetUserData()));
+		isIndexOk = (research == item->GetUserDataSint32());
 	}
 
 	s_sci_advanceScreen->ShouldDraw(TRUE);
@@ -503,7 +503,7 @@ sint32 sci_advancescreen_loadList( void )
 	return 0;
 }
 
-sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
+sint32 sci_advancescreen_updateData( const MBCHAR *messageText, BOOL defaultMessage )
 {
 	MBCHAR str[_MAX_PATH];
 	sint32 advanceTurns;
@@ -532,9 +532,9 @@ sint32 sci_advancescreen_updateData( MBCHAR *messageText, BOOL defaultMessage )
 		return 0;
 	}
 
-	sci_advancescreen_setStatsInfo( (long)item->GetUserData(), g_selected_item->GetVisiblePlayer());
+	sci_advancescreen_setStatsInfo( item->GetUserDataSint32(), g_selected_item->GetVisiblePlayer());
 
-	advanceTurns = p->m_advances->TurnsToNextAdvance((AdvanceType)item->GetUserData());
+	advanceTurns = p->m_advances->TurnsToNextAdvance(item->GetUserDataSint32());
 
 	if ( advanceTurns == -1 )
 	{
@@ -730,8 +730,8 @@ sint32 sci_advancescreen_isOnScreen()
 sint32 ScienceSortCallback(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
 	sint32 turns1,turns2;
-	turns1 = g_theAdvanceDB->Get((long)item1->GetUserData())->GetCost();
-	turns2 = g_theAdvanceDB->Get((long)item2->GetUserData())->GetCost();
+	turns1 = g_theAdvanceDB->Get(item1->GetUserDataSint32())->GetCost();
+	turns2 = g_theAdvanceDB->Get(item2->GetUserDataSint32())->GetCost();
 	return turns1-turns2;
 }
 

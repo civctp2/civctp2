@@ -8,12 +8,12 @@
 
 extern C3UI			*g_c3ui;
 
-void BlockPush(MBCHAR *path, MBCHAR *addition)
-	{
+void BlockPush(MBCHAR *path, const MBCHAR *addition)
+{
 
 	Assert(addition != NULL) ;
 
-	Assert(addition[0] != NULL) ;
+	Assert(addition[0] != '\0') ;
 
 	Assert(path != NULL) ;
 
@@ -22,31 +22,30 @@ void BlockPush(MBCHAR *path, MBCHAR *addition)
 	Assert(addition[0] != '.') ;
 	Assert(addition[strlen(addition)] != '.') ;
 
-	if (path[0]!=NULL)
+	if (path[0] != '\0')
 		strcat(path, ".") ;
 
 	strcat(path, addition) ;
-	}
+}
 
 void BlockPop(MBCHAR *path)
-	{
+{
 	MBCHAR	*p ;
 
 	Assert(path != NULL) ;
 
-	Assert(path[0] != NULL) ;
+	Assert(path[0] != '\0') ;
 	p = strrchr(path, '.') ;
 
 	Assert(p!=NULL) ;
 	if (p==NULL)
 		return ;
 
-	*p = NULL ;
-	}
+	*p = '\0';
+}
 
-void ui_TruncateString( aui_Control *control, MBCHAR *str )
+void ui_TruncateString( aui_Control *control, const MBCHAR *str )
 {
-
 	MBCHAR name[ _MAX_PATH + 1 ];
 	strncpy( name, str, _MAX_PATH );
 
@@ -60,19 +59,18 @@ void ui_TruncateString( aui_Control *control, MBCHAR *str )
 	control->SetText(name);
 }
 
-MBCHAR *uiutils_ChooseLdl(MBCHAR *firstChoice, MBCHAR *fallback)
+const MBCHAR *uiutils_ChooseLdl(const MBCHAR *firstChoice, const MBCHAR *fallback)
 {
-    if (aui_Ldl::IsValid(firstChoice))
+	if (aui_Ldl::IsValid(firstChoice))
 		return firstChoice;
 
-    if (aui_Ldl::IsValid(fallback))
+	if (aui_Ldl::IsValid(fallback))
 		return fallback;
 
 	return NULL;
 }
 
-
-MBCHAR *uiutils_AppendBlock(MBCHAR *destString, MBCHAR *srcString1, MBCHAR *srcString2)
+MBCHAR *uiutils_AppendBlock(MBCHAR *destString, const MBCHAR *srcString1, const MBCHAR *srcString2)
 {
 	sprintf(destString, "%s.%s", srcString1, srcString2);
 

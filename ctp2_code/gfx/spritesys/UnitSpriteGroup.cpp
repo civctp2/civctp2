@@ -264,7 +264,7 @@ void UnitSpriteGroup::DrawText(sint32 x, sint32 y, MBCHAR const * s)
 }
 
 bool
-UnitSpriteGroup::GetImageFileName(MBCHAR * name, char *format,...)
+UnitSpriteGroup::GetImageFileName(MBCHAR * name, const char *format,...)
 {
    	va_list          v_args;
 	char			 fname[512];

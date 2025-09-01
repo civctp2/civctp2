@@ -127,7 +127,7 @@ static jobject gj_mySession = NULL;	/* global handle to the currently open Sessi
 */
 static char *getCstring(JNIEnv *env, jstring jstr, char *buf, size_t buflen)
 {
-    int len;
+	sint32 len;
 	const char *utf8path;
 
 	/* Turn it into a null-terminated UTF string */
@@ -210,7 +210,7 @@ static struct {
 	jfieldID dialingMethod;
 } cfid;
 
-static long stop; //set to 1 to stop dial/answer; reset to 0 before dpCreate
+static size_t stop; //set to 1 to stop dial/answer; reset to 0 before dpCreate
 
 /* Initialize the field id's in cfid for use by commInitReq_CtoJava() and
  * commInitReq_JavatoC().  Must call often for now.
@@ -260,7 +260,7 @@ static jobject commInitReq_CtoJava(JNIEnv *env, jclass hccommInitReq, commInitRe
 	if (!cur)
 		return NULL;
 
-	/* Save the four int fields. */
+	/* Save the four sint32 fields. */
 	(*env)->SetIntField(env, cur, cfid.sessionId,  0xffff & c->sessionId);
 	(*env)->SetIntField(env, cur, cfid.portnum, 0xffff & c->portnum);
 	(*env)->SetIntField(env, cur, cfid.baud, 0xffff & c->baud);
@@ -287,7 +287,7 @@ static commInitReq_t *commInitReq_JavatoC(JNIEnv *env, jobject cur, commInitReq_
 
 	c->reqLen = sizeof(commInitReq_t);
 PRINTF(("jtoc:\n"));
-	/* Get the int fields. */
+	/* Get the sint32 fields. */
 	c->sessionId    = (*env)->GetIntField(env, cur, cfid.sessionId);
 	c->portnum    = (*env)->GetIntField(env, cur, cfid.portnum);
 	c->baud    = (*env)->GetIntField(env, cur, cfid.baud);
@@ -377,7 +377,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_create
 		cparams.sessionId = rand() | (rand() << 16) | time(0) | eclock();
 #endif
 		cparams.hwirq = 12345;   //enable stopping dial/answer
-		cparams.swint = (long)&stop;
+		cparams.swint = (size_t)&stop;
 		stop = 0;
 		pparams = &cparams;
 	}
@@ -395,7 +395,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_create
 JNIEXPORT jint JNICALL Java_Activision_ANet_destroy
   (JNIEnv *env, jobject jANet, jint flags)
 {
-	int err = dpDestroy(myDP, flags);
+	sint32 err = dpDestroy(myDP, flags);
 	myDP = NULL;
 	return dp_RES_BAD;
 }
@@ -436,7 +436,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_enumPorts
 {
 	dp_transport_t transport;
 	commPortName_t ports[5];
-	int nports, n, err;
+	sint32 nports, n, err;
 
 	jmethodID jmPort;		/* Method to construct commPortName() */
 	jclass jclPort;			/* Class of commPortName */
@@ -510,7 +510,7 @@ static playerHdl_t dpid2commHdl(dpid_t id)
 	playerHdl_t *pH = NULL;
 	dpid_t firstId;
 	char *p;
-	int i;
+	sint32 i;
 	assoctab_t *tab;
 	assoctab_item_t *pi;
 
@@ -548,7 +548,7 @@ static dptab_table_t *getTable(JNIEnv *env, jobject cur)
 	if (!keylen) return NULL;
 	if ((ckey = (*env)->GetByteArrayElements(env, key, NULL)) == NULL)
 		return NULL;
-	tab = dptab_getTable(myDP->dt, ckey, (int)keylen);
+	tab = dptab_getTable(myDP->dt, ckey, (sint32)keylen);
 	(*env)->ReleaseByteArrayElements(env, key, ckey, 0);
 	return tab;
 }
@@ -564,10 +564,10 @@ t_tableContext tcontext;
 /*-------------------------------------------------------------------------
  Callback triggered when table variable is set, deleted or sent.
 -------------------------------------------------------------------------*/
-static int dp_PASCAL table_cb(
+static sint32 dp_PASCAL table_cb(
 	dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest,
-	char *subkey, int subkeylen, void *buf, size_t sent, size_t total,
-	int seconds_left, void *context, dp_result_t status)
+	char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total,
+	sint32 seconds_left, void *context, dp_result_t status)
 {
 	jmethodID cb_methodID;
 	jobject gtab = ((t_tableContext *)context)->gtab;
@@ -661,7 +661,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_getTable
 			DPRINT(("getTable: can't create global ref to callback\n"));
 			return dp_RES_BUG;
 		}
-		err = dptab_createTable(myDP->dt, &tab, ckey, (int)keylen, 0, NULL, NULL, table_cb, &tcontext);
+		err = dptab_createTable(myDP->dt, &tab, ckey, (sint32)keylen, 0, NULL, NULL, table_cb, &tcontext);
 		(*env)->ReleaseByteArrayElements(env, key, ckey, 0);
 		if (err != dp_RES_OK && err != dp_RES_ALREADY) {
 			(*env)->DeleteGlobalRef(env, tcontext.gtab);
@@ -692,7 +692,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_destroyTable
 	if (!keylen) return dp_RES_BAD;
 	if ((ckey = (*env)->GetByteArrayElements(env, key, NULL)) == NULL)
 		return dp_RES_BAD;
-	err = dptab_deleteTable(myDP->dt, ckey, (int)keylen);
+	err = dptab_deleteTable(myDP->dt, ckey, (sint32)keylen);
 	(*env)->ReleaseByteArrayElements(env, key, ckey, 0);
 	return err;
 }
@@ -753,7 +753,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_requestSubscription
 	if ((h = dpid2commHdl((dpid_t)pId)) == PLAYER_NONE) return dp_RES_BAD;
 	ckey = (*env)->GetByteArrayElements(env, pubKey, NULL);
 	keylen = (*env)->GetArrayLength(env, pubKey);
-	err = dptab_requestSubscription(myDP->dt, ckey, (int)keylen, h, NULL, NULL);
+	err = dptab_requestSubscription(myDP->dt, ckey, (sint32)keylen, h, NULL, NULL);
 	(*env)->ReleaseByteArrayElements(env, pubKey, ckey, 0);
 	return err;
 }
@@ -774,7 +774,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_deletePublisher
 	if ((h = dpid2commHdl((dpid_t)pId)) == PLAYER_NONE) return dp_RES_BAD;
 	ckey = (*env)->GetByteArrayElements(env, pubKey, NULL);
 	keylen = (*env)->GetArrayLength(env, pubKey);
-	err = dptab_deletePublisher(myDP->dt, ckey, (int)keylen, h);
+	err = dptab_deletePublisher(myDP->dt, ckey, (sint32)keylen, h);
 	(*env)->ReleaseByteArrayElements(env, pubKey, ckey, 0);
 	return err;
 }
@@ -821,7 +821,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_setVal
   (JNIEnv *env, jobject jobj, jbyteArray subkey, jobject buf, jint hops)
 {
 	dp_result_t err;
-	int subkeylen, buflen;
+	sint32 subkeylen, buflen;
 	char *csubkey, *cbuf;
 	dptab_table_t *tab;
 	jclass jbcl;
@@ -835,7 +835,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_setVal
 	buflen = (*env)->GetArrayLength(env, (jbyteArray)buf);
 	csubkey = (*env)->GetByteArrayElements(env, subkey, NULL);
 	cbuf = (*env)->GetByteArrayElements(env, (jbyteArray)buf, NULL);
-	err = dptab_set(myDP->dt, tab, csubkey, subkeylen, cbuf, buflen, (int) hops, PLAYER_ME);
+	err = dptab_set(myDP->dt, tab, csubkey, subkeylen, cbuf, buflen, (sint32) hops, PLAYER_ME);
 	(*env)->ReleaseByteArrayElements(env, subkey, csubkey, 0);
 	(*env)->ReleaseByteArrayElements(env, (jbyteArray)buf, cbuf, 0);
 	return (jint)err;
@@ -850,7 +850,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_00024ANetTable_getValByKey
   (JNIEnv *env, jobject jobj, jbyteArray subkey)
 {
 	dp_result_t err;
-	int subkeylen, buflen;
+	sint32 subkeylen, buflen;
 	char *csubkey, *cbuf;
 	jbyteArray buf;
 	dptab_table_t *tab;
@@ -876,7 +876,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_00024ANetTable_getValByIndex
   (JNIEnv *env, jobject jobj, jint index, jbyteArray subkey)
 {
 	dp_result_t err;
-	int subkeylen, buflen;
+	sint32 subkeylen, buflen;
 	char *csubkey, *cbuf;
 	jbyteArray buf;
 	dptab_table_t *tab;
@@ -884,7 +884,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_00024ANetTable_getValByIndex
 		return NULL;
 	if ((tab = getTable(env, jobj)) == NULL) return NULL;
 	csubkey = (*env)->GetByteArrayElements(env, subkey, NULL);
-	err = dptab_get_byindex(tab, (int)index, &cbuf, &buflen, csubkey, &subkeylen);
+	err = dptab_get_byindex(tab, (sint32)index, &cbuf, &buflen, csubkey, &subkeylen);
 	(*env)->ReleaseByteArrayElements(env, subkey, csubkey, 0);
 	if (err != dp_RES_OK) return NULL;
 	buf = (*env)->NewByteArray(env, buflen);
@@ -901,7 +901,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_deleteVal
   (JNIEnv *env, jobject jobj, jbyteArray subkey)
 {
 	dp_result_t err;
-	int subkeylen;
+	sint32 subkeylen;
 	char *csubkey;
 	dptab_table_t *tab;
 	if (!myDP)
@@ -1051,7 +1051,7 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_00024ANetTable_deleteVal
 /*-------------------------------------------------------------------------
  Callback triggered by listing game servers.
 -------------------------------------------------------------------------*/
-int dp_PASCAL listServers_cb(const char *hostname, long roundtrip_ms,dp_serverInfo_t *server,long *pTimeout,long flags,void *context)
+sint32 dp_PASCAL listServers_cb(const char *hostname, sint32 roundtrip_ms,dp_serverInfo_t *server, sint32 *pTimeout, sint32 flags,void *context)
 {
 	(void) hostname;
 	(void) roundtrip_ms;
@@ -1097,8 +1097,8 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 	jmethodID constructor_methodID;
 	jobjectArray out;
 	jfieldID fid_hostname, fid_rtt_ms_avg, fid_loss_percent, fid_sesstype_players;
-	int i;
-	int n;
+	sint32 i;
+	sint32 n;
 
 	if (!myDP)
 		return NULL;
@@ -1150,7 +1150,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 		dp_serverInfo_t *server;
 		size_t serverlen;
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		dp_result_t err = dptab_get_byindex(myDP->serverpings, i, (void **)&server, &serverlen, subkey, &subkeylen);
 		if (err != dp_RES_OK)
 			continue;
@@ -1165,7 +1165,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 		if (!cur)
 			break;
 
-		/* Save the two int fields. */
+		/* Save the two sint32 fields. */
 		(*env)->SetIntField(env, cur, fid_rtt_ms_avg, server->rtt_ms_avg);
 		(*env)->SetIntField(env, cur, fid_loss_percent, server->loss_percent);
 		(*env)->SetIntField(env, cur, fid_sesstype_players, server->cur_sessTypeUsers);
@@ -1207,7 +1207,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumServers
 		if (!cur)
 			break;
 
-		/* Save the two int fields. */
+		/* Save the two sint32 fields. */
 		(*env)->SetIntField(env, cur, fid_rtt_ms_avg, server->rtt_ms_avg);
 		(*env)->SetIntField(env, cur, fid_loss_percent, server->loss_percent);
 
@@ -1268,7 +1268,7 @@ static struct {
 	jmethodID constructor_methodID;
 	jobjectArray out;
 	jfieldID fidName, fidPath, fidNeeds, fidCapabilities;
-	int n;
+	sint32 n;
 } et;
 
 /*--------------------------------------------------------------------------
@@ -1287,7 +1287,7 @@ void dp_PASCAL enumTransports_cb(const dp_transport_t *path, const comm_driverIn
 		if (!cur)
 			return;
 
-		/* Save the two int fields. */
+		/* Save the two sint32 fields. */
 		(*et.env)->SetIntField(et.env, cur, et.fidNeeds, 0xffff & info->needs);
 		(*et.env)->SetIntField(et.env, cur, et.fidCapabilities, 0xffff & info->capabilities);
 
@@ -1389,7 +1389,7 @@ static struct {
  * Must call often for now.
  * Returns TRUE on success, FALSE on failure.
  */
-static int InstalledApp_init(JNIEnv *env)
+static sint32 InstalledApp_init(JNIEnv *env)
 {
 	afid.jclApp = (*env)->FindClass(env,"Activision/ANet$InstalledApp");
 	if (afid.jclApp == NULL) return FALSE;
@@ -1517,7 +1517,7 @@ static void dp_PASCAL outputGame_cb(dp_appParam_t *param,void *context)
 JNIEXPORT jobject JNICALL Java_Activision_ANet_enumInstalledApps
   (JNIEnv *env, jobject jANet)
 {
-	int err;
+	sint32 err;
 	jclass jclVec;
 	jmethodID jmVec;
 
@@ -1558,7 +1558,7 @@ JNIEXPORT jobject JNICALL Java_Activision_ANet_enumInstalledApps
 JNIEXPORT jint JNICALL Java_Activision_ANet_00024InstalledApp_execWithConsole
   (JNIEnv *env, jobject jInstalledApp)
 {
-	int status;
+	sint32 status;
 	char name[MAX_PATH];
 	char path[MAX_PATH];
 	char args[MAX_PATH];
@@ -1695,8 +1695,8 @@ static struct {
 
 /* Can store these things only because dpEnumSession (timeout=0) completes immediately */
 static struct {
-	int n;
-	int nSessions;
+	sint32 n;
+	sint32 nSessions;
 	jobjectArray out;
 	jclass hcSession;
 } es;
@@ -1763,7 +1763,7 @@ static jobject Session_CtoJava(JNIEnv *env, jclass hcSession, dp_session_t *s)
 	if (!cur)
 		return NULL;
 
-	/* Save the int fields. */
+	/* Save the sint32 fields. */
 	(*env)->SetIntField(env, cur, sfid.type,       0xffff & s->sessionType);
 	(*env)->SetIntField(env, cur, sfid.maxPlayers, 0xffff & s->maxPlayers);
 	(*env)->SetIntField(env, cur, sfid.curPlayers, 0xffff & s->currentPlayers);
@@ -1823,7 +1823,7 @@ static dp_session_t *Session_JavatoC(JNIEnv *env, jobject cur, dp_session_t *s)
 
 	memset(s, 0, sizeof(*s));
 PRINTF(("jtoc:\n"));
-	/* Get the int fields. */
+	/* Get the sint32 fields. */
 	s->sessionType    = (*env)->GetIntField(env, cur, sfid.type);
 	s->maxPlayers     = (*env)->GetIntField(env, cur, sfid.maxPlayers);
 	s->currentPlayers = (*env)->GetIntField(env, cur, sfid.curPlayers);
@@ -1883,9 +1883,9 @@ PRINTF(("done:\n"));
 /*--------------------------------------------------------------------------
  Callback triggered by getting player info.
 --------------------------------------------------------------------------*/
-int dp_PASCAL enumSessions_cb(dp_session_t *sess, long *pTimeout, long flags, void *context)
+sint32 dp_PASCAL enumSessions_cb(dp_session_t *sess, sint32 *pTimeout, sint32 flags, void *context)
 {
-    JNIEnv *callback_env = (JNIEnv *)context;
+	JNIEnv *callback_env = (JNIEnv *)context;
 	if (!myDP || !sess) return 0;
 
 	if ((es.n < es.nSessions) && callback_env) {
@@ -1902,7 +1902,7 @@ int dp_PASCAL enumSessions_cb(dp_session_t *sess, long *pTimeout, long flags, vo
 	return 0;
 }
 
-int dp_PASCAL countSessions_cb(dp_session_t *sess, long *pTimeout, long flags, void *context)
+sint32 dp_PASCAL countSessions_cb(dp_session_t *sess, sint32 *pTimeout, sint32 flags, void *context)
 {
 	if (sess)
 		es.nSessions++;
@@ -1917,7 +1917,7 @@ int dp_PASCAL countSessions_cb(dp_session_t *sess, long *pTimeout, long flags, v
 JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumSessions
   (JNIEnv *env, jobject jANet, jint sessType)
 {
-	int i;
+	sint32 i;
 	dp_session_t sess;
 	dp_result_t err;
 
@@ -1988,12 +1988,12 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_setSessionDesc
 {
 	dp_session_t sess;
 
-    /* Convert the session description */
-    if (NULL == Session_JavatoC(env, jSession, &sess))
-        return dp_RES_BUG;
+	/* Convert the session description */
+	if (NULL == Session_JavatoC(env, jSession, &sess))
+		return dp_RES_BUG;
 
-    /* Set the session description (3rd parameter, "flags", is unused) */
-    return dpSetSessionDesc(myDP, &sess, 0L);
+	/* Set the session description (3rd parameter, "flags", is unused) */
+	return dpSetSessionDesc(myDP, &sess, 0L);
 }
 
 /*
@@ -2004,13 +2004,13 @@ JNIEXPORT jint JNICALL Java_Activision_ANet_setSessionDesc
 JNIEXPORT jint JNICALL Java_Activision_ANet_enableNewPlayers
   (JNIEnv *env, jobject jANet, jboolean enable)
 {
-    return dpEnableNewPlayers(myDP, enable);
+	return dpEnableNewPlayers(myDP, enable);
 }
 
 /** Context for a join_sess callback */
 typedef struct s_openContext {
-    JNIEnv *env;
-    jobject gjcb;
+	JNIEnv *env;
+	jobject gjcb;
 } t_openContext;
 
 t_openContext context;
@@ -2018,11 +2018,11 @@ t_openContext context;
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen when joining a session.
 -------------------------------------------------------------------------*/
-static int dp_PASCAL join_sess_cb(dp_session_t *ps, long *pTimeout, long flags, void *context)
+static sint32 dp_PASCAL join_sess_cb(dp_session_t *ps, sint32 *pTimeout, sint32 flags, void *context)
 {
 	jmethodID cb_methodID ;
 	jobject gjcb = ((t_openContext *)context)->gjcb;
-    JNIEnv *callback_env = ((t_openContext *)context)->env;
+	JNIEnv *callback_env = ((t_openContext *)context)->env;
 	jclass hcSessionListener;
 	jclass hcSession;
 
@@ -2160,8 +2160,8 @@ static struct {
 
 /* Can store these things only because dpEnumPlayers (local) completes immediately */
 static struct {
-	int n;
-	int nPlayers;
+	sint32 n;
+	sint32 nPlayers;
 	jclass hcPlayer;
 	jobjectArray out;
 } ep;
@@ -2208,7 +2208,7 @@ static jobject Player_CtoJava(JNIEnv *env, jclass hcPlayer, dp_playerId_t *s)
 	if (!cur)
 		return NULL;
 
-	/* Save the int fields. */
+	/* Save the sint32 fields. */
 	(*env)->SetIntField(env, cur, pfid.id, 0xffff & s->id);
 	(*env)->SetIntField(env, cur, pfid.local, memcmp(s->adr, myDP->dpio->myAdr, myDP->dpio->myAdrLen) ? FALSE : TRUE);
 
@@ -2227,7 +2227,7 @@ static dp_playerId_t *Player_JavatoC(JNIEnv *env, jobject cur, dp_playerId_t *s)
 	jbyteArray arr;
 	jstring js;
 
-	/* Get the int field. */
+	/* Get the sint32 field. */
 	s->id    = (*env)->GetIntField(env, cur, pfid.id);
 
 	/* Get the string field. */
@@ -2243,7 +2243,7 @@ static dp_playerId_t *Player_JavatoC(JNIEnv *env, jobject cur, dp_playerId_t *s)
 /*--------------------------------------------------------------------------
  Callback triggered by getting player info.
 --------------------------------------------------------------------------*/
-void dp_PASCAL enumPlayers_cb(dpid_t id, dp_char_t *name, long flags, void *context)
+void dp_PASCAL enumPlayers_cb(dpid_t id, dp_char_t *name, sint32 flags, void *context)
 {
 	jbyteArray arr;
 	jobject cur;
@@ -2261,7 +2261,7 @@ void dp_PASCAL enumPlayers_cb(dpid_t id, dp_char_t *name, long flags, void *cont
 		if (!cur)
 			return;
 
-		/* Save the int fields. */
+		/* Save the sint32 fields. */
 		(*callback_env)->SetIntField(callback_env, cur, pfid.id, 0xffff & id);
 		(*callback_env)->SetBooleanField(callback_env, cur, pfid.local,
                     (jboolean) ((flags & dp_EPC_FLAGS_LOCAL) == dp_EPC_FLAGS_LOCAL));
@@ -2285,7 +2285,7 @@ void dp_PASCAL enumPlayers_cb(dpid_t id, dp_char_t *name, long flags, void *cont
 JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumPlayers
   (JNIEnv *env, jobject jANet)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 
 	if (!myDP) return NULL;
@@ -2316,7 +2316,7 @@ JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_enumPlayers
 /*-------------------------------------------------------------------------
  Callback triggered by creating a player.
 -------------------------------------------------------------------------*/
-int dp_PASCAL create_player_cb(dpid_t id, char_t *name, long flags, void *context)
+sint32 dp_PASCAL create_player_cb(dpid_t id, char_t *name, sint32 flags, void *context)
 {
 	jmethodID cb_methodID;
 	jclass hcPlayerListener;
@@ -2598,7 +2598,7 @@ static jobject Packet_CtoJava(JNIEnv *env, jclass hcPacket, dp_packet_t *pkt)
 	if (!cur)
 		return NULL;
 
-	/* Save the three int fields. */
+	/* Save the three sint32 fields. */
 	(*env)->SetIntField(env, cur, qfid.src,  0xffff & pkt->src);
 	(*env)->SetIntField(env, cur, qfid.dest, 0xffff & pkt->dest);
 	(*env)->SetIntField(env, cur, qfid.err, 0xffff & pkt->err);
@@ -2618,11 +2618,11 @@ static jobject Packet_CtoJava(JNIEnv *env, jclass hcPacket, dp_packet_t *pkt)
 /* Convert a Java ANet.Packet to a C packet.
  * Returns dp_RES_OK on success.
  */
-static int Packet_JavatoC(JNIEnv *env, jobject cur, dp_packet_t *pkt)
+static sint32 Packet_JavatoC(JNIEnv *env, jobject cur, dp_packet_t *pkt)
 {
 	jbyteArray arr;
 
-	/* Get the three int fields. */
+	/* Get the three sint32 fields. */
 	pkt->src    = (*env)->GetIntField(env, cur, qfid.src);
 	pkt->dest   = (*env)->GetIntField(env, cur, qfid.dest);
 	pkt->err   = (*env)->GetIntField(env, cur, qfid.err);
@@ -2653,8 +2653,8 @@ static int Packet_JavatoC(JNIEnv *env, jobject cur, dp_packet_t *pkt)
 JNIEXPORT jobjectArray JNICALL Java_Activision_ANet_receivePackets
   (JNIEnv *env, jobject jANet)
 {
-	int i;
-	int n;
+	sint32 i;
+	sint32 n;
 	jobjectArray out;
 	jclass hcPacket;
 	dp_packet_t pkts[MAX_PKTS];
@@ -2672,7 +2672,7 @@ PRINTF(("receivePackets: in\n"));
 
 	/* Fetch packets.  Grab them into a local C array first. */
 	for (i=0; i<MAX_PKTS; i++) {
-		int j;
+		sint32 j;
 
 		/* Check for a packet.  Don't believe it right away if it
 		 * tells you none are ready!
@@ -2724,9 +2724,9 @@ PRINTF(("receivePackets: success\n"));
 }
 
 #if 0
-void dumpBuf(char *buf, int len)
+void dumpBuf(char *buf, sint32 len)
 {
-	int i;
+	sint32 i;
 	for (i=0; i<len; i++) {
 		printf("%02x ", buf[i]);
 	}

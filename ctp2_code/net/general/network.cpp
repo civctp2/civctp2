@@ -186,7 +186,7 @@ extern ChatBox *g_chatBox;
 
 extern c3_UtilityPlayerListPopup *g_networkPlayersScreen;
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 void network_AbortCallback( sint32 type )
 {
@@ -249,6 +249,7 @@ Network::Network() :
 	if(m_noThread) {
 		m_netIO = new ActivNetIO;
 		m_netIO->Init(this);
+
 	} else {
 		m_netIO = new NetThread;
 		m_netIO->Init(this);
@@ -712,7 +713,7 @@ Network::Process()
 		if(battleEndedTime < 0) {
 			battleEndedTime = time(0);
 		} else if(battleEndedTime + 30 < time(0)) {
-			battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+			battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 			battleEndedTime = -1;
 		}
 	} else {
@@ -1043,7 +1044,7 @@ void Network::PacketReady(sint32 from,
 }
 
 void Network::AddPlayer(uint16 id,
-                        char* name)
+                        const char* name)
 {
 	if(m_iAmHost) {
 		QueuePacketToAll(new NetAddPlayer(id, name));
@@ -2080,11 +2081,8 @@ Network::IndexToId(sint32 index)
 
 void Network::SetPlayerIndex(sint32 index, uint16 id)
 {
-	BOOL sendMessage = FALSE;
 	if(id == m_pid) {
 		m_playerIndex = index;
-	} else {
-		sendMessage = TRUE;
 	}
 	m_totalTimeUsed = 0;
 
@@ -2794,7 +2792,7 @@ void Network::TogglePacketLog()
 
 #endif
 
-PlayerData::PlayerData(char* name, uint16 id) :
+PlayerData::PlayerData(const char* name, uint16 id) :
 	m_id(id),
 	m_index(-1),
 	m_frozen(FALSE),

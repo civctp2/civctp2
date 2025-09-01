@@ -110,7 +110,7 @@ static c3_Static   * s_tileIBR     = NULL;
 
 #define HELPTILE_WINDOWldl "HelpTileWindow"
 
-AUI_ERRCODE newC3Static(MBCHAR * parent, MBCHAR * name, c3_Static ** c3Static)
+AUI_ERRCODE newC3Static(const MBCHAR * parent, const MBCHAR * name, c3_Static ** c3Static)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
@@ -131,7 +131,7 @@ sint32 removeTileWindow(uint32 action)
 	return 1;
 }
 
-void bExitPress(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void bExitPress(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	removeTileWindow(action);
 }

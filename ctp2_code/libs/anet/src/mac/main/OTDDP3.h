@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 extern "C" {
 #endif
 
+#include "types.h"
+
 	#define	ddpMaxRawData		512
 	#define kSocketType			"\pNetMech Transponder"
 
@@ -44,8 +46,8 @@ extern "C" {
 	UInt16 OTMySetNBPEntity(char *buffer, Ptr nbpObject, Ptr nbpType, Ptr nbpZone);
 
 	void CheckZoneList(void);
-	short CountZoneNamesInBuffer(Ptr packedBuffer, unsigned long bufferSize);
-	short UnpackZoneNames(Ptr packedBuffer, unsigned long bufferSize);
+	sint16 CountZoneNamesInBuffer(Ptr packedBuffer, uint32 bufferSize);
+	sint16 UnpackZoneNames(Ptr packedBuffer, uint32 bufferSize);
 
 	pascal void  HandleEndpointEventsDDP(void* contextPtr, OTEventCode code, OTResult result, void* it);
 	pascal void HandleEndpointEventsNBP(void* contextPtr, OTEventCode code, OTResult result, void* it);

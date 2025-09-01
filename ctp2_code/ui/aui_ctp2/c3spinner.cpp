@@ -23,9 +23,9 @@ extern C3UI *g_c3ui;
 C3Spinner::C3Spinner(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -60,7 +60,7 @@ C3Spinner::C3Spinner(
 }
 
 
-AUI_ERRCODE C3Spinner::InitCommon( MBCHAR *ldlBlock )
+AUI_ERRCODE C3Spinner::InitCommon( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -80,9 +80,9 @@ C3Spinner::C3Spinner(
 	sint32 width,
 	sint32 height,
 	BOOL isVertical,
-	MBCHAR *pattern,
+	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),

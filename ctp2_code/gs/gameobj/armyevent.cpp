@@ -1420,7 +1420,7 @@ STDEHANDLER(DirectorMoveUnitsEvent)
 	UnitActor **restOfStack = NULL;
 	sint32 numRest = a->Num() - 1;
 	if (numRest > 0) {
-		restOfStack = new (UnitActor* [numRest]);
+		restOfStack = new UnitActor* [numRest];
 		a->GetActors(top_src, restOfStack);
 	}
 

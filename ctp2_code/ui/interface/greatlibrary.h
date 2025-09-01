@@ -128,7 +128,7 @@ public:
 class TechListItem: public ctp2_ListItem
 {
 public:
-	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, MBCHAR *ldlBlock);
+	TechListItem(AUI_ERRCODE *retval, sint32 index, DATABASE database, const MBCHAR *ldlBlock);
 
 	virtual void Update(void);
 
@@ -156,7 +156,7 @@ class GreatLibrary final : public KeyboardHandler
 {
 public:
 	GreatLibrary(sint32 theMode);
-	~GreatLibrary();
+	virtual ~GreatLibrary();
 
 	static void Initialize_Great_Library_Data();
 	static void Shutdown_Great_Library_Data();
@@ -204,7 +204,7 @@ public:
 		aui_Control *control,
 		uint32 action,
 		uint32 data,
-		void *cookie
+		Cookie cookie
 	);
 
 	void UpdateList(DATABASE database);
@@ -227,7 +227,7 @@ public:
 	void Add_Item_To_Topics_List
 	(
 		const MBCHAR *name,
-		int index
+		sint32 index
 	);
 
 	ctp2_Window * GetWindow( void ) const;
@@ -238,7 +238,7 @@ public:
 	bool IsHidden(sint32 index, DATABASE theDatabase) const;
 
 private:
-	static void SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, void * cookie);
+	static void SortByAgeCallback(aui_Control * control, uint32 action, uint32 data, Cookie cookie);
 
 	void Initialize(MBCHAR const * windowBlock);
 	template <class T>

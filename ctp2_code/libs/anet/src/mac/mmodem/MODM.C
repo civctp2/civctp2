@@ -138,7 +138,7 @@ void ser_destroy(ser_t *ser)
 
  Returns ser_HDL_NONE on failure.
 -----------------------------------------------------------------------*/
-ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, int insert)
+ser_hdl_t ser_adr2hdl(ser_t *ser, ser_adr_t *adr, sint32 insert)
 {
 	if (*adr == ser->myAdr) {
 		return ser_HDL_ME;
@@ -194,14 +194,14 @@ ser_result_t ser_hdl2adr(ser_t *ser, ser_hdl_t hdl, ser_adr_t *adr)
  Duh, I think this works.  Kee gave it to me.  Looks plausible, anyway.
  Is this really better than just adding the bytes together?
 -----------------------------------------------------------------------*/
-static unsigned char crc(unsigned char *ptr, int len)
+static uint8 crc(uint8 *ptr, sint32 len)
 {
-	short	crc = 0;
-	int	i;
-	int	j;
+	sint16	crc = 0;
+	sint32	i;
+	sint32	j;
 
 	for (i = 0; i < len; i++) {
-		crc = crc ^ (int) ptr[i] << 8;
+		crc = crc ^ (sint32) ptr[i] << 8;
 
 		for (j = 0; j < 8; ++j) {
 			if (crc & 0x8000) {
@@ -214,12 +214,12 @@ static unsigned char crc(unsigned char *ptr, int len)
 	return crc & 0xff;
 }
 
-unsigned char CTB_crc(unsigned char *ptr, int len) {
-    short crc = 0;
-    int i, j;
+uint8 CTB_crc(uint8 *ptr, sint32 len) {
+    sint16 crc = 0;
+    sint32 i, j;
 
     for (i = 0; i < len; i++) {
-		crc = crc ^ (int) ptr[i] << 8;
+		crc = crc ^ (sint32) ptr[i] << 8;
 
         for (j = 0; j < 8; ++j) {
             if (crc & 0x8000) crc = crc << 1 ^ 0x1021;
@@ -259,7 +259,7 @@ ser_result_t CTB_put(ser_t *ser, void *buf, size_t len)
 	hdr.bodycrc = CTB_crc(buf, len);
 	{
 		CMErr		theErr;
-		long		nBytes;
+		sint32		nBytes;
 		char kludge[1000];
 		memcpy(kludge, &hdr, 5);
 		memcpy(kludge + 5, buf, len);
@@ -322,13 +322,13 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len)
 	SetZone(SystemZone());
 
 	while (true) {
-		int c;
-		unsigned char	csum;
+		sint32 c;
+		uint8	csum;
 	
 		//	if we have used up all of the bytes in our recieve buffer, read some more
 		
 		if (ser->head >= ser->len) {
-			long	nBytes = ser_READSIZE;
+			sint32	nBytes = ser_READSIZE;
 			CMErr	theErr;
 			
 			theErr = CMRead(
@@ -368,7 +368,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len)
 		
 		c = ser->rbuf[ser->head++];
 		if (ser->got < 5)		// if still filling header[
-			((unsigned char *)&ser->pkt)[ser->got++] = c;
+			((uint8 *)&ser->pkt)[ser->got++] = c;
 		else	
 			ser->pkt.body[ser->got++ - 5] = c;
 
@@ -386,7 +386,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len)
 		} else if (ser->got == 4) {
 			// Is header Checksum valid?
 			csum = (ser_HDR_FRAME0 + ser_HDR_FRAME1 + ser->pkt.hdr.bodylen) & 0xff;
-			if (((unsigned char) c) != csum) {
+			if (((uint8) c) != csum) {
 				ser->got = 0;			// no, just start over.
 			}
 		} else if (ser->got >= 5 + ser->pkt.hdr.bodylen) {
@@ -403,7 +403,7 @@ ser_result_t CTB_get(ser_t *ser, void *buf, size_t *len)
 				return ser_RES_FULL;	// no, packet too big to fit, fail
 			} else {
 				//ser_adr_t	adr;
-				short			lngth;
+				sint16			lngth;
 				char*			srcPtr;
 				
 				// Yes.  Copy packet to user, prepare for next packet.

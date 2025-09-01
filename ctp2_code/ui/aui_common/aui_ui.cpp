@@ -412,9 +412,8 @@ aui_Image *aui_UI::SetBackgroundImage( aui_Image *image, sint32 x, sint32 y )
 
 AUI_ERRCODE aui_UI::AddChild( aui_Region *child )
 {
-	Assert(this);
 	Assert( child != NULL );
-	if ( !child || !this) return AUI_ERRCODE_INVALIDPARAM;
+	if ( !child ) return AUI_ERRCODE_INVALIDPARAM;
 
 	Assert( child->IsThisA( aui_Window::m_windowClassId ) );
 	if ( !child->IsThisA( aui_Window::m_windowClassId ) )

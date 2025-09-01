@@ -54,7 +54,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* an instance of the wmq module */
 typedef struct {
 	char dir[wmq_DIR_MAXLEN];	/* directory holding data files */
-	int openForWrite;	/* Must specify read or write when creating */
+	sint32 openForWrite;	/* Must specify read or write when creating */
 	time_t t;			/* Most recent time read or written */
 	time_t tmin;		/* range of times covered by current file */
 	time_t tmax;
@@ -67,8 +67,8 @@ typedef struct {
 	time_t timestamp;		/* time when this record was written */
 	char serverTag[6];		/* unique server identifier - e.g. IP address */
 	char recordTag[2];		/* tag identifying type of data */
-	unsigned short datalen;	/* length of the data in this record */
-	unsigned short buflen;	/* currently allocated length of buf */
+	uint16 datalen;			/* length of the data in this record */
+	uint16 buflen;			/* currently allocated length of buf */
 	char *buf;				/* pointer to data buffer */
 } wmq_record_t;
 
@@ -76,7 +76,7 @@ typedef struct {
  Create a web message queue.  Directory is where data files live.
  openForWrite is either 0 for reading or 1 for writing.
 --------------------------------------------------------------------------*/
-wmq_t *wmq_create(const char *dir, int openForWrite);
+wmq_t *wmq_create(const char *dir, sint32 openForWrite);
 
 /*--------------------------------------------------------------------------
  Destroy a web message queue.
@@ -90,7 +90,7 @@ void wmq_destroy(wmq_t *wmq);
  serverTag, generally the binary IP:port address.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, int serverTagLen);
+dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, sint32 serverTagLen);
 
 /*--------------------------------------------------------------------------
  Get the position of the next message to be read from a web message queue.
@@ -103,7 +103,7 @@ dp_result_t wmq_setServerTag(wmq_t *wmq, const char *serverTag, int serverTagLen
  *ptime is set to the time associated with the most recent record read;
  *poffset is set to the offset in the file holding that record.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_tell(wmq_t *wmq, long *poffset, time_t *ptime);
+dp_result_t wmq_tell(wmq_t *wmq, sint32 *poffset, time_t *ptime);
 
 /*--------------------------------------------------------------------------
  Seek to the given position in a web message queue.
@@ -116,7 +116,7 @@ dp_result_t wmq_tell(wmq_t *wmq, long *poffset, time_t *ptime);
  		 dp_RES_EMPTY if no appropriate file exists yet - wmq is untouched,
 		 dp_RES_BADSIZE if the file is corrupted - wmq is closed.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_seek(wmq_t *wmq, time_t when, long offset);
+dp_result_t wmq_seek(wmq_t *wmq, time_t when, sint32 offset);
 
 /*--------------------------------------------------------------------------
  Seek to the point following the last record before <when> in a wmq.
@@ -147,9 +147,9 @@ dp_result_t wmq_flush(wmq_t *wmq);
 
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_put(wmq_t *wmq, time_t now, const char *recordTag, const char *data, unsigned short datalen);
+dp_result_t wmq_put(wmq_t *wmq, time_t now, const char *recordTag, const char *data, uint16 datalen);
 
-dp_result_t wmq_putServer(wmq_t *wmq, time_t now, const char *serverTag, const char *recordTag, const char *data, unsigned short datalen);
+dp_result_t wmq_putServer(wmq_t *wmq, time_t now, const char *serverTag, const char *recordTag, const char *data, uint16 datalen);
 
 /*--------------------------------------------------------------------------
  Read the next record from a web message queue into a record structure.
@@ -171,7 +171,7 @@ dp_result_t wmq_get(wmq_t *wmq, wmq_record_t *record);
  Restore with wmq_restorePosition.
  Returns dp_RES_OK on success.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_savePosition(wmq_t *wmq, int fd);
+dp_result_t wmq_savePosition(wmq_t *wmq, sint32 fd);
 
 /*--------------------------------------------------------------------------
  Restore the position in a wmq from a file descriptor fd, created
@@ -179,6 +179,6 @@ dp_result_t wmq_savePosition(wmq_t *wmq, int fd);
  Returns dp_RES_OK on success,
  		 dp_RES_EMPTY if the file is empty.
 --------------------------------------------------------------------------*/
-dp_result_t wmq_restorePosition(wmq_t *wmq, int fd);
+dp_result_t wmq_restorePosition(wmq_t *wmq, sint32 fd);
 
 #endif

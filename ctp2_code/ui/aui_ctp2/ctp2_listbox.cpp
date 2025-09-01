@@ -65,7 +65,7 @@ ctp2_ListBox::ctp2_ListBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -108,7 +108,7 @@ ctp2_ListBox::ctp2_ListBox(
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),

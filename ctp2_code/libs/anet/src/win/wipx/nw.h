@@ -35,20 +35,20 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma pack(1)
 
-typedef unsigned char u8;
-typedef unsigned short u16;
+typedef uint8 u8;
+typedef uint16 u16;
 
 typedef struct {
 	// real mode pointer to area
 	// WARNING: must be same as native x86 far pointer!
-	short off, seg;
+	sint16 off, seg;
 } nw_segptr_t;
 
 // IPX network number
-typedef	unsigned char nw_netAdr_t[4];
+typedef	uint8 nw_netAdr_t[4];
 
 // IPX node address (link layer address)
-typedef	unsigned char nw_nodeAdr_t[6];
+typedef	uint8 nw_nodeAdr_t[6];
 
 // The two together form a full IPX internetwork address.
 typedef	struct {
@@ -65,7 +65,7 @@ typedef	struct {			// ECB
 	nw_segptr_t	EventServiceRoutine;
 	u8			InUseFlag;
 	u8			CompletionCode;
-	short		SocketNumber;
+	sint16		SocketNumber;
 	u8			WorkSpace[4];
 	u8			DriverWorkSpace[12];
 	nw_nodeAdr_t	ImmediateAddress;

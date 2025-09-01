@@ -88,7 +88,7 @@ void victorymoviewin_Initialize()
 
 void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason)
 {
-	MBCHAR		*whichMovie;
+	MBCHAR const		*whichMovie;
 
 	Assert(g_victoryMovieWindow != NULL);
 	if (g_victoryMovieWindow == NULL) return;
@@ -160,7 +160,7 @@ void victorymoviewin_Cleanup()
 }
 
 
-void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
+void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -205,12 +205,4 @@ void CloseVictoryMovieAction::Execute(aui_Control *control, uint32 action, uint3
 	victorywin_Initialize(type);
 
 	victorywin_DisplayWindow(type);
-
-	if (s_result == GAME_OVER_WON_SCIENCE) {
-		EndGame *endGame = NULL;
-
-		sint32 p = g_selected_item->GetVisiblePlayer();
-		if (g_player[p] != NULL)
-			endGame = g_player[p]->m_endGame;
-	}
 }

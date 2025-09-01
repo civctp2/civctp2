@@ -14,7 +14,7 @@ void victorymoviewin_DisplayVictoryMovie(GAME_OVER reason);
 
 void victorymoviewin_Cleanup();
 
-void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
+void victorymoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 AUI_ACTION_BASIC(CloseVictoryMovieAction);
 

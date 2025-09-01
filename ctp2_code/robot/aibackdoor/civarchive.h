@@ -31,8 +31,8 @@
 //
 // Modifications from the original Activision code:
 //
-// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin Gühmann)
-// - Removed DoubleUp method. (Sep 9th 2005 Martin Gühmann)
+// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin GÃ¼hmann)
+// - Removed DoubleUp method. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -52,8 +52,10 @@ class CivArchive;
 #include <SDL_endian.h>
 #endif
 
-#define k_ARCHIVE_MAGIC_VALUE_1	'OTAK'
-#define k_ARCHIVE_MAGIC_VALUE_2	'U-98'
+// Used for checking save game integrity
+#define k_ARCHIVE_MAGIC_VALUE_1	'OTAK' // Multichar may be different between compilers
+#define k_ARCHIVE_MAGIC_VALUE_2	'U-98' // At least the MS compiler and gcc agree on that
+// However, the only problem here seems to be endianess
 
 class GameFile ;
 class DataCheck ;
@@ -95,6 +97,7 @@ public:
 		void ResetForLoad(void);
 		uint8 *GetStream(void) { return (m_pbBaseMemory) ; }
 		size_t StreamLen(void) { return (m_ulLength) ; }
+		void DumpStream(const MBCHAR* fileName);
 
 		friend class GameFile ;
 		friend class GameMapFile ;

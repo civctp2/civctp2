@@ -87,10 +87,10 @@
 #include "primitives.h"
 #include "colorset.h"                   // g_colorSet
 
-extern C3UI       *g_c3ui;
+extern C3UI         *g_c3ui;
 
-static DipWizard  *s_dipWizard;
-static MBCHAR     *s_dipWizardBlock = "DipWizard";
+static DipWizard    *s_dipWizard;
+static const MBCHAR *s_dipWizardBlock = "DipWizard";
 
 ctp2_Static       *DipWizard::m_stages[DIP_WIZ_STAGE_MAX];
 ctp2_Button       *DipWizard::m_toneButtons[DIPLOMATIC_TONE_MAX];
@@ -169,7 +169,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	}
 
 	m_nations = (ctp2_DropDown *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage0.Nations");
-	if(m_nations) m_nations->SetActionFuncAndCookie(NationCallback, NULL);
+	if(m_nations) m_nations->SetActionFuncAndCookie(NationCallback, nullptr);
 
 	for(i = 0; i < DIPLOMATIC_TONE_MAX; i++) {
 		MBCHAR buttName[k_MAX_NAME_LEN];
@@ -178,7 +178,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 		Assert(m_toneButtons[i]);
 
 		if(m_toneButtons[i]) {
-			m_toneButtons[i]->SetActionFuncAndCookie(ToneButtonCallback, (void *)i);
+			m_toneButtons[i]->SetActionFuncAndCookie(ToneButtonCallback, i);
 		}
 
 		MBCHAR labelName[k_MAX_NAME_LEN];
@@ -193,31 +193,31 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	}
 
 	m_backButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.BackButton");
-	if(m_backButton) m_backButton->SetActionFuncAndCookie(BackCallback, NULL);
+	if(m_backButton) m_backButton->SetActionFuncAndCookie(BackCallback, nullptr);
 
 	m_nextButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.NextButton");
-	if(m_nextButton) m_nextButton->SetActionFuncAndCookie(NextCallback, NULL);
+	if(m_nextButton) m_nextButton->SetActionFuncAndCookie(NextCallback, nullptr);
 
 	m_cancelButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.CancelButton");
-	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, NULL);
+	if(m_cancelButton) m_cancelButton->SetActionFuncAndCookie(CancelCallback, nullptr);
 
 	m_sendButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons.SendButton");
-	if(m_sendButton) m_sendButton->SetActionFuncAndCookie(SendCallback, NULL);
+	if(m_sendButton) m_sendButton->SetActionFuncAndCookie(SendCallback, nullptr);
 
 	m_acceptButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.AcceptButton");
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.AcceptButton", AcceptCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.AcceptButton", AcceptCallback, nullptr);
 
 	m_rejectButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.RejectButton");
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.RejectButton", RejectCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "ViewButtons.RejectButton", RejectCallback, nullptr);
 
 	m_counterOrThreatenButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons.CounterOrThreatenButton");
-	if(m_counterOrThreatenButton) m_counterOrThreatenButton->SetActionFuncAndCookie(CounterOrThreatenCallback, NULL);
+	if(m_counterOrThreatenButton) m_counterOrThreatenButton->SetActionFuncAndCookie(CounterOrThreatenCallback, nullptr);
 
 	m_createButtons = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "CreateButtons");
 	m_viewButtons = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "ViewButtons");
 
 	m_intelButton = (ctp2_Button *)aui_Ldl::GetObject(s_dipWizardBlock, "CheckIntelligenceButton");
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "CheckIntelligenceButton", CheckIntelligence, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "CheckIntelligenceButton", CheckIntelligence, nullptr);
 
 	m_propList[DIP_WIZ_PROP_TAB_REQUEST] = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage1.Tabs.Request.TabPanel.List");
 	m_propList[DIP_WIZ_PROP_TAB_OFFER] = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage1.Tabs.Offer.TabPanel.List");
@@ -227,13 +227,13 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_exchList[DIP_WIZ_PROP_TAB_OFFER] = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage2.Tabs.Offer.TabPanel.List");
 	m_exchList[DIP_WIZ_PROP_TAB_TREATY] = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage2.Tabs.Treaty.TabPanel.List");
 
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Request", ProposalTabCallback, (void *)DIP_WIZ_PROP_TAB_REQUEST);
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Offer", ProposalTabCallback, (void *)DIP_WIZ_PROP_TAB_OFFER);
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Treaty", ProposalTabCallback, (void *)DIP_WIZ_PROP_TAB_TREATY);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Request", ProposalTabCallback, DIP_WIZ_PROP_TAB_REQUEST);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Offer", ProposalTabCallback, DIP_WIZ_PROP_TAB_OFFER);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage1.Tabs.Treaty", ProposalTabCallback, DIP_WIZ_PROP_TAB_TREATY);
 
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Request", ExchangeTabCallback, (void *)DIP_WIZ_PROP_TAB_REQUEST);
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Offer", ExchangeTabCallback, (void *)DIP_WIZ_PROP_TAB_OFFER);
-	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Treaty", ExchangeTabCallback, (void *)DIP_WIZ_PROP_TAB_TREATY);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Request", ExchangeTabCallback, DIP_WIZ_PROP_TAB_REQUEST);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Offer", ExchangeTabCallback, DIP_WIZ_PROP_TAB_OFFER);
+	aui_Ldl::SetActionFuncAndCookie(s_dipWizardBlock, "Stage2.Tabs.Treaty", ExchangeTabCallback, DIP_WIZ_PROP_TAB_TREATY);
 
 	m_parchment = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Parchment");
 	m_responseDiplomat = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage3.Diplomat");
@@ -241,7 +241,7 @@ DipWizard::DipWizard(AUI_ERRCODE *err)
 	m_emissary_photo = (ctp2_Static *)aui_Ldl::GetObject(s_dipWizardBlock, "Details.Picture");
 
 	m_threatList = (ctp2_ListBox *)aui_Ldl::GetObject(s_dipWizardBlock, "Stage4.List");
-	m_threatList->SetActionFuncAndCookie(ThreatListCallback, NULL);
+	m_threatList->SetActionFuncAndCookie(ThreatListCallback, nullptr);
 
 	m_window->SetStronglyModal(TRUE);
 
@@ -430,8 +430,8 @@ void DipWizard::FillProposalLists()
 	for(i = 0; i < DIP_WIZ_PROP_TAB_MAX; i++) {
 		m_propList[i]->Clear();
 		m_exchList[i]->Clear();
-		m_propList[i]->SetActionFuncAndCookie(PropListCallback, (void *)i);
-		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, (void *)i);
+		m_propList[i]->SetActionFuncAndCookie(PropListCallback, i);
+		m_exchList[i]->SetActionFuncAndCookie(ExchListCallback, i);
 	}
 
 	const Diplomat & diplomat =
@@ -560,7 +560,7 @@ void DipWizard::FillProposalLists()
 					break;
 				}
 
-				item->SetUserData((void *)i);
+				item->SetUserData(i);
 
 				ctp2_Static * box = (ctp2_Static *)item->GetChildByIndex(0);
 				Assert(box);
@@ -596,7 +596,7 @@ void DipWizard::FillRecipientLists()
 		if(item) {
 			ctp2_Static *label = (ctp2_Static *)item->GetChildByIndex(0);
 			label->SetText(g_theStringDB->GetNameStr("str_ldl_DipWizNoNation"));
-			item->SetUserData((void *)-1);
+			item->SetUserData(-1);
 			m_nations->AddItem(item);
 		}
 
@@ -615,7 +615,7 @@ void DipWizard::FillRecipientLists()
 				g_player[pl]->m_civilisation->GetCountryName(buf);
 				label->SetText(buf);
 
-				item->SetUserData((void *)pl);
+				item->SetUserData(pl);
 
 				m_nations->AddItem(item);
 			}
@@ -638,7 +638,7 @@ void DipWizard::AddProposalItem(ctp2_ListBox *propList, const DiplomacyProposalR
 					label->SetText(g_theStringDB->GetNameStr(rec->GetTitle()));
 				}
 			}
-			propItem->SetUserData((void *)rec->GetIndex());
+			propItem->SetUserData(rec->GetIndex());
 			propList->AddItem(propItem);
 		}
 	}
@@ -658,13 +658,13 @@ void DipWizard::SetNation(sint32 pl)
 
 	ctp2_ListBox *nationList = (ctp2_ListBox *)m_nations->GetListBox();
 	ctp2_ListItem *item = (ctp2_ListItem *)nationList->GetSelectedItem();
-	if(!item || (pl != (sint32)item->GetUserData())) {
+	if(!item || (pl != item->GetUserDataSint32())) {
 		sint32 i;
 		for(i = 0; i < nationList->NumItems(); i++) {
 
 			item = (ctp2_ListItem *)nationList->GetItemByIndex(i);
 			Assert(item);
-			if(item && (pl == (sint32)item->GetUserData())) {
+			if(item && (pl == item->GetUserDataSint32())) {
 				m_nations->SetSelectedItem(i);
 				break;
 			}
@@ -1513,11 +1513,11 @@ void DipWizard::FillInProposalData(ProposalData &prop, bool counter)
 
 
 
-void DipWizard::ToneButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::ToneButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	sint32 tone = (sint32)cookie;
+	sint32 tone = cookie.m_sin32Type;
 	Assert(tone >= 0);
 	Assert(tone < DIPLOMATIC_TONE_MAX);
 	if(tone < 0 || tone >= DIPLOMATIC_TONE_MAX) return;
@@ -1525,7 +1525,7 @@ void DipWizard::ToneButtonCallback(aui_Control *control, uint32 action, uint32 d
 	SetTone(tone);
 }
 
-void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) return;
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
@@ -1535,18 +1535,18 @@ void DipWizard::PropListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ProposalContextMenu(item->GetUserDataSint32())) {
 			SetProposal(-1);
 		} else {
 			if(!m_proposalDataPending)
-				SetProposal((sint32)item->GetUserData());
+				SetProposal(item->GetUserDataSint32());
 			else
-				m_menuProposal = (sint32)item->GetUserData();
+				m_menuProposal = item->GetUserDataSint32();
 		}
 	}
 }
 
-void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) return;
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
@@ -1556,18 +1556,18 @@ void DipWizard::ExchListCallback(aui_Control *control, uint32 action, uint32 dat
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ProposalContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ProposalContextMenu(item->GetUserDataSint32())) {
 			SetExchange(-1);
 		} else {
 			if(!m_proposalDataPending)
-				SetExchange((sint32)item->GetUserData());
+				SetExchange(item->GetUserDataSint32());
 			else
-				m_menuExchange = (sint32)item->GetUserData();
+				m_menuExchange = item->GetUserDataSint32();
 		}
 	}
 }
 
-void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_DROPDOWN_ACTION_SELECT)
 		return;
@@ -1577,11 +1577,11 @@ void DipWizard::NationCallback(aui_Control *control, uint32 action, uint32 data,
 
 	ctp2_ListItem *item = (ctp2_ListItem *)m_nations->GetListBox()->GetSelectedItem();
 	if(!item) SetNation(-1);
-	else SetNation((sint32)item->GetUserData());
+	else SetNation(item->GetUserDataSint32());
 	UpdateButtons();
 }
 
-void DipWizard::BackCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::BackCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1593,7 +1593,7 @@ void DipWizard::BackCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-void DipWizard::NextCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::NextCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1607,7 +1607,7 @@ void DipWizard::NextCallback(aui_Control *control, uint32 action, uint32 data, v
 
 }
 
-void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1639,7 +1639,7 @@ void DipWizard::CancelCallback(aui_Control *control, uint32 action, uint32 data,
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::SendCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1719,13 +1719,13 @@ const MBCHAR *DipWizard::GetCategoryName(DIP_WIZ_PROP_TAB tab)
 	}
 }
 
-void DipWizard::ProposalTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::ProposalTabCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
 
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_PROPOSAL,
-			GetCategoryName(DIP_WIZ_PROP_TAB(sint32(cookie))));
+			GetCategoryName(DIP_WIZ_PROP_TAB(cookie.m_sin32Type)));
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(buf);
 	if(lb) {
@@ -1737,13 +1737,13 @@ void DipWizard::ProposalTabCallback(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void DipWizard::ExchangeTabCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::ExchangeTabCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != ctp2_Tab::ACTION_ACTIVATED) return;
 
 	MBCHAR buf[k_MAX_NAME_LEN];
 	sprintf(buf, "%s.Stage%d.Tabs.%s.TabPanel.List", s_dipWizardBlock, DIP_WIZ_STAGE_EXCHANGE,
-			GetCategoryName(DIP_WIZ_PROP_TAB(sint32(cookie))));
+			GetCategoryName(DIP_WIZ_PROP_TAB(cookie.m_sin32Type)));
 
 	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(buf);
 	if(lb) {
@@ -1755,7 +1755,7 @@ void DipWizard::ExchangeTabCallback(aui_Control *control, uint32 action, uint32 
 	}
 }
 
-void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1804,7 +1804,7 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 						  );
 }
 
-void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1826,7 +1826,7 @@ void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data,
 						  );
 }
 
-void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -1868,7 +1868,7 @@ void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, u
 
 
 
-void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
+void DipWizard::ProcessMenuSelection(sint32 itemIndex, Cookie cookie)
 {
 	bool isExchange = GetStage() == DIP_WIZ_STAGE_EXCHANGE;
 	sint32 prop = isExchange ? m_menuExchange : m_menuProposal;
@@ -1881,7 +1881,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 		switch(rec->GetArg1()) {
 			case k_DiplomacyProposal_Arg1_OwnCity_Bit:
 			case k_DiplomacyProposal_Arg1_HisCity_Bit:
-				arg.cityId = (sint32)cookie;
+				arg.cityId = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnArmy_Bit:
 				break;
@@ -1893,7 +1893,7 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 			case k_DiplomacyProposal_Arg1_HisAdvance_Bit:
 			case k_DiplomacyProposal_Arg1_OwnStopResearch_Bit:
 			case k_DiplomacyProposal_Arg1_HisStopResearch_Bit:
-				arg.advanceType = (sint32)cookie;
+				arg.advanceType = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_OwnUnitType_Bit:
 				break;
@@ -1903,13 +1903,13 @@ void DipWizard::ProcessMenuSelection(sint32 itemIndex, void *cookie)
 				break;
 			case k_DiplomacyProposal_Arg1_OwnGold_Bit:
 			case k_DiplomacyProposal_Arg1_HisGold_Bit:
-				arg.gold = (sint32)cookie;
+				arg.gold = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_ThirdParty_Bit:
-				arg.playerId = (sint32)cookie;
+				arg.playerId = cookie.m_sin32Type;
 				break;
 			case k_DiplomacyProposal_Arg1_Percent_Bit:
-				arg.percent = (double) ((sint32) cookie) / 100.0;
+				arg.percent = (double) (cookie.m_sin32Type / 100.0);
 				break;
 			default:
 
@@ -1933,7 +1933,7 @@ void DipWizard::ProcessMenuCancel()
 	}
 }
 
-void DipWizard::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DipWizard::MenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	Assert(menu == m_curMenu);
 	if(menu != m_curMenu)
@@ -2068,7 +2068,7 @@ void DipWizard::AddCityItems(ctp2_Menu *menu, sint32 player)
 			if(!(city.GetEverVisible() & (1 << g_selected_item->GetVisiblePlayer())))
 				continue;
 		}
-		menu->AddItem(city.GetName(), NULL, (void *)city.m_id);
+		menu->AddItem(city.GetName(), NULL, city.m_id);
 	}
 }
 
@@ -2156,7 +2156,7 @@ void DipWizard::AddAdvanceItems(ctp2_Menu *menu, sint32 sender, sint32 receiver)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, a);
 	}
 }
 
@@ -2178,7 +2178,7 @@ void DipWizard::AddStopResearchItems(ctp2_Menu *menu, sint32 playerId)
 			continue;
 		}
 
-		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, (void *)a);
+		menu->AddItem(g_theAdvanceDB->Get(a)->GetNameText(), NULL, a);
 	}
 }
 
@@ -2194,7 +2194,7 @@ void DipWizard::AddThirdPartyItems(ctp2_Menu *menu, sint32 sender, sint32 receiv
 
 		MBCHAR civName[k_MAX_NAME_LEN];
 		g_player[p]->GetCivilisation()->GetPluralCivName(civName);
-		menu->AddItem(civName, NULL, (void *)p);
+		menu->AddItem(civName, NULL, p);
 	}
 }
 
@@ -2239,7 +2239,7 @@ bool DipWizard::AddThreatData(SlicObject &so, sint32 threat, const DiplomacyArg 
 	}
 }
 
-void DipWizard::PollutionOk(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::PollutionOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2263,7 +2263,7 @@ void DipWizard::PollutionOk(aui_Control *control, uint32 action, uint32 data, vo
 	m_proposalDataPending = false;
 }
 
-void DipWizard::PercentOk(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::PercentOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2287,7 +2287,7 @@ void DipWizard::PercentOk(aui_Control *control, uint32 action, uint32 data, void
 	m_proposalDataPending = false;
 }
 
-void DipWizard::GoldOk(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::GoldOk(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2311,7 +2311,7 @@ void DipWizard::GoldOk(aui_Control *control, uint32 action, uint32 data, void *c
 	m_proposalDataPending = false;
 }
 
-void DipWizard::GoldCancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::GoldCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2325,7 +2325,7 @@ void DipWizard::GoldCancel(aui_Control *control, uint32 action, uint32 data, voi
 	m_proposalDataPending = false;
 }
 
-void DipWizard::PollutionCancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::PollutionCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2339,7 +2339,7 @@ void DipWizard::PollutionCancel(aui_Control *control, uint32 action, uint32 data
 	m_proposalDataPending = false;
 }
 
-void DipWizard::PercentCancel(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::PercentCancel(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -2364,8 +2364,8 @@ void DipWizard::RequestGoldValue(sint32 player)
 
 
 
-		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DipWizard::GoldOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DipWizard::GoldCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.OkButton", DipWizard::GoldOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipGoldRequest.CancelButton", DipWizard::GoldCancel, nullptr);
 		m_goldRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipGoldRequest.Spinner");
@@ -2391,8 +2391,8 @@ void DipWizard::RequestPollutionValue(sint32 player)
 
 
 
-		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DipWizard::PollutionOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DipWizard::PollutionCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.OkButton", DipWizard::PollutionOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipPollutionRequest.CancelButton", DipWizard::PollutionCancel, nullptr);
 		m_pollutionRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPollutionRequest.Spinner");
@@ -2420,8 +2420,8 @@ void DipWizard::RequestPercentValue()
 
 
 
-		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DipWizard::PercentOk, NULL);
-		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DipWizard::PercentCancel, NULL);
+		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.OkButton", DipWizard::PercentOk, nullptr);
+		aui_Ldl::SetActionFuncAndCookie("DipPercentRequest.CancelButton", DipWizard::PercentCancel, nullptr);
 		m_percentRequestWindow->SetStronglyModal(TRUE);
 	}
 	ctp2_Spinner *spinner = (ctp2_Spinner *)aui_Ldl::GetObject("DipPercentRequest.Spinner");
@@ -2438,7 +2438,7 @@ void DipWizard::RequestPercentValue()
 	m_proposalDataPending = true;
 }
 
-void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 	if((action != CTP2_MENU_ACTION_CANCEL) &&
 	   (action != CTP2_MENU_ACTION_SELECT))
@@ -2454,20 +2454,20 @@ void DipWizard::ThreatMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sin
 			ctp2_ListItem *item = (ctp2_ListItem *)m_threatList->GetSelectedItem();
 			Assert(item);
 			if(item) {
-				m_menuThreat = (sint32)item->GetUserData();
+				m_menuThreat = item->GetUserDataSint32();
 				const DiplomacyThreatRecord *rec = g_theDiplomacyThreatDB->Get(m_threat);
 				Assert(rec);
 				if(rec) {
 					switch(rec->GetArg1()) {
 						case k_DiplomacyThreat_Arg1_HisCity_Bit:
 						case k_DiplomacyThreat_Arg1_SpecialAttack_Bit:
-							m_threatArg.cityId = (sint32)cookie;
+							m_threatArg.cityId = cookie.m_sin32Type;
 							break;
 						case k_DiplomacyThreat_Arg1_ThirdParty_Bit:
-							m_threatArg.playerId = (sint32)cookie;
+							m_threatArg.playerId = cookie.m_sin32Type;
 							break;
 						case k_DiplomacyThreat_Arg1_AgreementId_Bit:
-							m_threatArg.agreementId = (sint32)cookie;
+							m_threatArg.agreementId = cookie.m_sin32Type;
 							break;
 						default:
 
@@ -2534,7 +2534,7 @@ bool DipWizard::ThreatContextMenu(sint32 threat)
 	return true;
 }
 
-void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) return;
 	ctp2_ListBox *lb = (ctp2_ListBox *)control;
@@ -2544,15 +2544,15 @@ void DipWizard::ThreatListCallback(aui_Control *control, uint32 action, uint32 d
 
 	if(!lb->IsHidden()) {
 		ctp2_ListItem *item = (ctp2_ListItem *)lb->GetSelectedItem();
-		if(!item || !ThreatContextMenu((sint32)item->GetUserData())) {
+		if(!item || !ThreatContextMenu(item->GetUserDataSint32())) {
 			SetThreat(-1);
 			m_sendButton->Enable(FALSE);
 		} else {
 			m_sendButton->Enable(TRUE);
 			if(!m_proposalDataPending)
-				SetThreat((sint32)item->GetUserData());
+				SetThreat(item->GetUserDataSint32());
 			else
-				m_menuThreat = (sint32)item->GetUserData();
+				m_menuThreat = item->GetUserDataSint32();
 		}
 	}
 }
@@ -2651,9 +2651,9 @@ void DipWizard::DisplayDiplomat(sint32 player)
 AUI_ERRCODE DrawDiplomatColor(ctp2_Static *control,
 							  aui_Surface *surface,
 							  RECT &rect,
-							  void *cookie)
+							  Cookie cookie)
 {
-	sint32 pl = (sint32)cookie;
+	sint32 pl = cookie.m_sin32Type;
 	primitives_PaintRect16(surface, &rect, g_colorSet->GetPlayerColor(pl));
 	return AUI_ERRCODE_OK;
 }
@@ -2662,10 +2662,7 @@ void DipWizard::DisplayResponseDiplomat(sint32 player)
 {
 	m_responseDiplomat->Show();
 
-
-
-
-	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, (void *)player);
+	m_responseDiplomat->SetDrawCallbackAndCookie(DrawDiplomatColor, player);
 }
 
 void DipWizard::DisplayParchment(sint32 player)
@@ -2678,7 +2675,7 @@ void DipWizard::DisplayParchment(sint32 player)
 	}
 }
 
-void DipWizard::CheckIntelligence(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void DipWizard::CheckIntelligence(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 

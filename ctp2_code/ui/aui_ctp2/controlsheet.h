@@ -16,7 +16,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	ControlSheet(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -26,7 +26,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ControlSheet();
 
 	virtual AUI_ERRCODE DrawThis(aui_Surface *surface = NULL,

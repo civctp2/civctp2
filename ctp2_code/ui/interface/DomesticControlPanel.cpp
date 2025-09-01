@@ -27,8 +27,8 @@
 // - Blank function added to hide the data of the previous player for hotseat
 //   games.
 // - Use the same science percentage everywhere.
-// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin Gühmann)
-// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin Gühmann)
+// - Domestic control panel shows now the city limit. (Aug 7th 2005 Martin GÃ¼hmann)
+// - Added a progress bar to the advance select button. (Feb 4th 2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -64,7 +64,7 @@ extern Pollution            *g_thePollution;
 AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
                                                        aui_Surface *surface,
                                                        RECT &rect,
-                                                       void *cookie)
+                                                       Cookie cookie)
 {
 	if (g_selected_item==NULL)
 		return AUI_ERRCODE_OK;
@@ -117,7 +117,7 @@ AUI_ERRCODE domesticcontrolpanel_HappinessDrawCallback(ctp2_Static *control,
 AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
                                                        aui_Surface *surface,
                                                        RECT &rect,
-                                                       void *cookie)
+                                                       Cookie cookie)
 {
 
 	double total = double(g_thePollution->GetGlobalPollutionLevel());
@@ -148,7 +148,7 @@ AUI_ERRCODE domesticcontrolpanel_PollutionDrawCallback(ctp2_Static *control,
 }
 
 
-DomesticControlPanel::DomesticControlPanel(MBCHAR *ldlBlock) :
+DomesticControlPanel::DomesticControlPanel(const MBCHAR *ldlBlock) :
 m_scienceLabel(static_cast<ctp2_Static*>(
                aui_Ldl::GetObject(ldlBlock,
                "DomesticTab.TabPanel.AdvanceProgress.Title"))),
@@ -182,10 +182,10 @@ m_scienceValue(static_cast<ctp2_Static*>(
 m_pollutionValue(static_cast<ctp2_Static*>(
                  aui_Ldl::GetObject(ldlBlock,
                  "DomesticTab.TabPanel.PollutionValue"))),
-m_menuPublicWorksValue(static_cast<ctp2_Static*>(
-                       aui_Ldl::GetObject("MainMenu.PWStatic"))),
 m_menuGoldValue(static_cast<ctp2_Static*>(
                 aui_Ldl::GetObject("MainMenu.GoldStatic"))),
+m_menuPublicWorksValue(static_cast<ctp2_Static*>(
+                       aui_Ldl::GetObject("MainMenu.PWStatic"))),
 m_menuHappinessValue(static_cast<ctp2_Static*>(
                      aui_Ldl::GetObject("MainMenu.HappinessBar"))),
 m_menuPollutionValue(static_cast<ctp2_Static*>(
@@ -212,14 +212,14 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 	m_scienceTurnButton->SetActionFuncAndCookie(
 		EditResearchButtonActionCallback, this);
 
-	m_menuHappinessValue->SetDrawCallbackAndCookie(domesticcontrolpanel_HappinessDrawCallback, NULL, false);
+	m_menuHappinessValue->SetDrawCallbackAndCookie(domesticcontrolpanel_HappinessDrawCallback, nullptr, false);
 	m_menuHappinessValue->ShouldDraw(TRUE);
 
-	m_menuPollutionValue->SetDrawCallbackAndCookie(domesticcontrolpanel_PollutionDrawCallback, NULL, false);
+	m_menuPollutionValue->SetDrawCallbackAndCookie(domesticcontrolpanel_PollutionDrawCallback, nullptr, false);
 	m_menuPollutionValue->ShouldDraw(TRUE);
 
 	if(m_scienceProgressBar) {
-		m_scienceProgressBar->SetDrawCallbackAndCookie(DomesticControlPanel::DrawScienceBar, NULL);
+		m_scienceProgressBar->SetDrawCallbackAndCookie(DomesticControlPanel::DrawScienceBar, nullptr);
 	}
 
 	m_currentResearch = -1;
@@ -231,7 +231,6 @@ m_menuPollutionValue(static_cast<ctp2_Static*>(
 	m_currentGovernment = -1;
 	m_currentScience = -1;
 	m_currentPollution = -1;
-
 }
 
 //----------------------------------------------------------------------------
@@ -277,7 +276,7 @@ void DomesticControlPanel::Update()
 }
 
 void DomesticControlPanel::EditResearchButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -450,7 +449,7 @@ void DomesticControlPanel::UpdateGoldPW()
 AUI_ERRCODE DomesticControlPanel::DrawScienceBar(ctp2_Static *control,
                                                  aui_Surface *surface,
                                                  RECT &rect,
-                                                 void *cookie )
+                                                 Cookie cookie )
 {
 	if(!g_selected_item)
 		return AUI_ERRCODE_OK;

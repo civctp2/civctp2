@@ -23,6 +23,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include "registry.h"
 #include <stdio.h>
 #include <winreg.h>
+#include "types.h"
 
 HKEY MyRegOpenKey( HKEY base, LPCSTR szSubKey )
 {
@@ -35,13 +36,13 @@ HKEY MyRegOpenKey( HKEY base, LPCSTR szSubKey )
 
 char *MyRegQueryValueMalloc( HKEY hKey, LPCSTR szValueName, LPDWORD pType, LPDWORD pSize )
 {
-	unsigned char *pData;
+	uint8 *pData;
 	DWORD dwSize = 0;
 
 	if( RegQueryValueEx( hKey, szValueName, 0, NULL, NULL, &dwSize ) != ERROR_SUCCESS )
 		return NULL;
 
-	pData = (unsigned char *)malloc( dwSize );
+	pData = (uint8 *)malloc( dwSize );
 	if( RegQueryValueEx( hKey, szValueName, 0, pType, pData, &dwSize ) != ERROR_SUCCESS )
 		return NULL;
 
@@ -68,7 +69,7 @@ char *MyRegQuickQueryMalloc( HKEY hKey, LPCSTR szSubKey, LPCSTR szValueName, LPD
 
 BOOL MyRegSetValue( HKEY hKey, LPCSTR szName, DWORD dwType, char *pData, DWORD cData )
 {
-	if( RegSetValueEx( hKey, szName, 0, dwType, (unsigned char *)pData, cData ) == ERROR_SUCCESS )
+	if( RegSetValueEx( hKey, szName, 0, dwType, (uint8 *)pData, cData ) == ERROR_SUCCESS )
 		return TRUE;
 	else
 		return FALSE;

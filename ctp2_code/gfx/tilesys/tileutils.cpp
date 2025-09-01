@@ -952,7 +952,7 @@ Pixel16 *tileutils_CreateBorkBork(void)
 Pixel16 *tileutils_ExtractUpperRight(char *tif, uint16 width, uint16 height, sint32 x, sint32 y)
 {
 	sint32		i,j;
-	sint32		pixelX, pixelY;
+	sint32		pixelX;
 	uint32		accum;
 	uint32		*image = (uint32 *)tif;
 
@@ -967,10 +967,8 @@ Pixel16 *tileutils_ExtractUpperRight(char *tif, uint16 width, uint16 height, sin
 		row = y+(k_TILE_PIXEL_HEIGHT-1)-i;
 		if (i<=23) {
 			pixelX = (x + k_TILE_PIXEL_WIDTH) - (23-i)*2-1;
-			pixelY = row;
 		} else {
 			pixelX = (x + k_TILE_PIXEL_WIDTH) - (i-24)*2-1;
-			pixelY = row;
 		}
 
 		accum = g_bitsTable[i];
@@ -994,7 +992,7 @@ Pixel16 *tileutils_ExtractUpperRight(char *tif, uint16 width, uint16 height, sin
 Pixel16 *tileutils_ExtractLowerLeft(char *tif, uint16 width, uint16 height, sint32 x, sint32 y)
 {
 	sint32		i,j;
-	sint32		pixelX, pixelY;
+	sint32		pixelX;
 	uint32		accum;
 	uint32		*image = (uint32 *)tif;
 
@@ -1009,10 +1007,8 @@ Pixel16 *tileutils_ExtractLowerLeft(char *tif, uint16 width, uint16 height, sint
 		row = (y + i);
 		if (i<=23) {
 			pixelX = (x + (23-i)*2);
-			pixelY = row;
 		} else {
 			pixelX = (x + (i-24)*2);
-			pixelY = row;
 		}
 
 		accum = g_bitsTable[i];
@@ -1231,12 +1227,9 @@ void tileutils_DumpAllTransitions(MBCHAR *filename, Pixel16 *t0, Pixel16 *t1, Pi
 
 sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 {
-
-	MBCHAR		ageChar;
 	MBCHAR		filename[_MAX_PATH];
 
 	sprintf(filename, "gtft%.2d%.2d.tif", fromType, toType);
-	ageChar = 'f';
 
 	char	*tif;
 	uint16	width=0, height=0;
@@ -1256,39 +1249,10 @@ sint32 tileutils_ExtractStencils(sint16 fromType, sint16 toType)
 	g_transitions[fromType][toType][2] = tileutils_MakeTransition2(g_transitions[fromType][toType][0]);
 	g_transitions[fromType][toType][3] = tileutils_MakeTransition3(g_transitions[fromType][toType][0]);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 	g_transitions[toType][fromType][0] = tileutils_ExtractLowerLeft(tif, width, height, 48, 24);
 	g_transitions[toType][fromType][1] = tileutils_MakeTransition1(g_transitions[toType][fromType][0]);
 	g_transitions[toType][fromType][2] = tileutils_MakeTransition2(g_transitions[toType][fromType][0]);
 	g_transitions[toType][fromType][3] = tileutils_MakeTransition3(g_transitions[toType][fromType][0]);
-
-
-
-
-
-
-
-
-
-
-
-
 
 	if (tif)
 		free (tif);
@@ -1368,7 +1332,6 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 
 	Pixel16		borkPix;
 	sint32		yoffset = 24;
-	uint32		accumList[k_TILE_PIXEL_HEIGHT][3];
 	sint32		accumIndex = 0;
 	sint32		accumCount;
 	uint32		accum = 0;
@@ -1397,12 +1360,6 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 	}
 
 	Pixel16 *   tileImage = RGB32ToRGB16(tif, width, height);
-
-	for (sint32 i=0; i<k_TILE_PIXEL_HEIGHT; i++) {
-		accumList[i][0] = 0;
-		accumList[i][1] = 0;
-		accumList[i][2] = 0;
-	}
 
 	uint32      tileDataLen = (k_TILE_PIXEL_WIDTH * k_TILE_PIXEL_HEIGHT)/2 + k_TILE_PIXEL_HEIGHT;
 	Pixel16 *   tileData    = new Pixel16[tileDataLen];
@@ -1462,7 +1419,6 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 			accumCount++;
 
 			if (accumCount >= 32) {
-				accumList[y][accumIndex] = accum;
 				accum = 0;
 				accumIndex++;
 				Assert(accumIndex<3);
@@ -1471,7 +1427,6 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 		}
 		Assert(accumIndex<3);
 		accum >>= 32-(endX-startX)-1;
-		accumList[y][accumIndex] = accum;
 	}
 
 	BaseTile	*baseTile = new BaseTile;
@@ -1517,12 +1472,6 @@ void tileutils_BorkifyTile(uint16 tileNum, MBCHAR ageChar, uint16 baseType, BOOL
 			waterTableLen = 0;
 		}
 	}
-
-
-
-
-
-
 
 	char		*hatTif=NULL;
 	Pixel16		*hatData=NULL;

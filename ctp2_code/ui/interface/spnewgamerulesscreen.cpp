@@ -28,7 +28,7 @@
 // - 7 options total needed to implement a new rule
 //
 // - Memory leaks repaired.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Removed new rules attempt - E 12.27.2006
 // - Added citycapture as an option and mapped it to gameplayoptions
 //   but appears to have no affect
@@ -42,7 +42,7 @@
 // - Added no production deficit for cities
 // - Added no gold hunger for ai
 // - Added no shield hunger for ai
-// - Added an upgrade option (13-Sep-2008 Martin Gühmann)
+// - Added an upgrade option (13-Sep-2008 Martin GÃ¼hmann)
 // - Added a new combat option (28-Feb-2009 Maq)
 // - Added a no goody huts option (20-Mar-2009 Maq)
 // - Added custom start/end "ages" button. (11-Apr-2009 Maq)
@@ -207,7 +207,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( aui_Control::ControlActionCallback 
 	{
 		if(callback)
 		{
-			s_spNewGameRulesScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+			s_spNewGameRulesScreen->Ok()->SetActionFuncAndCookie(callback, nullptr);
 		}
 
 		return AUI_ERRCODE_OK;
@@ -218,7 +218,7 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( aui_Control::ControlActionCallback 
 	s_spNewGameRulesScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
 
 	Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
-	if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
+	if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) return errcode;
 
 	s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
 	s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
@@ -301,11 +301,11 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 #undef mycleanup
 }
 
-void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (m_ruleDetails && m_ruleDetailsStrings)
 	{
-		m_ruleDetails->SetText("", NULL);
+		m_ruleDetails->SetText("", 0);
 		m_ruleDetails->Hide();
 		m_ruleDetails->Show();
 
@@ -320,15 +320,15 @@ void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 
 	agesscreen_displayMyWindow(0);
 }
 
-void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
-	uint32 checkbox = *((uint32*)cookie);
+	uint32 checkbox = *((uint32*)cookie.m_voidPtr);
 
 	sint32 rule = -1;
 
 	if (m_ruleDetails && m_ruleDetailsStrings)
 	{
-		m_ruleDetails->SetText("", NULL);
+		m_ruleDetails->SetText("", 0);
 		m_ruleDetails->Hide();
 
 		switch(checkbox)
@@ -354,7 +354,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		if (rule >= 0)
 		{
 			m_ruleDetails->Show();
-			m_ruleDetails->SetText("", NULL);
+			m_ruleDetails->SetText("", 0);
 
 			char buf[1024];
 			sprintf(buf, "%s", m_ruleDetailsStrings->GetString(rule));
@@ -362,7 +362,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		}
 		else
 		{
-			m_ruleDetails->SetText("", NULL);
+			m_ruleDetails->SetText("", 0);
 			m_ruleDetails->Hide();
 		}
 	}
@@ -396,7 +396,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
 
-void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void spnewgamerulesscreen_exitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	g_theProfileDB->Save();
 

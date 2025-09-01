@@ -111,17 +111,17 @@ aui_Sound *aui_SoundBase::SetSound(
 
 AUI_ERRCODE aui_SoundBase::PlaySound( AUI_SOUNDBASE_SOUND sound )
 {
-	switch (sound) {
-
-
-	case AUI_SOUNDBASE_SOUND_EXECUTE:
-		g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
+	switch (sound)
+	{
+		case AUI_SOUNDBASE_SOUND_EXECUTE:
+			g_soundManager->AddSound(SOUNDTYPE_SFX, 0,
 				gamesounds_GetGameSoundID(GAMESOUNDS_BUTTONCLICK), 0, 0);
-		break;
-	case AUI_SOUNDBASE_SOUND_ENGAGE:
-	case AUI_SOUNDBASE_SOUND_TIP:
-
-		break;
+			break;
+		case AUI_SOUNDBASE_SOUND_ENGAGE:
+		case AUI_SOUNDBASE_SOUND_TIP:
+			break;
+		default:
+			break;
 	}
 
 	return AUI_ERRCODE_OK;

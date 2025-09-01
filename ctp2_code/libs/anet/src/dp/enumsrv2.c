@@ -64,9 +64,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Hidden definition of the reserved field in dp_serverInfo_t */
 #include "dppack1.h"
 typedef struct {
-	long reserved PACK;
-	short i_rtt PACK;					/* next entry in rtt_ms to overwrite */
-	short rtt_ms[dp_SERVER_NPINGS] PACK;/* roundtrip time, msec; -1 if empty */
+	sint32 reserved PACK;
+	sint16 i_rtt PACK;					/* next entry in rtt_ms to overwrite */
+	sint16 rtt_ms[dp_SERVER_NPINGS] PACK;/* roundtrip time, msec; -1 if empty */
 } dp_serverInfo_reserved_t;
 #include "dppackn.h"
 
@@ -91,9 +91,9 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 
 	/* Note: fields of ping packet are:
 		dp_karma_t	karma;
-		unsigned short	pktnum;
-		unsigned char	len;
-		unsigned char	data[dp_MAXLEN_UNRELIABLE-5];	// 0..len-1
+		uint16	pktnum;
+		uint8	len;
+		uint8	data[dp_MAXLEN_UNRELIABLE-5];	// 0..len-1
 	 * We will store the current time in the data field.
 	*/
 
@@ -102,13 +102,13 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 	 */
 	pkt.tag = dp_PING_PACKET_ID;
 	pkt.body.karma = 0;
-	pkt.body.len = sizeof(clock_t) + dp->dpio->myAdrLen + sizeof(sessType);
+	pkt.body.len = (sint8)(sizeof(clock_t) + dp->dpio->myAdrLen + sizeof(sessType));
 	pkt.body.pktnum = SERVER_PING_MAGIC_PKTNUM1;
 	memset(pkt.body.data, 0, sizeof(pkt.body.data));
 	memcpy(pkt.body.data, &dp->now, sizeof(clock_t));
 
 	/* Save address for purpose of matching up with hostname later */
-	memcpy(pkt.body.data+4, adrbuf, dp->dpio->myAdrLen);
+	memcpy(pkt.body.data+sizeof(clock_t), adrbuf, dp->dpio->myAdrLen);
 
 	/* always store session type last */
 	sessbuf = SwapBytes2(sessType);
@@ -132,7 +132,7 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
 			+sizeof(pkt.body.karma)
 			+sizeof(pkt.body.len)
 			+sizeof(pkt.body.pktnum)
-			+sizeof(long)
+			+sizeof(clock_t)
 			+dp->dpio->myAdrLen
 			+sizeof(dp_species_t)
 			,NULL);
@@ -150,12 +150,12 @@ static void sendServerPing(dp_t *dp,dp_serverInfo_t *server, char *adrbuf, dp_sp
  Returns OK if server new, ALREADY if old.
 --------------------------------------------------------------------------*/
 
-static dp_result_t addServer(dp_t *dp, char *adrbuf, int adrlen, char *hostname, size_t hostnamelen)
+static dp_result_t addServer(dp_t *dp, char *adrbuf, sint32 adrlen, char *hostname, size_t hostnamelen)
 {
 	dp_serverInfo_t server;
 	dp_serverInfo_t *pserver;
 	size_t serverlen;
-	int j;
+	sint32 j;
 	dp_result_t err;
 
 	if (hostnamelen > sizeof(server.hostname))
@@ -201,7 +201,7 @@ static dp_result_t addServer(dp_t *dp, char *adrbuf, int adrlen, char *hostname,
  Callback for addition/deletion of server entries.
  Triggers a ping, if we're in the middle of pinging...
 ----------------------------------------------------------------------*/
-int dp_PASCAL dp_servers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status)
+sint32 dp_PASCAL dp_servers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dp_serverInfo_t *server;
@@ -228,7 +228,7 @@ int dp_PASCAL dp_servers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t sr
 /*----------------------------------------------------------------------
  Callback for server ping results.
 ----------------------------------------------------------------------*/
-int dp_PASCAL dp_serverpings_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status)
+sint32 dp_PASCAL dp_serverpings_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dp_serverInfo_t *server = (dp_serverInfo_t *)buf;
@@ -285,8 +285,8 @@ static myhostname_t default_bootstrap[] = {
 static myhostname_t *get_bootstrap_list()
 {
 	FILE *fp;
-	int nhosts = 0;
-	int nalloc = 0;
+	sint32 nhosts = 0;
+	sint32 nalloc = 0;
 	myhostname_t *bootstrap = NULL;
 
 	fp = fopen("bootserv.txt", "r");
@@ -296,7 +296,7 @@ static myhostname_t *get_bootstrap_list()
 		line[127] = '\0';
 		while (NULL != fgets(line, 127, fp)) {
 			char thisip[128], thishost[128];
-			int lenip, lenhost;
+			size_t lenip, lenhost;
 
 			if (2 != sscanf(line, "%s %s", thisip, thishost))
 				continue;
@@ -403,7 +403,7 @@ static dp_result_t dp_subscribeServerList(dp_t *dp)
 ----------------------------------------------------------------------*/
 void dp_initEnumServers(dp_t *dp)
 {
-	int sn;
+	sint32 sn;
 	dp_serverInfo_t *server;
 	char key[dptab_KEY_MAXLEN];
 	dp_result_t err;
@@ -411,7 +411,7 @@ void dp_initEnumServers(dp_t *dp)
 	/* Create the table of server ping responses. */
 	key[0] = dp_KEY_SERVERPINGS;
 	if (!dp->serverpings) {
-		int i;
+		sint32 i;
 		FILE *fp;
 
 		/* While we're here, initialize the timer that controls pings */
@@ -431,7 +431,7 @@ void dp_initEnumServers(dp_t *dp)
 		dp->serverpings = dptab_getTable(dp->dt, key, 1);
 		if (dp->serverpings) {
 			char subkey[dp_KEY_MAXLEN];
-			int subkeylen;
+			sint32 subkeylen;
 			void *buf;
 			size_t len;
 
@@ -447,11 +447,11 @@ void dp_initEnumServers(dp_t *dp)
 			/* Clear out the old ping results */
 			for (i=dptab_tableSize(dp->serverpings); i-- > 0; ) {
 				char subkey[dptab_KEY_MAXLEN];
-				int subkeylen;
+				sint32 subkeylen;
 				size_t serverlen;
 				dp_result_t err = dptab_get_byindex(dp->serverpings, i, (void **)&server, &serverlen, subkey, &subkeylen);
 				if (err == dp_RES_OK) {
-					int j;
+					sint32 j;
 					/* not kosher to modify table directly - oh, well. */
 					server->rtt_ms_avg = 9999;
 					server->loss_percent = 100;
@@ -484,7 +484,7 @@ void dp_initEnumServers(dp_t *dp)
 		/* Add in our bootstrap list. */
 		bootstrap = get_bootstrap_list();
 		for (sn=0; bootstrap[sn].ip; sn++) {
-			int adrlen;
+			sint32 adrlen;
 			char adrbuf[dp_MAX_ADR_LEN];
 
 			/* Don't use DNS - it's too slow.  We really need to update
@@ -535,10 +535,10 @@ void dp_saveServerList(dp_t *dp)
 --------------------------------------------------------------------------*/
 static void calc_delay(dp_serverInfo_t *server)
 {
-	int total_rtt;
-	int n_replies;
-	int n_lost;
-	int j;
+	sint32 total_rtt;
+	sint32 n_replies;
+	sint32 n_lost;
+	sint32 j;
 
 	n_replies = 0;
 	n_lost = 0;
@@ -585,7 +585,7 @@ void dp_endEnumServers(
 /*----------------------------------------------------------------------
  Wrapper for dpEnumServers callback.
 ----------------------------------------------------------------------*/
-static int dp_PASCAL serversEx_cb(const char *hostname, long roundtrip_ms,
+static sint32 dp_PASCAL serversEx_cb(const char *hostname, long roundtrip_ms,
 		dp_serverInfo_t *server, long *pTimeout, long flags, void *context)
 {
 	dp_t *dp = (dp_t *)context;
@@ -609,7 +609,7 @@ static int dp_PASCAL serversEx_cb(const char *hostname, long roundtrip_ms,
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnumServers(
 	dp_t *dp,
-	long timeout,				/* How long in milliseconds to wait. */
+	sint32 timeout,				/* How long in milliseconds to wait. */
 	dpEnumServersCallback_t cb,
 	void *context)
 {
@@ -637,12 +637,12 @@ DP_API dp_result_t DP_APIX dpEnumServers(
 ----------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpEnumServersEx(
 	dp_t *dp,
-	long timeout,				/* How long in milliseconds to wait. */
+	sint32 timeout,				/* How long in milliseconds to wait. */
 	dp_species_t sessType,
 	dpEnumServersExCallback_t cb,
 	void *context)
 {
-	int i;
+	sint32 i;
 	dp_serverInfo_t *server;
 
 	if (!dp) {
@@ -669,7 +669,7 @@ DP_API dp_result_t DP_APIX dpEnumServersEx(
 	DPRINT(("dpEnumServersEx: pinging %d hosts\n", dptab_tableSize(dp->serverpings)));
 	for (i=dptab_tableSize(dp->serverpings); i-- > 0; ) {
 		char subkey[dptab_KEY_MAXLEN];
-		int subkeylen;
+		sint32 subkeylen;
 		size_t serverlen;
 		dp_result_t err = dptab_get_byindex(dp->serverpings, i, (void **)&server, &serverlen, subkey, &subkeylen);
 		DPRINT(("dpEnumServersEx: getting host %d, err:%d; adr %02x.%02x.%02x.%02x.%02x.%02x\n", i, err,
@@ -707,7 +707,7 @@ dp_result_t dpEnumServersPoll(dp_t *dp)
 	if (!dp->monitor_object_servers)
 		return dp_RES_OK;
 
-	if ((long)(dp->next_serverping - dp->now) > 0)
+	if ((sint32)(dp->next_serverping - dp->now) > 0)
 		return dp_RES_OK;
 	dp->next_serverping = dp->now + dp->serverping_interval;
 
@@ -733,7 +733,7 @@ dp_result_t dpEnumServersPoll(dp_t *dp)
 ----------------------------------------------------------------------*/
 dp_result_t dpHandleServerPingResponsePacket(
 	dp_t *dp,
-	unsigned char *buf,
+	uint8 *buf,
 	size_t len,
 	playerHdl_t src)
 {
@@ -746,12 +746,12 @@ dp_result_t dpHandleServerPingResponsePacket(
 		dp_ping_packet_t body;
 	} PACK *pkt = (struct dpHSPRP_pkt_s *)buf;
 	clock_t tStart;
-	unsigned char adrbuf[dp_MAX_ADR_LEN];
+	uint8 adrbuf[dp_MAX_ADR_LEN];
 	dp_result_t err;
 
 	/* Size of block of data in ping packet body */
 	const size_t timeAndAdrlen = sizeof(clock_t) + dp->dpio->myAdrLen;
-	short *ps;	/* points to array of shorts at end of ping packet */
+	sint16 *ps;	/* points to array of shorts at end of ping packet */
 
 	DPRINT(("dpHandleServerPingResponsePacket: karma %d, pktnum %d\n", pkt->body.karma, pkt->body.pktnum));
 	if (!(pkt->body.pktnum & SERVER_PING_MAGIC_PKTNUM1)) {
@@ -775,15 +775,15 @@ dp_result_t dpHandleServerPingResponsePacket(
 
 	/* Figure out the round-trip time delay and store it. */
 	memcpy(&tStart, pkt->body.data, sizeof(clock_t));
-	RES(&serv)->rtt_ms[RES(&serv)->i_rtt] = (short) (((dp->now - tStart)*1000L)/dp->dpio->clocksPerSec);
+	RES(&serv)->rtt_ms[RES(&serv)->i_rtt] = (sint16) (((dp->now - tStart)*1000L)/dp->dpio->clocksPerSec);
 
-	ps = (short *)(pkt->body.data + timeAndAdrlen);
+	ps = (sint16 *)(pkt->body.data + timeAndAdrlen);
 	serv.sessType = SwapBytes2(*ps); ps++;
-	if (pkt->body.len >= timeAndAdrlen + 4*sizeof(short)) {
+	if (pkt->body.len >= timeAndAdrlen + 4*sizeof(sint16)) {
 		serv.cur_users = SwapBytes2(*ps); ps++;
 		serv.max_users = SwapBytes2(*ps); ps++;
 		serv.cur_sessTypeUsers = SwapBytes2(*ps); ps++;
-		if (pkt->body.len >= timeAndAdrlen + 6*sizeof(short)) {
+		if (pkt->body.len >= timeAndAdrlen + 6*sizeof(sint16)) {
 			serv.cur_games = SwapBytes2(*ps); ps++;
 			serv.cur_sessTypeGames = SwapBytes2(*ps); ps++;
 		} else {
@@ -816,7 +816,7 @@ dp_result_t dpHandleServerPingResponsePacket(
 	/* Inform caller via callback, if desired */
 	if (dp->enumServersEx_callback) {
 		long timeout = 1;
-		dp->enumServersEx_callback(serv.hostname, (long)serv.rtt_ms_avg,
+		dp->enumServersEx_callback(serv.hostname, (sint32)serv.rtt_ms_avg,
 								&serv, &timeout, 0, dp->enumServersEx_context);
 	}
 	return dp_RES_OK;

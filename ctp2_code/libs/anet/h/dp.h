@@ -236,7 +236,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Revision 1.12  1996/02/20 05:46:47  dkegel
  dp_host_t was never used.
  Revision 1.11  1996/02/16 20:27:22  dkegel
- 1. No limit on DPID's. dpid_t now unsigned.
+ 1. No limit on DPID's. dpid_t now uint32.
  2. Trust outgoing packet queue if MULTICAST_BLAST defined.
  3. Local messages are delivered even if network is busy.
  4. Now send keepalives to master if user hasn't lately.
@@ -267,7 +267,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  timeouts appear to work properly now.
  4. Added new constant dpid, dp_ID_LOCAL_NAMESERVER, for internal plumbing.
  Revision 1.5  1996/01/30 06:32:24  dkegel
- 1. dpid_t now short.  Saves four bytes in packet.
+ 1. dpid_t now sint16.  Saves four bytes in packet.
  (Should it be a char, even?  Or converted to one?)
  2. Increased dp_MAXDPIDS to 24.  Check when allocating new DPID!
  Should remove this limit- nothing should care how large these get.
@@ -291,6 +291,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include <stddef.h>
 #include <time.h>
+
+#include "type.h"
 
 #ifdef _WIN32
 #include <windows.h>
@@ -344,9 +346,9 @@ extern "C" {
 #define dp_PING_MAX_NTOTAL 10
 typedef struct {
 	dp_karma_t karma;	/* send packets with this, ignore responses that differ. */
-	int n_total; /* how many to send. */
-	int n_sent;  /* how many sent so far */
-	int n_got;   /* how many we got so far */
+	sint32 n_total; /* how many to send. */
+	sint32 n_sent;  /* how many sent so far */
+	sint32 n_got;   /* how many we got so far */
 	time_t sent_at[dp_PING_MAX_NTOTAL];
 	time_t got_at[dp_PING_MAX_NTOTAL];
 	time_t next_send_time;
@@ -362,11 +364,11 @@ typedef struct {
 typedef struct dp_enumserver_s {
 	const char *hostname;			/* Printable address of server */
 
-	short rtt_ms_avg;				/* Average measurement */
-	short loss_percent;				/* Average packet loss */
+	sint16 rtt_ms_avg;				/* Average measurement */
+	sint16 loss_percent;				/* Average packet loss */
 
-	short i_rtt;					/* next entry in rtt_ms to overwrite */
-	short rtt_ms[dp_SERVER_NPINGS];	/* roundtrip time, msec; -1 if empty */
+	sint16 i_rtt;					/* next entry in rtt_ms to overwrite */
+	sint16 rtt_ms[dp_SERVER_NPINGS];	/* roundtrip time, msec; -1 if empty */
 
 	byte adr[dp_MAX_ADR_LEN];		/* lowest level transport address */
 } dp_enumserver_t;
@@ -375,7 +377,7 @@ typedef struct dp_enumserver_s {
 typedef struct dp_enumsession_s {
 	dp_session_t s;			/* The packet received from the host. */
 	clock_t lastSeen;		/* When it was received. */
-	unsigned isNew : 1;		/* Newly added session */
+	uint32 isNew : 1;		/* Newly added session */
 } dp_enumsession_t;			/* Used to avoid duplicate reports */
 
 /********************************************************************* */
@@ -385,29 +387,29 @@ typedef struct dp_enumsession_s {
 #define dp_MAX_SERVERS 256
 
 typedef struct dp_s {
-	int			 magic;			/* sentinel to make sure structure valid */
+	sint32		 magic;			/* sentinel to make sure structure valid */
 	dpExceptionCallback_t	exception_cb;	// set this to catch fatal errors */
 	dp_karma_t	 myKarma;		/* random number; used as sessionKarma if leader */
 
-	int 		 bMaster;		/* whether I'm a session master */
+	sint32		 bMaster;		/* whether I'm a session master */
 	dpid_t		 nextId;		/* next id to hand out when creating players */
 	dp_session_t s;				/* session I'm connected to or hosting, if any. */
 	playerHdl_t  hMaster;		/* used to be in dp_session_t */
 	byte		 myAdr[dp_MAX_ADR_LEN];		/* lowest level transport address */
-	int			 myAdrLen;
-	int			 pollState;	/* what housekeeping packet to send this time. */
-	int			 clocksPerSec;	/* call dpSetClocks with multiplier to indicate relative speed. */
-	int			 enableNewPlayers;
-	int			 isServerLobby;
-	int			 sentToMaster;	/* whether we have sent a packet to the master lately. */
+	sint32		 myAdrLen;
+	sint32		 pollState;	/* what housekeeping packet to send this time. */
+	sint32		 clocksPerSec;	/* call dpSetClocks with multiplier to indicate relative speed. */
+	sint32		 enableNewPlayers;
+	sint32		 isServerLobby;
+	sint32		 sentToMaster;	/* whether we have sent a packet to the master lately. */
 
 	/* Our local list of players on this machine. No remote players included. */
-	int          my_nPlayers;
-	dp_playerId_t	my_players[dp_MAXPLAYERS];
+	sint32         my_nPlayers;
+	dp_playerId_t  my_players[dp_MAXPLAYERS];
 
 	/* Copy of last player list from master. */
-	int          nPlayers;
-	dp_playerId_t	players[dp_MAXPLAYERS];
+	sint32         nPlayers;
+	dp_playerId_t  players[dp_MAXPLAYERS];
 
 	/* How to map from dpid's to comm layer addresses. */
 	/* Indexed by dpid.  Update whenever nPlayers is incremented. */
@@ -415,11 +417,11 @@ typedef struct dp_s {
 	assoctab_t	*dpid2commHdl;
 
 	/* Capabilities of communications (transport) driver. */
-	long drivercaps;
+	sint32 drivercaps;
 
 	/* Following fields support dpEnumServers */
 	dp_enumserver_t servers[dp_MAX_SERVERS];
-	int n_servers;
+	sint32 n_servers;
 	dpEnumServersCallback_t enumServers_callback; /* Called for each server */
 	void *enumServers_context;
 	clock_t enumServers_deadline;	/* when to give up on replies. */
@@ -432,7 +434,7 @@ typedef struct dp_s {
 	dpEnumPlayersCallback_t createPlayer_callback;
 	void *createPlayer_context;
 	clock_t		 createPlayer_deadline;	/* when to grovel. */
-	int createPlayer_retries;	/* how many times we grovel before giving up. */
+	sint32 createPlayer_retries;	/* how many times we grovel before giving up. */
 
 	/* Called when open completes. */
 	dpEnumSessionsCallback_t openSession_callback;
@@ -440,8 +442,8 @@ typedef struct dp_s {
 
 	/* Following fields support enumSessions. */
 	dp_enumsession_t sessions[dp_MAXSESSIONS];
-	int			 n_sessions;
-	int			 last_sess_sent;	/* The last session sent to clients */
+	sint32		 n_sessions;
+	sint32		 last_sess_sent;	/* The last session sent to clients */
 	clock_t		 next_GS_beacon;	/* Whether it's time to send server */
 	clock_t		 GS_beacon_interval;	/* How often to broadcast server */
 	clock_t      next_beacon;		/* whether it's time to broadcast */
@@ -450,14 +452,14 @@ typedef struct dp_s {
 	dpEnumSessionsCallback_t enumSessions_callback;
 	clock_t		 enumSessions_deadline;	/* when to give up on replies. */
 	dp_species_t enumSessions_sessType;
-	int			 syncAfter;
-	int			 replyAfter;
+	sint32		 syncAfter;
+	sint32		 replyAfter;
 	playerHdl_t	 replyTo;
 	playerHdl_t  hGameServer;
 	byte		 adrGameServer[dp_MAX_ADR_LEN];
-	int			 gameServerReqCt;	/* How many enumSession packets we've sent */
-	int			 gameServerRespCt;	/* How many Session packets we've gotten */
-	int			 gamesServed;		/* How many games have been played */
+	sint32		 gameServerReqCt;	/* How many enumSession packets we've sent */
+	sint32		 gameServerRespCt;	/* How many Session packets we've gotten */
+	sint32		 gamesServed;		/* How many games have been played */
 	time_t		 startTime;			/* The time at which this server was last reset */
 
 	/* Following fields support enumPlayers. */
@@ -470,9 +472,9 @@ typedef struct dp_s {
 #if 0
 	/* Following fields support multi-cast simulation by dpSend. */
 	byte		 mc_buf[dp_MAXPACKETLEN];	/* Holding pen while multicasting */
-	int 		 mc_len;	/* Length of user data. */
-	int			 mc_next;	/* Index into players[].  Next guy to send it to, or -1 if done. */
-	int		 mc_sysMessage;	/* whether system message */
+	sint32		 mc_len;	/* Length of user data. */
+	sint32		 mc_next;	/* Index into players[].  Next guy to send it to, or -1 if done. */
+	sint32		 mc_sysMessage;	/* whether system message */
 #endif
 
 	/* Following field supports reliable data transmission. */

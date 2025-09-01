@@ -95,10 +95,10 @@ COMMON_WARNINGS="-pedantic -Wchar-subscripts -Wcomment -Wconversion -Wendif-labe
 C_WARNINGS="$COMMON_WARNINGS -Wmain -Wmissing-prototypes -Wnested-externs -Wnonnull -Wsequence-point -Wstrict-prototypes"
 CXX_WARNINGS="$COMMON_WARNINGS -Winvalid-offsetof"
 
-C_WARNINGS="-Wall -Wno-unused-variable"
-CXX_WARNINGS="-Wall -Wno-unused-variable"
+C_WARNINGS="-Wall -Wno-unused-variable -Wno-parentheses -Wno-format-overflow -Wno-deprecated-declarations -Wno-comment -Wno-char-subscripts"
+CXX_WARNINGS="-Wall -Wno-unused-variable -Wno-parentheses -Wno-class-memaccess -Wno-format-overflow -Wno-deprecated-declarations -Wno-comment -Wno-char-subscripts"
 
-CFLAGS="$C_WARNINGS -fpermissive -fms-extensions -fmessage-length=0 $CFLAGS"
+CFLAGS="$C_WARNINGS -fms-extensions -fmessage-length=0 $CFLAGS"
 CXXFLAGS="$CXX_WARNINGS -fpermissive -fms-extensions -fmessage-length=0 -frtti -fexceptions $CXXFLAGS"
 AC_SUBST(CFLAGS)
 AC_SUBST(CPPFLAGS)
@@ -135,6 +135,9 @@ if test x$enable_debug = xyes  || test x$enable_debug = xfull; then
 	AC_DEFINE(_DEBUG_MEMORY,1,[Enable the leak reporter])# _DEBUG requires this
 fi
 AM_CONDITIONAL([DEBUG], [test "x$enable_debug" != "xno"])# for conditional block in Makefile.am
+AM_CONDITIONAL([LOGGING], [test "x$enable_looging" != "xno"])# for conditional block in Makefile.am
+AM_CONDITIONAL([PROFILE], [test "x$enable_profile" != "xno"])# for conditional block in Makefile.am
+
 
 if test 0 -eq 1; then
 	AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[Enable slic debugging code])

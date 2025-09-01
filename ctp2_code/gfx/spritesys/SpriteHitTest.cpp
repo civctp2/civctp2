@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Removed unused local variables. (Sep 9th 2005 Martin Gühmann)
+// - Removed unused local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -37,8 +37,6 @@
 BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 					 uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
-	uint8			*surfBase;
-
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -53,13 +51,10 @@ BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 draw
 		return FALSE;
 	}
 
-
-	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
-
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
-	register	sint32 j;
+	sint32		j;
 	sint32		len;
 
 	mousePt.x -= drawX;
@@ -127,8 +122,6 @@ BOOL Sprite::HitTestLow(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 draw
 BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sint32 drawY, sint32 width, sint32 height,
 							 uint16 transparency, Pixel16 outlineColor, uint16 flags)
 {
-	uint8			*surfBase;
-
 	sint32 surfWidth = m_surfWidth;
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
@@ -142,13 +135,11 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 		return FALSE;
 	}
 
-	surfBase = m_surfBase + (drawY * surfPitch) + (drawX * sizeof(Pixel16));
-
 	Pixel16		*table = frame+1;
 	Pixel16		*dataStart = table + height;
 
-	register	sint32 j;
-	register	sint32 len;
+	sint32 j;
+	sint32 len;
 
 	mousePt.x -= drawX;
 	mousePt.y -= drawY;
@@ -212,8 +203,6 @@ BOOL Sprite::HitTestLowReversed(POINT mousePt, Pixel16 *frame, sint32 drawX, sin
 BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, sint32 destWidth, sint32 destHeight,
 							 uint16 transparency, Pixel16 outlineColor, uint16 flags, BOOL reverse)
 {
-	uint8			*surfBase;
-
 	Pixel16		emptyRow[2];
 
 	emptyRow[0] = (Pixel16)((k_CHROMAKEY_RUN_ID << 8) | m_width);
@@ -225,14 +214,10 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 	sint32 surfHeight = m_surfHeight;
 	sint32 surfPitch = m_surfPitch;
 
-	surfBase = m_surfBase + (y * surfPitch) + (x * sizeof(Pixel16));
-
 	if (destRect.left < 0) return FALSE;
 	if (destRect.top < 0) return FALSE;
 	if (destRect.right > surfWidth) return FALSE;
 	if (destRect.bottom > surfHeight) return FALSE;
-
-	Pixel16			*destPixel;
 
 	Pixel16			*table = data+1;
 	Pixel16			*dataStart = table + m_height;
@@ -262,7 +247,6 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 		} else {
 
 			Pixel16		*rowData1, *rowData2;
-			Pixel16		pixel1, pixel2;
 
 			sint32		haccum;
 			sint32		hincx, hincxy;
@@ -298,16 +282,11 @@ BOOL Sprite::HitTestScaledLow(POINT mousePt, Pixel16 *data, sint32 x, sint32 y, 
 			end1 = ReadTag(&mode1, &rowData1, &alpha1);
 			end2 = ReadTag(&mode2, &rowData2, &alpha2);
 
-			pixel1 = k_MEDIUM_KEY;
-			pixel2 = k_MEDIUM_KEY;
-
 			while (hpos < hend) {
 				if (haccum < 0) {
 					haccum += hincx;
 				} else {
 					haccum += hincxy;
-
-					destPixel = (Pixel16 *)(surfBase + ((vdestpos-y) * surfPitch) + ((hdestpos-x) * 2));
 
 					while (pos1 <= hpos) {
 						switch (mode1) {

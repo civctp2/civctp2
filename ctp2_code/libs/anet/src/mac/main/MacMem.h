@@ -21,6 +21,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define _MacMem_
 
 #include <Types.h>
+#include "types.h"
 typedef Handle HANDLE;
 
 #ifdef __cplusplus
@@ -29,17 +30,17 @@ extern "C" {
 
 	void MEM_free_lock(void* thePtr);
 
-	void *MyNewPtr(long x);
-	void *MyNewPtrClear(long x);
-	void* MyRealloc(void *x, long y);
+	void *MyNewPtr(sint32 x);
+	void *MyNewPtrClear(sint32 x);
+	void* MyRealloc(void *x, sint32 y);
 	OSErr MyDisposePtr(void *x);
-	long Mymsize(void *x);
+	sint32 Mymsize(void *x);
 
-	unsigned char *HeapReAlloc(HANDLE hHeap, unsigned long flags, char * obj, size_t size);
+	uint8 *HeapReAlloc(HANDLE hHeap, uint32 flags, char * obj, size_t size);
 
 	//	algigned memory calls
 
-	void* NewPtrAlign(long size);
+	void* NewPtrAlign(sint32 size);
 	void DisposePtrAlign(void* thePtr);
 
 	//	memory cache calls
@@ -47,7 +48,7 @@ extern "C" {
 	void* GetNewObject(void);
 	void FreeObject(void* theObject);
 
-	void* GetMemory(long theSize);
+	void* GetMemory(sint32 theSize);
 	void FreeMemory(void* theObject);
 
 #ifdef __cplusplus

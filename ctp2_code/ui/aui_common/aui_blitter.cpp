@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 21th 2006 Martin Gühmann)
+// - Standardized code (May 21th 2006 Martin GÃ¼hmann)
 // - Replaced inline assembly for 32 bit Intel with regular C++ library call.
 //
 //----------------------------------------------------------------------------
@@ -352,11 +352,11 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 						do
 						{
 							if ( *srcBuf != chromakey )
-								*destBuf++ = aui_Pixel::Blend555(
+								*destBuf = aui_Pixel::Blend555(
 									*destBuf, *srcBuf, blend );
-							else
-								destBuf++;
-						} while ( ++srcBuf != stopHorizontal );
+							destBuf++;
+						}
+						while ( ++srcBuf != stopHorizontal );
 
 						stopHorizontal += srcPitch;
 
@@ -371,11 +371,12 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 						{
 
 							if ( *srcBuf != chromakey )
-								*destBuf++ = aui_Pixel::Blend565(
+								*destBuf = aui_Pixel::Blend565(
 									*destBuf, *srcBuf, blend );
-							else
-								destBuf++;
-						} while ( ++srcBuf != stopHorizontal );
+
+							destBuf++;
+						}
+						while ( ++srcBuf != stopHorizontal );
 
 						stopHorizontal += srcPitch;
 
@@ -431,9 +432,11 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 					{
 						do
 						{
-							*destBuf++ =
+							*destBuf =
 								aui_Pixel::Blend555( *destBuf, *srcBuf, blend );
-						} while ( ++srcBuf != stopHorizontal );
+							destBuf++;
+						}
+						while ( ++srcBuf != stopHorizontal );
 
 						stopHorizontal += srcPitch;
 
@@ -446,9 +449,11 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 					{
 						do
 						{
-							*destBuf++ =
+							*destBuf =
 								aui_Pixel::Blend565( *destBuf, *srcBuf, blend );
-						} while ( ++srcBuf != stopHorizontal );
+							destBuf++;
+						}
+						while ( ++srcBuf != stopHorizontal );
 
 						stopHorizontal += srcPitch;
 
@@ -752,8 +757,6 @@ AUI_ERRCODE aui_Blitter::TileBlt8To8(
 						{
 							if ( *srcBuf != chromakey )
 								*destBuf = *srcBuf;
-							else
-								destBuf;
 
 							if ( ++srcBuf == stopSrcHorizontal )
 								srcBuf = beginningSrcLine;
@@ -932,8 +935,6 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 						{
 							if ( *srcBuf != chromakey )
 								*destBuf = *srcBuf;
-							else
-								destBuf;
 
 							if ( ++srcBuf == stopSrcHorizontal )
 								srcBuf = beginningSrcLine;
@@ -1266,19 +1267,21 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 				sint32 j;
 				for ( j = i; j; j-- )
 				{
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
+					*destBuf = aui_Pixel::Darken555( *destBuf, -xscalar );
+					destBuf++;
 				}
 
 				do
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, -yscalar );
-				} while ( destBuf != stop );
+					*destBuf = aui_Pixel::Darken555( *destBuf, -yscalar );
+					destBuf++;
+				}
+				while ( destBuf != stop );
 
 				for ( j = i; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, xscalar );
+					*destBuf = aui_Pixel::Darken555( *destBuf, xscalar );
+					destBuf++;
 				}
 
 				destBuf += destDiff;
@@ -1290,16 +1293,16 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 				sint32 j;
 				for ( j = bevelThickness; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
+					*destBuf = aui_Pixel::Darken555( *destBuf, -xscalar );
+					destBuf++;
 				}
 
 				destBuf += skipWidth;
 
 				for ( j = bevelThickness; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, xscalar );
+					*destBuf = aui_Pixel::Darken555( *destBuf, xscalar );
+					destBuf++;
 				}
 
 				destBuf += destDiff;
@@ -1312,20 +1315,21 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 				sint32 j;
 				for ( j = i - 1; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, -xscalar );
+					*destBuf = aui_Pixel::Darken555( *destBuf, -xscalar );
+					destBuf++;
 				}
 
 				do
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, yscalar );
-				} while ( destBuf != stop );
+					*destBuf = aui_Pixel::Darken555( *destBuf, yscalar );
+					destBuf++;
+				}
+				while ( destBuf != stop );
 
 				for ( j = i - 1; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken555( *destBuf, xscalar );
+					*destBuf = aui_Pixel::Darken555( *destBuf, xscalar );
+					destBuf++;
 				}
 
 				destBuf += destDiff;
@@ -1340,20 +1344,21 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 				sint32 j;
 				for ( j = i; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
+					*destBuf = aui_Pixel::Darken565( *destBuf, -xscalar );
+					destBuf++;
 				}
 
 				do
 				{
-
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, -yscalar );
-				} while ( destBuf != stop );
+					*destBuf = aui_Pixel::Darken565( *destBuf, -yscalar );
+					destBuf++;
+				}
+				while ( destBuf != stop );
 
 				for ( j = i; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, xscalar );
+					*destBuf = aui_Pixel::Darken565( *destBuf, xscalar );
+					destBuf++;
 				}
 
 				destBuf += destDiff;
@@ -1365,16 +1370,16 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 				sint32 j;
 				for ( j = bevelThickness; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
+					*destBuf = aui_Pixel::Darken565( *destBuf, -xscalar );
+					destBuf++;
 				}
 
 				destBuf += skipWidth;
 
 				for ( j = bevelThickness; j; j-- )
 				{
-
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, xscalar );
+					*destBuf = aui_Pixel::Darken565( *destBuf, xscalar );
+					destBuf++;
 				}
 
 				destBuf += destDiff;
@@ -1387,17 +1392,21 @@ AUI_ERRCODE aui_Blitter::BevelBlt16(
 				sint32 j;
 				for ( j = i - 1; j; j-- )
 				{
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, -xscalar );
+					*destBuf = aui_Pixel::Darken565( *destBuf, -xscalar );
+					destBuf++;
 				}
 
 				do
 				{
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, yscalar );
-				} while ( destBuf != stop );
+					*destBuf = aui_Pixel::Darken565( *destBuf, yscalar );
+					destBuf++;
+				}
+				while ( destBuf != stop );
 
 				for ( j = i - 1; j; j-- )
 				{
-					*destBuf++ = aui_Pixel::Darken565( *destBuf, xscalar );
+					*destBuf = aui_Pixel::Darken565( *destBuf, xscalar );
+					destBuf++;
 				}
 
 				destBuf += destDiff;

@@ -20,8 +20,8 @@ extern aui_UI		*g_ui;
 StaticPicture::StaticPicture(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
-	MBCHAR *picture )
+	const MBCHAR *ldlBlock,
+	const MBCHAR *picture )
 :
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -43,7 +43,7 @@ StaticPicture::StaticPicture(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *picture )
+	const MBCHAR *picture )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
@@ -58,13 +58,13 @@ StaticPicture::StaticPicture(
 }
 
 
-AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
+AUI_ERRCODE StaticPicture::InitCommon( const MBCHAR *ldlBlock, const MBCHAR *picture )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
-	MBCHAR *name =
+	const MBCHAR *name =
 		block->GetString( picture ? picture : k_AUI_STATICIMAGE_LDL_IMAGE );
 	Assert( name != NULL );
 	if ( name )
@@ -78,13 +78,13 @@ AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *ldlBlock, MBCHAR *picture )
 }
 
 
-AUI_ERRCODE StaticPicture::InitCommon( MBCHAR *picture )
+AUI_ERRCODE StaticPicture::InitCommon( const MBCHAR *picture )
 {
 	MBCHAR filename[_MAX_PATH];
 
 	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename))
-    {
-	    AUI_ERRCODE errcode;
+	{
+		AUI_ERRCODE errcode;
 		m_picture = new Picture(&errcode, filename);
 	} else {
 		m_picture = NULL;
@@ -126,18 +126,18 @@ AUI_ERRCODE StaticPicture::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	return AUI_ERRCODE_OK;
 }
 
-void StaticPicture::SetPicture(MBCHAR *picture)
+void StaticPicture::SetPicture(const MBCHAR *picture)
 {
 	MBCHAR filename[_MAX_PATH];
 
-    delete m_picture;
+	delete m_picture;
 	if (g_civPaths->FindFile(C3DIR_PICTURES, picture, filename))
-    {
-	    AUI_ERRCODE errcode;
+	{
+		AUI_ERRCODE errcode;
 		m_picture = new Picture(&errcode, filename);
 	}
-    else
-    {
+	else
+	{
 		m_picture = NULL;
 	}
 

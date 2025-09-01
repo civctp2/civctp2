@@ -61,7 +61,7 @@ void UnitsToggleButtonActionCallback
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie
+	Cookie cookie
 )
 {
 	switch (action)
@@ -80,7 +80,7 @@ void CitiesToggleButtonActionCallback
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie
+	Cookie cookie
 )
 {
 	switch (action)
@@ -99,7 +99,7 @@ void BordersToggleButtonActionCallback
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie
+	Cookie cookie
 )
 {
 	switch (action)
@@ -114,7 +114,7 @@ void BordersToggleButtonActionCallback
 }
 
 void TradeToggleButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	switch (action)
 	{
@@ -128,7 +128,7 @@ void TradeToggleButtonActionCallback(aui_Control *control,
 }
 
 void TerrainToggleButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	switch (action)
 	{
@@ -141,7 +141,7 @@ void TerrainToggleButtonActionCallback(aui_Control *control,
 	}
 }
 
-void MinimizeCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void MinimizeCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	ctp2_Static *topBorder		= static_cast<ctp2_Static*>(aui_Ldl::GetObject(
 		"RadarWindow.TopBorder"));
@@ -157,7 +157,7 @@ void MinimizeCallback(aui_Control *control, uint32 action, uint32 data, void *co
 }
 
 void PoliticalToggleButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	switch (action)
 	{
@@ -171,7 +171,7 @@ void PoliticalToggleButtonActionCallback(aui_Control *control,
 }
 
 void CapitolsToggleButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	switch (action)
 	{
@@ -185,7 +185,7 @@ void CapitolsToggleButtonActionCallback(aui_Control *control,
 }
 
 void RelationsToggleButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 	switch (action)
 	{
@@ -309,15 +309,15 @@ sint32 radarwindow_Initialize()
 	capitolsButton->SetState( g_radarMap->IsDisplayCapitols());
 	relationsButton->SetState( g_radarMap->IsDisplayRelations());
 
-	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, NULL);
-	citiesButton->SetActionFuncAndCookie(CitiesToggleButtonActionCallback, NULL);
-	bordersButton->SetActionFuncAndCookie(BordersToggleButtonActionCallback, NULL);
-	tradeButton->SetActionFuncAndCookie(TradeToggleButtonActionCallback, NULL);
-	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, NULL);
-	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, NULL);
-	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, NULL);
-	capitolsButton->SetActionFuncAndCookie(CapitolsToggleButtonActionCallback, NULL);
-	relationsButton->SetActionFuncAndCookie(RelationsToggleButtonActionCallback, NULL);
+	unitsButton->SetActionFuncAndCookie(UnitsToggleButtonActionCallback, nullptr);
+	citiesButton->SetActionFuncAndCookie(CitiesToggleButtonActionCallback, nullptr);
+	bordersButton->SetActionFuncAndCookie(BordersToggleButtonActionCallback, nullptr);
+	tradeButton->SetActionFuncAndCookie(TradeToggleButtonActionCallback, nullptr);
+	terrainButton->SetActionFuncAndCookie(TerrainToggleButtonActionCallback, nullptr);
+	minimizeButton->SetActionFuncAndCookie(MinimizeCallback, nullptr);
+	politicalButton->SetActionFuncAndCookie(PoliticalToggleButtonActionCallback, nullptr);
+	capitolsButton->SetActionFuncAndCookie(CapitolsToggleButtonActionCallback, nullptr);
+	relationsButton->SetActionFuncAndCookie(RelationsToggleButtonActionCallback, nullptr);
 
 	g_c3ui->AddWindow(g_radarWindow);
 

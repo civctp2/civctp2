@@ -32,10 +32,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define tcapwtab_MAGIC 0x9475
 #define tcapwtab_LEN_HEADER 20
 typedef struct {
-	long timestamp;
-	long offset;
-	short magic;
-	long n_used;
+	sint32 timestamp;
+	sint32 offset;
+	sint16 magic;
+	sint32 n_used;
 	size_t unit;
 	dp_uid_t lastuid;
 } tcapwtab_header_t;
@@ -44,7 +44,7 @@ typedef struct {
  Write the tcapwtab header to file.  Read with tcapwtab_thaw_header.
  Returns 0 on success.
 -------------------------------------------------------------------------*/
-static int tcapwtab_freeze_header(tcapwtab_header_t *head, FILE *fp)
+static sint32 tcapwtab_freeze_header(tcapwtab_header_t *head, FILE *fp)
 {
 	char buf[tcapwtab_LEN_HEADER];
 	char *pbuf = buf;
@@ -64,8 +64,8 @@ static int tcapwtab_freeze_header(tcapwtab_header_t *head, FILE *fp)
 	*pbuf++ = dpGETLONG_SECONDBYTE(head->n_used);
 	*pbuf++ = dpGETLONG_THIRDBYTE(head->n_used);
 	*pbuf++ = dpGETLONG_FOURTHBYTE(head->n_used);
-	*pbuf++ = dpGETSHORT_FIRSTBYTE((unsigned short)head->unit);
-	*pbuf++ = dpGETSHORT_SECONDBYTE((unsigned short)head->unit);
+	*pbuf++ = dpGETSHORT_FIRSTBYTE((uint16)head->unit);
+	*pbuf++ = dpGETSHORT_SECONDBYTE((uint16)head->unit);
 	*pbuf++ = dpGETLONG_FIRSTBYTE(head->lastuid);
 	*pbuf++ = dpGETLONG_SECONDBYTE(head->lastuid);
 	*pbuf++ = dpGETLONG_THIRDBYTE(head->lastuid);
@@ -82,7 +82,7 @@ static int tcapwtab_freeze_header(tcapwtab_header_t *head, FILE *fp)
  Read the tcapwtab header from a file.
  Returns 0 on success.
 -------------------------------------------------------------------------*/
-static int tcapwtab_thaw_header(tcapwtab_header_t *head, FILE *fp)
+static sint32 tcapwtab_thaw_header(tcapwtab_header_t *head, FILE *fp)
 {
 	char buf[tcapwtab_LEN_HEADER];
 	char *pbuf = buf;
@@ -112,18 +112,18 @@ static int tcapwtab_thaw_header(tcapwtab_header_t *head, FILE *fp)
  suitable for restoration with tcapwtab_thaw_encrypted.
  Saves the wmq position (timestamp, offset) and lastuid in the header.
 -------------------------------------------------------------------------*/
-void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8], time_t timestamp, long offset, dp_uid_t lastuid)
+void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8], time_t timestamp, sint32 offset, dp_uid_t lastuid)
 {
 	tcapwtab_header_t d;
 	size_t encrypted_unit;
-	int nwritten;
-	int n;
+	sint32 nwritten;
+	sint32 n;
 	size_t chunk;
 	char buf[tcapwtab_RW_BUFFER_SIZE];
 	char *pbuf;
 	char unitbuf[tcapwtab_RW_BUFFER_SIZE];
 
-	d.magic = (short)tcapwtab_MAGIC;
+	d.magic = (sint16)tcapwtab_MAGIC;
 	d.n_used = tab->n_used;
 	d.unit = tab->unit;
 	d.timestamp = timestamp;
@@ -179,9 +179,9 @@ void tcapwtab_freeze_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key
  Assumes that the items contain no pointers or other data that needs to
  be modified to reflect new conditions upon thawing.
 -------------------------------------------------------------------------*/
-void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[8], time_t *timestamp, long *offset, dp_uid_t *lastuid)
+void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const uint8 key[8], time_t *timestamp, sint32 *offset, dp_uid_t *lastuid)
 {
-	int nread;
+	sint32 nread;
 	void *p;
 	tcapwtab_header_t d;
 	size_t encrypted_unit;
@@ -202,8 +202,8 @@ void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 	DPRINT(("tcapwtab_thaw_encrypted: Reading %d elements of size %d (%d encrypted).\n", d.n_used, d.unit, encrypted_unit));
 	tab->unit = d.unit;
 	if (d.n_used != 0) {
-		int n;
-		int n_end;
+		sint32 n;
+		sint32 n_end;
 		size_t chunk;
 		char buf[tcapwtab_RW_BUFFER_SIZE];
 		char *pbuf;
@@ -254,7 +254,7 @@ void *tcapwtab_thaw_encrypted(dynatab_t *tab, FILE *fp, const unsigned char key[
 
 void test1(dynatab_t *pt)
 {
-	int i;
+	sint32 i;
 	FILE *fp;
 	dynatab_t *th;
 	time_t timestamp;
@@ -262,7 +262,7 @@ void test1(dynatab_t *pt)
 
 	for (i = NENTRIES-1; i >= 0; i--) {
 	/* for (i = 0; i < NENTRIES; i++) { */
-		int *p = dynatab_subscript_grow(pt, i);
+		sint32 *p = dynatab_subscript_grow(pt, i);
 		if (p == NULL) {
 			printf("grow1: test failed on i=%d\n", i);
 			exit(1);
@@ -275,7 +275,7 @@ void test1(dynatab_t *pt)
 		printf(".");
 	}
 	for (i = 0; i < NENTRIES; i++) {
-		int *p = dynatab_subscript(pt, i);
+		sint32 *p = dynatab_subscript(pt, i);
 		if (p == NULL) {
 			printf("subscript2: test failed\n");
 			exit(1);
@@ -304,7 +304,7 @@ void test1(dynatab_t *pt)
 		perror("closing spam.dat");
 		exit(1);
 	}
-	th = dynatab_create(sizeof(int));
+	th = dynatab_create(sizeof(sint32));
 	if (!th) exit(1);
 
 	fp = fopen("spam.dat", "rb");
@@ -326,7 +326,7 @@ void test1(dynatab_t *pt)
 		exit(1);
 	}
 	for (i = 0; i < NENTRIES; i++) {
-		int *p = dynatab_subscript(th, i);
+		sint32 *p = dynatab_subscript(th, i);
 		if (p == NULL) {
 			printf("subscript2: test failed\n");
 			exit(1);
@@ -341,14 +341,14 @@ void test1(dynatab_t *pt)
 		}
 	}
 	for (i = 0; i < NENTRIES/2; i++) {	/* Don't remove them all */
-		int *p = dynatab_subscript(th, 0);
-		int val = *p;
+		sint32 *p = dynatab_subscript(th, 0);
+		sint32 val = *p;
 		if (p == NULL) {
 			printf("subscript3: test failed\n");
 			exit(1);
 		}
 		dynatab_remove(th, 0);
-		if (val == *((int*)dynatab_subscript(th, 0))) {
+		if (val == *((sint32*)dynatab_subscript(th, 0))) {
 			printf("remove test: test failed\n");
 			exit(1);
 		}
@@ -365,11 +365,11 @@ void test1(dynatab_t *pt)
 #define NTABS 100
 main()
 {
-	int i;
+	sint32 i;
 	dynatab_t *pt[NTABS];
 
 	for (i=0;i<NTABS;i++) {
-		pt[i] = dynatab_create(sizeof(int));
+		pt[i] = dynatab_create(sizeof(sint32));
 		if (!pt[i]) {
 			printf("create: test failed\n");
 			exit(1);
@@ -380,7 +380,7 @@ main()
 		}
 	}
 	for (i=0;i<NTABS;i++) {
-		int h;
+		sint32 h;
 		h = _heapchk();
 		if (h != _HEAPOK) {
 			printf("heapchk: test failed\n");

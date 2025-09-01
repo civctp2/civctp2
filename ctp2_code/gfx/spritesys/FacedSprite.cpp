@@ -592,7 +592,7 @@ void FacedSprite::Export(FILE *file)
 
 	fprintf(file, "\t\t%s\n", g_allTokens[TOKEN_SPRITE_HOT_POINTS].keyword);
 	for (i=0; i<k_NUM_FACINGS; i++) {
-		fprintf(file, "\t\t\t%ld %ld\n", m_hotPoints[i].x, m_hotPoints[i].y);
+		fprintf(file, "\t\t\t%d %d\n", m_hotPoints[i].x, m_hotPoints[i].y);
 	}
 
 	fprintf(file, "\t}\n\n");

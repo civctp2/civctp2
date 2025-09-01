@@ -156,9 +156,11 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 extern "C" {
 #endif
 
+#include "types.h"
+
 /*-------------- commapi types & constants ----------------------------*/
 /* For commInitReq_t.portnum */
-#define COM1  (int)0
+#define COM1  (sint32)0
 #define COM2  1
 #define COM3  2
 #define COM4  3
@@ -188,13 +190,13 @@ extern "C" {
  */
 #include "dppack1.h"
 
-typedef	unsigned short	version_t;			/* Version number (major.minor) */
-#define VERSION(maj,min)	((unsigned short)(unsigned char)(maj)<<8 | (unsigned char) (min))
+typedef	uint16	version_t;			/* Version number (major.minor) */
+#define VERSION(maj,min)	((uint16)(uint8)(maj)<<8 | (uint8) (min))
 
-/* Player handles now longs to hold an entire Internet address; */
+/* Player handles now uint32s to hold an entire Internet address; */
 /* other transports will continue to use them as small integer handles. */
 /* PLAYER_BROADCAST value changed to match Internet broadcast address. */
-typedef unsigned long	playerHdl_t;		/* Handle for a player or group */
+typedef uint32	playerHdl_t;		/* Handle for a player or group */
 #define	PLAYER_NONE      ((playerHdl_t) 0xfffffffc) /* -4 No player */
 #define	PLAYER_UNKNOWN   ((playerHdl_t) 0xfffffffd) /* -3 Unknown player */
 #define	PLAYER_ME        ((playerHdl_t) 0xfffffffe) /* -2 This player */
@@ -235,14 +237,14 @@ typedef struct {					/* Request (filled in by caller) */
 } commAllocResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMALLOC)(
 	commAllocReq_t *		req,	/* Request (or NULL) */
 	commAllocResp_t *	resp)		/* Response (or NULL) */
 ;
 extern COMMALLOC commAlloc;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commAlloc(
 	commAllocReq_t *		req,	/* Request (or NULL) */
 	commAllocResp_t *	resp)		/* Response (or NULL) */
@@ -250,7 +252,7 @@ commAlloc(
 #endif
 
 #ifdef UNIX
-int validateComm(void *comm);
+sint32 validateComm(void *comm);
 #endif
 
 /*--------------------------------------------------------------------------
@@ -279,9 +281,9 @@ typedef struct {
 	char signature[comm_DRIVER_SIGLEN];
 	size_t recordLen;               /* sizeof(comm_driverInfo_t) */
 	char name[comm_DRIVER_NAMELEN]; /* Name to present to user */
-	short version;                  /* Major, minor rev. in high, low byte */
-	short capabilities;             /* What driver can do/wants to do */
-	short needs;                    /* What fields in commInitReq_t to fill in */
+	sint16 version;                  /* Major, minor rev. in high, low byte */
+	sint16 capabilities;             /* What driver can do/wants to do */
+	sint16 needs;                    /* What fields in commInitReq_t to fill in */
 } comm_driverInfo_t;
 
 /* Special value for commInitReq_t.portnum */
@@ -321,20 +323,20 @@ typedef struct {
 
 typedef struct {			/* Request (filled in by caller) */
 	size_t	reqLen;			/* Sizeof(commInitReq_t) */
-	long 	sessionId;		/* Random number chosen by stub, same for shell and sim. */
-	long	portnum;
-	long	baud;
-	long	baseadr;		/* ignored by Windows */
-	long	hwirq;			/* ignored by Windows */
-	long	swint;			/* ignored by Windows */
+	sint32	sessionId;		/* Random number chosen by stub, same for shell and sim. */
+	sint32	portnum;
+	sint32	baud;
+	sint32	baseadr;		/* ignored by Windows */
+	sint32	hwirq;			/* ignored by Windows */
+	size_t	swint;			/* ignored by Windows */
 	char	*phonenum;
 	char	*modeministr;
-	long	flags;			/* controls whether to dial and/or test */
-	long	dialing_method;	/* parameter to HMSetDialingMethod */
-} commInitReq_t;
+	sint32	flags;			/* controls whether to dial and/or test */
+	size_t	dialing_method;	/* parameter to HMSetDialingMethod */
+} commInitReq_t;			/* Copy of commInitReq_t in anet.h */
 
 typedef struct {
-	int portnum;			/* Value for commInitReq->portnum (e.g. 0) */
+	sint32 portnum;			/* Value for commInitReq->portnum (e.g. 0) */
 	char name[64];			/* Name to present to user (e.g. COM1) */
 } commPortName_t;
 
@@ -366,7 +368,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commNoOpResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMNOOP)(
 	commNoOpReq_t *		req,		/* Request (or NULL) */
 	commNoOpResp_t *	resp		/* Response (or NULL) */
@@ -374,7 +376,7 @@ typedef int
 ;
 extern COMMNOOP commNoOp;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commNoOp(
 	commNoOpReq_t *		req,		/* Request (or NULL) */
 	commNoOpResp_t *	resp		/* Response (or NULL) */
@@ -389,17 +391,17 @@ commNoOp(
 
 typedef struct {			/* Request (filled in by caller) */
 	size_t	reqLen;			/* Sizeof(commInitReq_t) */
-	int maxports;			/* Number of elements in buf */
+	sint32 maxports;		/* Number of elements in buf */
 	commPortName_t *buf;	/* Caller must allocate array to fill */
 } commEnumPortsReq_t;
 
 typedef struct {			/* Response (filled in by routine) */
 	comm_status_t status;	/* Command status */
-	int numports;			/* Number of elements of req->buf used */
+	sint32 numports;		/* Number of elements of req->buf used */
 } commEnumPortsResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMENUMPORTS)(
 	commEnumPortsReq_t *	req,		/* Request (or NULL) */
 	commEnumPortsResp_t *	resp		/* Response (or NULL) */
@@ -407,7 +409,7 @@ typedef int
 ;
 extern COMMENUMPORTS commEnumPorts;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commEnumPorts(
 	commEnumPortsReq_t *	req,		/* Request (or NULL) */
 	commEnumPortsResp_t *	resp		/* Response (or NULL) */
@@ -432,7 +434,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commInitResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMINIT)(
 	commInitReq_t *		req,		/* Request (or NULL) */
 	commInitResp_t *	resp		/* Response (or NULL) */
@@ -440,7 +442,7 @@ typedef int
 ;
 extern COMMINIT commInit;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commInit(
 	commInitReq_t *		req,		/* Request (or NULL) */
 	commInitResp_t *	resp		/* Response (or NULL) */
@@ -455,15 +457,15 @@ commInit(
  */
 
 typedef struct {			/* Request (filled in by caller) */
-	long flags;					/* if non-zero, do not hang up */
+	sint32 flags;			/* if non-zero, do not hang up */
 } commTermReq_t;
 
-typedef struct {			/* Response (filled in by routine) */
+typedef struct {					/* Response (filled in by routine) */
 	comm_status_t		status;		/* Command status */
 } commTermResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMTERM)(
 	commTermReq_t *		req,		/* Request (or NULL) */
 	commTermResp_t *	resp		/* Response (or NULL) */
@@ -471,7 +473,7 @@ typedef int
 ;
 extern COMMTERM commTerm;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commTerm(
 	commTermReq_t *		req,		/* Request (or NULL) */
 	commTermResp_t *	resp		/* Response (or NULL) */
@@ -495,7 +497,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commDriverInfoResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMDRIVERINFO)(
 	commDriverInfoReq_t *	req,  	/* Request (or NULL) */
 	commDriverInfoResp_t *	resp 	/* Response (or NULL) */
@@ -503,7 +505,7 @@ typedef int
 ;
 extern COMMDRIVERINFO commDriverInfo;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commDriverInfo(
 	commDriverInfoReq_t *	req,  	/* Request (or NULL) */
 	commDriverInfoResp_t *	resp 	/* Response (or NULL) */
@@ -531,11 +533,11 @@ typedef struct {			/* Response (filled in by routine) */
 	size_t			addrLen;	/* Length of address data */
 	char			nodeID[8];	/* Unique identifier (unused) */
 	void *			address2;	/* Secondary address (optional, may be NULL) */
-	long			flags;		/* Flags */
+	sint32			flags;		/* Flags */
 } commPlayerInfoResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMPLAYERINFO)(
 	commPlayerInfoReq_t *  	req,		/* Request (or NULL) */
 	commPlayerInfoResp_t *	resp		/* Response (or NULL) */
@@ -543,7 +545,7 @@ typedef int
 ;
 extern COMMPLAYERINFO commPlayerInfo;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commPlayerInfo(
 	commPlayerInfoReq_t *	req,		/* Request (or NULL) */
 	commPlayerInfoResp_t *	resp		/* Response (or NULL) */
@@ -567,7 +569,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commTxFullResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMTXFULL)(
 	commTxFullReq_t *  	req,		/* Request (or NULL) */
 	commTxFullResp_t *	resp		/* Response (or NULL) */
@@ -575,7 +577,7 @@ typedef int
 ;
 extern COMMTXFULL commTxFull;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commTxFull(
 	commTxFullReq_t * 	req,		/* Request (or NULL) */
 	commTxFullResp_t *	resp		/* Response (or NULL) */
@@ -591,19 +593,19 @@ commTxFull(
  *	that the packet has been (or ever will be) sent.
  */
 
-typedef struct {			/* Request (filled in by caller) */
+typedef struct {				/* Request (filled in by caller) */
 	playerHdl_t		dest;		/* Receiving player's handle */
 	void *			buffer;		/* Packet buffer */
 	size_t			length;		/* Length of packet */
-	unsigned long	flags;		/* Packet flags */
+	uint32	flags;				/* Packet flags */
 } commTxPktReq_t;
 
-typedef struct {			/* Response (filled in by routine) */
+typedef struct {					/* Response (filled in by routine) */
 	comm_status_t		status;		/* Command status */
 } commTxPktResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMTXPKT)(
 	commTxPktReq_t * 	req,		/* Request (or NULL) */
 	commTxPktResp_t *	resp		/* Response (or NULL) */
@@ -611,7 +613,7 @@ typedef int
 ;
 extern COMMTXPKT commTxPkt;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commTxPkt(
 	commTxPktReq_t *	req,		/* Request (or NULL) */
 	commTxPktResp_t *	resp		/* Response (or NULL) */
@@ -638,7 +640,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commPeekPktResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMPEEKPKT)(
 	commPeekPktReq_t *	req,		/* Request (or NULL) */
 	commPeekPktResp_t *	resp		/* Response (or NULL) */
@@ -646,7 +648,7 @@ typedef int
 ;
 extern COMMPEEKPKT commPeekPkt;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commPeekPkt(
 	commPeekPktReq_t *	req,		/* Request (or NULL) */
 	commPeekPktResp_t *	resp		/* Response (or NULL) */
@@ -669,11 +671,11 @@ typedef struct {			/* Response (filled in by routine) */
 	comm_status_t status;		/* Command status */
 	playerHdl_t src;			/* Sending player's handle */
 	size_t length;				/* Length of packet */
-	unsigned char adr[comm_MAX_ADR_LEN];/* Sending player's observed address */
+	uint8 adr[comm_MAX_ADR_LEN];/* Sending player's observed address */
 } commRxPktResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMRXPKT)(
 	commRxPktReq_t *	req,		/* Request (or NULL) */
 	commRxPktResp_t *	resp		/* Response (or NULL) */
@@ -681,7 +683,7 @@ typedef int
 ;
 extern COMMRXPKT commRxPkt;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commRxPkt(
 	commRxPktReq_t *	req,		/* Request (or NULL) */
 	commRxPktResp_t *	resp		/* Response (or NULL) */
@@ -697,26 +699,26 @@ commRxPkt(
  */
 
 typedef struct {			/* Request (filled in by caller) */
-	void *			address;	/* Free-format address buffer (or NULL) */
-	size_t			size;		/* Size of address buffer */
-	char *			printable;	/* Printable string (NUL-terminated) */
+	void *		address;	/* Free-format address buffer (or NULL) */
+	size_t		size;		/* Size of address buffer */
+	char *		printable;	/* Printable string (NUL-terminated) */
 } commScanAddrReq_t;
 
-typedef struct {			/* Response (filled in by routine) */
+typedef struct {					/* Response (filled in by routine) */
 	comm_status_t		status;		/* Command status */
-	size_t			length;		/* Length of address data */
+	size_t				length;		/* Length of address data */
 } commScanAddrResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMSCANADDR)(
 	commScanAddrReq_t *		req,		/* Request (or NULL) */
 	commScanAddrResp_t *	resp		/* Response (or NULL) */
-	COMM_3RDPARAM)				 		/* comm context pointer */
+	COMM_3RDPARAM)						/* comm context pointer */
 ;
 extern COMMSCANADDR commScanAddr;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commScanAddr(
 	commScanAddrReq_t *		req,		/* Request (or NULL) */
 	commScanAddrResp_t *	resp		/* Response (or NULL) */
@@ -743,7 +745,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commPrintAddrResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMPRINTADDR)(
 	commPrintAddrReq_t *	req,		/* Request (or NULL) */
 	commPrintAddrResp_t *	resp		/* Response (or NULL) */
@@ -751,7 +753,7 @@ typedef int
 ;
 extern COMMPRINTADDR commPrintAddr;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commPrintAddr(
 	commPrintAddrReq_t *	req,		/* Request (or NULL) */
 	commPrintAddrResp_t *	resp		/* Response (or NULL) */
@@ -778,7 +780,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commGroupAllocResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMGROUPALLOC)(
 	commGroupAllocReq_t *	req,		/* Request (or NULL) */
 	commGroupAllocResp_t *	resp		/* Response (or NULL) */
@@ -786,7 +788,7 @@ typedef int
 ;
 extern COMMGROUPALLOC commGroupAlloc;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupAlloc(
 	commGroupAllocReq_t *	req,		/* Request (or NULL) */
 	commGroupAllocResp_t *	resp		/* Response (or NULL) */
@@ -809,7 +811,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commGroupFreeResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMGROUPFREE)(
 	commGroupFreeReq_t *	req,		/* Request (or NULL) */
 	commGroupFreeResp_t *	resp		/* Response (or NULL) */
@@ -817,7 +819,7 @@ typedef int
 ;
 extern COMMGROUPFREE commGroupFree;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupFree(
 	commGroupFreeReq_t *	req,		/* Request (or NULL) */
 	commGroupFreeResp_t *	resp		/* Response (or NULL) */
@@ -844,7 +846,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commGroupAddResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMGROUPADD)(
 	commGroupAddReq_t *		req,		/* Request (or NULL) */
 	commGroupAddResp_t *	resp		/* Response (or NULL) */
@@ -852,7 +854,7 @@ typedef int
 ;
 extern COMMGROUPADD commGroupAdd;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupAdd(
 	commGroupAddReq_t *		req,		/* Request (or NULL) */
 	commGroupAddResp_t *	resp		/* Response (or NULL) */
@@ -879,7 +881,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commGroupSubtractResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMGROUPSUBTRACT)(
 	commGroupSubtractReq_t *	req,	/* Request (or NULL) */
 	commGroupSubtractResp_t *	resp 	/* Response (or NULL) */
@@ -887,7 +889,7 @@ typedef int
 ;
 extern COMMGROUPSUBTRACT commGroupSubtract;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commGroupSubtract(
 	commGroupSubtractReq_t *	req,	/* Request (or NULL) */
 	commGroupSubtractResp_t *	resp	/* Response (or NULL) */
@@ -923,10 +925,11 @@ commGroupSubtract(
 #define comm_PARAM_SYNCJOIN 0x3001  /* 0 if dynamic, 1 if sync launch */
 
 typedef struct {
-	size_t			reqLen;		/* sizeof(commSetParamReq_t) */
-	long param_num;				/* parameter to set */
-	long param_value;			/* value to set it to */
-	long param_value2;			/* second part of value, if needed */
+	size_t			reqLen;			/* sizeof(commSetParamReq_t) */
+	sint32 param_num;				/* parameter to set */
+	sint32 param_value;				/* value to set it to */
+	sint32 param_value2;			/* second part of value, if needed */
+	void*  param_pointer;			/* If the parameter is a pointer */
 } commSetParamReq_t;
 
 /* Note: You must set respLen before calling commSetParam!
@@ -935,26 +938,26 @@ typedef struct {
  */
 typedef struct {
 	comm_status_t		status;		/* contains comm_STATUS_* describing error */
-	size_t respLen;				/* sizeof(commSetParamResp_t) */
-	long param_num;				/* parameter that was to be set */
-	long param_value;			/* its new value */
-	long param_value2;			/* second part of value, if needed */
+	size_t respLen;					/* sizeof(commSetParamResp_t) */
+	sint32 param_num;				/* parameter that was to be set */
+	sint32 param_value;				/* its new value */
+	sint32 param_value2;			/* second part of value, if needed */
 } commSetParamResp_t;
 
 /* info sent by server to pinging hosts */
 #define SERVER_PING_MAGIC_PKTNUM0 0x8000 /*ping pktnum used by older dp code*/
 #define SERVER_PING_MAGIC_PKTNUM1 0x8001 /*ping pktnum used by current dp code*/
 typedef struct {
-	short cur_players;		/* current users on server */
-	short max_players;		/* max users allowed on server */
-	short players[65536];	/* current users on server indexed by session type*/
+	sint16 cur_players;			/* current users on server */
+	sint16 max_players;			/* max users allowed on server */
+	sint16 players[65536];		/* current users on server indexed by session type*/
 	/*following two fields added when started using SERVER_PING_MAGIC_PKTNUM1*/
-	short cur_games;		/* games currently running */
-	short games[65536];		/* games currently running indexed by session type*/
+	sint16 cur_games;			/* games currently running */
+	sint16 games[65536];		/* games currently running indexed by session type*/
 } commSessInfo_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMSETPARAM)(
 	commSetParamReq_t *		req,		/* Request (or NULL) */
 	commSetParamResp_t *	resp		/* Response (or NULL) */
@@ -962,7 +965,7 @@ typedef int
 ;
 extern COMMSETPARAM commSetParam;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commSetParam(
 	commSetParamReq_t *		req,		/* Request (or NULL) */
 	commSetParamResp_t *	resp		/* Response (or NULL) */
@@ -986,7 +989,7 @@ typedef struct {					/* Request (filled in by caller) */
 	void *			address;		/* Address data (in format returned by commScanAddr) */
 	size_t			length;			/* Length of address data (0=read as a string) */
 	void *			address2;		/* Secondary address (in format returned by commScanAddr) can be NULL */
-	long			flags;			/* Flags for second address */
+	sint32			flags;			/* Flags for second address */
 } commSayHiReq_t;
 
 typedef struct {					/* Response (filled in by routine) */
@@ -995,7 +998,7 @@ typedef struct {					/* Response (filled in by routine) */
 } commSayHiResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMSAYHI)(
 	commSayHiReq_t *	req,		/* Request (or NULL) */
 	commSayHiResp_t *	resp		/* Response (or NULL) */
@@ -1003,7 +1006,7 @@ typedef int
 ;
 extern COMMSAYHI commSayHi;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commSayHi(
 	commSayHiReq_t *	req,		/* Request (or NULL) */
 	commSayHiResp_t *	resp		/* Response (or NULL) */
@@ -1027,7 +1030,7 @@ typedef struct {			/* Response (filled in by routine) */
 } commSayByeResp_t;
 
 #if COMM_FNPTRS
-typedef int
+typedef sint32
 (*COMMSAYBYE)(
 	commSayByeReq_t *	req,		/* Request (or NULL) */
 	commSayByeResp_t *	resp		/* Response (or NULL) */
@@ -1035,7 +1038,7 @@ typedef int
 ;
 extern COMMSAYBYE commSayBye;
 #else
-DLLEXPORT int cdecl
+DLLEXPORT sint32 cdecl
 commSayBye(
 	commSayByeReq_t *	req,		/* Request (or NULL) */
 	commSayByeResp_t *	resp		/* Response (or NULL) */

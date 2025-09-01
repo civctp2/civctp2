@@ -42,7 +42,7 @@ aui_Tab::aui_Tab(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -67,7 +67,7 @@ aui_Tab::aui_Tab(
 	sint32 paneWidth,
 	sint32 paneHeight,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:

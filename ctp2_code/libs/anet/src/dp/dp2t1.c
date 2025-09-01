@@ -25,9 +25,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 /*-------------------------------------------------------*/
 /* Convert a key to ASCII for debug printing */
-static char *key2buf(char *key, int keylen, char *buf)
+static char *key2buf(char *key, sint32 keylen, char *buf)
 {
-	int i;
+	sint32 i;
 
 	buf[0] = 0;
 	for (i=0; i<keylen; i++) {
@@ -46,7 +46,7 @@ static char key2a_buf2[256];
 /*-------------------------------------------------------*/
 
 /* Print out incoming variable adds or deletes. */
-int dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t err)
+sint32 dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t err)
 {
 	dptab_table_t *sessions = (dptab_table_t *)context;
 
@@ -62,7 +62,7 @@ int dp_PASCAL print_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, pl
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout,long flags,void *context)
+sint32 dp_PASCAL listSessions_cb(dp_session_t *sDesc, sint32 *pTimeout, sint32 flags, void *context)
 {
 	char buf[300];
 	if (!sDesc) {
@@ -81,7 +81,7 @@ int dp_PASCAL listSessions_cb(dp_session_t *sDesc, long *pTimeout,long flags,voi
 	return TRUE;
 }
 
-void dp2_poll(dp_t *mydp, int secs)
+void dp2_poll(dp_t *mydp, sint32 secs)
 {
 	clock_t started;
 
@@ -89,7 +89,7 @@ void dp2_poll(dp_t *mydp, int secs)
 	 * server
 	 */
 	started = eclock();
-	while ((long)(eclock() - started) < (secs * ECLOCKS_PER_SEC)) {
+	while ((sint32)(eclock() - started) < (secs * ECLOCKS_PER_SEC)) {
 		dpid_t idFrom, idTo;
 		char pkt[512];
 		size_t size;
@@ -101,7 +101,7 @@ void dp2_poll(dp_t *mydp, int secs)
 
 		/* List sessions once per second */
 		{
-			static long oldtime = 0;
+			static sint32 oldtime = 0;
 			if (oldtime != time(NULL)) {
 				dp_session_t sess;
 				/* Enumerate sessions and see if our session came back from server */
@@ -179,9 +179,9 @@ dp2_test(char *servername, char *sessionname)
 	return 0;
 }
 
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
-	int i;
+	sint32 i;
 	char *logfname;
 	char *servername;
 

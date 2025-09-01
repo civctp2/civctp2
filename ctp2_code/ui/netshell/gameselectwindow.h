@@ -26,7 +26,7 @@ public:
 	virtual AUI_ERRCODE SetParent( aui_Region *region );
 	nf_GameSetup *GetGameSetup(NETFunc::Session *session);
 
-	void PasswordScreenDone( MBCHAR *password );
+	void PasswordScreenDone( const MBCHAR *password );
 
 
 	enum CONTROL
@@ -97,12 +97,12 @@ void StartSelectingLoadSaveCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 
 void StartSelectingScenarioCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie );
+	Cookie cookie );
 
 #endif

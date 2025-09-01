@@ -14,7 +14,7 @@
 #include <dirent.h>
 #endif
 
-static MBCHAR *s_block = "GenericFileDialog";
+static const MBCHAR *s_block = "GenericFileDialog";
 extern C3UI *g_c3ui;
 
 FileDialog::FileDialog()
@@ -46,7 +46,7 @@ FileDialog::~FileDialog()
 	m_list = NULL;
 }
 
-void FileDialog::Open(FILE_DIALOG_MODE mode, FileDialogCallback *cb, void *cookie, const MBCHAR *dirPath)
+void FileDialog::Open(FILE_DIALOG_MODE mode, FileDialogCallback *cb, Cookie cookie, const MBCHAR *dirPath)
 {
 	Assert(m_window);
 	if(!m_window) return;
@@ -85,7 +85,7 @@ void FileDialog::Close()
 	g_c3ui->RemoveWindow(m_window->Id());
 }
 
-void FileDialog::AddFile(const MBCHAR *path, void *cookie)
+void FileDialog::AddFile(const MBCHAR *path, Cookie cookie)
 {
 	Assert(m_list);
 	if(!m_list) return;
@@ -101,6 +101,8 @@ void FileDialog::AddFile(const MBCHAR *path, void *cookie)
 
 	box->SetText(path);
 
+	// That may be supossed to be unit32 or sint32 or indeed void*
+	// Actually only call from FileDialog::Fill(), with NULL as argument
 	item->SetUserData(cookie);
 	m_list->AddItem(item);
 }
@@ -127,7 +129,7 @@ void FileDialog::Fill()
 #ifdef WIN32
 	do {
 		if(!(fileData.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY)) {
-			AddFile(fileData.cFileName, NULL);
+			AddFile(fileData.cFileName, nullptr);
 		}
 	} while(FindNextFile(lpFileList, &fileData));
 
@@ -138,7 +140,7 @@ void FileDialog::Fill()
 		snprintf(pattern, sizeof(pattern), "%s%s%s", m_dirPath, FILE_SEP, dent->d_name);
 		int rc = stat(pattern, &st);
 		if (!S_ISDIR(st.st_mode)) {
-			AddFile(dent->d_name, NULL);
+			AddFile(dent->d_name, nullptr);
 		}
 	}
 	closedir(dir);
@@ -169,11 +171,11 @@ const MBCHAR *FileDialog::GetSelectedFile()
 	return file;
 }
 
-void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	if(di->m_callback) {
 		MBCHAR full[_MAX_PATH];
 		sprintf(full, "%s%s%s", di->m_dirPath, FILE_SEP, di->GetSelectedFile());
@@ -182,10 +184,10 @@ void FileDialog::LoadCallback(aui_Control *control, uint32 action, uint32 data, 
 	di->Close();
 }
 
-void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	if(di->m_callback) {
 		MBCHAR full[_MAX_PATH];
 		sprintf(full, "%s%s%s", di->m_dirPath, FILE_SEP, di->GetSelectedFile());
@@ -194,10 +196,10 @@ void FileDialog::SaveCallback(aui_Control *control, uint32 action, uint32 data, 
 	di->Close();
 }
 
-void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	if(di->m_callback) {
 		di->m_callback(di, k_FILE_DIALOG_CANCEL, NULL, di->m_cookie);
 	}
@@ -205,13 +207,13 @@ void FileDialog::CancelCallback(aui_Control *control, uint32 action, uint32 data
 
 }
 
-void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) {
 		return;
 	}
 
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	Assert(di);
 	if(!di) return;
 
@@ -239,10 +241,10 @@ void FileDialog::ListCallback(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void FileDialog::NameCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void FileDialog::NameCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_TEXTFIELD_ACTION_EXECUTE) return;
-	FileDialog *di = (FileDialog *)cookie;
+	FileDialog *di = (FileDialog *)cookie.m_voidPtr;
 	Assert(di);
 	if(!di) return;
 

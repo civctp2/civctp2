@@ -456,7 +456,7 @@ template <class T>
 T& semi_dynamic_array<T>::operator[](const int nIndex)
 {
 
-	_ASSERTE(nIndex >= 0 && nIndex < size);
+	Assert(nIndex >= 0 && nIndex < size);
 
 	return data[nIndex];
 }

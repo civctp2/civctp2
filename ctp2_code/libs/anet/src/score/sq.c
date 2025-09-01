@@ -30,14 +30,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define SQ_DAT "jscore.dat"
 
 wmq_t *wmq;
-int outdatfd;
+sint32 outdatfd;
 
 #if defined(DPRNT) || defined(DEBUG) || defined(_DEBUG)
 /* Convert a binary buffer to hex notation.  Don't use twice in one DPRINT! */
-const char *hexstring(const unsigned char *binstr, int len)
+const char *hexstring(const uint8 *binstr, sint32 len)
 {
 	static char buf[768];
-	int i;
+	sint32 i;
 	if (len < 1) return "";
 	for (i = 0; i < len && i < 256; i++)
 		sprintf(buf + 3*i, "%02x ", binstr[i]);
@@ -53,7 +53,7 @@ dp_dprintf(
 {
 #include <stdarg.h>
 	va_list argptr = NULL;
-	int len = 0;
+	sint32 len = 0;
 
 	if (__format) {
 		va_start(argptr, __format);
@@ -64,7 +64,7 @@ dp_dprintf(
 	return len;
 }
 
-dp_result_t dpReportAssertionFailure(int lineno, char *file, char *linetxt)
+dp_result_t dpReportAssertionFailure(sint32 lineno, char *file, char *linetxt)
 {
 	printf("dpReportAssertionFailure: %s, %d: %s\n", file, lineno, linetxt);
 	return dp_RES_OK;
@@ -79,7 +79,7 @@ void sq_init(const char *wmqDirectory)
 	dp_result_t err;
 	time_t now = time(0);
 	char filepath[wmq_DIR_MAXLEN + 24];
-	int indatfd;
+	sint32 indatfd;
 #endif
 
 	wmq = wmq_create(wmqDirectory, 0);
@@ -97,7 +97,7 @@ void sq_init(const char *wmqDirectory)
 		}
 	} else {
 		time_t t;
-		long offset;
+		sint32 offset;
 
 		printf("sq %s: reading startup info from %s\n", wmq->dir, filepath);
 		err = wmq_restorePosition(wmq, indatfd);
@@ -147,7 +147,7 @@ void sq_destroy()
  		 dp_RES_AGAIN if there was a non-score wmq entry,
          dp_RES_EMPTY if there is nothing there.
 --------------------------------------------------------------------------*/
-dp_result_t sq_get(unsigned char *sessid, int *sessidlen, dp_species_t *sessType, sq_message_t *msg)
+dp_result_t sq_get(uint8 *sessid, sint32 *sessidlen, dp_species_t *sessType, sq_message_t *msg)
 {
 	dp_result_t err;
 	time_t now = time(0);
@@ -230,13 +230,13 @@ dp_result_t sq_get(unsigned char *sessid, int *sessidlen, dp_species_t *sessType
 }
 
 #if 0
-int main()
+sint32 main()
 {
 	dp_result_t err;
 	dp_uid_t uid;
 	dp_species_t sessType;
 	char sessid[dp_KEY_MAXLEN];
-	int sessidlen;
+	sint32 sessidlen;
 	scorerep_t *rep;
 
 	DPRINT(("entering main\n"));

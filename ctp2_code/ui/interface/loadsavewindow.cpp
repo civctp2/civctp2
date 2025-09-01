@@ -26,12 +26,12 @@
 // Modifications from the original Activision code:
 //
 // - Repaired memory leak.
-// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin Gühmann)
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized code (May 2006 Martin Gühmann)
-// - Moved graph functionality to LineGraph (30-Sep-2007 Martin Gühmann)
-// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin Gühmann)
-// - The civ list has no empty rows, anymore. (19-Jan-2019 Martin Gühmann)
+// - Removed refferences to the civilisation database. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standartized code (May 2006 Martin GÃ¼hmann)
+// - Moved graph functionality to LineGraph (30-Sep-2007 Martin GÃ¼hmann)
+// - Replaced CIV_INDEX by sint32. (2-Jan-2008 Martin GÃ¼hmann)
+// - The civ list has no empty rows, anymore. (19-Jan-2019 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -106,13 +106,13 @@ LoadSaveWindow::LoadSaveWindow(AUI_ERRCODE *retval, uint32 id,
     m_deleteButton              (NULL)
     // MBCHAR m_mostRecentName[_MAX_PATH]
 {
-	sprintf(m_mostRecentName, "");
+	m_mostRecentName[0] = '\0';
 
 	MBCHAR  block[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf(block, "%s.%s", ldlBlock, "Name");
 	AddTitle(block);
 	AddCancel(loadsavescreen_backPress);
-	AddOk(loadsavescreen_executePress, NULL, "c3_PopupOk");
+	AddOk(loadsavescreen_executePress, nullptr, "c3_PopupOk");
 	Ok()->SetText(g_theStringDB->GetNameStr("str_ldl_CAPS_OK"));
 
 	m_deleteButton = spNew_ctp2_Button(
@@ -814,7 +814,7 @@ BOOL LoadSaveWindow::GetNote(MBCHAR *note)
 void LoadSaveWindow::SetGameInfo(GameInfo *info)
 {
 	m_gameInfo = info;
-	MBCHAR *noname = "";
+	const MBCHAR *noname = "";
 	SetGameName(info ? info->name : noname);
 	FillListTwo(info);
 }

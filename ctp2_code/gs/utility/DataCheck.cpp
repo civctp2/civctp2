@@ -24,15 +24,15 @@
 //
 // Modifications from the original Activision code:
 //
-// - Replced old civilisation database by new one. (Aug 20th 2005 Martin Gühmann)
-// - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin Gühmann)
-// - Added the risk database. (Aug 29th 2005 Martin Gühmann)
-// - Replaced old difficulty database by new one. (April 29th 2006 Martin Gühmann)
-// - Replaced old pollution database by new one. (July 15th 2006 Martin Gühmann)
-// - Replaced old global warming database by new one. (July 15th 2006 Martin Gühmann)
-// - Added sync check for the new map icon database. (27-Mar-2007 Martin Gühmann)
-// - Added sync check for the new map database. (27-Mar-2007 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replced old civilisation database by new one. (Aug 20th 2005 Martin GÃ¼hmann)
+// - Fixed the BeginTurn, DumpChecksum and DisplayCRC methods. (Aug 25th 2005 Martin GÃ¼hmann)
+// - Added the risk database. (Aug 29th 2005 Martin GÃ¼hmann)
+// - Replaced old difficulty database by new one. (April 29th 2006 Martin GÃ¼hmann)
+// - Replaced old pollution database by new one. (July 15th 2006 Martin GÃ¼hmann)
+// - Replaced old global warming database by new one. (July 15th 2006 Martin GÃ¼hmann)
+// - Added sync check for the new map icon database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Added sync check for the new map database. (27-Mar-2007 Martin GÃ¼hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -646,7 +646,7 @@ sint32 DataCheck::IsChanged(sint32 t) const
 
 
 
-void DataCheck::draw_crc(aui_Surface *surf, char str1[80], sint32 t, sint32 x, sint32 y) const
+void DataCheck::draw_crc(aui_Surface *surf, const MBCHAR* str1, sint32 t, sint32 x, sint32 y) const
 {
 	MBCHAR	str2[80];
 
@@ -763,7 +763,7 @@ void DataCheck::DisplayCRC(aui_Surface *surf) const
 	draw_time(surf, x, y);
 }
 
-void DataCheck::DumpSingleCRC(MBCHAR *grp, sint32 t)
+void DataCheck::DumpSingleCRC(const MBCHAR *grp, sint32 t)
 {
 	DPRINTF(k_DBG_INFO, ("%s     %08X %08X %08X %08X  %4.2lf\n", grp, m_crc[t][CRC_ARRAY_0], m_crc[t][CRC_ARRAY_1], m_crc[t][CRC_ARRAY_2], m_crc[t][CRC_ARRAY_3], (double)(m_time[t]) / CLOCKS_PER_SEC)) ;
 }

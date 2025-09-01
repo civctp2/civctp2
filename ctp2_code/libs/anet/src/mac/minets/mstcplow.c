@@ -28,7 +28,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #include "mstcplow.h"
 
-void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
+void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, sint32* status)
 {
 	TBind boundAddr;
 	InetAddress boundInetAddr;
@@ -74,7 +74,7 @@ void TCPLow_Create(TCPINSTANCE* pTcp, u_short* port, TCPPEER* peer, int* status)
 	}
 
 	boundAddr.addr.maxlen = sizeof(boundInetAddr);
-	boundAddr.addr.buf = (unsigned char*) &boundInetAddr;;
+	boundAddr.addr.buf = (uint8*) &boundInetAddr;;
 	err = OTGetProtAddress(pTcp->udpEndpoint,&boundAddr,NULL);
 	if (err != noErr) {
 		*status = comm_STATUS_BAD;
@@ -94,19 +94,19 @@ void TCPLow_Destroy(TCPINSTANCE* pTcp)
 	pTcp->isValid = false;
 }
 
-int TCPLow_PutPacket(TCPINSTANCE* tcp, TCPPEER* pPeer,void* bufptr,ULONG len)
+sint32 TCPLow_PutPacket(TCPINSTANCE* tcp, TCPPEER* pPeer,void* bufptr,ULONG len)
 {
 	TUnitData	udata;
 	OSStatus	err;
 	OTResult	theResult;
 	InetAddress	destAddr;
-	unsigned char *pt;
+	uint8 *pt;
 
 	OTInitInetAddress(&destAddr,pPeer->port,pPeer->addr);
 
 	udata.addr.maxlen = sizeof(InetAddress);
 	udata.addr.len = sizeof(InetAddress);
-	udata.addr.buf = (unsigned char *) &destAddr;
+	udata.addr.buf = (uint8 *) &destAddr;
 
 	udata.opt.maxlen = 0;
 	udata.opt.len = 0;
@@ -114,7 +114,7 @@ int TCPLow_PutPacket(TCPINSTANCE* tcp, TCPPEER* pPeer,void* bufptr,ULONG len)
 
 	udata.udata.maxlen = len;
 	udata.udata.len = len;
-	udata.udata.buf = (unsigned char *)bufptr;
+	udata.udata.buf = (uint8 *)bufptr;
 
 	do {
 		err = OTSndUData(tcp->udpEndpoint, &udata);
@@ -130,15 +130,15 @@ int TCPLow_PutPacket(TCPINSTANCE* tcp, TCPPEER* pPeer,void* bufptr,ULONG len)
 	return err;
 }
 
-int TCPLow_GetPacket(TCPINSTANCE* tcp,void* bufptr,ULONG* pLen,TCPPEER* addr)
+sint32 TCPLow_GetPacket(TCPINSTANCE* tcp,void* bufptr,ULONG* pLen,TCPPEER* addr)
 {
 	//	this method reads a packet and returns the
 	//	size of the data read and sets up the senders
 	//	address for the status routine
 
-	unsigned char		recvBuf[sizeof(InetAddress) + udpMaxRawData + 1];
+	uint8		recvBuf[sizeof(InetAddress) + udpMaxRawData + 1];
 	InetAddress*		srcAddr;
-	unsigned long		theSize = udpMaxRawData;
+	uint32		theSize = udpMaxRawData;
 	Boolean				gotPacket;
 	extern otq_t*		gInQueue;
 

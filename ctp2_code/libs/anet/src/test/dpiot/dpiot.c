@@ -104,8 +104,8 @@ Freeze and Thaw Test
 /* Structure to hold arguments to the test */
 typedef struct dpiotArgs_s {
 	char *adrbuf;
-	int pktsize;
-	long portnum;
+	sint32 pktsize;
+	sint32 portnum;
 	char *phonenum;
 	char *freeze;
 	boolean bFreeze;
@@ -125,18 +125,18 @@ typedef struct dpiotResult_s {
 	/* Final computed values */
 	float singleSmallTime;
 
-	int thisHost;		/* 0..n_hosts-1; if 0, this host is master */
+	sint32 thisHost;		/* 0..n_hosts-1; if 0, this host is master */
 
-	int n_hosts;
+	sint32 n_hosts;
 
-	int loops;
-	int pkts;
-	int pktsize;
+	sint32 loops;
+	sint32 pkts;
+	sint32 pktsize;
 
 	char *driver;
 	char *exe;
 
-	int packetLoss;
+	sint32 packetLoss;
 } dpiotResult_t;
 
 /**
@@ -149,8 +149,8 @@ char buf[BUFSIZE];
 char usage[1024];
 playerHdl_t qq_src;		/* Who sent us a QQ packet */
 playerHdl_t su_src;
-int su_num;
-int su_pktnum;
+sint32 su_num;
+sint32 su_pktnum;
 playerHdl_t hdl_opened;
 playerHdl_t hdl_deleted;
 clock_t dpio_now;
@@ -198,7 +198,7 @@ readReportToStdout(
 {
 	char test[128];
 	float val;
-	int write = 0;
+	sint32 write = 0;
 	while (fgets(buf, BUFSIZE, log) != NULL) {
 		if (sscanf(buf, "%s %f", test, &val) == 2) {
 			if (strcmpi(test, "singleSmallTime") == 0) {
@@ -206,7 +206,7 @@ readReportToStdout(
 				write++;
 			}
 			if (strcmpi(test, "pktloss") == 0) {
-				res->packetLoss = (int)val;
+				res->packetLoss = (sint32)val;
 				write++;
 			}
 		}
@@ -223,7 +223,7 @@ readReportToStdout(
 void
 abortTest(
 	FILE* log,
-	int exitCode,
+	sint32 exitCode,
 	char* message,
 	dpiotResult_t* res)
 {
@@ -239,8 +239,8 @@ abortTest(
 /*-------------------------------------------------------------------------
  Stop the test if something went wrong that we thought would never happen
 -------------------------------------------------------------------------*/
-#define assert(x) myassert((int)(x), __LINE__)
-void myassert(int x, int lineno)
+#define assert(x) myassert((sint32)(x), __LINE__)
+void myassert(sint32 x, sint32 lineno)
 {
 	if (!(x)) {
 		char buf[256];
@@ -253,7 +253,7 @@ void myassert(int x, int lineno)
 /*-------------------------------------------------------------------------
  Timeout
 -------------------------------------------------------------------------*/
-int timer_handler(int sigtype)
+sint32 timer_handler(sint32 sigtype)
 {
 	fflush(stdout);
 	printf("\nTimeout\n");
@@ -266,7 +266,7 @@ int timer_handler(int sigtype)
 -------------------------------------------------------------------------*/
 void
 signalHandler(
-	int sigId)
+	sint32 sigId)
 {
 	abortTest(logFile, 4, "Test terminated at user request.\n", &results);
 }
@@ -276,7 +276,7 @@ signalHandler(
  happens on remote close
 ----------------------------------------------------------------------*/
 static void dp_PASCAL dp_openHdl_cb(
-	playerHdl_t hdl, int n_hdls, dp_result_t status, void *context)
+	playerHdl_t hdl, sint32 n_hdls, dp_result_t status, void *context)
 {
 	DPRINT(("dp_openHdl_cb: h:%x status:%d\n", hdl, status));
 
@@ -322,7 +322,7 @@ void poll_test(dpio_t *dpio)
 		case PKT_SU:
 			su_src = src;
 			su_num = pkt[results.pktsize + 1];
-			su_pktnum = (unsigned char)pkt[results.pktsize];
+			su_pktnum = (uint8)pkt[results.pktsize];
 			printf("Node %d: Got su packet from source h:%x\n", results.thisHost, src);
 			results.gotSingleSmallTime = dpio_now;
 			results.singleSmallTime = ((float)dpio_now - results.sentSingleSmallTime) / ECLOCKS_PER_SEC;
@@ -347,15 +347,15 @@ void poll_test(dpio_t *dpio)
 /*-------------------------------------------------------------------------
  Handle command-line arguments
 -------------------------------------------------------------------------*/
-int						/* status */
+sint32						/* status */
 handleArguments(
 	dpiotArgs_t *arg,	/* (output) values */
-	int argc,			/* (input) number of arguments */
+	sint32 argc,			/* (input) number of arguments */
 	char *argv[] )		/* (input) value of arguments */
 {
 	char buf[BUFSIZE];
 	char usage[BUFSIZE];
-	int i;
+	sint32 i;
 
 	sprintf(usage,
 "Usage: %s -h=host_count(max=200) -d=driver [-nofreeze]\n\
@@ -535,21 +535,21 @@ argv[0], MAXPKTS, sizeof(dp_packetType_t), dpio_MAXLEN_UNRELIABLE-2, argv[0]);
  N must be 2 or greater.
 
 -------------------------------------------------------------------------*/
-int
+sint32
 run_one_node(
-	int childNum,
+	sint32 childNum,
 	char *sNextAdr,
-	int pkts,
-	int pktsize,
-	long portnum,
+	sint32 pkts,
+	sint32 pktsize,
+	sint32 portnum,
 	char *phonenum,
-	int loopTotal,
-	int endLoopAt)
+	sint32 loopTotal,
+	sint32 endLoopAt)
 {
 	dp_result_t err;
 	dpio_t *dpio;
 	playerHdl_t dest;
-	unsigned char adrBuf[dp_MAX_ADR_LEN];
+	uint8 adrBuf[dp_MAX_ADR_LEN];
 	commInitReq_t commInitReq;
 	commScanAddrReq_t		scanReq;
 	commScanAddrResp_t		scanResp;
@@ -558,8 +558,8 @@ run_one_node(
 	char dplogname[200];
 
 	char fname[256];
-	int i;
-	int startLoopAt = 0;
+	sint32 i;
+	sint32 startLoopAt = 0;
 
 	/* Check parameters */
 	assert(childNum >= 0);
@@ -605,12 +605,12 @@ run_one_node(
 		printf("Node %d: Thawing from file %s.\n", childNum, fname);
 		assert ((thawFile = fopen(fname, "r")) != NULL);
 
-		fread(&startLoopAt,sizeof(int),1,thawFile);
-		fread(&loopTotal,sizeof(int),1,thawFile);
-		fread(&su_num,sizeof(int),1,thawFile);
-		fread(&pkts,sizeof(int),1,thawFile);
-		fread(&pktsize,sizeof(int),1,thawFile);
-		fread(&(results.n_hosts),sizeof(int),1,thawFile);
+		fread(&startLoopAt,sizeof(sint32),1,thawFile);
+		fread(&loopTotal,sizeof(sint32),1,thawFile);
+		fread(&su_num,sizeof(sint32),1,thawFile);
+		fread(&pkts,sizeof(sint32),1,thawFile);
+		fread(&pktsize,sizeof(sint32),1,thawFile);
+		fread(&(results.n_hosts),sizeof(sint32),1,thawFile);
 		results.pkts = pkts;
 		results.pktsize = pktsize;
 
@@ -717,8 +717,8 @@ run_one_node(
 		/* If it's time to freeze, do so */
 		if(i == endLoopAt) {
 			FILE* freezeFile;
-			int result;
-			int proc;
+			sint32 result;
+			sint32 proc;
 			char argbuf1[BUFSIZE];
 			char argbuf2[BUFSIZE];
 			sprintf(fname, FREEZENAME, childNum);
@@ -726,12 +726,12 @@ run_one_node(
 			assert ((freezeFile = fopen(fname, "w")) != NULL);
 
 			/* save needed parameters into freezefile */
-			fwrite(&i,sizeof(int),1,freezeFile);	/* start loop at */
-			fwrite(&loopTotal,sizeof(int),1,freezeFile);
-			fwrite(&su_num,sizeof(int),1,freezeFile);
-			fwrite(&pkts,sizeof(int),1,freezeFile);
-			fwrite(&pktsize,sizeof(int),1,freezeFile);
-			fwrite(&(results.n_hosts),sizeof(int),1,freezeFile);
+			fwrite(&i,sizeof(sint32),1,freezeFile);	/* start loop at */
+			fwrite(&loopTotal,sizeof(sint32),1,freezeFile);
+			fwrite(&su_num,sizeof(sint32),1,freezeFile);
+			fwrite(&pkts,sizeof(sint32),1,freezeFile);
+			fwrite(&pktsize,sizeof(sint32),1,freezeFile);
+			fwrite(&(results.n_hosts),sizeof(sint32),1,freezeFile);
 
 			/* save dpio into freezefile */
 			dpio_freeze(dpio, freezeFile);
@@ -755,7 +755,7 @@ run_one_node(
 		 */
 		printf("Node %d step 3b\n", childNum);
 		if (childNum == 0) {
-			int j, chksum, pktgot;
+			sint32 j, chksum, pktgot;
 			boolean first;
 			printf("Node %d: Sending %d packets(siz:%d) to addr:%s(h:%x)\n",
 				childNum, pkts, pktsize, scanReq.printable, dest);
@@ -807,7 +807,7 @@ run_one_node(
 		#else
 			printf("Node %d step 4\n", childNum);
 			if (childNum > 0) {
-				int jrx, chksum, jtx;
+				sint32 jrx, chksum, jtx;
 				for (jrx = 0, chksum = 0, jtx = 0; jtx < pkts; jrx++) {
 					if (jrx < pkts) {
 						do {
@@ -858,7 +858,7 @@ run_one_node(
 	/* Ack packets for four more seconds just in case */
 	{
 		clock_t start = eclock();
-		while ((long)(eclock() - start) < 4 * ECLOCKS_PER_SEC) {
+		while ((sint32)(eclock() - start) < 4 * ECLOCKS_PER_SEC) {
 			poll_test(dpio);
 		}
 	}
@@ -871,21 +871,21 @@ run_one_node(
  Run n copies of the test.
  Return value is 0 on success.
 -------------------------------------------------------------------------*/
-int run_n_nodes(
+sint32 run_n_nodes(
 	char *exe,
-	int loops,
-	int pkts,
-	int pktsize,
+	sint32 loops,
+	sint32 pkts,
+	sint32 pktsize,
 	boolean bFreeze)
 {
 	char *childArgs[10] = {exe, "driver.internet_or_ipx_or_modem_or_serial", "number_of_hosts", "number_of_loops", "childnum", "nextadr.internet.address.specification:maybeWithPortNumber", "number_of_pkts", "pktsize", "-nofreeze", NULL};
-	int* procs = NULL;
-	int* result = NULL;
-	int i;
+	sint32* procs = NULL;
+	sint32* result = NULL;
+	sint32 i;
 
-	if ((procs = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
+	if ((procs = (sint32 *) malloc(results.n_hosts * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate process handle storage.\n", NULL);
-	if((result = (int *) malloc(results.n_hosts * sizeof(int))) == NULL)
+	if((result = (sint32 *) malloc(results.n_hosts * sizeof(sint32))) == NULL)
 		abortTest(logFile, 3, "Unable to allocate result storage.\n", NULL);
 
 	/* Start tests */
@@ -922,7 +922,7 @@ int run_n_nodes(
 
 	/* Wait for tests to finish */
 	for (i=0; i < results.n_hosts; i++) {
-		int rVal = _cwait(&(result[i]), procs[i], 0);
+		sint32 rVal = _cwait(&(result[i]), procs[i], 0);
 		printf("Node %d returned %d\n", i, result[i]);
 	}
 
@@ -943,9 +943,9 @@ int run_n_nodes(
 /*-------------------------------------------------------------------------
  Entry point
 -------------------------------------------------------------------------*/
-int						/* Success (0) or failure (nonzero) */
+sint32						/* Success (0) or failure (nonzero) */
 main(
-	int argc,			/* number of arguments */
+	sint32 argc,			/* number of arguments */
 	char *argv[] )		/* value of arguments */
 {
 	dpiotArgs_t arg;
@@ -992,7 +992,7 @@ main(
 
 		return run_n_nodes(argv[0], results.loops, results.pkts, results.pktsize, arg.bFreeze);
 	} else if (results.thisHost >=0 && (*arg.adrbuf)) {
-		int stop = 0;
+		sint32 stop = 0;
 		if (FALSE == arg.bFreeze) {
 			return run_one_node(results.thisHost, arg.adrbuf, results.pkts, results.pktsize, arg.portnum, arg.phonenum, results.loops, 1000);
 		} else {

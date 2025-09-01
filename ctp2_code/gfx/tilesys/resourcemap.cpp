@@ -98,9 +98,9 @@ extern C3UI				*g_c3ui;
 
 ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
-							void *cookie)
+							Cookie cookie)
 	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
@@ -116,9 +116,9 @@ ResourceMap::ResourceMap(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
-							void *cookie)
+							Cookie cookie)
 	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
@@ -135,7 +135,7 @@ ResourceMap::~ResourceMap()
 	delete m_updateAction;
 }
 
-void ResourceMap::InitCommonLdl(MBCHAR *ldlBlock)
+void ResourceMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
     ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -732,13 +732,7 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	MBCHAR *name = cityData->GetName() ;
 
 	if (x >= 0 && yoffset >= 0 && x < surface->Width() && yoffset < surface->Height())
-    {
-	    RECT rect;
-		rect.left = x;
-		rect.top = yoffset;
-		rect.right = x+textutils_GetWidth(surface,name);
-		rect.bottom = y+textutils_GetHeight(surface,name);
-
+	{
 		textutils_ColoredDropString(
 			surface,
 			name,
@@ -756,11 +750,6 @@ void ResourceMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const U
 	sprintf(str,"%i",pop);
 
     sint32  popEdgeSize = std::max(k_POP_BOX_SIZE, k_POP_BOX_SIZE_MINIMUM);
-	sint32  nudge       = 0;
-	if (pop > 9)
-		nudge = 4;
-	if (pop > 99)
-		nudge = 2;
 
 	RECT popRect = {x,
 					 y,

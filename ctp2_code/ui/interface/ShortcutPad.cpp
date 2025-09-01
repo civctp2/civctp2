@@ -45,7 +45,7 @@ namespace Shortcuts {
 	ShortcutPad::ShortcutCallback<AUI_ERRCODE> TradeCallback(TradeManager::Display);
 };
 
-ShortcutPad::ShortcutPad(MBCHAR *ldlBlock) :
+ShortcutPad::ShortcutPad(const MBCHAR *ldlBlock) :
 m_cityManagementButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"ShortcutPad.CityManagementButton"))),
 m_civilizationManagementButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
@@ -92,17 +92,13 @@ m_greatLibraryButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 }
 
 void ShortcutPad::ShortcutButtonActionCallback(aui_Control *control, uint32 action,
-											   uint32 data, void *cookie)
+											   uint32 data, Cookie cookie)
 {
-
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-
-
-
 	close_AllScreens();
 
-	Assert(cookie)
-	(*(static_cast<ShortcutObject*>(cookie)))();
+	Assert(cookie.m_voidPtr)
+	(*(static_cast<ShortcutObject*>(cookie.m_voidPtr)))();
 }

@@ -88,8 +88,8 @@ typedef struct {
 typedef struct {
 	LOOPADDR	from;
 	LOOPADDR	to;
-	int			flags;
-	int			len;
+	sint32			flags;
+	sint32			len;
 	char		data[LOOP_MAX_USERDATALEN];
 } LOOP_PACKET;
 
@@ -103,11 +103,11 @@ typedef struct {
 //*****************************************************************************
 // Static declarations
 
-static LOOPADDR		open_loopback(LOOPPEER *mypeer, long sessionId);
+static LOOPADDR		open_loopback(LOOPPEER *mypeer, sint32 sessionId);
 static void			close_loopback(LOOPADDR myaddr);
-static int			loopsend(LOOPADDR myaddr, char *buf, int len, int flags, LOOPPEER *to);
-static int			loopbroadcast(LOOPADDR myaddr, char *buf, int len, int flags);
-static int			looprecv(LOOPADDR myaddr, char *buf, int len, int flags, LOOPADDR *from);
+static sint32			loopsend(LOOPADDR myaddr, char *buf, sint32 len, sint32 flags, LOOPPEER *to);
+static sint32			loopbroadcast(LOOPADDR myaddr, char *buf, sint32 len, sint32 flags);
+static sint32			looprecv(LOOPADDR myaddr, char *buf, sint32 len, sint32 flags, LOOPADDR *from);
 static BOOL			address_to_peer(LOOPADDR addr, LOOPPEER *peer);
 
 //*****************************************************************************
@@ -158,11 +158,11 @@ void printaddr(LOOPADDR *peer, char *string)
 // Only one of these may exist at a time, since multiple ones would
 // compete for the same source of rx packets.
 
-LOOPINSTANCE * LOOPWIN_Create(int *status, long sessionId)
+LOOPINSTANCE * LOOPWIN_Create(sint32 *status, sint32 sessionId)
 
 {
   LOOPINSTANCE * loopptr;
-//  int           len;
+//  sint32           len;
 
   DPRINT(("LOOPWIN_Create() Called..\n"));
 
@@ -225,7 +225,7 @@ void LOOPWIN_Destroy(LOOPINSTANCE *loopptr)
 // 16 bytes each.)
 // Returns loop_HDL_NONE on failure.
 
-LOOPHANDLE LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, int insert)
+LOOPHANDLE LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, sint32 insert)
 
 {
   LOOPHANDLE	h;
@@ -264,7 +264,7 @@ LOOPHANDLE LOOPWIN_Address2Handle(LOOPINSTANCE *loop, LOOPADDR addr, int insert)
 // Given a handle, return the corresponding loopback address.
 // Returns loop_RES_EMPTY on failure.
 
-int LOOPWIN_Handle2Address(LOOPINSTANCE *loop, LOOPHANDLE handle, LOOPADDR *addr)
+sint32 LOOPWIN_Handle2Address(LOOPINSTANCE *loop, LOOPHANDLE handle, LOOPADDR *addr)
 
 {
   *addr = loop->peers[handle].addr;
@@ -282,10 +282,10 @@ int LOOPWIN_Handle2Address(LOOPINSTANCE *loop, LOOPHANDLE handle, LOOPADDR *addr
 // Copies len bytes from buf into internal packet queue.
 // Must have previously gotten handle for destination by calling loop_adr2hdl.
 
-int LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hdest)
+sint32 LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hdest)
 
 {
-  int			nobytes;
+  sint32			nobytes;
   LOOPPEER		*peer;
 
 //  DPRINT(("LOOPWIN_PutPacket() Called..\n"));
@@ -300,9 +300,9 @@ int LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hd
 
   // send the packet
   if (peer->addr == BROADCAST_LOOPADDR)
-	  nobytes = loopbroadcast(loop->addr, (char *) bufptr, (int) len, 0);
+	  nobytes = loopbroadcast(loop->addr, (char *) bufptr, (sint32) len, 0);
   else
-	  nobytes = loopsend(loop->addr, (char *) bufptr, (int) len, 0, peer);
+	  nobytes = loopsend(loop->addr, (char *) bufptr, (sint32) len, 0, peer);
   if ((nobytes == 0) || (nobytes == LOOP_ERROR))  {
 	  getlooperror();
 	  return(loop_RES_FULL);
@@ -336,10 +336,10 @@ int LOOPWIN_PutPacket(LOOPINSTANCE *loop, void *bufptr, ULONG len, LOOPHANDLE hd
 // (loop_get could do this for you, but then the peer table might fill up
 // with all sorts of garbage addresses from hosts who sent you junk mail.)
 
-int LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *plen, LOOPHANDLE *hsrc, LOOPADDR *srcaddr)
+sint32 LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *plen, LOOPHANDLE *hsrc, LOOPADDR *srcaddr)
 
 {
-  int     addrlen;
+  sint32     addrlen;
   ULONG   nobytes;
   LOOPADDR addr;
 
@@ -354,7 +354,7 @@ int LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *plen, LOOPHANDLE 
 
   // read next packet
   addrlen = sizeof(LOOPADDR);
-  nobytes = looprecv(loop->addr, (char *) bufptr, (int) *plen, 0, &addr);
+  nobytes = looprecv(loop->addr, (char *) bufptr, (sint32) *plen, 0, &addr);
   if ((nobytes == 0) || (nobytes == LOOP_ERROR))  {
 	if (nobytes == LOOP_ERROR) {
 		DPRINT(("LOOPWIN_GetPacket: \n"));
@@ -391,7 +391,7 @@ int LOOPWIN_GetPacket(LOOPINSTANCE *loop, void *bufptr, ULONG *plen, LOOPHANDLE 
 // GENERAL COMMENTS:
 //  Only called when allocating your own address.
 
-static int		add_adr_into_dir(LOOPADDR newaddr)
+static sint32		add_adr_into_dir(LOOPADDR newaddr)
 {
 	DWORD		i;
 	DWORD hole;
@@ -433,7 +433,7 @@ static int		add_adr_into_dir(LOOPADDR newaddr)
 // GENERAL COMMENTS:
 //
 
-static LOOPADDR		open_loopback(LOOPPEER *mypeer, long sessionId)
+static LOOPADDR		open_loopback(LOOPPEER *mypeer, sint32 sessionId)
 
 {
 	LOOPADDR	myaddr;
@@ -607,13 +607,13 @@ static void			close_loopback(LOOPADDR myaddr)
 //					 len:			Length of packet data
 //					 flags:			Packet flags
 //					 to:			Destination info
-// RETURNS:          int:			Size of data sent
+// RETURNS:          sint32:			Size of data sent
 // EXTERN INPUTS:    none
 // EXTERN OUTPUTS:   none
 // GENERAL COMMENTS:
 //
 
-static int			loopsend(LOOPADDR myaddr, char *buf, int len, int flags, LOOPPEER *to)
+static sint32			loopsend(LOOPADDR myaddr, char *buf, sint32 len, sint32 flags, LOOPPEER *to)
 
 {
 	LOOP_PACKBUFFER	*to_buf;
@@ -629,7 +629,7 @@ static int			loopsend(LOOPADDR myaddr, char *buf, int len, int flags, LOOPPEER *
 // handle to him.
 
 	if (!to->mutex)  {
-		int i;
+		sint32 i;
 		WaitForSingleObject(hDirMutex, INFINITE);
 		DPRINT(("loopsend: got dir mutex\n"));
 		for (i = 0; i < NUM_DIRENTRIES; i++) {
@@ -698,17 +698,17 @@ static int			loopsend(LOOPADDR myaddr, char *buf, int len, int flags, LOOPPEER *
 //					 buf:			Buffer containing packet data to be sent
 //					 len:			Length of packet data
 //					 flags:			Packet flags
-// RETURNS:          int:			Size of data sent
+// RETURNS:          sint32:			Size of data sent
 // EXTERN INPUTS:    none
 // EXTERN OUTPUTS:   none
 // GENERAL COMMENTS:
 //
 
-static int			loopbroadcast(LOOPADDR myaddr, char *buf, int len, int flags)
+static sint32			loopbroadcast(LOOPADDR myaddr, char *buf, sint32 len, sint32 flags)
 
 {
 	LOOPPEER	temp;
-	int			newlen;
+	sint32			newlen;
 	DWORD		i;
 
 // Get access to the directory
@@ -750,13 +750,13 @@ static int			loopbroadcast(LOOPADDR myaddr, char *buf, int len, int flags)
 //					 len:			Length of packet data
 //					 flags:			Packet flags
 //					 from:			Source address
-// RETURNS:          int:			Size of data sent
+// RETURNS:          sint32:			Size of data sent
 // EXTERN INPUTS:    none
 // EXTERN OUTPUTS:   none
 // GENERAL COMMENTS:
 //
 
-static int			looprecv(LOOPADDR myaddr, char *buf, int len, int flags, LOOPADDR *from)
+static sint32			looprecv(LOOPADDR myaddr, char *buf, sint32 len, sint32 flags, LOOPADDR *from)
 
 {
 	LOOP_PACKET		*pkt;
@@ -817,7 +817,7 @@ static BOOL		address_to_peer(LOOPADDR addr, LOOPPEER *peer)
 
 {
 	char	buffer[80];
-	int created;
+	sint32 created;
 
 	peer->addr = addr;
 

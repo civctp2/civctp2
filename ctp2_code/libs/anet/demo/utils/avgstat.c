@@ -30,8 +30,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 -------------------------------------------------------------------------*/
 dp_result_t dp_avgstat_init(dp_t *dp, dp_avgstat_t *avgstat)
 {
-	int i;
-    dp_result_t err;
+	sint32 i;
+	dp_result_t err;
 	dp_stats_t tmp;
 
 	if (!avgstat || !dp)
@@ -90,9 +90,9 @@ void subtract(dp_stat_t *result, const dp_stat_t *x, time_t dt)
 	 if (dt == 0)
 		 dt = 1000000; /* avoid crashes */
 	 /* multiply by 60 to get units per minute */
-	 result->in = (result->in * 60) / dt;
-	 result->out = (result->out * 60) / dt;
-	 result->dropped = (result->dropped * 60) / dt;
+	 result->in      = (sint32)((result->in * 60) / dt);
+	 result->out     = (sint32)((result->out * 60) / dt);
+	 result->dropped = (sint32)((result->dropped * 60) / dt);
 }
 
 /*-------------------------------------------------------------------------
@@ -109,10 +109,10 @@ dp_result_t dp_avgstat_poll(dp_t *dp, dp_avgstat_t *avgstat,
 		dp_stats_t *max1,
 		dp_stats_t *max60)
 {
-	int i;
-	int newest;
-	int oldest;
-    dp_result_t err;
+	sint32 i;
+	sint32 newest;
+	sint32 oldest;
+	dp_result_t err;
 	dp_stats_t tmp;
 	time_t	dt;
 
@@ -177,7 +177,7 @@ dp_result_t dp_avgstat_print(dp_t *dp,
 		const dp_stats_t *stats,
 		dp_avgstat_printline_fn_t printfn, void *printcontext)
 {
-	int i;
+	sint32 i;
 	char obuf[1024];
 	static char * names[dp_STAT_MAX+1] = {
 		"DPIO_RX_REL_BYTES",
@@ -200,7 +200,7 @@ dp_result_t dp_avgstat_print(dp_t *dp,
 		return dp_RES_BAD;
 
 	for (i = 0; i <= dp_STAT_MAX; i++) {
-		 sprintf(obuf, "%s : in %d, out %d, dropped %d, waiting %d", names[i], stats->stats[i].in, stats->stats[i].out, stats->stats[i].dropped, stats->stats[i].waiting);
+		 sprintf(obuf, "%s : in %ld, out %ld, dropped %ld, waiting %ld", names[i], stats->stats[i].in, stats->stats[i].out, stats->stats[i].dropped, stats->stats[i].waiting);
 		 printfn(obuf, printcontext);
 	}
 	return dp_RES_OK;

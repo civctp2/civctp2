@@ -438,14 +438,14 @@ void ctp2_Static::MouseRDropInside( aui_MouseEvent *mouseData )
 #endif
 }
 
-void ctp2_Static::SetDrawCallbackAndCookie(StaticDrawCallback *func, void *cookie,bool exclusive)
+void ctp2_Static::SetDrawCallbackAndCookie(StaticDrawCallback *func, Cookie cookie, bool exclusive)
 {
 	m_drawFunc		= func;
 	m_drawCookie	= cookie;
 	m_drawCallbackExclusive	= exclusive;
 }
 
-void ctp2_Static::SetImageMapCallback(ImageMapCallback *func, void *cookie)
+void ctp2_Static::SetImageMapCallback(ImageMapCallback *func, Cookie cookie)
 {
 	m_imageMapCallback = func;
 	m_imageMapCookie = cookie;

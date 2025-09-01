@@ -65,7 +65,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	ctp2_HyperTextBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -75,7 +75,7 @@ public:
 		sint32 height,
 		const MBCHAR *pattern,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ctp2_HyperTextBox();
 
 	void RemoveHyperLinks(void);

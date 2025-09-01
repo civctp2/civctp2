@@ -118,7 +118,7 @@
 //#include "gnlframp.h"
 
 ser_t *ser = NULL;
-int already_hungup = FALSE;
+sint32 already_hungup = FALSE;
 
 THz				myZone;
 
@@ -163,7 +163,7 @@ comm_driverInfo_t gCommDriverInfo = {
 
 #pragma export off
 
-static int logfd = ERROR;
+static sint32 logfd = ERROR;
 
 static void fdclose(void)
 {
@@ -183,7 +183,7 @@ void fdprint(char *msg)
 
 #pragma export on
 
-int commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp)
+sint32 commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp)
 {
     DPRINT(("commNoOp(): \n"));
     resp->status = comm_STATUS_OK;
@@ -204,7 +204,7 @@ int commNoOp( commNoOpReq_t *req, commNoOpResp_t *resp)
  *
  *	Return FALSE on error.
  */
-int commTerm(commTermReq_t *req, commTermResp_t *resp)
+sint32 commTerm(commTermReq_t *req, commTermResp_t *resp)
 {
 	OSErr				error;
 	CMStatFlags		flags;
@@ -245,15 +245,15 @@ int commTerm(commTermReq_t *req, commTermResp_t *resp)
  req->hwirq
 -------------------------------------------------------------------------*/
 
-int commInit(commInitReq_t *req, commInitResp_t *resp)
+sint32 commInit(commInitReq_t *req, commInitResp_t *resp)
 {
 	commInitResp_t	respDummy;
-	long				ticks;
+	sint32				ticks;
 	char				response[256];
 	char				*init = "AT&D2&K1";	// Hangup, cancel autoanswer if DTR drops; rts/cts flow control
-	int				hwirq;
-	int				baseadr;
-	int				dialing_method;
+	sint32				hwirq;
+	sint32				baseadr;
+	sint32				dialing_method;
 	char				message[256];
 	OSErr				error;
 	Ptr				newConfig;
@@ -265,7 +265,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp)
 	Boolean			keys;
 	EventRecord		theEvent;
 	Str255			name;
-	unsigned long	value = 0;
+	uint32	value = 0;
 	Boolean			result;
 	Boolean			choose = false;
 	Str255			helperName;
@@ -318,7 +318,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp)
 	if (req->flags & comm_INIT_FLAGS_RESUME) {
 		DPRINT(("Getting sysheap 'ser' address from req->baseadr"));
 		ser = (ser_t *) req->baseadr;
-		value = (long) ser;
+		value = (sint32) ser;
 		error = noErr;
 		if (ser == 0) {
 			return FALSE;
@@ -355,15 +355,15 @@ int commInit(commInitReq_t *req, commInitResp_t *resp)
 			return FALSE;
 		}
 		
-		req->baseadr = (long) ser;
+		req->baseadr = (sint32) ser;
 		DPRINT(("Storing sysheap 'ser' address in req->baseadr"));
-		// MAD error = SetData((unsigned long)ser);
+		// MAD error = SetData((uint32)ser);
 		
 		if (error != noErr) {
 			DPRINT(("commInit: unable to set modemhelper value\n"));
 			resp->status = comm_STATUS_BUG;
 
-			error = SetData((unsigned long)nil);					// I know; it failed before.  But it might have set it anyway
+			error = SetData((uint32)nil);					// I know; it failed before.  But it might have set it anyway
 			free(ser);
 			return FALSE;
 		}
@@ -572,8 +572,8 @@ int commInit(commInitReq_t *req, commInitResp_t *resp)
 			
 			// center on main screen
 			Rect sr = (**GetMainDevice()).gdRect;
-			int x = (sr.left + sr.right - (mr.right - mr.left)) / 2;
-			int y = (sr.top + sr.bottom - (mr.bottom - mr.top)) / 2;
+			sint32 x = (sr.left + sr.right - (mr.right - mr.left)) / 2;
+			sint32 y = (sr.top + sr.bottom - (mr.bottom - mr.top)) / 2;
 			OffsetRect(&mr,-mr.left + x, -mr.top + y);
 			
 			wpt = NewWindow(NULL,&mr,"\p",TRUE,1,(WindowPtr) -1L, FALSE,0);
@@ -637,8 +637,8 @@ int commInit(commInitReq_t *req, commInitResp_t *resp)
 			
 			// center on main screen
 			Rect sr = (**GetMainDevice()).gdRect;
-			int x = (sr.left + sr.right - (mr.right - mr.left)) / 2;
-			int y = (sr.top + sr.bottom - (mr.bottom - mr.top)) / 2;
+			sint32 x = (sr.left + sr.right - (mr.right - mr.left)) / 2;
+			sint32 y = (sr.top + sr.bottom - (mr.bottom - mr.top)) / 2;
 			OffsetRect(&mr,-mr.left + x, -mr.top + y);
 			
 			wpt = NewWindow(NULL,&mr,"\p",TRUE,1,(WindowPtr) -1L, FALSE,0);
@@ -720,7 +720,7 @@ int commInit(commInitReq_t *req, commInitResp_t *resp)
  *	Return TRUE if info was retrieved.
  */
 
-int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
+sint32 commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
 {
 	// We plan to make dpEnumTransports scan through the DLL file looking
 	// for this signature.  It will use the info to present a driver name
@@ -759,7 +759,7 @@ int commDriverInfo(commDriverInfoReq_t *req, commDriverInfoResp_t *resp)
  *  another station.
  */
 
-int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
+sint32 commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
 {
 	static ser_adr_t	kludgeAdr;
 	ser_hdl_t			h;
@@ -796,8 +796,8 @@ int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
     resp->name      = NULL;
     resp->address   = &kludgeAdr;
     resp->addrLen   = sizeof(ser_adr_t);
-    resp->nodeID[0] = (unsigned long) 0;
-    resp->nodeID[1] = (unsigned long) 0;
+    resp->nodeID[0] = (uint32) 0;
+    resp->nodeID[1] = (uint32) 0;
 
     return TRUE;
 }
@@ -810,7 +810,7 @@ int commPlayerInfo(commPlayerInfoReq_t *req, commPlayerInfoResp_t *resp)
  *	time.
  */
 
-int commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
+sint32 commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
 {
     commTxFullReq_t	reqDummy;
     commTxFullResp_t	respDummy;
@@ -839,11 +839,11 @@ int commTxFull(commTxFullReq_t *req, commTxFullResp_t *resp)
  */
 
 
-int commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
+sint32 commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
 {
 	commTxPktResp_t   respDummy;
 #ifdef PACKETLOGGING
-	short					temp;
+	sint16					temp;
 	size_t				actual;
 #endif
 
@@ -888,7 +888,7 @@ int commTxPkt(commTxPktReq_t *req, commTxPktResp_t *resp)
  *	Return TRUE if a packet was retrieved.
  */
 
-int commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
+sint32 commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
 {
     commPeekPktReq_t		reqDummy;
     commPeekPktResp_t	respDummy;
@@ -914,13 +914,13 @@ int commPeekPkt(commPeekPktReq_t *req, commPeekPktResp_t *resp)
  *	Return TRUE if a packet was retrieved.
  */
 
-int commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
+sint32 commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
 {
 	commRxPktReq_t    reqDummy;
 	commRxPktResp_t   respDummy;
 	ser_result_t		res;
 #ifdef PACKETLOGGING
-	short					temp;
+	sint16					temp;
 	size_t				actual;
 #endif
 
@@ -962,7 +962,7 @@ int commRxPkt(commRxPktReq_t *req, commRxPktResp_t *resp)
  *	Return TRUE if the string was parsed successfully.
  */
 
-int commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
+sint32 commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
 {
    commScanAddrReq_t		reqDummy;
    commScanAddrResp_t	respDummy;
@@ -1001,7 +1001,7 @@ int commScanAddr(commScanAddrReq_t *req, commScanAddrResp_t *resp)
  *	Return TRUE if the buffer was formatted successfully.
  */
 
-int commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
+sint32 commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
 {
 	commPrintAddrReq_t	reqDummy;
 	commPrintAddrResp_t	respDummy;
@@ -1045,7 +1045,7 @@ int commPrintAddr( commPrintAddrReq_t *req, commPrintAddrResp_t *resp)
  *	Return TRUE if the pseudo-player handle was generated.
  */
 
-int commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
+sint32 commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
 {
 	req = req;
 	resp = resp;
@@ -1060,7 +1060,7 @@ int commGroupAlloc(commGroupAllocReq_t *req, commGroupAllocResp_t *resp)
  *	Return TRUE if the pseudo-player handle was invalidated.
  */
 
-int commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
+sint32 commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
 {
 	req = req;
 	resp = resp;
@@ -1075,7 +1075,7 @@ int commGroupFree(commGroupFreeReq_t *req, commGroupFreeResp_t *resp)
  *	Return TRUE if the players were all added.
  */
 
-int commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
+sint32 commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
 {
    req = req;
    resp = resp;
@@ -1092,7 +1092,7 @@ int commGroupAdd(commGroupAddReq_t *req, commGroupAddResp_t *resp)
  *	Return TRUE unless there was a problem subtracting one or more players.
  */
 
-int commGroupSubtract(commGroupSubtractReq_t *req, commGroupSubtractResp_t *resp)
+sint32 commGroupSubtract(commGroupSubtractReq_t *req, commGroupSubtractResp_t *resp)
 {
    req = req;
    resp = resp;
@@ -1102,7 +1102,7 @@ int commGroupSubtract(commGroupSubtractReq_t *req, commGroupSubtractResp_t *resp
 
 #else
 
-int
+sint32
 commSetParam(
 	commSetParamReq_t *	req,	// Request
 	commSetParamResp_t *	resp)	// Response
@@ -1138,7 +1138,7 @@ commSetParam(
  */
 
 
-int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
+sint32 commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
 {
 	commSayHiReq_t		reqDummy;
 	commSayHiResp_t	respDummy;
@@ -1188,7 +1188,7 @@ int commSayHi(commSayHiReq_t *req, commSayHiResp_t *resp)
  *	Return TRUE if the link was successfully broken.
  */
 
-int commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
+sint32 commSayBye(commSayByeReq_t *req, commSayByeResp_t *resp)
 {
     commSayByeReq_t	reqDummy;
     commSayByeResp_t	respDummy;
@@ -1210,7 +1210,7 @@ Boolean commLoadTest(void);
 Boolean commLoadTest(void)
 {
 	Boolean	result = false;
-	long		value;
+	sint32		value;
 	OSErr		error;
 	FSSpec	where;
 	

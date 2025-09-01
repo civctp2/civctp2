@@ -9,11 +9,12 @@
 
 class aui_Control;
 class ctp2_Button;
+union Cookie;
 
 class EndTurnButton {
 public:
 
-	EndTurnButton(MBCHAR *ldlBlock);
+	EndTurnButton(const MBCHAR *ldlBlock);
 
 
 	void UpdatePlayer(PLAYER_INDEX player);
@@ -21,7 +22,7 @@ public:
 private:
 
 	static void EndTurnButtonActionCallback(aui_Control *control, uint32 action,
-		uint32 data, void *cookie);
+		uint32 data, Cookie cookie);
 
 	ctp2_Button *m_endTurn;
 };

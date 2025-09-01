@@ -86,7 +86,7 @@ static void write_log(char *fmt, ...) {
 /*----------------------------------------------------------------------
  Get info about JRE from registry.
 ----------------------------------------------------------------------*/
-static int findJreInfoFromRegistry(char *path, char *args) {
+static sint32 findJreInfoFromRegistry(char *path, char *args) {
 	INT	   i;
 	HKEY   hKey;				/* Key handle of NetShell */
 	CHAR   ValueName[MAX_PATH]; /* Name of value. */
@@ -152,7 +152,7 @@ static int findJreInfoFromRegistry(char *path, char *args) {
  Get info about JRE and use it to fill the character
  arrays that were passed as arguments.  Returns non-zero if error occurred.
 ----------------------------------------------------------------------*/
-static int getinfo(char *path, char *args, char *cwd)
+static sint32 getinfo(char *path, char *args, char *cwd)
 {
 	CHAR   *Param;
 	BOOL   pathFound = FALSE;
@@ -212,8 +212,8 @@ static int getinfo(char *path, char *args, char *cwd)
  main thread to add the new process to its list.  Terminates when stub exits.
 --------------------------------------------------------------------------*/
 DWORD WINAPI readThread(LPVOID lpvThreadParm) {
-	int nread;
-	unsigned long tag;
+	sint32 nread;
+	uint32 tag;
 	HANDLE hbuf;
 
 	while (1) {
@@ -252,9 +252,9 @@ DWORD WINAPI readThread(LPVOID lpvThreadParm) {
    processes to die and then relaunches NetShell if nothing exited with
    non-zero exit status.
 --------------------------------------------------------------------------*/
-int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine, int nCmdShow)
+sint32 WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine, sint32 nCmdShow)
 {
-	int firsttime = 1;
+	sint32 firsttime = 1;
 	char cmd[2*MAX_PATH];
 	char args[MAX_PATH];
 	char cwd[MAX_PATH];

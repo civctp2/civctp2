@@ -94,7 +94,7 @@ str_ldl_CANCEL_OFFER_CAPS	"取消提议"
 str_ldl_No_item_selected_in_list	"清单中未选取特产！"
 str_ldl_Foreign_Attitude	"外国态度"
 str_ldl_Local	"本地"
-str_ldl_mp_dbase_out_of_synch	"数据库出问题。回到大厅。"
+str_ldl_mp_dbase_out_of_synch	"数据库出问题。回到大厅。" # Needs update
 
 ##This is the latest batch from Add_str.txt 02-26-99##
 
@@ -1186,7 +1186,7 @@ str_ldl_Unit_Help	"部队说明"
 str_ldl_UNIT_MOVEMENT	"部队移动力"
 str_ldl_UNIT_STATUS	"部队状态"
 str_ldl_Units	"部队"
-str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
+str_ldl_Unix_Internet			"Unix Internet requires an active connection to the Internet."
 str_ldl_UNLOAD_ALL	"无法全读取"
 str_ldl_Unpredictable	"不可预测的"
 str_ldl_Untarnished	"无污点的"

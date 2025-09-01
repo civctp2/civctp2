@@ -99,7 +99,6 @@ void UnitPool::Serialize(CivArchive &archive)
 {
 	UnitData *unitData;
 
-	sint32    i;
 	sint32    count = 0;
 
 #define UNITPOOL_MAGIC 0xA4D27DED
@@ -111,12 +110,12 @@ void UnitPool::Serialize(CivArchive &archive)
 		archive.PerformMagic(UNITPOOL_MAGIC);
 		ObjPool::Serialize(archive);
 
-		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if(m_table[i])
 				count++;
 
 		archive<<count;
-		for (i=0; i<k_OBJ_POOL_TABLE_SIZE; i++)
+		for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 			if (m_table[i])
 				((UnitData *)(m_table[i]))->Serialize(archive);
 	}
@@ -126,7 +125,7 @@ void UnitPool::Serialize(CivArchive &archive)
 		ObjPool::Serialize(archive);
 
 		archive>>count;
-		for (i=0; i<count; i++)
+		for(sint32 i=0; i < count; i++)
 		{
 			unitData = new UnitData(archive);
 			Insert(unitData);
@@ -136,8 +135,7 @@ void UnitPool::Serialize(CivArchive &archive)
 
 void UnitPool::RebuildQuadTree()
 {
-	sint32 i;
-	for(i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
+	for(size_t i = 0; i < k_OBJ_POOL_TABLE_SIZE; i++)
 	{
 		if(m_table[i])
 		{

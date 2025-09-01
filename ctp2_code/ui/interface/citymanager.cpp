@@ -52,7 +52,7 @@ void CityManagerWindow::Cleanup()
 
 CityManagerWindow::CityManagerWindow(AUI_ERRCODE *retval,
 									 uint32 id,
-									 MBCHAR *ldlBlock)
+									 const MBCHAR *ldlBlock)
 	: aui_Window(retval, id,
 				 uiutils_ChooseLdl(ldlBlock, "CITY_MANAGER_WINDOW"),
 				 16,
@@ -84,17 +84,17 @@ CityManagerWindow::~CityManagerWindow()
 	}
 }
 
-void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void CityManagerWindowButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != (uint32)AUI_BUTTON_ACTION_EXECUTE) return;
 	if(s_cityManagerWindow)
 		s_cityManagerWindow->Hide();
 }
 
-AUI_ERRCODE CityManagerWindow::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE CityManagerWindow::InitCommonLdl(const MBCHAR *ldlBlock)
 {
-    if (!aui_Ldl::IsValid(ldlBlock))
-    {
+	if (!aui_Ldl::IsValid(ldlBlock))
+	{
 		return AUI_ERRCODE_HACK;
 	}
 

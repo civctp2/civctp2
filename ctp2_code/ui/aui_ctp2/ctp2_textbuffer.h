@@ -17,8 +17,8 @@ public:
 	void Redraw(void);
 	void Scroll(sint32 numLines);
 
-	void AddLine(MBCHAR *line, sint32 len, COLOR color = COLOR_WHITE);
-	void AddText(MBCHAR *text, COLOR color = COLOR_WHITE);
+	void AddLine(const MBCHAR *line, sint32 len, COLOR color = COLOR_WHITE);
+	void AddText(const MBCHAR *text, COLOR color = COLOR_WHITE);
 
 	void PageUp(void);
 	void PageDown(void);

@@ -104,7 +104,7 @@ sint32 ThroneDB::ParseNumber(Token *token, sint32 *number)
 	return(TRUE);
 }
 
-sint32 ThroneDB::ParseThroneDatabase(MBCHAR *filename)
+sint32 ThroneDB::ParseThroneDatabase(const MBCHAR *filename)
 {
 
 	sint32 nThrones = 0;
@@ -136,7 +136,7 @@ operation_failed:
 	return TRUE;
 }
 
-sint32 ThroneDB::CheckToken(Token *token, sint32 type, MBCHAR *error)
+sint32 ThroneDB::CheckToken(Token *token, sint32 type, const MBCHAR *error)
 {
 
 	if(token->Next() != type) {

@@ -81,21 +81,6 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 
 	sint32 backgroundWidth = g_ScreenWidth + 5 * k_TILE_GRID_WIDTH / 2;
 
-	sint32 controlPanelHeight=0;
-
-	if (!fullscreen)
-	{
-		if (g_ScreenWidth < 1024)
-		{
-
-			controlPanelHeight = 100;
-		}
-		else
-		{
-
-			controlPanelHeight = 150;
-		}
-	}
 	sint32 backgroundHeight = g_ScreenHeight  + 2 * k_TILE_GRID_HEIGHT;
 
 	sint32 backgroundX = 0 - k_TILE_GRID_WIDTH;
@@ -104,19 +89,18 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 
 	sint32 widthAdjust = 0;
 	sint32 heightAdjust = 0;
+
 	if (backgroundWidth & 0x01)
 	{
 		widthAdjust = 1;
 		backgroundWidth += widthAdjust;
 	}
+
 	if (backgroundHeight & 0x01)
 	{
 		heightAdjust = 1;
 		backgroundHeight += heightAdjust;
 	}
-
-
-
 
 	SetRect(
 		&g_backgroundViewport,
@@ -133,11 +117,6 @@ sint32 backgroundWin_Initialize(bool fullscreen)
 		background_draw_handler );
 	Assert( g_background != NULL );
 	if ( !g_background ) return -1;
-
-
-
-
-
 
 	return 0;
 }
@@ -249,9 +228,9 @@ void DumpSpanList(aui_DirtyList *list)
 	for (i=0; i<list->GetHeight(); i++) {
 		curSpanList = (spanList + i);
 		if (curSpanList->num > 0) {
-			fprintf(outFile, "Line %#.3d", i);
+			fprintf(outFile, "Line %.3d", i);
 			for (j=0; j<curSpanList->num; j++) {
-				fprintf(outFile, " Run %#.3d Len %#.3d", curSpanList->spans[j].run,
+				fprintf(outFile, " Run %.3d Len %.3d", curSpanList->spans[j].run,
 						curSpanList->spans[j].length);
 			}
 			fprintf(outFile, "\n");

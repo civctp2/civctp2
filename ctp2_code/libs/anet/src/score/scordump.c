@@ -46,8 +46,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Specific application code goes below here.
 --------------------------------------------------------------------------*/
 
-static int callbacksFinished;
-static int openFinished;
+static sint32 callbacksFinished;
+static sint32 openFinished;
 static dpid_t my_id;
 static dp_session_t theSession;
 
@@ -84,9 +84,9 @@ scordump: dump the contents of a server's score database\n\
 	exit(1);
 }
 
-int dp_PASCAL myCommThaw_cb(int status, void *context)
+sint32 dp_PASCAL myCommThaw_cb(sint32 status, void *context)
 {
-	static int status_old = -1;
+	static sint32 status_old = -1;
 
 	if (status != status_old) {
 		printf("Connecting status:%d\n", status);
@@ -95,14 +95,14 @@ int dp_PASCAL myCommThaw_cb(int status, void *context)
 	return TRUE;  /* don't cancel */
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
-	int argi;
+	sint32 argi;
 	dp_t *dp = NULL;
 	dp_result_t err;
 	dp_appParam_t app;
 	dp_launchParams_t params;
-	int let_game_init_comm = FALSE;
+	sint32 let_game_init_comm = FALSE;
 
 	char	GameName[MAX_PATH]="";
 	char	GamePath[MAX_PATH]="";
@@ -122,9 +122,9 @@ int main(int argc, char **argv)
 	params.Maxplayers=4;
 
 	for (argi=1; argi<argc; argi++) {
-		int c = argv[argi][0];
-		int c1 = argv[argi][1];
-		int c2 = argv[argi][2];
+		sint32 c = argv[argi][0];
+		sint32 c1 = argv[argi][1];
+		sint32 c2 = argv[argi][2];
 		char *arg;
 
 		if (c != '-') continue;
@@ -317,7 +317,7 @@ int main(int argc, char **argv)
 	}
 
 	if (dp) {
-		int quitState = 0;
+		sint32 quitState = 0;
 		clock_t tfinish;
 		clock_t deadline = dp->now + 5 * ECLOCKS_PER_SEC;
 		char key[dp_KEY_MAXLEN];
@@ -359,7 +359,7 @@ int main(int argc, char **argv)
 						scorerep_buf_t repbuf;
 						dp_species_t gameType;
 						dp_uid_t uid;
-						int i;
+						sint32 i;
 
 						gameType = dpMAKESHORT(delta->key[1], delta->key[2]);
 						uid = dpMAKELONG(delta->subkey[0], delta->subkey[1],
@@ -374,12 +374,12 @@ int main(int argc, char **argv)
 						assert(!err);
 						assert(player.scores);
 						for (i = 0; i < player.scores->n_used; i++) {
-							int scoreId;
-							long scoreVal;
+							sint32 scoreId;
+							sint32 scoreVal;
 							assoctab_item_t *pe = assoctab_getkey(player.scores, i);
 							assert(pe);
 							scoreId = pe->key;
-							scoreVal = *((long *)pe->value);
+							scoreVal = *((sint32 *)pe->value);
 							PRINT((" %x:%d", scoreId, scoreVal));
 						}
 						PRINT(("\n"));
@@ -392,7 +392,7 @@ int main(int argc, char **argv)
 			}
 
 #if 0
-			if (!quitState && ((long)(eclock() - deadline) > 0))
+			if (!quitState && ((sint32)(eclock() - deadline) > 0))
 				quitState = 3;
 #endif
 
@@ -404,7 +404,7 @@ int main(int argc, char **argv)
 				tfinish = eclock() + ECLOCKS_PER_SEC / 4;
 			} else if (quitState == 4) {
 				/* Wait a little longer to give dpClose a time to send packets */
-				if ((long)(eclock() - tfinish) > 0)
+				if ((sint32)(eclock() - tfinish) > 0)
 					quitState++;
 			} else if (quitState == 5) {
 				/* Have table transfers and network traffic finished yet? */
@@ -422,7 +422,7 @@ int main(int argc, char **argv)
 				}
 			} else if (quitState != 0) {
 				/* Wait a little longer in case we must retransmit anything */
-				if ((long)(eclock() - tfinish) > 0) {
+				if ((sint32)(eclock() - tfinish) > 0) {
 					printf("scorsend: done (quitState:%d)\n", quitState);
 					return 0; /* break out of the main loop, and call dpDestroy */
 				}

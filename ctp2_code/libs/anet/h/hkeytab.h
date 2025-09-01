@@ -80,7 +80,7 @@ void *hkeytab_subscript_grow(hkeytab_t *tab, void *key, size_t keylen);
  (in the hkeytab_getkey sense).
  Returns 0 on success, 1 on failure.
 -----------------------------------------------------------------------*/
-int hkeytab_subscript_delete(hkeytab_t *tab, void *key, size_t keylen);
+sint32 hkeytab_subscript_delete(hkeytab_t *tab, void *key, size_t keylen);
 
 /*-----------------------------------------------------------------------
  Return the address of the value part of the given element of the table.

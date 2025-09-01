@@ -130,7 +130,7 @@ AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *ca
 
 	if ( callback )
 		g_loadSaveMapWindow->GetOkButton()->SetActionFuncAndCookie(
-			callback, NULL );
+			callback, nullptr );
 
 	return AUI_ERRCODE_OK;
 }
@@ -140,13 +140,13 @@ AUI_ERRCODE loadsavemapscreen_Initialize( aui_Control::ControlActionCallback *ca
 
 void loadsavemapscreen_Cleanup(void)
 {
-    if (g_c3ui && g_loadSaveMapWindow)
-    {
-        g_c3ui->RemoveWindow(g_loadSaveMapWindow->Id());
-    }
+	if (g_c3ui && g_loadSaveMapWindow)
+	{
+		g_c3ui->RemoveWindow(g_loadSaveMapWindow->Id());
+	}
 
-    delete g_loadSaveMapWindow;
-    g_loadSaveMapWindow = NULL;
+	delete g_loadSaveMapWindow;
+	g_loadSaveMapWindow = NULL;
 }
 
 
@@ -210,7 +210,7 @@ void loadsavemapscreen_SaveGameMap(void)
 
 
 
-void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 
@@ -230,7 +230,7 @@ void loadsavemapscreen_executePress(aui_Control *control, uint32 action, uint32 
 }
 
 
-void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -245,7 +245,7 @@ void loadsavemapscreen_backPress(aui_Control *control, uint32 action, uint32 dat
 }
 
 
-void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -294,7 +294,7 @@ void loadsavemapscreen_deletePress(aui_Control *control, uint32 action, uint32 d
 }
 
 
-void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -333,7 +333,7 @@ void loadsavemapscreen_ListOneHandler(aui_Control *control, uint32 action, uint3
 }
 
 
-void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void loadsavemapscreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;

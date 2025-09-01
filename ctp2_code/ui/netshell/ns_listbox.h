@@ -53,9 +53,9 @@ public:
 	ns_ListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_ListBox();
 
 protected:
@@ -64,7 +64,7 @@ protected:
 	aui_Image *m_itemsSelectImage;
 
 	ns_ListBox() : ns_CivListBox() {}
-	AUI_ERRCODE InitCommonLdl( MBCHAR *ldlBlock );
+	AUI_ERRCODE InitCommonLdl( const MBCHAR *ldlBlock );
 	AUI_ERRCODE InitCommon( void );
 
 public:
@@ -184,9 +184,9 @@ template<class T,class NetShellT>
 ns_ListBox<T,NetShellT>::ns_ListBox(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -202,7 +202,7 @@ ns_ListBox<T,NetShellT>::ns_ListBox(
 
 
 template<class T,class NetShellT>
-AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( MBCHAR *ldlBlock )
+AUI_ERRCODE ns_ListBox<T,NetShellT>::InitCommonLdl( const MBCHAR *ldlBlock )
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );

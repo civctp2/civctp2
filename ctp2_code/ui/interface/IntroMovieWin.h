@@ -11,7 +11,7 @@ void intromoviewin_DisplayIntroMovie(void);
 
 void intromoviewin_Cleanup();
 
-void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie);
+void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
 AUI_ACTION_BASIC(CloseIntroMovieAction);
 

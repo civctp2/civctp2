@@ -191,7 +191,7 @@ void ColorSet::Initialize(uint32 fileNumber)
 void ColorSet::Import(uint32 fileNumber)
 {
 	MBCHAR		filename[_MAX_PATH];
-	sprintf(filename, "Colors%.2ld.txt", fileNumber);
+	sprintf(filename, "Colors%.2u.txt", fileNumber);
 	Token       theToken(filename, C3DIR_GAMEDATA);
 
     try

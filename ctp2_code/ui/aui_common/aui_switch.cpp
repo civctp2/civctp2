@@ -17,7 +17,7 @@ aui_Switch::aui_Switch(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -44,7 +44,7 @@ aui_Switch::aui_Switch(
 	sint32 width,
 	sint32 height,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:
@@ -67,7 +67,7 @@ aui_Switch::aui_Switch(
 
 AUI_ERRCODE aui_Switch::InitCommonLdl( const MBCHAR *ldlBlock )
 {
-    ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
 	if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
 
@@ -195,18 +195,12 @@ AUI_ERRCODE aui_Switch::DrawThis(
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
-
-
-void aui_Switch::SetDrawCallbackAndCookie(SwitchDrawCallback *func, void *cookie,bool exclusive)
+void aui_Switch::SetDrawCallbackAndCookie(SwitchDrawCallback *func, Cookie cookie, bool exclusive)
 {
 	m_drawFunc		= func;
 	m_drawCookie	= cookie;
 	m_drawCallbackExclusive	= exclusive;
 }
-
 
 void aui_Switch::MouseLDragOver( aui_MouseEvent *mouseData )
 {

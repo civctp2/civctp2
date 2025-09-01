@@ -47,7 +47,7 @@ extern sint32 g_ScreenHeight;
 
 extern aui_UI *g_ui;
 
-void DefaultCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, void *cookie)
+void DefaultCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIndex, Cookie cookie)
 {
 }
 
@@ -76,20 +76,20 @@ protected:
 	ctp2_Menu *     m_menu;
 };
 
-static void ButtonCallback	(aui_Control *control, uint32 action, uint32 data, void *cookie)
+static void ButtonCallback	(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != (uint32)AUI_BUTTON_ACTION_PRESS) return;
 	if(data > 0) return;
 
-	if (cookie==NULL)
+	if (cookie.m_voidPtr == NULL)
 		return;
 
-	ctp2_Menu *menu = (ctp2_Menu *)cookie;
+	ctp2_Menu *menu = (ctp2_Menu *)cookie.m_voidPtr;
 
-	if (control!=NULL) {
+	if (control != NULL)
+	{
 		menu->Move(control->X(),control->Y()+control->Height());
-
 	}
 
 	g_ui->AddAction(new OpenMenuAction(menu));
@@ -175,10 +175,10 @@ AUI_ERRCODE ctp2_MenuBar::AddChild(aui_Region *in_child)
 
 		m_runningWidth += width;
 
-		ctp2_Menu *menu=new ctp2_Menu(false,DefaultCallback);
+		ctp2_Menu *menu=new ctp2_Menu(false, DefaultCallback);
 		menu->SetSiblingArea(this);
 
-		child->SetActionFuncAndCookie (ButtonCallback,(void *)menu);
+		child->SetActionFuncAndCookie (ButtonCallback, menu);
 
 		ctp2_MenuButton *mbutt = (ctp2_MenuButton *)child;
 		mbutt->SetMenu(menu);
@@ -217,7 +217,7 @@ ctp2_Menu * ctp2_MenuBar::GetMenu(const MBCHAR *ldlParent, const MBCHAR *menunam
 	if (button==NULL)
 		return NULL;
 
-	return (ctp2_Menu*)button->GetCookie();
+	return (ctp2_Menu*)button->GetCookie().m_voidPtr;
 }
 
 void

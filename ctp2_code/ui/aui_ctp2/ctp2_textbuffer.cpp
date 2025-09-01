@@ -81,11 +81,8 @@ void ctp2_TextBuffer::DrawLine(sint32 lineNum, COLOR color)
 	RECT							destRect;
 	COLORREF						colorRef = g_colorSet->GetColorRef(color);
 	sint32							col;
-	sint32							top;
 
-
-	top = destRect.top = (m_topLine - lineNum + 1) * m_charHeight - m_charHeight;
-
+	destRect.top = (m_topLine - lineNum + 1) * m_charHeight - m_charHeight;
 	destRect.bottom = destRect.top + m_charHeight;
 	destRect.left = m_rect.left;
 	destRect.right = m_rect.left + m_charWidth;
@@ -210,7 +207,7 @@ void ctp2_TextBuffer::Scroll(sint32 numLines)
 }
 
 
-void ctp2_TextBuffer::AddLine(MBCHAR *text, sint32 len, COLOR color)
+void ctp2_TextBuffer::AddLine(const MBCHAR *text, sint32 len, COLOR color)
 {
 
 	MBCHAR *lastLine = m_rowData[m_maxRows-1];
@@ -243,9 +240,9 @@ void ctp2_TextBuffer::AddLine(MBCHAR *text, sint32 len, COLOR color)
 	}
 }
 
-void ctp2_TextBuffer::AddText(MBCHAR *text, COLOR color)
+void ctp2_TextBuffer::AddText(const MBCHAR *text, COLOR color)
 {
-	MBCHAR		*start, *end;
+	const MBCHAR		*start, *end;
 	sint32		col;
 
 	start = text;
@@ -262,7 +259,7 @@ void ctp2_TextBuffer::AddText(MBCHAR *text, COLOR color)
 		if (col >= m_numDisplayedColumns) {
 
 			sint32 tempCol = col;
-			MBCHAR *tempEnd = end;
+			const MBCHAR *tempEnd = end;
 
 			while (tempCol > 0 && *end != '\n') {
 				tempCol--;

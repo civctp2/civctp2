@@ -27,6 +27,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef aeh_h
 #define aeh_h
 
+#include "types.h"
+
 #ifdef _WIN32
 #include <windows.h>
 #else
@@ -81,14 +83,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* single entry in list of module functions gotten from mapfiles */
 typedef struct aeh_map_func_s {
 	char *name;
-	unsigned start_addr;
+	uint32 start_addr;
 	struct aeh_map_func_s *next;
 } aeh_map_func_t;
 
 /* single entry in list of module mapfiles gotten from mapfile catalog file */
 typedef struct {
-	unsigned long crc;         /* crc of module corresponding to mapfile */
-	unsigned long load_addr;   /* preferred load address for mapfile module */
+	uint32 crc;         /* crc of module corresponding to mapfile */
+	uint32 load_addr;   /* preferred load address for mapfile module */
 	char *path;                /* path to mapfile */
 	char *reldir;              /* relative dir of mapfile; used for printing */
 	/* pointer to first entry in linked list of functions for mapfile;
@@ -100,7 +102,7 @@ typedef struct {
 
 /* array of mapfiles gotten from mapfile catalog file */
 typedef struct {
-	unsigned int nmap;
+	uint32 nmap;
 	aeh_map_t *map;
 } aeh_mapcat_t;
 
@@ -114,7 +116,7 @@ typedef struct {
          aeh_RES_BAD if couldn't get catalog info
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_mapcat_Create(aeh_mapcat_t *aehmapcat, const char *catpath);
+sint32 aeh_mapcat_Create(aeh_mapcat_t *aehmapcat, const char *catpath);
 
 /*--------------------------------------------------------------------------
  Free memory allocated to aeh_mapcat_t during aehmapcat_Create().
@@ -129,37 +131,37 @@ void aeh_mapcat_Destroy(aeh_mapcat_t *aehmapcat);
 
 /* crash application info; see dp_appParam_t */
 typedef struct {
-	unsigned short sessionType;
-	unsigned short platform;
-	unsigned short language;
-	unsigned short major_version;
-	unsigned short minor_version;
+	uint16 sessionType;
+	uint16 platform;
+	uint16 language;
+	uint16 major_version;
+	uint16 minor_version;
 } aeh_appParam_t;
 
 /* module (.dll, .exe, etc.) info */
 typedef struct {
-	unsigned long crc;  /* used to distinguish different versions of modules */
+	uint32 crc;  /* used to distinguish different versions of modules */
 	char *name;
 } aeh_modfile_t;
 
 /* call stack at time of crash */
 typedef struct {
-	unsigned int mod_index;  /* index of module in module array in aeh_t
+	uint32 mod_index;  /* index of module in module array in aeh_t
                                 0: unknown/kernel; 1 thru n_mod: array index */
-	unsigned long offset_addr; /* address offset by module's base address */
+	size_t offset_addr; /* address offset by module's base address */
 } aeh_stack_entry_t;
 #define aeh_MAX_STACK_DEPTH (aeh_BUF_MAXLEN/sizeof(aeh_stack_entry_t))
 
 /* module function info */
 typedef struct {
 	char *name;                /* name of the module function */
-	unsigned long offset_addr; /* address offset by function's base address */
-	unsigned long load_addr;   /* preferred load address of module function */
+	size_t offset_addr; /* address offset by function's base address */
+	size_t load_addr;   /* preferred load address of module function */
 	char *mappath;             /* path to mapfile for this module function */
-	/* int lineno; */   /* module function line number; not yet implemented */
+	/* sint32 lineno; */   /* module function line number; not yet implemented */
 } aeh_modfunc_t;
 
-#define aeh_WIN32afl_ID 0x01  /* refers to unsigned char rwFlag */
+#define aeh_WIN32afl_ID 0x01  /* refers to uint8 rwFlag */
 #define aeh_WIN32info_ID 0x02 /* refers to aeh_WIN32info_t */
 #define aeh_WIN32inst_ID 0x03 /* refers to ninst bytes at crash address */
 #define aeh_COMMENT_ID 0x04	  /* refers to an additional comment */
@@ -168,52 +170,52 @@ typedef struct {
 /* WIN32 register contents and other info at time of crash */
 typedef struct {
 	/* integer registers */
-	unsigned long eax;
-	unsigned long ebx;
-	unsigned long ecx;
-	unsigned long edx;
-	unsigned long esi;
-	unsigned long edi;
+	uint32 eax;
+	uint32 ebx;
+	uint32 ecx;
+	uint32 edx;
+	uint32 esi;
+	uint32 edi;
 	/* control registers */
-	unsigned long ebp;
-	unsigned long eip;
-	unsigned long esp;
-	unsigned long segCs;
-	unsigned long segSs;
+	uint32 ebp;
+	uint32 eip;
+	uint32 esp;
+	uint32 segCs;
+	uint32 segSs;
 	/* segment registers */
-	unsigned long segDs;
-	unsigned long segEs;
-	unsigned long segFs;
-	unsigned long segGs;
+	uint32 segDs;
+	uint32 segEs;
+	uint32 segFs;
+	uint32 segGs;
 	/* context flags */
-	unsigned long contextFlags;
+	uint32 contextFlags;
 	/* additional info about access violations */
-	unsigned long access_addr;
+	uint32 access_addr;
 } aeh_WIN32info_t;
 
 /* additional data of free format */
 typedef struct {
-	unsigned int id;
+	uint32 id;
 	void *data;
 } aeh_info_t;
 
 /* crash/assertion failure info */
 typedef struct {
-	unsigned long retcode;  /* exception code */
-	unsigned long retflag;  /* exception flags */
-	unsigned long retaddr;  /* address where exception/assertion occurred */
-	unsigned int assertln;  /* line number where assertion occurred */
+	uint32 retcode;  /* exception code */
+	uint32 retflag;  /* exception flags */
+	uint32 retaddr;  /* address where exception/assertion occurred */
+	uint32 assertln;  /* line number where assertion occurred */
 	char *assertfile;       /* file where assertion occurred */
 	char *asserttxt;		/* text of line where assertion occurred */
-	unsigned int nstk;      /* number of elements in stack trace array */
+	uint32 nstk;      /* number of elements in stack trace array */
 	aeh_stack_entry_t *stk; /* stack trace array */
-	unsigned int nmod;      /* number of elements in module array */
+	uint32 nmod;      /* number of elements in module array */
 	aeh_modfile_t *mod;     /* array of modules involved when crash/assertion */
 	char *systemDesc;	         /* description of video, 3D card */
 	aeh_appParam_t app;       /* info about crash/assertion application */
 	aeh_modfunc_t *modfunc;   /* array of module function info whose elements
                                     correspond to crash stack elements */
-	unsigned int ninfo;       /* number of elements in additional info array */
+	uint32 ninfo;       /* number of elements in additional info array */
 	aeh_info_t *info;         /* array of additional info */
 } aeh_t;
 
@@ -221,8 +223,8 @@ typedef struct {
  * used when doing file or network operations; values in buf are in portable
  * byte order */
 typedef struct {
-	unsigned int buflen;   /* size of useful info in buf */
-	unsigned char buf[aeh_BUF_MAXLEN]; /* contain crucial elements of aeh_t */
+	uint32 buflen;   /* size of useful info in buf */
+	uint8 buf[aeh_BUF_MAXLEN]; /* contain crucial elements of aeh_t */
 } aeh_buf_t;
 
 /*--------------------------------------------------------------------------
@@ -241,9 +243,9 @@ typedef struct {
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
 #ifdef _WIN32
-int aeh_Create(aeh_t *aeh, const LPEXCEPTION_POINTERS ep, const aeh_appParam_t *aehapp, const char *systemDesc, const int *assertln, const char *assertfile, const char *asserttxt);
+sint32 aeh_Create(aeh_t *aeh, const LPEXCEPTION_POINTERS ep, const aeh_appParam_t *aehapp, const char *systemDesc, const sint32 *assertln, const char *assertfile, const char *asserttxt);
 #else
-int aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const char *systemDesc, const int *assertln, const char *assertfile, const char *asserttxt);
+sint32 aeh_Create(aeh_t *aeh, const void *ep, const aeh_appParam_t *aehapp, const char *systemDesc, const sint32 *assertln, const char *assertfile, const char *asserttxt);
 #endif
 
 /*--------------------------------------------------------------------------
@@ -259,20 +261,20 @@ void aeh_Destroy(aeh_t *aeh);
  2^(2*12 - 1)/2^32 = 1/2^9.
  On error or empty stack, returns 0.
 --------------------------------------------------------------------------*/
-unsigned long aeh_getSignature(const aeh_t *aeh);
+uint32 aeh_getSignature(const aeh_t *aeh);
 
 /*--------------------------------------------------------------------------
  Print out an aeh signature to text string.
  Input: signature (from getSignature)
  Output: 9 byte string plus null termination
 --------------------------------------------------------------------------*/
-void aeh_signature_toString(unsigned long crc, char *buf);
+void aeh_signature_toString(uint32 crc, char *buf);
 
 /*--------------------------------------------------------------------------
  Add a comment field to an aeh.
  Returns aeh_RES_OK on success.
 --------------------------------------------------------------------------*/
-int aeh_addComment(aeh_t *aeh, const char *comment);
+sint32 aeh_addComment(aeh_t *aeh, const char *comment);
 
 #if 0
 /*--------------------------------------------------------------------------
@@ -282,7 +284,7 @@ int aeh_addComment(aeh_t *aeh, const char *comment);
  Returns aeh_RES_OK on success,
 		 aeh_RES_EMPTY if there is no nth comment.
 --------------------------------------------------------------------------*/
-int aeh_getComment(aeh_t *aeh, char *comment, int len, int n);
+sint32 aeh_getComment(aeh_t *aeh, char *comment, sint32 len, sint32 n);
 
 /*--------------------------------------------------------------------------
  Get the name of the last (deepest) known module in the stack trace.
@@ -290,7 +292,7 @@ int aeh_getComment(aeh_t *aeh, char *comment, int len, int n);
  Returns aeh_RES_OK on success,
 		 aeh_RES_EMPTY if the stack trace contains no known modules.
 --------------------------------------------------------------------------*/
-int aeh_getLastModule(aeh_t *aeh, char *name, int len);
+sint32 aeh_getLastModule(aeh_t *aeh, char *name, sint32 len);
 #endif
 
 /*--------------------------------------------------------------------------
@@ -303,7 +305,7 @@ int aeh_getLastModule(aeh_t *aeh, char *name, int len);
          aeh_RES_FULL if info is greater than aehbuf buffer size
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf);
+sint32 aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf);
 
 /*--------------------------------------------------------------------------
  Convert crash info from a binary stream format (aeh_buf_t) to an object
@@ -316,7 +318,7 @@ int aeh_writeOutputStream(const aeh_t *aeh, aeh_buf_t *aehbuf);
          aeh_RES_FULL if incomplete data read back (due to full aehbuf buffer)
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf);
+sint32 aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf);
 
 /*--------------------------------------------------------------------------
  Evaluate crash data in aeh along with info in corresponding map files to
@@ -331,7 +333,7 @@ int aeh_readInputStream(aeh_t *aeh, const aeh_buf_t *aehbuf);
          aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat);
+sint32 aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat);
 
 /*--------------------------------------------------------------------------
  Print out aeh info to text string.
@@ -341,7 +343,7 @@ int aeh_getAllInfo(aeh_t *aeh, aeh_mapcat_t *aehmapcat);
          len (actual length of aehDesc)
  Return: length needed to completely write out info
 --------------------------------------------------------------------------*/
-int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len);
+size_t aeh_toString(const aeh_t *aeh, char *aehDesc, size_t *len);
 
 /*--------------------------------------------------------------------------
  Strip system description from crash info. Takes aeh and returns it with
@@ -351,7 +353,7 @@ int aeh_toString(const aeh_t *aeh, char *aehDesc, unsigned int *len);
  Return: aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_stripSysDesc(aeh_t *aeh);
+sint32 aeh_stripSysDesc(aeh_t *aeh);
 
 /*--------------------------------------------------------------------------
  Strip selected info id's from crash info. Takes aeh and array and size of
@@ -361,7 +363,7 @@ int aeh_stripSysDesc(aeh_t *aeh);
  Return: aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[]);
+sint32 aeh_stripInfoId(aeh_t *aeh, uint32 nids, uint32 stripIds[]);
 
 /*--------------------------------------------------------------------------
  Strip address info. Takes aeh and return it with its address field set to zero.
@@ -370,7 +372,7 @@ int aeh_stripInfoId(aeh_t *aeh, unsigned int nids, unsigned int stripIds[]);
  Return: aeh_RES_BAD if bad arguments
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aeh_stripExceptionAddress(aeh_t *aeh);
+sint32 aeh_stripExceptionAddress(aeh_t *aeh);
 
 #ifdef _WIN32
 #define DEBUG_AEHEXCP
@@ -379,12 +381,12 @@ int aeh_stripExceptionAddress(aeh_t *aeh);
 /*--------------------------------------------------------------------------
  Record current line and file.  Used to help debug aeh-caused exceptions.
 --------------------------------------------------------------------------*/
-void aeh_SetCurrent(int line, char *file);
+void aeh_SetCurrent(sint32 line, char *file);
 /*--------------------------------------------------------------------------
  Get most recently recorded line and file.  Used to help debug aeh-caused
  exceptions.
 --------------------------------------------------------------------------*/
-void aeh_GetCurrent(int *line, char **file);
+void aeh_GetCurrent(sint32 *line, char **file);
 #else
 #define aeh_SetCurrent(s,t)
 #define aeh_GetCurrent(s,t)
@@ -394,7 +396,7 @@ void aeh_GetCurrent(int *line, char **file);
 
 #define BUFFER_SIZE 4096
 /* Find map entry corresponding the module in aehmodfile */
-int aeh_map_Find(aeh_mapcat_t *aehmapcat, aeh_modfile_t *aehmodfile);
+sint32 aeh_map_Find(aeh_mapcat_t *aehmapcat, aeh_modfile_t *aehmodfile);
 
 #endif
 

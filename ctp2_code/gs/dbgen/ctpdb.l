@@ -6,6 +6,7 @@
 #include "y.tab.h"
 #include <stdlib.h>
 #include <string.h>
+#include <limits.h>
 
 extern int g_line_number;
 
@@ -41,11 +42,12 @@ alsire        { return ALLOWS_SINGLE_RECORD; }
 				  return STRINGVALUE;
 			  }
 -?[0-9]+\.[0-9]+ {
-				  yylval.fval = atof(yytext);
+				  yylval.fval = strtod(yytext, NULL);
 				  return FLOATVALUE;
 			  }
 -?[0-9]+	  {
-				  yylval.val = atoi(yytext);
+				  long tmpVal = strtol(yytext, NULL, 10);
+				  yylval.val = (tmpVal > 0) ? ((tmpVal < INT_MAX) ? tmpVal : INT_MAX) : ((tmpVal > INT_MIN) ? tmpVal : INT_MIN); // We don't have the min and max macros, so just insert their code
 				  return NUMBER;
 			  }
 \.\.          { return RANGE; }

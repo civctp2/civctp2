@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ C3DropDown::C3DropDown(
 	sint32 buttonSize,
 	sint32 windowSize,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),
@@ -79,7 +79,7 @@ C3DropDown::C3DropDown(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -120,7 +120,6 @@ AUI_ERRCODE C3DropDown::CreateComponents( void )
 
 	m_listBox->SetForceSelect( TRUE );
 
-	errcode;
 	m_listBoxWindow = new aui_Window(
 		&errcode,
 		aui_UniqueId(),

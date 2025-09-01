@@ -131,7 +131,7 @@ extern PointerList<Player> *        g_deadPlayer;
 
 struct MagicValue
 {
-	char *string;
+	const char *string;
 	sint32 version;
 };
 
@@ -905,7 +905,7 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->radarMapData = new Pixel16[info->radarMapWidth * info->radarMapHeight];
 		n = c3files_fread(info->radarMapData, sizeof(uint8),
 							sizeof(Pixel16) * info->radarMapWidth * info->radarMapHeight, saveFile);
-		if (n != (sint32)(info->radarMapWidth * info->radarMapHeight * sizeof(Pixel16)))
+		if (n != info->radarMapWidth * info->radarMapHeight * sizeof(Pixel16))
 		{
 			return false;
 		}
@@ -941,7 +941,7 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		info->powerGraphData = new Pixel16[info->powerGraphWidth * info->powerGraphHeight];
 		n = c3files_fread(info->powerGraphData, sizeof(uint8),
 							sizeof(Pixel16) * info->powerGraphWidth * info->powerGraphHeight, saveFile);
-		if (n != (sint32)(info->powerGraphWidth * info->powerGraphHeight * sizeof(Pixel16)))
+		if (n != info->powerGraphWidth * info->powerGraphHeight * sizeof(Pixel16))
 		{
 			return false;
 		}
@@ -1254,8 +1254,8 @@ bool GameFile::LoadBasicGameInfo(FILE *saveFile, SaveInfo *info)
 
 void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 {
-	MBCHAR		*functionName = "GameFile::SaveExtendedGameInfo";
-	MBCHAR		*errorString = "Unable to write save file.";
+	const MBCHAR		*functionName = "GameFile::SaveExtendedGameInfo";
+	const MBCHAR		*errorString  = "Unable to write save file.";
 
 	size_t n = c3files_fwrite(info->gameName, sizeof(MBCHAR), _MAX_PATH, saveFile);
 	if (n != _MAX_PATH)
@@ -1311,7 +1311,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		n = c3files_fwrite(info->radarMapData, sizeof(uint8),
 							sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth,
 							saveFile);
-		if (n != (sint32)(sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth))
+		if (n != sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth)
 		{
 			c3errors_FatalDialog(functionName, errorString);
 			return;
@@ -1345,7 +1345,7 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		n = c3files_fwrite(info->powerGraphData, sizeof(uint8),
 							sizeof(Pixel16) * info->powerGraphHeight * info->powerGraphWidth,
 							saveFile);
-		if (n != (sint32)(sizeof(Pixel16) * info->powerGraphHeight * info->powerGraphWidth))
+		if (n != sizeof(Pixel16) * info->powerGraphHeight * info->powerGraphWidth)
 		{
 			c3errors_FatalDialog(functionName, errorString);
 			return;
@@ -2199,7 +2199,7 @@ bool GameMapFile::LoadExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 		info->radarMapData = new Pixel16[info->radarMapWidth * info->radarMapHeight];
 		n = c3files_fread(info->radarMapData, sizeof(uint8),
 							sizeof(Pixel16) * info->radarMapWidth * info->radarMapHeight, saveFile);
-		if (n != (sint32)(info->radarMapWidth * info->radarMapHeight * sizeof(Pixel16)))
+		if (n != info->radarMapWidth * info->radarMapHeight * sizeof(Pixel16))
 		{
 			c3files_fclose(saveFile);
 			return false;
@@ -2245,7 +2245,7 @@ void GameMapFile::SaveExtendedGameMapInfo(FILE *saveFile, SaveMapInfo *info)
 		n = c3files_fwrite(info->radarMapData, sizeof(uint8),
 							sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth,
 							saveFile);
-		if (n != (sint32)(sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth))
+		if (n != sizeof(Pixel16) * info->radarMapHeight * info->radarMapWidth)
 		{
 			c3errors_FatalDialog(functionName, errorString);
 			return;

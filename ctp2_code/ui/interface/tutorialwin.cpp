@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -78,14 +78,14 @@ void tutorialwin_DialogCallback( sint32 val )
 	}
 }
 
-void tutorialwin_ButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void tutorialwin_ButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	g_tutorialWin->HandleButton( (c3_Button *)control );
 }
 
-void tutorialwin_SwitchCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void tutorialwin_SwitchCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	switch ( action ) {
 	case AUI_SWITCH_ACTION_ON:
@@ -98,7 +98,7 @@ void tutorialwin_SwitchCallback( aui_Control *control, uint32 action, uint32 dat
 
 }
 
-void tutorialwin_ListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void tutorialwin_ListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -166,13 +166,13 @@ TutorialWin::TutorialWin( void )
 	UpdateData();
 }
 
-sint32 TutorialWin::Initialize( MBCHAR *windowBlock )
+sint32 TutorialWin::Initialize( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "List" );
-	m_list = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ListCallback, NULL );
+	m_list = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, tutorialwin_ListCallback, nullptr );
 	TestControl( m_list );
 	m_list->Hide();
 
@@ -259,7 +259,7 @@ sint32 TutorialWin::UpdateData( void )
 	return 0;
 }
 
-sint32 TutorialWin::AddToList( MBCHAR *text, sint32 index )
+sint32 TutorialWin::AddToList( const MBCHAR *text, sint32 index )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR ldlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];

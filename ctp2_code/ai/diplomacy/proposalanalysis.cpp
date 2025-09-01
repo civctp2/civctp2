@@ -697,6 +697,8 @@ bool ProposalAnalysis::IsAcceptResponse(const Response & response)
 		case PROPOSAL_REQUEST_HONOR_POLLUTION_AGREEMENT:
 		case PROPOSAL_REQUEST_END_EMBARGO:
 			return true;
+		default:
+			break;
 		}
 	}
 

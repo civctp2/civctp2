@@ -51,9 +51,6 @@ public:
 											 ctp2_ListItem *item2,
 											 sint32 column);
 
-	void *                      m_userData;
-	CTP2ItemCompareCallback *   m_compareCallback;
-
 	ctp2_ListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock);
 	virtual ~ctp2_ListItem();
 
@@ -61,20 +58,25 @@ public:
 	virtual void Update(void) {}
 	virtual sint32 Compare(ctp2_ListItem *item2, uint32 column);
 
-	void SetUserData(void *data) { m_userData = data; }
-	void *GetUserData() { return m_userData; }
+	void SetUserData(Cookie data) { m_userData = data; }
+
+	void  *GetUserDataPtr()    { return m_userData.m_voidPtr;   }
+	sint32 GetUserDataSint32() { return m_userData.m_sin32Type; }
+	uint32 GetUserDataUint32() { return m_userData.m_uin32Type; }
 
 	void SetCompareCallback(CTP2ItemCompareCallback *cb) { m_compareCallback = cb; }
 
 protected:
 	ctp2_ListItem()
-    :
-        aui_Item            (),
-        PatternBase         (),
-        m_userData          (NULL),
-        m_compareCallback   (NULL)
-    { ; };
+	:
+	    aui_Item            (),
+	    PatternBase         (),
+	    m_userData          (),
+	    m_compareCallback   (NULL)
+	{ ; };
 
+	Cookie                      m_userData;
+	CTP2ItemCompareCallback *   m_compareCallback;
 };
 
 #endif

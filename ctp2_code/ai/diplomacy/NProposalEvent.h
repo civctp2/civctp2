@@ -8,4 +8,4 @@ public:
 	static void AddCallbacks();
 };
 
-#endif __NEW_PROPOSAL_EVENT_H__
+#endif // __NEW_PROPOSAL_EVENT_H__

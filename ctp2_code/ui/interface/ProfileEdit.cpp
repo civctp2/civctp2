@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Removed unit animations option stuff, since the option is already present
 //	 in the graphics window, and should not clutter this one. (10-Apr-2009 Maq)
 //
@@ -70,8 +70,8 @@ ProfileEdit::ProfileEdit(AUI_ERRCODE *err)
 
 	m_list->SetAbsorbancy(FALSE);
 
-	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.CloseButton", CloseWindow, NULL);
-	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.EnableMessages", EnableMessages, NULL);
+	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.CloseButton", CloseWindow, nullptr);
+	aui_Ldl::SetActionFuncAndCookie("ProfileEdit.EnableMessages", EnableMessages, nullptr);
 }
 
 ProfileEdit::~ProfileEdit()
@@ -156,7 +156,7 @@ void ProfileEdit::FillList()
 			continue;
 		}
 
-		char *itemname = NULL;
+		const char *itemname = NULL;
 		switch(walk.GetObj()->m_type) {
 			case PV_NUM:
 				itemname = "ProfileEditNumItem";
@@ -216,6 +216,8 @@ void ProfileEdit::FillList()
 					}
 					break;
 				}
+				default:
+					break;
 			}
 		}
 		item->SetUserData(walk.GetObj());
@@ -225,7 +227,7 @@ void ProfileEdit::FillList()
 	m_list->BuildListEnd();
 }
 
-void ProfileEdit::ListCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::ListCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_SELECT && action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT)
 		return;
@@ -235,11 +237,11 @@ void ProfileEdit::ListCallback(aui_Control *control, uint32 action, uint32 data,
 
 }
 
-void ProfileEdit::ToggleBoolVar(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::ToggleBoolVar(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
-	ProfileVar *var = (ProfileVar *)cookie;
+	ProfileVar *var = (ProfileVar *)cookie.m_voidPtr;
 	Assert(g_theProfileDB);
 	if(g_theProfileDB) {
 		*var->m_numValue = !*var->m_numValue;
@@ -252,18 +254,18 @@ void ProfileEdit::ToggleBoolVar(aui_Control *control, uint32 action, uint32 data
 	}
 }
 
-void ProfileEdit::SetNumVar(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::SetNumVar(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_TEXTFIELD_ACTION_EXECUTE || action == AUI_TEXTFIELD_ACTION_DISMISS) {
 		ctp2_TextField *field = (ctp2_TextField *)control;
 		char buf[50];
 		field->GetFieldText(buf, 50);
-		ProfileVar *var = (ProfileVar *)cookie;
+		ProfileVar *var = (ProfileVar *)cookie.m_voidPtr;
 		*var->m_numValue = atoi(buf);
 	}
 }
 
-void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_BUTTON_ACTION_EXECUTE) {
 
@@ -273,7 +275,7 @@ void ProfileEdit::CloseWindow(aui_Control *control, uint32 action, uint32 data, 
 	}
 }
 
-void ProfileEdit::EnableMessages(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ProfileEdit::EnableMessages(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action== AUI_BUTTON_ACTION_EXECUTE) {
 		g_theCriticalMessagesPrefs->EnableAll();

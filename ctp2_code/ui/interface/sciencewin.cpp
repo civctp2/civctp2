@@ -165,13 +165,9 @@ static c3_HyperTextBox	*s_givesBox;
 static c3_Static		*s_civBox;
 static c3_Static		*s_civText;
 
-
-
-
-void sciencewin_ExitCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_ExitCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
-	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+		if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	close_ScienceStatus();
 }
@@ -181,19 +177,18 @@ void ScienceWin::kh_Close()
 	close_ScienceStatus();
 }
 
-void sciencewin_LibraryButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_LibraryButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 
-	Chart *tree = (Chart *)cookie;
+	Chart *tree = (Chart *)cookie.m_voidPtr;
 
 	open_GreatLibrary( tree->GetCenterIndex(), TRUE );
 	close_ScienceStatus();
 }
 
-void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -202,7 +197,7 @@ void sciencewin_ChangeButtonCallback( aui_Control *control, uint32 action, uint3
 	close_ScienceStatus();
 }
 
-void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
@@ -228,18 +223,13 @@ void sciencewin_SciButtonCallback( aui_Control *control, uint32 action, uint32 d
 	p->SetTaxes( taxRate );
 
 	g_scienceWin->UpdateData( SCI_UPDATE_NOCHART );
-
-
-
-
 }
 
-void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numPreReq = chart->GetNumPreReq();
 
 	for ( sint32 i = 0;i < numPreReq;i++ ) {
@@ -250,12 +240,11 @@ void sciencewin_PrereqActionCallback( aui_Control *control, uint32 action, uint3
 	}
 }
 
-void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
-
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
-	Chart *chart = (Chart *)cookie;
+	Chart *chart = (Chart *)cookie.m_voidPtr;
 	sint32 numLeadsTo = chart->GetNumLeadsTo();
 
 	for ( sint32 i = 0;i < numLeadsTo;i++ ) {
@@ -264,10 +253,9 @@ void sciencewin_LeadsToActionCallback( aui_Control *control, uint32 action, uint
 			chart->Update( chart->GetLeadsToIndex(i) );
 		}
 	}
-
 }
 
-void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void sciencewin_AdvanceListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT &&
@@ -509,7 +497,7 @@ sint32 knowledgewin_Initialize( void )
 	return 0;
 }
 
-sint32 knowledgewin_InitGraphicTrim( MBCHAR *windowBlock )
+sint32 knowledgewin_InitGraphicTrim( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		imageBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -666,7 +654,7 @@ sint32 knowledgewin_Cleanup( void )
 	return 0;
 }
 
-KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
+KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -680,7 +668,7 @@ KnowledgeListItem::KnowledgeListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE KnowledgeListItem::InitCommonLdl(sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -727,7 +715,7 @@ sint32 KnowledgeListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
+EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -741,7 +729,7 @@ EmbassyListItem::EmbassyListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlB
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-AUI_ERRCODE EmbassyListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE EmbassyListItem::InitCommonLdl(sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;
@@ -791,7 +779,7 @@ sint32 EmbassyListItem::Compare(c3_ListItem *item2, uint32 column)
 	return 0;
 }
 
-AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, MBCHAR *ldlBlock)
+AdvanceListItem::AdvanceListItem(AUI_ERRCODE *retval, sint32 index, const MBCHAR *ldlBlock)
 	:
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -826,7 +814,7 @@ AdvanceListItem::~AdvanceListItem()
 	m_childList->DeleteAll();
 }
 
-AUI_ERRCODE AdvanceListItem::InitCommonLdl(sint32 index, MBCHAR *ldlBlock)
+AUI_ERRCODE AdvanceListItem::InitCommonLdl(sint32 index, const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	MBCHAR			subBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
@@ -1104,7 +1092,7 @@ ScienceWin::ScienceWin( void )
 	Initialize( windowBlock );
 }
 
-sint32 ScienceWin::Initialize( MBCHAR *windowBlock )
+sint32 ScienceWin::Initialize( const MBCHAR *windowBlock )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];

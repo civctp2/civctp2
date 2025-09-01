@@ -58,12 +58,12 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 typedef struct bench_time_s
 {
-    int             on;
-	unsigned long	count;
-	unsigned long	sum;
-	unsigned long 	sumsq;
-	unsigned long	min;
-	unsigned long	max;
+    sint32             on;
+	uint32	count;
+	uint32	sum;
+	uint32 	sumsq;
+	uint32	min;
+	uint32	max;
 } bench_time_t;
 
 #define bench_BITFLAG_ERROR			1
@@ -80,10 +80,10 @@ typedef enum
 
 typedef struct bench_stat_s
 {
-   unsigned long rx_pkts;
-   unsigned long rx_bytes;
-   unsigned long tx_pkts;
-   unsigned long tx_bytes;
+   uint32 rx_pkts;
+   uint32 rx_bytes;
+   uint32 tx_pkts;
+   uint32 tx_bytes;
 } bench_stat_t;
 
 #define bench_VERBOSITY_NONE 0
@@ -93,54 +93,54 @@ typedef struct bench_stat_s
 
 typedef struct bench_s
 {
-	unsigned long	number;
+	uint32	number;
 	prog_process_t	process;
-	unsigned long	timer[bench_NUM_TIMERS];
-	unsigned short	species;
+	uint32	timer[bench_NUM_TIMERS];
+	uint16	species;
 	dp_t			*dp;
 	dp_session_t	session;
 	dpid_t			id;
-	int				idrank;	/* Access only thru bench_get_rank() */
-	unsigned long	wait;
-	unsigned long	flag;
-	unsigned long	bitflag;	/* should eventually replace flag */
-   	unsigned long	verbosity;
+	sint32				idrank;	/* Access only thru bench_get_rank() */
+	uint32	wait;
+	uint32	flag;
+	uint32	bitflag;	/* should eventually replace flag */
+   	uint32	verbosity;
 #ifdef UNIX
-	long			filedesc;
+	sint32			filedesc;
 #endif
 	struct bench_s	*next;
 	FILE *logfp;
 
 	dp_uid_t myUID;		/* should get cleared when you disconnect from a server... */
 
-	int				amHost;	/* TRUE if we create session, or become host */
+	sint32				amHost;	/* TRUE if we create session, or become host */
 } bench_t;
 
 static bench_time_t		bench_timers[bench_NUM_TIMERS];
 static bench_t			*bench_process_list = NULL;
-static int		        bench_process_number = 0;
-static int				bench_process_id = 0;
-static int				bench_exitcode = -1;
-static unsigned long	bench_starttime;
+static sint32		        bench_process_number = 0;
+static sint32				bench_process_id = 0;
+static sint32				bench_exitcode = -1;
+static uint32	bench_starttime;
 static bench_stat_t		bench_stats;
-static unsigned long	bench_maxexec;
-static int				bench_globals[bench_NUM_GLOBALS];
+static uint32	bench_maxexec;
+static sint32				bench_globals[bench_NUM_GLOBALS];
 
 /*
  * prototypes
  */
-static void bench_time_Reset(int timer);
-static void bench_time_Sample(int timer, unsigned long sample);
-static void bench_time_Report(int timer);
-static int bench_time_GetNumber(int timer);
-static double bench_time_GetAvg(int timer);
-static double bench_time_GetStdDev(int timer);
-static int bench_time_GetMax(int timer);
-static int bench_time_GetMin(int timer);
+static void bench_time_Reset(sint32 timer);
+static void bench_time_Sample(sint32 timer, uint32 sample);
+static void bench_time_Report(sint32 timer);
+static sint32 bench_time_GetNumber(sint32 timer);
+static double bench_time_GetAvg(sint32 timer);
+static double bench_time_GetStdDev(sint32 timer);
+static sint32 bench_time_GetMax(sint32 timer);
+static sint32 bench_time_GetMin(sint32 timer);
 
 static prog_res_t bench_expand_var(bench_t *bench, const char *varname, char *sresult);
-static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *piresult, char *errbuf);
-static int bench_expand_intvar_quick(bench_t *bench, const char *varname);
+static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, sint32 *piresult, char *errbuf);
+static sint32 bench_expand_intvar_quick(bench_t *bench, const char *varname);
 
 static prog_cmd_res_t benchCmd_DPRINT(prog_process_t *process, const char *params, void *context);
 static prog_cmd_res_t benchCmd_Verbosity(prog_process_t *process, const char *params, void *context);
@@ -161,8 +161,8 @@ static prog_cmd_res_t benchCmd_LoseHost(prog_process_t *process, const char *par
 static prog_cmd_res_t benchCmd_Login(prog_process_t *process, const char *params, void *context);
 static prog_cmd_res_t benchCmd_ReportScore(prog_process_t *process, const char *params, void *context);
 
-static int dp_PASCAL bench_cb_session_join(dp_session_t *, long *, long, void *);
-static void dp_PASCAL bench_cb_player_create(dpid_t, char_t *, long, void *);
+static sint32 dp_PASCAL bench_cb_session_join(dp_session_t *, sint32 *, sint32, void *);
+static void dp_PASCAL bench_cb_player_create(dpid_t, char_t *, sint32, void *);
 
 static bench_t *bench_process_Create(prog_t *program, prog_line_t *start);
 static prog_res_t bench_process_Start(bench_t *bench);
@@ -172,7 +172,7 @@ static prog_res_t bench_process_Step();
 #define bench_RANK
 #ifdef bench_RANK
 
-int bench_rank_dirty;
+sint32 bench_rank_dirty;
 
 /*--------------------------------------------------------------------------
  Call this to set the current process's dpid.
@@ -187,15 +187,15 @@ static void bench_set_id(bench_t *bench, dpid_t id)
 dpid_t bench_compare_hostid;
 bench_t *bench_compare_array[bench_MAX_PROCS];
 
-int bench_compare_rank(const void *a, const void *b)
+sint32 bench_compare_rank(const void *a, const void *b)
 {
 	const bench_t * const *ba, * const *bb;
-	int ia, ib;
+	sint32 ia, ib;
 
 	ba = a;
 	bb = b;
-	ia = (int) (*ba)->id; if (ia == bench_compare_hostid) ia = 20;
-	ib = (int) (*bb)->id; if (ib == bench_compare_hostid) ib = 20;
+	ia = (sint32) (*ba)->id; if (ia == bench_compare_hostid) ia = 20;
+	ib = (sint32) (*bb)->id; if (ib == bench_compare_hostid) ib = 20;
 	return (ia - ib);
 }
 
@@ -206,10 +206,10 @@ int bench_compare_rank(const void *a, const void *b)
  and to 1, 2, 3... if he's the normal client with the lowest, next lowest,
  etc. id.
 --------------------------------------------------------------------------*/
-static int bench_get_rank(bench_t *bench)
+static sint32 bench_get_rank(bench_t *bench)
 {
-	int i;
-	int n;
+	sint32 i;
+	sint32 n;
 	bench_t *pb;
 	dp_result_t err;
 
@@ -253,7 +253,7 @@ static int bench_get_rank(bench_t *bench)
 /*
  * bench_uptime
  */
-unsigned long bench_uptime(void)
+uint32 bench_uptime(void)
 {
 	return (eclock() - bench_starttime);
 }
@@ -433,7 +433,7 @@ prog_cmd_res_t benchCmd_dpDestroy(prog_process_t *process, const char *params, v
 prog_cmd_res_t benchCmd_dpSetGameServer(prog_process_t *process, const char *params, void *context)
 {
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 
 	bench_t		*bench = (bench_t *) context;
@@ -488,8 +488,8 @@ prog_cmd_res_t benchCmd_dpSetGameServer(prog_process_t *process, const char *par
 		t_start = eclock();
 		res = dpSetGameServerEx(bench->dp, pserver, bench->species);
 		t_finish = eclock();
-		if ((long)(t_finish - t_start) > ECLOCKS_PER_SEC/3) {
-			printf("dpSetGameServer: DNS for %s took %d ms, add it to etc/hosts!\n", argv[0], (1000 * (long)(t_finish - t_start))/ECLOCKS_PER_SEC);
+		if ((sint32)(t_finish - t_start) > ECLOCKS_PER_SEC/3) {
+			printf("dpSetGameServer: DNS for %s took %d ms, add it to etc/hosts!\n", argv[0], (1000 * (sint32)(t_finish - t_start))/ECLOCKS_PER_SEC);
 			exit(1);
 		}
 	}
@@ -508,7 +508,7 @@ prog_cmd_res_t benchCmd_dpSetGameServer(prog_process_t *process, const char *par
  Saves session in bench->session if its name matches
  bench->session.sessionName.  (Yeah, it's a kludge.)
 -------------------------------------------------------------------------*/
-static int dp_PASCAL bench_cb_session_find(dp_session_t *sDesc, long *pTimeout,long flags,void *context)
+static sint32 dp_PASCAL bench_cb_session_find(dp_session_t *sDesc, sint32 *pTimeout,sint32 flags,void *context)
 {
 	bench_t *bench = (bench_t *)context;
 	assert(bench);
@@ -688,7 +688,7 @@ prog_cmd_res_t benchCmd_dpCreatePlayer(prog_process_t *process, const char *para
 	char		name[25];
 	char		bname[32];
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 	dp_result_t res;
 
@@ -791,7 +791,7 @@ prog_cmd_res_t benchCmd_dpSend(prog_process_t *process, const char *params, void
 	} packet;
 	bench_t			*bench = (bench_t *) context;
 	dp_result_t		res;
-	unsigned long	length;
+	uint32	length;
 	char			*ptr;
 	dpid_t			id;
 
@@ -868,9 +868,9 @@ static prog_cmd_res_t benchCmd_dpGetStats(prog_process_t *process, const char *p
 }
 
 /* Convert a key to ASCII for debug printing */
-static char *key2buf(const char *key, int keylen, char *buf)
+static char *key2buf(const char *key, sint32 keylen, char *buf)
 {
-	int i;
+	sint32 i;
 
 	if (keylen > dp_KEY_MAXLEN)
 		return "key too long";
@@ -900,7 +900,7 @@ static char key2a_buf3[256];
 --------------------------------------------------------------------------*/
 static void dp_playerId_t_toString(const dp_playerId_t *src, char *buf)
 {
-	int i;
+	sint32 i;
 
 	/* print out dp_playerId_t field */
 	sprintf(buf, "playerId: id=%d, karma=%d, name=%s, blob=", src->id, src->karma, src->name);
@@ -913,7 +913,7 @@ static void dp_playerId_t_toString(const dp_playerId_t *src, char *buf)
 --------------------------------------------------------------------------*/
 static void dp_session_t_toString(const dp_session_t *src, char *buf)
 {
-	int i;
+	sint32 i;
 
 	sprintf(buf, "session: sessType %d, name %s, k%d u%x f%x, cur %d, max %d, reserved2 %s, u ",
 			src->sessionType, src->sessionName,
@@ -1041,7 +1041,7 @@ prog_cmd_res_t benchCmd_dpReceive(prog_process_t *process, const char *params, v
 				dp_objectDelta_packet_t delta;
 				dp_account_packet_t acctpkt;
 				dp_sessionResult_packet_t sessRes;
-				unsigned char buf[512];
+				uint8 buf[512];
 			} u PACK;
 		} *pkt = (void *)buf;
 #include "dpunpack.h"
@@ -1199,9 +1199,9 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int 		timer;
+	sint32 		timer;
 
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
@@ -1268,12 +1268,12 @@ prog_cmd_res_t benchCmd_Timer(prog_process_t *process, const char *params, void 
 
 				case 'a':
 				case 'A':
-					prog_process_SetInteger(&bench->process, 0, (int) bench_time_GetAvg(timer));
+					prog_process_SetInteger(&bench->process, 0, (sint32) bench_time_GetAvg(timer));
 					break;
 
 				case 's':
 				case 'S':
-					prog_process_SetInteger(&bench->process, 0, (int) bench_time_GetStdDev(timer));
+					prog_process_SetInteger(&bench->process, 0, (sint32) bench_time_GetStdDev(timer));
 					break;
 
 				default:
@@ -1337,10 +1337,10 @@ prog_cmd_res_t benchCmd_Wait(prog_process_t *process, const char *params, void *
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 	prog_cmd_res_t	res;
-	long		waitflags;		/* what we're waiting for */
+	sint32		waitflags;		/* what we're waiting for */
 
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
@@ -1447,11 +1447,11 @@ prog_cmd_res_t benchCmd_Wait(prog_process_t *process, const char *params, void *
 	 * Wait nnnn FREEZE
 	 */
 	if (bench->wait == 0) {
-		long msec_to_wait;
+		sint32 msec_to_wait;
 
 		msec_to_wait = atol(argv[0]);
 		if ((argc >= 2) && isdigit(argv[1][0])) {
-			long max_msec_to_wait = atol(argv[1]);
+			sint32 max_msec_to_wait = atol(argv[1]);
 			msec_to_wait += rand() % (max_msec_to_wait - msec_to_wait);
 		}
 		if (bench->verbosity >= bench_VERBOSITY_LOTS) {
@@ -1474,7 +1474,7 @@ prog_cmd_res_t benchCmd_Wait(prog_process_t *process, const char *params, void *
 	}
 
 	/* See if wait is up */
-	if ((long)(eclock() - bench->wait) > 0) {
+	if ((sint32)(eclock() - bench->wait) > 0) {
 		if (bench->verbosity >= bench_VERBOSITY_LOTS) {
 			bench_print(bench, "Wait over.\n");
 
@@ -1498,9 +1498,9 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int 		num;
+	sint32 		num;
 	prog_line_t *line;
 	prog_cmd_res_t res;
 	char		errbuf[256];
@@ -1535,7 +1535,7 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 
 	while (num--)
 	{
-		int argi;
+		sint32 argi;
 		bench_t *b = bench_process_Create(process->program, line);
 		if (!b)
 		{
@@ -1551,7 +1551,7 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 			char *parg;
 			char string[PROG_MAX_STRINGLEN];
 			if (argv[argi][0] == '$') {
-				int res = bench_expand_var(bench, argv[argi], string);
+				sint32 res = bench_expand_var(bench, argv[argi], string);
 				if (res != prog_RES_OK)
 					break;
 				parg = string;
@@ -1569,10 +1569,10 @@ prog_cmd_res_t benchCmd_Spawn(prog_process_t *process, const char *params, void 
 /*--------------------------------------------------------------------------
  Return the value of the given integer expression, or 0 on error.
 --------------------------------------------------------------------------*/
-static int bench_expand_intvar_quick(bench_t *bench, const char *varname)
+static sint32 bench_expand_intvar_quick(bench_t *bench, const char *varname)
 {
 	prog_res_t res;
-	int val;
+	sint32 val;
 	char errbuf[256];
 
 	res = bench_expand_intvar(bench, varname, &val, errbuf);
@@ -1614,7 +1614,7 @@ static int bench_expand_intvar_quick(bench_t *bench, const char *varname)
  On error, prog_RES_SYNTAX is returned if variable name can't be parsed,
  and error message is copied to errbuf.
 --------------------------------------------------------------------------*/
-static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *piresult, char *errbuf)
+static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, sint32 *piresult, char *errbuf)
 {
 	dpid_t hid;
 	dp_result_t err;
@@ -1711,11 +1711,11 @@ static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *
 					break;
 
 				case 'A':
-					*piresult = (int) bench_time_GetAvg(bench_expand_intvar_quick(bench, varname + 3));
+					*piresult = (sint32) bench_time_GetAvg(bench_expand_intvar_quick(bench, varname + 3));
 					break;
 
 				case 'D':
-					*piresult = (int) bench_time_GetStdDev(bench_expand_intvar_quick(bench, varname + 3));
+					*piresult = (sint32) bench_time_GetStdDev(bench_expand_intvar_quick(bench, varname + 3));
 					break;
 
 				case 'm':
@@ -1753,7 +1753,7 @@ static prog_res_t bench_expand_intvar(bench_t *bench, const char *varname, int *
 --------------------------------------------------------------------------*/
 static prog_res_t bench_expand_var(bench_t *bench, const char *varname, char *sresult)
 {
-	int iresult;
+	sint32 iresult;
 	prog_cmd_res_t res;
 
 	*sresult = 0;
@@ -1789,9 +1789,9 @@ prog_cmd_res_t benchCmd_Print(prog_process_t *process, const char *params, void 
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int 		num;
+	sint32 		num;
 	char		obuf[2048];
 	char		*obufp;
 	prog_res_t res;
@@ -1868,12 +1868,12 @@ prog_cmd_res_t benchCmd_Eval(prog_process_t *process, const char *params, void *
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 	char 		*infoName;
-	int         varNum;
+	sint32         varNum;
 	prog_res_t res;
-	int			iresult;
+	sint32			iresult;
 	char		errbuf[256];
 
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
@@ -1928,9 +1928,9 @@ prog_cmd_res_t benchCmd_SetGlobal(prog_process_t *process, const char *params, v
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int 		gnum;
+	sint32 		gnum;
 	prog_cmd_res_t res;
 	char		errbuf[256];
 
@@ -1995,14 +1995,14 @@ prog_cmd_res_t benchCmd_ReadLineIntoGlobals(prog_process_t *process, const char 
 {
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int 		gnum;
+	sint32 		gnum;
 	prog_cmd_res_t res;
 	char		errbuf[256];
 	char		linebuf[256];
 	char		*tok;
-	int         i;
+	sint32         i;
 
 	memcpy(buff, params, PROG_MAX_PARAM_LENGTH);
 	prog_Char2Args(buff, &argc, argv);
@@ -2093,9 +2093,9 @@ prog_cmd_res_t benchCmd_LosePeerWithRank(prog_process_t *process, const char *pa
 	dp_result_t err;
 	char		buff[PROG_MAX_PARAM_LENGTH];
 	char		errbuf[256];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int			rank;
+	sint32			rank;
 	playerHdl_t h;
 	dpid_t		id;
 	prog_cmd_res_t res;
@@ -2150,7 +2150,7 @@ prog_cmd_res_t benchCmd_Login(prog_process_t *process, const char *params, void 
 	dp_result_t err;
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
 	char		username[PROG_MAX_STRINGLEN];
 	char		password[PROG_MAX_STRINGLEN];
@@ -2228,10 +2228,10 @@ prog_cmd_res_t benchCmd_ReportScore(prog_process_t *process, const char *params,
 	dp_result_t err;
 	bench_t		*bench = (bench_t *) context;
 	char		buff[PROG_MAX_PARAM_LENGTH];
-	int 		argc;
+	sint32 		argc;
 	char	 	*argv[PROG_MAX_PARAM];
-	int			id;
-	int			score;
+	sint32			id;
+	sint32			score;
 	char		scorebuf[3];
 	prog_cmd_res_t res;
 	char		errbuf[256];
@@ -2277,8 +2277,8 @@ prog_cmd_res_t benchCmd_ReportScore(prog_process_t *process, const char *params,
 	}
 
 	/* Report the score */
-	scorebuf[0] = dpGETSHORT_FIRSTBYTE((short)score);
-	scorebuf[1] = dpGETSHORT_SECONDBYTE((short)score);
+	scorebuf[0] = dpGETSHORT_FIRSTBYTE((sint16)score);
+	scorebuf[1] = dpGETSHORT_SECONDBYTE((sint16)score);
 	scorebuf[2] = 0;
 	err = dpReportScoreBuf(bench->dp, id, 0, scorebuf, 3);
 	if (err != dp_RES_OK) {
@@ -2293,14 +2293,14 @@ prog_cmd_res_t benchCmd_ReportScore(prog_process_t *process, const char *params,
  * main
  *
  */
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
 	bench_t			*bench;
 	prog_syntax_t	syntax;
 	prog_t			program;
-	int				i;
-	int				bail;
-	unsigned long	endtime;
+	sint32				i;
+	sint32				bail;
+	uint32	endtime;
 	bench_t	*pptr;
 
 	srand(eclock());
@@ -2397,8 +2397,8 @@ int main(int argc, char **argv)
 
 	while (!bail)
 	{
-		unsigned long timer;
-	   	unsigned long timer2;
+		uint32 timer;
+	   	uint32 timer2;
 
 		timer = eclock();
 
@@ -2473,7 +2473,7 @@ int main(int argc, char **argv)
  * Resets a benchmark timer
  *
  */
-void bench_time_Reset(int timer)
+void bench_time_Reset(sint32 timer)
 {
     bench_timers[timer].on = 1;
 	bench_timers[timer].count = 0;
@@ -2489,7 +2489,7 @@ void bench_time_Reset(int timer)
  * Adds a sample to the timer
  *
  */
-void bench_time_Sample(int timer, unsigned long sample)
+void bench_time_Sample(sint32 timer, uint32 sample)
 {
     if (bench_timers[timer].on)
 	{
@@ -2507,7 +2507,7 @@ void bench_time_Sample(int timer, unsigned long sample)
  * Writes a report about a timer
  *
  */
-void bench_time_Report(int timer)
+void bench_time_Report(sint32 timer)
 {
 	printf("Timer %d\n", timer);
 	printf("Samples: %d Sum: %d: SumSq: %d Min: %d Max: %d\n", bench_timers[timer].count, bench_timers[timer].sum, bench_timers[timer].sumsq, bench_timers[timer].min, bench_timers[timer].max);
@@ -2529,7 +2529,7 @@ void bench_time_Report(int timer)
  * bench_time_GetNumber
  *
  */
-int bench_time_GetNumber(int timer)
+sint32 bench_time_GetNumber(sint32 timer)
 {
 	return (bench_timers[timer].count);
 }
@@ -2538,7 +2538,7 @@ int bench_time_GetNumber(int timer)
  * bench_time_GetAvg
  *
  */
-double bench_time_GetAvg(int timer)
+double bench_time_GetAvg(sint32 timer)
 {
 	return (((double) bench_timers[timer].sum) / (double) bench_timers[timer].count);
 }
@@ -2547,7 +2547,7 @@ double bench_time_GetAvg(int timer)
  * bench_time_GetStdDev
  *
  */
-double bench_time_GetStdDev(int timer)
+double bench_time_GetStdDev(sint32 timer)
 {
 	double avg = ((double) bench_timers[timer].sum) / (double) bench_timers[timer].count;
 	double avgsq = ((double) bench_timers[timer].sumsq) / (double) bench_timers[timer].count;
@@ -2558,7 +2558,7 @@ double bench_time_GetStdDev(int timer)
  * bench_time_GetMax
  *
  */
-static int bench_time_GetMax(int timer)
+static sint32 bench_time_GetMax(sint32 timer)
 {
 	return (bench_timers[timer].max);
 }
@@ -2567,7 +2567,7 @@ static int bench_time_GetMax(int timer)
  * bench_time_GetMin
  *
  */
-static int bench_time_GetMin(int timer)
+static sint32 bench_time_GetMin(sint32 timer)
 {
 	return (bench_timers[timer].min);
 }
@@ -2576,7 +2576,7 @@ static int bench_time_GetMin(int timer)
  * bench_cb_session_join
  *
  */
-int dp_PASCAL bench_cb_session_join(dp_session_t *session, long *timeout, long flags, void *context)
+sint32 dp_PASCAL bench_cb_session_join(dp_session_t *session, sint32 *timeout, sint32 flags, void *context)
 {
 	bench_t *bench = (bench_t *) context;
 
@@ -2605,7 +2605,7 @@ int dp_PASCAL bench_cb_session_join(dp_session_t *session, long *timeout, long f
  * bench_cb_player_create
  *
  */
-void dp_PASCAL bench_cb_player_create(dpid_t id, char_t *name, long flags, void *context)
+void dp_PASCAL bench_cb_player_create(dpid_t id, char_t *name, sint32 flags, void *context)
 {
 	bench_t *bench = (bench_t *) context;
 
@@ -2752,18 +2752,18 @@ prog_res_t bench_process_Step()
 	bench_t	*next;
 
 #ifdef UNIX
-	static unsigned long lasttime = 0;
-	long delta_t;
+	static uint32 lasttime = 0;
+	sint32 delta_t;
 
 	if (!lasttime)
 		lasttime = eclock();
-	delta_t = (long)(eclock()-lasttime);
+	delta_t = (sint32)(eclock()-lasttime);
 	if (delta_t < bench_maxexec)
 	{
 		fd_set 			fds;
 		struct timeval	timeout;
-		int				n;
-		int				max = 0;
+		sint32				n;
+		sint32				max = 0;
 
 		pptr = bench_process_list;
 

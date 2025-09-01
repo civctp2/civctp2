@@ -21,20 +21,20 @@ public:
 		sint32 y,
 		sint32 width,
 		sint32 height,
-		MBCHAR *pattern,
-		MBCHAR *icon,
+		const MBCHAR *pattern,
+		const MBCHAR *icon,
 		uint16 color,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 
 	IconButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 
-	virtual AUI_ERRCODE	InitCommon( MBCHAR *ldlBlock, BOOL isLDL = FALSE);
+	virtual AUI_ERRCODE	InitCommon( const MBCHAR *ldlBlock, BOOL isLDL = FALSE);
 
 	virtual ~IconButton();
 

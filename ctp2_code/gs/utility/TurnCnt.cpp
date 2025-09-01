@@ -846,7 +846,7 @@ void TurnCount::SendMsgEndOfGameEarlyWarning(void)
 	}
 }
 
-void TurnCount::SendMsgToAllPlayers(MBCHAR *s)
+void TurnCount::SendMsgToAllPlayers(const MBCHAR *s)
 	{
 	sint32	i ;
 
@@ -1020,7 +1020,7 @@ void TurnCount::LogPlayerStats(void)
 {
 	PLAYER_INDEX    playerNum   = g_selected_item->GetCurPlayer();
 	MBCHAR          filename[80];
-	sprintf(filename, "Playerlog%#.2d.txt", playerNum);
+	sprintf(filename, "Playerlog%.2d.txt", playerNum);
 	FILE *  logfile = fopen(filename, "rt");
 
 	if (logfile)

@@ -373,125 +373,26 @@ public:
 //----------------------------------------------------------------------------
 CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 :
-    m_owner                             (owner),
-    m_slaveBits                         (0),
-    m_accumulated_food                  (0),
-    m_shieldstore                       (0),
-    m_shieldstore_at_begin_turn         (0),
-    m_build_category_at_begin_turn      (-4),
-    m_net_gold                          (0),
-    m_gold_lost_to_crime                (0),
-    m_gross_gold                        (0),
-    m_goldFromTradeRoutes               (0),
-    m_goldLostToPiracy                  (0),
-    m_goldFromTransitRoutes             (0),
-    m_science                           (0),
-    m_luxury                            (0),
-    m_city_attitude                     (CITY_ATTITUDE_CONTENT),
-    m_collected_production_this_turn    (0),
-    m_gross_production                  (0),
-    m_gross_prod_before_bonuses         (0),
-    m_net_production                    (0),
-    m_production_lost_to_crime          (0),
-    m_built_improvements                (0),
-    m_builtWonders                      (0),
     m_food_delta                        (0.0),
     m_gross_food                        (0.0),
-    m_gross_food_before_bonuses         (0.0),
     m_net_food                          (0.0),
     m_food_lost_to_crime                (0.0),
     m_food_consumed_this_turn           (0.0),
-    m_total_pollution                   (0),
-    m_cityPopulationPollution           (0),
-    m_cityIndustrialPollution           (0),
-    m_cityPollutionCleaner              (0),
-    m_contribute_materials              (true),
-    m_contribute_military               (true),
-    m_capturedThisTurn                  (false),
-    m_spied_upon                        (0),
-    m_walls_nullified                   (false),
-    m_franchise_owner                   (PLAYER_UNASSIGNED),
-    m_franchiseTurnsRemaining           (-1),
-    m_watchfulTurns                     (-1),
-    m_bioInfectionTurns                 (-1),
-    m_bioInfectedBy                     (PLAYER_UNASSIGNED),
-    m_nanoInfectionTurns                (-1),
-    m_nanoInfectedBy                    (PLAYER_UNASSIGNED),
-    m_convertedTo                       (PLAYER_UNASSIGNED),
-    m_convertedGold                     (0),
-    m_convertedBy                       (CONVERTED_BY_NOTHING),
-    m_terrainWasPolluted                (false),
-    m_happinessAttackedBy               (PLAYER_UNASSIGNED),
-    m_terrainImprovementWasBuilt        (false),
-    m_improvementWasBuilt               (false),
-    m_isInjoined                        (false),
-    m_injoinedBy                        (PLAYER_UNASSIGNED),
-    m_airportLastUsed                   (-1),
-    m_founder                           (owner),
-    m_wages_paid                        (0),
-    m_pw_from_infrastructure            (0),
-    m_gold_from_capitalization          (0),
-    m_buildInfrastructure               (false),
-    m_buildCapitalization               (false),
-    m_paidForBuyFront                   (false),
-    m_doUprising                        (UPRISING_CAUSE_NONE),
-    m_turnFounded                       (g_turn ? g_turn->GetRound() : 0),
-    m_productionLostToFranchise         (0),
-    m_probeRecoveredHere                (false),
-    m_lastCelebrationMsg                (-1),
-    m_alreadySoldABuilding              (false),
-    m_population                        (0),
-    m_partialPopulation                 (0),
-//	sint16 m_numSpecialists[POP_MAX];
-//	sint32 m_specialistDBIndex[POP_MAX];
-    m_sizeIndex                         (0),
-    m_workerFullUtilizationIndex        (0),
-    m_workerPartialUtilizationIndex     (0),
-    m_useGovernor                       (false),
-    m_buildListSequenceIndex            (0),
-    m_garrisonOtherCities               (false),
-    m_garrisonComplete                  (false),
-    m_currentGarrison                   (0),
-    m_neededGarrison                    (0),
     m_currentGarrisonStrength           (0.0),
     m_neededGarrisonStrength            (0.0),
-    m_sellBuilding                      (-1),
-    m_buyFront                          (false),
-    m_max_food_from_terrain             (0),
-    m_max_prod_from_terrain             (0),
-    m_max_gold_from_terrain             (0),
-    m_growth_rate                       (0),
+    m_gross_food_before_bonuses         (0.0),
     m_overcrowdingCoeff                 (0.0),
-    m_starvation_turns                  (0),
-    m_cityStyle                         (CITY_STYLE_GENERIC),
-    m_pos                               (center_point),
-    m_is_rioting                        (false),
-    m_home_city                         (hc),
-    m_min_turns_revolt                  (0),
-    m_build_queue                       (),
-    m_tradeSourceList                   (),
-    m_tradeDestinationList              (),
-#ifdef CTP1_TRADE
-    m_resources                         (),
-    m_localResources                    (),
-#else
-    m_collectingResources               (),
-    m_sellingResources                  (),
-    m_buyingResources                   (),
-#endif
-    m_happy                             (new Happy()),
-    m_name                              (NULL),
-//	sint32    *m_distanceToGood;
     m_defensiveBonus                    (0.0),
-//	sint32    *m_ringFood;
-//	sint32    *m_ringProd;
-//	sint32    *m_ringGold;
-//	sint32    *m_ringSizes;
+    m_bonusFoodCoeff                    (0.0),
+    m_bonusFood                         (0.0),
+    m_bonusProdCoeff                    (0.0),
+    m_bonusProd                         (0.0),
+    m_bonusGoldCoeff                    (0.0),
+    m_bonusGold                         (0.0),
+    m_bonusScieCoeff                    (0.0),
+    m_bonusScie                         (0.0),
+
 #if defined(NEW_RESOURCE_PROCESS)
-//	double    *m_farmersEff;
-//	double    *m_laborersEff;
-//	double    *m_merchantsEff;
-//	double    *m_scientistsEff;
     m_max_processed_terrain_food        (0.0),
     m_max_processed_terrain_prod        (0.0),
     m_max_processed_terrain_gold        (0.0),
@@ -514,28 +415,142 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
     m_bioinfectionProdLossOfOnePop      (0.0),
     m_franchiseProdLossOfOnePop         (0.0),
     m_conversionGoldLossOfOnePop        (0.0),
-    m_productionLostToBioinfection      (0),
-    m_max_scie_from_terrain             (0),
     m_gross_science                     (0.0),
     m_science_lost_to_crime             (0.0),
 #endif
-    m_cityRadiusOp                      (RADIUS_OP_UKNOWN),
+
+    m_built_improvements                (0),
+    m_builtWonders                      (0),
+    m_happy                             (new Happy()),
+    m_name                              (NULL),
+//	sint32    *m_distanceToGood;
+//	sint32    *m_ringFood;
+//	sint32    *m_ringProd;
+//	sint32    *m_ringGold;
+//	sint32    *m_ringSizes;
+    m_tempGoodAdder                     (NULL),
     m_killList                          (NULL),
+
+#if defined(NEW_RESOURCE_PROCESS)
+//	double           *m_farmersEff;
+//	double           *m_laborersEff;
+//	double           *m_merchantsEff;
+//	double           *m_scientistsEff;
+    m_productionLostToBioinfection      (0),
+    m_max_scie_from_terrain             (0),
+#endif
+
+    m_cityRadiusOp                      (RADIUS_OP_UKNOWN),
+    m_doUprising                        (UPRISING_CAUSE_NONE),
+    m_convertedBy                       (CONVERTED_BY_NOTHING),
+    m_city_attitude                     (CITY_ATTITUDE_CONTENT),
+    m_pos                               (center_point),
+    m_home_city                         (hc),
+    m_owner                             (owner),
+    m_slaveBits                         (0),
+
+    m_accumulated_food                  (0),
+    m_shieldstore                       (0),
+    m_shieldstore_at_begin_turn         (0),
+    m_build_category_at_begin_turn      (-4),
+    m_net_gold                          (0),
+    m_gold_lost_to_crime                (0),
+    m_gross_gold                        (0),
+    m_goldFromTradeRoutes               (0),
+    m_goldLostToPiracy                  (0),
+    m_goldFromTransitRoutes             (0),
+    m_science                           (0),
+    m_luxury                            (0),
+    m_collected_production_this_turn    (0),
+    m_gross_production                  (0),
+    m_gross_prod_before_bonuses         (0),
+    m_net_production                    (0),
+    m_production_lost_to_crime          (0),
+    m_total_pollution                   (0),
+    m_cityPopulationPollution           (0),
+    m_cityIndustrialPollution           (0),
+    m_cityPollutionCleaner              (0),
+    m_spied_upon                        (0),
+    m_franchise_owner                   (PLAYER_UNASSIGNED),
+    m_franchiseTurnsRemaining           (-1),
+    m_watchfulTurns                     (-1),
+    m_bioInfectionTurns                 (-1),
+    m_bioInfectedBy                     (PLAYER_UNASSIGNED),
+    m_nanoInfectionTurns                (-1),
+    m_nanoInfectedBy                    (PLAYER_UNASSIGNED),
+    m_convertedTo                       (PLAYER_UNASSIGNED),
+    m_convertedGold                     (0),
+    m_happinessAttackedBy               (PLAYER_UNASSIGNED),
+    m_injoinedBy                        (PLAYER_UNASSIGNED),
+    m_airportLastUsed                   (-1),
+    m_founder                           (owner),
+    m_wages_paid                        (0),
+    m_pw_from_infrastructure            (0),
+    m_gold_from_capitalization          (0),
+    m_turnFounded                       (g_turn ? g_turn->GetRound() : 0),
+    m_productionLostToFranchise         (0),
+    m_population                        (0),
+    m_partialPopulation                 (0),
+    m_sizeIndex                         (0),
+    m_workerFullUtilizationIndex        (0),
+    m_workerPartialUtilizationIndex     (0),
+    m_buildListSequenceIndex            (0),
+    m_sellBuilding                      (-1),
+    m_max_food_from_terrain             (0),
+    m_max_prod_from_terrain             (0),
+    m_max_gold_from_terrain             (0),
+    m_growth_rate                       (0),
+    m_starvation_turns                  (0),
+    m_cityStyle                         (CITY_STYLE_GENERIC),
+    m_build_category_before_load_queue  (0),
+    m_scie_lost_to_crime                (0),
     m_radiusNewOwner                    (0),
     m_tilecount                         (0),
-//            m_whichtile;
-    m_tempGoodAdder                     (NULL),
+    m_whichtile                         (0),
     m_tempGood                          (-1),
     m_tempGoodCount                     (0),
-    m_sentInefficientMessageAlready     (false),
     m_culture                           (0),      //emod
     m_secthappy                         (0),      //emod
-    m_bonusFood                         (0.0),
-    m_bonusFoodCoeff                    (0.0),
-    m_bonusProdCoeff                    (0.0),
-    m_bonusProd                         (0.0),
-    m_bonusGoldCoeff                    (0.0),
-    m_bonusGold                         (0.0)
+
+    m_lastCelebrationMsg                (-1),
+
+    m_min_turns_revolt                  (0),
+    m_currentGarrison                   (0),
+    m_neededGarrison                    (0),
+    m_alreadySoldABuilding              (false),
+    m_probeRecoveredHere                (false),
+    m_buyFront                          (false),
+    m_sentInefficientMessageAlready     (false),
+    m_garrisonComplete                  (false),
+    m_garrisonOtherCities               (false),
+    m_contribute_materials              (true),
+    m_contribute_military               (true),
+    m_capturedThisTurn                  (false),
+    m_walls_nullified                   (false),
+    m_terrainWasPolluted                (false),
+    m_terrainImprovementWasBuilt        (false),
+    m_improvementWasBuilt               (false),
+    m_isInjoined                        (false),
+    m_buildInfrastructure               (false),
+    m_buildCapitalization               (false),
+    m_paidForBuyFront                   (false),
+    m_useGovernor                       (false),
+    m_is_rioting                        (false),
+
+    m_build_queue                       (),
+    m_tradeSourceList                   (),
+    m_tradeDestinationList              (),
+#ifdef CTP1_TRADE
+    m_resources                         (),
+    m_localResources                    ()
+#else
+    m_collectingResources               (),
+    m_sellingResources                  (),
+    m_buyingResources                   ()
+#endif
+
+//	sint16 m_numSpecialists[POP_MAX];
+//	sint32 m_specialistDBIndex[POP_MAX];
 {
 	m_build_queue.SetOwner(m_owner);
 	m_build_queue.SetCity(m_home_city);
@@ -792,7 +807,7 @@ void CityData::Serialize(CivArchive &archive)
 	}
 	else
 	{
-		sint8 empty = 0;
+		sint8 empty = 0; // Needed
 
 		m_owner                          = archive.GetSINT32();
 		m_slaveBits                      = archive.GetUINT32();
@@ -1250,7 +1265,7 @@ void CityData::Initialize(sint32 settlerType)
 	{
 		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 		{
-			if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
+			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner))
 				continue;
 
 			if(!CanBuildBuilding(i))
@@ -1269,7 +1284,7 @@ void CityData::Initialize(sint32 settlerType)
 		{
 			for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 			{
-				if(buildingutil_GetDesignatesCapitol(((uint64)1 << (uint64)i, m_owner), m_owner))
+				if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner))
 					continue;
 
 				if(!CanBuildBuilding(i))
@@ -5566,11 +5581,6 @@ bool CityData::ChangeCurrentlyBuildingItem(sint32 category, sint32 item_type)
 	const WonderRecord* wrec = NULL;
 	const BuildingRecord* irec = NULL;
 //	const EndGameRecord *egrec = NULL; // Maybe usefull later
-	sint32 oldCategory;
-	if(m_build_queue.GetHead())
-		oldCategory = m_build_queue.GetHead()->m_category;
-	else
-		oldCategory = -5;
 
 	switch(category)
 	{ // see Globals.h for k_GAME_OBJ_TYPE enum
@@ -5705,7 +5715,7 @@ void CityData::DestroyCapitol()
 {
 	if(buildingutil_GetDesignatesCapitol(m_built_improvements, m_owner))
 	{
-		for(uint64 i = 0; i < g_theBuildingDB->NumRecords(); i++)
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++)
 		{
 			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
 			   m_built_improvements & uint64((uint64)1 << i))
@@ -5920,8 +5930,6 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 				Cell *cell = g_theWorld->GetCell(pos);
 				if(cell->GetCanDie())
 				{
-					MapPoint tmp = pos;
-
 					cell->Kill();
 
 					g_theWorld->CutImprovements(pos);
@@ -6212,6 +6220,8 @@ void CityData::ModifySpecialAttackChance(UNIT_ORDER_TYPE attack,
 			break;
 		case UNIT_ORDER_SLAVE_RAID:
 			chance -= buildingutil_GetPreventSlavery(GetEffectiveBuildings(), m_owner);
+			break;
+		default:
 			break;
 	}
 }
@@ -9446,13 +9456,13 @@ void CityData::AddImprovement(sint32 type)
 	buildingutil_GetDefendersBonus(GetEffectiveBuildings(), m_defensiveBonus, m_owner);
 }
 
-bool CityData::FindGoodDistancesCallback(const MapPoint &pos, Cell *cell, void *cookie)
+bool CityData::FindGoodDistancesCallback(const MapPoint &pos, Cell *cell, Cookie cookie)
 {
 	sint32 good;
 	if(!g_theWorld->GetGood(pos, good))
 		return false;
 
-	CityData *cd = (CityData *)cookie;
+	CityData *cd = (CityData *)cookie.m_voidPtr;
 
 	if(cd->m_distanceToGood[good] > 0)
 		return false;
@@ -11690,7 +11700,7 @@ void CityData::DestroyOnePerCiv()
 {
 	if(buildingutil_GetDesignatesOnePerCiv(m_built_improvements, m_owner))
 	{
-		for(uint64 i = 0; i < g_theBuildingDB->NumRecords(); i++) // Can this be simplified?
+		for(sint32 i = 0; i < g_theBuildingDB->NumRecords(); i++) // Can this be simplified?
 		{
 			if(buildingutil_GetDesignatesCapitol((uint64)1 << (uint64)i, m_owner) &&
 			   m_built_improvements & uint64((uint64)1 << i))

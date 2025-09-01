@@ -44,17 +44,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef dpprivy_h
 #define dpprivy_h
 
+#include "types.h"
+
 /*------------------------------------------------------------------------
  Returns temporary directory for the local machine.
 ------------------------------------------------------------------------*/
-int getTempDir(char *name, int namelen);
+sint32 getTempDir(char *name, size_t namelen);
 
 /*------------------------------------------------------------------------
  Write/read size bytes to/from dat from/to *bp, incrementing *bp by size.
  Byteswaps if Sparc and PowerMac and do nothing otherwise.
 ------------------------------------------------------------------------*/
-void writeSwap(void **bp, const void *dat, unsigned int size);
-void readSwap(const void **bp, void *dat, unsigned int size);
+void writeSwap(void **bp, const void *dat, size_t size);
+void readSwap(const void **bp, void *dat, size_t size);
 
 #ifndef NO_NETWORK	/* what the hell is this? */
 /*-----------------------------------------------------------------------
@@ -72,15 +74,15 @@ void dpSwapErrorPacket(dp_error_packet_t *buffer);
 void dpSwapSessionPacket(dp_session_packet_t *buffer);
 #ifndef dp_ANET2
 void dpSwapEnumPlayers(dp_enumPlayers_packet_t *buffer);
-void dpSwapPlayerList(dp_playerList_packet_t *buffer, int nPlayers);
-void dpSwapPlayerRoster(dp_playerRoster_packet_t *buffer, int nPlayers);
+void dpSwapPlayerList(dp_playerList_packet_t *buffer, sint32 nPlayers);
+void dpSwapPlayerRoster(dp_playerRoster_packet_t *buffer, sint32 nPlayers);
 void dpSwapAddPlayer(dp_addPlayer_packet_t *buffer);
 void dpSwapDelPlayer(dp_delPlayer_packet_t *buffer);
 void dpSwapUserAddPlayer(dp_user_addPlayer_packet_t *buffer);
 #endif /* dp_ANET2 */
 void dpSwapPingPacket(dp_ping_packet_t *buffer);
 #ifndef dp_ANET2
-void dpSwapUserAddGroup(dp_group_t *buffer, int n);
+void dpSwapUserAddGroup(dp_group_t *buffer, sint32 n);
 void dpSwapUserDelGroup(dp_user_delGroup_packet_t *buffer);
 void dpSwapPlayerToFromGroup(dp_addPlayerToGroup_packet_t *buffer);
 void dpSwapUserHost(dp_packetType_t *buffer);
@@ -124,7 +126,7 @@ extern char key2a_buf[];
 extern char key2a_buf2[];
 extern char key2a_buf3[];
 extern char key2a_buf4[];
-extern char *key2buf(const char *key, int keylen, char *buf);
+extern char *key2buf(const char *key, size_t keylen, char *buf);
 /* Don't use this twice in one printf! */
 #define key2a(key, keylen) key2buf(key, keylen, key2a_buf)
 /* You can use this one for the second key in a printf */
@@ -160,7 +162,7 @@ void dp_assertValid(dp_t *d);
  Does not fill in address field; that has to be looked up in the hosts table.
  Returns number of bytes used, or -1 on error.
 ----------------------------------------------------------------------*/
-int dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p);
+size_t dp_unpack_playerId(dpid_t id, const char *buf, dp_playerId_t *p);
 
 /*----------------------------------------------------------------------
  Convert a dpid into a playerHdl.
@@ -199,9 +201,9 @@ dp_result_t dp_broadcast_reliable(dp_t *dp, void *buf, size_t size, playerHdl_t 
  If flags is DP_SEND_UNRELIABLE, yields PLAYER_BROADCAST only if
  idTo is dp_ID_BROADCAST and the driver prefers broadcast.
 --------------------------------------------------------------------------*/
-int dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[]
+sint32 dp_getBroadcastHdls(dp_t *dp, playerHdl_t hdls[]
 #ifdef dp_ANET2
-		, int flags
+		, sint32 flags
 #endif
 	);
 #endif
@@ -311,13 +313,13 @@ dp_result_t dpSendObjectDelta(
 	dp_object_t *data,
 	dptab_table_t *tab,
 	char *subkey,
-	int subkeylen);
+	sint32 subkeylen);
 
 /*----------------------------------------------------------------------
  Callback for remote player tables.  Only used if application requested
  object deltas for this session's players.
 ----------------------------------------------------------------------*/
-int dp_PASCAL dp_rplayers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status);
+sint32 dp_PASCAL dp_rplayers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status);
 
 /* enumsrv2.c */
 
@@ -332,14 +334,14 @@ dp_result_t dpEnumServersPoll(dp_t *dp);
  Look up the session type and id of the session the given uid most
  recently tried to join.
 ----------------------------------------------------------------------*/
-dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, int *sessidlen, dp_species_t *sessType);
+dp_result_t dp_uid2sessid(dp_t *dp, dp_uid_t uid, char *sessidbuf, size_t *sessidlen, dp_species_t *sessType);
 
 /*----------------------------------------------------------------------
  Remember the session type and id of the session the given uid most
  recently tried to join.
  Silently ignores calls with uid == dp_UID_NONE
 ----------------------------------------------------------------------*/
-dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, int sessidlen, dp_species_t sessType);
+dp_result_t dp_sessid4uid(dp_t *dp, dp_uid_t uid, const char *sessid, size_t sessidlen, dp_species_t sessType);
 
 #endif	/* NO_NETWORK */
 

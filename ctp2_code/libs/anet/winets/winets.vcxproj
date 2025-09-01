@@ -318,7 +318,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="..\demo\utils\bad\unistd.h" />
+    <ClInclude Include="..\demo\utils\unistd-win.h" />
     <ClInclude Include="..\demo\utils\logpkt.h" />
     <ClInclude Include="..\h\anet.h" />
     <ClInclude Include="..\h\aneterr.h" />
@@ -343,6 +343,7 @@
     <ClInclude Include="..\h\eclock.h" />
     <ClInclude Include="..\h\hkeytab.h" />
     <ClInclude Include="..\h\q.h" />
+    <ClInclude Include="..\h\types.h" />
     <ClInclude Include="..\src\score\scorerep.h" />
     <ClInclude Include="..\src\tca\tca.h" />
     <ClInclude Include="..\src\tca\tcapw.h" />

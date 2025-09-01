@@ -46,6 +46,7 @@ class ctp2_Window;
 class RankingTab;
 class ScoreTab;
 class WonderTab;
+union Cookie;
 
 class InfoWindow
 {
@@ -69,7 +70,7 @@ private:
 	void UpdateData(void);
 
 	static void CloseButtonActionCallback(aui_Control *control,
-	                                      uint32 action, uint32 data, void *cookie);
+	                                      uint32 action, uint32 data, Cookie cookie);
 
 	ctp2_Window * m_window;
 	ctp2_Button * m_closeButton;

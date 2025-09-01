@@ -47,7 +47,7 @@ MBCHAR * AppendBlockName(MBCHAR const * ldlBlock, MBCHAR const * subBlock)
 
 } // namespace
 
-ControlTabPanel::ControlTabPanel(MBCHAR *ldlBlock)
+ControlTabPanel::ControlTabPanel(const MBCHAR *ldlBlock)
 :
     m_ldlBlock                  (AppendBlockName(ldlBlock, "ControlTabPanel")),
     m_domesticControlPanel      (new DomesticControlPanel(m_ldlBlock.get())),

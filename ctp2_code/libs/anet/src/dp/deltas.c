@@ -25,7 +25,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Callback for remote player tables.  Only used if application requested
  object deltas for this session's players.
 ----------------------------------------------------------------------*/
-int dp_PASCAL dp_rplayers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, int subkeylen, void *buf, size_t sent, size_t total, int seconds_left, void *context, dp_result_t status)
+sint32 dp_PASCAL dp_rplayers_cb(dptab_t *dptab, dptab_table_t *table, playerHdl_t src, playerHdl_t dest, char *subkey, sint32 subkeylen, void *buf, size_t sent, size_t total, sint32 seconds_left, void *context, dp_result_t status)
 {
 	dp_t *dp = (dp_t *)context;
 	dp_playerId_t player;
@@ -74,7 +74,7 @@ void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, long flags, void *co
 	dp_rplayers_enumEx_context_t *r = (dp_rplayers_enumEx_context_t *)context;
 	dp_result_t err;
 	char subkey[2];
-	int subkeylen;
+	sint32 subkeylen;
 
 	if (!r || !r->dp || !r->tab)
 		return;
@@ -137,9 +137,9 @@ void dp_PASCAL dp_rplayers_enumEx_cb(dpid_t id, char *name, long flags, void *co
 ------------------------------------------------------------------------*/
 DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 	dp_t *dp,
-	int monitor,		/* TRUE to start, FALSE to stop */
+	sint32 monitor,		/* TRUE to start, FALSE to stop */
 	const char *key,
-	int keylen)
+	sint32 keylen)
 {
 	dp_result_t err;
 	precondition(dp);
@@ -161,7 +161,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 		dp->monitor_object_sessions = monitor;
 		if (monitor) {
 			dptab_table_t *sesstab;
-			int i;
+			sint32 i;
 
 			/* enumerate the existing sessions */
 			/* If we're a standalone master, enum the mysessions table */
@@ -175,7 +175,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 				dp_session_t sess;
 				size_t len;
 				char subkey[dptab_KEY_MAXLEN];
-				int subkeylen;
+				sint32 subkeylen;
 
 				err = dptab_get_byindex(sesstab, i, (void **)&s, &len, subkey, &subkeylen);
 				if (err != dp_RES_OK) {
@@ -203,7 +203,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 		dp->serverping_rx_count = 0;
 		dp->serverping_rx_count_old = 0;
 		if (monitor) {
-			int i;
+			sint32 i;
 
 			if (keylen != 3) {
 				DPRINT(("dpRequestObjectDeltas: must specify session type.\n"));
@@ -217,7 +217,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 				dp_serverInfo_t *server;
 				size_t len;
 				char subkey[dptab_KEY_MAXLEN];
-				int subkeylen;
+				sint32 subkeylen;
 
 				err = dptab_get_byindex(dp->serverpings, i, (void **)&server, &len, subkey, &subkeylen);
 				if (err != dp_RES_OK) {
@@ -242,7 +242,7 @@ DP_API dp_result_t DP_APIX dpRequestObjectDeltas(
 		size_t slen;
 		dptab_table_t *rplayers;
 		char pkey[3];
-		int pkeylen;
+		sint32 pkeylen;
 
 		precondition(keylen == dp->dpio->myAdrLen + 3);
 		pkeylen = 0;
@@ -330,7 +330,7 @@ DP_API dp_result_t DP_APIX dpGetSessionId(
 	dp_t *dp,
 	const dp_session_t *sess,	/* session to convert */
 	char *id,					/* resulting id stored here */
-	int *pidlen)				/* length of resulting id stored here */
+	sint32 *pidlen)				/* length of resulting id stored here */
 {
 	precondition(dp);
 	precondition(dp->dpio);
@@ -356,7 +356,7 @@ dp_result_t dpSendObjectDelta(
 	dp_object_t *data,
 	dptab_table_t *tab,
 	char *subkey,
-	int subkeylen)
+	sint32 subkeylen)
 {
 	playerHdl_t dest;
 	size_t pktlen;
@@ -387,8 +387,8 @@ dp_result_t dpSendObjectDelta(
 
 				if (h != PLAYER_NONE) {
 					/* Stuff latency into delta for players in our session */
-					int		loss;
-					int		latency;
+					sint32		loss;
+					sint32		latency;
 
 					latency = dpio_get_player_latency(dp->dpio, h, 0, &loss);
 					if (latency > 32767)

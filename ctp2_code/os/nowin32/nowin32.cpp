@@ -129,7 +129,7 @@ void _splitpath( const char *path,
   const char *dot = strrchr(basename(extc), '.');
   if(ext){
     if(!dot || dot == fname)
-      ext= "";
+      ext[0]= '\0';
     else
       strcpy(ext, dot + 1); // expecting pre-allocted array by caller
 }

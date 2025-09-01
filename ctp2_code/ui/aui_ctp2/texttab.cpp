@@ -25,9 +25,9 @@ extern C3UI			*g_c3ui;
 TextTab::TextTab(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -51,10 +51,10 @@ TextTab::TextTab(
 	sint32 height,
 	sint32 paneWidth,
 	sint32 paneHeight,
-	MBCHAR *pattern,
-	MBCHAR *text,
+	const MBCHAR *pattern,
+	const MBCHAR *text,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	BOOL selected )
 	:
 	aui_ImageBase( (sint32)0 ),

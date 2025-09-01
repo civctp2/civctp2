@@ -175,15 +175,17 @@ CombatUnit::CombatUnit
     Unit &u
 )
 :
-    m_offense   (offense),
-    m_defense   (defense),
-    m_strength  (strength),
-    m_armor     (armor),
-    m_ranged    (ranged),
-    m_hp        (hp),
-    m_isVeteran (u.IsVeteran()),
-    m_unit      (u),
-    m_valid     (true)
+    m_offense         (offense),
+    m_defense         (defense),
+    m_strength        (strength),
+    m_armor           (armor),
+    m_ranged          (ranged),
+    m_hp              (hp),
+    m_isVeteran       (u.IsVeteran()),
+    m_valid           (true),
+    m_alreadyExploded (false),
+    m_alreadyAttacked (false),
+    m_unit            (u)
 {
 
 	const UnitRecord *rec = m_unit.GetDBRec();
@@ -900,15 +902,15 @@ CTP2Combat::CTP2Combat
     m_defenders           (w, h, false),
     m_width               (w),
     m_height              (h),
+    m_round               (0),
     m_retreated           (false),
     m_retreating          (false),
     m_noAttacksPossible   (false),
-    m_battle              (NULL),
-    m_round               (0),
-    m_army_id             (attackers[0].GetArmy().m_id),
-    m_roundsSinceUpdate   (0x7ffffffe),
     m_attacker            (attackers.GetOwner()),
-    m_defender            (defenders.GetOwner())
+    m_defender            (defenders.GetOwner()),
+    m_army_id             (attackers[0].GetArmy().m_id),
+    m_battle              (NULL),
+    m_roundsSinceUpdate   (0x7ffffffe)
 {
 	m_attackers.FillFrom(attackers);
 	m_defenders.FillFrom(defenders);
@@ -1491,7 +1493,6 @@ bool CTP2Combat::IsDone()
 
 void CTP2Combat::Retreat()
 {
-	if(!this) return;
 	m_retreating = true;
 }
 

@@ -43,7 +43,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_Radio(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -52,7 +52,7 @@ public:
 		sint32 width,
 		sint32 height,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
+		Cookie cookie = nullptr,
 		sint32 state = 0,
 		sint32 numStates = k_AUI_SWITCH_DEFAULTNUMSTATES );
 	virtual ~aui_Radio() {}

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -90,7 +90,7 @@ AUI_ERRCODE ServerSelectWindow::CreateControls( void )
 {
 	AUI_ERRCODE     errcode = AUI_ERRCODE_OK;
 	aui_Control *   control = new c3_Static
-        (&errcode, aui_UniqueId(), "serverselectwindow.titlestatictext");
+	    (&errcode, aui_UniqueId(), "serverselectwindow.titlestatictext");
 	Assert( AUI_NEWOK(control,errcode) );
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_TITLESTATICTEXT ] = control;
@@ -191,9 +191,9 @@ void ServerSelectWindow::Update( bool wait )
 AUI_ERRCODE ServerSelectWindow::Idle( void )
 {
 	if (g_netfunc)
-    {
-        while (NETFunc::Message * m = g_netfunc->GetMessage())
-        {
+	{
+		while (NETFunc::Message * m = g_netfunc->GetMessage())
+		{
 			g_netfunc->HandleMessage(m);
 
 			switch ( m->GetCode() )
@@ -203,19 +203,19 @@ AUI_ERRCODE ServerSelectWindow::Idle( void )
 				break;
 
 			case dp_OBJECTDELTA_PACKET_ID:
-                {
-            	    dp_objectDelta_packet_t *   p =
-                        (dp_objectDelta_packet_t *) m->GetBody();
+				{
+					dp_objectDelta_packet_t *   p =
+					    (dp_objectDelta_packet_t *) m->GetBody();
 
-				    if (p->key[0] == dp_KEY_SERVERPINGS
+					if (p->key[0] == dp_KEY_SERVERPINGS
 					    && (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)
 					    && p->data.serv.loss_percent != 100 && s_dbw
-                       )
-                    {
-					    DialogBoxWindow::PopDown(s_dbw);
-					    s_dbw = NULL;
-				    }
-                }
+					   )
+					{
+						DialogBoxWindow::PopDown(s_dbw);
+						s_dbw = NULL;
+					}
+				}
 				break;
 			default:
 				break;

@@ -9,7 +9,7 @@ aui_Radio::aui_Radio(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -30,7 +30,7 @@ aui_Radio::aui_Radio(
 	sint32 width,
 	sint32 height,
 	ControlActionCallback *ActionFunc,
-	void *cookie,
+	Cookie cookie,
 	sint32 state,
 	sint32 numStates )
 	:

@@ -31,6 +31,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <unistd.h>
 #include <sys/types.h>
 #include <sys/wait.h>
+#include "../../../h/types.h"
 
 /*********** CONFIGURATION ***********/
 
@@ -45,9 +46,9 @@ const char *htmldir = "/home/alink/public_html";
 static char *server;
 
 /* parse argument string */
-static char **parseArgs(char *in, int *narg)
+static char **parseArgs(char *in, sint32 *narg)
 {
-	int i;
+	sint32 i;
 	char **parsed;
 	char buf[1024];
 	char *ptr, *ptr0 = in;
@@ -61,7 +62,7 @@ static char **parseArgs(char *in, int *narg)
 	i = 0;
 	while (*in) {
 		switch(*in) {
-			int val, val1;
+			sint32 val, val1;
 			case '%':
 				in++;
 				if ((sscanf(in,"%2x",&val)==1) &&
@@ -119,14 +120,14 @@ static char mask[] = "255.255.252.0";
 static char baseip[] = "207.82.188.0";
 static struct {
 	char letter;
-	int buffer;
+	sint32 buffer;
 } passwrd[] = {{'h', 0}, {'a', 0}, {'c', 0}, {'k', 0}, {'@', 0}, {'s', 0}, {'h', 0}, {'a', 0}, {'q', 0}, {'\0', 0}};
 
 /* check password and restart option; then fork and exec servfil script to
  * perform desired action and return completion status */
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
-	int i, inlen, status, narg, ret, bCorrectPwd = 0;
+	sint32 i, inlen, status, narg, ret, bCorrectPwd = 0;
 	char *bRestart = "0";
 	FILE *fp;
 	pid_t pid;
@@ -160,7 +161,7 @@ int main(int argc, char **argv)
 		remove("/tmp/servfil.running");
 		exit(1);
 	} else {
-		int i;
+		sint32 i;
 		char *pmask = mask;
 		char *pbaseip = baseip;
 		char *ptrbuf, *ptrmask, *ptrbaseip;
@@ -208,7 +209,7 @@ int main(int argc, char **argv)
 			var = parsed[i];
 			val = ptr+1;
 			if (!strcmp(var, "password")) {
-				int j, jmax = sizeof(passwrd)/sizeof(*passwrd);
+				sint32 j, jmax = sizeof(passwrd)/sizeof(*passwrd);
 				for (j = 0; j < jmax; j++) {
 					if (*val++ != passwrd[j].letter)
 						break;

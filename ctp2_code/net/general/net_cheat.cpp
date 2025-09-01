@@ -99,9 +99,9 @@ NetCheat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 				city.m_id = (0);
 			}
 			MapPoint pos(m_data[3], m_data[4]);
-			Unit newu = g_player[m_data[2]]->CreateUnit(m_data[1], pos, city,
-													 FALSE,
-													 CAUSE_NEW_ARMY_INITIAL);
+			g_player[m_data[2]]->CreateUnit(m_data[1], pos, city,
+											FALSE,
+											CAUSE_NEW_ARMY_INITIAL);
 			break;
 		}
 		case NET_CHEAT_ADD_MATERIALS:

@@ -55,7 +55,7 @@ TileControl::TileControl(AUI_ERRCODE * retval, uint32 id, MBCHAR * ldlBlock )
 }
 
 TileControl::TileControl(AUI_ERRCODE * retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
-		ControlActionCallback *ActionFunc, void * cookie)
+		ControlActionCallback *ActionFunc, Cookie cookie)
 :
 	aui_ImageBase((sint32) 0),
 	aui_TextBase(NULL),

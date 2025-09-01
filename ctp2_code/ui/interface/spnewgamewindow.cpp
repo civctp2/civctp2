@@ -143,13 +143,13 @@ SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 	g_theProfileDB->SetSPEndingAge(g_theAgeDB->NumRecords() - 1);
 	g_theProfileDB->Save();
 
-    Update();
+	Update();
 }
 
 SPNewGameWindow::~SPNewGameWindow()
 {
-    delete m_spStart;
-    delete m_spOk;
+	delete m_spStart;
+	delete m_spOk;
 	delete m_spReturn;
 	delete m_spTribe;
 	delete m_spDifficulty;
@@ -160,9 +160,9 @@ SPNewGameWindow::~SPNewGameWindow()
 	delete m_spEditor;
 	delete m_spScenario;
 	delete m_spGeneral;
-    delete m_spWorld;
-    delete m_spCustom;
-    delete m_spName;
+	delete m_spWorld;
+	delete m_spCustom;
+	delete m_spName;
 	delete m_mapTypeButton;
 	delete m_mapTypeLabel;
 	delete m_worldShapeButton;
@@ -391,7 +391,7 @@ SPProfileBox::~SPProfileBox()
 	delete m_spPreferences;
 	delete m_spCustom;
 
-    delete m_PTOP;
+	delete m_PTOP;
 	delete m_PHEADER;
 	delete m_PBOT;
 	delete m_PLEFT;
@@ -557,7 +557,7 @@ uint32 SPRulesBox::GetPollutionRules() { return m_spGenocide->IsOn(); }
 SPDropDownListItem::SPDropDownListItem(AUI_ERRCODE *retval, const MBCHAR *ldlBlock, const MBCHAR *type, const MBCHAR *name)
 :
 	aui_ImageBase(ldlBlock),
-	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
+	aui_TextBase(ldlBlock, (const MBCHAR *) NULL),
 	c3_ListItem( retval, ldlBlock),
 	m_myItem(NULL)
 {
@@ -586,7 +586,7 @@ TwoChoiceButton::TwoChoiceButton(
 		const MBCHAR *ldlBlock,
 		const MBCHAR *choiceOff, const MBCHAR *choiceOn, uint32 onoff,
 		ControlActionCallback *ActionFunc,
-		void *cookie) :
+		Cookie cookie) :
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
 	ctp2_Button(retval,id,ldlBlock,ActionFunc,cookie),

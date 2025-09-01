@@ -52,7 +52,7 @@ UInt8					gRecvBuf[sizeof(DDPAddress) + ddpMaxRawData + 1];
 #define kLookupBufSize	(10*1024)	//	size of lookup buffer
 
 Boolean					gLookupInProgress = false;
-short					gLookupCount = 0;				//	this can change while we're looking
+sint16					gLookupCount = 0;				//	this can change while we're looking
 DDPAddress				gLookupResults[kMaxAddresses];
 
 TLookupRequest			gLookupRequest;
@@ -70,12 +70,12 @@ Ptr						gBuffPtr = nil;
 
 #define	kMaxZoneBuffSize	(32*1024)
 
-short					gZoneListState = kNoZoneList;	//	controls starting and processing of zone list
+sint16					gZoneListState = kNoZoneList;	//	controls starting and processing of zone list
 
-short					gNumZones = 0;				//	number of zones in our list
-short					gCurrentZone = 0;			//	current zone we are doing a name lookup in
+sint16					gNumZones = 0;				//	number of zones in our list
+sint16					gCurrentZone = 0;			//	current zone we are doing a name lookup in
 
-unsigned long			gZoneBufferSize = 0;		//	amount of space used in zone buffer
+uint32			gZoneBufferSize = 0;		//	amount of space used in zone buffer
 Ptr						gZoneBuffer = nil;			//	used when we do a zone list
 Str32*					gZoneNames = nil;			//	used to store results of zone list
 
@@ -90,14 +90,14 @@ Boolean					gBindDDP = false;
 Boolean					gNotifierDDP = false;
 Boolean					gEndPointValidDDP = false;
 
-short					gPrefsResFile = -1;
+sint16					gPrefsResFile = -1;
 
 //	other misc. globals
 
 otq_t*					gInQueue = nil;
 
-long					gExtraOTDataDDP = 0;
-long					gExtraOTDataNBP = 0;
+sint32					gExtraOTDataDDP = 0;
+sint32					gExtraOTDataNBP = 0;
 
 DDPAddress				gDDPAddress;
 OTNameID				gMyNameID = 0;
@@ -192,7 +192,7 @@ OSStatus DoAppleTalkBind(EndpointRef ep, Boolean resume) {
 
 		bindReq.addr.maxlen = sizeof(DDPAddress);
 		bindReq.addr.len = sizeof(DDPAddress);
-		bindReq.addr.buf = (unsigned char*) &reqAddr;
+		bindReq.addr.buf = (uint8*) &reqAddr;
 		bindReq.qlen = 0;
 	} else {
 		bindReq.addr.maxlen = 0;
@@ -203,7 +203,7 @@ OSStatus DoAppleTalkBind(EndpointRef ep, Boolean resume) {
 
 	bindResp.addr.maxlen = sizeof(DDPAddress);
 	bindResp.addr.len = sizeof(DDPAddress);
-	bindResp.addr.buf = (unsigned char*) &respAddr;
+	bindResp.addr.buf = (uint8*) &respAddr;
 	bindResp.qlen = 0;
 
 	//	bind the endpoint
@@ -476,7 +476,7 @@ OSStatus OTRegisterMyName(void) {
 	OSErr				err;
 	OSStatus			status;
 	UInt8				nameBuf[100];
-	unsigned long		theTime;
+	uint32		theTime;
 
 	//	if we have already registered our name, don't do it again
 
@@ -519,7 +519,7 @@ OSStatus OTRegisterMyName(void) {
 	// bind this name to our address and socket number
 
 	regreq.addr.len = regreq.addr.maxlen = sizeof(DDPAddress);
-	regreq.addr.buf = (unsigned char*) &gDDPAddress;
+	regreq.addr.buf = (uint8*) &gDDPAddress;
 
 	// set up regreply
 
@@ -621,7 +621,7 @@ OSStatus StartupAppleTalk(void) {
 #pragma segment Main
 pascal void HandleEndpointEventsDDP(void* contextPtr, OTEventCode code, OTResult result, void* it) {
 	OSStatus 					error;
-	static unsigned long		overflowErrors = 0;
+	static uint32		overflowErrors = 0;
 	Boolean						doneReading = false;
 	OTResult					epState;
 
@@ -752,8 +752,8 @@ pascal void HandleEndpointEventsNBP(void* contextPtr, OTEventCode code, OTResult
 				//	there is a response in the buffer, get the ddp address and ignore the
 				//	name
 
-				if (gLookupCount < (unsigned short) kMaxAddresses) {
-					theAddress = (DDPAddress*) (theResponse->names.buf + 2 * sizeof(short));	//	2 words, ddp address, nbp address
+				if (gLookupCount < (uint16) kMaxAddresses) {
+					theAddress = (DDPAddress*) (theResponse->names.buf + 2 * sizeof(sint16));	//	2 words, ddp address, nbp address
 
 					//	if this is our address, we want to ignore it
 
@@ -785,10 +785,10 @@ OSStatus HandleErrorUDERR(void) {
 	char		optBuff[100];
 
 	uderr.addr.maxlen = sizeof(DDPAddress);
-	uderr.addr.buf = (unsigned char *)addrBuf;
+	uderr.addr.buf = (uint8 *)addrBuf;
 
 	uderr.opt.maxlen = 100;
-	uderr.opt.buf = (unsigned char *)optBuff;
+	uderr.opt.buf = (uint8 *)optBuff;
 
 	return OTRcvUDErr(gDDPEndpoint, &uderr);
 }
@@ -900,7 +900,7 @@ OSStatus DoOTNameLookup(void) {
 #pragma segment Main
 void CheckZoneList(void) {
 	static TNetbuf		zoneListReply;
-	short				numZoneNames;
+	sint16				numZoneNames;
 	OSStatus			err;
 
 	//	this method handles the various zone list states
@@ -969,9 +969,9 @@ void CheckZoneList(void) {
 }
 
 #pragma segment Main
-short CountZoneNamesInBuffer(Ptr packedBuffer, unsigned long bufferSize) {
-	short			nStrings = 0;
-	unsigned long	index = 0;
+sint16 CountZoneNamesInBuffer(Ptr packedBuffer, uint32 bufferSize) {
+	sint16			nStrings = 0;
+	uint32	index = 0;
 
 	//	the buffer has packed pascal strings in it. This routine
 	//	returns the number of pascal strings in the buffer
@@ -991,9 +991,9 @@ short CountZoneNamesInBuffer(Ptr packedBuffer, unsigned long bufferSize) {
 }
 
 #pragma segment Main
-short UnpackZoneNames(Ptr packedBuffer, unsigned long bufferSize) {
-	unsigned long	index = 0;
-	short			nStrings = 0;
+sint16 UnpackZoneNames(Ptr packedBuffer, uint32 bufferSize) {
+	uint32	index = 0;
+	sint16			nStrings = 0;
 
 	//	the buffer has packed pascal strings in it. This routine
 	//	returns the number of pascal strings in the buffer

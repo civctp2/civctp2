@@ -38,18 +38,18 @@ void loadsavescreen_LoadSCENGame(void);
 
 void loadsavescreen_delete( void );
 
-void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavescreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void loadsavescreen_executePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavescreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavescreen_deletePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
-void loadsavescreen_DifficultyScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+void loadsavescreen_DifficultyScreenActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
-void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie);
+void loadsavescreen_TribeScreenActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
+void loadsavescreen_PlayersScreenActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie);
 
-void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void loadsavescreen_ListOneHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavescreen_ListTwoHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void loadsavescreen_CivListHandler(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 enum LSS_TYPE
 {

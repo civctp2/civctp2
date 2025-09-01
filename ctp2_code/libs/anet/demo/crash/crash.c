@@ -20,7 +20,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <stdio.h>
 #include "anet.h"
 
-static long __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
+static sint32 __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
 {
 	dpReportCrash(ep);
 
@@ -30,7 +30,7 @@ static long __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
 	return (EXCEPTION_CONTINUE_SEARCH);
 }
 
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
 	dp_t *dp;
 	dp_result_t err;

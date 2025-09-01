@@ -46,15 +46,15 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define strncpy					sap_strncpy
 
 #ifdef strncpy
-typedef unsigned long			size_t;
+//typedef unsigned long			size_t;
 #endif /* strncpy */
 
 /*
  * Prototypes
  */
-extern short			call_sap(SAPpb *sap_pb);
+extern sint16			call_sap(SAPpb *sap_pb);
 #if !defined(powerc) && !defined (__powerc)
-extern unsigned long	IpxGetRegisterA5(void);
+extern uint32	IpxGetRegisterA5(void);
 #endif
 #ifdef strncpy
 char 					*sap_strncpy(char *dst, char *src, size_t n);
@@ -62,15 +62,15 @@ char 					*sap_strncpy(char *dst, char *src, size_t n);
 #include <String.h>
 #endif /* strncpy */
 
-pascal short
-AdvertiseService(unsigned short serviceType, char *serviceName,
-                       unsigned short serviceSocket, unsigned long *adv_handle)
+pascal sint16
+AdvertiseService(uint16 serviceType, char *serviceName,
+                       uint16 serviceSocket, uint32 *adv_handle)
 {
    	T_AdvertisingStruct *ASp;
 	Handle				h;
 	SAPpb				pb;
-	short				status;
-	unsigned int		i;
+	sint16				status;
+	uint32		i;
 	char				*tmp;
 
 	*adv_handle = 0L;
@@ -106,16 +106,16 @@ AdvertiseService(unsigned short serviceType, char *serviceName,
 		DisposeHandle(h);
 		return (status);
 	}
-	*adv_handle = (unsigned long)h;
+	*adv_handle = (uint32)h;
 	return (SAP_SUCCESSFUL);
 }
 
-pascal short
-ShutdownAdvertising(unsigned long adv_handle)
+pascal sint16
+ShutdownAdvertising(uint32 adv_handle)
 {
 	T_AdvertisingStruct		*ASp;
 	SAPpb					pb;
-	short					status;
+	sint16					status;
 	Handle					h;
 
 	if (adv_handle == 0L) {
@@ -139,14 +139,14 @@ ShutdownAdvertising(unsigned long adv_handle)
 	 * to have been allocated.)
 	 */
 	status = call_sap(&pb);
-	if ((status == 0) || (status == (short)-28)) {
+	if ((status == 0) || (status == (sint16)-28)) {
 		DisposeHandle(h);
 		status = SAP_SUCCESSFUL;
 	}
 	return (status);
 }
 
-pascal short
+pascal sint16
 QueryServices(queryInfoPtr query_info, char async)
 {
 	SAPpb		pb;
@@ -182,7 +182,7 @@ QueryServices(queryInfoPtr query_info, char async)
 	return (call_sap(&pb));
 }
 
-pascal short
+pascal sint16
 AbortQueryServices(queryInfoPtr query_info)
 {
 	SAPpb		pb;
@@ -199,7 +199,7 @@ AbortQueryServices(queryInfoPtr query_info)
 	return (call_sap(&pb));
 }
 
-pascal short
+pascal sint16
 FreeQueryServicesList(SAP_RESPONSE_LIST_ENTRY *listP)
 {
    	SAP_RESPONSE_LIST_ENTRY *nextListP;
@@ -219,7 +219,7 @@ FreeQueryServicesList(SAP_RESPONSE_LIST_ENTRY *listP)
    	return (SAP_SUCCESSFUL);
 }
 
-pascal short
+pascal sint16
 SapRelinquishControl()
 {
 	SAPpb		pb;
@@ -228,17 +228,17 @@ SapRelinquishControl()
 	return (call_sap(&pb));
 }
 
-short
+sint16
 call_sap(SAPpb *pb)
 {
-	short	status;
+	sint16	status;
 	SAPpb	sap_pb;
 	char	sapDrvrName[10];
 
 	sapDrvrName[0] = 0x08;
 	sapDrvrName[1] = '.';
-	*(long *)&sapDrvrName[2] = 'NVL_';
-	*(long *)&sapDrvrName[6] = 'SAP ';
+	*(sint32 *)&sapDrvrName[2] = 'NVL_';
+	*(sint32 *)&sapDrvrName[6] = 'SAP ';
 	sap_pb.ioNamePtr = sapDrvrName;
 	sap_pb.csCode = 0; /* We're actually setting the read/write permission here */
 	status = PBOpen((ParmBlkPtr)&sap_pb, FALSE);

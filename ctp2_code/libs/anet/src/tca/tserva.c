@@ -42,7 +42,7 @@ dp_result_t tserv_account_loginA(tserv_t *tserv, const char *username, const cha
 	return tserv_account_loginW(tserv, wuname, wpw);
 }
 
-dp_result_t tserv_account_createA(tserv_t *tserv, const char *username, const char *password, int flags, const char *email)
+dp_result_t tserv_account_createA(tserv_t *tserv, const char *username, const char *password, sint32 flags, const char *email)
 {
 	wchar_t wuname[MYLEN];
 	wchar_t wpw[MYLEN];
@@ -74,7 +74,7 @@ dp_result_t tserv_account_activateA(tserv_t *tserv, const char *secretcode)
   passwords are in the current locale's 8-bit or multibyte-string
   character set instead of Unicode.
 --------------------------------------------------------------------------*/
-dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, const char *newpassword, int flags, const char *email)
+dp_result_t tserv_change_passwordA(tserv_t *tserv, const char *oldpassword, const char *newpassword, sint32 flags, const char *email)
 {
 	wchar_t woldpw[MYLEN];
 	wchar_t wnewpw[MYLEN];

@@ -48,7 +48,7 @@ static void aehlog_clear(aehlog_t *aehlog)
  Return: aeh_RES_BAD if couldn't set file path
          aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_Create(const char *logpath, aehlog_t *aehlog)
+sint32 aehlog_Create(const char *logpath, aehlog_t *aehlog)
 {
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!logpath || !aehlog) return aeh_RES_BAD;
@@ -96,10 +96,10 @@ void aehlog_delete(aehlog_t *aehlog)
          0 if file cannot be opened
          size of file in aehlog otherwise
 --------------------------------------------------------------------------*/
-long aehlog_getfsize(aehlog_t *aehlog)
+sint32 aehlog_getfsize(aehlog_t *aehlog)
 {
 	FILE *fp;
-	long size;
+	sint32 size;
 
 	if (!(fp = fopen(aehlog->path, "r")))
 		return 0;
@@ -113,7 +113,7 @@ long aehlog_getfsize(aehlog_t *aehlog)
 /*--------------------------------------------------------------------------
  Returns the current offset in the aehlog or -1 on error.
 --------------------------------------------------------------------------*/
-long aehlog_tell(aehlog_t *aehlog)
+sint32 aehlog_tell(aehlog_t *aehlog)
 {
 	if (!aehlog || !aehlog->fp)
 		return -1;
@@ -134,12 +134,12 @@ long aehlog_tell(aehlog_t *aehlog)
           aeh_RES_BUG on bad offset (in file, but not a valid record),
 		  aeh_RES_BAD if bad arguments,
 --------------------------------------------------------------------------*/
-int aehlog_seek(aehlog_t *aehlog, long offset)
+sint32 aehlog_seek(aehlog_t *aehlog, sint32 offset)
 {
-	long old_offset = 0;
-	unsigned char buf[3 * sizeof(unsigned int)];
-	unsigned char *ptr = buf;
-	unsigned int aehlog_tag, ninst, buflen;
+	sint32 old_offset = 0;
+	uint8 buf[3 * sizeof(uint32)];
+	uint8 *ptr = buf;
+	uint32 aehlog_tag, ninst, buflen;
 
 	if (!aehlog) return aeh_RES_BAD;
 	if (aehlog->status == aehlog_WRITE)
@@ -158,7 +158,7 @@ int aehlog_seek(aehlog_t *aehlog, long offset)
 		return aeh_RES_BAD;		/* offset not in file */
 	}
 
-	if (fread(buf, sizeof(unsigned int), 3, aehlog->fp) != 3) {
+	if (fread(buf, sizeof(uint32), 3, aehlog->fp) != 3) {
 		if (feof(aehlog->fp))
 			return aeh_RES_EMPTY;
 		aehDPRINT(("aehlog_readfromfile: read error\n"));
@@ -168,9 +168,9 @@ int aehlog_seek(aehlog_t *aehlog, long offset)
 			fseek(aehlog->fp, old_offset, SEEK_SET);
 		return aeh_RES_BUG;
 	}
-	readSwap((const void**)&ptr, &aehlog_tag, sizeof(int));
-	readSwap((const void**)&ptr, &ninst, sizeof(int));
-	readSwap((const void**)&ptr, &buflen, sizeof(int));
+	readSwap((const void**)&ptr, &aehlog_tag, sizeof(sint32));
+	readSwap((const void**)&ptr, &ninst, sizeof(sint32));
+	readSwap((const void**)&ptr, &buflen, sizeof(sint32));
 	if ((aehlog_tag != aehlog_MAGIC) || (buflen > aeh_BUF_MAXLEN)) {
 		aehDPRINT(("aehlog_seek: bad offset:%d : tag %x, len %d\n",
 			offset, aehlog_tag, buflen));
@@ -185,12 +185,12 @@ int aehlog_seek(aehlog_t *aehlog, long offset)
 }
 
 /* read next aehbuf from aehlog->fp */
-static int aehlog_readfromfile(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int *ninst)
+static sint32 aehlog_readfromfile(aehlog_t *aehlog, aeh_buf_t *aehbuf, uint32 *ninst)
 {
-	unsigned char buf[3 * sizeof(unsigned int)];
-	unsigned char *ptr = buf;
-	int aehlog_tag;
-	if (fread(buf, sizeof(unsigned int), 3, aehlog->fp) != 3) {
+	uint8 buf[3 * sizeof(uint32)];
+	uint8 *ptr = buf;
+	sint32 aehlog_tag;
+	if (fread(buf, sizeof(uint32), 3, aehlog->fp) != 3) {
 		if (feof(aehlog->fp)) return aeh_RES_EMPTY;
 		aehDPRINT(("aehlog_readfromfile: read error\n"));
 		return aeh_RES_BUG;
@@ -200,7 +200,7 @@ static int aehlog_readfromfile(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int
 	readSwap((const void**)&ptr, &(aehbuf->buflen), sizeof(aehbuf->buflen));
 	if ((aehlog_tag != aehlog_MAGIC) ||
 		(aehbuf->buflen > aeh_BUF_MAXLEN) ||
-		(fread(aehbuf->buf, sizeof(unsigned char), aehbuf->buflen, aehlog->fp) != aehbuf->buflen)) {
+		(fread(aehbuf->buf, sizeof(uint8), aehbuf->buflen, aehlog->fp) != aehbuf->buflen)) {
 		if (feof(aehlog->fp)) return aeh_RES_EMPTY;
 		aehDPRINT(("aehlog_readfromfile: err: tag %x, len %d\n", aehlog_tag, aehbuf->buflen));
 		return aeh_RES_BUG;
@@ -209,16 +209,16 @@ static int aehlog_readfromfile(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int
 }
 
 /* write aehbuf to aehlog->fp */
-static int aehlog_writetofile(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const unsigned int ninst)
+static sint32 aehlog_writetofile(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const uint32 ninst)
 {
-	unsigned char buf[3 * sizeof(unsigned int)];
-	unsigned char *ptr = buf;
-	int aehlog_tag = aehlog_MAGIC;
+	uint8 buf[3 * sizeof(uint32)];
+	uint8 *ptr = buf;
+	sint32 aehlog_tag = aehlog_MAGIC;
 	writeSwap((void**)&ptr, &aehlog_tag, sizeof(aehlog_tag));
 	writeSwap((void**)&ptr, &ninst, sizeof(ninst));
 	writeSwap((void**)&ptr, &(aehbuf->buflen), sizeof(aehbuf->buflen));
-	if ((fwrite(buf, sizeof(unsigned int), 3, aehlog->fp) != 3) ||
-		(fwrite(aehbuf->buf, sizeof(unsigned char), aehbuf->buflen, aehlog->fp) != aehbuf->buflen)) {
+	if ((fwrite(buf, sizeof(uint32), 3, aehlog->fp) != 3) ||
+		(fwrite(aehbuf->buf, sizeof(uint8), aehbuf->buflen, aehlog->fp) != aehbuf->buflen)) {
 		aehDPRINT(("aehlog_writetofile: write err: tag %x, len %d\n", aehlog_tag, aehbuf->buflen));
 		return aeh_RES_BUG;
 	}
@@ -230,12 +230,12 @@ static int aehlog_writetofile(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const u
  i.e. of the sort created by aehlog_writetobuf().
  Returns number of bytes read or -1 on failure.
 --------------------------------------------------------------------------*/
-int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, int buflen)
+size_t aehlog_readfrombuf(aeh_buf_t *aehbuf, uint32 *ninst, const char *buf, size_t buflen)
 {
 	const char *ptr = buf;
-	int aehlog_tag;
+	sint32 aehlog_tag;
 
-	if (!aehbuf || !buf || (buflen < 3 * sizeof(int)))
+	if (!aehbuf || !buf || (buflen < 3 * sizeof(sint32)))
 		return -1;
 	readSwap((const void**)&ptr, &aehlog_tag, sizeof(aehlog_tag));
 	readSwap((const void**)&ptr, ninst, sizeof(*ninst));
@@ -246,8 +246,8 @@ int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, 
 	} else if (aehbuf->buflen > aeh_BUF_MAXLEN) {
 		aehDPRINT(("aehlog_readfrombuf: err: len %d > max %d\n", aehbuf->buflen, aeh_BUF_MAXLEN));
 		return -1;
-	} else if ((int)aehbuf->buflen > (buflen - (ptr - buf))) {
-		aehDPRINT(("aehlog_readfrombuf: err: len %d > buflen %d\n", aehbuf->buflen + (ptr - buf), buflen));
+	} else if ((sint32)aehbuf->buflen > (buflen - (ptr - buf))) {
+		aehDPRINT(("aehlog_readfrombuf: err: len %d > buflen %zu\n", aehbuf->buflen + (ptr - buf), buflen));
 		return -1;
 	}
 	memcpy(aehbuf->buf, ptr, aehbuf->buflen);
@@ -260,12 +260,12 @@ int aehlog_readfrombuf(aeh_buf_t *aehbuf, unsigned int *ninst, const char *buf, 
  buf must be at least aehbuf->buflen + 12 bytes in length.
  Returns number of bytes written or -1 on failure.
 --------------------------------------------------------------------------*/
-int aehlog_writetobuf(const aeh_buf_t *aehbuf, const unsigned int ninst, char *buf, int buflen)
+size_t aehlog_writetobuf(const aeh_buf_t *aehbuf, const uint32 ninst, char *buf, size_t buflen)
 {
 	char *ptr = buf;
-	int aehlog_tag = aehlog_MAGIC;
+	sint32 aehlog_tag = aehlog_MAGIC;
 
-	if (!aehbuf || !buf || (buflen < (int)aehbuf->buflen + 3*sizeof(int)))
+	if (!aehbuf || !buf || (buflen < (sint32)(aehbuf->buflen + 3*sizeof(sint32))))
 		return -1;
 	if (aehbuf->buflen > aeh_BUF_MAXLEN) {
 		aehDPRINT(("aehlog_writetobuf: err: aehbuf->buflen %d > max %d\n", aehbuf->buflen, aeh_BUF_MAXLEN));
@@ -281,16 +281,16 @@ int aehlog_writetobuf(const aeh_buf_t *aehbuf, const unsigned int ninst, char *b
 /* see if exception is already in the logfile; if so, set file position to
  * position of that exception and return the exception count,
  * otherwise set file position to end of file and return zero. */
-static int checkDupException(const unsigned char *buf, unsigned int size, unsigned long fsize, aehlog_t *aehlog)
+static sint32 checkDupException(const uint8 *buf, uint32 size, uint32 fsize, aehlog_t *aehlog)
 {
-	int err;
-	unsigned int ninst;
+	sint32 err;
+	uint32 ninst;
 	aeh_buf_t tmpaehbuf;
 	fpos_t fptr;
-	long fpos;
+	sint32 fpos;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	fseek(aehlog->fp, 0L, SEEK_SET);
-	while ((fpos = ftell(aehlog->fp)) >= 0 && fpos < fsize) {
+	while ((fpos = ftell(aehlog->fp)) >= 0 && fpos < (sint32)fsize) {
 		fgetpos(aehlog->fp, &fptr);
 		if ((err = aehlog_readfromfile(aehlog, &tmpaehbuf, &ninst)) != aeh_RES_OK) {
 			if (err == aeh_RES_EMPTY) break;
@@ -309,10 +309,10 @@ static int checkDupException(const unsigned char *buf, unsigned int size, unsign
 }
 
 /* get the exception file and set the file position for writing */
-static int initExceptionFileStream(aehlog_t *aehlog, const aeh_buf_t *aehbuf, unsigned int *ninst, unsigned long fmaxsize)
+static sint32 initExceptionFileStream(aehlog_t *aehlog, const aeh_buf_t *aehbuf, uint32 *ninst, uint32 fmaxsize)
 {
-	int retVal;
-	unsigned long fsize;
+	sint32 retVal;
+	uint32 fsize;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	*ninst = 0;
 	if (!aehlog->fp) {
@@ -358,10 +358,10 @@ static int initExceptionFileStream(aehlog_t *aehlog, const aeh_buf_t *aehbuf, un
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const unsigned int ninst, const unsigned long fmaxsize)
+sint32 aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const uint32 ninst, const uint32 fmaxsize)
 {
-	int err;
-	unsigned int file_ninst;
+	sint32 err;
+	uint32 file_ninst;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!aehlog || !aehbuf || aehbuf->buflen > aeh_BUF_MAXLEN) return aeh_RES_BAD;
 	if (aehlog->status == aehlog_READ) {
@@ -398,7 +398,7 @@ int aehlog_writeExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_appendMultExceptionRecords(aehlog_t *aehlog, const unsigned char *buf, const unsigned int buflen, const unsigned long fmaxsize)
+sint32 aehlog_appendMultExceptionRecords(aehlog_t *aehlog, const uint8 *buf, const size_t buflen, const size_t fmaxsize)
 {
 	if (!aehlog || !buf || buflen > fmaxsize) return aeh_RES_BAD;
 	if (aehlog->status == aehlog_READ) {
@@ -408,7 +408,7 @@ int aehlog_appendMultExceptionRecords(aehlog_t *aehlog, const unsigned char *buf
 	if (!aehlog->fp)
 		if (!(aehlog->fp = fopen(aehlog->path, "ab"))) return aeh_RES_EMPTY;
 	aehlog->status = aehlog_WRITE;
-	if (fwrite(buf, sizeof(unsigned char), buflen, aehlog->fp) != buflen) {
+	if (fwrite(buf, sizeof(uint8), buflen, aehlog->fp) != buflen) {
 		return aeh_RES_BUG;
 	}
 	return aeh_RES_OK;
@@ -427,9 +427,9 @@ int aehlog_appendMultExceptionRecords(aehlog_t *aehlog, const unsigned char *buf
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const unsigned int ninst)
+sint32 aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, const uint32 ninst)
 {
-	int err;
+	sint32 err;
 	if (!aehlog || !aehbuf || aehbuf->buflen > aeh_BUF_MAXLEN) return aeh_RES_BAD;
 	if (aehlog->fp)
 		aehlog_close(aehlog);
@@ -453,9 +453,9 @@ int aehlog_appendExceptionRecord(aehlog_t *aehlog, const aeh_buf_t *aehbuf, cons
 		  aeh_RES_BAD if bad arguments
           aeh_RES_OK on success
 --------------------------------------------------------------------------*/
-int aehlog_readExceptionRecord(aehlog_t *aehlog, aeh_buf_t *aehbuf, unsigned int *ninst)
+sint32 aehlog_readExceptionRecord(aehlog_t *aehlog, aeh_buf_t *aehbuf, uint32 *ninst)
 {
-	int err;
+	sint32 err;
 	if (!aehlog || !aehbuf || !ninst) return aeh_RES_BAD;
 	if (aehlog->status == aehlog_WRITE)
 		aehlog_close(aehlog);

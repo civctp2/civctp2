@@ -78,7 +78,7 @@ void q_destroy(q_t *pq)
 void *q_put(q_t *pq, void *src, size_t len)
 {
 	void *pv;
-	int newHead;
+	sint32 newHead;
 
 	newHead = (pq->head + 1) % q_MAXELS;
 	if (newHead == pq->tail) return NULL;
@@ -112,9 +112,9 @@ void *q_get(q_t *pq, size_t *pLen)
 /*-----------------------------------------------------------------------
  Returns number of free slots in queue.
 -----------------------------------------------------------------------*/
-int q_nfree(q_t *pq)
+sint32 q_nfree(q_t *pq)
 {
-	int nfree = pq->tail - pq->head - 1;
+	sint32 nfree = pq->tail - pq->head - 1;
 	if (nfree < 0)
 		nfree += q_MAXELS;
 	return nfree;
@@ -123,7 +123,7 @@ int q_nfree(q_t *pq)
 /*-----------------------------------------------------------------------
  Write a q_element_t to disk.
 -----------------------------------------------------------------------*/
-static int freeze_element(q_element_t *qe, FILE *fp)
+static sint32 freeze_element(q_element_t *qe, FILE *fp)
 {
 	if (fwrite(&(qe->len), sizeof(size_t), 1, fp) != 1)
 		return 1;
@@ -135,7 +135,7 @@ static int freeze_element(q_element_t *qe, FILE *fp)
 /*-----------------------------------------------------------------------
  Read a q_element_t from disk.
 -----------------------------------------------------------------------*/
-static int thaw_element(q_element_t *qe, FILE *fp)
+static sint32 thaw_element(q_element_t *qe, FILE *fp)
 {
 	if (fread(&(qe->len), sizeof(size_t), 1, fp) != 1)
 		return 1;
@@ -152,15 +152,15 @@ static int thaw_element(q_element_t *qe, FILE *fp)
 -----------------------------------------------------------------------*/
 void q_freeze(q_t *pq, FILE *fp)
 {
-	int i, err;
-	int sig = q_SIGNATURE;
+	sint32 i, err;
+	sint32 sig = q_SIGNATURE;
 
 	if (fwrite(&sig, sizeof(sig), 1, fp) != 1) {
 		DPRINT(("q_freeze: error writing sig\n"));
 		return;
 	}
-	if ((fwrite(&(pq->head), sizeof(int), 1, fp) != 1) ||
-		(fwrite(&(pq->tail), sizeof(int), 1, fp) != 1)) {
+	if ((fwrite(&(pq->head), sizeof(sint32), 1, fp) != 1) ||
+		(fwrite(&(pq->tail), sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("q_freeze: error writing head/tail\n"));
 		return;
 	}
@@ -201,10 +201,10 @@ void q_freeze(q_t *pq, FILE *fp)
 /*-----------------------------------------------------------------------
  Read queue from disk.
 -----------------------------------------------------------------------*/
-int q_thaw(q_t *pq, FILE *fp)
+sint32 q_thaw(q_t *pq, FILE *fp)
 {
-	int i, err;
-	int sig;
+	sint32 i, err;
+	sint32 sig;
 
 	if (fread(&sig, sizeof(sig), 1, fp) != 1) {
 		DPRINT(("q_thaw: error reading signature\n"));
@@ -214,8 +214,8 @@ int q_thaw(q_t *pq, FILE *fp)
 		DPRINT(("q_thaw: signature doesn't match\n"));
 		return 1;
 	}
-	if ((fread(&(pq->head), sizeof(int), 1, fp) != 1) ||
-		(fread(&(pq->tail), sizeof(int), 1, fp) != 1)) {
+	if ((fread(&(pq->head), sizeof(sint32), 1, fp) != 1) ||
+		(fread(&(pq->tail), sizeof(sint32), 1, fp) != 1)) {
 		DPRINT(("q_thaw: error reading tail/head\n"));
 		return 1;
 	}
@@ -266,7 +266,7 @@ int q_thaw(q_t *pq, FILE *fp)
 
 main()
 {
-	int i, j;
+	sint32 i, j;
 	q_t	*pq;
 	void *pv;
 	size_t len;
@@ -302,11 +302,11 @@ main()
 				printf("Test Failed, could not get data out\n");
 				exit(1);
 			}
-			if (len != sizeof(int)) {
+			if (len != sizeof(sint32)) {
 				printf("Test Failed, bad length\n");
 				exit(1);
 			}
-			if (*(int *)pv != i) {
+			if (*(sint32 *)pv != i) {
 				printf("Test Failed, bad data\n");
 				exit(1);
 			}

@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -98,13 +98,13 @@ void watchlist_Refresh()
 	watchlist_Display();
 }
 
-void watchlist_AddExpression(char *exp)
+void watchlist_AddExpression(const char *exp)
 {
 	watchlist_Display();
 	g_watchList->AddExpression(exp);
 }
 
-WatchList::WatchList(WatchListCallback callback, MBCHAR *ldlBlock)
+WatchList::WatchList(WatchListCallback callback, const MBCHAR *ldlBlock)
 :   m_window                (NULL),
     m_list                  (NULL),
     m_newButton             (NULL),
@@ -148,14 +148,14 @@ WatchList::~WatchList(void)
 	delete m_window;
 }
 
-void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
-	WatchList *list = (WatchList *)cookie;
+	WatchList *list = (WatchList *)cookie.m_voidPtr;
 
 	WatchListItem *item = (WatchListItem *)list->GetList()->GetSelectedItem();
 
@@ -173,7 +173,7 @@ void WatchListActionCallback(aui_Control *control, uint32 action, uint32 data, v
 	return;
 }
 
-void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) {
 		return;
@@ -195,13 +195,10 @@ void WatchListButtonCallback(aui_Control *control, uint32 action, uint32 data, v
 	}
 }
 
-sint32 WatchList::Initialize(MBCHAR *windowBlock)
+sint32 WatchList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-
-
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "WatchList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, WatchListActionCallback, this);
@@ -263,7 +260,7 @@ sint32 WatchList::UpdateData(void)
 	return 0;
 }
 
-void WatchList::AddExpression(char *exp)
+void WatchList::AddExpression(const char *exp)
 {
 	AUI_ERRCODE retval;
 	WatchListItem *item = new WatchListItem(&retval, 0, exp, "WatchListItem");
@@ -279,7 +276,7 @@ void WatchList::Clear()
 
 
 WatchListItem::WatchListItem(AUI_ERRCODE *retval, sint32 index,
-							 MBCHAR *line, MBCHAR *ldlBlock) :
+							 const MBCHAR *line, const MBCHAR *ldlBlock) :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	c3_ListItem(retval, ldlBlock)
@@ -312,24 +309,24 @@ WatchListItem::~WatchListItem()
 	}
 }
 
-void WatchExpressionItemCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchExpressionItemCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) {
-		WatchListItem *item = (WatchListItem *)cookie;
+		WatchListItem *item = (WatchListItem *)cookie.m_voidPtr;
 		item->Update();
 	}
 }
 
-void WatchBreakItemCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void WatchBreakItemCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == (uint32)AUI_TEXTFIELD_ACTION_EXECUTE) {
-		WatchListItem *item = (WatchListItem *)cookie;
+		WatchListItem *item = (WatchListItem *)cookie.m_voidPtr;
 		item->ToggleBreak();
 		item->Update();
 	}
 }
 
-AUI_ERRCODE WatchListItem::InitCommonLdl(MBCHAR *ldlBlock)
+AUI_ERRCODE WatchListItem::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

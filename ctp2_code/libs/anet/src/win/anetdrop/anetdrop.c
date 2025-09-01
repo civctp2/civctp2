@@ -37,23 +37,23 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #define MSG_WIND_TITLE "Game Launcher"
 #define MSG_ERROR_TITLE "Error"
 
-int autoclick;  /* auto click on the message or dialog box */
+sint32 autoclick;  /* auto click on the message or dialog box */
 
 /* Error injection scheme.  Used during testing only */
-int err_line_number; /* set with -e=err_line_number */
+sint32 err_line_number; /* set with -e=err_line_number */
 #define FORCE_ERR (err_line_number == __LINE__)
 
 /*--------------------------------------------------------------------------
  Generic startup code.
 --------------------------------------------------------------------------*/
 
-int my_MessageBox(
+sint32 my_MessageBox(
         LPCSTR lpText,
         LPCSTR lpCaption,
         UINT uType
         )
 {
-        static int (APIENTRY *pfnMessageBoxA)(HWND, LPCSTR, LPCSTR, UINT) = NULL;
+        static sint32 (APIENTRY *pfnMessageBoxA)(HWND, LPCSTR, LPCSTR, UINT) = NULL;
         static HWND (APIENTRY *pfnGetActiveWindow)(void) = NULL;
         static HWND (APIENTRY *pfnGetLastActivePopup)(HWND) = NULL;
 
@@ -64,7 +64,7 @@ int my_MessageBox(
             HANDLE hlib = LoadLibrary("user32.dll");
 
             if (NULL == hlib || NULL == (pfnMessageBoxA =
-                        (int (APIENTRY *)(HWND, LPCSTR, LPCSTR, UINT))
+                        (sint32 (APIENTRY *)(HWND, LPCSTR, LPCSTR, UINT))
                         GetProcAddress(hlib, "MessageBoxA")))
                 return 0;
 
@@ -90,7 +90,7 @@ FILE *flog = NULL;
 static void write_log(char *fmt, ...) {
 	if (!flog) {
 		char logfile[MAX_PATH];
-		sprintf(logfile, "%x", time(NULL));
+		sprintf(logfile, "%lx", time(NULL));
 		strcat(logfile, ".log");
 		flog = fopen(logfile, "w");
 	}
@@ -128,11 +128,11 @@ static void my_print(char *fmt, ...) {
 /*-------------------------------------------------------------------------
  Parse commandline into words; double quotes protect words with spaces.
 --------------------------------------------------------------------------*/
-static int my_setargv(char *lpszCmdLine, char **argv, int maxargv)
+static sint32 my_setargv(char *lpszCmdLine, char **argv, sint32 maxargv)
 {
 	char *p;
 	char *argcopy;
-	int argi;
+	sint32 argi;
 
 	/* Copy arguments so we can write over them with nulls. */
 	argcopy = malloc(strlen(lpszCmdLine)+1);
@@ -190,7 +190,7 @@ static int my_setargv(char *lpszCmdLine, char **argv, int maxargv)
 	return argi;
 }
 
-int main(int argc, char **argv);
+sint32 main(sint32 argc, char **argv);
 
 static LONG __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
 {
@@ -198,7 +198,7 @@ static LONG __cdecl Debug_ExceptionFilter(LPEXCEPTION_POINTERS ep)
 	return (EXCEPTION_CONTINUE_SEARCH);
 }
 
-int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine, int nCmdShow)
+sint32 WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine, sint32 nCmdShow)
 {
 	char *argv[MAXARGS];
 
@@ -209,6 +209,8 @@ int WINAPI WinMain(HINSTANCE hinstExe, HINSTANCE hinstExePrev, LPSTR lpszCmdLine
 	} __except(Debug_ExceptionFilter(GetExceptionInformation())) {
 		;
 	}
+
+	return 0;
 }
 
 /*--------------------------------------------------------------------------
@@ -252,9 +254,9 @@ static void usage()
 	exit(1);
 }
 
-int dp_PASCAL myCommThaw_cb(int status, void *context)
+sint32 dp_PASCAL myCommThaw_cb(sint32 status, void *context)
 {
-	static int status_old = -1;
+	static sint32 status_old = -1;
 
 	DPRINT(("myCommThaw_cb: status %d\n", status));
 
@@ -268,18 +270,18 @@ int dp_PASCAL myCommThaw_cb(int status, void *context)
 	return !cancelbox_poll();
 }
 
-int main(int argc, char **argv)
+sint32 main(sint32 argc, char **argv)
 {
-	int argi;
+	sint32 argi;
 	dp_t *dp = NULL;
 	dp_result_t err;
 	dp_appParam_t app;
 	dp_launchParams_t params;
-	int let_game_init_comm = FALSE;
-	int use_new_filename = FALSE;
+	sint32 let_game_init_comm = FALSE;
+	sint32 use_new_filename = FALSE;
 	char fname[MAX_PATH];
 	char parambuf[16000];
-	int parambuflen = 0;
+	sint32 parambuflen = 0;
 
 	char	GameName[MAX_PATH]="";
 	char	GamePath[MAX_PATH]="";
@@ -301,9 +303,9 @@ int main(int argc, char **argv)
 	autoclick = 0;
 
 	for (argi=1; argi<argc; argi++) {
-		int c = argv[argi][0];
-		int c1 = argv[argi][1];
-		int c2 = argv[argi][2];
+		sint32 c = argv[argi][0];
+		sint32 c1 = argv[argi][1];
+		sint32 c2 = argv[argi][2];
 		char *arg;
 
 		LPRINT(("argv[%d] = %s\n", argi, argv[argi]));
@@ -372,7 +374,7 @@ int main(int argc, char **argv)
 			strcpy(params.Playname, "player");
 	}
 
-    params.commInitReq.sessionId = rand() ^ (rand() << 16) ^ time(0) ^ clock();
+	params.commInitReq.sessionId = rand() ^ (rand() << 16) ^ time(0) ^ clock();
 	params.commInitReq.reqLen = sizeof(commInitReq_t);
 
 	/* Load the app's anet.inf. */

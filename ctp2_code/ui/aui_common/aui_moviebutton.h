@@ -54,7 +54,7 @@ public:
 		uint32 id,
 		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	aui_MovieButton(
 		AUI_ERRCODE *retval,
 		uint32 id,
@@ -64,7 +64,7 @@ public:
 		sint32 height,
 		const MBCHAR *movie = NULL,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~aui_MovieButton();
 
 protected:

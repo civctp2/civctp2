@@ -232,7 +232,6 @@ ProfileDB::ProfileDB()
     m_showOrderUnion                    (FALSE),
     m_recentAtTop                       (FALSE),
     m_cityClick                         (FALSE),
-    m_dontSave                          (FALSE),
     m_endTurnWithEmptyBuildQueues       (FALSE),
     m_runInBackground                   (FALSE),
     m_autoExpireTreatyTurn              (k_EXPIRATION_NEVER),
@@ -267,7 +266,8 @@ ProfileDB::ProfileDB()
     m_sleepingUnitsBoard                (FALSE),
     // Add above this line new profile options
     m_vars                              (new PointerList<ProfileVar>),
-    m_loadedFromTutorial                (FALSE)
+    m_loadedFromTutorial                (FALSE),
+    m_dontSave                          (FALSE)
 {
 	for (size_t player = 0; player < k_MAX_PLAYERS; ++player)
 	{
@@ -518,7 +518,7 @@ BOOL ProfileDB::Init(BOOL forTutorial)
 	}
 	else
 	{
-		profileTxtFile = g_civPaths->FindFile(C3DIR_DIRECT, "userprofile.txt",
+		profileTxtFile = g_civPaths->FindFile(C3DIR_APPBASE, "userprofile.txt",
 		                                      profileName);
 		if (!profileTxtFile || !c3files_PathIsValid(profileTxtFile))
 		{
@@ -665,7 +665,7 @@ void ProfileDB::SetTutorialAdvice( BOOL val )
 
 void ProfileDB::SetDiplmacyLog(BOOL b)
 {
-	if (b == m_is_diplomacy_log_on)
+	if (b == static_cast<BOOL>(m_is_diplomacy_log_on))
 	{
 		// No action: keep current log status
 	}
@@ -855,7 +855,7 @@ void ProfileDB::SetDifficulty(uint32 x)
 	}
 }
 
-void ProfileDB::Var(char *name, PROF_VAR_TYPE type, sint32 *numValue,
+void ProfileDB::Var(const char *name, PROF_VAR_TYPE type, sint32 *numValue,
                     char *stringValue, bool visible)
 {
 	m_vars->AddTail(new ProfileVar(name, type, numValue, stringValue, visible));
@@ -867,7 +867,7 @@ void ProfileDB::Save()
 		return;
 	}
 
-	FILE *file = c3files_fopen(C3DIR_DIRECT, "userprofile.txt", "w");
+	FILE *file = c3files_fopen(C3DIR_APPBASE, "userprofile.txt", "w");
 	if(file) {
 		PointerList<ProfileVar>::Walker walk(m_vars);
 		while(walk.IsValid()) {

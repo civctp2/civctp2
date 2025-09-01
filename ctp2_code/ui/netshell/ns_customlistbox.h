@@ -2,6 +2,8 @@
 #define __NS_CUSTOMLISTBOX_H__
 
 #include "ns_listbox.h"
+
+#include "c3files.h"
 #include "ns_session.h"
 #include "ns_lobby.h"
 #include "ns_game.h"
@@ -76,9 +78,9 @@ public:
 	ns_TransportListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_TransportListBox();
 };
 
@@ -90,15 +92,15 @@ public:
 	ns_FileDataListBox(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 #if defined(_MSC_VER)
-        ControlActionCallback * ActionFunc  = NULL,
+		ControlActionCallback * ActionFunc  = NULL,
 #else
 		typename ns_FileDataListBox<NFT,NST>::ControlActionCallback *ActionFunc = NULL,
 #endif
 
-		void *cookie = NULL,
-		char *filename = "")
+		Cookie cookie = nullptr,
+		const char *filename = "")
 
 		:
 		aui_ImageBase( ldlBlock),
@@ -113,7 +115,7 @@ public:
 	{
 
 		strncpy(m_filename, filename, 64);
-		FILE *file = fopen(filename, "rb");
+		FILE *file = c3files_fopen(C3DIR_APPBASE, filename, "rb");
 		if(file) {
 
 			sint32 test = 0;
@@ -161,7 +163,7 @@ public:
 
 		memset(&(this->m_curkey), 0, sizeof(this->m_curkey));
 		this->m_curkey.m_len = 1;
-		FILE *file = fopen(m_filename, "wb");
+		FILE *file = c3files_fopen(C3DIR_APPBASE, m_filename, "wb");
 		if(file) {
 
 			fwrite( &NFT::m_version, sizeof( sint32 ), 1, file );
@@ -200,10 +202,10 @@ public:
 	ns_PlayerSetupListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
-		char *filename = "nsplayer.cfg");
+		Cookie cookie = nullptr,
+		const char *filename = "nsplayer.cfg");
 };
 
 class ns_GameSetupListBox:public ns_FileDataListBox<nf_GameSetup, ns_GameSetup> {
@@ -211,10 +213,10 @@ public:
 	ns_GameSetupListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
-		char *filename = "nsgame.cfg");
+		Cookie cookie = nullptr,
+		const char *filename = "nsgame.cfg");
 };
 
 class ns_AIPlayerSetupListBox:public ns_FileDataListBox<nf_AIPlayer, ns_AIPlayerSetup> {
@@ -222,10 +224,10 @@ public:
 	ns_AIPlayerSetupListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL,
-		char *filename = "nsai.cfg");
+		Cookie cookie = nullptr,
+		const char *filename = "nsai.cfg");
 };
 
 class ns_SessionListBox:public ns_ListBox<NETFunc::Session, ns_Session> {
@@ -233,9 +235,9 @@ public:
 	ns_SessionListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_LobbyListBox:public ns_ListBox<NETFunc::Lobby, ns_Lobby> {
@@ -243,9 +245,9 @@ public:
 	ns_LobbyListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_GameListBox:public ns_ListBox<NETFunc::Game, ns_Game> {
@@ -253,9 +255,9 @@ public:
 	ns_GameListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_PlayerListBox:public ns_ListBox<NETFunc::Player, ns_Player> {
@@ -263,9 +265,9 @@ public:
 	ns_PlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_PlayerListBox();
 
 	aui_TextBase *m_pingFastStyle;
@@ -283,9 +285,9 @@ public:
 	ns_RPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 };
 
 class ns_ServerListBox:public ns_ListBox<NETFunc::Server, ns_Server> {
@@ -293,9 +295,9 @@ public:
 	ns_ServerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_ServerListBox();
 
 	aui_TextBase *m_pingFastStyle;
@@ -314,10 +316,10 @@ public:
 	ns_GPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 	virtual ~ns_GPlayerListBox();
 
 	virtual void Insert( NETFunc::Player *object );
@@ -348,10 +350,10 @@ public:
 	ns_AIPlayerListBox (
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		ns_HPlayerListBox *hplayerlistbox,
 		ControlActionCallback *ActionFunc = NULL,
-		void *cookie = NULL );
+		Cookie cookie = nullptr );
 
 	virtual void Insert( nf_AIPlayer *object );
 	virtual void Delete( nf_AIPlayer *object );

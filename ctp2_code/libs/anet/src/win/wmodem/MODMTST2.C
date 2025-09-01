@@ -31,13 +31,13 @@ exports_commDLL_t *	commImports;
 /*----------------------------------------------------------------------
  Called internally by dpCreate to load a DLL.
 ----------------------------------------------------------------------*/
-int dpLoadDLL(char *transportName)
+sint32 dpLoadDLL(char *transportName)
 {
 #if DYNALINK
-	int i;
+	sint32 i;
 
 	// Valid segment alignment masks
-	static int	alignMask[] = {1-1, 2-1, 4-1, 16-1, 256-1, 4096-1};
+	static sint32	alignMask[] = {1-1, 2-1, 4-1, 16-1, 256-1, 4096-1};
 
 	DPRINT(("dpLoadDLL: transport %s\n", transportName));
 
@@ -56,7 +56,7 @@ int dpLoadDLL(char *transportName)
 			if (++i == orderof(alignMask)) return 3;
 			commDLL =
 				(void *)
-					((unsigned long) ((char *) commDLL + alignMask[i])
+					((uint32) ((char *) commDLL + alignMask[i])
 						& ~alignMask[i]);
 		}
 
@@ -89,9 +89,9 @@ quitAll(void)
 test1(commInitReq_t *init_req, commTermReq_t *term_req)
 {
 	clock_t rope;
-	int j;
+	sint32 j;
 	char buf[512];
-	int nGot = 0;
+	sint32 nGot = 0;
 	commRxPktReq_t rxReq;
 	commRxPktResp_t rxResp;
 	commTxPktReq_t txReq;
@@ -175,7 +175,7 @@ test1(commInitReq_t *init_req, commTermReq_t *term_req)
 test2(commInitReq_t *init_req, commTermReq_t *term_req)
 {
 	char buf[512];
-	int nGot = 0;
+	sint32 nGot = 0;
 	commRxPktReq_t rxReq;
 	commRxPktResp_t rxResp;
 	commInitResp_t	init_resp;
@@ -218,8 +218,8 @@ test2(commInitReq_t *init_req, commTermReq_t *term_req)
 test3(commInitReq_t *init_req, commTermReq_t *term_req)
 {
 	char buf[512];
-	int nGot = 0;
-	int c;
+	sint32 nGot = 0;
+	sint32 c;
 	commTxPktReq_t txReq;
 	commTxPktResp_t txResp;
 	commInitResp_t	init_resp;
@@ -257,15 +257,15 @@ test3(commInitReq_t *init_req, commTermReq_t *term_req)
 test4(commInitReq_t *init_req, commTermReq_t *term_req)
 {
 	char buf[512];
-	int nGot = 0;
+	sint32 nGot = 0;
 	commTxPktReq_t txReq;
 	commTxPktResp_t txResp;
 	commInitResp_t	init_resp;
 	clock_t send_interval = CLOCKS_PER_SEC / 5;
 	clock_t last_sent;
-	int i;
+	sint32 i;
 
-	int pktnum;
+	sint32 pktnum;
 	for (i=0; i<200; i++)
 		buf[i] = i;
 
@@ -302,10 +302,10 @@ test4(commInitReq_t *init_req, commTermReq_t *term_req)
 /*-------------------------------------------------------------------------
  Send a 200 byte packet every 1/5th of a second
 -------------------------------------------------------------------------*/
-test5(commInitReq_t *init_req, commTermReq_t *term_req, int reInitOften)
+test5(commInitReq_t *init_req, commTermReq_t *term_req, sint32 reInitOften)
 {
 	char buf[512];
-	int nGot = 0;
+	sint32 nGot = 0;
 	commTxPktReq_t txReq;
 	commTxPktResp_t txResp;
 	commInitResp_t	init_resp;
@@ -313,9 +313,9 @@ test5(commInitReq_t *init_req, commTermReq_t *term_req, int reInitOften)
 	commRxPktResp_t rxResp;
 	clock_t send_interval = CLOCKS_PER_SEC / 5;
 	clock_t last_sent;
-	int i;
+	sint32 i;
 
-	int pktnum;
+	sint32 pktnum;
 	for (i=0; i<200; i++)
 		buf[i] = i;
 
@@ -373,7 +373,7 @@ test5(commInitReq_t *init_req, commTermReq_t *term_req, int reInitOften)
 	}
 }
 
-main(int argc, char **argv)
+main(sint32 argc, char **argv)
 {
 	commInitReq_t req;
 	commTermReq_t termreq;

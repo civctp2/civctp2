@@ -55,7 +55,7 @@ Copyright (c) 1997 by Activision Inc.  All rights reserved.
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -76,6 +76,7 @@ MSVC's warning level is set to 4.
 #endif
 
 #include "dictset.h"
+//#include "anet.h"  // For DPRINT, but VS Studio does not like it to have it here
 
 /* Disable MSVC warning "unreferenced inline function has been removed"
    (Windows *linked* code has six of these ) */
@@ -100,8 +101,8 @@ struct dcst_s {
 	dcst_element_t** htab;		/* hashtable (array of ptrs to elements) */
 	dcst_value_t* valueStorage;	/* array to hold values of elements */
 	size_t valueSize;			/* number of bytes in a value */
-	int maxKeys;				/* number of elements in keys */
-	int maxHash;				/* number of pointers in htab */
+	sint32 maxKeys;				/* number of elements in keys */
+	sint32 maxHash;				/* number of pointers in htab */
 };
 
 /**
@@ -126,30 +127,30 @@ dcstNextKey(
 /*****************************************************************************
 Return the hash index that corresponds to the value
 *****************************************************************************/
-int						/* The hash */
+sint32						/* The hash */
 dcstHashvalue(
 	dcst_t pDcst,		/* Set to examine */
 	dcst_value_t value)	/* Value to compute hash of */
 {
-	unsigned char* val = (unsigned char*)value;
-	int rVal = 0;
-	unsigned int i;
-	int step = 0;
-	int limStep = 0;
+	uint8* val = (uint8*)value;
+	sint32 rVal = 0;
+	size_t i;
+	sint32 step = 0;
+	sint32 limStep = 0;
 
 	/* Get a type that's just big enough to hold the hash size.
 	   Treat value as an array of the appropriate type, and XOR the
 	   array elements together to form the base hash number */
 	if (pDcst->maxHash < UCHAR_MAX)
-		limStep = sizeof(unsigned char);
+		limStep = sizeof(uint8);
 	else if (pDcst->maxHash < USHRT_MAX)
-		limStep = sizeof(unsigned char);
+		limStep = sizeof(uint8);
 	else
-		limStep = sizeof(unsigned int);
+		limStep = sizeof(uint32);
 
 	/* XOR each byte of value against a different byte of the hash */
 	for(i = 0; i < pDcst->valueSize; i++) {
-		rVal ^= (unsigned int)(((unsigned int)val[i]) << (step * sizeof(unsigned char)));
+		rVal ^= (uint32)(((uint32)val[i]) << (step * sizeof(uint8)));
 		step = (step + 1) % limStep;
 	}
 
@@ -171,11 +172,11 @@ Returns the new dictionary set, or NULL if unable to create one.
 dcst_t 					/* The new dictionary set */
 dcstCreate(
 	size_t valueSize,	/* Number of bytes in a value in the dictset */
-	int maxKeys,		/* Largest number of keys the set can support */
-	int maxHashEntries)	/* Number of hash bins the set uses */
+	sint32 maxKeys,		/* Largest number of keys the set can support */
+	sint32 maxHashEntries)	/* Number of hash bins the set uses */
 {
 	dcst_t newSet;
-	int i;
+	sint32 i;
 	char* pVal;
 
 	/* Check preconditions */
@@ -272,11 +273,12 @@ dcstAdd(
 	if(key == dcst_INVALID_KEY) {
 		key = dcstNextKey(pDcst);
 		if(key != dcst_INVALID_KEY) {	/* if there's space left */
-			int hash = dcstHashvalue(pDcst, value);
+			sint32 hash = dcstHashvalue(pDcst, value);
 			pDcst->keys[key].key = key;
 			memcpy(pDcst->keys[key].value, value, pDcst->valueSize);
 			pDcst->keys[key].next = pDcst->htab[hash];
 			pDcst->htab[hash] = &(pDcst->keys[key]);
+//			DPRINT(("dcstAdd: Add key %d to %d@%p, value (address) %p\n", key, hash, pDcst->keys, value)); // VS Studio does not like it to have it here
 		}
 	}
 
@@ -314,17 +316,19 @@ dcstAddEx(
 	{
 		if (newkey != dcst_INVALID_KEY)
 		{
-			int hash = dcstHashvalue(pDcst, newvalue);
+			sint32 hash = dcstHashvalue(pDcst, newvalue);
 
 			pDcst->keys[newkey].key = newkey;
 			memcpy(pDcst->keys[newkey].value, newvalue, pDcst->valueSize);
 			pDcst->keys[newkey].next = pDcst->htab[hash];
 			pDcst->htab[hash] = &(pDcst->keys[newkey]);
+	//		DPRINT(("dcstAdd: Add key %d to %d@%p, value (address) %p\n", newkey, hash, pDcst->keys, newvalue)); // VS Studio does not like it to have it here
 		}
 	}
 	else
 	{
 		/* Replace value */
+	//	DPRINT(("dcstAddEx: Replace value %p of key %d to %p\n", newvalue, newkey, pDcst->keys)); // VS Studio does not like it to have it here
 		dcstReplace(pDcst, newkey, newvalue);
 	}
 
@@ -422,7 +426,7 @@ dcstDeleteKey(
 	dcst_t pDcst,		/* set to delete from */
 	dcst_key_t key)		/* key of element to delete */
 {
-	int hash;
+	sint32 hash;
 
 	/* Check preconditions */
 	dcst_ASSERTVALID(pDcst);									/* invalid set */
@@ -463,7 +467,7 @@ dcstFindKey(
 	dcst_t pDcst,		/* set to examine */
 	dcst_value_t value)	/* value to search for */
 {
-	int hash;
+	sint32 hash;
 
 	/* Check preconditions */
 	dcst_ASSERTVALID(pDcst);					/* invalid set */
@@ -524,7 +528,7 @@ dcstForEach(
 	dcst_forEach_cb cb,	/* method to call on each element */
 	void* context)		/* data for callback method */
 {
-	int i;
+	sint32 i;
 
 	/* Check preconditions */
 	dcst_ASSERTVALID(pDcst);		/* invalid set */
@@ -595,11 +599,11 @@ dcstThaw(
 *****************************************************************************/
 void
 dcstAssertValid(
-	dcst_t pDcst,	/* set to check */
-	char* file,		/* filename for error reporting */
-	int line)		/* line number for error reporting */
+	dcst_t pDcst,		/* set to check */
+	char* file,			/* filename for error reporting */
+	sint32 line)		/* line number for error reporting */
 {
-	int i, j;
+	sint32 i, j;
 
 	/* Protect against a NULL file */
 	if(NULL == file)
@@ -667,7 +671,7 @@ dcstAssertValid(
 
 /*****************************************************************************
 *****************************************************************************/
-int						/* continue? nonzero=yes, 0=no */
+sint32						/* continue? nonzero=yes, 0=no */
 forEachTestCb (
 	dcst_t pDcst,		/* Dictset being operated on */
 	dcst_key_t key,		/* key of current element */
@@ -678,11 +682,11 @@ forEachTestCb (
 	dcst_ASSERTVALID(pDcst);
 
 	/* Verify that we're getting these things */
-	if(*((int*)context) < 0) {
-		*((int*)context) -= 1;
+	if(*((sint32*)context) < 0) {
+		*((sint32*)context) -= 1;
 		return 1;	/* Abort */
 	} else
-		*((int*)context) += (pDcst->valueSize+1);
+		*((sint32*)context) += (pDcst->valueSize+1);
 
 	/* Compare the keys to the values, for the fun of it */
 	if(key == *((dcst_key_t *) value))
@@ -698,9 +702,9 @@ forEachTestCb (
 
 /*****************************************************************************
 *****************************************************************************/
-int
+sint32
 main(
-	int argc,
+	sint32 argc,
 	char** argv)
 {
 	#define VALUESIZE	7
@@ -725,8 +729,8 @@ main(
 	dcst_key_t key6 = dcst_INVALID_KEY;
 	dcst_key_t tmpKey = dcst_INVALID_KEY;
 	dcst_value_t tmpVal = NULL;
-	int context;
-	int i;
+	sint32 context;
+	sint32 i;
 
 	/* Check command-line parameters */
 	if(argc > 1) {

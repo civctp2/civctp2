@@ -58,7 +58,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if defined(WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -107,14 +107,14 @@ MSVC's warning level is set to 4.
 /*****************************************************************************
  Return the last socket error.  If in debug mode, also print error.
 *****************************************************************************/
-static int			/* error number */
+static sint32			/* error number */
 getsockerror(void)
 {
-	int err;
+	sint32 err;
 	char string[256];
 
 	err = WSAGetLastError();
-	sprintf(string, "Socket Error: %i\n", (int) err);
+	sprintf(string, "Socket Error: %i\n", (sint32) err);
 	OutputDebugString(string);
 
 	return(err);
@@ -135,8 +135,8 @@ gethostaddr_ping(
 	TCPINSTANCE *pTcp)	/* (modified) Current tcp instance */
 {
 	TCPPEER addr;
-	int addrlen;
-	int bAddressFound = FALSE;
+	sint32 addrlen;
+	sint32 bAddressFound = FALSE;
 	TCPPEER* pAddr;
 	SOCKADDR_IN stRmtAddr;
 	clock_t waittime;
@@ -189,12 +189,12 @@ gethostaddr_connect(
 	TCPINSTANCE *pTcp)	/* (modified) Current tcp instance */
 {
 	TCPPEER addr;
-	int addrlen;
-	int bAddressFound = FALSE;
+	sint32 addrlen;
+	sint32 bAddressFound = FALSE;
 	SOCKET hSock;
 	SOCKADDR_IN stRmtAddr;
 	SOCKADDR_IN stLclAddr;
-	int nRet;
+	sint32 nRet;
 
 	hSock = socket(AF_INET, SOCK_DGRAM, 0);
 	if(hSock != INVALID_SOCKET) {
@@ -206,7 +206,7 @@ gethostaddr_connect(
 		nRet = connect(hSock, (LPSOCKADDR)&stRmtAddr, sizeof(SOCKADDR));
 		if(nRet != SOCKET_ERROR) {
 			addrlen = sizeof(stLclAddr);
-			getsockname(hSock, (LPSOCKADDR)&stLclAddr, (int FAR*)&addrlen);
+			getsockname(hSock, (LPSOCKADDR)&stLclAddr, (sint32 FAR*)&addrlen);
 			if(INADDR_ANY != stLclAddr.sin_addr.s_addr) {
 #if defined(ANET_ORIGINAL)
 				addr.addr = stRmtAddr.sin_addr.s_addr;
@@ -240,9 +240,9 @@ gethostaddr_connect(
 static BOOL gethostaddr_gethostname(TCPINSTANCE *pTcp)
 {
 	char			name[256];
-	int				err;
+	sint32				err;
 	HOSTENT			*host;
-	unsigned char	**ptr;
+	uint8	**ptr;
 	BOOL			found;
 	BOOL			secondary;
 
@@ -349,7 +349,7 @@ static BOOL gethostaddr_gethostname(TCPINSTANCE *pTcp)
 		return (FALSE);
 	}
 
-	ptr = (unsigned char **) host->h_addr_list;
+	ptr = (uint8 **) host->h_addr_list;
 	if (!ptr)
 	{
 		DPRINT(("gethostaddr_gethostname: No addresses in host entry ?\n"));
@@ -510,13 +510,13 @@ TCPINSTANCE *			/* TCP driver, or NULL for failure */
 TCPWIN_Create(
 	u_short maxHandles,	/* (input) Maximum number of allowed handles */
 	u_short* port,		/* (modified) Port (socket) number, or TCP_SOCKET_ANY */
-	int *status)		/* (output) status */
+	sint32 *status)		/* (output) status */
 {
 	TCPINSTANCE* pTcp;
 	TCPPEER peer;
 	SOCKADDR_IN sockAddr;
 	u_short truePort;	/* in host format */
-	int err;
+	sint32 err;
 	WSADATA wsa;
 
 	DPRINT(("TCPWIN_Create() Called..\n"));
@@ -688,7 +688,7 @@ TCPWIN_Create(
 		/* If user specified 'any old port', try picking a random socket
 		 * number inside our range.
 		 */
-		unsigned short randport = (eclock() % TCP_PORT_RANGE_LEN) + TCP_PORT_RANGE_START;
+		uint16 randport = (eclock() % TCP_PORT_RANGE_LEN) + TCP_PORT_RANGE_START;
 		sockAddr.sin_port = htons(randport);
 		peer.port = sockAddr.sin_port;
 		DPRINT(("TCPWIN_Create: Binding to %s:%d from range %d...%d\n", inet_ntoa(sockAddr.sin_addr), randport, TCP_PORT_RANGE_START, TCP_PORT_RANGE_START + TCP_PORT_RANGE_LEN-1));
@@ -719,14 +719,14 @@ TCPWIN_Create(
 	/* determine the actual port number */
 	if (TCP_SOCKET_ANY == *port)
 	{
-		int addrlen = sizeof(sockAddr);
+		sint32 addrlen = sizeof(sockAddr);
 		memset(&sockAddr, 0, sizeof(sockAddr));
-		err = getsockname(pTcp->socket, (LPSOCKADDR)&sockAddr, (int FAR*)&addrlen);
+		err = getsockname(pTcp->socket, (LPSOCKADDR)&sockAddr, (sint32 FAR*)&addrlen);
 		if (SOCKET_ERROR == err)
 		{
 			DPRINT(("TCPWIN_Create: could net get socket name\n"));
 			err = WSAGetLastError();
-	    }
+		}
 		truePort = ntohs(sockAddr.sin_port);
 		*port = truePort;
 	}
@@ -844,7 +844,7 @@ TCPWIN_Address2Handle(
 	DPRINT(("TCPWIN_Address2Handle : "));
 	if (insert)
 	{
-	    DPRINT(("canINS "));
+		DPRINT(("canINS "));
 	}
 
 	if (live)
@@ -915,7 +915,7 @@ TCPWIN_Address2Handle(
 				 * When adding a secondary address it gets marked as live
 				 * (if flagged) until such time that it is marked non-live
 				 */
-				peer2.status = (unsigned char) ((live) ? TCP_HDL2_LIVE : 0);
+				peer2.status = (uint8) ((live) ? TCP_HDL2_LIVE : 0);
 				peer2.peer = *pAddr2;
 
 				/* add it to the secondary handles */
@@ -991,7 +991,7 @@ TCPWIN_Address2Handle(
 					 * such time that it is marked non-live
 					 */
 					p2.peer = *pAddr2;
-					p2.status = (unsigned char) ((live) ? TCP_HDL2_LIVE : 0);
+					p2.status = (uint8) ((live) ? TCP_HDL2_LIVE : 0);
 
 					/* add it to the secondary handles */
 					dcstAddEx(tcp->secondary, h, &p2);
@@ -1088,8 +1088,8 @@ TCPWIN_Address2Handle(
 			}
 			else
 			{
-		        /* Did not find in second list */
-		        DPRINT(("n2nd "));
+				/* Did not find in second list */
+				DPRINT(("n2nd "));
 
 				/* Check to see if there is a NON-LIVE version
 				   in the second group of addresses */
@@ -1129,7 +1129,7 @@ TCPWIN_Address2Handle(
 
  Returns TCP_RES_OK on success, TCP_RES_EMPTY on failure.
 *****************************************************************************/
-int						/* status */
+sint32						/* status */
 TCPWIN_Handle2Address(
 	TCPINSTANCE *tcp,	/* (input) Current TCP instance */
 	TCPHANDLE handle,	/* (input) Handle to translate */
@@ -1186,14 +1186,14 @@ TCPWIN_Handle2Address(
  Copies len bytes from buf into internal packet queue.
  Must have previously gotten handle for destination by calling TCP_adr2hdl.
 *****************************************************************************/
-int						/* status */
+sint32						/* status */
 TCPWIN_PutPacket(
 	TCPINSTANCE *tcp,	/* (input) current TCP instance */
 	void *bufptr,		/* (input) packet to send */
-	ULONG len,			/* (input) length in bytes of packet to send */
+	size_t len,			/* (input) length in bytes of packet to send */
 	TCPHANDLE hdest)	/* (input) destination for packet */
 {
-	int cBytes;
+	sint32 cBytes;
 	TCPPEER* pPeer;
 	TCPPEER2 *pPeer2;
 	SOCKADDR_IN sockAddr;
@@ -1219,7 +1219,7 @@ TCPWIN_PutPacket(
 	sockAddr.sin_family = AF_INET;
 	sockAddr.sin_port = pPeer->port;
 	sockAddr.sin_addr.s_addr = pPeer->addr;
-	cBytes = sendto(tcp->socket, (char *) bufptr, (int) len, 0,
+	cBytes = sendto(tcp->socket, (char *) bufptr, (sint32) len, 0,
 				(struct sockaddr *) &sockAddr, sizeof(sockAddr));
 	if ((cBytes == 0) || (cBytes == SOCKET_ERROR)) {
 		getsockerror();
@@ -1271,7 +1271,7 @@ TCPWIN_PutPacket(
 		sockAddr.sin_family = AF_INET;
 		sockAddr.sin_port = pPeer2->peer.port;
 		sockAddr.sin_addr.s_addr = pPeer2->peer.addr;
-		cBytes = sendto(tcp->socket, (char *) bufptr, (int) len, 0,	(struct sockaddr *) &sockAddr, sizeof(sockAddr));
+		cBytes = sendto(tcp->socket, (char *) bufptr, (sint32) len, 0,	(struct sockaddr *) &sockAddr, sizeof(sockAddr));
 		if ((cBytes == 0) || (cBytes == SOCKET_ERROR))
 		{
 			getsockerror();
@@ -1307,7 +1307,7 @@ TCPWIN_PutPacket(
  (TCP_get could do this for you, but then the peer table might fill up
  with all sorts of garbage addresses from hosts who sent you junk mail.)
 *****************************************************************************/
-int						/* status */
+sint32						/* status */
 TCPWIN_GetPacket(
 	TCPINSTANCE *tcp,	/* (input) Current TCP instance */
 	void *bufptr,		/* (output) Contents of packet */
@@ -1315,7 +1315,7 @@ TCPWIN_GetPacket(
 	TCPHANDLE *hsrc,	/* (output) Handle of sender */
 	TCPPEER *srcaddr)	/* (output) Address of sender */
 {
-	int addrlen;
+	sint32 addrlen;
 	ULONG cBytes;
 	TCPPEER addr;
 	SOCKADDR_IN sockAddr;
@@ -1334,7 +1334,7 @@ TCPWIN_GetPacket(
 
 	/* read packet */
 	addrlen = sizeof(sockAddr);
-	cBytes = recvfrom(tcp->socket, (char *) bufptr, (int) *pLen, 0,
+	cBytes = recvfrom(tcp->socket, (char *) bufptr, (sint32) *pLen, 0,
 				(struct sockaddr *) &sockAddr, &addrlen);
 	if ((cBytes == 0) || (cBytes == SOCKET_ERROR))
 		return(TCP_RES_EMPTY);
@@ -1357,7 +1357,7 @@ TCPWIN_GetPacket(
 	 * it will get the correct handle.
 	 */
 	{
-		unsigned char	*pkt = bufptr;
+		uint8	*pkt = bufptr;
 
 		if (((*(dp_packetType_t *)bufptr) == (dpio_SYN_PACKET_ID)) && memcmp(&addr, pkt + 7, sizeof (TCPPEER)))
 		{

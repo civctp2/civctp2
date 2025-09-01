@@ -58,13 +58,13 @@ extern void fdprint(char *msg);
  print any differences in the ramp to both DPRINT and fdprint.
  If session ID's are the same, print warning to both DPRINT and fdprint.
 ---------------------------------------------------------------------------*/
-void exchange_ramp(PORT *port, long sessionID)
+void exchange_ramp(PORT *port, sint32 sessionID)
 {
 	// See if data is getting through to the other side.
-	unsigned char ibuf[256], obuf[256];
+	uint8 ibuf[256], obuf[256];
 	char message[256];
-	long theirID;
-	int i;
+	sint32 theirID;
+	sint32 i;
 
 	// Generate ramp and send it.
 	for (i=0; i<sizeof(obuf); i++)

@@ -60,9 +60,9 @@ clock_t dp_Sparc_clock(void)
 ------------------------------------------------------------------------*/
 #ifdef WIN32
 #include <windows.h>
-int getTempDir(char *name, int maxnamelen)
+sint32 getTempDir(char *name, size_t maxnamelen)
 {
-	int namelen = GetTempPath(maxnamelen, name);
+	sint32 namelen = GetTempPath((DWORD)maxnamelen, name);
 	if (namelen == 0) {
 		name[0] = '\0';
 	} else if (name[namelen - 1] != '\\') {
@@ -73,14 +73,14 @@ int getTempDir(char *name, int maxnamelen)
 }
 
 #elif defined(UNIX)
-int getTempDir(char *name, int namelen)
+sint32 getTempDir(char *name, size_t namelen)
 {
 	strcpy(name, "/var/tmp/");
 	return 5;
 }
 
 #elif defined(__POWERPC__)
-int getTempDir(char *name, int namelen)
+sint32 getTempDir(char *name, size_tnamelen)
 {
 	name[0] = '\0';
 	return 0;	/* not yet implemented */
@@ -93,35 +93,35 @@ int getTempDir(char *name, int namelen)
  Byteswaps if necessary.
 ------------------------------------------------------------------------*/
 #if defined(SPARC) || defined(POWERPC)
-void writeSwap(void **bp, const void *dat, unsigned int size)
+void writeSwap(void **bp, const void *dat, size_t size)
 {
-	unsigned char *p0 = (unsigned char *)dat + (size - 1);
-	unsigned char *p1 = (unsigned char *)(*bp);
+	uint8 *p0 = (uint8 *)dat + (size - 1);
+	uint8 *p1 = (uint8 *)(*bp);
 	while (p0 >= dat)
 		*p1++ = *p0--;
 	*bp = (void *)p1;
 }
-void readSwap(const void **bp, void *dat, unsigned int size)
+void readSwap(const void **bp, void *dat, size_t size)
 {
-	unsigned char *p0 = (unsigned char *)(*bp);
-	unsigned char *p1 = (unsigned char *)dat + (size - 1);
+	uint8 *p0 = (uint8 *)(*bp);
+	uint8 *p1 = (uint8 *)dat + (size - 1);
 	while (p1 >= dat)
 		*p1-- = *p0++;
 	*bp = (void *)p0;
 }
 
 #else
-void writeSwap(void **bp, const void *dat, unsigned int size)
+void writeSwap(void **bp, const void *dat, size_t size)
 {
 	memcpy(*bp, dat, size);
-	unsigned char *ucp = (unsigned char *) *bp;
+	uint8 *ucp = (uint8 *) *bp;
 	ucp += size;
 	*bp = (void *) ucp;
 }
-void readSwap(const void **bp, void *dat, unsigned int size)
+void readSwap(const void **bp, void *dat, size_t size)
 {
 	memcpy(dat, *bp, size);
-	unsigned char *ucp = (unsigned char *) *bp;
+	uint8 *ucp = (uint8 *) *bp;
 	ucp += size;
 	*bp = (void *) ucp;
 }
@@ -167,9 +167,9 @@ void dpSwapEnumPlayers(dp_enumPlayers_packet_t *buffer)
 	buffer->start = SwapBytes2(buffer->start);
 }
 
-void dpSwapPlayerList(dp_playerList_packet_t *buffer, int nPlayers)
+void dpSwapPlayerList(dp_playerList_packet_t *buffer, sint32 nPlayers)
 {
-	int i;
+	sint32 i;
 
 	buffer->sessionType = SwapBytes2(buffer->sessionType);
 	buffer->karma = SwapBytes2(buffer->karma);
@@ -181,9 +181,9 @@ void dpSwapPlayerList(dp_playerList_packet_t *buffer, int nPlayers)
 	}
 }
 
-void dpSwapPlayerRoster(dp_playerRoster_packet_t *buffer, int nPlayers)
+void dpSwapPlayerRoster(dp_playerRoster_packet_t *buffer, sint32 nPlayers)
 {
-	int i;
+	sint32 i;
 
 	buffer->sessionType = SwapBytes2(buffer->sessionType);
 	buffer->karma = SwapBytes2(buffer->karma);
@@ -224,9 +224,9 @@ void dpSwapPingPacket(dp_ping_packet_t *buffer)
 }
 
 #ifndef dp_ANET2
-void dpSwapUserAddGroup(dp_group_t *buffer, int n)
+void dpSwapUserAddGroup(dp_group_t *buffer, sint32 n)
 {
-	int i;
+	sint32 i;
 
 	buffer->id = SwapBytes2(buffer->id);
 	buffer->karma = SwapBytes2(buffer->karma);
@@ -282,9 +282,9 @@ void dpSwapPvUpdate(pv_playerData_body_packet_t *buffer)
 
 #if defined(_DEBUG) || defined(DPRNT)
 /* Convert a key to ASCII for debug printing */
-char *key2buf(const char *key, int keylen, char *buf)
+char *key2buf(const char *key, size_t keylen, char *buf)
 {
-	int i;
+	size_t i;
 
 	if (keylen > hkeytab_MAXLEN)
 		return "key too long";

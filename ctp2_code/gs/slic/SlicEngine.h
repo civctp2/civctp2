@@ -131,7 +131,7 @@ public:
 	void Execute(SlicObject *obj);
 
 	void AddBuiltinFunctions();
-    bool Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum);
+	bool Load(std::basic_string<MBCHAR> const & a_File, sint32 filenum);
 	void Link();
 
 	sint32 GetTutorialPlayer() const { return m_tutorialPlayer; }
@@ -149,7 +149,7 @@ public:
 	void AddCurrentMessage();
 
 	PointerList<SlicRecord> *GetRecords(sint32 player);
-	void AddTutorialRecord(sint32 player, MBCHAR *title, MBCHAR *text,
+	void AddTutorialRecord(sint32 player, const MBCHAR *title, const MBCHAR *text,
 						   SlicSegment *segment);
 
 	bool IsTimerExpired(sint32 timer) const;
@@ -271,9 +271,9 @@ public:
 	bool RunKeyboardTrigger(MBCHAR key);
 
 	void CheckPendingResearch();
-	void AddResearchOnUnblank(sint32 owner, MBCHAR *text);
+	void AddResearchOnUnblank(sint32 owner, const MBCHAR *text);
 
-	SlicSymbolData *CheckForBuiltinWithIndex(MBCHAR *name, sint32 &index);
+	SlicSymbolData *CheckForBuiltinWithIndex(const MBCHAR *name, sint32 &index);
 
 	void AddConst(const MBCHAR *name, sint32 value);
 	bool FindConst(const MBCHAR *name, sint32 *value) const;
@@ -309,7 +309,7 @@ public:
 
 	sint32 CallExcludeFunc(const MBCHAR *name, sint32 type, sint32 player);
 
-    static bool Reload(std::basic_string<MBCHAR> const & a_File);
+	static bool Reload(std::basic_string<MBCHAR> const & a_File);
 
 	sint32 GetCurrentLine() const;
 	const char* GetSegmentName() const;

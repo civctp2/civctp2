@@ -15,21 +15,21 @@ sint32 optionsscreen_removeMyWindow(uint32 action);
 AUI_ERRCODE optionsscreen_Initialize( void );
 void optionsscreen_Cleanup(void);
 
-void optionsscreen_graphicsPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_soundPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_musicPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_savegamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_savescenarioPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_restartPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_quitPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_returnPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_gameplayPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void optionsscreen_quitToShellPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void optionsscreen_graphicsPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_soundPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_musicPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_newgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_savegamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_savescenarioPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_loadgamePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_restartPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_quitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_returnPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_gameplayPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_mapeditorPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_keyboardPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_languagePress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void optionsscreen_quitToShellPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 class OptionsWindow : public c3_PopupWindow
 {
@@ -37,7 +37,7 @@ public:
 	OptionsWindow(
 		AUI_ERRCODE *retval,
 		uint32 id,
-		MBCHAR *ldlBlock,
+		const MBCHAR *ldlBlock,
 		sint32 bpp,
 		AUI_WINDOW_TYPE type = AUI_WINDOW_TYPE_STANDARD,
 		bool bevel = true);

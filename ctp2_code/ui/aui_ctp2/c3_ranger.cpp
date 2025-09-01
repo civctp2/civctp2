@@ -56,7 +56,7 @@ c3_Ranger::c3_Ranger(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -102,7 +102,7 @@ c3_Ranger::c3_Ranger(
 	AUI_RANGER_ORIENTATION orientation,
 	const MBCHAR *pattern,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase( NULL ),

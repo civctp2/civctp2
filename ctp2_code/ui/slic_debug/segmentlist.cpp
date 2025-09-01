@@ -88,7 +88,7 @@ void segmentlist_Remove()
 	}
 }
 
-SegmentList::SegmentList(SegmentListCallback *callback, MBCHAR *ldlBlock)
+SegmentList::SegmentList(SegmentListCallback *callback, const MBCHAR *ldlBlock)
 :   KeyboardHandler     (),
     m_window            (NULL),
 	m_list              (NULL),
@@ -133,14 +133,14 @@ SegmentList::~SegmentList(void)
 	delete m_window;
 }
 
-void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if((action != (uint32)AUI_LISTBOX_ACTION_SELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_RMOUSESELECT) &&
 	   (action != (uint32)AUI_LISTBOX_ACTION_DOUBLECLICKSELECT))
 		return;
 
-	SegmentList *list = (SegmentList *)cookie;
+	SegmentList *list = (SegmentList *)cookie.m_voidPtr;
 
 	SegmentListItem *item = (SegmentListItem *)list->GetList()->GetSelectedItem();
 
@@ -158,7 +158,7 @@ void SegmentListActionCallback(aui_Control *control, uint32 action, uint32 data,
 	return;
 }
 
-void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action == AUI_BUTTON_ACTION_EXECUTE) {
 		if(control == g_segmentList->m_watchButton) {
@@ -172,13 +172,10 @@ void SegmentListButtonCallback(aui_Control *control, uint32 action, uint32 data,
 	}
 }
 
-sint32 SegmentList::Initialize(MBCHAR *windowBlock)
+sint32 SegmentList::Initialize(const MBCHAR *windowBlock)
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
-
-
-
 
 	sprintf( controlBlock, "%s.%s", windowBlock, "SegmentList" );
 	m_list = new c3_ListBox(&errcode, aui_UniqueId(), controlBlock, SegmentListActionCallback, this);
@@ -248,7 +245,7 @@ sint32 SegmentList::UpdateData(void)
 }
 
 SegmentListItem::SegmentListItem(AUI_ERRCODE *retval, sint32 index,
-								 SlicSegment *segment, MBCHAR *ldlBlock) :
+								 SlicSegment *segment, const MBCHAR *ldlBlock) :
 	aui_ImageBase(ldlBlock),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
 	c3_ListItem(retval, ldlBlock)
@@ -265,7 +262,7 @@ SegmentListItem::SegmentListItem(AUI_ERRCODE *retval, sint32 index,
 }
 
 AUI_ERRCODE SegmentListItem::InitCommonLdl(SlicSegment *segment,
-										   MBCHAR *ldlBlock)
+										   const MBCHAR *ldlBlock)
 {
 	MBCHAR			block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	AUI_ERRCODE		retval;

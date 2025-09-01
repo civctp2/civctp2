@@ -25,11 +25,11 @@ IconButton::IconButton(
 	sint32 y,
 	sint32 width,
 	sint32 height,
-	MBCHAR *pattern,
-	MBCHAR *icon,
+	const MBCHAR *pattern,
+	const MBCHAR *icon,
 	uint16 color,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 :
 	aui_ImageBase( (sint32)0 ),
 	aui_TextBase(NULL),
@@ -44,9 +44,9 @@ IconButton::IconButton(
 IconButton::IconButton(
 	AUI_ERRCODE *retval,
 	uint32 id,
-	MBCHAR *ldlBlock,
+	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock ),
 	aui_TextBase(ldlBlock, (MBCHAR *)NULL),
@@ -54,18 +54,17 @@ IconButton::IconButton(
 	PatternBase( ldlBlock, (MBCHAR *)NULL )
 {
 	InitCommon(ldlBlock, TRUE);
-
 }
 
-AUI_ERRCODE IconButton::InitCommon( MBCHAR *ldlBlock, BOOL isLDL)
+AUI_ERRCODE IconButton::InitCommon( const MBCHAR *ldlBlock, BOOL isLDL)
 {
-	MBCHAR		*name;
+	const MBCHAR		*name;
 
-	if (isLDL) {
+	if (isLDL)
+	{
 		ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 		Assert( block != NULL );
 		if ( !block ) return AUI_ERRCODE_LDLFINDDATABLOCKFAILED;
-
 
 		name = block->GetString( "icon" );
 		Assert( name != NULL );

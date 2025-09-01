@@ -47,7 +47,7 @@ ns_CivListBox::ns_CivListBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (const MBCHAR *)NULL ),
@@ -91,7 +91,7 @@ ns_CivListBox::ns_CivListBox(
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),
@@ -166,7 +166,6 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 
 	if ( ldlBlock )
 	{
-
 		if ( m_header )
 		{
 			RemoveChild( m_header->Id() );
@@ -233,7 +232,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	{
 		sprintf( block, "%s.%s", ldlBlock, k_AUI_LISTBOX_LDL_RANGERX );
 
-        if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
+		if (aui_Ldl::GetLdl()->FindDataBlock( block ) )
 			m_horizontalRanger = new c3_Ranger(
 				&errcode,
 				aui_UniqueId(),
@@ -260,7 +259,7 @@ AUI_ERRCODE ns_CivListBox::CreateRangersAndHeader( const MBCHAR *ldlBlock )
 	AddChild( m_horizontalRanger );
 
 	sint32 maxRangerSize =
-        std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
+	    std::max(m_verticalRanger->Width(), m_horizontalRanger->Height());
 
 	if ( maxRangerSize )
 		SetRangerSize( maxRangerSize );
@@ -414,7 +413,7 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	uint32 id,
 	const MBCHAR *ldlBlock,
 	ControlActionCallback *ActionFunc,
-	void *cookie )
+	Cookie cookie )
 	:
 	aui_ImageBase( ldlBlock),
 	aui_TextBase( ldlBlock, (MBCHAR *)NULL ),
@@ -440,7 +439,7 @@ ns_HPlayerListBox::ns_HPlayerListBox(
 	sint32 bevelWidth,
 	sint32 bevelType,
 	ControlActionCallback *ActionFunc,
-	void *cookie)
+	Cookie cookie)
 	:
 	aui_ImageBase((sint32) 0),
 	aui_TextBase((MBCHAR const *) NULL, (uint32) 0),

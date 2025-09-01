@@ -84,7 +84,7 @@
 
 extern C3UI *g_c3ui;
 
-void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, void *cookie );
+void battleview_ExitButtonActionCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 
 const uint32 NetAction::m_args[NET_ACTION_NULL] = {
 	2,
@@ -278,7 +278,7 @@ NetAction::NetAction(NET_ACTION action, ...)
 		for(i = 0; i < m_args[m_action]; i++) {
 			m_data[i] = va_arg( vl, uint32 );
 #ifdef _DEBUG
-			sprintf(str + strlen(str), "arg: %8d/0x%lx ", m_data[i], m_data[i]);
+			sprintf(str + strlen(str), "arg: %8d/0x%x ", m_data[i], m_data[i]);
 #endif
 		}
 		va_end(vl);
@@ -356,7 +356,7 @@ void NetAction::Unpacketize(uint16 id, uint8* buf, uint16 size)
 					Assert(g_network.m_playerData[index]->m_createdUnits.Num() == 0);
 
 					if(g_battleViewWindow && g_c3ui->GetWindow(g_battleViewWindow->Id())) {
-						battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+						battleview_ExitButtonActionCallback(NULL, AUI_BUTTON_ACTION_EXECUTE, 0, nullptr);
 					}
 
 					g_gevManager->EndTurnRequest();

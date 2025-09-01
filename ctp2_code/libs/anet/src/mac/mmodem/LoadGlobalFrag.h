@@ -17,9 +17,10 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 */
 
+#include "types.h"
 
-static short	gvRef;
-static long		gparID;
+static sint16	gvRef;
+static sint32		gparID;
 #define kTransportNames		11000
 #define kTransportPath		12000
 #define kTransportType		'shlb'
@@ -27,6 +28,6 @@ static long		gparID;
 void SetBasePath(void);
 OSErr LoadTransport(char *transportName);
 void unloadTransport(void);
-OSErr GetData(unsigned long* value);
-OSErr SetData(unsigned long value);
+OSErr GetData(uint32* value);
+OSErr SetData(uint32 value);
 // MAD ** OSErr SetupData(CFragConnectionID connID);

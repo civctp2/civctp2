@@ -35,8 +35,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #endif
 
 #include "eclock.h"
+#include "types.h"
 
-static int nCalls = 0;
+static sint32 nCalls = 0;
 
 /*------------------------------------------------------------------------------
  Return the filename that the next call to logPkt_open() will use.
@@ -66,8 +67,8 @@ FILE *logPkt_open()
 		/* Delete all output9.* and move all old output0.* to output1.*,
 		 * output1.* to output2.*, etc.
 		 */
-		int n = 0, i;
-		int retval;
+		sint32 n = 0, i;
+		sint32 retval;
 
 		do {
 			sprintf(filename, "output%d.%d", 9, n);
@@ -117,7 +118,7 @@ void logPkt_close(FILE *outFile)
  each byte, extracts the 2 starting pkttype bytes, and records the information
  in the text log file.  tag is a 2 character id, usually "rx" or "tx".
 ------------------------------------------------------------------------------*/
-void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer, const char *tag)
+void logPkt(FILE *outFile, const void *buffer, size_t length, uint32 peer, const char *tag)
 {
 	size_t i;
 	char *p;
@@ -135,9 +136,9 @@ void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer
 	*p++ = ' ';
 
 	for (i=0; i<length; i++) {
-		unsigned int c = ((unsigned char *)xbuf)[i];
-		unsigned int nib;
-		unsigned int hc;
+		uint32 c = ((uint8 *)xbuf)[i];
+		uint32 nib;
+		uint32 hc;
 
 		nib = (c >> 4) & 0xf;
 		hc = nib + '0';
@@ -153,7 +154,7 @@ void logPkt(FILE *outFile, const void *buffer, size_t length, unsigned long peer
 	}
 	*p++ = 0;
 
-	fprintf(outFile, "%2s %10ld %2ld %3ld : %s\n", tag, eclock(), peer, length, tbuf);
+	fprintf(outFile, "%2s %10ld %2d %3zu : %s\n", tag, eclock(), peer, length, tbuf);
 }
 
 #endif

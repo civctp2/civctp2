@@ -26,14 +26,14 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  * the Windows 95 kernel. Explicitly linking to them will make this
  * application unloadable in Microsoft(R) Windows NT(TM) and will
  * produce an ugly system dialog box. */
-int InitSnapshot(Toolhlp *tool)
+sint32 InitSnapshot(Toolhlp *tool)
 {
 	HANDLE hKernel = NULL;
 	aeh_SetCurrent(__LINE__, __FILE__);
 	tool->pCreate32Snapshot = NULL;
 	tool->pModule32First  = NULL;
 	tool->pModule32Next   = NULL;
-    hKernel = GetModuleHandle("KERNEL32.DLL");
+	hKernel = GetModuleHandle("KERNEL32.DLL");
 	aeh_SetCurrent(__LINE__, __FILE__);
 	if (!hKernel ||
 		!(tool->pCreate32Snapshot = (CREATESNAPSHOT)GetProcAddress(hKernel, "CreateToolhelp32Snapshot")) ||
@@ -51,9 +51,9 @@ UNDECORATESYMNAME InitUnDecorateSymbolName(void)
 {
 	HANDLE hImage = NULL;
 	UNDECORATESYMNAME pUnDecorateSymbolName = NULL;
-    hImage = GetModuleHandle("IMAGEHLP.DLL");
+	hImage = GetModuleHandle("IMAGEHLP.DLL");
 	if (!hImage)  /* maybe dll not loaded yet */
-    	hImage = LoadLibrary("IMAGEHLP.DLL");
+		hImage = LoadLibrary("IMAGEHLP.DLL");
 	if (!hImage ||
 		!(pUnDecorateSymbolName = (UNDECORATESYMNAME)GetProcAddress(hImage,
 									"UnDecorateSymbolName")))

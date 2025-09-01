@@ -25,7 +25,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -378,7 +378,7 @@ AUI_ERRCODE km_screen_Initialize( void )
 	{
 		s_km_screen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING );
 		Assert( AUI_NEWOK(s_km_screen, errcode) );
-		if ( !AUI_NEWOK(s_km_screen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_km_screen, errcode) ) return errcode;
 
 		s_km_screen->Resize(s_km_screen->Width(),s_km_screen->Height());
 		s_km_screen->GrabRegion()->Resize(s_km_screen->Width(),s_km_screen->Height());
@@ -521,14 +521,14 @@ void km_screen_Cleanup()
 
 
 
-void km_screen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void km_screen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if(km_screen_removeMyWindow(action))
 	{
 	}
 }
 
-void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -537,7 +537,7 @@ void km_screen_resetPress(aui_Control *control, uint32 action, uint32 data, void
 	km_screen_loadKeyList();
 }
 
-void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void km_screen_switchPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if (AUI_SWITCH_ACTION_ON == action)
 	{

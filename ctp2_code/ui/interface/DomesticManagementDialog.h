@@ -11,6 +11,7 @@ class ctp2_Button;
 class ctp2_Window;
 class CauseAndEffectTab;
 class GovernmentTab;
+union Cookie;
 
 class DomesticManagementDialog {
 public:
@@ -33,7 +34,7 @@ private:
 	void Hide();
 
 	static void CloseButtonActionCallback(aui_Control *control,
-		uint32 action, uint32 data, void *cookie);
+		uint32 action, uint32 data, Cookie cookie);
 
 	ctp2_Window *m_window;
 

@@ -33,7 +33,9 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #ifndef commerr_h
 #define commerr_h
 
-typedef long comm_status_t;
+#include "types.h"
+
+typedef sint32 comm_status_t;
 
 /* Chosen to coincide with the error codes in dppkt.h. */
 /* Once a number is assigned, never reassign it. */

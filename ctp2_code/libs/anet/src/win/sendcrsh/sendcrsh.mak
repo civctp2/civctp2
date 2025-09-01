@@ -353,7 +353,7 @@ DEP_CPP_AEH_C=\
 SOURCE=..\..\sbd\sbdclnt.c
 DEP_CPP_SBDCL=\
 	"..\..\..\demo\utils\logprint.h"\
-	"..\..\..\demo\utils\unistd.h"\
+	"..\..\..\demo\utils\unistd-win.h"\
 	"..\..\..\h\portable.h"\
 	"..\..\sbd\sbd.h"\
 	"..\..\sbd\sbdclnt.h"\

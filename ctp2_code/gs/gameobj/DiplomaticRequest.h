@@ -49,7 +49,7 @@ public:
 	void Reject(BOOL fromServer = FALSE) { AccessData()->Reject(fromServer) ; }
 	void Enact(BOOL fromServer = FALSE) { AccessData()->Enact(fromServer) ; }
 	void Dump(const sint32 i) { AccessData()->Dump(i) ; }
-	MBCHAR *GetRequestString(void) { return (AccessData()->GetRequestString()) ; }
+	const MBCHAR *GetRequestString(void) { return (AccessData()->GetRequestString()) ; }
 
 	sint32 GetTone() const;
 	sint32 GetRound() const;

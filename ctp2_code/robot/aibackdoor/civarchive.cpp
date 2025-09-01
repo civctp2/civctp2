@@ -22,15 +22,14 @@
 // - Generate debug version when set.
 //
 // ARCHIVE_TYPE_CHECK
-// linux // Why lower case?
 //
 //
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
 //
-// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin Gühmann)
-// - Removed DoubleUp method. (Sep 9th 2005 Martin Gühmann)
+// - Added put and get methods for MBCHAR* (Aug 24th 2005 Martin GÃ¼hmann)
+// - Removed DoubleUp method. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -151,7 +150,7 @@ void CivArchive::Store(uint8 *pbData, size_t ulLen)
 {
 #ifdef ARCHIVE_TYPE_CHECK
 TypeCheck(TYPE_CHECK_ARRAY);
-#endif ARCHIVE_TYPE_CHECK
+#endif // ARCHIVE_TYPE_CHECK
 
 	Assert(m_bIsStoring);
 
@@ -167,7 +166,7 @@ void CivArchive::Load(uint8 *pbData, size_t ulLen)
 {
 #ifdef ARCHIVE_TYPE_CHECK
 	TypeCheck(TYPE_CHECK_ARRAY);
-#endif ARCHIVE_TYPE_CHECK
+#endif // ARCHIVE_TYPE_CHECK
 
 #ifdef _DEBUG
 	Assert(!m_bIsStoring);
@@ -262,7 +261,6 @@ void CivArchive::PutDoubleString(const double &val)
 	char buf[256];
 	sprintf(buf, "%8.8le", val);
 
-#ifndef linux
 	if(buf[0] != '-')
 	{
 		memmove(&buf[12], &buf[13], 3);
@@ -271,8 +269,35 @@ void CivArchive::PutDoubleString(const double &val)
 	{
 		memmove(&buf[13], &buf[14], 3);
 	}
-#endif
+
 	Store((uint8*)buf, strlen(buf));
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CivArchive::DumpStream
+//
+// Description: Dumps the byte stream to a file, so that the content can be
+//              checked. Useful to check for byte compatibilty between 32 and
+//              64 bit versions or just for diffrences between two copies
+//              of the game where no differences are expected.
+//
+// Parameters : fileName         : The name of the file where the stream
+//                                 should be written to. If it is a relative
+//                                 it will be relative to the executable.
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
+void CivArchive::DumpStream(const MBCHAR* fileName)
+{
+	FILE* fp = fopen(fileName, "wb");
+	fwrite(GetStream(), StreamLen(), 1, fp);
+	fclose(fp);
 }
 
 void CivArchive::ResetForLoad()

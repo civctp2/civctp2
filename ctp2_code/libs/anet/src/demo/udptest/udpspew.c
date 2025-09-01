@@ -27,17 +27,17 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 #include <netdb.h>
 #include "eclock.h"
 
-void main (int argc, char *argv[])
+void main (sint32 argc, char *argv[])
 {
-	int sockfd;
+	sint32 sockfd;
 	char *host;
-	int port = 2000;
-	int n;
+	sint32 port = 2000;
+	sint32 n;
 	struct hostent *he;
 	struct protoent *pe;
 	struct sockaddr_in sockaddr;
-	int i;
-	int len;
+	sint32 i;
+	sint32 len;
 	char msg[1500];
 	clock_t t_start;
 	float duration;
@@ -50,7 +50,7 @@ void main (int argc, char *argv[])
 		exit(1);
 	}
 	host = argv[1];
-	n = (short)atoi(argv[2]);
+	n = (sint16)atoi(argv[2]);
 	if (n < 1)
 		n = 1;
 	if (argc > 3) {
@@ -95,7 +95,7 @@ void main (int argc, char *argv[])
 		                 &sockaddr, sizeof(struct sockaddr_in)))
 			printf("sendto error:%d on packet %d/%d\n", errno, i, n);
 	}
-	duration = (float)((long)(eclock()-t_start))/ECLOCKS_PER_SEC;
+	duration = (float)((sint32)(eclock()-t_start))/ECLOCKS_PER_SEC;
 	if (duration < (float)1.0/ECLOCKS_PER_SEC)
 		duration = (float)1.0/ECLOCKS_PER_SEC;
 	printf("finished in %.2fs, %.2f pkts/sec\n", duration, (float)n/duration);

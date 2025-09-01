@@ -161,7 +161,6 @@ protected:
 
 	GROUPTYPE   m_groupType;
 	sint32      m_actionType;
-	bool        m_finished;
 
 	Anim      * m_curAnim;
 	ActorPath * m_curPath;
@@ -174,6 +173,8 @@ protected:
 
 	sint32      m_facing;
 	uint32      m_unitsVisibility;
+
+	bool        m_finished;
 };
 
 #endif

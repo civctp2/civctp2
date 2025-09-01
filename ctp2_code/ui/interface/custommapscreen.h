@@ -24,15 +24,15 @@ void custommapscreen_setValues(
 	sint32 homodiverse,
 	sint32 goodcount);
 
-void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_wetdrySlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_warmcoldSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_oceanlandSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_islandcontinentSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_homodiverseSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_goodcountSlide(aui_Control *control, uint32 action, uint32 data, void *cookie );
-void custommapscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie );
+void custommapscreen_backPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_cancelPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_wetdrySlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_warmcoldSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_oceanlandSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_islandcontinentSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_homodiverseSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_goodcountSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
+void custommapscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie );
 void custommapscreen_updateWindow();
 
 #endif

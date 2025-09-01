@@ -239,8 +239,8 @@ public:
 
 	bool EventsPending() const;
 
-	static char* ArgCharToName(char want);
-	static char* ArgToName(GAME_EVENT_ARGUMENT want);
+	static const char* ArgCharToName(char want);
+	static const char* ArgToName(GAME_EVENT_ARGUMENT want);
 
 	void NotifyResync();
 	GAME_EVENT GetProcessingEvent() const { return m_processingEvent; };

@@ -114,7 +114,7 @@ Initial revision
 /* Disable MSVC warnings as follows; the include files generate these when
 MSVC's warning level is set to 4.
 4201: nonstandard extension used : nameless struct/union
-4214: nonstandard extension used : bit field types other than int
+4214: nonstandard extension used : bit field types other than sint32
 4115: named type definition in parentheses */
 #if (defined _WIN32)
 #pragma warning( disable : 4201 4214 4115 )
@@ -210,22 +210,22 @@ MSVC's warning level is set to 4.
 #define load_RES_HOSTLOST		7	/* lost host */
 #define load_RES_TIMEOUT		8	/* too much time passed */
 
-long cps2ms(clock_t t)
+sint32 cps2ms(clock_t t)
 {
-	static long hertz = 0;
+	static sint32 hertz = 0;
 	if (!hertz)
 		hertz = ECLOCKS_PER_SEC;
 
 	if (hertz > 1000) {
-		return ((long)(t)) / (ECLOCKS_PER_SEC / 1000);
+		return ((sint32)(t)) / (ECLOCKS_PER_SEC / 1000);
 	} else {
-		return ((long)(t)) * (1000 / ECLOCKS_PER_SEC);
+		return ((sint32)(t)) * (1000 / ECLOCKS_PER_SEC);
 	}
 /* macro to convert ECLOCKS_PER_SEC to milliseconds */
 /*#if ECLOCKS_PER_SEC > 1000
-#define cps2ms(t) ((long)(t)) / (ECLOCKS_PER_SEC / 1000)
+#define cps2ms(t) ((sint32)(t)) / (ECLOCKS_PER_SEC / 1000)
 #else
-#define cps2ms(t) ((long)(t)) * (1000 / ECLOCKS_PER_SEC)
+#define cps2ms(t) ((sint32)(t)) * (1000 / ECLOCKS_PER_SEC)
 #endif*/
 }
 
@@ -250,31 +250,31 @@ typedef struct data_s {
 	clock_t findClock;  /* millisecond */
 	clock_t joinClock;  /* millisecond */
 	clock_t playClock;  /* millisecond */
-	unsigned long portnum;
-	int bCallbacksFinished;
-	int bOpenSessionCallbackFinished;
-	int bCallbackSucceeded;
-	int bCreateRoom;
-	int curCmd;
-	int n_sessions;
-	int n_players;
-	int n_expectedPlayers;
-	int n_maxPlayers;
-	int packetLoss;
-	int cmdCount;
-	int thisPlayer;
-	int abort_if_host_not_responding;
-	int host_not_responding;
+	uint32 portnum;
+	sint32 bCallbacksFinished;
+	sint32 bOpenSessionCallbackFinished;
+	sint32 bCallbackSucceeded;
+	sint32 bCreateRoom;
+	sint32 curCmd;
+	sint32 n_sessions;
+	sint32 n_players;
+	sint32 n_expectedPlayers;
+	sint32 n_maxPlayers;
+	sint32 packetLoss;
+	sint32 cmdCount;
+	sint32 thisPlayer;
+	sint32 abort_if_host_not_responding;
+	sint32 host_not_responding;
 	#if defined(_WIN32)
-		int emptyCount;
+		sint32 emptyCount;
 	#endif
-	unsigned short species;
-	int bJoinAny;
+	uint16 species;
+	sint32 bJoinAny;
 	char* ipadr_joinany;
-	short flag_joinany;
+	sint16 flag_joinany;
 	char room_joinany[256];
-	int bWaitingToFreeze;
-	int n_loop;
+	sint32 bWaitingToFreeze;
+	sint32 n_loop;
 
 	char nastygram_buf[NASTYGRAM_MAX_LEN];
 	char *e_mail;
@@ -299,7 +299,7 @@ void sendMailFromToSubjectBody(const char *from, const char *to,
 -------------------------------------------------------------------------*/
 void
 abortRun(
-	int exitCode,
+	sint32 exitCode,
 	char* message)
 {
 	DPRINTE(("Aborting(%d): %s\n", exitCode, message));
@@ -312,7 +312,7 @@ abortRun(
 -------------------------------------------------------------------------*/
 void
 signalHandler(
-	int sigId)
+	sint32 sigId)
 {
 	DPRINTE(("load.signalHandler: Entry\n"));
 	sigId = sigId;
@@ -333,7 +333,7 @@ signalHandler(
 #ifdef UNIX
 void
 alarmHandler(
-	int sigId)
+	sint32 sigId)
 {
 	DPRINTE(("load.alarmHandler: Entry\n"));
 	if (data.e_mail && data.e_mail[0]) {
@@ -351,11 +351,11 @@ alarmHandler(
 /*-------------------------------------------------------------------------
  Callback triggered by dpOpen.
 -------------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 open_cb(
 	dp_session_t *ps,
-	long *pTimeout,
-	long flags,
+	sint32 *pTimeout,
+	sint32 flags,
 	void *context)
 {
 	data_t* res = (data_t *) context;
@@ -375,11 +375,11 @@ open_cb(
 /*-------------------------------------------------------------------------
  Callback triggered by listing sessions.
 -------------------------------------------------------------------------*/
-int dp_PASCAL
+sint32 dp_PASCAL
 listSessions_cb(
 	dp_session_t *sDesc,
-	long *pTimeout,
-	long flags,
+	sint32 *pTimeout,
+	sint32 flags,
 	void *context)
 {
 	data_t* res = (data_t *) context;
@@ -419,7 +419,7 @@ joinSessionByName(
 	char *name,
 	void* context)
 {
-	int i;
+	sint32 i;
 	dp_result_t err;
 	data_t* res = (data_t *) context;
 
@@ -450,10 +450,10 @@ void dp_PASCAL
 create_player_cb(
 	dpid_t id,
 	char_t *name,
-	long flags,
+	sint32 flags,
 	void *context)
 {
-	int i = 0;
+	sint32 i = 0;
 	data_t* res = (data_t *) context;
 
 	DPRINTE(("load.create_player_cb: Entry\n"));
@@ -490,7 +490,7 @@ void dp_PASCAL
 listPlayers_cb(
 	dpid_t id,
 	char_t *name,
-	long flags,
+	sint32 flags,
 	void *context)
 {
 	data_t* res = (data_t *) context;
@@ -500,7 +500,7 @@ listPlayers_cb(
 		res->n_players++;
 		#if PLAYER_LIST_STORED
 		{
-			int i;
+			sint32 i;
 			/* Store player ID in our list, if it's not already there */
 			for(i = 0; i < res->n_expectedPlayers; i++) {
 				if (res->playerID[i] == id) {
@@ -589,7 +589,7 @@ processMessage(dp_t* myDP, data_t* res)
 Wait timeout sec for a host-not-responding message; return when one
 found or timeout is over or host is ready.
 -------------------------------------------------------------------------*/
-int
+sint32
 waitForHost(
 	dp_t* myDP,
 	clock_t timeout)
@@ -602,7 +602,7 @@ waitForHost(
 	clock_t endClock;
 
 	endClock = eclock() + timeout * ECLOCKS_PER_SEC;
-	while((long)(endClock - eclock()) > 0) {
+	while((sint32)(endClock - eclock()) > 0) {
 		size = dpio_MAXLEN_UNRELIABLE;
 		err = dpReceive(myDP, &idFrom, &idTo, RECEIVE_FLAGS, buf, &size);
 		if (err == dp_RES_HOST_NOT_RESPONDING) {
@@ -612,7 +612,7 @@ waitForHost(
 		if(err != dp_RES_EMPTY) DPRINTD(("load.waitForHostFail got %d from dpReceive.\n",err));
 	}
 
-	if((long)(endClock - eclock()) < 0) {
+	if((sint32)(endClock - eclock()) < 0) {
 		DPRINTD(("load.waitForHostFail returning timeout.\n"));
 		return load_RES_TIMEOUT;
 	}
@@ -624,20 +624,20 @@ Simulate activity of one session for one user.
 First, create or join the session, then send some chat messages.  After a
 while, leave the session.
 -------------------------------------------------------------------------*/
-int
+sint32
 simulateUserGame(
-	int thisPlayer,
+	sint32 thisPlayer,
 	char* room,
-	int startGame)
+	sint32 startGame)
 {
 	char name[64];
 	time_t now;
 	time_t startTime;
 	clock_t startClock;
 	clock_t endClock;
-	int lastCount = 0;
-	int err;
-	int i;
+	sint32 lastCount = 0;
+	sint32 err;
+	sint32 i;
 
 	DPRINTE(("load.simulateUserGame: Entry\n"));
 
@@ -669,7 +669,7 @@ simulateUserGame(
 			processMessage(data.myDP, &data); if (data.host_not_responding) return load_RES_DPERR;
 
 			/* Timeout check */
-			if((long)(endClock - eclock()) < 0) {
+			if((sint32)(endClock - eclock()) < 0) {
 				DPRINTX(("%3d: Timed out waiting for dpEnumSessions/c.\n", thisPlayer));
 				DPRINTE(("load.simulateUserGame: Exit, returning load_RES_TIMEOUT\n"));
 				return load_RES_TIMEOUT;
@@ -740,7 +740,7 @@ simulateUserGame(
 					processMessage(data.myDP, &data); if (data.host_not_responding) return load_RES_DPERR;
 
 					/* Timeout check */
-					if((long)(endClock - eclock()) < 0) {
+					if((sint32)(endClock - eclock()) < 0) {
 						DPRINTX(("%3d: Timed out waiting for dpEnumSessions/c.\n", thisPlayer));
 						DPRINTE(("load.simulateUserGame: Exit, returning load_RES_TIMEOUT\n"));
 						return load_RES_TIMEOUT;
@@ -749,7 +749,7 @@ simulateUserGame(
 				processMessage(data.myDP, &data); if (data.host_not_responding) return load_RES_DPERR;
 
 				/* Timeout check */
-				if((long)(endClock - eclock()) < 0) {
+				if((sint32)(endClock - eclock()) < 0) {
 					DPRINTX(("%3d: Timed out waiting for dpEnumSessions.\n", thisPlayer));
 					DPRINTE(("load.simulateUserGame: Exit, returning load_RES_TIMEOUT.\n"));
 					return load_RES_TIMEOUT;
@@ -774,7 +774,7 @@ simulateUserGame(
 		processMessage(data.myDP, &data); if (data.host_not_responding) return load_RES_DPERR;
 
 		/* Timeout check */
-		if((long)(endClock - eclock()) < 0) {
+		if((sint32)(endClock - eclock()) < 0) {
 			DPRINTX(("%3d: Timed out joining session %s.\n",
 					thisPlayer, room));
 			DPRINTP(("load.simulateUserGame %d: Timed out joining session %s.\n",
@@ -816,7 +816,7 @@ simulateUserGame(
 		processMessage(data.myDP, &data); if (data.host_not_responding) return load_RES_DPERR;
 
 		/* Timeout check */
-		if((long)(endClock - eclock()) < 0) {
+		if((sint32)(endClock - eclock()) < 0) {
 			DPRINTX(("%3d: Timed out creating player.\n", thisPlayer));
 			DPRINTP(("load.simulateUserGame %d: Timed out creating player.\n", thisPlayer));
 			DPRINTC(("load.simulateUserGame: calling dpClose\n"));
@@ -876,10 +876,10 @@ simulateUserGame(
 		return load_RES_DPERR;
 	}
 #ifndef dp_ANET2
-	{	long when;
+	{	sint32 when;
 		when = time(0);
 		data.bWaitingToFreeze = 1;
-		while((dp_RES_BUSY == dpReadyToFreeze(data.myDP)) && ((long)(time(0)-when) < 20))
+		while((dp_RES_BUSY == dpReadyToFreeze(data.myDP)) && ((sint32)(time(0)-when) < 20))
 			processMessage(data.myDP, &data);
 		data.bWaitingToFreeze = 0;
 	}
@@ -893,13 +893,13 @@ simulateUserGame(
 Read a comma, vertical bar or semicolon-separated list from a string.  Adjacent
 commas will produce a zero-length string as a list element.
 -------------------------------------------------------------------------*/
-int					/* Number of items in final list */
+sint32					/* Number of items in final list */
 scanCommaList(
 	char*** list,	/* (output) list */
 	char *arg)		/* (input) string to scan */
 {
-	int count = 1;
-	int i;
+	sint32 count = 1;
+	sint32 i;
 	char* pc;
 
 	assert(list != NULL);
@@ -927,7 +927,7 @@ scanCommaList(
 /*-------------------------------------------------------------------------
 Set the server used.
 -------------------------------------------------------------------------*/
-int					/* status */
+sint32					/* status */
 setServer(
 	char* server)	/* Server name, or NULL to clear server */
 {
@@ -984,7 +984,7 @@ setServer(
 		#if 0
 		{
 			time_t endClock = eclock() + 20 * ECLOCKS_PER_SEC;
-			while ((long)(endClock - eclock()) > 0)
+			while ((sint32)(endClock - eclock()) > 0)
 				processMessage(data.myDP, &data);
 		}
 		#endif
@@ -1041,7 +1041,7 @@ Write out a verbose help message
 void
 printHelp()
 {
-	int i;
+	sint32 i;
 	for(i = 0; i < (sizeof(helpMsg)/sizeof(char*)); i++)
 		puts(helpMsg[i]);
 }
@@ -1049,14 +1049,14 @@ printHelp()
 /*-------------------------------------------------------------------------
  Handle command-line arguments
 -------------------------------------------------------------------------*/
-int						/* status */
+sint32						/* status */
 handleArguments(
-	int argc,			/* (input) number of arguments */
+	sint32 argc,			/* (input) number of arguments */
 	char *argv[] )		/* (input) value of arguments */
 {
 	char buf[BUFSIZE];
 	char usage[BUFSIZE];
-	int i;
+	sint32 i;
 	char* rooms = NULL;
 
 	sprintf(usage, "Usage: %s <argument list>\nType '%s -?' for help.", argv[0], argv[0]);
@@ -1113,7 +1113,7 @@ handleArguments(
 					if ((i + 2 < argc) &&
 						!(argv[i+1][0] == '-' || argv[i+1][0] == '/')) {
 						data.ipadr_joinany = argv[i+1];
-						data.flag_joinany = (short)atoi(argv[i+2]);
+						data.flag_joinany = (sint16)atoi(argv[i+2]);
 						i += 2;
 					}
 					break;
@@ -1267,14 +1267,14 @@ handleArguments(
  Launch all tests
 -------------------------------------------------------------------------*/
 void launch (
-	int playerCount,	/* Total number to launch */
-	int argc,			/* Count of arguments */
+	sint32 playerCount,	/* Total number to launch */
+	sint32 argc,			/* Count of arguments */
 	char** argv)		/* Arguments */
 {
-	int* procs;
+	sint32* procs;
 	char* childArgs[MAX_ARGUMENTS];
 	char buf[BUFSIZE];
-	int i;
+	sint32 i;
 
 	/* Copy original arguments into NULL-terminated array of strings */
 	assert(MAX_ARGUMENTS >= (argc - 2));
@@ -1284,7 +1284,7 @@ void launch (
 	childArgs[argc+1] = NULL;
 
 	/* allocate storage */
-	if((procs = (int *) malloc(playerCount * sizeof(int))) == NULL)
+	if((procs = (sint32 *) malloc(playerCount * sizeof(sint32))) == NULL)
 		abortRun(load_RES_NOMEM, "Unable to allocate process handle storage.\n");
 
 	/* Start tests */
@@ -1392,7 +1392,7 @@ void sendMailFromToSubjectBody(const char *from, const char *to,
 	fputs(body, fp);
 	fclose(fp);
 #elif defined(UNIX)
-	int proc = fork();
+	sint32 proc = fork();
 	if(proc == -1) {
 		DPRINTR(("sendMailFromToSubjectBody: error in fork\n"));
 	} else if (proc == 0) {  /* child process */
@@ -1412,11 +1412,11 @@ void sendMailFromToSubjectBody(const char *from, const char *to,
 		DPRINTR(("sendMailFromToSubjectBody: error in exec, errno %d\n", errno));
 		exit(3);
 	} else { /* parent; get child's exit code */
-		int status;
+		sint32 status;
 		pid_t pid;
 		pid = waitpid(proc, &status, 0);
 		if (WIFEXITED(status) == 0) {
-			int retCode = WEXITSTATUS(status);
+			sint32 retCode = WEXITSTATUS(status);
 			DPRINTR(("sendMailFromToSubjectBody: sendmail failed, err %d\n", retCode));
 		}
 
@@ -1427,18 +1427,18 @@ void sendMailFromToSubjectBody(const char *from, const char *to,
 /*-------------------------------------------------------------------------
  Run the load for one player
 -------------------------------------------------------------------------*/
-int testOne (
-	int thisPlayer,			/* Which player are we */
-	int packetLoss,
-	int startGame,
-	unsigned long port,
+sint32 testOne (
+	sint32 thisPlayer,			/* Which player are we */
+	sint32 packetLoss,
+	sint32 startGame,
+	uint32 port,
 	char* driver)
 {
 	dp_transport_t CommDLLName;
 	commInitReq_t commInitReq;
 	dp_result_t err;
-	long when;
-	int nloop;
+	sint32 when;
+	sint32 nloop;
 
 	char buf[BUFSIZE];
 	char name[64];
@@ -1523,7 +1523,7 @@ int testOne (
 					setServer(NULL);
 					when = time(0);
 					data.bWaitingToFreeze = 1;
-					while((dp_RES_BUSY == dpReadyToFreeze(data.myDP)) && ((long)(time(0)-when) < 20)) {
+					while((dp_RES_BUSY == dpReadyToFreeze(data.myDP)) && ((sint32)(time(0)-when) < 20)) {
 						processMessage(data.myDP, &data);
 					}
 					data.bWaitingToFreeze = 0;
@@ -1556,7 +1556,7 @@ int testOne (
 					break;
 				case '&':   /* wait 2 sec. */
 					{	clock_t start = eclock();
-						while ((long)(eclock() - start) < 2 * ECLOCKS_PER_SEC)
+						while ((sint32)(eclock() - start) < 2 * ECLOCKS_PER_SEC)
 							processMessage(data.myDP, &data);
 					}
 					break;
@@ -1583,9 +1583,9 @@ int testOne (
 /*-------------------------------------------------------------------------
  Entry point
 -------------------------------------------------------------------------*/
-int						/* Success (0) or failure (nonzero) */
+sint32						/* Success (0) or failure (nonzero) */
 main(
-	int argc,			/* number of arguments */
+	sint32 argc,			/* number of arguments */
 	char *argv[] )		/* value of arguments */
 {
 	memset(&data, 0, sizeof(data_t));

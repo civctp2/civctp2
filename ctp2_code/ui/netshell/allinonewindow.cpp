@@ -684,7 +684,7 @@ AUI_ERRCODE AllinoneWindow::CreateControls( void )
 	m_controls[ CONTROL_HPLAYERSLISTBOX ]->SetAction(new PlayersListBoxAction);
 	m_controls[ CONTROL_PLAYSTYLEDROPDOWN ]->SetAction(new PlayStyleDropDownAction);
 
-	((ctp2_Spinner *)m_controls[CONTROL_PLAYSTYLEVALUESPINNER])->SetSpinnerCallback(PlayStyleValueSpinnerCallback, NULL);
+	((ctp2_Spinner *)m_controls[CONTROL_PLAYSTYLEVALUESPINNER])->SetSpinnerCallback(PlayStyleValueSpinnerCallback, nullptr);
 
 	m_controls[ CONTROL_DYNAMICJOINSWITCH ]->SetAction(new DynamicJoinSwitchAction);
 	m_controls[ CONTROL_HANDICAPPINGSWITCH ]->SetAction(new HandicappingSwitchAction);
@@ -1340,7 +1340,7 @@ BOOL AllinoneWindow::WhoHasTribe( size_t index, uint16 *curKey, BOOL *curIsAI, B
 	TribeSlot *tribeSlots = g_gamesetup.GetTribeSlots();
 	for (int i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
-		if ( tribeSlots[ i ].tribe == index )
+		if ( tribeSlots[ i ].tribe == static_cast<sint32>(index) )
 		{
 			*curKey = tribeSlots[ i ].key;
 			*curIsAI = tribeSlots[ i ].isAI;
@@ -1363,7 +1363,7 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 		TribeSlot *tribeSlots = g_gamesetup.GetTribeSlots();
 
 		for (int i = 0; i < k_NS_MAX_PLAYERS; i++ )
-			if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == isAI )
+			if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == static_cast<sint8>(isAI) )
 			{
 				if ( isFemale ) *isFemale = tribeSlots[ i ].isFemale;
 				return tribeSlots[ i ].tribe;
@@ -1389,8 +1389,8 @@ sint32 AllinoneWindow::FindTribe( uint16 key, BOOL isAI, BOOL *isFemale )
 						for ( sint32 j = 0; j < k_NS_MAX_PLAYERS; j++ )
 						{
 							if (
-								g_gamesetup.GetSavedTribeSlots()[ j ].tribe == i &&
-								g_gamesetup.GetSavedTribeSlots()[ j ].isAI == isAI )
+								g_gamesetup.GetSavedTribeSlots()[ j ].tribe == static_cast<sint32>(i) &&
+								g_gamesetup.GetSavedTribeSlots()[ j ].isAI == static_cast<sint8>(isAI) )
 							{
 								if ( isFemale ) *isFemale = g_gamesetup.GetSavedTribeSlots()[ j ].isFemale;
 								return static_cast<sint32>(i);
@@ -1485,7 +1485,7 @@ BOOL AllinoneWindow::AssignTribe(
 	sint32 i;
 	for ( i = 0; i < k_NS_MAX_PLAYERS; i++ )
 	{
-		if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == isAI )
+		if ( tribeSlots[ i ].key == key && tribeSlots[ i ].isAI == static_cast<sint8>(isAI) )
 		{
 			memset( tribeSlots + i, 0, sizeof( TribeSlot ) );
 			break;
@@ -2610,7 +2610,7 @@ void AllinoneWindow::UpdateTribeSwitches( void )
 			} else {
 				for ( j = 0; j < k_NS_MAX_PLAYERS; j++ )
 				{
-					if ( i == g_gamesetup.GetSavedTribeSlots()[ j ].tribe )
+					if ( static_cast<sint32>(i) == g_gamesetup.GetSavedTribeSlots()[ j ].tribe )
 					{
 						found = true;
 						break;
@@ -2736,7 +2736,7 @@ void AllinoneWindow::UpdateConfig( void )
 
 void AllinoneWindow::UpdateGameSetup(bool b)
 {
-		if ( g_netfunc->IsHost() )
+	if ( g_netfunc->IsHost() )
 	{
 		if(b)
 			g_netfunc->UnLaunchAll();
@@ -3944,7 +3944,7 @@ void AllinoneWindow::PlayStyleDropDownAction::Execute(
 	}
 }
 
-void AllinoneWindow::PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void AllinoneWindow::PlayStyleValueSpinnerCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_RANGER_ACTION_VALUECHANGE)
 		return;
@@ -4172,7 +4172,7 @@ void AllinoneAgesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4227,7 +4227,7 @@ void AllinoneMapSizeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4247,7 +4247,7 @@ void AllinoneWorldShapeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4268,14 +4268,14 @@ void AllinoneTribeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	spnewgametribescreen_removeMyWindow(
 		action,
@@ -4287,8 +4287,8 @@ void AllinoneTribeCallback(
 	if ( !item->GetPlayer() && !item->GetAIPlayer() ) return;
 
 	uint16 key = item->IsAI() ?
-		key = *(uint16 *)item->GetAIPlayer()->GetKey()->m_buf :
-		key = *(uint16 *)item->GetPlayer()->GetKey()->m_buf;
+		*(uint16 *)item->GetAIPlayer()->GetKey()->m_buf :
+		*(uint16 *)item->GetPlayer()->GetKey()->m_buf;
 
 	if ( g_netfunc->IsHost() && index == 0 )
 	{
@@ -4392,7 +4392,7 @@ void AllinoneWorldTypeCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4435,7 +4435,7 @@ void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4466,7 +4466,7 @@ void AllinoneMoreRulesCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void* cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4622,13 +4622,13 @@ void TribesButtonCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
 	AllinoneWindow *w = g_allinoneWindow;
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	if ( item->IsAI() )
 	{
@@ -4653,7 +4653,7 @@ void CivPointsButtonCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4663,7 +4663,7 @@ void CivPointsButtonCallback(
 	AllinoneWindow *w = g_allinoneWindow;
 	if ( !w ) return;
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	if ( item->IsAI() )
 	{
@@ -4697,7 +4697,7 @@ void PwPointsButtonCallback(
 	aui_Control *control,
 	uint32 action,
 	uint32 data,
-	void *cookie )
+	Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -4707,7 +4707,7 @@ void PwPointsButtonCallback(
 	c3_EditButton *button = (c3_EditButton *)control;
 	sint32 value = button->GetValue();
 
-	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie;
+	ns_HPlayerItem *item = (ns_HPlayerItem *)cookie.m_voidPtr;
 
 	if ( item->IsAI() )
 	{

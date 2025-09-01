@@ -88,7 +88,7 @@ const MBCHAR *TurnYearStatus::GetYearString(sint32 currentYear, sint32 round)
 		AUI_ERRCODE         errcode         = AUI_ERRCODE_OK;
 		aui_StringTable *   table           = new aui_StringTable(&errcode, "YearStrings");
 		sint32 const        yearStringIndex = (currentYear < 0) ? 0 : 1;
-		sprintf(buf, "%ld%s", abs(currentYear), table->GetString(yearStringIndex));
+		sprintf(buf, "%d%s", abs(currentYear), table->GetString(yearStringIndex));
 		delete table;
 	}
 
@@ -201,7 +201,7 @@ void TurnYearStatus::CleanupTurnLengthOverride()
 	s_pTurnLengthOverride = NULL;
 }
 
-TurnYearStatus::TurnYearStatus(MBCHAR *ldlBlock)
+TurnYearStatus::TurnYearStatus(const MBCHAR *ldlBlock)
 :   m_turnYearStatus (static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock, "TurnYearStatus"))),
     m_dougsProgress  (static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock, "DougsProgressBar"))),
     m_displayType    (DISPLAY_YEAR)
@@ -250,14 +250,14 @@ void TurnYearStatus::Update()
 }
 
 void TurnYearStatus::TurnYearStatusActionCallback(aui_Control *control, uint32 action,
-												  uint32 data, void *cookie)
+												  uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
 
-	TurnYearStatus *turnYearStatus = static_cast<TurnYearStatus*>(cookie);
+	TurnYearStatus *turnYearStatus = static_cast<TurnYearStatus*>(cookie.m_voidPtr);
 
 	turnYearStatus->m_displayType = static_cast<DisplayType>(
 		(turnYearStatus->m_displayType + 1) % NUMBER_OF_DISPLAY_TYPES);
@@ -268,7 +268,7 @@ void TurnYearStatus::TurnYearStatusActionCallback(aui_Control *control, uint32 a
 AUI_ERRCODE TurnYearStatus::DrawDougsProgress(ctp2_Static *control,
                                               aui_Surface *surface,
                                               RECT &rect,
-                                              void *cookie)
+                                              Cookie cookie)
 {
 	if(g_selected_item == NULL)
 		return AUI_ERRCODE_OK;

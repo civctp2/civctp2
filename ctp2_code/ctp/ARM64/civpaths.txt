@@ -1,10 +1,10 @@
-.
+..
 setup\data\max\ctp_data\videos
 default
 english
-..\..\..\ctp2_data
-..\..\..\scenarios
-..\save
+..\..\ctp2_data
+..\..\scenarios
+.\save
 games
 queues
 mp
@@ -26,3 +26,4 @@ graphics\icons
 graphics\cursors
 sound
 videos
+music

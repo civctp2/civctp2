@@ -51,10 +51,6 @@ m_causeAndEffectTab(new CauseAndEffectTab(
 m_governmentTab(new GovernmentTab(
 				"DomesticDialog.TabGroup.Tab2.TabPanel"))
 {
-
-
-
-
 	Assert(m_closeButton);
 
 	m_closeButton->SetActionFuncAndCookie(CloseButtonActionCallback, this);
@@ -94,13 +90,13 @@ void DomesticManagementDialog::Hide()
 }
 
 void DomesticManagementDialog::CloseButtonActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
 		return;
 
-	static_cast<DomesticManagementDialog*>(cookie)->Hide();
+	static_cast<DomesticManagementDialog*>(cookie.m_voidPtr)->Hide();
 }
 
 void DomesticManagementDialog::Update()

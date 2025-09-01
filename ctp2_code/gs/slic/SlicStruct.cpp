@@ -359,10 +359,10 @@ const char * SlicStructDescription::GetMemberName(sint32 index) const
 
 
 SlicStructInstance::SlicStructInstance(SlicStructDescription *description, SlicSymbolData *dataSym)
-:   m_createdData       (false),
+:   m_description       (description),
     m_dataSymbol        (dataSym),
     m_dataSymbolIndex   (INDEX_INVALID),
-    m_description       (description)
+    m_createdData       (false)
 {
 	m_validIndexCount	=
 		m_description->GetNumMembers() + m_description->GetNumAccessors();

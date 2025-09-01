@@ -69,9 +69,9 @@ extern C3UI				*g_c3ui;
 
 WorkMap::WorkMap(AUI_ERRCODE *retval,
 							sint32 id,
-							MBCHAR *ldlBlock,
+							const MBCHAR *ldlBlock,
 							ControlActionCallback *ActionFunc,
-							void *cookie)
+							Cookie cookie)
 	:
 		aui_ImageBase(ldlBlock),
 		aui_TextBase(ldlBlock),
@@ -87,9 +87,9 @@ WorkMap::WorkMap(AUI_ERRCODE *retval,
 							sint32 y,
 							sint32 width,
 							sint32 height,
-							MBCHAR *pattern,
+							const MBCHAR *pattern,
 							ControlActionCallback *ActionFunc,
-							void *cookie)
+							Cookie cookie)
 	:
 		aui_ImageBase((sint32)0),
 		aui_TextBase((MBCHAR *)NULL),
@@ -120,7 +120,7 @@ WorkMap::~WorkMap()
 	}
 }
 
-void WorkMap::InitCommonLdl(MBCHAR *ldlBlock)
+void WorkMap::InitCommonLdl(const MBCHAR *ldlBlock)
 {
 	ldl_datablock * block = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert( block != NULL );
@@ -997,11 +997,6 @@ void WorkMap::DrawCityName(aui_Surface *surface, sint32 x, sint32 y, const Unit 
 	sprintf(str,"%i",pop);
 
     sint32  popEdgeSize = std::max<sint32>(k_POP_BOX_SIZE_MINIMUM, k_POP_BOX_SIZE);
-	sint32  nudge       = 0;
-	if (pop > 9)
-		nudge = 4;
-	if (pop > 99)
-		nudge = 2;
 
 	RECT popRect = {x,
 					 y,
@@ -1091,7 +1086,7 @@ void WorkMap::DrawLabels( aui_Surface *surface )
 		DrawALabel( surface, goldStr, k_OFFSET_WIDTH, offsetHeight, goldWidth, goldHeight );
 
 		MBCHAR tiStr[_MAX_PATH];
-		sprintf( tiStr, g_theStringDB->GetNameStr("str_ldl_TILE_RESOURCES_Colon") );
+		strcpy( tiStr, g_theStringDB->GetNameStr("str_ldl_TILE_RESOURCES_Colon") );
 		sint32 tiLabelWidth = g_tiledMap->GetFont()->GetStringWidth(tiStr);
 		RECT rect = {0, 0, tiLabelWidth, g_tiledMap->GetFont()->GetMaxHeight()};
 
@@ -1159,7 +1154,7 @@ void WorkMap::DrawResourceIcons(aui_Surface *surface, sint32 x, sint32 y, MapPoi
 	Assert(resourceIcon); if (!resourceIcon) return;
 	g_tiledMap->DrawColorizedOverlay(resourceIcon, surface, iconRect.left, iconRect.top, color);
 
-	sprintf(str, "%ld", prod);
+	sprintf(str, "%d", prod);
 
 	if (g_tiledMap && g_tiledMap->GetFont()) {
 		width = g_tiledMap->GetFont()->GetStringWidth(str);
@@ -1193,7 +1188,7 @@ void WorkMap::DrawResourceIcons(aui_Surface *surface, sint32 x, sint32 y, MapPoi
 	Assert(resourceIcon); if (!resourceIcon) return;
 	g_tiledMap->DrawColorizedOverlay(resourceIcon, surface, iconRect.left, iconRect.top, color);
 
-	sprintf(str, "%ld", food);
+	sprintf(str, "%d", food);
 
 	if (g_tiledMap && g_tiledMap->GetFont()) {
 		width = g_tiledMap->GetFont()->GetStringWidth(str);
@@ -1418,7 +1413,7 @@ void WorkMap::HandlePop( MapPoint point )
 /// @todo Find out what this function is supposed to do, because it is now
 ///       only updating local variables.
 
-	MapPoint mp;
+/*	MapPoint mp;
 
 	m_unit.GetData()->GetPos(mp);
 
@@ -1438,7 +1433,7 @@ void WorkMap::HandlePop( MapPoint point )
 
 	Cell *cell;
 	cell = g_theWorld->GetCell(point);
-
+*/
 
 	return;
 

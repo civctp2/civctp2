@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - Cleanup improved.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -98,7 +98,7 @@ sint32 musictrackscreen_removeMyWindow(uint32 action)
 }
 
 
-void MusicTrackListCallback( aui_Control *control, uint32 action, uint32 data, void *cookie )
+void MusicTrackListCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT ) return;
@@ -126,7 +126,7 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 	{
 		s_musicTrackScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false );
 		Assert( AUI_NEWOK(s_musicTrackScreen, errcode) );
-		if ( !AUI_NEWOK(s_musicTrackScreen, errcode) ) errcode;
+		if ( !AUI_NEWOK(s_musicTrackScreen, errcode) ) return errcode;
 
 		s_musicTrackScreen->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
 		s_musicTrackScreen->GrabRegion()->Resize(s_musicTrackScreen->Width(),s_musicTrackScreen->Height());
@@ -138,7 +138,7 @@ AUI_ERRCODE musictrackscreen_Initialize( void )
 
 	MBCHAR		controlBlock[k_AUI_LDL_MAXBLOCK + 1];
 	sprintf( controlBlock, "%s.%s", windowBlock, "TrackList" );
-	s_trackList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, MusicTrackListCallback, NULL);
+	s_trackList = new c3_ListBox( &errcode, aui_UniqueId(), controlBlock, MusicTrackListCallback, nullptr);
 	Assert( AUI_NEWOK(s_trackList, errcode) );
 	if ( !AUI_NEWOK(s_trackList, errcode) ) return errcode;
 	s_trackList->SetForceSelect(FALSE);
@@ -180,7 +180,7 @@ void musictrackscreen_Cleanup()
 
 
 
-void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void musictrackscreen_acceptPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( musictrackscreen_removeMyWindow(action) ) {
 

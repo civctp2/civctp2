@@ -34,12 +34,12 @@
 // - Added a check in terrainutil_CanPlayerBuildAt for the IsRestrictedToGood
 //   flag so a tile improvement can only be built on a tile with a
 //   certain good on it - (E 2005/03/12)
-// - Removed .NET warnings - May 7th 2005 Martin Gühmann
+// - Removed .NET warnings - May 7th 2005 Martin GÃ¼hmann
 // - terrainutil_CanPlayerSpecialBuildAt added by E 4-1-2006
 // - Added outcommented terrainutil_HasUpgrader, terrainutil_CanBeCaptured,
 //   terrainutil_HasColony by E (4-25-2006) fo future use
 // - implemented above and added HasMinefield by E 5-30-2006
-// - Made government modified for units work here. (July 29th 2006 Martin Gühmann)
+// - Made government modified for units work here. (July 29th 2006 Martin GÃ¼hmann)
 // - Added CanBuildAlly and CanBuildWasteland checks
 // - Added outcommented infrastructure flags
 // - Added IsWonder Check to specialbuildat
@@ -47,9 +47,9 @@
 // - Added HasWonder method
 // - FINALLY got contiguous irrigation to work 4.12.2007
 // - City Radius tileimps
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin GÃ¼hmann)
 // - Added terrainutil_GetMinimumProductionCost to retrieve the minimum
-//   costs of a tile improvement. (17-Jan-2008 Martin Gühmann)
+//   costs of a tile improvement. (17-Jan-2008 Martin GÃ¼hmann)
 // - Fixed GetNeedsIrrigation in terrainutil_CanPlayerBuildAt. CityInfluenceIterator
 //	 was not finding irrigation squares next to a city with irrigation from a tile imp.
 //	 (10-Mar-2009 Maq)
@@ -851,22 +851,24 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		// need to add a start building check to prevent multiple instances
 		if(eff->GetNumIsWonder() > 0)
 		{
+			Unit cellcity = cell->GetCityOwner();
+			CityData *wondercity = cellcity.GetData()->GetCityData();
+			if (cellcity.GetOwner() != pl)
+				return false;
+
+			bool canBuild = false;
 			for(sint32 won = 0; won < eff->GetNumIsWonder(); won++)
 			{
-				if(eff->GetIsWonderIndex(won))
+				if(wondercity->HasCityWonder(eff->GetIsWonderIndex(won)))
 				{
-					Unit cellcity = cell->GetCityOwner();
-					CityData *wondercity = cellcity.GetData()->GetCityData();
-					if (cellcity.GetOwner() != pl)
-						return false;
-
-					for (sint32 w =0; w < wondercity->GetBuiltWonders(); w++)
-					{
-						if (w != won)
-							return false;
-					}
+					canBuild = true;
+					break;
 				}
+
 			} //end isbuilding loop
+
+			if(!canBuild)
+				return false;
 
 		//end wonder check
 		}
@@ -886,6 +888,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 
 	// End EMOD
 	}
+
 	return true;
 }
 
@@ -913,8 +916,9 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 
 	const TerrainImprovementRecord::Effect *eff;
 	eff = terrainutil_GetTerrainEffect(rec, cell->GetTerrain());
-		if(!eff)
-			return false;
+
+	if(!eff)
+		return false;
 
 //	if(cell->GetOwner() == -1) {
 //		if(rec->GetIntBorderRadius()) {
@@ -931,14 +935,20 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 	{
 		bool const haveAlliance	=
 			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
-		if(cell->GetOwner() > 0 && haveAlliance) {
+		if(cell->GetOwner() > 0 && haveAlliance)
+		{
 			if(rec->GetClassRoad() ||
-				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
+				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex())))
+			{
 
-			} else {
+			}
+			else
+			{
 				return false;
 			}
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -946,24 +956,25 @@ bool terrainutil_CanPlayerSpecialBuildAt(const TerrainImprovementRecord *rec, si
 	if(g_theWorld->GetCity(pos).IsValid())
 		return false;
 
-		if(rec->GetNumIsRestrictedToGood () == 0) {
-			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
-				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
-					return false;
-				}
-			}
-		}
-		else {
-			sint32 good;
-			if (g_theWorld->GetGood(pos, good)) {
-				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
-					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
-						return true;
-					}
-				}
+	if(rec->GetNumIsRestrictedToGood () == 0) {
+		for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
+			if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
 				return false;
 			}
 		}
+	}
+	else
+	{
+		sint32 good;
+		if (g_theWorld->GetGood(pos, good)) {
+			for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
+				if(rec->GetIsRestrictedToGoodIndex(i) == good) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 	if(eff->GetNumIsWonder() > 0) {  //added for show on map code
 		if(terrainutil_HasWonder(pos)) {
 			return false;
@@ -1628,12 +1639,17 @@ bool terrainutil_CanPlayerSpecialBuildAt(sint32 impType, sint32 pl, const MapPoi
 			AgreementMatrix::s_agreements.HasAgreement(pl, cell->GetOwner(), PROPOSAL_TREATY_ALLIANCE);
 		if(cell->GetOwner() > 0 && haveAlliance) {
 			if(rec->GetClassRoad() ||
-				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex()))) {
+				(g_player[pl]->GetGaiaController() && g_player[pl]->GetGaiaController()->GaiaControllerTileImp(rec->GetIndex())))
+			{
 
-			} else {
+			}
+			else
+			{
 				return false;
 			}
-		} else {
+		}
+		else
+		{
 			return false;
 		}
 	}
@@ -1641,24 +1657,25 @@ bool terrainutil_CanPlayerSpecialBuildAt(sint32 impType, sint32 pl, const MapPoi
 	if(g_theWorld->GetCity(pos).IsValid())
 		return false;
 
-		if(rec->GetNumIsRestrictedToGood () == 0) {
-			for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
-				if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
-					return false;
-				}
-			}
-		}
-		else {
-			sint32 good;
-			if (g_theWorld->GetGood(pos, good)) {
-				for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
-					if(rec->GetIsRestrictedToGoodIndex(i) == good) {
-						return true;
-					}
-				}
+	if(rec->GetNumIsRestrictedToGood () == 0) {
+		for(i = 0; i < rec->GetNumCantBuildOn(); i++) {
+			if(rec->GetCantBuildOnIndex(i) == cell->GetTerrain()) {
 				return false;
 			}
 		}
+	}
+	else
+	{
+		sint32 good;
+		if (g_theWorld->GetGood(pos, good)) {
+			for(i = 0; i < rec->GetNumIsRestrictedToGood(); i++) {
+				if(rec->GetIsRestrictedToGoodIndex(i) == good) {
+					return true;
+				}
+			}
+			return false;
+		}
+	}
 	if(eff->GetNumIsWonder() > 0) {  //added for show on map code
 		if(terrainutil_HasWonder(pos)) {
 			return false;

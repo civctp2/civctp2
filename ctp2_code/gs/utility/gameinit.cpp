@@ -411,9 +411,6 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 		settler = 0;
 	}
 
-
-
-
 	const DifficultyRecord *drec = g_theDifficultyDB->Get(g_theProfileDB->GetDifficulty());
 	sint32 humanStart = drec->GetHumanStartLocation();
 	if(humanStart > nPlayers - 1)
@@ -439,10 +436,12 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 			}
 		}
 		else
+		{
 			if(i == 1)
 			{
 				which = humanStart;
 			}
+		}
 
 		if(player_start_list[which].x < 0)
 			break;
@@ -463,16 +462,18 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 				nUnits = 1;
 			}
 			else
+			{
 				if (g_player[i]->IsRobot())
 				{
 					nUnits = drec->GetAIStartUnits();
 				}
+			}
 
-				if (g_player_start_score[which] < sint32(drec->GetExtraSettlerChance()))
-//add additional free start units here
-				{
-					nUnits++;
-				}
+			if (g_player_start_score[which] < sint32(drec->GetExtraSettlerChance()))
+			//add additional free start units here
+			{
+				nUnits++;
+			}
 		}
 
 		if (nUnits < 1)
@@ -528,12 +529,12 @@ void gameinit_SpewUnits(sint32 player, MapPoint &pos)
 		}
 		pos.x++;
 	} else {
-		fscanf(uFile, "%ld\n", &n);
+		fscanf(uFile, "%d\n", &n);
 
 		sint32 *uids = new sint32[n];
 
 		for (i=0; i<n; i++) {
-			fscanf(uFile, "%ld\n", &uids[i]);
+			fscanf(uFile, "%d\n", &uids[i]);
 		}
 		fclose(uFile);
 
@@ -1294,22 +1295,10 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
     verifyYwrap();
 #endif
 
-
-
-
-
-
 	SPLASH_STRING("Creating AI Interface's...");
 
 	if (g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch())
 	{
-		PLAYER_INDEX ai_players[k_MAX_PLAYERS];
-		sint32 next = 0;
-
-		for (i=0; i< k_MAX_PLAYERS; i++)
-			if(g_player[i] && g_player[i]->IsRobot())
-				ai_players[next++] = PLAYER_INDEX(i);
-
 		if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch())
 			g_theProfileDB->SetAI(TRUE);
 	}
@@ -1322,22 +1311,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	g_theTradeOfferPool->ReRegisterOffers();
 
-
-
-
-
-
-
-
-
-
 	if ( g_selected_item && g_player[g_selected_item->GetVisiblePlayer()] )
 	{
-
-
-
-
-
 		g_selected_item->Refresh();
 	}
 
@@ -1384,9 +1359,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 		g_setBarbarianRiskUponLaunch = FALSE;
 	}
 
-
-
-
 	infowin_SetMinRoundForGraphs(0);
 
 	return 1;
@@ -1394,7 +1366,6 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 sint32 gameinit_GetCivForSlot(sint32 slot)
 {
-
 	if(g_network.IsLaunchHost()) {
 
 		if(slot > g_network.GetNumHumanPlayers()) {
@@ -2167,18 +2138,6 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 
 		if(g_theProfileDB->IsAIOn() || g_network.IsNetworkLaunch() )
 		{
-			PLAYER_INDEX ai_players[k_MAX_PLAYERS];
-
-			sint32 next = 0;
-
-			for (i=0; i< k_MAX_PLAYERS; i++)
-			{
-				if(g_player[i] && g_player[i]->IsRobot())
-				{
-					ai_players[next++] = PLAYER_INDEX(i);
-				}
-			}
-
 			if(!g_theProfileDB->IsAIOn() && g_network.IsNetworkLaunch())
 			{
 				g_theProfileDB->SetAI(TRUE);

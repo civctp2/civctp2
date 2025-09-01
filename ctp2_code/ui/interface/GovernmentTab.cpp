@@ -65,7 +65,7 @@ template <class type> COLORREF ComparisonColorOpposite(type left, type right)
 	return(g_colorSet->GetColorRef(COLOR_BLACK));
 }
 
-GovernmentTab::GovernmentTab(MBCHAR *ldlBlock) :
+GovernmentTab::GovernmentTab(const MBCHAR *ldlBlock) :
 m_tabPanel(static_cast<ctp2_Static*>(aui_Ldl::GetObject(ldlBlock))),
 m_enactButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(ldlBlock,
 	"EnactGovernment"))),
@@ -216,8 +216,7 @@ void GovernmentTab::UpdateCompareGovernmentDropdown()
 			ctp2_Static *label = static_cast<ctp2_Static*>(
 				listItem->GetChildByIndex(0));
 			label->SetText(government->GetNameText());
-			listItem->SetUserData(
-				reinterpret_cast<void*>(governmentIndex));
+			listItem->SetUserData(governmentIndex);
 
 			m_compareGovernment->AddItem(listItem);
 
@@ -474,8 +473,7 @@ std::pair<bool, sint32> GovernmentTab::GetGovernmentSelection()
 
 			currentSelection.first = true;
 
-			currentSelection.second = reinterpret_cast<sint32>
-				(currentItem->GetUserData());
+			currentSelection.second = currentItem->GetUserDataSint32();
 		}
 	}
 
@@ -483,20 +481,20 @@ std::pair<bool, sint32> GovernmentTab::GetGovernmentSelection()
 }
 
 void GovernmentTab::CompareGovernmentActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_DROPDOWN_ACTION_SELECT))
 		return;
 
-	static_cast<GovernmentTab*>(cookie)->UpdateCompareGovernment();
-	static_cast<GovernmentTab*>(cookie)->m_tabPanel->ShouldDraw(TRUE);
+	static_cast<GovernmentTab*>(cookie.m_voidPtr)->UpdateCompareGovernment();
+	static_cast<GovernmentTab*>(cookie.m_voidPtr)->m_tabPanel->ShouldDraw(TRUE);
 }
 
-void GovernmentTab::ConfirmGovernmentChange(bool result, void *data)
+void GovernmentTab::ConfirmGovernmentChange(bool result, Cookie data)
 {
 
-	GovernmentTab *tab = static_cast<GovernmentTab*>(data);
+	GovernmentTab *tab = static_cast<GovernmentTab*>(data.m_voidPtr);
 
 	if(result) {
 		Player *player = g_player[g_selected_item->GetVisiblePlayer()];
@@ -514,7 +512,7 @@ void GovernmentTab::ConfirmGovernmentChange(bool result, void *data)
 }
 
 void GovernmentTab::EnactGovernmentActionCallback(aui_Control *control,
-	uint32 action, uint32 data, void *cookie)
+	uint32 action, uint32 data, Cookie cookie)
 {
 
 	if(action != static_cast<uint32>(AUI_BUTTON_ACTION_EXECUTE))
@@ -523,7 +521,7 @@ void GovernmentTab::EnactGovernmentActionCallback(aui_Control *control,
 	Player *player = g_player[g_selected_item->GetVisiblePlayer()];
 
 
-	GovernmentTab *tab = static_cast<GovernmentTab*>(cookie);
+	GovernmentTab *tab = static_cast<GovernmentTab*>(cookie.m_voidPtr);
 
 	sint32 i;
 	for(i = player->m_all_units->Num() - 1; i >= 0; i--) {

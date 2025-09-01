@@ -152,7 +152,7 @@ sint32 TransformSliderValueToCityNameAlpha(sint32 sliderValue)
 	return pixelutils_OPAQUE;
 }
 
-void graphicsscreen_cityNameAlphaSlide(aui_Control * control, uint32 action, uint32 data, void * cookie)
+void graphicsscreen_cityNameAlphaSlide(aui_Control * control, uint32 action, uint32 data, Cookie cookie)
 {
 	if (action != AUI_RANGER_ACTION_VALUECHANGE) {
 		return;
@@ -320,14 +320,14 @@ void graphicsscreen_Cleanup()
 #undef mycleanup
 }
 
-void graphicsscreen_screensizeSelect(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_screensizeSelect(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_LISTBOX_ACTION_SELECT  ) return;
 
 	if(s_graphicsWindow) callbackSetSelected(control,cookie);
 }
 
-void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -365,11 +365,11 @@ void graphicsscreen_exitPress(aui_Control *control, uint32 action, uint32 data, 
 	graphicsscreen_removeMyWindow(action);
 }
 
-void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != (uint32)AUI_SWITCH_ACTION_PRESS ) return;
 
-	uint32 checkbox = *((uint32*)cookie);
+	uint32 checkbox = *((uint32*)cookie.m_voidPtr);
 	void (ProfileDB::*func)(BOOL) = 0;
 	uint32 state = data;
 
@@ -433,7 +433,7 @@ void graphicsscreen_checkPress(aui_Control *control, uint32 action, uint32 data,
 		(g_theProfileDB->*func)(state ? FALSE : TRUE);
 }
 
-void graphicsscreen_selectResolution(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void graphicsscreen_selectResolution(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
@@ -442,24 +442,24 @@ void graphicsscreen_selectResolution(aui_Control *control, uint32 action, uint32
 	}
 }
 
-void graphicsscreen_brightSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_brightSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 }
-void graphicsscreen_gammaSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_gammaSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 }
-void graphicsscreen_colorSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_colorSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 }
-void graphicsscreen_contrastSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_contrastSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 
 }
 
-void graphicsscreen_unitSpeedSlide(aui_Control *control, uint32 action, uint32 data, void *cookie )
+void graphicsscreen_unitSpeedSlide(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
 	if ( action != AUI_RANGER_ACTION_VALUECHANGE ) return;
 

@@ -78,8 +78,8 @@
 extern C3UI *g_c3ui;
 
 static UnitManager *s_unitManager = NULL;
-static MBCHAR *s_unitManagerBlock = "UnitManager";
-static MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
+static const MBCHAR *s_unitManagerBlock = "UnitManager";
+static const MBCHAR *s_unitManagerAdviceBlock = "UnitManagerAdviceWindow";
 bool UnitManager::sm_statsTabVisible = true;
 
 #define k_UNITMAN_STATS 0
@@ -126,19 +126,19 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 	m_tacticalList = (ctp2_ListBox *)aui_Ldl::GetObject(s_unitManagerBlock, "Tabs.Tactical.TabPanel.List");
 	Assert(m_tacticalList);
 	if(m_tacticalList) {
-		m_tacticalList->SetActionFuncAndCookie(TacticalList, NULL);
+		m_tacticalList->SetActionFuncAndCookie(TacticalList, nullptr);
 		m_tacticalList->SetMultiSelect(TRUE);
 	}
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "CloseButton", Close, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "AdviceButton", Advice, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "CloseButton", Close, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "AdviceButton", Advice, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Slider", ReadinessActionCallback, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Slider", ReadinessActionCallback, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "DisbandButton", DisbandButton, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "DisbandButton", DisbandButton, nullptr);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Stats", TabChanged, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Tactical", TabChanged, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Stats", TabChanged, nullptr);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerBlock, "Tabs.Tactical", TabChanged, nullptr);
 
 	m_adviceWindow = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_unitManagerAdviceBlock);
 	Assert(m_adviceWindow);
@@ -155,7 +155,7 @@ UnitManager::UnitManager(AUI_ERRCODE *err)
 	m_window->AddDockedWindow(m_adviceWindow);
 	m_adviceWindow->SetDock(m_window);
 
-	aui_Ldl::SetActionFuncAndCookie(s_unitManagerAdviceBlock, "UpkeepButton", UpkeepButton, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_unitManagerAdviceBlock, "UpkeepButton", UpkeepButton, nullptr);
 
 	*err = AUI_ERRCODE_OK;
 
@@ -255,12 +255,12 @@ AUI_ERRCODE UnitManager::Hide()
 	return g_c3ui->RemoveWindow(s_unitManager->m_window->Id());
 }
 
-void UnitManager::TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, void *cookie)
+void UnitManager::TabGroupCallback(ctp2_TabGroup *group, ctp2_Tab *tab, Cookie cookie)
 {
 	UnitManager::UpdateAdviceText();
 }
 
-void UnitManager::Close(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::Close(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 	UnitManager::Hide();
@@ -389,7 +389,7 @@ void UnitManager::UpdateStatsList()
 					child->SetText(buf);
 				}
 
-				item->SetUserData((void *)i);
+				item->SetUserData(i);
 				item->SetCompareCallback(CompareStatItems);
 
 				m_statsList->AddItem(item);
@@ -488,9 +488,9 @@ void UnitManager::UpdateTacticalList()
 
 		child = (ctp2_Static *) box->GetChildByIndex(k_TACTICAL_HEALTH_COL);
 		if (child) {
-			child->SetDrawCallbackAndCookie(DrawHealthBar, (void *)u.m_id);
+			child->SetDrawCallbackAndCookie(DrawHealthBar, u.m_id);
 		}
-		item->SetUserData((void *)u.m_id);
+		item->SetUserData(u.m_id);
 		item->SetCompareCallback(CompareTacticalItems);
 		m_tacticalList->AddItem(item);
 	}
@@ -684,8 +684,8 @@ void UnitManager::UpdateAdviceText()
 
 sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	sint32 idx1 = (sint32)item1->GetUserData();
-	sint32 idx2 = (sint32)item2->GetUserData();
+	sint32 idx1 = item1->GetUserDataSint32();
+	sint32 idx2 = item2->GetUserDataSint32();
 	const UnitRecord *rec1 = g_theUnitDB->Get(idx1);
 	const UnitRecord *rec2 = g_theUnitDB->Get(idx2);
 
@@ -737,8 +737,8 @@ sint32 UnitManager::CompareStatItems(ctp2_ListItem *item1, ctp2_ListItem *item2,
 
 sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	Unit u1; u1.m_id = (uint32)item1->GetUserData();
-	Unit u2; u2.m_id = (uint32)item2->GetUserData();
+	Unit u1; u1.m_id = item1->GetUserDataUint32();
+	Unit u2; u2.m_id = item2->GetUserDataUint32();
 	if(!u1.IsValid() || !u2.IsValid())
 		return 0;
 
@@ -815,8 +815,8 @@ sint32 UnitManager::CompareTacticalItems(ctp2_ListItem *item1, ctp2_ListItem *it
 
 sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item2, sint32 column)
 {
-	UnitManagerCategoryInfo *info1 = (UnitManagerCategoryInfo *)item1->GetUserData();
-	UnitManagerCategoryInfo *info2 = (UnitManagerCategoryInfo *)item2->GetUserData();
+	UnitManagerCategoryInfo *info1 = (UnitManagerCategoryInfo *)item1->GetUserDataPtr();
+	UnitManagerCategoryInfo *info2 = (UnitManagerCategoryInfo *)item2->GetUserDataPtr();
 
 	switch(column) {
 		case k_ADVICE_CATEGORY_COL:
@@ -833,7 +833,7 @@ sint32 UnitManager::CompareAdviceItems(ctp2_ListItem *item1, ctp2_ListItem *item
 }
 
 AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surface,
-									   RECT &rect, void *cookie)
+									   RECT &rect, Cookie cookie)
 {
 	RECT destRect = {
 		rect.left + 2,
@@ -847,7 +847,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	if(err != AUI_ERRCODE_OK)
 		return err;
 
-	Unit u ((uint32) cookie);
+	Unit u (cookie.m_uin32Type);
 	Assert(u.IsValid());
 	if(!u.IsValid())
 		return AUI_ERRCODE_INVALIDPARAM;
@@ -892,7 +892,7 @@ AUI_ERRCODE UnitManager::DrawHealthBar(ctp2_Static *control, aui_Surface *surfac
 	return err;
 }
 
-void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -910,7 +910,7 @@ void UnitManager::UpkeepButton(aui_Control *control, uint32 action, uint32 data,
 	UpdateUpkeepButton(butt, pl, useTotalFormat);
 }
 
-void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -929,7 +929,7 @@ void UnitManager::Advice(aui_Control *control, uint32 action, uint32 data, void 
 	}
 }
 
-void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_LISTBOX_ACTION_DOUBLECLICKSELECT) return;
 
@@ -938,7 +938,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	ctp2_ListItem *item = lb ? (ctp2_ListItem *)lb->GetSelectedItem() : NULL;
 	if(!item) return;
 
-	Unit u(reinterpret_cast<uint32>(item->GetUserData()));
+	Unit u(item->GetUserDataSint32());
 	Assert(u.IsValid());
 
 	if (u.IsValid())
@@ -962,7 +962,7 @@ void UnitManager::TacticalList(aui_Control *control, uint32 action, uint32 data,
 	g_director->AddCenterMap(u.RetPos());
 }
 
-void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
 
@@ -976,14 +976,14 @@ void UnitManager::DisbandButton(aui_Control *control, uint32 action, uint32 data
 
 }
 
-void UnitManager::TabChanged(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void UnitManager::TabChanged(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	UnitManager::sm_statsTabVisible =
 	    (control == aui_Ldl::GetObject(s_unitManagerBlock, "Tabs.Stats"));
 	UnitManager::UpdateAdviceText();
 }
 
-void UnitManager::DisbandQuery(bool response, void *data)
+void UnitManager::DisbandQuery(bool response, Cookie data)
 {
 	if(response) {
 		Assert(s_unitManager);
@@ -1026,7 +1026,7 @@ void UnitManager::DisbandSelected()
 
 		if(theList == m_tacticalList) {
 
-			Unit u; u.m_id = (uint32)item->GetUserData();
+			Unit u; u.m_id = item->GetUserDataUint32();
 
 			m_lastDisbandedUnit = u.m_id;
 			if(g_network.IsClient()) {
@@ -1037,7 +1037,7 @@ void UnitManager::DisbandSelected()
 								   GEA_End);
 		} else if(theList == m_statsList) {
 
-			sint32 unitType = (sint32)item->GetUserData();
+			sint32 unitType = item->GetUserDataSint32();
 			sint32 i;
 			Player *pl = g_player[g_selected_item->GetVisiblePlayer()];
 			Assert(pl);
@@ -1112,7 +1112,7 @@ void UnitManager::CleanupEvents()
 
 void UnitManager::ReadinessActionCallback(aui_Control *control,
 													 uint32 action, uint32 data,
-													 void *cookie)
+													 Cookie cookie)
 {
 	if(action != static_cast<uint32>(AUI_RANGER_ACTION_VALUECHANGE))
 		return;

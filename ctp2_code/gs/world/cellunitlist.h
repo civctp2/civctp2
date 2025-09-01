@@ -27,8 +27,8 @@
 // - Microsoft extensions removed.
 // - MovementTypeLand added, as suggested by NelsonAndBronte.
 // - Option added to report sync errors only once.
-// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
-// - Position strength can now be calculated independently from position. (13-Aug-2008 Martin Gühmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin GÃ¼hmann)
+// - Position strength can now be calculated independently from position. (13-Aug-2008 Martin GÃ¼hmann)
 //
 //----------------------------------------------------------------------------
 //
@@ -90,6 +90,7 @@ public:
 	CellUnitList() {m_nElements = 0;}
 	CellUnitList(const sint32 size) {Assert(size == k_MAX_ARMY_SIZE); m_nElements = 0;}
 	CellUnitList(const DynamicArray<Unit> &copyme);
+	virtual ~CellUnitList(){}
 	void Serialize(CivArchive &archive);
 
 	virtual bool Insert(Unit id);

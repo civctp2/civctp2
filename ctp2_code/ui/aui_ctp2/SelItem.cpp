@@ -1057,8 +1057,7 @@ void SelectedItem::Refresh()
 
 			if(s_state == SELECT_TYPE_LOCAL_CITY)
 			{
-				Unit u = s_item;
-
+			//	Unit u = s_item;
 			}
 			else if(s_state == SELECT_TYPE_LOCAL_ARMY)
 			{
@@ -2842,7 +2841,7 @@ void SelectedItem::UpdateSelectedItem( void )
 
 			if(s_state == SELECT_TYPE_LOCAL_CITY)
 			{
-				Unit u = s_item;
+			//	Unit u = s_item;
 			}
 			else if(s_state == SELECT_TYPE_LOCAL_ARMY)
 			{

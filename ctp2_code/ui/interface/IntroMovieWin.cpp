@@ -69,29 +69,24 @@ void intromoviewin_Initialize(void)
 	}
 }
 
-
 void intromoviewin_DisplayIntroMovie(void)
 {
-	MBCHAR		*whichMovie;
-
 	Assert(g_introMovieWindow != NULL);
 	if (g_introMovieWindow == NULL) return;
 
-	whichMovie = "VICTORY_INTRO";
+	const MBCHAR* whichMovie = "VICTORY_INTRO";
 
 	sint32 index = g_theVictoryMovieDB->FindTypeIndex(whichMovie);
 	Assert(index >= 0);
 
-	MBCHAR *filename = g_theVictoryMovieDB->GetMovieFilename(index);
+	const MBCHAR *filename = g_theVictoryMovieDB->GetMovieFilename(index);
 	g_introMovieWindow->SetMovie(filename);
 
 	AUI_ERRCODE		errcode;
 
 	errcode = g_c3ui->AddWindow(g_introMovieWindow);
 	Assert(errcode == AUI_ERRCODE_OK);
-
 }
-
 
 void intromoviewin_Cleanup()
 {
@@ -105,7 +100,7 @@ void intromoviewin_Cleanup()
 }
 
 
-void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, void * cookie)
+void intromoviewin_MovieButtonCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie)
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
