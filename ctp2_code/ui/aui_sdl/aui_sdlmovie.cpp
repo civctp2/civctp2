@@ -12,6 +12,7 @@
 #if defined(USE_SDL_FFMPEG)
 
 extern "C" {
+#include <libavcodec/avcodec.h> // indirectly included in https://github.com/FFmpeg/FFmpeg/blob/release/7.1/fftools/ffplay.c
 // c+p from https://github.com/FFmpeg/FFmpeg/blob/release/7.1/fftools/ffplay.c#L33C1-L53C1
 #include "libavutil/avstring.h"
 #include "libavutil/channel_layout.h"
@@ -331,6 +332,7 @@ static int64_t audio_callback_time;
 #define FF_QUIT_EVENT    (SDL_USEREVENT + 2)
 
 static SDL_Renderer *renderer;
+static SDL_Texture *background = NULL;
 static SDL_AudioDeviceID audio_dev;
 
 static const struct TextureFormatEntry {
@@ -520,7 +522,7 @@ static int decoder_init(Decoder *d, AVCodecContext *avctx, PacketQueue *queue, S
     return 0;
 }
 
-static int decoder_decode_frame(Decoder *d, AVFrame *frame, AVSubtitle *sub) {
+static int decoder_decode_frame(Decoder *d, AVFrame *frame) {
     int ret = AVERROR(EAGAIN);
 
     for (;;) {
@@ -992,9 +994,7 @@ static void video_display(VideoState *is)
 
     SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
     SDL_RenderClear(renderer);
-    if (is->audio_st && is->show_mode != SHOW_MODE_VIDEO)
-        video_audio_display(is);
-    else if (is->video_st)
+    if (is->video_st)
         video_image_display(is);
     SDL_RenderPresent(renderer);
 }
@@ -1244,7 +1244,7 @@ retry:
         }
 display:
         /* display picture */
-        if (!display_disable && is->force_refresh && is->show_mode == SHOW_MODE_VIDEO && is->pictq.rindex_shown)
+        if (is->force_refresh && is->pictq.rindex_shown)
             video_display(is);
     }
     is->force_refresh = 0;
@@ -1285,7 +1285,7 @@ static int get_video_frame(VideoState *is, AVFrame *frame)
 {
     int got_picture;
 
-    if ((got_picture = decoder_decode_frame(&is->viddec, frame, NULL)) < 0)
+    if ((got_picture = decoder_decode_frame(&is->viddec, frame)) < 0)
         return -1;
 
     if (got_picture) {
@@ -1329,7 +1329,7 @@ static int audio_thread(void *arg)
         return AVERROR(ENOMEM);
 
     do {
-        if ((got_frame = decoder_decode_frame(&is->auddec, frame, NULL)) < 0)
+        if ((got_frame = decoder_decode_frame(&is->auddec, frame)) < 0)
             goto the_end;
 
         if (got_frame) {
@@ -1341,7 +1341,7 @@ static int audio_thread(void *arg)
                     goto the_end;
 
                 af->pts = (frame->pts == AV_NOPTS_VALUE) ? NAN : frame->pts * av_q2d(tb);
-                af->pos = fd ? fd->pkt_pos : -1;
+                af->pos = fd ? fd->pkt_pos: -1;
                 af->serial = is->auddec.pkt_serial;
                 af->duration = av_q2d((AVRational){frame->nb_samples, frame->sample_rate});
 
@@ -1389,7 +1389,7 @@ static int video_thread(void *arg)
             fd = frame->opaque_ref ? (FrameData*)frame->opaque_ref->data : NULL;
             duration = (frame_rate.num && frame_rate.den ? av_q2d((AVRational){frame_rate.den, frame_rate.num}) : 0);
             pts = (frame->pts == AV_NOPTS_VALUE) ? NAN : frame->pts * av_q2d(tb);
-            ret = queue_picture(is, frame, pts, duration, fd ? fd->pkt_pos : -1, is->viddec.pkt_serial);
+            ret = queue_picture(is, frame, pts, duration, fd ? fd->pkt_pos: -1, is->viddec.pkt_serial);
             av_frame_unref(frame);
 
         if (ret < 0)
@@ -1825,6 +1825,16 @@ static int is_realtime(AVFormatContext *s)
     return 0;
 }
 
+void print_error(const char *filename, int err)
+{
+	char errbuf[128];
+	const char *errbuf_ptr = errbuf;
+
+	if (av_strerror(err, errbuf, sizeof(errbuf)) < 0)
+		errbuf_ptr = strerror(AVUNERROR(err));
+	av_log(NULL, AV_LOG_ERROR, "%s: %s\n", filename, errbuf_ptr);
+}
+
 /* this thread gets the stream from the disk or the network */
 static int read_thread(void *arg)
 {
@@ -1863,7 +1873,7 @@ static int read_thread(void *arg)
     }
     ic->interrupt_callback.callback = decode_interrupt_cb;
     ic->interrupt_callback.opaque = is;
-    err = avformat_open_input(&ic, is->filename, is->iformat, &format_opts);
+    err = avformat_open_input(&ic, is->filename, is->iformat, NULL);
     if (err < 0) {
         print_error(is->filename, err);
         ret = -1;
@@ -1944,8 +1954,7 @@ static int read_thread(void *arg)
         if (infinite_buffer<1 &&
               (is->audioq.size + is->videoq.size + is->subtitleq.size > MAX_QUEUE_SIZE
             || (stream_has_enough_packets(is->audio_st, is->audio_stream, &is->audioq) &&
-                stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq) &&
-                stream_has_enough_packets(is->subtitle_st, is->subtitle_stream, &is->subtitleq)))) {
+                stream_has_enough_packets(is->video_st, is->video_stream, &is->videoq)))) {
             /* wait 10 ms */
             SDL_LockMutex(wait_mutex);
             SDL_CondWaitTimeout(is->continue_read_thread, wait_mutex, 10);
@@ -2036,8 +2045,7 @@ static VideoState *stream_open(const char *filename,
         goto fail;
 
     if (packet_queue_init(&is->videoq) < 0 ||
-        packet_queue_init(&is->audioq) < 0 ||
-        packet_queue_init(&is->subtitleq) < 0)
+        packet_queue_init(&is->audioq) < 0)
         goto fail;
 
     if (!(is->continue_read_thread = SDL_CreateCond())) {
@@ -2058,10 +2066,11 @@ static VideoState *stream_open(const char *filename,
     is->audio_volume = startup_volume;
     is->muted = 0;
     is->av_sync_type = av_sync_type;
+// done in (moved to) aui_SDLMovie::Play():     is->read_tid     = SDL_CreateThread(read_thread, "read_thread", is);
+    return is; // has to be moved before fail: because the test on read_tid is also moved to aui_SDLMovie::Play()
 fail:
         stream_close(is);
         return NULL;
-    return is;
 }
 
 static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
@@ -2075,7 +2084,7 @@ static void refresh_loop_wait_event(VideoState *is, SDL_Event *event) {
         if (remaining_time > 0.0)
             av_usleep((int64_t)(remaining_time * 1000000.0));
         remaining_time = REFRESH_RATE;
-        if (is->show_mode != SHOW_MODE_NONE && (!is->paused || is->force_refresh))
+        if (!is->paused || is->force_refresh)
             video_refresh(is, &remaining_time);
         SDL_PumpEvents();
     }
