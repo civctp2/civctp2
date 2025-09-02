@@ -85,7 +85,7 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 	Path    path;
 	float   cost;
 
-#ifndef USE_QUICKTRADEROUTECALC
+#ifdef USE_PRECISETRADEROUTECALC
 // used to be tradeutil_GetAccurateTradeDistance which is exact but takes much longer to compute due to use of astar
 	if (g_theTradeAstar.FindPath // comparable to TradeRouteData::GeneratePath cost calculation
             (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
@@ -96,14 +96,14 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 
 	return DISTANCE_UNKNOWN;
 
-#else // USE_QUICKTRADEROUTECALC
+#else // not USE_PRECISETRADEROUTECALC
 // used to be tradeutil_GetTradeDistance which is a very rough calculation but is quick due to avoiding astar
 	cost = 5 * // used to be g_theWorld->CalcTerrainFreightCost(source.RetPos()) * which was just returning 5 as a const in orig code: https://github.com/civctp2/civctp2/blob/d614fbdf705db334a4b45037bbcc735142d22016/ctp2_code/gs/world/wldgen.cpp#L1984-L1990
 	    static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
 
 	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
 
-#endif // USE_QUICKTRADEROUTECALC
+#endif // USE_PRECISETRADEROUTECALC
 }
 
 // Maybe move the following to worldutils

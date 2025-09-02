@@ -157,11 +157,11 @@ else
 fi
 AM_CONDITIONAL(INTERNAL_ANET, test x$enable_anet == xno)
 
-AC_ARG_ENABLE([quicktraderoutecalc],
-              AC_HELP_STRING([--enable-quicktraderoutecalc],[enable quick (and dirty) trade route calculation]),,
-	      [enable_quicktraderoutecalc=no])
-if test x$enable_quicktraderoutecalc = xyes; then
-	AC_DEFINE(USE_QUICKTRADEROUTECALC,1,[enable quick (and dirty) trade route calculation])
+AC_ARG_ENABLE([precisetraderoutecalc],
+              AC_HELP_STRING([--enable-precisetraderoutecalc],[enable precise (but slower) trade route calculation]),,
+	      [enable_precisetraderoutecalc=no])
+if test x$enable_precisetraderoutecalc = xyes; then
+	AC_DEFINE(USE_PRECISETRADEROUTECALC,1,[enable precise (but slower) trade route calculation])
 fi
 
 AX_SUBDIRS_CONFIGURE([ctp2_code/libs/freetype-1.3.1], [--enable-shared=no], [], [], [])
