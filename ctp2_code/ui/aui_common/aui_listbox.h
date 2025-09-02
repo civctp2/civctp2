@@ -150,7 +150,7 @@ public:
 		if ( 0 > column || column >= m_numColumns )
 			return AUI_ERRCODE_INVALIDPARAM;
 
-		m_sortColumn = column;
+		m_sortColumn = static_cast<sint32>(column);
 		m_sortAscending = ascending;
 
 		return AUI_ERRCODE_OK;
@@ -179,7 +179,7 @@ public:
 	BOOL		IsAbsorbant( void ) const { return m_absorbEvents; }
 	BOOL		SetAbsorbancy( BOOL absorbEvents );
 
-	sint32		NumItems( void ) const { return m_numRows; }
+	sint32		NumItems( void ) const { return static_cast<sint32>(m_numRows); }
 
 	BOOL		IsItem( aui_Region *region );
 
@@ -333,7 +333,8 @@ protected:
 
 private:
 	sint32 CalculateRelativeY(sint32 y) const {
-		return y - m_y - (m_pane ? m_pane->Y() : 0);
+		sint32 relativeY = y - m_y - (m_pane ? m_pane->Y() : 0);
+		return (relativeY > 0 ? relativeY : 0);
 	}
 
 	sint32 CalculateItemIndexByRelativeY(sint32 relativeY) const {

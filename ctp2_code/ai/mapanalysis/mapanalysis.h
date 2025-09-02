@@ -67,55 +67,55 @@ public:
 	void ResizeContinents();
 
 	void BeginTurn();
-	void RecalcCityRanks(sint32 player);
+	void RecalcCityRanks(size_t player);
 
 	//     The enemy grids
-	sint32    GetEnemyGrid        (const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const;
-	sint32 GetMaxEnemyGrid        (const MapGridVector & gridVector, const sint32 & player) const;
+	sint32    GetEnemyGrid        (const MapGridVector & gridVector, const size_t & player, const MapPoint & pos) const;
+	sint32 GetMaxEnemyGrid        (const MapGridVector & gridVector, const size_t & player) const;
 
-	sint32 GetThreat              (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_threatGrid,      player, pos); };
-	sint32 GetEnemyAttack         (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_attackGrid,      player, pos); };
-	sint32 GetEnemyDefense        (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_defenseGrid,     player, pos); };
-	sint32 GetEnemyRanged         (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_rangedGrid,      player, pos); };
-	sint32 GetEnemyBombardLand    (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardLandGrid, player, pos); };
-	sint32 GetEnemyBombardSea     (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardSeaGrid,  player, pos); };
-	sint32 GetEnemyBombardAir     (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardAirGrid,  player, pos); };
-	sint32 GetEnemyCityValue      (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_cityValueGrid,   player, pos); };
-	sint32 GetEnemyValue          (const sint32 & player, const MapPoint & pos) const { return GetEnemyGrid(m_valueGrid,       player, pos); };
+	sint32 GetThreat              (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_threatGrid,      player, pos); };
+	sint32 GetEnemyAttack         (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_attackGrid,      player, pos); };
+	sint32 GetEnemyDefense        (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_defenseGrid,     player, pos); };
+	sint32 GetEnemyRanged         (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_rangedGrid,      player, pos); };
+	sint32 GetEnemyBombardLand    (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardLandGrid, player, pos); };
+	sint32 GetEnemyBombardSea     (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardSeaGrid,  player, pos); };
+	sint32 GetEnemyBombardAir     (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_bombardAirGrid,  player, pos); };
+	sint32 GetEnemyCityValue      (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_cityValueGrid,   player, pos); };
+	sint32 GetEnemyValue          (const size_t & player, const MapPoint & pos) const { return GetEnemyGrid(m_valueGrid,       player, pos); };
 
-	sint32 GetMaxThreat           (const sint32 & player) const { return GetMaxEnemyGrid(m_threatGrid,      player); };
-	sint32 GetMaxEnemyAttack      (const sint32 & player) const { return GetMaxEnemyGrid(m_attackGrid,      player); };
-	sint32 GetMaxEnemyDefense     (const sint32 & player) const { return GetMaxEnemyGrid(m_defenseGrid,     player); };
-	sint32 GetMaxEnemyRanged      (const sint32 & player) const { return GetMaxEnemyGrid(m_rangedGrid,      player); };
-	sint32 GetMaxEnemyBombardLand (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardLandGrid, player); };
-	sint32 GetMaxEnemyBombardSea  (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardSeaGrid,  player); };
-	sint32 GetMaxEnemyBombardAir  (const sint32 & player) const { return GetMaxEnemyGrid(m_bombardAirGrid,  player); };
-	sint32 GetMaxEnemyValue       (const sint32 & player) const { return GetMaxEnemyGrid(m_valueGrid,       player); };
-	sint32 GetMaxEnemyCityValue   (const sint32 & player) const { return GetMaxEnemyGrid(m_cityValueGrid,   player); };
+	sint32 GetMaxThreat           (const size_t & player) const { return GetMaxEnemyGrid(m_threatGrid,      player); };
+	sint32 GetMaxEnemyAttack      (const size_t & player) const { return GetMaxEnemyGrid(m_attackGrid,      player); };
+	sint32 GetMaxEnemyDefense     (const size_t & player) const { return GetMaxEnemyGrid(m_defenseGrid,     player); };
+	sint32 GetMaxEnemyRanged      (const size_t & player) const { return GetMaxEnemyGrid(m_rangedGrid,      player); };
+	sint32 GetMaxEnemyBombardLand (const size_t & player) const { return GetMaxEnemyGrid(m_bombardLandGrid, player); };
+	sint32 GetMaxEnemyBombardSea  (const size_t & player) const { return GetMaxEnemyGrid(m_bombardSeaGrid,  player); };
+	sint32 GetMaxEnemyBombardAir  (const size_t & player) const { return GetMaxEnemyGrid(m_bombardAirGrid,  player); };
+	sint32 GetMaxEnemyValue       (const size_t & player) const { return GetMaxEnemyGrid(m_valueGrid,       player); };
+	sint32 GetMaxEnemyCityValue   (const size_t & player) const { return GetMaxEnemyGrid(m_cityValueGrid,   player); };
 
 	//     The allied grids
-	sint32    GetAlliedGrid       (const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const;
-	sint32 GetMaxAlliedGrid       (const MapGridVector & gridVector, const sint32 & player) const;
+	sint32    GetAlliedGrid       (const MapGridVector & gridVector, const size_t & player, const MapPoint & pos) const;
+	sint32 GetMaxAlliedGrid       (const MapGridVector & gridVector, const size_t & player) const;
 
-	sint32 GetPower               (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_threatGrid,      player, pos); };
-	sint32 GetAlliedAttack        (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_attackGrid,      player, pos); };
-	sint32 GetAlliedDefense       (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_defenseGrid,     player, pos); };
-	sint32 GetAlliedRanged        (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_rangedGrid,      player, pos); };
-	sint32 GetAlliedBombardLand   (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardLandGrid, player, pos); };
-	sint32 GetAlliedBombardSea    (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardSeaGrid,  player, pos); };
-	sint32 GetAlliedBombardAir    (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardAirGrid,  player, pos); };
-	sint32 GetAlliedCityValue     (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_cityValueGrid,   player, pos); };
-	sint32 GetAlliedValue         (const sint32 & player, const MapPoint & pos) const { return GetAlliedGrid(m_valueGrid,       player, pos); };
+	sint32 GetPower               (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_threatGrid,      player, pos); };
+	sint32 GetAlliedAttack        (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_attackGrid,      player, pos); };
+	sint32 GetAlliedDefense       (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_defenseGrid,     player, pos); };
+	sint32 GetAlliedRanged        (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_rangedGrid,      player, pos); };
+	sint32 GetAlliedBombardLand   (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardLandGrid, player, pos); };
+	sint32 GetAlliedBombardSea    (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardSeaGrid,  player, pos); };
+	sint32 GetAlliedBombardAir    (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_bombardAirGrid,  player, pos); };
+	sint32 GetAlliedCityValue     (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_cityValueGrid,   player, pos); };
+	sint32 GetAlliedValue         (const size_t & player, const MapPoint & pos) const { return GetAlliedGrid(m_valueGrid,       player, pos); };
 
-	sint32 GetMaxPower            (const sint32 & player) const { return GetMaxAlliedGrid(m_threatGrid,      player); };
-	sint32 GetMaxAlliedAttack     (const sint32 & player) const { return GetMaxAlliedGrid(m_attackGrid,      player); };
-	sint32 GetMaxAlliedDefense    (const sint32 & player) const { return GetMaxAlliedGrid(m_defenseGrid,     player); };
-	sint32 GetMaxAlliedRanged     (const sint32 & player) const { return GetMaxAlliedGrid(m_rangedGrid,      player); };
-	sint32 GetMaxAlliedBombardLand(const sint32 & player) const { return GetMaxAlliedGrid(m_bombardLandGrid, player); };
-	sint32 GetMaxAlliedBombardSea (const sint32 & player) const { return GetMaxAlliedGrid(m_bombardSeaGrid,  player); };
-	sint32 GetMaxAlliedBombardAir (const sint32 & player) const { return GetMaxAlliedGrid(m_bombardAirGrid,  player); };
-	sint32 GetMaxAlliedCityValue  (const sint32 & player) const { return GetMaxAlliedGrid(m_cityValueGrid,   player); };
-	sint32 GetMaxAlliedValue      (const sint32 & player) const { return GetMaxAlliedGrid(m_valueGrid,       player); };
+	sint32 GetMaxPower            (const size_t & player) const { return GetMaxAlliedGrid(m_threatGrid,      player); };
+	sint32 GetMaxAlliedAttack     (const size_t & player) const { return GetMaxAlliedGrid(m_attackGrid,      player); };
+	sint32 GetMaxAlliedDefense    (const size_t & player) const { return GetMaxAlliedGrid(m_defenseGrid,     player); };
+	sint32 GetMaxAlliedRanged     (const size_t & player) const { return GetMaxAlliedGrid(m_rangedGrid,      player); };
+	sint32 GetMaxAlliedBombardLand(const size_t & player) const { return GetMaxAlliedGrid(m_bombardLandGrid, player); };
+	sint32 GetMaxAlliedBombardSea (const size_t & player) const { return GetMaxAlliedGrid(m_bombardSeaGrid,  player); };
+	sint32 GetMaxAlliedBombardAir (const size_t & player) const { return GetMaxAlliedGrid(m_bombardAirGrid,  player); };
+	sint32 GetMaxAlliedCityValue  (const size_t & player) const { return GetMaxAlliedGrid(m_cityValueGrid,   player); };
+	sint32 GetMaxAlliedValue      (const size_t & player) const { return GetMaxAlliedGrid(m_valueGrid,       player); };
 
 	void DebugLog() const;
 
@@ -235,13 +235,13 @@ public:
 
 	void Cleanup();
 
-	void CalcEmpireCenter(const PLAYER_INDEX playerId);
+	void CalcEmpireCenter(const size_t playerId);
 
 private:
 	static MapAnalysis s_mapAnalysis;
 
-	void AddPiracyIncome( const PLAYER_INDEX playerId,
-	                      const PLAYER_INDEX victimId,
+	void AddPiracyIncome( const size_t playerId,
+	                      const size_t victimId,
 	                      const sint16 route_value );
 
 	void ComputeHandicapRatios();

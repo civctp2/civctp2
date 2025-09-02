@@ -92,6 +92,9 @@ void    close_OptionsScreen( void );
 sint32  open_KeyMappingScreen( void );
 void    close_KeyMappingScreen( void );
 
+void    open_LanguageScreen( void );
+void    close_LanguageScreen( void );
+
 sint32  open_EndGame( void );
 void    close_EndGame( void );
 

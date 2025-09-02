@@ -148,6 +148,13 @@ void NetCellList::Packetize(uint8* buf, uint16& size)
 	PUSHLONG(g_network.PackedPos(pos));
 	PUSHBYTE(m_cells);
 
+	DPRINTF(k_DBG_NET, ("\n"));
+	DPRINTF(k_DBG_NET, ("NetCellList sending chunk\n"));
+	DPRINTF(k_DBG_NET, ("Start pos: (%3d, %3d), Number of cells: %3d\n",
+		m_x,
+		m_y,
+		m_cells));
+
 	size_t cells = 0;
 
 #if defined(USE_WORLDSIZE_CLASS)
@@ -195,12 +202,26 @@ void NetCellList::Packetize(uint8* buf, uint16& size)
 				PUSHLONG(cell->m_objects->Get(i).m_id);
 			}
 
+			DPRINTF(k_DBG_NET, ("Map pos: (%3d, %3d), Current cell: %3zu, Terrain type: %3d, Owner: %3d, City ID: %8u, Flags: %8d, Jabba type: %3d, Jabba value: %3d, Object count: %3d \n",
+				x,
+				y,
+				cells,
+				cell->m_terrain_type,
+				cell->m_cellOwner,
+				cell->GetCity().m_id,
+				terrainPlusFlags,
+				cell->m_jabba ? cell->m_jabba->m_typeValue : 0,
+				cell->m_jabba ? cell->m_jabba->m_value : 0,
+				objectCount));
+
 			++cells;
 			if (cells >= m_cells)
 			{
 				return;
 			}
 		}
+
+		m_y = 0;
 	}
 }
 
@@ -217,6 +238,13 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 	m_y = mapPos.y;
 	PULLBYTE(m_cells);
 
+	DPRINTF(k_DBG_NET, ("\n"));
+	DPRINTF(k_DBG_NET, ("NetCellList receiving chunk\n"));
+	DPRINTF(k_DBG_NET, ("Start pos: (%3d, %3d), Number of cells: %3d\n",
+		m_x,
+		m_y,
+		m_cells));
+
 	size_t cells = 0;
 
 #if defined(USE_WORLDSIZE_CLASS)
@@ -224,6 +252,11 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 #else
 	MapPoint  mapsize = *g_theWorld->GetSize();
 #endif
+	// The map is put into chunks, m_x and m_y are 
+	// the start coordinates of each chunk.
+	// Each chunk has at max 37 Cells.
+	// Once the inner loop is complete, m_y
+	// must be set to 0.
 	for (sint32 x = m_x; x < mapsize.x; x++)
 	{
 		for (sint32 y = m_y; y < mapsize.y; y++)
@@ -283,6 +316,18 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				cell->m_objects->Insert(id);
 			}
 
+			DPRINTF(k_DBG_NET, ("Map pos: (%3d, %3d), Current cell: %3zu, Terrain type: %3d, Owner: %3d, City ID: %8u, Flags: %8d, Jabba type: %3d, Jabba value: %3d, Object count: %3d \n",
+				x,
+				y,
+				cells,
+				cell->m_terrain_type,
+				cell->m_cellOwner,
+				cell->GetCity().m_id,
+				terrainPlusFlags,
+				cell->m_jabba ? cell->m_jabba->m_typeValue : 0,
+				cell->m_jabba ? cell->m_jabba->m_value : 0,
+				numObjects));
+
 			cell->CalcTerrainMoveCost();
 
 			if (g_theWorld->GetTileInfo(mp))
@@ -298,6 +343,8 @@ void NetCellList::Unpacketize(uint16 id, uint8* buf, uint16 len)
 				return;
 			}
 		}
+
+		m_y = 0;
 	}
 }
 

@@ -23,20 +23,21 @@ public:
 	               BOOL isPrimary = FALSE,
 	               BOOL useVideoMemory = FALSE,
 	               BOOL takeOwnership = FALSE );
-        virtual ~aui_SDLSurface();
+	virtual ~aui_SDLSurface();
 
 protected:
-        aui_SDLSurface() : aui_Surface() {}
-        AUI_ERRCODE InitCommon( void );
+	aui_SDLSurface() : aui_Surface() {}
+	AUI_ERRCODE InitCommon( void );
 
 public:
-    static uint32 TransformSurfacePixelFormatToSDL(const AUI_SURFACE_PIXELFORMAT pixelFormat);
+	static uint32 TransformSurfacePixelFormatToSDL(const AUI_SURFACE_PIXELFORMAT pixelFormat);
 
-	virtual BOOL IsThisA( uint32 classId ) {
-            return ((classId == m_SDLSurfaceClassId)
-                    || aui_Surface::IsThisA( classId )
-                    || aui_SDL::IsThisA( classId ));
-            }
+	virtual BOOL IsThisA( uint32 classId )
+	{
+		return ((classId == m_SDLSurfaceClassId)
+		       || aui_Surface::IsThisA( classId )
+		       || aui_SDL::IsThisA( classId ));
+	}
 
 	virtual uint32 SetChromaKey( uint32 color );
 
@@ -44,10 +45,8 @@ public:
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
 	SDL_Surface*    DDS( void ) const { return m_lpdds; }
-	BOOL                            IsDCGot( void ) const { return m_dcIsGot
-; }
 
-        virtual BOOL IsOK( void ) const;
+	virtual BOOL IsOK( void ) const;
 	virtual AUI_ERRCODE Blank(const uint32 &color);
 
 	virtual void Flip();
@@ -61,7 +60,7 @@ protected:
 	SDL_Surface* m_lpdds;
 
 private:
-    SDL_Surface* CreateSDLSurface(const int width, const int height, const int bpp);
+	SDL_Surface* CreateSDLSurface(const int width, const int height, const int bpp);
 };
 
 typedef aui_SDLSurface aui_NativeSurface;

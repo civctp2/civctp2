@@ -72,7 +72,7 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Initial revision
 --------------------------------------------------------------------------*/
 
-#ifdef WIN32
+#if defined(_WIN32)
  /* Enumerates applications in the registry specified by SubKey */
 
 #define STRICT
@@ -493,6 +493,7 @@ DP_API dp_result_t DP_APIX dpDownloadUpdate(dp_t *dp, const dp_appParam_t *app)
 }
 #endif
 
+#if defined(_WIN32) && (!defined(_M_ARM) && !defined(_M_ARM64))
 /*----------------------------------------------------------------------
  Enumerate applications installed on this machine.
  Callback is called once for each application found.
@@ -538,7 +539,7 @@ dpEnumApp(
 
 	dp_appParam_t appParam;
 
-    precondition(cb != NULL);
+	precondition(cb != NULL);
 
 	DPRINT(("dpEnumApp:\n"));
 
@@ -548,23 +549,23 @@ dpEnumApp(
 	appParam.cwd = GameCwd;
 	appParam.shellOpts = GameShellOpts;
 
-	#if defined(dp_ANET2)
-		/* Set up the server-list table (the list of latest version number) */
-        if(dp != NULL) {
-		    if(dp->apps == NULL) {
-			    err = dp_createAppsList(dp);
-			    if (err != dp_RES_OK) {
-				    DPRINT(("dpEnumApp: Could not create apps, err:%d\n",err));
-				    return dp_RES_BAD;
-			    }
-                err = dp_subscribeAppsList(dp);
-			    if (err != dp_RES_OK) {
-				    DPRINT(("dpEnumApp: Could not subscribe apps, err:%d\n",err));
-				    return dp_RES_BAD;
-			    }
-		    }
-        }
-	#endif
+#if defined(dp_ANET2)
+	/* Set up the server-list table (the list of latest version number) */
+	if(dp != NULL) {
+		if(dp->apps == NULL) {
+			err = dp_createAppsList(dp);
+			if (err != dp_RES_OK) {
+				DPRINT(("dpEnumApp: Could not create apps, err:%d\n",err));
+				return dp_RES_BAD;
+			}
+			err = dp_subscribeAppsList(dp);
+			if (err != dp_RES_OK) {
+				DPRINT(("dpEnumApp: Could not subscribe apps, err:%d\n",err));
+				return dp_RES_BAD;
+			}
+		}
+	}
+#endif
 
 	/* Open the key for list of games and get info about it. */
 	retCodeApp = RegOpenKeyEx(hKeyRoot, SubKey, 0, KEY_EXECUTE, &hKeyApp);
@@ -590,7 +591,7 @@ dpEnumApp(
 				continue;
 			} else {
 				DPRINT(("dpEnumApp: RegEnumKey/hKeyApp rCode:%d\n", retCodeApp));
-	 			return dp_RES_BAD;
+				return dp_RES_BAD;
 			}
 		}
 		if (!AppName) {
@@ -601,7 +602,7 @@ dpEnumApp(
 		retCodeApp = RegOpenKeyEx(hKeyApp, AppName, 0, KEY_EXECUTE, &hKeyVal);
 		if (retCodeApp != ERROR_SUCCESS) {
 			DPRINT(("dpEnumApp: RegOpenKeyEx/hKeyVal rCode:%d\n", retCodeApp));
- 			return dp_RES_BAD;
+			return dp_RES_BAD;
 		}
 
 		dwcClassLen = MAX_PATH;
@@ -611,7 +612,7 @@ dpEnumApp(
 					 &ftLastWriteTime);
 		if (retCodeApp != ERROR_SUCCESS) {
 			DPRINT(("dpEnumApp: RegQIK/hKeyVal rCode:%d\n", retCodeApp));
- 			return dp_RES_BAD;
+			return dp_RES_BAD;
 		}
 
 		*appParam.name = '\0';
@@ -639,7 +640,7 @@ dpEnumApp(
 									retCodeVal != ERROR_NO_MORE_ITEMS) {
 					DPRINT(("dpEnumApp: RegEnumValue = %d cbData = %d line %d\n"
 						   , retCodeVal, cbData, __LINE__));
- 					return dp_RES_BAD;
+					return dp_RES_BAD;
 				}
 			} else if (ValueName) {
 				/*DPRINT(("dpEnumApp: loopVal=%d, ValueName=%s, cbValueName=%d, dwType=%d,\n\t bData=%s, cbData=%d; retCodeVal=%d\n", loopVal, ValueName, cbValueName, dwType, bData, cbData, retCodeVal)); */
@@ -686,7 +687,7 @@ dpEnumApp(
 			if (err == dp_RES_OK && *appParam.name && *appParam.path && *appParam.cwd) {
 				cb(&appParam, context);
 			} else {
-                DPRINT(("dpEnumApp: Getting appParam, err:%d\n",err));
+				DPRINT(("dpEnumApp: Getting appParam, err:%d\n",err));
 //				DPRINT(("dpEnumApp: Error: App(name,path,cwd) = (%s, %s, %s)\n",
 //						*(appParam.name), *(appParam.path), *(appParam.cwd)));
 			}
@@ -695,7 +696,8 @@ dpEnumApp(
 		}
 		if (bData) free(bData);
 	}
+
 	return dp_RES_OK;
 }
-
+#endif
 #endif

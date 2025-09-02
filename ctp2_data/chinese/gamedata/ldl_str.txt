@@ -49,13 +49,15 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer	"已提供特产，要变更吗？"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER	"所有的文明帝国都将恭迎新的人类主宰，因为 {player[1].leader_name} 已经完成了外星人生命计划。"
+ENDGAME_WON_OTHER	"所有的文明帝国都将恭迎新的人类主宰，因为 {player[0].leader_name} 已经完成了外星人生命计划。"
 
 ##FINAL FINAL FINAL batch of string added 03-05-99 (yea right)
 str_ldl_comma	"，"
@@ -425,9 +427,9 @@ str_tbl_ldl_Total_Negative_Points_Colon "总扣分："
 str_tbl_ldl_Total_Points_Colon "总分："
 str_tbl_ldl_Civ_Score_Colon		"文明积分："
 
-
-#Who knows where this goes?#
-UNIT_ORDER_TRANSPORTED "正在传送"
+str_tbl_ldl_The_Diplomats "我们的领袖目前公务繁忙，我们并没有兴趣与贵国在此时商谈任何事务。" 
+str_tbl_ldl_Select_a_new			"Select a new Advance to research."
+str_ldl_Review_Tutorial_Messages		"Review Tutorial Messages"
 str_ldl_END	"结束"
 str_ldl_End_Tutorial_Dialog	"你确定要结束教学模式了吗？"
 str_ldl_Skill_Level	"技术等级"
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE			"文明积分"
 str_ldl_POWER_GRAPH			"权力图"
 str_ldl_DEFEAT				"击败"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE			"穷困的人"
 str_ldl_THE_SQUIRREL_HEARTED	"胆小如鼠的人"
 str_ldl_THE_RED_FACED			"红脸的人"
@@ -866,6 +869,7 @@ str_ldl_Known_To_You_And_Others	"你与别人都知道的"
 str_ldl_LABORERS	"劳工"
 str_ldl_Land	"陆地"
 str_ldl_Land_Grabber	"陆上抢夺者"
+str_ldl_LANGUAGE					"LANGUAGE"
 str_ldl_Large_64_x_128	"大型"
 str_ldl_Last_Sale_Price_COLON	"上次的售价："
 str_ldl_Launch	"发射"
@@ -945,6 +949,7 @@ str_ldl_Offer	"提供"
 str_ldl_OFFER_A_GIFT	"提供礼物"
 str_ldl_OFFER_AN_EXCHANGE	"提供交易"
 str_ldl_Offer_Good	"提供货物"
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "关闭"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -1181,6 +1186,7 @@ str_ldl_Unit_Help	"部队说明"
 str_ldl_UNIT_MOVEMENT	"部队移动力"
 str_ldl_UNIT_STATUS	"部队状态"
 str_ldl_Units	"部队"
+str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
 str_ldl_UNLOAD_ALL	"无法全读取"
 str_ldl_Unpredictable	"不可预测的"
 str_ldl_Untarnished	"无污点的"
@@ -1413,6 +1419,8 @@ str_tbl_ldl_You_will_receive	"你将获得"
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"你欲购买的货物已经开始运送。"
 str_tbl_ldl_Zoom_in_one_level	"放大一级"
 str_tbl_ldl_Zoom_out_one_level	"缩小一级"
+str_ldl_CAPS_LANGUAGE				"LANGUAGE"
+str_ldl_Use_OS_Language				"Use language from operating system"
 str_ldl_CAPS_MUSIC  "音乐"
 str_ldl_Select_Track	"选择曲目"
 str_ldl_CAPS_SELECT_TRACK	"选择曲目"
@@ -1881,31 +1889,31 @@ str_tbl_ldl_Music_Track_10	"卡莉舞曲"
 
 
 ###Grammar and Description Stuff###
-GRAMMAR_MALE_LOSER_RANK_1     "穷困的人"
-GRAMMAR_FEMALE_LOSER_RANK_1   "穷困的人"
-GRAMMAR_MALE_LOSER_RANK_2     "胆小如鼠的人"
-GRAMMAR_FEMALE_LOSER_RANK_2   "胆小如鼠的人"
-GRAMMAR_MALE_LOSER_RANK_3     "红脸的人"
-GRAMMAR_FEMALE_LOSER_RANK_3   "红脸的人"
-GRAMMAR_MALE_LOSER_RANK_4     "疲惫的人"
-GRAMMAR_FEMALE_LOSER_RANK_4   "疲惫的人"
-GRAMMAR_MALE_LOSER_RANK_5     "柔顺的人"
-GRAMMAR_FEMALE_LOSER_RANK_5   "柔顺的人"
-GRAMMAR_MALE_LOSER_RANK_6     "迟缓的人"
-GRAMMAR_FEMALE_LOSER_RANK_6   "迟缓的人"
+#GRAMMAR_MALE_LOSER_RANK_1     "穷困的人"
+#GRAMMAR_FEMALE_LOSER_RANK_1   "穷困的人"
+#GRAMMAR_MALE_LOSER_RANK_2     "胆小如鼠的人"
+#GRAMMAR_FEMALE_LOSER_RANK_2   "胆小如鼠的人"
+#GRAMMAR_MALE_LOSER_RANK_3     "红脸的人"
+#GRAMMAR_FEMALE_LOSER_RANK_3   "红脸的人"
+#GRAMMAR_MALE_LOSER_RANK_4     "疲惫的人"
+#GRAMMAR_FEMALE_LOSER_RANK_4   "疲惫的人"
+#GRAMMAR_MALE_LOSER_RANK_5     "柔顺的人"
+#GRAMMAR_FEMALE_LOSER_RANK_5   "柔顺的人"
+#GRAMMAR_MALE_LOSER_RANK_6     "迟缓的人"
+#GRAMMAR_FEMALE_LOSER_RANK_6   "迟缓的人"
 
-GRAMMAR_MALE_WINNER_RANK_1    "认真的人"
-GRAMMAR_FEMALE_WINNER_RANK_1  "认真的人"
-GRAMMAR_MALE_WINNER_RANK_2    "聪明的人"
-GRAMMAR_FEMALE_WINNER_RANK_2  "聪明的人"
-GRAMMAR_MALE_WINNER_RANK_3    "勇敢的人"
-GRAMMAR_FEMALE_WINNER_RANK_3  "勇敢的人"
-GRAMMAR_MALE_WINNER_RANK_4    "雄才大略的人"
-GRAMMAR_FEMALE_WINNER_RANK_4  "雄才大略的人"
-GRAMMAR_MALE_WINNER_RANK_5    "不屈不挠的人"
-GRAMMAR_FEMALE_WINNER_RANK_5  "不屈不挠的人"
-GRAMMAR_MALE_WINNER_RANK_6    "具有文明霸主相的人"
-GRAMMAR_FEMALE_WINNER_RANK_6  "具有文明霸主相的人"
+#GRAMMAR_MALE_WINNER_RANK_1    "认真的人"
+#GRAMMAR_FEMALE_WINNER_RANK_1  "认真的人"
+#GRAMMAR_MALE_WINNER_RANK_2    "聪明的人"
+#GRAMMAR_FEMALE_WINNER_RANK_2  "聪明的人"
+#GRAMMAR_MALE_WINNER_RANK_3    "勇敢的人"
+#GRAMMAR_FEMALE_WINNER_RANK_3  "勇敢的人"
+#GRAMMAR_MALE_WINNER_RANK_4    "雄才大略的人"
+#GRAMMAR_FEMALE_WINNER_RANK_4  "雄才大略的人"
+#GRAMMAR_MALE_WINNER_RANK_5    "不屈不挠的人"
+#GRAMMAR_FEMALE_WINNER_RANK_5  "不屈不挠的人"
+#GRAMMAR_MALE_WINNER_RANK_6    "具有文明霸主相的人"
+#GRAMMAR_FEMALE_WINNER_RANK_6  "具有文明霸主相的人"
 
 PLAYER_DESCRIPTION_LOSER_RANK_1			"{player[0].leader_name}"
 PLAYER_DESCRIPTION_LOSER_RANK_2			"{player[0].leader_name}"
@@ -2261,6 +2269,7 @@ str_ldl_MapFilters			"地图滤镜"
 str_ldl_Graphics			"画面"		
 str_ldl_Sound				"音效"			
 str_ldl_Music				"音乐"
+str_ldl_Language			"Language"
 str_ldl_Advanced			"进阶"      
 str_ldl_SaveGame			"储存游戏"		
 str_ldl_LoadGame			"加载游戏"		
@@ -2747,8 +2756,6 @@ str_ldl_SET_GOAL	"设定目标"
 str_ldl_SORT_BY_AGE "按时代排序"
 
 
-
-
 # Ranking Tab
 str_ldl_RANKING_MILITARY			"军事"
 str_ldl_RANKING_ECONOMIC			"经济"
@@ -3088,7 +3095,7 @@ str_profile_CityClick                           "点选城市而非军队"
 str_profile_DebugSlic                           "逐步调试信息"
 str_profile_DebugSlicEvents                     "逐步事件调试信息"
 str_profile_EndTurnWithEmptyBuildQueues         "建筑排程为空结束回合"
-str_profile_RunInBackground                     "允许后台结束回合"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "单位升级中"
 str_profile_SmoothBorders                       "平滑帝国边界"
 str_profile_CivFlags                            "显示文明单位旗帜"
@@ -3113,19 +3120,22 @@ str_profile_OneCityChallenge                    "一城挑战"                      
 str_profile_CityCaptureOptions                  "征服城市选项"                          # Captured city options
 str_profile_DebugCityAstar                      "调试路径点"
 str_profile_NewCombat                           "新战斗"
+str_profile_WindowedMode                        "Windowed Mode"                                 # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Sentineling units board automatically"         # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options			"音乐选项"
-str_tbl_ldl_Decend				"减弱"
+str_tbl_ldl_Music_Options				"音乐选项"
+str_tbl_ldl_Language_Options			"Language Options"
+str_tbl_ldl_Decend						"减弱"
 str_tbl_ldl_Execute_Eyepoint			"对象聚焦"
-str_tbl_ldl_Move_Order				"移动命令"
-str_tbl_ldl_End_Unit_Turn			"结束回合"
+str_tbl_ldl_Move_Order					"移动命令"
+str_tbl_ldl_End_Unit_Turn				"结束回合"
 str_tbl_ldl_Process_Unit_Orders			"持续给单位命令"
-str_tbl_ldl_Group_Army				"编组单位为军队"
-str_tbl_ldl_Ungroup_Army			"解散军队"
-str_tbl_ldl_Gamestate_Debug			"调试状态 (playtest)"
-str_tbl_ldl_Rand_Test				"边缘测试 (playtest)"
-str_tbl_ldl_Command_Enter			"输入命令 (playtest)"
+str_tbl_ldl_Group_Army					"编组单位为军队"
+str_tbl_ldl_Ungroup_Army				"解散军队"
+str_tbl_ldl_Gamestate_Debug				"调试状态 (playtest)"
+str_tbl_ldl_Rand_Test					"边缘测试 (playtest)"
+str_tbl_ldl_Command_Enter				"输入命令 (playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"改变输入命令 (playtest)"
 
 # New gamesetting options
@@ -3140,7 +3150,13 @@ str_ldl_SmoothBorders_On			"平滑图标边缘"
 str_ldl_SmoothBorders_Off			"锐化像素边缘"
 str_ldl_Good_Animations_Off			"高质量动画关"
 str_ldl_Good_Animations_On			"高质量动画开"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
 str_tbl_ldl_CityCaptureOptions_On		"征服城市选项 - 开"
 str_tbl_ldl_CityCaptureOptions_Off		"征服城市选项 - 关"
 str_tbl_ldl_OneCityChallenge_On			"一城挑战 - 开"
@@ -3177,6 +3193,7 @@ str_tbl_ldl_RandomCustomMap_On			"随机设置"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"嗜血\n 为了胜利，你要击败所有敌人。"
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"污染\n 污染降低城市幸福度，严重污染的城市会出现死地，极端时会导致世界范围的洪水泛滥与土地沙漠化。"
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"征服城市选项\n 当征服一座城市会出现三个选项 - 废弃：将城市留给野蛮人, 毁灭：将城市付之一炬， and 占据：占领这座城市。"
 str_tbl_ldl_RuleDetail_OneCityChallenge		"一城挑战\n 人类玩家无法建造城市。"

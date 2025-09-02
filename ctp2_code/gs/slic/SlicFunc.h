@@ -498,6 +498,8 @@ SLICFUNC(SFR_INT,  SetPreference);
 SLICFUNC(SFR_VOID, AddMovement);
 SLICFUNC(SFR_VOID, ToggleVeteran);
 SLICFUNC(SFR_INT,  IsVeteran);
+SLICFUNC(SFR_VOID, ToggleElite);
+SLICFUNC(SFR_INT,  IsElite);
 SLICFUNC(SFR_VOID, CantAttackUnit);
 SLICFUNC(SFR_VOID, CantAttackCity);
 SLICFUNC(SFR_VOID, CityCantRiotOrRevolt);
@@ -624,6 +626,11 @@ SLICFUNC(SFR_INT, GetUnitFromCargo)
 SLICFUNC(SFR_INT, GetContinent)
 SLICFUNC(SFR_INT, GetContinentSize)
 SLICFUNC(SFR_INT, IsWater)
+SLICFUNC(SFR_VOID, SetVeteran)
+SLICFUNC(SFR_VOID, UnsetVeteran)
+SLICFUNC(SFR_VOID, SetElite)
+SLICFUNC(SFR_VOID, UnsetElite)
+SLICFUNC(SFR_VOID, HearGossip)
 //New slicfunctions by Solver
 SLICFUNC(SFR_INT, IsOnSameContinent)
 //New slicfunctions by E

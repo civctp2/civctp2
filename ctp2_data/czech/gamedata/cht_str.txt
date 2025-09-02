@@ -1,0 +1,97 @@
+#################################
+#
+# BETA PATCH CHEAT TOOLS STRINGS
+#
+#################################
+# SAM032299
+#################################
+
+#
+# SAM032299 added for cheat toolbar enhancements
+#
+
+#
+# Single-Player Game Launch Screen
+#
+str_ldl_Editor					"Spustit Editor"
+
+#
+# Cheat Toolbar
+#
+str_ldl_Tile_Pad				"Terén"
+str_ldl_Civ						"Civ"
+str_ldl_Edit_City				"Edit City"
+str_ldl_Unit_City				"Unit/City"
+
+str_ldl_Toolbar_Title			"Cheat mód Call to Power"
+str_ldl_World_Settings			"Nastavení Sveta"
+str_ldl_Player_Settings			"nastavení Hráce"
+str_ldl_Player_Static_Text		"Hrác:"
+str_ldl_Player_Name_Text		"PNT"
+str_ldl_Year_Static_Text		"Herní Rok:"
+str_ldl_Year_Text				"YT"
+str_ldl_Num_Players_Static_Text	"Poc Hrácu:"
+str_ldl_Num_Players_Text		"NPT"
+str_ldl_Map_Size_Static_Text	"Velikost Mapy:"
+str_ldl_Map_Size_Text			"MST"
+str_ldl_Difficulty_Static_Text	"Obtíznost:"
+str_ldl_Difficulty_Text			"DT"
+str_ldl_Save_As_SP				"Save as SP Game"
+str_ldl_Save_As_MP				"Save as MP Game"
+
+# SAM041599 added ResetLOS button to cheat mode screen
+str_ldl_Reset_LOS				"Reset LOS"
+
+#
+# for Tile Pad
+#
+str_ldl_Forest					"Les"
+str_ldl_Plains					"Pláne"
+str_ldl_Tundra					"Tundra"
+str_ldl_Glacier					"Ledovec"
+str_ldl_Grassland				"Luciny"
+str_ldl_Desert					"Poust"
+str_ldl_Swamp					"Baziny"
+str_ldl_Jungle					"Dzungle"
+str_ldl_Mountain				"Hora"
+str_ldl_Hills					"Kopec"
+str_ldl_ShallowWater			"Melká Voda"
+str_ldl_DeepWater				"Hluboká Voda"
+str_ldl_Volcano					"Podmorský Vulkán"
+str_ldl_Space					"Vesmír"
+str_ldl_Beach					"Pláz"
+str_ldl_Shelf					"Continental Shelf"
+str_ldl_Trench					"Príkop"
+str_ldl_Rift					"Deep Sea Rift"
+str_ldl_Dead					"Znicená Zeme"
+str_ldl_BrownHill				"Píscité Duny"
+str_ldl_BrownMountain			"Poustní Hora"
+str_ldl_WhiteHill				"Arktický Kopec"
+str_ldl_WhiteMountain			"Arktická Hora"
+str_ldl_Goody					"Ruiny"
+str_ldl_River					"Reka"
+
+#
+# for City Pad
+#
+str_ldl_City_Pad_Message		"While this City Pad is open, you can RUSH BUY Improvements and Wonders for the selected City using the Production tab on the Control Panel."
+
+#
+# for Pollution Pad
+#
+str_ldl_Global_Pollution		"Svetové znecistení celkem"
+str_ldl_Ozone_Damage			"Ozonová Díira"
+str_ldl_Flooding				"Zaplavování"
+str_ldl_never					"N/A"
+str_ldl_O						"O"
+str_ldl_F						"F"
+
+#
+# for Unit Pad
+#
+str_ldl_Kill					"Kill"
+
+#
+# for Tile Improvements Pad
+#
+str_ldl_Tile_Imp_Pad_Message	"While this Tile Improvements Pad is open, you can freely place legal Tile Improvements, Installations and Terraforming using the Control Panel interface."

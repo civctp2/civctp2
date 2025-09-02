@@ -295,7 +295,7 @@ AUI_ERRCODE aui_Control::SetParentWindow( aui_Window *window )
 	ListPos position = m_childList->GetHeadPosition();
 	if ( position )
 	{
-		for ( sint32 i = m_childList->L(); i; i-- )
+		for ( size_t i = m_childList->L(); i; i-- )
 		{
 			aui_Control *subControl =
 				(aui_Control *)m_childList->GetNext( position );
@@ -365,7 +365,7 @@ AUI_ERRCODE aui_Control::InsertChild( aui_Region *child, sint32 index )
 AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 {
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		ListPos prevPos = position;
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
@@ -392,19 +392,11 @@ AUI_ERRCODE aui_Control::RemoveChild( uint32 controlId )
 
 AUI_ERRCODE aui_Control::ToWindow( RECT *rect )
 {
-
-
-
-
-
-
-
 	if (!m_parent) return AUI_ERRCODE_OK;
-
 
 	if ( m_parent != (aui_Region *)m_window )
 	{
-        Assert(m_parent);
+		Assert(m_parent);
 		OffsetRect( rect, m_parent->X(), m_parent->Y() );
 		((aui_Control *)m_parent)->ToWindow( rect );
 	}
@@ -549,10 +541,10 @@ aui_Control *aui_Control::SetMouseOwnership( void )
 AUI_ERRCODE aui_Control::ReleaseMouseOwnership( void )
 {
 	if (GetMouseOwnership() != this)
-	    return AUI_ERRCODE_NOCONTROL;
+		return AUI_ERRCODE_NOCONTROL;
 
 	s_whichOwnsMouse = NULL;
-    return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -570,28 +562,28 @@ aui_Control *aui_Control::SetKeyboardFocus( void )
 	return prevFocus;
 }
 
-#ifndef WIN32
+#if defined(__AUI_USE_SDL__)
 extern class aui_Win* g_winFocus;
 #endif
 
 AUI_ERRCODE aui_Control::ReleaseKeyboardFocus(void)
 {
 	if (GetKeyboardFocus() != this)
-	    return AUI_ERRCODE_NOCONTROL;
+		return AUI_ERRCODE_NOCONTROL;
 
 	s_whichHasFocus = NULL;
-    m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
+	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_KEYBOARDFOCUSCHANGE;
 
-    if (g_ui)
-    {
-#ifdef WIN32
-	    SetFocus(g_ui->TheHWND());
+	if (g_ui)
+	{
+#if !defined(__AUI_USE_SDL__)
+		SetFocus(g_ui->TheHWND());
 #else
-        g_winFocus = 0;
+		g_winFocus = 0;
 #endif
-    }
+	}
 
-    return AUI_ERRCODE_OK;
+	return AUI_ERRCODE_OK;
 }
 
 
@@ -636,7 +628,7 @@ AUI_ERRCODE aui_Control::DrawThis(
 
 
 AUI_ERRCODE aui_Control::DrawThisStateImage(
-	sint32 state,
+	size_t state,
 	aui_Surface *destSurf,
 	RECT *destRect )
 {
@@ -1696,7 +1688,7 @@ bool aui_Control::HandleKey(uint32 wParam)
 	}
 
 	ListPos position = m_childList->GetHeadPosition();
-	for ( sint32 i = m_childList->L(); i; i-- )
+	for ( size_t i = m_childList->L(); i; i-- )
 	{
 		aui_Control *control = (aui_Control *)m_childList->GetNext( position );
 

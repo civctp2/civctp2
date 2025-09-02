@@ -343,10 +343,10 @@ public:
 	void ResetCityOwner(sint32 owner);
 
 	sint32 GetStoredCityFood() const { return m_accumulated_food; }
-	sint32 GetNetCityFood() const { return sint32(m_food_delta); }
-	sint32 GetGrossCityFood() const { return sint32(m_gross_food); }
-	sint32 GetGrossCityFoodBeforeBonuses() const { return sint32(m_gross_food_before_bonuses); }
-	sint32 GetGrossCityProdBeforeBonuses() const { return sint32(m_gross_prod_before_bonuses); }
+	double GetNetCityFood() const { return m_food_delta; }
+	double GetGrossCityFood() const { return m_gross_food; }
+	double GetGrossCityFoodBeforeBonuses() const { return m_gross_food_before_bonuses; }
+	double GetGrossCityProdBeforeBonuses() const { return m_gross_prod_before_bonuses; }
 
 	sint32 GetStarvationTurns() const {return m_starvation_turns;}
 
@@ -398,9 +398,9 @@ public:
 	void   CollectResources();
 	void   CollectResourcesFinally();
 
-        sint32 FoodFromTrade();
-        sint32 ProdFromTrade();
-        sint32 GoldFromTrade();
+	sint32 FoodFromTrade();
+	sint32 ProdFromTrade();
+	sint32 GoldFromTrade();
 
 #if !defined(NEW_RESOURCE_PROCESS)
 	sint32 ProcessFood();
@@ -446,7 +446,7 @@ public:
 	void RemoveOneSlave(PLAYER_INDEX p);
 
 #if !defined(NEW_RESOURCE_PROCESS)
-	void CollectOtherTrade(const bool projectedOnly);
+	void CollectOtherGold(const bool projectedOnly);
 #endif
 	void CheckTopTen();
 	sint32 SupportBuildings(bool projectedOnly);
@@ -551,15 +551,13 @@ public:
 	}
 
 	sint32 GetScienceCrime() const { return m_scie_lost_to_crime; }
-	sint32 GetTradeCrime() const { return m_gold_lost_to_crime; }
+	sint32 GetGoldCrime() const { return m_gold_lost_to_crime; }
 	sint32 GetProdCrime() const { return m_production_lost_to_crime; }
-	void GetFoodCrime( sint32 &foodCrime ) const {
-		foodCrime = (sint32)(m_food_lost_to_crime);
-	}
+	double GetFoodCrime() const { return m_food_lost_to_crime; }
 
 	bool GetIsRioting(void) const { return m_is_rioting; }
 
-	void CalcHappiness(sint32 &virtualGoldSpent, bool isFirstPass);
+	void CalcHappiness(bool isFirstPass = false);
 	void CheckRiot();
 	double GetHappiness() const;
 	double GetHappySize() const;

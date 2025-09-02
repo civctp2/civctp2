@@ -78,8 +78,10 @@
 // Suppress some rediculous MS warnings about "deprecated" standard functions
 #define _SECURE_SCL					0
 #define _SECURE_SCL_NO_DEPRECATE
-#define _CRT_SECURE_NO_DEPRECATE
-#define _CRT_NONSTDC_NO_DEPRECATE
+// Now defined in the project prepocessor definition
+// Catches also files that do not include this header
+// #define _CRT_SECURE_NO_DEPRECATE
+// #define _CRT_NONSTDC_NO_DEPRECATE
 #define _CRT_SECURE_NO_WARNINGS
 #define _HAS_ITERATOR_DEBUGGING		0	// this one may be more interesting
 //#define _SECURE_SCL_THROWS 1
@@ -99,8 +101,6 @@
 
 #include <tchar.h>
 
-#include <ddraw.h>
-#include <dinput.h>
 #else
 #include "windows.h" // Defines HAVE_CONFIG_H, HAVE_INTTYPES_H and HAVE_STDINT_H
 #endif // WIN32
@@ -116,14 +116,6 @@
 #include <sys/stat.h>
 #include <stdarg.h>
 #include <time.h>
-
-#if defined(__GNUC__)
-//#define _MAX_PATH PATH_MAX
-// Needs to be 260 otherwise you cannot load savegames from Windows.
-// Maybe this screws up something else.
-#define _MAX_PATH   260 // max. length of full pathname
-
-#endif // __GNUC__
 
 #if defined(__cplusplus)
 #include "c3debug.h"

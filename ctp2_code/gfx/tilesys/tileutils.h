@@ -18,7 +18,7 @@ void		tileutils_EncodeColorizeRun(Pixel32 **inBuf, int *pos, int width, Pixel16 
 void		tileutils_EncodeShadowRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr);
 char		tileutils_EncodeSkipRun(Pixel32 **inBuf, int *pos, int width, Pixel16 **outBufPtr);
 char		tileutils_EncodeScanline(Pixel32 *scanline, int width, Pixel16 **outBufPtr);
-Pixel16		*tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, uint32 *dataLen);
+Pixel16		*tileutils_EncodeTile(Pixel32 *buf, uint16 width, uint16 height, size_t *dataLen);
 
 
 void		tileutils_EncodeCopyRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr, BOOL sourceDataIs565);
@@ -26,7 +26,7 @@ void		tileutils_EncodeColorizeRun16(Pixel16 **inBuf, int *pos, int width, Pixel1
 void		tileutils_EncodeShadowRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr, BOOL sourceDataIs565);
 char		tileutils_EncodeSkipRun16(Pixel16 **inBuf, int *pos, int width, Pixel16 **outBufPtr, BOOL sourceDataIs565);
 char		tileutils_EncodeScanline16(Pixel16 *scanline, int width, Pixel16 **outBufPtr, BOOL sourceDataIs565);
-Pixel16		*tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, uint32 *size, sint32 pitch = 0);
+Pixel16		*tileutils_EncodeTile16(Pixel16 *buf, uint16 width, uint16 height, size_t *size, sint32 pitch = 0);
 
 sint32		tileutils_ConvertPixelFormatFrom565(Pixel16 *data);
 sint32		tileutils_ConvertPixelFormatFrom555(Pixel16 *data);

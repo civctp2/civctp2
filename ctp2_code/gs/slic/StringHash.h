@@ -45,21 +45,21 @@ public:
 	StringHashNode<T> *m_next;
 
 	StringHashNode(const char *string, T *obj)
-    :   m_obj   (obj),
-        m_next  (NULL)
-    { ; };
+	:   m_obj   (obj),
+	    m_next  (NULL)
+	{ ; };
 
 	StringHashNode(ARCHIVE archive)
-    :   m_obj   (NULL),
-        m_next  (NULL)
+	:   m_obj   (NULL),
+	    m_next  (NULL)
 	{
 		Serialize(archive);
 	};
 
 	~StringHashNode()
-    {
+	{
 		delete m_obj;
-        // m_next not deleted (intentional)
+		// m_next not deleted (intentional)
 	};
 
 	void Serialize(ARCHIVE archive) {

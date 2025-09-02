@@ -11,7 +11,7 @@ rem
 rem /MD  = use MSVCRT.DLL standard C library (because that's what anet2 uses)
 
 del test.exe
-cl /D DOSWIN32 /D WIN32 /I ..\..\h test.c ..\..\win\lib\anet2d.lib /Fm /Oy- /Ox /W3 /WX /MD
+cl /D DOSWIN32 /D WIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /I ..\..\h test.c ..\..\win\lib\anet2d.lib /Fm /Oy- /Ox /W3 /WX /MD
 if errorlevel 1 goto bad
 if not exist test.exe goto bad
 

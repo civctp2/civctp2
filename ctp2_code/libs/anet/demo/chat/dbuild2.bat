@@ -13,7 +13,7 @@ rem /MDd = use MSVCRTD.DLL standard C library (because that's what anet2d uses)
 rem /Zi  = insert symbolic debugging info
 
 del chatd.exe
-cl /D DOSWIN32 /D _WIN32 /I ..\..\h /I ..\utils chat.c ..\utils\raw.c ..\utils\eclock.c ..\..\win\lib\anet2d.lib /Fm /Oy- /Ox /W3 /WX /Gr /MDd /Zi /Fechatd.exe
+cl /D DOSWIN32 /D _WIN32 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /I ..\..\h /I ..\utils chat.c ..\utils\raw.c ..\utils\eclock.c ..\..\win\lib\anet2d.lib /Fm /Oy- /Ox /W3 /WX /Gr /MDd /Zi /Fechatd.exe
 if errorlevel 1 goto bad
 if not exist chatd.exe goto bad
 

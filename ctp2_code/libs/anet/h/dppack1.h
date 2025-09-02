@@ -24,6 +24,8 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
  Use dpunpack.h to revert to previous packing state.
 
  $Log: dppack1.h $
+ Revision 1.5  2025/04/07 23:51:34  Martin Gühmann
+ Make packing work in Visual Studio x64 builds
  Revision 1.4  1997/09/21 04:34:25  lbennett
  Removed MSVC compiler warning.
  Revision 1.3  1997/06/10 23:57:16  dkegel
@@ -42,10 +44,19 @@ Foundation, Inc., 59 Temple Place, Suite 330, Boston, MA  02111-1307  USA
 
 #pragma options align=packed
 
-#elif defined(_M_IX86)      /* Visual C */
+#elif defined(__GNUC__)     /* GNU C */
+
+#pragma pack(push, 1)
+
+#elif defined(_MSC_VER)     /* Visual C*/
 
 #pragma warning( disable : 4103 )
 #pragma pack(push, 1)
+
+#else
+
+// Visual Sudio should just ignore this, but it doesn't for wipx, winits, and wudplan. Anet is fine.
+//#error "Packing not defined for this compiler"
 
 #endif
 

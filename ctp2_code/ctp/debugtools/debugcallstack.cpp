@@ -53,6 +53,8 @@
 #endif
 #include <string.h>
 #include <stdio.h>
+#include <vector>
+#include <algorithm>
 #ifdef WIN32
 #include <imagehlp.h>
 #endif
@@ -71,42 +73,20 @@
 
 static bool debug_dump_whole_stack = false;
 
-void Debug_FunctionNameInit (void);
+void Debug_FunctionNameFindAddresses(FILE *fp);
 int Debug_FunctionNameOpen (char *map_file_name);
 void Debug_FunctionNameClose (void);
 const char *Debug_FunctionNameGet (size_t address);
+void Debug_MakeRoom(size_t capacity);
+void Debug_SortFunctions();
 
 #ifdef WIN32
-
-#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
-BOOL CALLBACK   Debug_EnumSymbolsCallback(LPCSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
-BOOL CALLBACK   Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext);
-#else
-BOOL CALLBACK   Debug_EnumSymbolsCallback(LPSTR symbolName, ULONG symbolAddress, ULONG symbolSize, PVOID userContext);
-BOOL CALLBACK   Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext);
-#endif
-
-int             Debug_FunctionNameOpenFromPDB(void);
-
-#ifdef _DEBUG
-#define k_MAP_FILE "civctp_dbg.map"
-#else
-#ifndef _BFR_
-#define k_MAP_FILE "civctp_rel.map"
-#else
-#if defined(USE_LOGGING)
-#define k_MAP_FILE "ctp2log.map"
-#else
 #define k_MAP_FILE "ctp2.map"
-#endif
-#endif
-#endif
-
 #else // WIN32
 #define k_MAP_FILE "ctp2linux.map"
 #endif // WIN32
 
-#if defined(WIN32)
+#if defined(WIN32) && defined(_X86_)
 #define DEBUG_CODE_LIMIT 0x80000000
 #else
 #define DEBUG_CODE_LIMIT 0x8000000000000000
@@ -121,8 +101,26 @@ static MBCHAR s_stackTraceString[k_STACK_TRACE_LEN];
 
 void DebugCallStack_Open (void)
 {
+#if defined(WIN32)
+	TCHAR exepath[MAX_PATH + 1];
+	if (GetModuleFileName(0, exepath, MAX_PATH + 1) > 0)
+	{
+		char* name_map = strdup(exepath);
+		char *p = strrchr(name_map, '.');
+		if (p)
+		{
+			strcpy(p, ".map"); // Change to map file
+			Debug_FunctionNameOpen(name_map);
+		}
+		else
+			Debug_FunctionNameOpen(k_MAP_FILE);
+	}
+	else
+		Debug_FunctionNameOpen(k_MAP_FILE);
 
-	Debug_FunctionNameOpen (k_MAP_FILE);
+#else
+	Debug_FunctionNameOpen(k_MAP_FILE);
+#endif
 }
 
 void DebugCallStack_Close (void)
@@ -151,37 +149,32 @@ static int function_name_open = 0;
 
 typedef struct tagFUNCTION_ADDRESS
 {
-	struct tagFUNCTION_ADDRESS * next;
 	size_t address;
 	char *name;
 } FUNCTION_ADDRESS;
 
-static FUNCTION_ADDRESS *fa_first = NULL;
+static std::vector<FUNCTION_ADDRESS> functionAdresses;
 
-void *Debug_GetFAFirst(void)
-{
-	return (void *)fa_first;
+// Comparator function
+bool funcComparator(FUNCTION_ADDRESS a, FUNCTION_ADDRESS b) {
+	return a.address > b.address;
 }
 
-void Debug_SetFAFirst(void *ptr)
+void Debug_MakeRoom(size_t capacity)
 {
-	fa_first = (FUNCTION_ADDRESS *)ptr;
-	function_name_open = TRUE;
+	functionAdresses.reserve(capacity);
+}
+
+void Debug_SortFunctions()
+{
+	std::stable_sort(functionAdresses.begin(), functionAdresses.end(), funcComparator);
 }
 
 void Debug_AddFunction (const char *name, size_t address)
 {
-	FUNCTION_ADDRESS *new_function = NULL;
-	FUNCTION_ADDRESS *pointer = NULL;
-	FUNCTION_ADDRESS *last = NULL;
+	FUNCTION_ADDRESS new_function;
 
-	new_function = (FUNCTION_ADDRESS *) malloc (sizeof (FUNCTION_ADDRESS));
-	if (!new_function)
-	{
-		LOG ((LOG_FATAL, "Out of Memory"));
-	}
-
-	new_function->address = address;
+	new_function.address = address;
 
 	if (name[0] == '?')
 	{
@@ -189,51 +182,49 @@ void Debug_AddFunction (const char *name, size_t address)
 		char buff[BUFFER_SIZE];
 		if (UnDecorateSymbolName(name, buff, BUFFER_SIZE-1, 0))
 		{
-			new_function->name = strdup(buff);
+			new_function.name = strdup(buff);
 		}
 		else
 #endif
 		{
-			new_function->name = strdup(name);
+			new_function.name = strdup(name);
 		}
 	}
 	else if (name[0] == '_')
 	{
-		new_function->name = strdup (name + 1);
+		new_function.name = strdup (name + 1);
 	}
 	else
 	{
-		new_function->name = strdup (name);
+		new_function.name = strdup (name);
 	}
 
-	if (fa_first == NULL)
-	{
-		new_function->next = NULL;
-		fa_first = new_function;
-		return;
-	}
-
-	if (address >= fa_first->address)
-	{
-		new_function->next = fa_first;
-		fa_first = new_function;
-		return;
-	}
-
-	pointer = fa_first;
-	while ((pointer) && (address < pointer->address))
-	{
-		last = pointer;
-		pointer = pointer->next;
-	}
-
-	new_function->next = last->next;
-	last->next = new_function;
+	functionAdresses.push_back(new_function);
 }
 
-void Debug_FunctionNameInit (void)
+void Debug_FunctionNameFindAddresses(FILE *fp)
 {
-	fa_first = NULL;
+#if defined(WIN32)
+	char buffer[BUFFER_SIZE];
+	char name[BUFFER_SIZE];
+
+	int done = 0;
+	while (!done)
+	{
+		fgets(buffer, BUFFER_SIZE, fp);
+
+		if (feof(fp))
+			done = 1;
+
+		if (sscanf(buffer, "%s", name) == 1)
+		{
+			if (strcmp(name, "Address") == 0)
+				done = 1;
+		}
+	}
+
+	fgets(buffer, BUFFER_SIZE, fp);
+#endif
 }
 
 int Debug_FunctionNameOpen (char *map_file_name)
@@ -262,24 +253,29 @@ int Debug_FunctionNameOpen (char *map_file_name)
 #endif
 	}
 
-#if defined(WIN32)
+	Debug_FunctionNameFindAddresses(fp);
+
+	// First count how many etries we have
+	// So that we can allocate memory in one go
 	done = 0;
+	size_t numEntries = 0;
 	while (!done)
 	{
-		fgets (buffer, BUFFER_SIZE, fp);
+		fgets(buffer, BUFFER_SIZE, fp);
 
-		if (feof (fp))
+		if (feof(fp))
 			done = 1;
 
-		if (sscanf (buffer, "%s", name) == 1)
-		{
-			if (strcmp (name, "Address") == 0)
-				done = 1;
-		}
+		numEntries++;
 	}
+	fclose(fp);
 
-	fgets (buffer, BUFFER_SIZE, fp);
-#endif
+	// Preallocate the memory to store the functions
+	// This way it is faster
+	Debug_MakeRoom(numEntries);
+
+	fp = fopen(map_file_name, "rt");
+	Debug_FunctionNameFindAddresses(fp);
 
 	done = 0;
 	while (!done)
@@ -290,7 +286,7 @@ int Debug_FunctionNameOpen (char *map_file_name)
 		if ((buffer[0] == ' ') &&
 		    (buffer[1] == '0') &&
 		    (buffer[5] == ':') &&
-		    (sscanf (buffer, "%x:%x %s %x", &crap, &crap, name, &address) == 4))
+		    (sscanf (buffer, "%x:%x %s %zx", &crap, &crap, name, &address) == 4))
 #else
 		if(sscanf (buffer, "%zx %s %[^\n]", &address, symbol, name) == 3)
 #endif
@@ -304,6 +300,7 @@ int Debug_FunctionNameOpen (char *map_file_name)
 
 	fclose (fp);
 
+	Debug_SortFunctions();
 	function_name_open = 1;
 	return (1);
 
@@ -313,70 +310,24 @@ int Debug_FunctionNameOpen (char *map_file_name)
 static HANDLE	hProc,
 				hThread;
 
-BOOL CALLBACK Debug_EnumSymbolsCallback
-(
-#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
-    LPCSTR symbolName,
-#else
-    LPSTR symbolName,
-#endif
-    ULONG symbolAddress,
-    ULONG symbolSize,
-    PVOID userContext
-)
-{
-	Debug_AddFunction ((char *)symbolName, (size_t)symbolAddress);
-
-	return TRUE;
-}
-
-#ifdef WIN32
-#if defined(_MSC_VER) && (_MSC_VER > 1400) // @ToDo: Figure out if this is the right precompiler derective.
-BOOL CALLBACK Debug_EnumModulesCallback(LPCSTR moduleName, ULONG dllBase, PVOID userContext)
-#else
-BOOL CALLBACK Debug_EnumModulesCallback(LPSTR moduleName, ULONG dllBase, PVOID userContext)
-#endif
-{
-#ifndef _BFR_
-	// Seems that SysEnumerateSymbols changed??? // Seems to be fine
-	if (!SymEnumerateSymbols(hProc, dllBase, Debug_EnumSymbolsCallback, userContext)) {
-		int err = GetLastError();
-		LOG ((LOG_FATAL, "SymEnumerateSymbols failed in module '%s' with error %d", moduleName, err));
-
-		return FALSE;
-	}
-#endif
-
-	return TRUE;
-}
-
-#endif // WIN32
-
 void Debug_FunctionNameClose (void)
 {
-	FUNCTION_ADDRESS *pointer = fa_first;
-	FUNCTION_ADDRESS *next;
 #ifdef GENERATE_ADDRESS_LOG
-	FILE *fh;
-#endif
-
-#ifdef GENERATE_ADDRESS_LOG
-	fh = fopen("address.log","w");
+	FILE *fh = fopen("address.log","w");
 #endif
 
 	function_name_open = 0;
 
-	while (pointer)
+	for (auto func : functionAdresses)
 	{
 #ifdef GENERATE_ADDRESS_LOG
-		fprintf(fh,"%08X %s\n",pointer->address,pointer->name);
+		fprintf(fh, "%08X %s\n", func.address, func->name);
 #endif
-
-		next = pointer->next;
-		free (pointer->name);
-		free (pointer);
-		pointer = next;
+		free(func.name);
 	}
+
+	functionAdresses.clear();
+	functionAdresses.shrink_to_fit();
 
 #ifdef GENERATE_ADDRESS_LOG
 	fclose (fh);
@@ -385,8 +336,6 @@ void Debug_FunctionNameClose (void)
 
 const char *Debug_FunctionNameGet (size_t address)
 {
-	FUNCTION_ADDRESS *pointer;
-
 #ifdef __linux__
 	Dl_info info;
 	if(dladdr((void*)address, &info) != 0)
@@ -406,23 +355,18 @@ const char *Debug_FunctionNameGet (size_t address)
 	}
 	else
 	{
-		pointer = fa_first;
-
-		while (pointer)
+		for (auto func : functionAdresses)
 		{
-			if (address >= pointer->address)
-				return (pointer->name);
-
-			pointer = pointer->next;
+			if (address >= func.address)
+				return (func.name);
 		}
 
 		return (unknown);
 	}
 }
 
-const char *Debug_FunctionNameAndOffsetGet (size_t address, int *offset)
+const char *Debug_FunctionNameAndOffsetGet (size_t address, size_t *offset)
 {
-	FUNCTION_ADDRESS *pointer;
 	*offset = 0;
 
 #ifdef __linux__
@@ -444,17 +388,13 @@ const char *Debug_FunctionNameAndOffsetGet (size_t address, int *offset)
 	}
 	else
 	{
-		pointer = fa_first;
-
-		while (pointer)
+		for (auto func : functionAdresses)
 		{
-			if (address >= pointer->address)
+			if (address >= func.address)
 			{
-				*offset = address - pointer->address;
-				return (pointer->name);
+				*offset = address - func.address;
+				return (func.name);
 			}
-
-			pointer = pointer->next;
 		}
 
 		return (unknown);
@@ -472,7 +412,7 @@ unsigned char Debug_NumToChar (unsigned char byte)
 void DebugCallStack_DumpAddress (LogClass log_class, size_t address)
 {
 	const char	*caller_name;
-	int		offset;
+	size_t		offset;
 
 	caller_name = Debug_FunctionNameAndOffsetGet (address, &offset);
 
@@ -482,11 +422,11 @@ void DebugCallStack_DumpAddress (LogClass log_class, size_t address)
 void DebugCallStack_Dump (LogClass log_class)
 {
 // Disabled for anything else than WIN32, because the assembler code does not seem to be save
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 	size_t base_pointer;
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 	__asm mov base_pointer, ebp;
-#else // if GCC 64 bit
+#elif !defined(_MSC_VER) // if GCC 64 bit
 	__asm("\t movq %%rbp,%0" : "=r"(base_pointer));
 #endif // WIN32
 
@@ -498,7 +438,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 {
 // Disabled for anything than WIN32, because the code segfaults, which can only be catched on Windows.
 // Beside that, this is not a good design anyway.
-#if defined(WIN32)
+#if defined(_MSC_VER) && defined(_X86_)
 	size_t frame_limit;
 	size_t frame_pointer;
 	size_t caller;
@@ -615,9 +555,7 @@ void DebugCallStack_DumpFrom (LogClass log_class, size_t base_pointer)
 
 void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 {
-#if !defined(WIN32)
-	backtrace((void**)call_stack, number);
-#else
+#if defined(_MSC_VER) && defined(_X86_)
 	size_t base_pointer;
 	size_t caller;
 	int finished;
@@ -694,6 +632,17 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp)
 
 		index ++;
 	}
+#elif defined(_MSC_VER)
+	HANDLE process = GetCurrentProcess();
+	SymInitialize(process, NULL, TRUE);
+
+	size_t cap = CaptureStackBackTrace(0, number, (void**)call_stack, NULL);
+	for (size_t i = cap; i < number; i++)
+	{
+		call_stack[i] = 0;
+	}
+#else
+	backtrace((void**)call_stack, number);
 #endif
 }
 
@@ -701,14 +650,13 @@ void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number)
 {
 	size_t caller;
 	const char *caller_name;
-	int index;
 
-	index = 0;
+	int index = 0;
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
 
-		int offset;
+		size_t offset;
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
@@ -740,16 +688,15 @@ void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int num
 {
 	size_t caller;
 	const char *caller_name;
-	int index;
 
 	char allocator_name[1024];
 
-	index = 0;
+	int index = 0;
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
 
-		int offset;
+		size_t offset;
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
@@ -758,7 +705,7 @@ void DebugCallStack_ShowToFile  (LogClass log_class, size_t *call_stack, int num
 			strcpy(allocator_name, caller_name);
 		}
 
-		fprintf(file, "0x%08x [%s+0x%x] / ", caller, caller_name, offset);
+		fprintf(file, "0x%08zx [%s+0x%zx] / ", caller, caller_name, offset);
 
 		index ++;
 	}
@@ -794,7 +741,7 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, size_t *call_stack, int 
 	char cpyBuff[8196];
 
 	caller = call_stack[index];
-	int offset;
+	size_t offset;
 	caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 	sprintf(buff, "[%s]", caller_name);
 	index++;
@@ -802,7 +749,7 @@ void DebugCallStack_ShowToAltFile  (LogClass log_class, size_t *call_stack, int 
 	while ((index < number) && (call_stack[index] != 0))
 	{
 		caller = call_stack[index];
-		int offset;
+		size_t offset;
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
 		strcpy(cpyBuff, buff);
@@ -833,11 +780,11 @@ char * c3debug_StackTrace(void)
 	{
 		caller = callstack_function[index];
 
-		int offset;
+		size_t offset;
 
 		caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
-		sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
+		sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 
 		if (strlen(s_stackTraceString) + strlen(function_name) < k_STACK_TRACE_LEN - 1 )
 			strcat(s_stackTraceString, function_name);
@@ -848,7 +795,7 @@ char * c3debug_StackTrace(void)
 	return s_stackTraceString;
 }
 
-#ifdef WIN32
+#if defined(_MSC_VER)
 char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 {
 	if(!function_name_open)
@@ -863,9 +810,15 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 
 	size_t callstack_function[k_CALL_STACK_SIZE];
 
+#if defined(_X86_)
 	callstack_function[0] = exception->ContextRecord->Eip;
 
 	DebugCallStack_Save(&callstack_function[1], k_CALL_STACK_SIZE - 1, exception->ContextRecord->Ebp);
+#else
+	callstack_function[0] = NULL;
+
+	DebugCallStack_Save(&callstack_function[1], k_CALL_STACK_SIZE - 1, 0);
+#endif
 
 	s_stackTraceString[0] = 0;
 
@@ -874,17 +827,16 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 	{
 		caller = callstack_function[index];
 
-		int offset;
-
 		if(function_name_open)
 		{
+			size_t offset;
 			caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
-			sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
+			sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 		}
 		else
 		{
-			sprintf(function_name, "  0x%08x\n", caller);
+			sprintf(function_name, "  0x%08zx\n", caller);
 		}
 
 		if (strlen(s_stackTraceString) + strlen(function_name) < k_STACK_TRACE_LEN - 1 )
@@ -908,18 +860,18 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 	char line[1024];
 	const char *caller_name;
 
-	int offset;
+	size_t offset;
 
 	MBCHAR function_name[_MAX_PATH];
 	s_stackTraceString[0] = 0;
 	while(!feof(f))
 	{
 		if(fgets(line, 1024, f)) {
-			if(sscanf(line, "  0x%08x", &caller) == 1)
+			if(sscanf(line, "  0x%08zx", &caller) == 1)
 			{
 				caller_name = Debug_FunctionNameAndOffsetGet(caller, &offset);
 
-				sprintf(function_name, "  0x%08x  [%s + 0x%x]\n", caller, caller_name, offset);
+				sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 
 				if (strlen(s_stackTraceString) + strlen(function_name) < k_STACK_TRACE_LEN - 1 )
 					strcat(s_stackTraceString, function_name);
@@ -1002,7 +954,7 @@ void cDebugCallStackSet::Add()
 void cDebugCallStackSet::Dump(const char *filename)
 {
 	const char *caller_name;
-	int offset;
+	size_t offset;
 
 	qsort(m_stacks,m_numStacks,m_blockSize*sizeof(size_t),qsortDebugCallStack);
 
@@ -1010,20 +962,20 @@ void cDebugCallStackSet::Dump(const char *filename)
 
 	caller_name = Debug_FunctionNameAndOffsetGet(m_caller,&offset);
 
-	int totalCalls = 0;
+	size_t totalCalls = 0;
 	int i;
 	for (i=0;i<m_numStacks;++i)
 	{
 		totalCalls += m_stacks[m_blockSize*i];
 	}
 
-	fprintf(fp,"callstack dump for function:\n%s\ncalled %d times\n",caller_name,totalCalls);
+	fprintf(fp,"callstack dump for function:\n%s\ncalled %zu times\n",caller_name,totalCalls);
 
 	for (i=0;i<m_numStacks;++i)
 	{
-		int called = m_stacks[m_blockSize*i];
+		size_t called = m_stacks[m_blockSize*i];
 		float perCalled = (float)(100 * called)/(float)totalCalls;
-		fprintf(fp,"\nnum times called: %d, %.2f percent\n",called,perCalled);
+		fprintf(fp,"\nnum times called: %zu, %.2f percent\n",called,perCalled);
 		int j;
 		for (j=0;j<m_depth;++j)
 		{

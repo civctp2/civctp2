@@ -505,7 +505,7 @@ void ArmyData::Serialize(CivArchive &archive)
             walk.Next();
         }
 
-        sint32 len = m_name ? strlen(m_name) : 0;
+        sint32 len = m_name ? static_cast<sint32>(strlen(m_name)) : 0;
         archive << len;
         if(len > 0) {
             archive.Store((uint8*)m_name, len);
@@ -959,6 +959,19 @@ bool ArmyData::CanTransport() const
 
     return false;
 }
+
+bool ArmyData::HasTransporter() const
+{
+	for (sint32 i = 0; i < m_nElements; ++i)
+	{
+		sint32 const	cargo = m_array[i].GetData()->GetMaxCargoCapacity();
+		if (cargo > 0)
+			return true;
+	}
+
+	return false;
+}
+
 
 // not used
 bool ArmyData::CanPatrol() const
@@ -2966,7 +2979,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 	Unit home_city; // city where slaves are put to work
 
 	if (!IsSlaveRaidPossible(point, success, death, timer, amount, uindex,
-	    target_is_city, target_city, home_city))
+	    target_is_city, target_city, home_city)) // determines home_city (with Player::GetSlaveCity)
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("!IsSlaveRaidPossible()\n"));
 		return ORDER_RESULT_ILLEGAL;
@@ -2989,7 +3002,7 @@ ORDER_RESULT ArmyData::SlaveRaid(const MapPoint &point)
 		// InformAI(UNIT_ORDER_ENSLAVE_SETTLER, point); //does nothing here but could be implemented
 
 		DPRINTF(k_DBG_GAMESTATE, ("Doing EnslaveSettler instead of SlaveRaid\n"));
-		return EnslaveSettler(point, uindex, home_city); //redetermines home_city?
+		return EnslaveSettler(point, uindex, home_city); // redetermines home_city (with Player::GetSlaveCity) but does not return it
 	}
 
 	double slaveryReduction = target_city.IsProtectedFromSlavery();
@@ -3240,7 +3253,7 @@ bool ArmyData::CanEnslaveSettler(sint32 &uindex) const
 ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex,
                               Unit home_city)
 {
-	sint32 r = g_player[m_owner]->GetSlaveCity(m_pos, home_city);
+	sint32 r = g_player[m_owner]->GetSlaveCity(m_pos, home_city);  // could be removed, already checked in ArmyData::SlaveRaid -> check if ArmyData::EnslaveSettler is called from elsewhere
 	if(!r)
 		return ORDER_RESULT_ILLEGAL;
 
@@ -3322,7 +3335,7 @@ ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
 
 	if(c.GetOwner() == m_array[0].GetOwner())
 	{
-		DPRINTF(k_DBG_GAMESTATE, ("You can't free your own slaves with an abolitionist.  In fact, you shouldn't even be able to have both slaves and an abolitionist.  Stop cheating!\n"));
+		DPRINTF(k_DBG_GAMESTATE, ("You can't free your own slaves with an abolitionist.\n"));
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -5839,6 +5852,7 @@ ORDER_RESULT ArmyData::InterceptTrade()
 	sint32 typeIndex = g_theSpecialEffectDB->FindTypeIndex("SPECEFFECT_PIRATE");
 	sint32 effectId = g_theSpecialEffectDB->Get(typeIndex)->GetValue();
 	sint32 soundId = g_theSoundDB->FindTypeIndex("SOUND_ID_SLAVE_RAIDS");
+	sint32 soundIdTmp= -1;
 
 	for (sint32 i = m_nElements - 1; i>= 0; i--)
 	{
@@ -5891,6 +5905,9 @@ ORDER_RESULT ArmyData::InterceptTrade()
 						g_selected_item->ForceDirectorSelect(Army(m_id));
 						return ORDER_RESULT_ILLEGAL;
 					}
+					if (g_selected_item->GetVisiblePlayer() == route_owner){ // set pirating sound if route_owner is human player
+					    soundIdTmp= soundId;
+					    }
 				}
 			}
 
@@ -5912,6 +5929,10 @@ ORDER_RESULT ArmyData::InterceptTrade()
 
 					g_director->AddSpecialEffect(m_pos, effectId, soundId);
 				}
+				else if (soundIdTmp != -1){ // play pirating sound if route_owner is human player even if pirating pos is not visible (i.e. sound corresponds to the feedback of the pirated trader)
+				    g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundIdTmp, m_pos.x, m_pos.y);
+				    }
+				
 				AddSpecialActionUsed(m_array[i]);
 				m_isPirating = true;
 			}
@@ -6705,8 +6726,11 @@ bool ArmyData::IsOccupiedByForeigner(const MapPoint &pos)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ArmyData::CheckLoadSleepingCargoFromCity(Order *order)
+void ArmyData::CheckLoadSleepingCargoFromCity()
 {
+	if(!g_player[m_owner]->IsRobot() && !g_theProfileDB->IsSleepingUnitsBoard())
+		return;
+
 	Cell *cell = g_theWorld->GetCell(m_pos);
 	//if neither in a city nor in an airfield
 	if( cell->GetCity().m_id == 0
@@ -7863,8 +7887,8 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 	if(anyVisible && g_radarMap)
 	{
-		g_radarMap->RedrawTile(&oldPos); // oldPos only used here
-		g_radarMap->RedrawTile(&m_pos);  // m_pos hasn't been modified so oldPos and m_pos are still identical
+		g_radarMap->RedrawTile(oldPos); // oldPos only used here
+		g_radarMap->RedrawTile(pos);
 	}
 
 	if(HasLeftMap())
@@ -8327,7 +8351,8 @@ bool ArmyData::ExecuteUnloadOrder(Order *order)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 		if(visiblePlayer == m_array[0].GetOwner()
-		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)))
+//		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)) // not an attack sound, so not appropriate to hear for any unit not owned by visible player
+		    )
 		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
@@ -8344,8 +8369,9 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 	if(debark.Num() <= 0)
 	{
 		sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-		if ((visiblePlayer == m_array[0].GetOwner()) ||
-			(m_array[0].GetVisibility() & (1 << visiblePlayer)))
+		if ((visiblePlayer == m_array[0].GetOwner())
+//		|| (m_array[0].GetVisibility() & (1 << visiblePlayer)) // not an attack sound, so not appropriate to hear for any unit not owned by visible player
+		   )
 		{
 			g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
 								m_array[0].GetCantMoveSoundID(),
@@ -9139,22 +9165,18 @@ void ArmyData::ActionSuccessful(SPECATTACK attack, Unit &unit, Unit const & c)
 			if(visiblePlayer == m_owner
 			|| unit.GetVisibility() & (1 << visiblePlayer))
 			{
-				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y);
+				if(g_selected_item->IsAutoCenterOn() 
+				    && !g_director->TileWillBeCompletelyVisible(m_pos.x, m_pos.y)
+				    && g_player[visiblePlayer]->IsVisible(m_pos)
+				  )
+				{
+					// center on pos if generally visible but not in current view
+					g_director->AddCenterMap(m_pos);
+				}
+				
+				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0, 	soundID, m_pos.x, m_pos.y); // pos not used in SoundManager::AddSound, centering map could be implemented there, not sure though if that would cause troule for sounds not bound to a map position (e.g. click-sound)
 			}
 		}
-	}
-}
-
-void ArmyData::ActionUnsuccessful(const MapPoint &point)
-{
-	sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
-	if ((visiblePlayer == m_owner) ||
-		(m_array[0].GetVisibility() & (1 << visiblePlayer))) {
-
-		g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32)0,
-							gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),
-							point.x,
-							point.y);
 	}
 }
 
@@ -9920,16 +9942,20 @@ void ArmyData::CharacterizeArmy
     sint32 & maxdefense,
     bool & cancapture,
     bool & haszoc,
-    bool & canbombard
+    bool & canbombard,
+    bool & canthrowparty,
+    bool & canestablishembassy
 ) const
 {
-	isspecial  = false;
-	isstealth  = true;
-	maxattack  = 0;
-	maxdefense = 0;
-	cancapture = false;
-	haszoc     = false;
-	canbombard = false;
+	isspecial           = false;
+	isstealth           = true;
+	maxattack           = 0;
+	maxdefense          = 0;
+	cancapture          = false;
+	haszoc              = false;
+	canbombard          = false;
+	canthrowparty       = false;
+	canestablishembassy = false;
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -9946,15 +9972,17 @@ void ArmyData::CharacterizeArmy
 			break;
 		}
 
-		isspecial  |= !rec->GetVisionClassStandard();
-		isspecial  |= (rec->GetAttack() <= 0.0);
-		isstealth  &=  rec->GetVisionClassStealth();
-		cancapture |= !rec->GetCantCaptureCity();
-		haszoc     |= !rec->GetNoZoc();
-		canbombard |= (rec->GetCanBombard() != 0x0);
+		isspecial           |= !rec->GetVisionClassStandard();
+		isspecial           |= (rec->GetAttack() <= 0.0);
+		isstealth           &=  rec->GetVisionClassStealth();
+		cancapture          |= !rec->GetCantCaptureCity();
+		haszoc              |= !rec->GetNoZoc();
+		canbombard          |= (rec->GetCanBombard() != 0x0);
+		canthrowparty       |= rec->GetThrowParty();
+		canestablishembassy |= rec->GetEstablishEmbassy();
 
-		maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
-		maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
+		maxattack            = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+		maxdefense           = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 	}
 }
 
@@ -9991,16 +10019,20 @@ void ArmyData::CharacterizeCargo
     sint32 & maxdefense,
     bool & cancapture,
     bool & haszoc,
-    bool & canbombard
+    bool & canbombard,
+    bool & canthrowparty,
+    bool & canestablishembassy
 ) const
 {
-	isspecial  = false;
-	isstealth  = true;
-	maxattack  = 0;
-	maxdefense = 0;
-	cancapture = false;
-	haszoc     = false;
-	canbombard = false;
+	isspecial           = false;
+	isstealth           = true;
+	maxattack           = 0;
+	maxdefense          = 0;
+	cancapture          = false;
+	haszoc              = false;
+	canbombard          = false;
+	canthrowparty       = false;
+	canestablishembassy = false;
 
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
@@ -10013,15 +10045,17 @@ void ArmyData::CharacterizeCargo
 			{
 				const UnitRecord *rec = cargo->Access(j)->GetDBRec();
 
-				isspecial  |= !rec->GetVisionClassStandard();
-				isspecial  |= (rec->GetAttack() <= 0.0);
-				isstealth  &=  rec->GetVisionClassStealth();
-				cancapture |= !rec->GetCantCaptureCity();
-				haszoc     |= !rec->GetNoZoc();
-				canbombard |= (rec->GetCanBombard() != 0x0);
+				isspecial           |= !rec->GetVisionClassStandard();
+				isspecial           |= (rec->GetAttack() <= 0.0);
+				isstealth           &=  rec->GetVisionClassStealth();
+				cancapture          |= !rec->GetCantCaptureCity();
+				haszoc              |= !rec->GetNoZoc();
+				canbombard          |= (rec->GetCanBombard() != 0x0);
+				canthrowparty       |= !rec->GetThrowParty();
+				canestablishembassy |= !rec->GetEstablishEmbassy();
 
-				maxattack   = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
-				maxdefense  = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
+				maxattack            = std::max(maxattack,  static_cast<sint32>(rec->GetAttack()));
+				maxdefense           = std::max(maxdefense, static_cast<sint32>(rec->GetDefense()));
 			}
 		}
 	}
@@ -10142,6 +10176,23 @@ bool ArmyData::CheckValidDestination(const MapPoint &dest) const
 }
 
 // returns true if this army's current order is UNIT_ORDER_MOVE and the army already is where it was ordered to go
+//----------------------------------------------------------------------------
+//
+// Name       : ArmyData::AtEndOfPath
+//
+// Description: Returns true if this army is at the end of its path and was
+//              was moving. If it has no valid path then it is assumed to be
+//              at its end-
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : bool
+//
+// Remark(s)  : -
+//
+//----------------------------------------------------------------------------
 bool ArmyData::AtEndOfPath() const
 {
 	Order *order = m_orders->GetHead();
@@ -11427,7 +11478,7 @@ void ArmyData::BarbarianSpawning()
 
 		if(
 			(g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetBarbarianSpawnsBarbarian())
-		||  (g_theProfileDB->IsBarbarianSpawnsBarbarian())
+		||  (g_theGameSettings->IsBarbarianSpawnsBarbarian())
 		){
 
 			if ( (barbhorde) >= (barbmax^2) ) {

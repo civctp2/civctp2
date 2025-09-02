@@ -33,6 +33,10 @@
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
 
+# More Stuff for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Activision consiglia un massimo di 4 giocatori per le partite a Call to Power in multiplayer."
+
 ## Stuff for LDL_STR.txt
 str_ldl_AutoCenter_On	"Centraggio automatico: sì"
 str_ldl_AutoCenter_Off	"Centraggio automatico: no"
@@ -80,8 +84,9 @@ str_ldl_RADAR_MAP_FILTER	"Filtrata"
 # Replaces string in ldl_str.txt, changed to Status from Modifiers
 str_ldl_CityWinStatisticsTab "Stato"
 
+#revised below
 # Added
-str_code_CityWinTotalHappinessFormat "Totale: %d"
+#str_code_CityWinTotalHappinessFormat "Totale: %d"
 
 str_code_QueryRebuildCapitol "Sei sicuro di voler ricostruire il tuo palazzo?"
 str_code_QuerySwitchProduction "Switch production type? (City will lose %d%% stored production)"
@@ -104,8 +109,6 @@ str_ldl_DontShowAgain		"Non mostrare più questo messaggio."
 
 # In science picker, when the advance gives you tile improvements:
 ADVANCE_GIVES_TILE_IMPROVEMENTS "Trasformazione terreno:"
-
-# Toggle buttons on radar map
 
 str_ldl_RADAR_MAP_TRADE "Commercio"
 str_ldl_RADAR_MAP_TERRAIN "Terreno"
@@ -178,6 +181,7 @@ str_ldl_IntelligenceTitle "I N F O R M A Z I O N I"
 ## PLEASE ENTER NEW STUFF BELOW THIS LINE
 ## Strings above sent to be localized 10/06/00
 ##############################################
+str_ldl_PosField "Pos:"
 
 str_ldl_CityEspionage "Spionaggio in città"
 str_ldl_NatlManagerHotKey "F1"
@@ -208,6 +212,7 @@ str_ldl_RestartHotKey "Ctrl+z"
 str_ldl_NewGameHotKey "Ctrl+x"
 str_ldl_SoundHotKey "Ctrl+v"
 str_ldl_MusicHotKey "Ctrl+m"
+str_ldl_LanguageHotKey "Ctrl+j"
 str_ldl_GraphicsHotKey "Ctrl+f"
 str_ldl_GameplayHotKey "Ctrl+p"
 str_ldl_CityEspionageHotKey "Ctrl+e"
@@ -238,11 +243,10 @@ str_tbl_ldl_Toggle_Ctl_Panel "Mostra/nasconde pannello controllo"
 str_tbl_ldl_Toggle_All "Mostra/nasconde tutto"
 str_tbl_ldl_Open_Army_Mgmt "Apre la Gestione armate"
 str_ldl_UNIT_CONTROLS "COMANDI UNITÀ"
-
 str_ldl_GreatLibrary "Grande Biblioteca"   
 str_control_key "Ctrl"   
-str_ldl_EnableAllMessages "Abilita tutti i messaggi"
 
+str_ldl_EnableAllMessages "Abilita tutti i messaggi"
 
 
 #################################
@@ -337,10 +341,6 @@ CONTEXT_VIEW_CARGO "  Osserva carico"
 # For netshell list header
 str_ldl_Settlers "Coloni"
 
-# More Stuuf for LDL_STR
-# Multiplayer Disclaimer String
-str_ldl_MultiplayerDisclaimer	"Activision consiglia un massimo di 4 giocatori per le partite a Call to Power in multiplayer."
-
 # When units will be disbanded due to a government change, ask first:
 str_code_GovernmentChangeDisbandsUnits "Instaurando questa forma di governo, alcune delle tue unità saranno congedate. Sei sicuro di voler proseguire?"
 
@@ -364,5 +364,4 @@ STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Clicca qui per creare una nuova armata."
 CONTEXT_TILE_INFO "Info mappa"
 
 str_ldl_EditQueueReallyDelete "Vuoi eliminare definitivamente la coda %s?"
-
 

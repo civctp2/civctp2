@@ -582,7 +582,7 @@ void FacedSprite::Export(FILE *file)
 
 	fprintf(file, "\t{\n");
 
-	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_facedFrameCount);
+	fprintf(file, "\t\t%s\t%zu\n", g_allTokens[TOKEN_SPRITE_NUM_FRAMES].keyword, m_facedFrameCount);
 
 	fprintf(file, "\t\t%s\t%d\n", g_allTokens[TOKEN_SPRITE_FIRST_FRAME].keyword, m_firstFrame);
 

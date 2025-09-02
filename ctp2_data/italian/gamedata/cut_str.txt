@@ -152,15 +152,6 @@ TERRORHACK_COMPLETE_VICTIM "Terror and confusion have overtaken our people of {c
 TERRORHACK_FAILED_ATTACKER "The enemy's computer security overcame our Cyber Ninja's bravest efforts. Terror hack unsuccessful."
 TERRORHACK_FAILED_VICTIM "Your information security system is formidable. You have foiled a computer terrorist plot in {city[0].name}."
 
-#Hear Gossip#
-GOSSIP_WARTIME_READINESS "The [player.1.civ_name_plural] are at wartime readiness"
-GOSSIP_ALERT_READINESS "The [player.1.civ_name_plural] are on alert"
-GOSSIP_PEACETIME_READINESS "The [player.1.civ_name_plural] are at peacetime readiness"
-GOSSIP_CAPTION "Gossip"
-GOSSIP_BORING "The [player.1.civ_name_plural] are a remarkably boring people, and have nothing worth gossiping about"
-GOSSIP_MAP "We have gleaned knowledge of the world map from the [player.1.civ_name_plural]"
-GOSSIP_COMPLETE_ATTACKER "Our Diplomats have overheard gossip. We have gained [advance.1.name]."
-
 ### Alien Endgame stuff that don't apply no mo' ###
 ALIEN_ALMOST_DONE "The alien embryo has entered the final stage of its development. Soon the world shall bow before your accomplishment, unless someone kills you or beats you to it first. "
 ALIEN_ALMOST_DONE_OTHERS "Spies report that the [player.1.civ_name_plural] have almost completed their work on the Alien Life Project. We must act fast or all will be lost."

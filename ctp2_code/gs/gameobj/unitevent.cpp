@@ -266,8 +266,7 @@ STDEHANDLER(UndergroundRailwayUnitEvent)
 	c.RemoveOneSlave(u.GetOwner());
 
 	Unit hc;
-	double distance;
-	sint32 r = g_player[u.GetOwner()]->GetNearestCity(u.RetPos(), hc, distance);
+	sint32 r = g_player[u.GetOwner()]->GetSlaveCity(u.RetPos(), hc); // use GetSlaveCity instead of GetNearestCity to include randomness for determining the target city (to avoid accumulation in border cities)
 	Assert(r);
 
 	if(!r)
@@ -387,13 +386,11 @@ STDEHANDLER(BioInfectCityUnitEvent)
 	so->AddCity(c) ;
 	g_slicEngine->Execute(so) ;
 
-	/* disabled because success of action is obvious any way (special effect and city icon) and therefore message spamming can be avoided
 	so = new SlicObject("11iBioInfectComplete") ;
 	so->AddRecipient(u.GetOwner()) ;
 	so->AddCivilisation(c.GetOwner()) ;
 	so->AddCity(c) ;
 	g_slicEngine->Execute(so) ;
-	*/
 
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_BioInfectCity,
 						   GEA_City, c.m_id,

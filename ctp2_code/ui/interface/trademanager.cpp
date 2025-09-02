@@ -421,7 +421,7 @@ void TradeManager::UpdateCreateList(const PLAYER_INDEX & player_id)
 									maxValuePerCaravan[j] = maxValuePerCaravan[j - 1];
 									maxCity[j].m_id = maxCity[j - 1].m_id;
 								}
-								maxValuePerCaravan[i] = valuePerCaravan;
+								maxValuePerCaravan[i] = static_cast<sint32>(valuePerCaravan);
 								maxCity[i] = destCity;
 								break;
 							}

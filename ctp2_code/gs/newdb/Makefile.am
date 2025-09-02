@@ -48,6 +48,7 @@ libgsnewdb_a_SOURCES = \
 	GovernmentRecord.cpp \
 	IconRecord.cpp \
 	ImprovementListRecord.cpp \
+	LanguageRecord.cpp \
 	LeaderRecord.cpp \
 	MapIconRecord.cpp \
 	MapRecord.cpp \
@@ -102,6 +103,7 @@ newdb_CDBTYPES = \
 	GovernmentRecord \
 	IconRecord \
 	ImprovementListRecord \
+	LanguageRecord \
 	LeaderRecord \
 	MapIconRecord \
 	MapRecord \
@@ -340,6 +342,13 @@ ImprovementListRecord.h: ImprovementListRecord.stamp
 ImprovementListRecord.stamp: $(ctp2_code)/gs/newdb/strategy.cdb \
 		TerrainImprovementRecord.h \
 		$(CTPDB)
+	$(CTPDB) . < $<
+	touch $@
+
+LanguageRecord.cpp \
+LanguageRecord.h: LanguageRecord.stamp
+
+LanguageRecord.stamp: $(ctp2_code)/gs/newdb/Language.cdb $(CTPDB)
 	$(CTPDB) . < $<
 	touch $@
 

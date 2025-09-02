@@ -340,8 +340,6 @@ BOOL ChatWindow::CheckForEasterEggs(MBCHAR *s)
 					{
 						i = n;
 					}
-
-					SDLMessageHandler(event);
 				}
 #else
 				// Make it abort if you press for instance the ESC key

@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <None Include=".\libavdevice.def" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\libavdevice\avdeviceres.rc">
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Release'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='Debug'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='ReleaseWinRT'">true</ExcludedFromBuild>
+      <ExcludedFromBuild Condition="'$(Configuration)'=='DebugWinRT'">true</ExcludedFromBuild>
+    </ResourceCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\libavdevice\alldevices.c" />
+    <ClCompile Include="..\libavdevice\avdevice.c" />
+    <ClCompile Include="..\libavdevice\utils.c" />
+    <ClCompile Include="..\libavdevice\version.c" />
+    <ClCompile Include="..\libavdevice\file_open.c" />
+    <ClCompile Include="..\libavdevice\lavfi.c" />
+    <ClCompile Include="libavdevice\dshow_wrap.c" />
+    <ClCompile Include="libavdevice\dshow_common_wrap.c" />
+    <ClCompile Include="libavdevice\dshow_crossbar_wrap.c" />
+    <ClCompile Include="libavdevice\dshow_enummediatypes_wrap.c" />
+    <ClCompile Include="libavdevice\dshow_enumpins_wrap.c" />
+    <ClCompile Include="libavdevice\dshow_filter_wrap.c" />
+    <ClCompile Include="libavdevice\dshow_pin_wrap.c" />
+    <ClCompile Include="libavdevice\gdigrab_wrap.c" />
+    <ClCompile Include="libavdevice\vfwcap_wrap.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\libavdevice\avdevice.h" />
+    <ClInclude Include="..\libavdevice\version.h" />
+    <ClInclude Include="..\libavdevice\version_major.h" />
+  </ItemGroup>
+</Project>

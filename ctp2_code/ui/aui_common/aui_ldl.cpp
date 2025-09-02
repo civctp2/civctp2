@@ -853,9 +853,9 @@ AUI_ERRCODE aui_Ldl::DetachHierarchy(aui_Region *region)
 {
 	if (region)
 	{
-		sint32 numChildren = region->NumChildren();
+		size_t numChildren = region->NumChildren();
 
-		for (sint32 i = 0; i < numChildren; i++)
+		for (size_t i = 0; i < numChildren; i++)
 		{
 			DetachHierarchy(region->GetChildByIndex(i));
 		}

@@ -46,7 +46,7 @@ MessageList::~MessageList( )
 	MessageWindow		*window = NULL;
 	ListPos position = m_iconList->GetHeadPosition();
 
-	for ( uint32 count = m_iconList->L(); count; count-- ) {
+	for ( size_t count = m_iconList->L(); count; count-- ) {
 		iconWindow = m_iconList->GetNext( position );
 		if (iconWindow) {
 			window = iconWindow->GetWindow();
@@ -112,11 +112,11 @@ void MessageList::HideVisibleWindows( void )
 
 	ListPos position = m_iconList->GetHeadPosition();
 
-	for ( uint32 count = m_iconList->L(); count; count-- )
-    {
+	for ( size_t count = m_iconList->L(); count; count-- )
+	{
 		MessageIconWindow * iconWindow = m_iconList->GetNext( position );
 		if (iconWindow)
-        {
+		{
 			MessageWindow * window = iconWindow->GetWindow();
 
 			iconWindow->SetCurrentIconButton( NULL );
@@ -129,7 +129,6 @@ void MessageList::HideVisibleWindows( void )
 					window->ShowWindow( FALSE );
 		}
 	}
-
 }
 
 void MessageList::CheckVisibleMessages( void )
@@ -192,22 +191,16 @@ return;
 
 }
 
-
-
-
 void MessageList::CheckMaxMessages( void )
 {
-
-	uint32 count = m_iconList->L();
+	uint32 count = static_cast<uint32>(m_iconList->L());
 	uint32 maxCount = ( m_offset + g_messageMaxVisible );
 
 	if ( count > maxCount )
 		messagewin_MoreMessagesIcon( TRUE );
 	else
 		messagewin_MoreMessagesIcon( FALSE );
-
 }
-
 
 void MessageList::ChangeOffset( sint32 offset, int flag )
 {
@@ -227,7 +220,7 @@ void MessageList::ChangeOffset( sint32 offset, int flag )
 	uint32 count = 0;
 	ListPos position = m_iconList->GetHeadPosition();
 
-	for ( uint32 i = m_iconList->L(); i; i-- ) {
+	for ( size_t i = m_iconList->L(); i; i-- ) {
 		MessageIconWindow *iconWindow = m_iconList->GetNext( position );
 
 		if (iconWindow) {

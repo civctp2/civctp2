@@ -1,0 +1,1546 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="DebugDLL|Win32">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="DebugDLL|x64">
+      <Configuration>DebugDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|Win32">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLL|x64">
+      <Configuration>ReleaseDLL</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLLStaticDeps|Win32">
+      <Configuration>ReleaseDLLStaticDeps</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="ReleaseDLLStaticDeps|x64">
+      <Configuration>ReleaseDLLStaticDeps</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{CE6C44DD-6E38-4293-8AB3-04EE28CCA972}</ProjectGuid>
+    <RootNamespace>avutil</RootNamespace>
+    <WindowsTargetPlatformVersion>10.0.19041.0</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <ImportGroup Label="PropertySheets">
+    <Import Project="smp_deps.props" />
+    <Import Project="libavutil_files.props" />
+  </ImportGroup>
+  <ImportGroup Label="ExtensionSettings">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\nasm.props" />
+  </ImportGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;DEBUG;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;DEBUG;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;DEBUG;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\libavutil.def</ModuleDefinitionFile>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='DebugDLL|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;DEBUG;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\libavutil.def</ModuleDefinitionFile>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Lib>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Lib>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\libavutil.def</ModuleDefinitionFile>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLL|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\libavutil.def</ModuleDefinitionFile>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLLStaticDeps|Win32'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\libavutil.def</ModuleDefinitionFile>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='ReleaseDLLStaticDeps|x64'">
+    <ClCompile>
+      <PreprocessorDefinitions>_UCRT_NOISY_NAN;restrict=__restrict;HAVE_AV_CONFIG_H;_USE_MATH_DEFINES;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalOptions Condition="$([System.String]::Copy($(PlatformToolset)).Contains('Intel'))">/Qvec- /Qsimd- %(AdditionalOptions)</AdditionalOptions>
+      <AdditionalOptions Condition="'$(AdditionalOptions)' == '' and '$(VisualStudioVersion)' != '12.0'">/utf-8 %(AdditionalOptions)</AdditionalOptions>
+      <DisableSpecificWarnings>4244;4267;4018;4146;4028;4996;4090;4114;4308;4305;4005;4101;4554;4307;4273;4133;4544;4334;4293;4047;4703;%(DisableSpecificWarnings)</DisableSpecificWarnings>
+      <LanguageStandard_C Condition="'$(VisualStudioVersion)' &gt; '15.0'">stdc11</LanguageStandard_C>
+    </ClCompile>
+    <Link>
+      <AdditionalDependencies>Bcrypt.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <ModuleDefinitionFile>.\libavutil.def</ModuleDefinitionFile>
+      <AdditionalOptions>/IGNORE:4006,4221,4049,4217,4197,4099,4264 %(AdditionalOptions)</AdditionalOptions>
+    </Link>
+    <PostBuildEvent>
+      <Command>mkdir "$(OutDir)"\include
+mkdir "$(OutDir)"\include\libavutil
+copy ..\libavutil\adler32.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\aes_ctr.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ambient_viewing_environment.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\attributes.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\audio_fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avassert.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avstring.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avutil.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\base64.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\blowfish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bprint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\bswap.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\buffer.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cast5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\camellia.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\channel_layout.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\common.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\cpu.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\crc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\csp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\des.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\detection_bbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dict.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\display.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\dovi_meta.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\downmix_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\encryption_info.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\error.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\eval.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\executor.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\fifo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\file.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\frame.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hash.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hdr_dynamic_vivid_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hmac.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_cuda.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_d3d11va.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_drm.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_dxva2.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_qsv.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_mediacodec.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_opencl.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vaapi.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_videotoolbox.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vdpau.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\hwcontext_vulkan.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\imgutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intfloat.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\intreadwrite.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lfg.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\log.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\lzo.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\macros.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mathematics.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mastering_display_metadata.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\md5.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\mem.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\motion_vector.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\murmur3.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\opt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\parseutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixdesc.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixelutils.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\pixfmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\random_seed.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rc4.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\rational.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\replaygain.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\ripemd.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\samplefmt.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\sha512.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\spherical.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\stereo3d.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\threadmessage.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\time.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timecode.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\timestamp.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tree.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\twofish.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\uuid.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\version.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_enc_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\xtea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tea.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\tx.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\film_grain_params.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\video_hint.h "$(OutDir)"\include\libavutil
+copy ..\libavutil\avconfig.h "$(OutDir)"\include\libavutil
+copy libavutil\ffversion.h "$(OutDir)"\include\libavutil
+mkdir "$(OutDir)"\licenses
+copy ..\COPYING.LGPLv2.1 "$(OutDir)"\licenses\ffmpeg.txt</Command>
+    </PostBuildEvent>
+    <PreBuildEvent>
+      <Command>if exist ..\config.h (
+del ..\config.h
+)
+if exist ..\version.h (
+del ..\version.h
+)
+if exist ..\config.asm (
+del ..\config.asm
+)
+if exist ..\config_components.h (
+del ..\config_components.h
+)
+if exist ..\libavutil\avconfig.h (
+del ..\libavutil\avconfig.h
+)
+if exist ..\libavutil\ffversion.h (
+del ..\libavutil\ffversion.h
+)
+if exist "$(OutDir)"\include\libavutil (
+rd /s /q "$(OutDir)"\include\libavutil
+cd ../
+cd $(ProjectDir)
+)</Command>
+    </PreBuildEvent>
+    <NASM>
+      <IncludePaths>$(ProjectDir);$(ProjectDir)\..\;$(ProjectDir)\..\\libavutil\x86;%(IncludePaths)</IncludePaths>
+      <PreIncludeFiles>config.asm;%(PreIncludeFiles)</PreIncludeFiles>
+      <GenerateDebugInformation>false</GenerateDebugInformation>
+    </NASM>
+    <ResourceCompile>
+      <AdditionalIncludeDirectories>$(ProjectDir)\..\compat\atomics\win32\;$(ProjectDir)\..\;.\;..\;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <PreprocessorDefinitions>_MSC_VER;BUILDING_avutil;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ResourceCompile>
+  </ItemDefinitionGroup>
+  <ImportGroup Label="ExtensionTargets">
+    <Import Project="$(VCTargetsPath)\BuildCustomizations\nasm.targets" />
+  </ImportGroup>
+</Project>

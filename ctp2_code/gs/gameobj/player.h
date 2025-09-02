@@ -111,6 +111,7 @@ typedef sint32      PLAYER_INDEX;
 typedef sint32      TERRAIN_IMPROVEMENT;
 
 PLAYER_INDEX const  PLAYER_UNASSIGNED   = -1;
+PLAYER_INDEX const  PLAYER_BARBARIAN    =  0;
 
 #define k_ANNOUNCE_TRADE_MESSAGES       1
 #define k_SQUELCH_TRADE_MESSAGES        0
@@ -441,7 +442,7 @@ public:
 	void Sleep(sint32 idx);
 	void WakeUp(sint32 idx);
 
-	sint32 GetCheapestMilitaryUnit();
+	sint32 GetCheapestMilitaryUnit(const MapPoint& pos);
 
 	void BeginTurnPollution(void) ;
 	void EndTurnPollution(void) ;
@@ -846,8 +847,6 @@ public:
 	void   SetCapitol(const Unit &c);
 	bool   GetCapitolPos(MapPoint &pos) const;
 
-	double GetRationLevel() const { return 1.0; }
-
 	void   BuildWonder(Unit city, sint32 wonder);
 	void   AddWonder(sint32 wonder, Unit &city);
 	void   RemoveWonder(sint32 wonder, bool destroyed);
@@ -1010,6 +1009,7 @@ public:
 
 	bool HasCostalCities() const;
 	bool HasTransporters() const;
+	sint32 GetTransporterNum() const;
 
 	bool IsConnected(MapPoint const & center, sint32 maxSquaredDistance, sint32 & distance, bool isLandOnly = true) const;
 

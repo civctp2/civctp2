@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Ressourcendateien">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="demo">
+      <UniqueIdentifier>{169d1628-c91e-4db6-84cb-681c786375b5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="demo\utils">
+      <UniqueIdentifier>{df9b988d-4bf5-4c57-935f-be7b0f25ef08}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="h">
+      <UniqueIdentifier>{edd31f6d-1ffc-4fe3-956e-2c95a9b974d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{c0018826-2543-4bd4-adb3-99c04dd35c2a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rdparty">
+      <UniqueIdentifier>{a1da3873-0646-434c-ac39-0f64c9d75daf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rdparty\md5">
+      <UniqueIdentifier>{1c32a59c-f11d-4de5-85a5-d23194efb747}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\3rdparty\d3des">
+      <UniqueIdentifier>{9fd01c7e-7c43-4296-abfb-b76a0c7ac266}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\aeh">
+      <UniqueIdentifier>{24331e2b-ba6c-4082-b446-6d1532a2a2fb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\dp">
+      <UniqueIdentifier>{f9a09d39-d134-4448-939f-93c47903d649}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\score">
+      <UniqueIdentifier>{ac505c0f-c779-400e-a9d5-8e434b6aa75c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\tca">
+      <UniqueIdentifier>{e862c359-1c0a-4729-9f13-23627c43a003}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\win">
+      <UniqueIdentifier>{6e429d29-01c3-49e7-8632-a5d1c3682abf}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src\win\dp">
+      <UniqueIdentifier>{f1e7ac37-3c96-43b2-99e4-dab6fcea26ea}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="demo\utils\dpcrc32.c">
+      <Filter>demo\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="demo\utils\logpkt.c">
+      <Filter>demo\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="demo\utils\mywcs.c">
+      <Filter>demo\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdparty\d3des\d3des.c">
+      <Filter>src\3rdparty\d3des</Filter>
+    </ClCompile>
+    <ClCompile Include="src\3rdparty\md5\md5c.c">
+      <Filter>src\3rdparty\md5</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\dp\dllmain.c">
+      <Filter>src\win\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\dp\dpdllwin.c">
+      <Filter>src\win\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\dp\enumapp.c">
+      <Filter>src\win\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\win\dp\launchap.c">
+      <Filter>src\win\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aeh\aeh.c">
+      <Filter>src\aeh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aeh\aehlog.c">
+      <Filter>src\aeh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aeh\aehmap.c">
+      <Filter>src\aeh</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\assoctab.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dictset.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dp2.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dpio.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dprint.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dpuser.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dynatab.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\ini.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\q.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\delay.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\deltas.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dpexcept.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dpprivy.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dpscore.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dpshutdn.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\dptab.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\enumsrv2.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\hkeytab.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\dp\launchparams.c">
+      <Filter>src\dp</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tca\crypttab.c">
+      <Filter>src\tca</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tca\tca.c">
+      <Filter>src\tca</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tca\tcapw.c">
+      <Filter>src\tca</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tca\tserv.c">
+      <Filter>src\tca</Filter>
+    </ClCompile>
+    <ClCompile Include="src\tca\tserva.c">
+      <Filter>src\tca</Filter>
+    </ClCompile>
+    <ClCompile Include="src\score\scorerep.c">
+      <Filter>src\score</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aeh\tlstuff.c">
+      <Filter>src\aeh</Filter>
+    </ClCompile>
+    <ClCompile Include="demo\utils\eclock.c">
+      <Filter>demo\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="src\aeh\detect.c">
+      <Filter>src\aeh</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="demo\utils\dpcrc32.h">
+      <Filter>demo\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\utils\logpkt.h">
+      <Filter>demo\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="demo\utils\mywcs.h">
+      <Filter>demo\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="src\3rdparty\d3des\d3des.h">
+      <Filter>src\3rdparty\d3des</Filter>
+    </ClInclude>
+    <ClInclude Include="src\3rdparty\md5\md5.h">
+      <Filter>src\3rdparty\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\3rdparty\md5\global.h">
+      <Filter>src\3rdparty\md5</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aeh\aeh.h">
+      <Filter>src\aeh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aeh\aehlog.h">
+      <Filter>src\aeh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\dp\dpprivy.h">
+      <Filter>src\dp</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tca\crypttab.h">
+      <Filter>src\tca</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tca\tca.h">
+      <Filter>src\tca</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tca\tcapw.h">
+      <Filter>src\tca</Filter>
+    </ClInclude>
+    <ClInclude Include="src\tca\tserv.h">
+      <Filter>src\tca</Filter>
+    </ClInclude>
+    <ClInclude Include="src\score\scorerep.h">
+      <Filter>src\score</Filter>
+    </ClInclude>
+    <ClInclude Include="h\anet.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\aneterr.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\assoctab.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\commapi.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\commerr.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\contract.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\delay.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dictset.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dp.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dp2.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpcompat.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpdll.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpexcept.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpio.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dplang.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpmem.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dppack1.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dppackn.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dppkt.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dppv.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dprint.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dptab.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpturn.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dpunpack.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\dynatab.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\eclock.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\enumapps.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\enumserv.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\hkeytab.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\ini.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\launchparams.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\portable.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\q.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="h\types.h">
+      <Filter>h</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aeh\tlstuff.h">
+      <Filter>src\aeh</Filter>
+    </ClInclude>
+    <ClInclude Include="src\aeh\detect.h">
+      <Filter>src\aeh</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

@@ -102,7 +102,7 @@ CLEAN :
 # ADD CPP /nologo /G5 /MD /W3 /GX /O2 /Oy- /I "..\..\..\h" /I "..\..\aeh" /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /YX /c
 CPP_PROJ=/nologo /G5 /MD /W3 /GX /O2 /Oy- /I "..\..\..\h" /I "..\..\aeh" /I\
  "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "WIN32" /D\
- "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /Fp"$(INTDIR)/dp2.pch" /YX\
+ "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/dp2.pch" /YX\
  /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\dp2/
 CPP_SBRS=.\.
@@ -272,7 +272,7 @@ CLEAN :
 # SUBTRACT CPP /WX
 CPP_PROJ=/nologo /G5 /MDd /W3 /GX /Z7 /Od /I "..\..\..\h" /I "..\..\aeh" /I\
  "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "_DEBUG" /D "DEBUG" /D\
- "DPRNT" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /Fr"$(INTDIR)/"\
+ "DPRNT" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fr"$(INTDIR)/"\
  /Fp"$(INTDIR)/dp2.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\dp2d/
 CPP_SBRS=.\dp2d/
@@ -445,7 +445,7 @@ CLEAN :
 # ADD CPP /nologo /G5 /MD /W3 /GX /O2 /Oy- /I "..\..\..\h" /I "..\..\aeh" /I "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "DPRNT" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /YX /c
 CPP_PROJ=/nologo /G5 /MD /W3 /GX /O2 /Oy- /I "..\..\..\h" /I "..\..\aeh" /I\
  "..\..\score" /I "..\..\..\demo\utils" /I "..\stub" /D "NDEBUG" /D "DPRNT" /D\
- "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /Fp"$(INTDIR)/dp2.pch" /YX\
+ "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/dp2.pch" /YX\
  /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\dp2l/
 CPP_SBRS=.\.
@@ -1023,7 +1023,7 @@ DEP_CPP_ENUMA=\
 	"..\..\tca\tca.h"\
 	"..\..\tca\tcapw.h"\
 	"..\..\tca\tserv.h"\
-	"..\3rdparty\updater\update.h"\
+#	"..\3rdparty\updater\update.h"\ # Missing file, keep in case we wanna reimplment this.
 	
 
 !IF  "$(CFG)" == "DP2 - Win32 Release"

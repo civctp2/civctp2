@@ -218,7 +218,7 @@ public:
 
 
 
-	int Get_Database_Size(int the_database);
+	size_t Get_Database_Size(int the_database);
 
 	void Search_Great_Library();
 
@@ -254,7 +254,7 @@ private:
 	ctp2_HyperTextBox	*m_techRequirementsText;
 	ctp2_HyperTextBox	*m_techVariablesText;
 
-#ifdef WIN32
+#ifdef __AUI_USE_DIRECTX__
 	DirectVideo		*m_techMovie;
 #endif
 	ctp2_Static		*m_techStillShot;

@@ -250,7 +250,7 @@ POPULATION_POLLUTION_WARNING_THRESHOLD   10  # population pollution warning mess
 INDUSTRIAL_POLLUTION_WARNING_THRESHOLD   10  # industrial pollution warning message threshold
 VERY_HAPPY_THRESHOLD                     85  # threshold at which a city is considered "very happy"
 CITY_GROWTH_COEFFICIENT                 175  # Amount of food per citizen required to grow a city
-RIOT_LEVEL                               73
+RIOT_LEVEL                               73  # Minimum happiness level so that a city does not riot
 POWER_POINTS_TO_MATERIALS                 1  # 1 power point can be converted to x materials (Unused)
 MAX_AIRLIFT_STACK_SIZE                    2
 GOLD_FROM_PIRACY                         30
@@ -395,3 +395,16 @@ CITY_ON_TRADE_ROUTE_BONUS  0.3   # if a trade route passes through a city and th
 DOMESTIC_TRADE_COEF 0.5 # coefficient for the reduction of trade route value in case of domestic trade (value < 1.0 promotes foreign trade)
 TRADE_COEF 1.002 # factor for trade route value depending on squared distance to good, if TradeCoef= 1.002 then the VPC is 2 times for a good that needs 2 Caravans to trade (in comparison as if the good would only need 1 Caravan to trade), if TradeCoef= 1 then there is only a linear dependency (as it used to be)
 PACT_TRADE_COEF  1.5  # surplus in trade route values in case of a standing trade pact
+
+# Can be overwritten in strategies.txt for each strategy separately, here is the default value if you do not set here:
+TurnsAcceptedForOnePop 30
+
+# Some more new stuff. Only in the new format: Only camel casse available, no underscores
+# Those are the default values, the values these things have, if you don't put them into the file
+UseBaseMoveCostsForRoads 0
+RoadAlreadyThereCostsCoefficient 0.5
+BuildRoadsToClosestCities 5
+BaseRoadPriorityVsThreatRank 0.5
+CosiderNumCitiesForSlaves 5
+SmallCityImproveCoeff 1.0
+FlashInMilSecs 2000               # Bio and Nano terror flash # If FlashInMilSecs <= 0 no flash is shown

@@ -334,37 +334,36 @@ KeylistStrings {
 	string	string66	"str_tbl_ldl_Open_Options_Screen"
 	string	string67	"str_tbl_ldl_Sound_Options"		#new
 	string	string68	"str_tbl_ldl_Music_Options"		#02 new
-	string	string69	"str_tbl_ldl_Graphics_Options"		#new
-	string	string70	"str_tbl_ldl_Gameplay_Options"		#new
-	string	string71	"str_tbl_ldl_Advanced_Options"		#new (really new)
-	string	string72	"str_tbl_ldl_Restart_Game"		#new
-	string	string73	"str_tbl_ldl_New_Game"			#new
-	string	string74	"str_tbl_ldl_Save_Game"
-	string	string75	"str_tbl_ldl_Load_Game"
-	string	string76	"str_tbl_ldl_Save_World"
-	string	string77	"str_tbl_ldl_Load_World"
-	string	string78	"str_tbl_ldl_Quit"
+	string	string69	"str_tbl_ldl_Language_Options"		#02 new
+	string	string70	"str_tbl_ldl_Graphics_Options"		#new
+	string	string71	"str_tbl_ldl_Gameplay_Options"		#new
+	string	string72	"str_tbl_ldl_Advanced_Options"		#new (really new)
+	string	string73	"str_tbl_ldl_Restart_Game"		#new
+	string	string74	"str_tbl_ldl_New_Game"			#new
+	string	string75	"str_tbl_ldl_Save_Game"
+	string	string76	"str_tbl_ldl_Load_Game"
+	string	string77	"str_tbl_ldl_Save_World"
+	string	string78	"str_tbl_ldl_Load_World"
+	string	string79	"str_tbl_ldl_Quit"
 #### END GAME OPTIONS ####	
 
 #### BEGIN MAP CONTROLS ####
-	string	string79	"str_tbl_ldl_Toggle_City_Names"
-	string	string80	"str_tbl_ldl_Toggle_Trade_Routes"
-	string	string81	"str_tbl_ldl_Center_Map_on_UnitCity"
-	string	string82	"str_tbl_ldl_Close_Message"
-	string	string83	"str_tbl_ldl_Toggle_Radar"		#new
-	string	string84	"str_tbl_ldl_Toggle_Ctl_Panel"		#new
-	string	string85	"str_tbl_ldl_Toggle_All"		#new
-	string	string86	"str_ldl_ZoomIn"
-	string	string87	"str_ldl_ZoomOut"
-	string	string88	"str_tbl_ldl_Gamestate_Debug"		#02 new (Only _PLAYTEST)
-	string	string89	"str_tbl_ldl_Rand_Test"			#02 new (Only _PLAYTEST)
-	string	string90	"str_tbl_ldl_Command_Enter"		#02 new (Only _PLAYTEST)
-	string	string91	"str_tbl_ldl_Command_Enter_Alternate"	#02 new (Only _PLAYTEST)
-	string	string92	"str_tbl_ldl_Toggle_Space"		#02 new
+	string	string80	"str_tbl_ldl_Toggle_City_Names"
+	string	string81	"str_tbl_ldl_Toggle_Trade_Routes"
+	string	string82	"str_tbl_ldl_Center_Map_on_UnitCity"
+	string	string83	"str_tbl_ldl_Close_Message"
+	string	string84	"str_tbl_ldl_Toggle_Radar"		#new
+	string	string85	"str_tbl_ldl_Toggle_Ctl_Panel"		#new
+	string	string86	"str_tbl_ldl_Toggle_All"		#new
+	string	string87	"str_ldl_ZoomIn"
+	string	string88	"str_ldl_ZoomOut"
+	string	string89	"str_tbl_ldl_Gamestate_Debug"		#02 new (Only _PLAYTEST)
+	string	string90	"str_tbl_ldl_Rand_Test"			#02 new (Only _PLAYTEST)
+	string	string91	"str_tbl_ldl_Command_Enter"		#02 new (Only _PLAYTEST)
+	string	string92	"str_tbl_ldl_Command_Enter_Alternate"	#02 new (Only _PLAYTEST)
+	string	string93	"str_tbl_ldl_Toggle_Space"		#02 new
 #### END MAP CONTROLS ####	
 
 }
-
-
 
 $

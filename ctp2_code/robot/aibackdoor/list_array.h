@@ -43,28 +43,28 @@ public:
 		int i_max_chunks = -1
 	);
 
-    ~list_array();
+	~list_array();
 
-    void Clear()
-    {
-        data_list.clear();
-    };
+	void Clear()
+	{
+		data_list.clear();
+	};
 
-    size_t size() const
-    {
-        return data_list.size();
-    };
+	size_t size() const
+	{
+		return data_list.size();
+	};
 
-    LIST_DATA_TYPE Return_Data_By_Number
+	LIST_DATA_TYPE Return_Data_By_Number
 	(
-		int n
+		size_t n
 	) const
 	{
 		return data_list[n];
 	};
 
 	list_array & operator =
-    (
+	(
 		list_array<LIST_DATA_TYPE> const & the_list
 	);
 
@@ -85,7 +85,7 @@ protected:
 	int max_chunks;
 	int chunks;
 
-    std::vector<LIST_DATA_TYPE> data_list;
+	std::vector<LIST_DATA_TYPE> data_list;
 };
 
 template <typename LIST_DATA_TYPE>
@@ -94,7 +94,6 @@ list_array<LIST_DATA_TYPE>::list_array
 	int i_size,
 	int i_chunk_size,
 	int i_max_chunks
-
 )
 :   data_list       (),
     chunk_size      ((i_chunk_size == -1) ? i_size : i_chunk_size),
@@ -106,7 +105,7 @@ list_array<LIST_DATA_TYPE>::list_array
 template <typename LIST_DATA_TYPE>
 list_array<LIST_DATA_TYPE>::~list_array()
 {
-    std::vector<LIST_DATA_TYPE>().swap(data_list);
+	std::vector<LIST_DATA_TYPE>().swap(data_list);
 }
 
 template <typename LIST_DATA_TYPE>
@@ -115,14 +114,15 @@ list_array<LIST_DATA_TYPE> & list_array<LIST_DATA_TYPE>::operator =
 	list_array<LIST_DATA_TYPE> const & the_list
 )
 {
-    if (this != &the_list)
-    {
-        chunk_size  = the_list.chunk_size;
-        max_chunks  = the_list.max_chunks;
-        chunks      = the_list.chunks;
-        data_list   = the_list.data_list;
-    }
-    return *this;
+	if (this != &the_list)
+	{
+		chunk_size  = the_list.chunk_size;
+		max_chunks  = the_list.max_chunks;
+		chunks      = the_list.chunks;
+		data_list   = the_list.data_list;
+	}
+
+	return *this;
 }
 
 template <typename LIST_DATA_TYPE>
@@ -131,18 +131,18 @@ int list_array<LIST_DATA_TYPE>::Append_Data
 	LIST_DATA_TYPE the_data
 )
 {
-    size_t const    old_size   = data_list.size();
+	size_t const    old_size   = data_list.size();
 
-    if (old_size < data_list.capacity())
-    {
-        // No action: space available
-    }
-    else
-    {
+	if (old_size < data_list.capacity())
+	{
+		// No action: space available
+	}
+	else
+	{
 		Assert(0 < chunk_size);
 
 		size_t const    needed_chunks =
-            (old_size - initial_size + chunk_size) / chunk_size;
+		    (old_size - initial_size + chunk_size) / chunk_size;
 
 		if ((static_cast<int>(needed_chunks) >= max_chunks) && (max_chunks >= 0))
 		{
@@ -150,19 +150,19 @@ int list_array<LIST_DATA_TYPE>::Append_Data
 		}
 		else
 		{
-    	    size_t const    extra_chunks = needed_chunks - chunks;
+			size_t const    extra_chunks = needed_chunks - chunks;
 
 			if (extra_chunks >= 1)
-            {
-    			chunks = needed_chunks;
-                data_list.reserve(data_list.capacity() + (chunk_size * extra_chunks));
-            }
+			{
+				chunks = static_cast<int>(needed_chunks);
+				data_list.reserve(data_list.capacity() + (chunk_size * extra_chunks));
+			}
 		}
 	}
 
 	data_list.push_back(the_data);
 
-    return data_list.size() - 1;
+	return static_cast<int>(data_list.size() - 1);
 }
 
 template <typename LIST_DATA_TYPE>

@@ -19,6 +19,7 @@
 #include "UnitDynArr.h"
 #include "UnitRecord.h"
 #include "MessageBoxDialog.h"
+#include "GameSettings.h"
 
 template <class type> const MBCHAR *ComparisonCharacter(type left, type right)
 {
@@ -277,9 +278,17 @@ void GovernmentTab::UpdateComparison(const GovernmentRecord *currentGovernment,
 									 const GovernmentRecord *compareGovernment)
 {
 
-	m_comparison[GII_CITIES]->SetText(ComparisonCharacter(
-		currentGovernment->GetTooManyCitiesThreshold(),
-		compareGovernment->GetTooManyCitiesThreshold()));
+	if(g_theGameSettings->IsNoCityLimit())
+	{
+		// In that case both are the same
+		m_comparison[GII_CITIES]->SetText(ComparisonCharacter(0, 0));
+	}
+	else
+	{
+		m_comparison[GII_CITIES]->SetText(ComparisonCharacter(
+			currentGovernment->GetTooManyCitiesThreshold(),
+			compareGovernment->GetTooManyCitiesThreshold()));
+	}
 
 	m_comparison[GII_GROWTH]->SetText(ComparisonCharacter(
 		(100.0 * currentGovernment->GetFoodCoef()),
@@ -406,7 +415,15 @@ void GovernmentTab::UpdateGovernmentInformation(
 	static char stringBuffer[32];
 	static char formatBuffer[64];
 
-	sprintf(stringBuffer, "%d", government->GetTooManyCitiesThreshold());
+	if(g_theGameSettings->IsNoCityLimit())
+	{
+		sprintf(stringBuffer, "---");
+	}
+	else
+	{
+		sprintf(stringBuffer, "%d", government->GetTooManyCitiesThreshold());
+	}
+
 	information[GII_CITIES]->SetText(stringBuffer);
 
 	sprintf(stringBuffer, "%.0f%%", ceil(100.0 * government->GetFoodCoef()));

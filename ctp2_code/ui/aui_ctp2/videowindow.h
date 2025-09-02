@@ -5,7 +5,7 @@
 #define __VIDEOWINDOW_H__
 
 #include "c3window.h"
-
+#include "directvideo.h"
 
 class VideoWindow : public C3Window
 {

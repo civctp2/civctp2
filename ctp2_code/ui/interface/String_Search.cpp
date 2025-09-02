@@ -22,13 +22,13 @@ void String_Search::Set_Search_Key
 		return;
 
 	s_key           = new_key;
-	s_key_length    = strlen(s_key);
-    std::fill(s_skip_table, s_skip_table + NUM_CHAR_VALUES, s_key_length);
+	s_key_length    = static_cast<int>(strlen(s_key));
+	std::fill(s_skip_table, s_skip_table + NUM_CHAR_VALUES, s_key_length);
 
 	for (int j = 0; j < s_key_length; j++)
 	{
-        char key_char =
-            (s_case_sensitive) ? s_key[j] : static_cast<char>(tolower(s_key[j]));
+		char key_char =
+		    (s_case_sensitive) ? s_key[j] : static_cast<char>(tolower(s_key[j]));
 
 		s_skip_table[key_char] = s_key_length - j - 1;
 	}
@@ -46,19 +46,19 @@ bool String_Search::Search
 	if (!s_key)
 		return false;
 
-	int     my_string_length    = strlen(my_string);
+	int     my_string_length    = static_cast<int>(strlen(my_string));
 	int     i                   = s_key_length-1;
-    char    key_char;
-    char    string_char;
+	char    key_char;
+	char    string_char;
 
 	for (int j = s_key_length - 1; j >= 0; i--, j--)
 	{
 		if (s_case_sensitive)
-        {
-            key_char    = s_key[j];
-            string_char = my_string[i];
-        }
-        else
+		{
+			key_char    = s_key[j];
+			string_char = my_string[i];
+		}
+		else
 		{
 			key_char    = static_cast<char>(tolower(s_key[j]));
 			string_char = static_cast<char>(tolower(my_string[i]));
@@ -76,11 +76,11 @@ bool String_Search::Search
 			j   = s_key_length - 1;
 
 			if (s_case_sensitive)
-            {
-			    key_char    = s_key[j];
-			    string_char = my_string[i];
-            }
-            else
+			{
+				key_char    = s_key[j];
+				string_char = my_string[i];
+			}
+			else
 			{
 				key_char    = static_cast<char>(tolower(s_key[j]));
 				string_char = static_cast<char>(tolower(my_string[i]));

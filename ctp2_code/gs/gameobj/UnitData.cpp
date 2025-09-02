@@ -167,6 +167,7 @@
 #include "World.h"
 #include "Wormhole.h"
 #include "GovernmentRecord.h"
+#include "GameSettings.h"
 
 #ifdef _DEBUG
 #include "aui.h"
@@ -1300,7 +1301,7 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 	}
 	base += (base * bonuses);
 	// finally add city attack buildings, so they're not subject to bonuses.
-	if (!g_theProfileDB->IsNewCombat()) {
+	if (!g_theGameSettings->IsNewCombat()) {
 		Unit	city	= g_theWorld->GetCity(m_pos);
 		if(city.IsValid()) {
 			base += city.CD()->GetOffenseBonus(defender);
@@ -2963,14 +2964,20 @@ void UnitData::CityRadiusFunc(const MapPoint &pos)
 	}
 }
 
-void UnitData::BeginTurn()
+void UnitData::HearGossip()
 {
-	bool needsEnqueue = false;
 	const UnitRecord *rec = GetDBRec();
 	if(rec->GetHearGossip())
 	{
 		AdjacentIterator(m_pos, this);
 	}
+}
+
+void UnitData::BeginTurn()
+{
+	HearGossip();
+	bool needsEnqueue = false;
+	const UnitRecord *rec = GetDBRec();
 
 #if 0
 	if(Flag(k_UDF_IS_TRAVELLING_RIFT)) {
@@ -3418,7 +3425,7 @@ double UnitData::GetOffense(const Unit &defender) const
 
 	// finally add city attack buildings, so they're not subject to bonuses.
 	// Note: This are only used with old combat.
-	if (!g_theProfileDB->IsNewCombat())
+	if (!g_theGameSettings->IsNewCombat())
 	{
 		Unit	city	= g_theWorld->GetCity(m_pos);
 		if(city.IsValid())
@@ -3466,7 +3473,7 @@ double UnitData::GetDefense(const Unit &attacker) const
 	if(modDef != intDef)
 		base = modDef;
 
-	if (g_theProfileDB->IsNewCombat())
+	if (g_theGameSettings->IsNewCombat())
 	{// these were not in original combat for defence
 		if (IsVeteran())
 		{
@@ -4550,17 +4557,29 @@ void UnitData::HearGossip(Unit c)
 			uint8 *canSteal = g_player[m_owner]->m_advances->
 			    CanAskFor(g_player[c.GetOwner()]->m_advances, num);
 
-			for(i=0; i<num; i++) {
-				if (canSteal[i]) {
-					g_player[m_owner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
+			if(num > 0)
+			{
+				for(i = 0; i<g_theAdvanceDB->NumRecords(); i++)
+				{
+					if(canSteal[i])
+					{
+						g_player[m_owner]->m_advances->GiveAdvance(i, CAUSE_SCI_COMBAT);
 
-					so = new SlicObject("146GossipCompleteAttacker") ;
-					so->AddRecipient(m_owner) ;
-					so->AddAdvance(i) ;
-					g_slicEngine->Execute(so);
+						so = new SlicObject("146GossipCompleteAttacker");
+						so->AddRecipient(m_owner);
+						so->AddAdvance(i);
+						g_slicEngine->Execute(so);
 
-					break;
+						break;
+					}
 				}
+			}
+			else
+			{
+				so = new SlicObject("97GossipBoring");
+				so->AddCivilisation(oplayer);
+				so->AddRecipient(m_owner);
+				g_slicEngine->Execute(so);
 			}
 
 			delete [] canSteal;
@@ -4973,11 +4992,11 @@ sint32 UnitData::GetStoredCityFood() const
 	return m_city_data->GetStoredCityFood();
 }
 
-sint32 UnitData::GetNetCityFood() const
+double UnitData::GetNetCityFood() const
 {
 	Assert(m_city_data);
 	if(!m_city_data)
-		return 0;
+		return 0.0;
 
 	return m_city_data->GetNetCityFood();
 }
@@ -4988,7 +5007,7 @@ sint32 UnitData::GetGrossCityFood() const
 	if(!m_city_data)
 		return 0;
 
-	return m_city_data->GetGrossCityFood();
+	return static_cast<sint32>(m_city_data->GetGrossCityFood());
 }
 
 sint32 UnitData::GetNetCityGold() const
@@ -6333,6 +6352,13 @@ ORDER_RESULT UnitData::SpecialCityAttackResult(ORDER_RESULT result, SPECATTACK a
 		default: {
 			sint32 visiblePlayer = g_selected_item->GetVisiblePlayer();
 			if ((visiblePlayer == m_owner) || (m_visibility & (1 << visiblePlayer))) {
+				if(g_selected_item->IsAutoCenterOn() 
+				    && !g_director->TileWillBeCompletelyVisible(m_pos.x, m_pos.y)
+				    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(m_pos)
+				    ){ // center on pos if generally visible but not in current view
+				    g_director->AddCenterMap(m_pos);
+				    }
+
 				g_soundManager->AddSound(SOUNDTYPE_SFX, (uint32) 0,
 										 gamesounds_GetGameSoundID(GAMESOUNDS_DEFAULT_FAIL),
 										 m_pos.x,

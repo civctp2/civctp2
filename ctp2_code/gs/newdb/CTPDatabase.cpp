@@ -221,7 +221,7 @@ template <class T> void CTPDatabase<T>::Serialize(CivArchive &archive)
 /// \param  govIndex    Government index
 /// \remarks When \a govIndex is not found in the government specific overrides,
 ///          the generic entry is returned.
-template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
+template <class T> T * CTPDatabase<T>::Access(size_t index, sint32 govIndex)
 {
 	// Check validity of index
 	T * nonSpecific = Access(index);
@@ -245,7 +245,7 @@ template <class T> T * CTPDatabase<T>::Access(sint32 index, sint32 govIndex)
 	return nonSpecific;
 }
 
-template <class T> const T * CTPDatabase<T>::Get(sint32 index,sint32 govIndex)
+template <class T> const T * CTPDatabase<T>::Get(size_t index,sint32 govIndex)
 {
 	return const_cast<const T *>(Access(index, govIndex));
 }
@@ -296,7 +296,7 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 		if ((mainRecord >= 0) && (validIndex > 0))
 		{
 			// Add the new object to the list of modified records.
-			sint32 const	newIndex	= m_modifiedRecords.size();
+			sint32 const	newIndex	= static_cast<sint32>(m_modifiedRecords.size());
 			obj->SetIndex(newIndex);
 			m_modifiedRecords.push_back(obj);
 
@@ -339,11 +339,11 @@ template <class T> void CTPDatabase<T>::Add(T *obj)
 	}
 }
 
-template <class T> T *CTPDatabase<T>::Access(sint32 index)
+template <class T> T *CTPDatabase<T>::Access(size_t index)
 {
 	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	if((index < 0) || (index >= m_numRecords))
+	Assert(index < static_cast<size_t>(m_numRecords));
+	if((index < 0) || (index >= static_cast<size_t>(m_numRecords)))
 	{
 		DPRINTF(k_DBG_GAMESTATE, ("CTPDatabase::Access: index: %i, numRecords: %i\n", index, m_numRecords));
 		return NULL;
@@ -352,21 +352,21 @@ template <class T> T *CTPDatabase<T>::Access(sint32 index)
 	return m_records[index];
 }
 
-template <class T> sint32 CTPDatabase<T>::GetName(sint32 index)
+template <class T> sint32 CTPDatabase<T>::GetName(size_t index)
 {
 	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	if((index < 0) || (index >= m_numRecords))
+	Assert(index < static_cast<size_t>(m_numRecords));
+	if((index < 0) || (index >= static_cast<size_t>(m_numRecords)))
 		return 0;
 
 	return m_records[index]->m_name;
 }
 
-template <class T> const char *CTPDatabase<T>::GetNameStr(sint32 index)
+template <class T> const char *CTPDatabase<T>::GetNameStr(size_t index)
 {
 	Assert(index >= 0);
-	Assert(index < m_numRecords);
-	if((index < 0) || (index >= m_numRecords))
+	Assert(index < static_cast<size_t>(m_numRecords));
+	if((index < 0) || (index >= static_cast<size_t>(m_numRecords)))
 		return 0;
 
 	return g_theStringDB->GetNameStr(m_records[index]->m_name);
@@ -658,15 +658,20 @@ template <class T> bool CTPDatabase<T>::GetNamedItemID(sint32 index, sint32 &nam
 	return true;
 }
 
-template <class T> bool CTPDatabase<T>::ResolveReferences()
+template <class T> void CTPDatabase<T>::ResolveReferences()
 {
-	bool success = true;
-	sint32 i;
-	for(i = 0; i < m_numRecords; i++) {
+	for(sint32 i = 0; i < m_numRecords; i++)
+	{
 		m_records[i]->ResolveDBReferences();
 	}
+}
 
-	return success;
+template <class T> void CTPDatabase<T>::UpdateStrings()
+{
+	for(sint32 i = 0; i < m_numRecords; i++)
+	{
+		m_records[i]->UpdateDBStrings();
+	}
 }
 
 template <class T> sint32 CTPDatabase<T>::FindTypeIndex(const char *str) const
@@ -725,6 +730,7 @@ template class CTPDatabase<WonderMovieRecord>;
 template class CTPDatabase<BuildingRecord>;
 
 #ifndef __TILETOOL__
+// The tiletool code is way incomplete, not even enough to reconstruct it
 
 #include "UnitRecord.h" // 11
 template class CTPDatabase<UnitRecord>;
@@ -824,4 +830,7 @@ template class CTPDatabase<ConceptRecord>;
 
 #include "ConstRecord.h" // 43
 template class CTPDatabase<ConstRecord>;
+
+#include "LanguageRecord.h" // 44
+template class CTPDatabase<LanguageRecord>;
 #endif // __TILETOOL__

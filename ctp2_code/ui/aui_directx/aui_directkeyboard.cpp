@@ -56,9 +56,6 @@ aui_DirectKeyboard::aui_DirectKeyboard(AUI_ERRCODE *retval)
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
-
-
 AUI_ERRCODE aui_DirectKeyboard::CreateDirectKeyboard( void )
 {
 	HRESULT hr;
@@ -96,9 +93,6 @@ AUI_ERRCODE aui_DirectKeyboard::CreateDirectKeyboard( void )
 	return AUI_ERRCODE_OK;
 }
 
-
-
-
 AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 {
 	if ( !m_lpdid ) return AUI_ERRCODE_NODIRECTINPUTDEVICE;
@@ -120,93 +114,106 @@ AUI_ERRCODE aui_DirectKeyboard::GetInput( void )
 
 		switch ( hr )
 		{
-		case DI_BUFFEROVERFLOW:
-		case DI_OK:
-			break;
+			case DI_BUFFEROVERFLOW:
+			case DI_OK:
+				break;
 
-		case DIERR_NOTACQUIRED:
-			return AUI_ERRCODE_NOTACQUIRED;
+			case DIERR_NOTACQUIRED:
+				return AUI_ERRCODE_NOTACQUIRED;
 
-		case DIERR_INPUTLOST:
-			Acquire();
-			return AUI_ERRCODE_INPUTLOST;
+			case DIERR_INPUTLOST:
+				Acquire();
+				return AUI_ERRCODE_INPUTLOST;
 
-		default:
-			return AUI_ERRCODE_GETDEVICEDATAFAILED;
+			default:
+				return AUI_ERRCODE_GETDEVICEDATAFAILED;
 		}
 
 		if ( numElements == 0 ) return AUI_ERRCODE_NOINPUT;
 
-		switch (ptrOd->dwOfs) {
-		case DIK_LSHIFT :
-			if (g_c3ui->TheMouse()) {
-				if (uint8(ptrOd->dwData) & 0x80) {
-
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_LSHIFT);
-				} else {
-
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_LSHIFT);
+		switch(ptrOd->dwOfs)
+		{
+			case DIK_LSHIFT:
+				if(g_c3ui->TheMouse())
+				{
+					if(uint8(ptrOd->dwData) & 0x80)
+					{
+						g_c3ui->TheMouse()->SetLeftShift();
+					}
+					else
+					{
+						g_c3ui->TheMouse()->UnsetLeftShift();
+					}
 				}
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_RSHIFT :
-			if (g_c3ui->TheMouse()) {
-				if (uint8(ptrOd->dwData) & 0x80) {
+				return AUI_ERRCODE_OK;
 
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_RSHIFT);
-				} else {
-
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_RSHIFT);
+			case DIK_RSHIFT:
+				if(g_c3ui->TheMouse())
+				{
+					if(uint8(ptrOd->dwData) & 0x80)
+					{
+						g_c3ui->TheMouse()->SetRightShift();
+					}
+					else
+					{
+						g_c3ui->TheMouse()->UnsetRightShift();
+					}
 				}
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_LCONTROL :
-			if (g_c3ui->TheMouse()) {
-				if (uint8(ptrOd->dwData) & 0x80) {
+				return AUI_ERRCODE_OK;
 
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_LCONTROL);
-				} else {
-
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_LCONTROL);
+			case DIK_LCONTROL:
+				if(g_c3ui->TheMouse())
+				{
+					if(uint8(ptrOd->dwData) & 0x80)
+					{
+						g_c3ui->TheMouse()->SetLeftControl();
+					}
+					else
+					{
+						g_c3ui->TheMouse()->UnsetLeftControl();
+					}
 				}
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_RCONTROL :
-			if (g_c3ui->TheMouse()) {
-				if (uint8(ptrOd->dwData) & 0x80) {
+				return AUI_ERRCODE_OK;
 
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() | k_MOUSE_EVENT_FLAG_RCONTROL);
-				} else {
-
-					g_c3ui->TheMouse()->SetFlags(g_c3ui->TheMouse()->GetFlags() & ~k_MOUSE_EVENT_FLAG_RCONTROL);
+			case DIK_RCONTROL:
+				if(g_c3ui->TheMouse())
+				{
+					if(uint8(ptrOd->dwData) & 0x80)
+					{
+						g_c3ui->TheMouse()->SetRightControl();
+					}
+					else
+					{
+						g_c3ui->TheMouse()->SetRightControl();
+					}
 				}
-			}
-			return AUI_ERRCODE_OK;
-		case DIK_RETURN:
+				return AUI_ERRCODE_OK;
 
-			#ifdef _DEBUG
+			case DIK_RETURN:
+#ifdef _DEBUG
 				extern BOOL commandMode;
 				if(commandMode)
 					return AUI_ERRCODE_OK;
-			#endif
-			break;
+#endif
+				break;
 
-		case DIK_UPARROW:
-		case DIK_LEFTARROW:
-		case DIK_RIGHTARROW:
-		case DIK_DOWNARROW:
-				if (uint8(ptrOd->dwData) & 0x80) {
-
+			case DIK_UPARROW:
+			case DIK_LEFTARROW:
+			case DIK_RIGHTARROW:
+			case DIK_DOWNARROW:
+				if(uint8(ptrOd->dwData) & 0x80)
+				{
 					g_civApp->BeginKeyboardScrolling(ptrOd->dwOfs);
-				} else {
-
+				}
+				else
+				{
 					g_civApp->StopKeyboardScrolling(ptrOd->dwOfs);
 				}
-			break;
+				break;
 		}
 
 		uint8 const l_DownMask  = static_cast<uint8>(ptrOd->dwData & 0x0080);
-        m_data.down                     = l_DownMask;
+		m_data.down                     = l_DownMask;
 		m_keyboardState[ptrOd->dwOfs]   = l_DownMask;
 		m_data.key                      = ptrOd->dwOfs;
 	}

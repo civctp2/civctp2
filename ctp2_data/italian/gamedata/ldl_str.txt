@@ -49,6 +49,8 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE				"Punteggio CIV "
 str_ldl_POWER_GRAPH				"Grafico potenza"
 str_ldl_DEFEAT					"Sconfitta"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"IL MISERO"
 str_ldl_THE_SQUIRREL_HEARTED			"CUOR DI SCOIATTOLO"
 str_ldl_THE_RED_FACED				"IL RUBICONDO"
@@ -866,6 +869,7 @@ str_ldl_Known_To_You_And_Others			"Di tua e altrui conoscenza"
 str_ldl_LABORERS				"Operai"
 str_ldl_Land					"Terraferma"
 str_ldl_Land_Grabber				"Avido"
+str_ldl_LANGUAGE					"LINGUA"
 str_ldl_Large_64_x_128				"Grande"
 str_ldl_Last_Sale_Price_COLON			"Ultimo prezzo vendita:"
 str_ldl_Launch					"Lancia"
@@ -945,6 +949,7 @@ str_ldl_Offer					"Offerta"
 str_ldl_OFFER_A_GIFT				"OFFRI UN DONO"
 str_ldl_OFFER_AN_EXCHANGE			"OFFRI UNO SCAMBIO"
 str_ldl_Offer_Good				"Offri merce"
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -1181,6 +1186,7 @@ str_ldl_Unit_Help				"Guida unità"
 str_ldl_UNIT_MOVEMENT				"MOVIMENTO UNITÀ"
 str_ldl_UNIT_STATUS				"SITUAZIONE UNITÀ"
 str_ldl_Units					"Unità"
+str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
 str_ldl_UNLOAD_ALL				"SCARICA TUTTO"
 str_ldl_Unpredictable				"Imprevedibile"
 str_ldl_Untarnished				"Immacolato"
@@ -1413,6 +1419,8 @@ str_tbl_ldl_You_will_receive			"Riceverai"
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"La tua proposta di acquisto è stata inviata."
 str_tbl_ldl_Zoom_in_one_level			"Zoom avanti di un livello"
 str_tbl_ldl_Zoom_out_one_level			"Zoom indietro di un livello"
+str_ldl_CAPS_LANGUAGE				"LINGUA"
+str_ldl_Use_OS_Language				"Use language from operating system"
 str_ldl_CAPS_MUSIC				"MUSICA"
 str_ldl_Select_Track				"Seleziona traccia"
 str_ldl_CAPS_SELECT_TRACK			"SELEZIONA TRACCIA"
@@ -2261,6 +2269,7 @@ str_ldl_MapFilters				"Filtri della mappa"
 str_ldl_Graphics				"Grafica"
 str_ldl_Sound					"Sonoro"
 str_ldl_Music					"Musica"
+str_ldl_Language				"Lingua"
 str_ldl_Advanced				"Avanzate"
 str_ldl_SaveGame				"Salva partita"
 str_ldl_LoadGame				"Carica partita"
@@ -2747,7 +2756,6 @@ str_ldl_SET_GOAL				"Scegli obiettivo"
 str_ldl_SORT_BY_AGE				"Ordina per età"
 
 
-
 # Ranking Tab
 str_ldl_RANKING_MILITARY			"Militare"
 str_ldl_RANKING_ECONOMIC			"Economica"
@@ -3087,7 +3095,7 @@ str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
 str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "Unit upgrading"
 str_profile_SmoothBorders                       "Smooth empire borders"
 str_profile_CivFlags                            "Show Civilization Unit flags"
@@ -3112,19 +3120,22 @@ str_profile_OneCityChallenge                    "One City Challenge"            
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
 str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"                                 # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Sentineling units board automatically"         # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options			"Musicoptions"
-str_tbl_ldl_Decend				"Decend"
+str_tbl_ldl_Music_Options				"Musicoptions"
+str_tbl_ldl_Language_Options			"Lingua Options"
+str_tbl_ldl_Decend						"Decend"
 str_tbl_ldl_Execute_Eyepoint			"Focus on object (eye)"
-str_tbl_ldl_Move_Order				"Moveorder"
-str_tbl_ldl_End_Unit_Turn			"End unit turn"
+str_tbl_ldl_Move_Order					"Moveorder"
+str_tbl_ldl_End_Unit_Turn				"End unit turn"
 str_tbl_ldl_Process_Unit_Orders			"Process given unit orders"
-str_tbl_ldl_Group_Army				"Group all units to army"
-str_tbl_ldl_Ungroup_Army			"Ungroup armies"
-str_tbl_ldl_Gamestate_Debug			"Debug gamestate (playtest)"
-str_tbl_ldl_Rand_Test				"Rand test (playtest)"
-str_tbl_ldl_Command_Enter			"Command enter (playtest)"
+str_tbl_ldl_Group_Army					"Group all units to army"
+str_tbl_ldl_Ungroup_Army				"Ungroup armies"
+str_tbl_ldl_Gamestate_Debug				"Debug gamestate (playtest)"
+str_tbl_ldl_Rand_Test					"Rand test (playtest)"
+str_tbl_ldl_Command_Enter				"Command enter (playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"Command enter alternate (playtest)"
 
 # New gamesetting options
@@ -3139,7 +3150,13 @@ str_ldl_SmoothBorders_On			"Smooth Icon Borders"
 str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
 str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
 str_tbl_ldl_CityCaptureOptions_On		"City Capture Options"
 str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
 str_tbl_ldl_OneCityChallenge_On			"One City Challenge"
@@ -3176,6 +3193,7 @@ str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."

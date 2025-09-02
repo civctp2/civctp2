@@ -269,7 +269,7 @@ void EndGame::AdvanceStage()
 		}
 
 		g_player[m_owner]->m_score->SetWonByWonder();
-		g_player[m_owner]->GameOver(GAME_OVER_WON_WORMHOLE, -1);
+		g_player[m_owner]->GameOver(GAME_OVER_WON_SCIENCE, -1);
 		m_currentStage = g_theEndGameDB->GetNumStages();
 		openScreen = false;
 		g_theGameSettings->SetAlienEndGameWon(m_owner);
@@ -277,7 +277,7 @@ void EndGame::AdvanceStage()
 		sint32 i;
 		for(i = 0; i < k_MAX_PLAYERS; i++) {
 			if(g_player[i] && i != m_owner) {
-				g_player[i]->GameOver(GAME_OVER_LOST_OVERRUN_BY_SMURFS, m_owner);
+				g_player[i]->GameOver(GAME_OVER_LOST_SCIENCE, m_owner);
 			}
 		}
 	}

@@ -155,13 +155,12 @@ AUI_ERRCODE aui_TabGroup::AddChild( aui_Region *child )
 
 AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 {
-	sint32 numTabs = m_childList->L();
+	size_t numTabs = m_childList->L();
 
 	sint32 maxPaneWidth = 0;
 	sint32 maxPaneHeight = 0;
 	ListPos position = m_childList->GetHeadPosition();
-	sint32 i;
-	for (i = numTabs; i; i-- )
+	for (size_t i = numTabs; i; i-- )
 	{
 		aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 		if ( tab->GetPane()->Width() > maxPaneWidth )
@@ -173,7 +172,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 	sint32 maxTabWidth = 0;
 	sint32 maxTabHeight = 0;
 	position = m_childList->GetHeadPosition();
-	for (sint32 j = numTabs; j > 0; --j)
+	for (size_t j = numTabs; j > 0; --j)
 	{
 		aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 		if ( tab->Width() > maxTabWidth ) maxTabWidth = tab->Width();
@@ -191,7 +190,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 		sint32 tabOffset = sint32(0.05 * maxPaneWidth + 0.5);
 
 		position = m_childList->GetHeadPosition();
-		for ( sint32 k = numTabs; k; k-- )
+		for ( size_t k = numTabs; k; k-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -221,7 +220,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 		sint32 tabOffset = sint32(0.05 * maxPaneWidth + 0.5);
 
 		position = m_childList->GetHeadPosition();
-		for ( sint32 i = numTabs; i; i-- )
+		for ( size_t i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -251,7 +250,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 		sint32 tabOffset = sint32(0.05 * maxPaneHeight + 0.5);
 
 		position = m_childList->GetHeadPosition();
-		for (sint32 i = numTabs; i; i-- )
+		for (size_t i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 
@@ -281,7 +280,7 @@ AUI_ERRCODE aui_TabGroup::FormatTabs( void )
 		sint32 tabOffset = sint32(0.05 * maxPaneHeight + 0.5);
 
 		position = m_childList->GetHeadPosition();
-		for (sint32 i = numTabs; i; i-- )
+		for (size_t i = numTabs; i; i-- )
 		{
 			aui_Tab *tab = (aui_Tab *)m_childList->GetNext( position );
 

@@ -134,7 +134,7 @@ AUI_ERRCODE aui_TextBox::AppendText
 
 	strncat( m_text, text, m_maxLength - m_curLength );
 
-	m_curLength = strlen( m_text );
+	m_curLength =  static_cast<sint32>(strlen( m_text ));
 
 	return AUI_ERRCODE_OK;
 }
@@ -161,7 +161,7 @@ AUI_ERRCODE aui_TextBox::CalculateItems(const MBCHAR * text)
 
 	if ( cur == stop ) return AUI_ERRCODE_OK;
 
-	uint32 length = 0;
+	size_t length = 0;
 	aui_Static **itemPtr = m_items + m_curItem;
 
 	{
@@ -178,36 +178,37 @@ AUI_ERRCODE aui_TextBox::CalculateItems(const MBCHAR * text)
 				NULL,
 				&start,
 				stop,
-				TRUE );
+				TRUE);
 
 			length = start - cur;
 
-			if ( !length )
+			if (!length)
 			{
 				const MBCHAR * token = FindNextToken(cur, " \t\n", 1);
-				if ( token )
+				if (token)
 					length = token - cur + 1;
 				else
 					length = stop - cur;
 			}
 
-			Assert( cur + length <= stop );
-			if ( cur + length > stop ) length = stop - cur;
+			Assert(cur + length <= stop);
+			if (cur + length > stop) length = stop - cur;
 
 			MBCHAR * tempCopy = new MBCHAR[length + 1];
 			std::copy(cur, cur + length, tempCopy);
 			tempCopy[length] = '0';
 
-			if ( ++m_numItems > k_AUI_TEXTBOX_MAXITEMS )
+			if (++m_numItems > k_AUI_TEXTBOX_MAXITEMS)
 			{
 				m_numItems = k_AUI_TEXTBOX_MAXITEMS;
-				RemoveItem( (*itemPtr)->Id() );
+				RemoveItem((*itemPtr)->Id());
 
-				memmove( m_text, m_text + m_maxLength - length, length );
-				memset( m_text + m_maxLength - length, '\0', length + 1 );
+				memmove(m_text, m_text + m_maxLength - length, length);
+				memset(m_text + m_maxLength - length, '\0', length + 1);
 			}
 
 			(*itemPtr)->SetText(tempCopy);
+			delete[] tempCopy;
 
 			COLORREF color = m_curColor;
 

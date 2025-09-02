@@ -1,6 +1,6 @@
 REM Trivial batch file to compile Windows version of Activenet libraries.
 
-set TOP=\mw2\commdll
+set TOP="%~dp0..\"
 set TOPWIN=%TOP%\src\win
 
 if m%TOPWIN%m==mm goto bad

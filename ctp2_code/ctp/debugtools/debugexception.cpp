@@ -28,7 +28,7 @@ void DebugException_Close (void)
 {
 }
 
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 inline static void DebugExceptionFilter_LogExceptionType (LPEXCEPTION_POINTERS ep)
 {
 	switch(ep->ExceptionRecord->ExceptionCode)
@@ -160,7 +160,7 @@ static LONG _cdecl DebugException_Filter (LPEXCEPTION_POINTERS exception_pointer
 
 void DebugException_Execute (DebugExceptionClientFunction function_monitored)
 {
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 	__try
 	{
 		function_monitored();

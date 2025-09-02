@@ -191,6 +191,8 @@
 #include "keymap.h"
 #include "keypress.h"
 #include "km_screen.h"
+#include "LanguageRecord.h"
+#include "LanguageScreen.h"
 #include "loadsavewindow.h"
 #include "MainControlPanel.h"
 #include "MapIconRecord.h"
@@ -586,8 +588,8 @@ CivApp::CivApp()
 void CivApp::InitializeAppUI(void)
 {
 	// Set CTP2 specific data for the Anet library (multiplayer only)
-	NETFunc::GameType	= GAMEID;				// CTP2 game id for Anet
-	NETFunc::DllPath	= "dll" FILE_SEP "net";	// Anet DLLs are in dll\net (relative to executable)
+	NETFunc::s_GameType	= GAMEID;				// CTP2 game id for Anet
+	NETFunc::s_DllPath	= "dll" FILE_SEP "net";	// Anet DLLs are in dll\net (relative to executable)
 
 	if (g_useIntroMovie && !g_no_shell)
 	{
@@ -728,6 +730,9 @@ bool CivApp::InitializeAppDB(void)
 		return false;
 	}
 
+	// And now have the entries in the Language DB connected to the String DB
+	g_theLanguageDB->UpdateStrings();
+
 	// Has to be done after the initialization of the string database
 	g_theProgressWindow->StartCountingTo(10, g_theStringDB->GetNameStr("LOADING"));
 
@@ -819,7 +824,7 @@ bool CivApp::InitializeAppDB(void)
 	g_theProgressWindow->StartCountingTo( 120 );
 
 	if (!g_theAdvanceDB->Parse(C3DIR_GAMEDATA, g_advancedb_filename))
-    {
+	{
 		return false;
 	}
 
@@ -1105,50 +1110,51 @@ bool CivApp::InitializeAppDB(void)
 
 	g_exclusions = new Exclusions();
 
-	if(!g_theUnitDB->ResolveReferences())               return false;
-	if(!g_theAdvanceDB->ResolveReferences())            return false;
-	if(!g_theIconDB->ResolveReferences())               return false;
-	if(!g_theConstDB->ResolveReferences())              return false;
-	if(!g_theSpriteDB->ResolveReferences())             return false;
-	if(!g_theSoundDB->ResolveReferences())              return false;
-	if(!g_theSpecialEffectDB->ResolveReferences())      return false;
-	if(!g_theSpecialAttackInfoDB->ResolveReferences())  return false;
-	if(!g_theGovernmentDB->ResolveReferences())         return false;
-	if(!g_theAdvanceBranchDB->ResolveReferences())      return false;
-	if(!g_theAgeDB->ResolveReferences())                return false;
-	if(!g_theTerrainDB->ResolveReferences())            return false;
-	if(!g_theResourceDB->ResolveReferences())           return false;
-	if(!g_theTerrainImprovementDB->ResolveReferences()) return false;
-	if(!g_theMapDB->ResolveReferences())                return false;
-	if(!g_theOrderDB->ResolveReferences())              return false;
-	if(!g_theMapIconDB->ResolveReferences())            return false;
-	if(!g_theCitySizeDB->ResolveReferences())           return false;
-	if(!g_thePopDB->ResolveReferences())                return false;
-	if(!g_theBuildingDB->ResolveReferences())           return false;
-	if(!g_thePollutionDB->ResolveReferences())          return false;
-	if(!g_theCityStyleDB->ResolveReferences())          return false;
-	if(!g_theAgeCityStyleDB->ResolveReferences())       return false;
-	if(!g_theGoalDB->ResolveReferences())               return false;
-	if(!g_thePersonalityDB->ResolveReferences())        return false;
-	if(!g_theUnitBuildListDB->ResolveReferences())      return false;
-	if(!g_theWonderBuildListDB->ResolveReferences())    return false;
-	if(!g_theBuildingBuildListDB->ResolveReferences())  return false;
-	if(!g_theConceptDB->ResolveReferences())            return false;
-	if(!g_theImprovementListDB->ResolveReferences())    return false;
-	if(!g_theStrategyDB->ResolveReferences())           return false;
-	if(!g_theBuildListSequenceDB->ResolveReferences())  return false;
-	if(!g_theDiplomacyDB->ResolveReferences())          return false;
-	if(!g_theDiplomacyProposalDB->ResolveReferences())  return false;
-	if(!g_theDiplomacyThreatDB->ResolveReferences())    return false;
-	if(!g_theAdvanceListDB->ResolveReferences())        return false;
-	if(!g_theCivilisationDB->ResolveReferences())       return false;
-	if(!g_theWonderDB->ResolveReferences())             return false;
-	if(!g_theWonderMovieDB->ResolveReferences())        return false;
-	if(!g_theFeatDB->ResolveReferences())               return false;
-	if(!g_theEndGameObjectDB->ResolveReferences())      return false;
-	if(!g_theRiskDB->ResolveReferences())               return false;
-	if(!g_theDifficultyDB->ResolveReferences())         return false;
-	if(!g_theGlobalWarmingDB->ResolveReferences())      return false;
+	g_theUnitDB->ResolveReferences();
+	g_theAdvanceDB->ResolveReferences();
+	g_theIconDB->ResolveReferences();
+	g_theConstDB->ResolveReferences();
+	g_theSpriteDB->ResolveReferences();
+	g_theSoundDB->ResolveReferences();
+	g_theSpecialEffectDB->ResolveReferences();
+	g_theSpecialAttackInfoDB->ResolveReferences();
+	g_theGovernmentDB->ResolveReferences();
+	g_theAdvanceBranchDB->ResolveReferences();
+	g_theAgeDB->ResolveReferences();
+	g_theTerrainDB->ResolveReferences();
+	g_theResourceDB->ResolveReferences();
+	g_theTerrainImprovementDB->ResolveReferences();
+	g_theMapDB->ResolveReferences();
+	g_theOrderDB->ResolveReferences();
+	g_theMapIconDB->ResolveReferences();
+	g_theCitySizeDB->ResolveReferences();
+	g_thePopDB->ResolveReferences();
+	g_theBuildingDB->ResolveReferences();
+	g_thePollutionDB->ResolveReferences();
+	g_theCityStyleDB->ResolveReferences();
+	g_theAgeCityStyleDB->ResolveReferences();
+	g_theGoalDB->ResolveReferences();
+	g_thePersonalityDB->ResolveReferences();
+	g_theUnitBuildListDB->ResolveReferences();
+	g_theWonderBuildListDB->ResolveReferences();
+	g_theBuildingBuildListDB->ResolveReferences();
+	g_theConceptDB->ResolveReferences();
+	g_theImprovementListDB->ResolveReferences();
+	g_theStrategyDB->ResolveReferences();
+	g_theBuildListSequenceDB->ResolveReferences();
+	g_theDiplomacyDB->ResolveReferences();
+	g_theDiplomacyProposalDB->ResolveReferences();
+	g_theDiplomacyThreatDB->ResolveReferences();
+	g_theAdvanceListDB->ResolveReferences();
+	g_theCivilisationDB->ResolveReferences();
+	g_theWonderDB->ResolveReferences();
+	g_theWonderMovieDB->ResolveReferences();
+	g_theFeatDB->ResolveReferences();
+	g_theEndGameObjectDB->ResolveReferences();
+	g_theRiskDB->ResolveReferences();
+	g_theDifficultyDB->ResolveReferences();
+	g_theGlobalWarmingDB->ResolveReferences();
+	g_theLanguageDB->ResolveReferences();
 
 	g_theProgressWindow->StartCountingTo( 510 );
 
@@ -1245,31 +1251,32 @@ bool CivApp::InitializeAppDB(void)
 
 sint32 CivApp::InitializeApp(HINSTANCE hInstance, int iCmdShow)
 {
-#ifdef WIN32
-    // COM needed for DirectX/Movies
+#if defined(__AUI_USE_DIRECTX__)
+	// COM needed for DirectX/Movies
 	CoInitialize(NULL);
 #endif
 #ifdef __AUI_USE_SDL__
-        Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTS) & ~SDL_INIT_AUDIO; //why no audio?
+	Uint32 flags = (SDL_INIT_EVERYTHING | SDL_INIT_EVENTS) & ~SDL_INIT_AUDIO; //why no audio?
 #if defined(_DEBUG) || defined(DEBUG)
-        flags |= SDL_INIT_NOPARACHUTE;
+	flags |= SDL_INIT_NOPARACHUTE;
 #endif// _DEBUG || DEBUG
-        int rc = SDL_Init(flags);
-        if (rc != 0) {
-                fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
-                return -1;
-        }
+	int rc = SDL_Init(flags);
+	if (rc != 0)
+	{
+		fprintf(stderr, "Could not initialize SDL:\n%s\n", SDL_GetError());
+		return -1;
+	}
 #endif
 
 	Splash::Initialize();
 
-	CivPaths_InitCivPaths();
-
 	g_theProfileDB = new ProfileDB;
-	if (!g_theProfileDB->Init(FALSE)) {
+	if (!g_theProfileDB->Init(FALSE))
+	{
 		c3errors_FatalDialog("CivApp", "Unable to init the ProfileDB.");
-		return -1;
 	}
+
+	CivPaths_InitCivPaths();
 
 	g_logCrashes = g_theProfileDB->GetEnableLogs();
 
@@ -1426,6 +1433,7 @@ void CivApp::CleanupAppUI(void)
 	gameplayoptions_Cleanup();
 	soundscreen_Cleanup();
 	musicscreen_Cleanup();
+	LanguageScreen::Cleanup();
 	StatusBar::CleanUp();
 	loadsavescreen_Cleanup();
 	graphicsresscreen_Cleanup();
@@ -1530,7 +1538,7 @@ void CivApp::CleanupApp(void)
 		CivPaths_CleanupCivPaths();
 		SlicSegment::Cleanup();
 
-#ifdef WIN32
+#if defined(__AUI_USE_DIRECTX__)
 		// COM needed for DirectX Moviestuff
 		CoUninitialize();
 #endif
@@ -2330,21 +2338,10 @@ sint32 CivApp::ProcessUI(const uint32 target_milliseconds, uint32 &used_millisec
 	static uint32	lastTicks       = curTicks;
 
 	if (g_c3ui->TheMouse()) {
-		if (g_c3ui->TheMouse()->IsSuspended() )
+		if (g_c3ui->TheMouse()->IsSuspended() && IsInBackground())
 		{
 			used_milliseconds = Os::GetTicks() - start_time_ms;
 
-			if(g_runInBackground
-			|| g_theProfileDB->GetValueByName("RunInBackground")
-			){
-				if (m_gameLoaded)
-				{
-					if (g_director)
-					{
-						g_director->Process();
-					}
-				}
-			}
 			return 0;
 		}
 
@@ -2408,8 +2405,7 @@ sint32 CivApp::ProcessAI()
 
 	if (g_c3ui->TheMouse()) {
 		if( g_c3ui->TheMouse()->IsSuspended()
-		&& !g_runInBackground
-		&& !g_theProfileDB->GetValueByName("RunInBackground")
+		&& IsInBackground()
 		){
 			return 0;
 		}
@@ -2430,7 +2426,7 @@ sint32 CivApp::ProcessRobot(const uint32 target_milliseconds, uint32 &used_milli
 
 	if (g_c3ui->TheMouse())
 	{
-		if (g_c3ui->TheMouse()->IsSuspended() && !g_runInBackground && !g_theProfileDB->GetValueByName("RunInBackground"))
+		if (g_c3ui->TheMouse()->IsSuspended() && IsInBackground())
 		{
 			// Probably there was something here.
 		}
@@ -2520,8 +2516,7 @@ sint32 CivApp::Process(void)
 		}
 	}
 
-	// Sleep problem if the game is supposed to run in background
-	if (m_inBackground)
+	if (IsInBackground())
 	{
 		Os::Sleep(50);
 		return 0;

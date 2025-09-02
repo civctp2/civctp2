@@ -785,12 +785,15 @@ PRIMITIVES_ERRCODE primitives_DrawText(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT rect = {x, y - 0.5 * font->GetLineSkip(), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
-	    font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
-	    }
+
+	if(font)
+	{
+		RECT rect = {x, static_cast<sint32>(y - 0.5 * font->GetLineSkip()), pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+		font->DrawString(pDirectSurface, &rect, &clipRect, pString, 0, color, 0); // no bg correspondence
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -850,11 +853,14 @@ PRIMITIVES_ERRCODE primitives_DrawBoundedText(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
-	    font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
-	    }
+
+	if(font)
+	{
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *bound);
+		font->DrawString(pDirectSurface, bound, &clipRect, pString, 0, color, 0); // no bg correspondence
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -916,17 +922,19 @@ PRIMITIVES_ERRCODE primitives_DrawTextBatch(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    for (sint32 i=0;i < numStrings;i++)
+
+	if(font)
+	{
+		for (sint32 i=0;i < numStrings;i++)
 		{
-		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
-		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
-		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
-		y += font->GetLineSkip();
-		
+			RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+			RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+			font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+			y += font->GetLineSkip();
 		}
-	    }
+
+		freeBitmapFont(font);
+	}
 #endif
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1109,11 +1117,12 @@ PRIMITIVES_ERRCODE primitives_DropTextCentered(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
-	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, color, 0); // no bg correspondence
-	    }
+
+	if(font)
+	{
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+		font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, color, 0); // no bg correspondence
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1178,11 +1187,14 @@ PRIMITIVES_ERRCODE primitives_ColoredDropTextCentered(
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_SURFACEUNLOCKFAILED;
 #else	
 	aui_BitmapFont *font= getBitmapFont();
-	    
-	if(font){
-	    RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
-	    font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
-	    }
+
+	if(font)
+	{
+		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, *destRect);
+		font->DrawString(pDirectSurface, destRect, &clipRect, pString, k_AUI_BITMAPFONT_DRAWFLAG_VERTCENTER, textColor, 0); // no bg correspondence, not handling dropColor
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -1258,18 +1270,20 @@ PRIMITIVES_ERRCODE primitives_DropTextBatch(
 	Assert(hr == AUI_ERRCODE_OK);
 	if (hr != AUI_ERRCODE_OK) return PRIMITIVES_ERRCODE_DSRELEASEDCFAILED;
 #else	
-	aui_BitmapFont *font= getBitmapFont();
+	aui_BitmapFont *font = getBitmapFont();
 
-	if(font){
-	    for (sint32 i=0;i < numStrings;i++)
+	if(font)
+	{
+		for (sint32 i=0;i < numStrings;i++)
 		{
-		RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
-		RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
-		font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
-		y += font->GetLineSkip();
-		
+			RECT rect = {x, y, pDirectSurface->Width(), pDirectSurface->Height()}; // ony x, y matter; width and hight get clipped in DrawString
+			RECT clipRect = primitives_GetScreenAdjustedRectCopy(pDirectSurface, rect);
+			font->DrawString(pDirectSurface, &rect, &clipRect, pString[i], 0, color, 0); // no bg correspondence
+			y += font->GetLineSkip();
 		}
-	    }
+
+		freeBitmapFont(font);
+	}
 #endif // __AUI_USE_DIRECTX__
 
 	return PRIMITIVES_ERRCODE_OK;
@@ -2465,8 +2479,123 @@ void SpecialDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLe
 	} while (--majorLength > 0);
 }
 
+void FillDrawDiagonalLine16(Pixel16 * pixel, sint32 length, sint32 incrementX, sint32 incrementY, Pixel16 color,
+                            uint8 alpha, TRIANGLE_ID triangleId)
+{
+	const uint32 blendRGBMask = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + length * (incrementX + incrementY);
+
+	sint32 fillLength          = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? length : 0;
+	sint32 fillLengthIncrement = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? -1 : 1;
+	bool   toDiagonal          = triangleId == TI_LEFT_TOP || triangleId == TI_LEFT_BOTTOM;
+	while (pixel <= endPixel)
+	{
+		BlendLine16(toDiagonal ? pixel - fillLength : pixel, fillLength + 1, 1, color, alpha, blendRGBMask);
+		fillLength += fillLengthIncrement;
+		pixel += (incrementX + incrementY);
+	}
+}
+
+void FillDrawAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
+		sint32 minorPitch, Pixel16 color, uint8 alpha, sint32 fillPitch, bool toAngledLine)
+{
+	const uint32 blendRGBMask  = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	sint32 fillLength         = fillPitch < 0 ? majorLength : 0;
+	sint32 positiveMajorPitch = majorPitch > 0 ? majorPitch : -majorPitch;
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	do
+	{
+		BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1,
+				positiveMajorPitch, color, alpha, blendRGBMask);
+
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+		}
+		pixel += majorPitch; // always advance major
+		fillLength += fillPitch;
+	} while (--majorLength > 0);
+
+	// Last line
+	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
+			positiveMajorPitch, color, alpha, blendRGBMask);
+}
+
+void FillDrawAntiAliasedAngledLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
+                                     sint32 minorPitch, Pixel16 color, uint8 alpha, sint32 fillPitch, bool toAngledLine)
+{
+	const uint32 blendRGBMask  = pixelutils_GetBlend16RGBMask();
+
+	Pixel16 * endPixel = pixel + majorLength * majorPitch + minorLength * minorPitch;
+
+	sint32 fillLength         = fillPitch < 0 ? majorLength : 0;
+	sint32 positiveMajorPitch = majorPitch > 0 ? majorPitch : -majorPitch;
+	bool   positiveEdge       = toAngledLine ^ (majorPitch > 0);
+
+	// first line
+	BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel, fillLength + 1, positiveMajorPitch,
+	            color, alpha, blendRGBMask);
+
+	// calculate 16-bit fixed-point fractional part of a
+	// pixel that minor advances each time major advances 1 pixel, truncating the
+	// result so that we won't overrun the endpoint along the minor axis
+	const uint16 errorFraction = uint16 ((minorLength << 16) / (uint32) majorLength);
+	// Initialize the line error accumulator to 0
+	uint16 errorAccumulator = 0;
+
+	do
+	{
+		const uint16 error = errorAccumulator; // remember current accumulated error
+		errorAccumulator += errorFraction;     // calculate error for next pixel
+
+		if (errorAccumulator <= error)
+		{
+			// Error accumulator turned over, so advance the minor
+			pixel += minorPitch;
+		}
+
+		BlendLine16(toAngledLine ? pixel - (fillLength * positiveMajorPitch) : pixel + positiveMajorPitch,
+		            fillLength, positiveMajorPitch, color, alpha, blendRGBMask);
+
+		if (positiveEdge) {
+			pixel += majorPitch; // always advance major
+		}
+
+		Pixel16 * pairedPixel = pixel + (positiveEdge ? minorPitch : -minorPitch);
+		// Most significant bits of errorAccumulator determine the weight of this pixel
+		uint8 weight = errorAccumulator >> 8;
+		*pixel       = color;
+		*pairedPixel = pixelutils_Blend16(*pairedPixel, color, positiveEdge ? weight : weight ^ 255, blendRGBMask);
+
+		if (!positiveEdge) {
+			pixel += majorPitch; // always advance major
+		}
+
+		fillLength += fillPitch;
+	} while (--majorLength > 0);
+
+	// Last line
+	BlendLine16(toAngledLine ? endPixel - (fillLength * positiveMajorPitch) : endPixel, fillLength + 1,
+	            positiveMajorPitch, color, alpha, blendRGBMask);
+}
+
 void SpecialDrawAngledPatternLine16(Pixel16 * pixel, sint32 majorLength, sint32 minorLength, sint32 majorPitch,
-		sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern, LINE_FLAGS lineFlags)
+                                    sint32 minorPitch, Pixel16 color, uint32 fullPattern, uint32 currentPattern, LINE_FLAGS lineFlags)
 {
 	const uint32 shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	const uint32 blendRgbMask  = pixelutils_GetBlend16RGBMask();
@@ -2805,6 +2934,143 @@ void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect)
 	{
 		DrawShadowLine16(pixel, width, 1, shadowRGBMask);
 		pixel += surfPitchPixels;
+	}
+}
+
+sint32 angleDirection (sint32 x1, sint32 y1, sint32 x2, sint32 y2, sint32 x3, sint32 y3)
+{
+	return (x2 - x1) * (y3 - y1) - (y2 - y1) * (x3 - x1);
+}
+
+/*
+ * Method can be tested by TestClipRectangle per example by calling it from RadarMap::RenderMap
+ */
+void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color,
+		uint8 alpha, bool antiAliased)
+{
+	if (!RectIntersectSurface(surf, rect)) {
+		return;
+	}
+
+	// Diagonal
+	sint32 x1 = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_BOTTOM) ? rect.right : rect.left;
+	sint32 y1 = rect.top;
+	sint32 x2 = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_BOTTOM) ? rect.left : rect.right;
+	sint32 y2 = rect.bottom;
+
+	sint32 deltaX = x2 - x1;
+	sint32 deltaY = y2 - y1;
+	if (deltaX == 0 || deltaY == 0)
+	{
+		primitives_ClippedPaintRect16(surf, rect, color, alpha);
+		return;
+	}
+
+	sint32 x3;
+	sint32 y3;
+	switch (triangleId) {
+		case TI_LEFT_TOP:
+			x3 = rect.left;
+			y3 = rect.top;
+			break;
+		case TI_LEFT_BOTTOM:
+			x3 = rect.left;
+			y3 = rect.bottom;
+			break;
+		case TI_RIGHT_TOP:
+			x3 = rect.right;
+			y3 = rect.top;
+			break;
+		case TI_RIGHT_BOTTOM:
+			x3 = rect.right;
+			y3 = rect.bottom;
+			break;
+		default:
+		Assert(false);
+	}
+
+	sint32 x1BeforeClip = x1;
+	sint32 y1BeforeClip = y1;
+	sint32 x2BeforeCLip = x2;
+	sint32 y2BeforeClip = y2;
+	bool lineClipped = ClipLine(RECT { 0, 0, surf.Width() - 1, surf.Height() - 1 }, x1, y1, x2, y2);
+	if (!lineClipped || (x2 == x1) || (y2 == y1))
+	{
+		sint32 signTriangle  = angleDirection(x1BeforeClip, y1BeforeClip, x2BeforeCLip, y2BeforeClip, x3, y3);
+		// Try top-left corner of rectangle
+		sint32 signRectangle = angleDirection(x1BeforeClip, y1BeforeClip, x2BeforeCLip, y2BeforeClip, 0, 0);
+		if (signRectangle == 0) { // if on same line, try top-right corner
+			signRectangle = angleDirection(x1BeforeClip, y1BeforeClip, x2BeforeCLip, y2BeforeClip, surf.Width(), 0);
+		}
+		// Both have the same sign, so in same half-plane => visible
+		if ((signTriangle < 0 && signRectangle < 0) || (signTriangle > 0 && signRectangle > 0))
+		{
+			primitives_ClippedPaintRect16(surf, rect, color, alpha);
+		}
+		else if ((x1 == x2) || (y1 == y2)) { // line touches corner, draw single point
+			primitives_ClippedPaintRect16(surf, RECT { x1, y1, x2, y2 }, color, alpha);
+		}
+		return;
+	}
+	bool point1Clipped = (x1 != x1BeforeClip) || (y1 != y1BeforeClip);
+	bool point2Clipped = (x2 != x2BeforeCLip) || (y2 != y2BeforeClip);
+
+	deltaX = x2 - x1;
+	deltaY = y2 - y1;
+	sint32 incrementX = deltaX < 0 ? -1 : 1;
+	if (incrementX < 0) {
+		deltaX = -deltaX;
+	}
+
+	Pixel16 * base = GetBasePixel16(surf, x1, y1);
+	sint32 incrementY = surf.Pitch() >> 1;
+	if (deltaX == deltaY) { // diagonal
+		FillDrawDiagonalLine16(base, deltaX, incrementX, incrementY, color, alpha, triangleId);
+	}
+	else if (deltaX < deltaY) // Y-major
+	{
+		bool   toAngledLine = (triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP);
+		sint32 fillPitch    = (triangleId == TI_LEFT_BOTTOM || triangleId == TI_RIGHT_BOTTOM) ? -1 : 1;
+		if (antiAliased) {
+			FillDrawAntiAliasedAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, fillPitch,
+					toAngledLine);
+		} else {
+			FillDrawAngledLine16(base, deltaY, deltaX, incrementY, incrementX, color, alpha, fillPitch, toAngledLine);
+		}
+	}
+	else // X-major
+	{
+		bool   toAngledLine = triangleId == TI_LEFT_TOP || triangleId == TI_LEFT_BOTTOM;
+		sint32 fillPitch    = triangleId == TI_LEFT_TOP || triangleId == TI_RIGHT_TOP ? -1 : 1;
+		if (antiAliased) {
+			FillDrawAntiAliasedAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, fillPitch,
+					toAngledLine);
+		} else {
+			FillDrawAngledLine16(base, deltaX, deltaY, incrementX, incrementY, color, alpha, fillPitch, toAngledLine);
+		}
+	}
+
+	if (point1Clipped)
+	{
+		RECT fillRect = { x1, y1, x3, y3 };
+		if (fillRect.left > fillRect.right) {
+			SWAPVARS(fillRect.left, fillRect.right);
+		}
+		if (fillRect.top > fillRect.bottom) {
+			SWAPVARS(fillRect.top, fillRect.bottom);
+		}
+		primitives_ClippedPaintRect16(surf, fillRect, color, alpha);
+	}
+	if (point2Clipped)
+	{
+		RECT fillRect = {x2, y2, x3, y3 };
+		if (fillRect.left > fillRect.right) {
+			SWAPVARS(fillRect.left, fillRect.right);
+		}
+		if (fillRect.top > fillRect.bottom) {
+			SWAPVARS(fillRect.top, fillRect.bottom);
+		}
+		primitives_ClippedPaintRect16(surf, fillRect, color, alpha);
 	}
 }
 

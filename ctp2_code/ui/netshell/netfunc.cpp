@@ -19,7 +19,7 @@
 //
 // _DEBUG
 // Generate debug information.
-// USE_SDL
+// __AUI_USE_SDL__
 // Use SDL API calls
 // WIN32
 // Use MS Windows32 API calls
@@ -43,15 +43,15 @@
 #include <algorithm>
 
 #if defined(_DEBUG)
-#include "debug.h"      	// Os::SetThreadName
+#include "debug.h"           // Os::SetThreadName
 #endif
 
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
 
-#ifdef WIN32
+#if defined(WIN32)
 #include <ras.h>
 #endif
 
@@ -80,7 +80,7 @@ namespace Os
 
 int adialup_autodial_enabled(void)
 {
-#ifdef WIN32
+#if defined(WIN32)
 	HKEY hKey;
 	unsigned long werr = RegOpenKeyEx(HKEY_CURRENT_USER,
 			"Software\\Microsoft\\Windows\\CurrentVersion\\Internet Settings",
@@ -121,14 +121,15 @@ int adialup_autodial_enabled(void)
 
 #define adialup_MAXCONNS 10
 
-#ifdef WIN32
+#if defined(WIN32)
 typedef DWORD (APIENTRY *pfnRasEnumConnections_t)(LPRASCONN, LPDWORD, LPDWORD);
 typedef DWORD (APIENTRY *pfnRasGetConnectStatus_t)(HRASCONN, LPRASCONNSTATUS);
 #endif
 
 int adialup_is_active(void)
 {
-#ifdef WIN32
+#if defined(WIN32)
+	// Windows modem dialup connection, probably not needed today.
 	HANDLE hlib = LoadLibrary("rasapi32.dll");
 	if (NULL == hlib) {
 		DPRINT(("adialup_is_active: can't load library rasapi32.dll\n"));
@@ -136,9 +137,9 @@ int adialup_is_active(void)
 	}
 
 	pfnRasEnumConnections_t pfnRasEnumConnections =
-        (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
+	    (pfnRasEnumConnections_t)GetProcAddress((HINSTANCE)hlib, "RasEnumConnectionsA");
 	pfnRasGetConnectStatus_t pfnRasGetConnectStatus =
-        (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
+	    (pfnRasGetConnectStatus_t) GetProcAddress((HINSTANCE)hlib, "RasGetConnectStatusA");
 
 	if (!pfnRasEnumConnections || !pfnRasGetConnectStatus) {
 		DPRINT(("adialup_is_active: can't get fns from library rasapi32.dll\n"));
@@ -180,9 +181,6 @@ int adialup_is_active(void)
 	return FALSE;
 }
 
-
-
-
 int adialup_willdial(void)
 {
 	return adialup_autodial_enabled() && !adialup_is_active();
@@ -213,35 +211,34 @@ void NETFunc::StringMix(int c, char *mix, char *msg, ...) {
 	va_end(al);
 }
 
-
-char *NETFunc::StringDup(char *s) {
-    return (s) ? strcpy(new char[strlen(s) + 1], s) : NULL;
+char *NETFunc::StringDup(char *s)
+{
+	return (s) ? strcpy(new char[strlen(s) + 1], s) : NULL;
 }
-
 
 NETFunc::Timer::Timer(void)
 :
-    start   (0),
-    finish  (0),
-    done    (false)
+    m_start   (0),
+    m_finish  (0),
+    m_done    (false)
 {
 }
 
-void NETFunc::Timer::Start(int d) {
-	start = GetTickCount();
-	finish = start + d;
-	done = false;
+void NETFunc::Timer::Start(int d)
+{
+	m_start = GetTickCount();
+	m_finish = m_start + d;
+	m_done = false;
 }
 
 bool NETFunc::Timer::Finished(void)
 {
-    return done || (GetTickCount() >= finish);
+	return m_done || (GetTickCount() >= m_finish);
 }
 
-
 NETFunc::MessageHandler::MessageHandler(void) {
-	if(hCount < nf_MAX_HANDLERS)
-		hList[hCount++] = this;
+	if(s_hCount < nf_MAX_HANDLERS)
+		s_hList[s_hCount++] = this;
 }
 
 NETFunc::MessageHandler::~MessageHandler(void) {
@@ -250,87 +247,86 @@ NETFunc::MessageHandler::~MessageHandler(void) {
 
 void NETFunc::MessageHandler::Unregister(void) {
 	bool f = false;
-	for(int i = 0; i < hCount; i++) {
+	for(int i = 0; i < s_hCount; i++) {
 		if(f)
-			hList[i-1] = hList[i];
+			s_hList[i-1] = s_hList[i];
 		else
-			f = (hList[i] == this);
+			f = (s_hList[i] == this);
 	}
 	if(f)
-		hCount--;
+		s_hCount--;
 }
 
 bool NETFunc::MessageHandler::HandleAll(Message *m) {
 	bool f = false;
-	for(int i = 0; i < hCount; i++)
-		f = hList[i]->Handle(m) || f;
+	for(int i = 0; i < s_hCount; i++)
+		f = s_hList[i]->Handle(m) || f;
 	return f;
 }
 
-NETFunc::MessageHandler *NETFunc::MessageHandler::hList[] = {0};
-int NETFunc::MessageHandler::hCount = 0;
-
+NETFunc::MessageHandler *NETFunc::MessageHandler::s_hList[] = {0};
+int NETFunc::MessageHandler::s_hCount = 0;
 
 NETFunc::Message::Message(CODE c, void *p, size_t s) {
-	newbody = true;
-	body = new char[s + sizeof(CODE)];
-	*(CODE *)body = c;
-	memcpy(body + sizeof(CODE), p, s);
-	size = s + sizeof(CODE);
-	sender = dp_ID_NAMESERVER;
+	m_newbody = true;
+	m_body = new char[s + sizeof(CODE)];
+	*(CODE *)m_body = c;
+	memcpy(m_body + sizeof(CODE), p, s);
+	m_size = s + sizeof(CODE);
+	m_sender = dp_ID_NAMESERVER;
 }
 
 NETFunc::Message::Message(CODE c) {
-	newbody = true;
-	body = new char[sizeof(CODE)];
-	*(CODE *)body = c;
-	size = sizeof(CODE);
-	sender = dp_ID_NAMESERVER;
+	m_newbody = true;
+	m_body = new char[sizeof(CODE)];
+	*(CODE *)m_body = c;
+	m_size = sizeof(CODE);
+	m_sender = dp_ID_NAMESERVER;
 }
 
 NETFunc::Message::Message(void *p, size_t s, dpid_t id, bool b) {
-	newbody = b;
-	if(newbody) {
-		body = new char[s];
-		memcpy(body, p, s);
+	m_newbody = b;
+	if(m_newbody) {
+		m_body = new char[s];
+		memcpy(m_body, p, s);
 	} else
-		body = (char *)p;
-	size = s;
-	sender = id;
+		m_body = (char *)p;
+	m_size = s;
+	m_sender = id;
 }
 
 NETFunc::Message::Message(void) {
-	newbody = false;
-	size = 0;
+	m_newbody = false;
+	m_size = 0;
 }
 
 NETFunc::Message::~Message(void) {
-	if(newbody)
-		delete [] body;
+	if(m_newbody)
+		delete [] m_body;
 }
 
 dp_packetType_t *NETFunc::Message::Get(void) {
-	return (dp_packetType_t *)body;
+	return (dp_packetType_t *)m_body;
 }
 
 void *NETFunc::Message::GetBody(void) {
-	return body + sizeof(CODE);
+	return m_body + sizeof(CODE);
 }
 
 dpid_t NETFunc::Message::GetSender(void) {
-	return sender;
+	return m_sender;
 }
 
 size_t NETFunc::Message::GetSize(void) {
-	return size;
+	return m_size;
 }
 
 size_t NETFunc::Message::GetBodySize(void) {
-	return size - sizeof(CODE);
+	return m_size - sizeof(CODE);
 }
 
 NETFunc::Message::CODE NETFunc::Message::GetCode(void) {
-	return *(CODE *)body;
+	return *(CODE *)m_body;
 }
 
 
@@ -353,35 +349,35 @@ NETFunc::Messages NETFunc::messages = Messages();
 
 
 NETFunc::Keys::Keys(void) {
-	memset(&curkey, 0, sizeof(KeyStruct));
-	curkey.len = 1;
+	memset(&m_curkey, 0, sizeof(KeyStruct));
+	m_curkey.m_len = 1;
 }
 
 void NETFunc::Keys::NextKey(void) {
-	if(curkey.buf[curkey.len-1] == COUNT_MAX)
-		curkey.len++;
-	curkey.buf[curkey.len-1]++;
+	if(m_curkey.m_buf[m_curkey.m_len-1] == COUNT_MAX)
+		m_curkey.m_len++;
+	m_curkey.m_buf[m_curkey.m_len-1]++;
 }
 
 
 NETFunc::Key::Key(void) {
-	memset(&key, 0, sizeof(KeyStruct));
+	memset(&m_key, 0, sizeof(KeyStruct));
 }
 
 NETFunc::Key::Key(Key *k) {
-	key = k->key;
+	m_key = k->m_key;
 }
 
 NETFunc::Key::Key(KeyStruct *k) {
-	key = *k;
+	m_key = *k;
 }
 void NETFunc::Key::WriteToFile(FILE *saveFile) const
 {
 	sint32 first = 0; // For bytes to the first real data
 	c3files_fwrite(&first, sizeof(first), 1, saveFile);
 
-	c3files_fwrite(&key.len, sizeof(key.len), 1, saveFile);
-	c3files_fwrite(&key.buf, sizeof(key.buf), 1, saveFile);
+	c3files_fwrite(&m_key.m_len, sizeof(m_key.m_len), 1, saveFile);
+	c3files_fwrite(&m_key.m_buf, sizeof(m_key.m_buf), 1, saveFile);
 }
 
 void NETFunc::Key::ReadFromFile(FILE *saveFile)
@@ -389,56 +385,56 @@ void NETFunc::Key::ReadFromFile(FILE *saveFile)
 	sint32 first = 0; // For bytes to the first real data
 	c3files_fread(&first, sizeof(first), 1, saveFile);
 
-	c3files_fread(&key.len, sizeof(key.len), 1, saveFile);
-	c3files_fread(&key.buf, sizeof(key.buf), 1, saveFile);
+	c3files_fread(&m_key.m_len, sizeof(m_key.m_len), 1, saveFile);
+	c3files_fread(&m_key.m_buf, sizeof(m_key.m_buf), 1, saveFile);
 }
 
 bool NETFunc::Key::Equals(Key *k) {
-	return memcmp(&key, &k->key, sizeof(key.len) + key.len) == 0;
+	return memcmp(&m_key, &k->m_key, sizeof(m_key.m_len) + m_key.m_len) == 0;
 }
 
 bool NETFunc::Key::Equals(KeyStruct *k) {
-	return memcmp(&key, k, sizeof(key.len) + key.len) == 0;
+	return memcmp(&m_key, k, sizeof(m_key.m_len) + m_key.m_len) == 0;
 }
 
 NETFunc::KeyStruct *NETFunc::Key::GetKey(void) {
-	return &key;
+	return &m_key;
 }
 
 
 NETFunc::STATUS NETFunc::EnumServers(bool b) {
 	KeyStruct key;
-	key.buf[0] = dp_KEY_SERVERPINGS;
-	key.len = 1;
+	key.m_buf[0] = dp_KEY_SERVERPINGS;
+	key.m_len = 1;
 	if(!b)
 		PushMessage(new Message(Message::RESET, &key, sizeof(KeyStruct)));
 
-	key.buf[1] = (char) dpGETSHORT_FIRSTBYTE(GameType);
-	key.buf[2] = (char) dpGETSHORT_SECONDBYTE(GameType);
-	key.len = 3;
-	return dpRequestObjectDeltas(dp, b, &key.buf[0], key.len) == dp_RES_OK ? OK : ERR;
+	key.m_buf[1] = (char) dpGETSHORT_FIRSTBYTE(s_GameType);
+	key.m_buf[2] = (char) dpGETSHORT_SECONDBYTE(s_GameType);
+	key.m_len = 3;
+	return dpRequestObjectDeltas(s_dp, b, &key.m_buf[0], key.m_len) == dp_RES_OK ? OK : ERR;
 }
 
 
 NETFunc::STATUS NETFunc::EnumSessions(bool b) {
 	KeyStruct key;
-	key.buf[0] = dp_KEY_SESSIONS;
-	key.len = 1;
+	key.m_buf[0] = dp_KEY_SESSIONS;
+	key.m_len = 1;
 	if(!b)
 		PushMessage(new Message(Message::RESET, &key, sizeof(KeyStruct)));
 
-	NETFunc::STATUS s = dpRequestObjectDeltas(dp, b, &key.buf[0], key.len) == dp_RES_OK ? OK : ERR;
+	NETFunc::STATUS s = dpRequestObjectDeltas(s_dp, b, &key.m_buf[0], key.m_len) == dp_RES_OK ? OK : ERR;
 
-	key.buf[0] = dp_KEY_PLAYER_LATENCIES;
-	return dpRequestObjectDeltas(dp, 1, &key.buf[0], key.len) == dp_RES_OK ? s : ERR;
+	key.m_buf[0] = dp_KEY_PLAYER_LATENCIES;
+	return dpRequestObjectDeltas(s_dp, 1, &key.m_buf[0], key.m_len) == dp_RES_OK ? s : ERR;
 }
 
 
 NETFunc::STATUS NETFunc::EnumPlayers(bool b, KeyStruct *k) {
 	KeyStruct key;
-	key.buf[0] = dp_KEY_PLAYERS;
-	memcpy(&key.buf[0] + 1, &k->buf[0], k->len);
-	key.len = 1 + k->len;
+	key.m_buf[0] = dp_KEY_PLAYERS;
+	memcpy(&key.m_buf[0] + 1, &k->m_buf[0], k->m_len);
+	key.m_len = 1 + k->m_len;
 	Receive();
 	if(!b) {
 		for(Messages::iterator i = messages.begin(); i != messages.end() && !messages.empty(); i++) {
@@ -447,7 +443,7 @@ NETFunc::STATUS NETFunc::EnumPlayers(bool b, KeyStruct *k) {
 				dp_objectDelta_packet_t *p = (dp_objectDelta_packet_t *)(*i)->GetBody();
 				KeyStruct key = *(KeyStruct *)(&p->keylen);
 
-				if(key.buf[0] == dp_KEY_PLAYERS && memcmp(&key.buf[key.len - 2], &k->buf[k->len - 2], 2) == 0) {
+				if(key.m_buf[0] == dp_KEY_PLAYERS && memcmp(&key.m_buf[key.m_len - 2], &k->m_buf[k->m_len - 2], 2) == 0) {
 
 					messages.Del(*i);
 					i = messages.begin();
@@ -455,51 +451,34 @@ NETFunc::STATUS NETFunc::EnumPlayers(bool b, KeyStruct *k) {
 			}
 		}
 	}
-	return dpRequestObjectDeltas(dp, b, &key.buf[0], key.len) == dp_RES_OK ? OK : ERR;
+	return dpRequestObjectDeltas(s_dp, b, &key.m_buf[0], key.m_len) == dp_RES_OK ? OK : ERR;
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 NETFunc::Server::Server(void) {
-	memset(&server, 0, sizeof(dp_serverInfo_t));
+	memset(&m_server, 0, sizeof(dp_serverInfo_t));
 }
 
 NETFunc::Server::Server(dp_object_t *o, KeyStruct *k, long f):Key(k) {
-	server = o->serv;
+	m_server = o->serv;
 }
 
 NETFunc::Server::~Server(void) {
 }
 
 char *NETFunc::Server::GetName(void) {
-	return server.hostname;
+	return m_server.hostname;
 }
 
 int NETFunc::Server::GetPlayers(void) {
-	return server.cur_sessTypeUsers;
+	return m_server.cur_sessTypeUsers;
 }
 
 int NETFunc::Server::GetPing(void) {
-	return server.rtt_ms_avg;
+	return m_server.rtt_ms_avg;
 }
 
 dp_serverInfo_t *NETFunc::Server::GetServer(void) {
-	return &server;
+	return &m_server;
 }
 
 template<>
@@ -538,42 +517,42 @@ bool NETFunc::ListHandler<NETFunc::Server>::Handle(Message *m) {
 
 template<>
 void NETFunc::ListHandler<NETFunc::Server>::SetKey(void) {
-	key.buf[0] = dp_KEY_SERVERPINGS;
+	m_key.m_buf[0] = dp_KEY_SERVERPINGS;
 
 
-	key.len = 1;
+	m_key.m_len = 1;
 }
 
 
 NETFunc::Contact::Contact(char *n, char *p) {
-	name = NETFunc::StringDup(n);
-	number = NETFunc::StringDup(p);
+	m_name = NETFunc::StringDup(n);
+	m_number = NETFunc::StringDup(p);
 }
 
 NETFunc::Contact::Contact(void) {
 }
 
 NETFunc::Contact::~Contact(void) {
-	delete name;
-	delete number;
+	delete m_name;
+	delete m_number;
 }
 
 char *NETFunc::Contact::GetName(void) {
-	return name;
+	return m_name;
 }
 
 char *NETFunc::Contact::GetNumber(void) {
-	return number;
+	return m_number;
 }
 
 void NETFunc::Contact::SetName(char *n) {
-	delete name;
-	name = NETFunc::StringDup(n);
+	delete m_name;
+	m_name = NETFunc::StringDup(n);
 }
 
 void NETFunc::Contact::SetNumber(char *p) {
-	delete number;
-	number = NETFunc::StringDup(p);
+	delete m_number;
+	m_number = NETFunc::StringDup(p);
 }
 
 
@@ -584,18 +563,10 @@ NETFunc::ContactList::ContactList(void) {
 NETFunc::ContactList::~ContactList(void) {
 }
 
-
-
-
-
-
-
-
-
 NETFunc::Port::Port(commPortName_t *p, int b, char *i) {
-	port = *p;
-	baud	= b;
-	strncpy(init, i, nf_PORTINITLEN);
+	m_port = *p;
+	m_baud	= b;
+	strncpy(m_init, i, nf_PORTINITLEN);
 }
 
 NETFunc::Port::Port(void) {
@@ -605,23 +576,23 @@ NETFunc::Port::~Port(void) {
 }
 
 commPortName_t *NETFunc::Port::GetPort(void) {
-	return &port;
+	return &m_port;
 }
 
 int NETFunc::Port::GetNumber(void) {
-	return port.portnum;
+	return m_port.portnum;
 }
 
 char *NETFunc::Port::GetName(void) {
-	return port.name;
+	return m_port.name;
 }
 
 int NETFunc::Port::GetBaud(void) {
-	return baud;
+	return m_baud;
 }
 
 char *NETFunc::Port::GetInit(void) {
-	return init;
+	return m_init;
 }
 
 
@@ -629,7 +600,7 @@ NETFunc::PortList::PortList(Transport *t)
 {
     commPortName_t portName[10];
     int portCount;
-    dp_result_t err = dpEnumPorts(&t->transport , portName, 10, &portCount);
+    dp_result_t err = dpEnumPorts(&t->m_transport , portName, 10, &portCount);
     if (err == dp_RES_OK)
     {
         for (int i = 0; i < portCount; i++)
@@ -650,8 +621,8 @@ NETFUNC_CONNECT_RESULT NETFunc::ConnectThread(NETFUNC_CONNECT_PARAMETER t)
 #if defined(_DEBUG)
     Os::SetThreadName("NETFunc::ConnectThread");
 #endif
-    result = dpCreate(&dp, ((TransportSetup *)t)->GetTransport(), ((TransportSetup *)t)->GetParams(), 0);
-    return Os::ExitThread((dp_RES_OK == result) ? 0 : 1);
+    s_result = dpCreate(&s_dp, ((TransportSetup *)t)->GetTransport(), ((TransportSetup *)t)->GetParams(), 0);
+    return Os::ExitThread((dp_RES_OK == s_result) ? 0 : 1);
 }
 
 NETFUNC_CONNECT_RESULT NETFunc::ReConnectThread(NETFUNC_CONNECT_PARAMETER r)
@@ -660,7 +631,7 @@ NETFUNC_CONNECT_RESULT NETFunc::ReConnectThread(NETFUNC_CONNECT_PARAMETER r)
     Os::SetThreadName("NETFunc::ReconnectThread");
 #endif
     *((bool *)r) = false;
-    dpSetActiveThread(dp);
+    dpSetActiveThread(s_dp);
     while (!(*((bool *)r)))
     {
 		Receive();
@@ -669,51 +640,17 @@ NETFUNC_CONNECT_RESULT NETFunc::ReConnectThread(NETFUNC_CONNECT_PARAMETER r)
     return Os::ExitThread(0);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 NETFunc::Transport::Transport(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k)
 :
 	Key(k),
-	transport(*t),
-	description(*d)
+	m_transport(*t),
+	m_description(*d)
 {
 
-	memset(&parameters, 0, sizeof(commInitReq_t));
-	parameters.reqLen = sizeof(commInitReq_t);
-	parameters.sessionId = GetTickCount();
-	parameters.dialing_method = comm_INIT_DIALING_METHOD_TONE;
+	memset(&m_parameters, 0, sizeof(commInitReq_t));
+	m_parameters.reqLen = sizeof(commInitReq_t);
+	m_parameters.sessionId = GetTickCount();
+	m_parameters.dialing_method = comm_INIT_DIALING_METHOD_TONE;
 	status = NOSETUP;
 }
 
@@ -724,11 +661,11 @@ NETFunc::Transport::~Transport(void) {
 }
 
 dp_transport_t *NETFunc::Transport::GetTransport(void) {
-	return &transport;
+	return &m_transport;
 }
 
 commInitReq_t *NETFunc::Transport::GetParams(void) {
-	return &parameters;
+	return &m_parameters;
 }
 
 
@@ -743,11 +680,11 @@ NETFunc::Transport::TYPE NETFunc::Transport::GetType(void) {
 }
 
 char *NETFunc::Transport::GetName(void) {
-	return description.name;
+	return m_description.name;
 }
 
 char *NETFunc::Transport::GetFileName(void) {
-	return transport.fname;
+	return m_transport.fname;
 }
 
 NETFunc::STATUS NETFunc::Transport::SetPort(long p) {
@@ -764,20 +701,20 @@ NETFunc::STATUS NETFunc::Transport::SetContact(Contact *c) {
 
 NETFunc::TransportSetup::TransportSetup(Transport *t) {
 
-	transport = *t->GetTransport();
-	parameters = *t->GetParams();
+	m_transport = *t->GetTransport();
+	m_parameters = *t->GetParams();
 	status = t->GetStatus();
-	parameters.modeministr = StringDup(t->GetParams()->modeministr);
-	parameters.phonenum = StringDup(t->GetParams()->phonenum);
+	m_parameters.modeministr = StringDup(t->GetParams()->modeministr);
+	m_parameters.phonenum = StringDup(t->GetParams()->phonenum);
 	type = t->GetType();
 }
 
 NETFunc::TransportSetup::~TransportSetup(void) {
 
-	if ( parameters.modeministr )
-		delete [] parameters.modeministr;
-	if ( parameters.phonenum )
-		delete [] parameters.phonenum;
+	if ( m_parameters.modeministr )
+		delete [] m_parameters.modeministr;
+	if ( m_parameters.phonenum )
+		delete [] m_parameters.phonenum;
 }
 
 NETFunc::STATUS NETFunc::TransportSetup::GetStatus(void) {
@@ -789,14 +726,14 @@ NETFunc::Transport::TYPE NETFunc::TransportSetup::GetType(void) {
 }
 
 dp_transport_t *NETFunc::TransportSetup::GetTransport(void) {
-	return &transport;
+	return &m_transport;
 }
 
 commInitReq_t *NETFunc::TransportSetup::GetParams(void) {
-	return &parameters;
+	return &m_parameters;
 }
 
-NETFunc::TransportSetup *NETFunc::transport = 0;
+NETFunc::TransportSetup *NETFunc::s_transport = 0;
 
 
 NETFunc::Transport::TYPE NETFunc::GetTransportType(const comm_driverInfo_t *c) {
@@ -813,10 +750,10 @@ NETFunc::Transport::TYPE NETFunc::GetTransportType(const comm_driverInfo_t *c) {
 
 NETFunc::TransportList::TransportList(void) {
 	dp_transport_t transport;
-	strcpy (transport.fname, DllPath);
-	memset(&key, 0, sizeof(KeyStruct));
-	key.len = 1;
-	result = dpEnumTransports(&transport, CallBack, this);
+	strcpy (transport.fname, s_DllPath);
+	memset(&m_key, 0, sizeof(KeyStruct));
+	m_key.m_len = 1;
+	s_result = dpEnumTransports(&transport, CallBack, this);
 }
 
 NETFunc::TransportList::~TransportList(void) {
@@ -825,11 +762,11 @@ NETFunc::TransportList::~TransportList(void) {
 NETFUNC_CALLBACK_RESULT(void)
 NETFunc::TransportList::CallBack(const dp_transport_t *t, const comm_driverInfo_t *d, void *context) {
 	if (comm_DRIVER_IS_VISIBLE & d->capabilities) {
-		KeyStruct *k = (KeyStruct *)&((TransportList *)context)->key;
-		if(k->buf[k->len-1] == COUNT_MAX)
-			k->len++;
+		KeyStruct *k = (KeyStruct *)&((TransportList *)context)->m_key;
+		if(k->m_buf[k->m_len-1] == COUNT_MAX)
+			k->m_len++;
 		else
-			k->buf[k->len-1]++;
+			k->m_buf[k->m_len-1]++;
 
 		switch(GetTransportType(d)) {
 		case Transport::INTERNET:
@@ -858,8 +795,8 @@ NETFunc::Internet::~Internet(void) {
 }
 
 NETFunc::STATUS NETFunc::Internet::SetPort(long p) {
-	long o = parameters.portnum;
-	parameters.portnum = p;
+	long o = m_parameters.portnum;
+	m_parameters.portnum = p;
 	return o != p ? RESET : OK;
 }
 
@@ -882,8 +819,8 @@ NETFunc::Transport::TYPE NETFunc::IPX::GetType(void) {
 
 NETFunc::Modem::Modem(const comm_driverInfo_t *d, const dp_transport_t *t, KeyStruct *k):Transport(d, t, k) {
 
-	parameters.hwirq = 12345;
-	parameters.swint = (long) &NETFunc::cancelDial;
+	m_parameters.hwirq = 12345;
+	m_parameters.swint = (long) &NETFunc::s_cancelDial;
 
 }
 
@@ -893,19 +830,19 @@ NETFunc::Modem::~Modem(void) {
 NETFunc::STATUS NETFunc::Modem::SetContact(Contact *c) {
 	if(c)
 
-		parameters.phonenum = c->GetNumber();
+		m_parameters.phonenum = c->GetNumber();
 	else
 
-		parameters.phonenum = "";
+		m_parameters.phonenum = "";
 	status = status == NOSETUP ? NOPORT :READY;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::Modem::SetPort(Port *p) {
 
-	parameters.baud = p->GetBaud();
-	parameters.portnum = p->GetNumber();
-	parameters.modeministr = p->GetInit();
+	m_parameters.baud = p->GetBaud();
+	m_parameters.portnum = p->GetNumber();
+	m_parameters.modeministr = p->GetInit();
 	status = status == NOSETUP ? NOCONTACT : READY;
 	return OK;
 }
@@ -923,9 +860,9 @@ NETFunc::NullModem::~NullModem(void) {
 
 NETFunc::STATUS NETFunc::NullModem::SetPort(Port *p) {
 
-	parameters.baud = p->GetBaud();
-	parameters.portnum = p->GetNumber();
-	parameters.modeministr = "";
+	m_parameters.baud = p->GetBaud();
+	m_parameters.portnum = p->GetNumber();
+	m_parameters.modeministr = "";
 	return OK;
 }
 
@@ -950,44 +887,44 @@ NETFunc::AIPlayer::~AIPlayer(void) {
 }
 
 const char *NETFunc::AIPlayer::GetName(void) {
-	return name;
+	return m_name;
 }
 
 void NETFunc::AIPlayer::SetName(const char *n) {
-	strncpy(name, n, dp_PNAMELEN - 1);
-	name[dp_PNAMELEN - 1] = 0;
+	strncpy(m_name, n, dp_PNAMELEN - 1);
+	m_name[dp_PNAMELEN - 1] = 0;
 }
 
 unsigned char NETFunc::AIPlayer::GetGroup(void) {
-	return group;
+	return m_group;
 }
 
 void NETFunc::AIPlayer::SetGroup(unsigned char g) {
-	group = g;
+	m_group = g;
 }
 
 void NETFunc::AIPlayer::SetKey(KeyStruct *k) {
-	key = *k;
+	m_key = *k;
 }
 
 void NETFunc::AIPlayer::Pack(void) {
 	Clear();
-	Push(key.buf);
-	Push(name);
-	Push(group);
+	Push(m_key.m_buf);
+	Push(m_name);
+	Push(m_group);
 }
 
 void NETFunc::AIPlayer::Unpack(void) {
-	first = body;
-	Pop(key.buf);
-	key.len = static_cast<short>(strlen(key.buf));
-	Pop(name);
-	Pop(group);
+	m_first = m_body;
+	Pop(m_key.m_buf);
+	m_key.m_len = static_cast<short>(strlen(m_key.m_buf));
+	Pop(m_name);
+	Pop(m_group);
 }
 
 NETFunc::STATUS NETFunc::AIPlayer::Load(FILE *f) {
-	if(fread(&(Packet::size), sizeof(SizeT), 1, f) == 1)
-		if(fread(body, Packet::size, 1, f) == 1) {
+	if(fread(&(Packet::m_size), sizeof(SizeT), 1, f) == 1)
+		if(fread(m_body, Packet::m_size, 1, f) == 1) {
 			Unpack();
 			return OK;
 		}
@@ -996,8 +933,8 @@ NETFunc::STATUS NETFunc::AIPlayer::Load(FILE *f) {
 
 NETFunc::STATUS NETFunc::AIPlayer::Save(FILE *f) {
 	Pack();
-	if(fwrite(&(Packet::size), sizeof(SizeT), 1, f) == 1)
-		if(fwrite(body, Packet::size, 1, f) == 1)
+	if(fwrite(&(Packet::m_size), sizeof(SizeT), 1, f) == 1)
+		if(fwrite(m_body, Packet::m_size, 1, f) == 1)
 			return OK;
 	return ERR;
 }
@@ -1074,103 +1011,103 @@ void NETFunc::ListHandler<NETFunc::AIPlayer>::SetKey(void) {
 
 
 void NETFunc::Player::SetGroupMaster(bool b) {
-	if(player.bloblen == 0) {
-		player.bloblen = 1;
-		player.blob[0] = 0;
+	if(m_player.bloblen == 0) {
+		m_player.bloblen = 1;
+		m_player.blob[0] = 0;
 	}
 	if(b)
-		player.blob[0] |= nf_GROUPMASTER;
+		m_player.blob[0] |= nf_GROUPMASTER;
 	else
-		player.blob[0] &= ~nf_GROUPMASTER;
+		m_player.blob[0] &= ~nf_GROUPMASTER;
 }
 
 void NETFunc::Player::SetKey(void) {
-	key.buf[0] = (char) dpGETSHORT_FIRSTBYTE(player.id);
-	key.buf[1] = (char) dpGETSHORT_SECONDBYTE(player.id);
-	key.len = 2;
+	m_key.m_buf[0] = (char) dpGETSHORT_FIRSTBYTE(m_player.id);
+	m_key.m_buf[1] = (char) dpGETSHORT_SECONDBYTE(m_player.id);
+	m_key.m_len = 2;
 }
 
 NETFunc::Player::Player(void) {
-	memset(&player, 0, sizeof(dp_playerId_t));
-	player.bloblen = 1;
+	memset(&m_player, 0, sizeof(dp_playerId_t));
+	m_player.bloblen = 1;
 	SetKey();
-	flags = 0;
-	muted = false;
+	m_flags = 0;
+	m_muted = false;
 }
 
 NETFunc::Player::Player(dp_object_t *o, KeyStruct *k, long f, short l):Key(k) {
-	player = o->p;
+	m_player = o->p;
 	SetKey();
-	flags = f;
-	latency = l;
-	muted = false;
+	m_flags = f;
+	m_latency = l;
+	m_muted = false;
 }
 
 void NETFunc::Player::Set(dp_playerId_t *p) {
-	player = *p;
+	m_player = *p;
 }
 
 NETFunc::Player::~Player(void) {
 }
 
 dpid_t NETFunc::Player::GetId(void) {
-	return player.id;
+	return m_player.id;
 }
 
 char *NETFunc::Player::GetName(void) {
-	return player.name;
+	return m_player.name;
 }
 
 unsigned char *NETFunc::Player::GetBlob(void) {
-	return &player.blob[1];
+	return &m_player.blob[1];
 }
 
 unsigned char NETFunc::Player::GetBlobLen(void) {
-	if(player.bloblen == 0)
+	if(m_player.bloblen == 0)
 		return 0;
-	return player.bloblen - 1;
+	return m_player.bloblen - 1;
 }
 
 unsigned char NETFunc::Player::GetGroup(void) {
-	if(player.bloblen == 0)
+	if(m_player.bloblen == 0)
 		return 0;
-	return (player.blob[0] & nf_GROUPNUMBER);
+	return (m_player.blob[0] & nf_GROUPNUMBER);
 }
 
 short NETFunc::Player::GetLatency(void) {
-	return latency;
+	return m_latency;
 }
 
 bool NETFunc::Player::IsMe(void) {
-	return (flags & dp_OBJECTDELTA_FLAG_LOCAL) != 0;
+	return (m_flags & dp_OBJECTDELTA_FLAG_LOCAL) != 0;
 }
 
 bool NETFunc::Player::IsMuted(void) {
-	return muted;
+	return m_muted;
 }
 
 void NETFunc::Player::SetMuted(bool m) {
-	muted = m;
+	m_muted = m;
 }
 
 bool NETFunc::Player::IsInCurrentSession(void) {
-	return (flags & dp_OBJECTDELTA_FLAG_INOPENSESS) != 0;
+	return (m_flags & dp_OBJECTDELTA_FLAG_INOPENSESS) != 0;
 }
 
 bool NETFunc::Player::IsHost(void) {
-	return (flags & dp_OBJECTDELTA_FLAG_ISHOST) != 0;
+	return (m_flags & dp_OBJECTDELTA_FLAG_ISHOST) != 0;
 }
 
 bool NETFunc::Player::IsGroupMaster(void) {
-	return player.bloblen > 0 && GetGroup() && player.blob[0] & nf_GROUPMASTER;
+	return m_player.bloblen > 0 && GetGroup() && m_player.blob[0] & nf_GROUPMASTER;
 }
 
 bool NETFunc::Player::IsReadyToLaunch(void) {
-	return player.bloblen > 0 && player.blob[0] & nf_READYLAUNCH;
+	return m_player.bloblen > 0 && m_player.blob[0] & nf_READYLAUNCH;
 }
 
-NETFunc::Player NETFunc::player = Player();
-dp_uid_t NETFunc::userId = dp_UID_NONE;
+NETFunc::Player NETFunc::s_player = Player();
+dp_uid_t NETFunc::s_userId = dp_UID_NONE;
 
 template<>
 bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
@@ -1215,88 +1152,88 @@ bool NETFunc::ListHandler<NETFunc::Player>::Handle(Message *m) {
 
 template<>
 void NETFunc::ListHandler<NETFunc::Player>::SetKey(void) {
-	key.buf[0] = dp_KEY_PLAYERS;
-	key.len = 1;
+	m_key.m_buf[0] = dp_KEY_PLAYERS;
+	m_key.m_len = 1;
 }
 
 
 
 
 NETFunc::PlayerStat::PlayerStat(void) {
-	key.len = sizeof(dpid_t);
-	name[0] = 0;
-	group = 0;
-	isingame = true;
-	hasleft = false;
+	m_key.m_len = sizeof(dpid_t);
+	m_name[0] = 0;
+	m_group = 0;
+	m_isingame = true;
+	m_hasleft = false;
 }
 
 NETFunc::PlayerStat::~PlayerStat(void) {
 }
 
 char *NETFunc::PlayerStat::GetName(void) {
-	return name;
+	return m_name;
 }
 
 void NETFunc::PlayerStat::SetName(char *n) {
-	strncpy(name, n, dp_PNAMELEN - 1);
-	name[dp_PNAMELEN - 1] = 0;
+	strncpy(m_name, n, dp_PNAMELEN - 1);
+	m_name[dp_PNAMELEN - 1] = 0;
 }
 
 unsigned char NETFunc::PlayerStat::GetGroup(void) {
-	return group;
+	return m_group;
 }
 
 void NETFunc::PlayerStat::SetGroup(unsigned char g) {
-	group = g;
+	m_group = g;
 }
 
 void NETFunc::PlayerStat::SetId(dpid_t i) {
-	*(dpid_t *)&key.buf = i;
+	*(dpid_t *)&m_key.m_buf = i;
 }
 
 dpid_t NETFunc::PlayerStat::GetId(void) {
-	return 	*(dpid_t *)&key.buf;
+	return 	*(dpid_t *)&m_key.m_buf;
 }
 
 void NETFunc::PlayerStat::SetInGame(bool b) {
-	isingame = b;
+	m_isingame = b;
 	*((bool *)GetBody() + 1) = b;
 }
 
 bool NETFunc::PlayerStat::IsInGame(void) {
-	return isingame;
+	return m_isingame;
 }
 
 void NETFunc::PlayerStat::SetLeft(bool b) {
-	hasleft = b;
+	m_hasleft = b;
 	*(bool *)GetBody() = b;
 }
 
 bool NETFunc::PlayerStat::HasLeft(void) {
-	return hasleft;
+	return m_hasleft;
 }
 
 void NETFunc::PlayerStat::Pack(void) {
 	Clear();
-	Push(hasleft);
-	Push(isingame);
-	Push(*(dpid_t *)&key.buf);
-	Push(name);
-	Push(group);
+	Push(m_hasleft);
+	Push(m_isingame);
+	Push(*(dpid_t *)&m_key.m_buf);
+	Push(m_name);
+	Push(m_group);
 }
 
 void NETFunc::PlayerStat::Unpack(void) {
-	first = body;
-	Pop(hasleft);
-	Pop(isingame);
-	Pop(*(dpid_t *)&key.buf);
-	Pop(name);
-	Pop(group);
+	m_first = m_body;
+	Pop(m_hasleft);
+	Pop(m_isingame);
+	Pop(*(dpid_t *)&m_key.m_buf);
+	Pop(m_name);
+	Pop(m_group);
 }
 
 NETFunc::STATUS NETFunc::PlayerStat::Update(dp_t *p, bool r) {
-	hasleft = false;
-	isingame = true;
+	m_hasleft = false;
+	m_isingame = true;
 	Pack();
 	Message message = Message(Message::ADDPLAYERSTAT, GetBody(), GetSize());
 	if(NETFunc::Send(p, &message, dp_ID_BROADCAST, dp_ID_BROADCAST, r) != OK)
@@ -1326,7 +1263,7 @@ void NETFunc::PlayerStats::Left(dpid_t id) {
 		t = **i;
 		t.SetLeft(true);
 		Chg(&t);
-		if(status != RESET)
+		if(s_status != RESET)
 			PushMessage(new Message(Message::CHGPLAYERSTAT, t.GetBody(), t.GetSize()));
 	}
 }
@@ -1380,19 +1317,19 @@ bool NETFunc::PlayerStats::Handle(dp_t *p, Message *m, dpid_t from) {
 
 
 NETFunc::PlayerSetup::PlayerSetup(Player *p):Player(*p) {
-	description[0] = 0;
+	m_description[0] = 0;
 }
 
 NETFunc::PlayerSetup::PlayerSetup() {
-	description[0] = 0;
+	m_description[0] = 0;
 }
 
 NETFunc::PlayerSetup::~PlayerSetup() {
 }
 
 void NETFunc::PlayerSetup::SetName(char *n) {
-	strncpy(player.name, n, dp_PNAMELEN);
-	player.name[dp_PNAMELEN - 1] = 0;
+	strncpy(m_player.name, n, dp_PNAMELEN);
+	m_player.name[dp_PNAMELEN - 1] = 0;
 }
 
 void NETFunc::PlayerSetup::SetBlob(char *b) {
@@ -1401,57 +1338,57 @@ void NETFunc::PlayerSetup::SetBlob(char *b) {
 
 void NETFunc::PlayerSetup::SetBlob(void *b, size_t s) {
     s = std::min<size_t>(s, dp_MAX_PLAYERBLOB_LEN - 1);
-	memcpy(&player.blob[1], b, s);
-	player.bloblen = static_cast<unsigned char>(s + 1);
+	memcpy(&m_player.blob[1], b, s);
+	m_player.bloblen = static_cast<unsigned char>(s + 1);
 }
 
 void NETFunc::PlayerSetup::SetBlobLen(unsigned char l) {
 	if(l < dp_MAX_PLAYERBLOB_LEN)
-		player.bloblen = l + 1;
+		m_player.bloblen = l + 1;
 }
 
 char *NETFunc::PlayerSetup::GetDescription(void) {
-	return description;
+	return m_description;
 }
 
 void NETFunc::PlayerSetup::SetDescription(char *d) {
-	strncpy(description, d, nf_PLAYERDESCLEN);
+	strncpy(m_description, d, nf_PLAYERDESCLEN);
 }
 
 void NETFunc::PlayerSetup::SetGroup(char group) {
-	if(player.bloblen == 0) {
-		player.bloblen = 1;
-		player.blob[0] = 0;
+	if(m_player.bloblen == 0) {
+		m_player.bloblen = 1;
+		m_player.blob[0] = 0;
 	}
-	player.blob[0] &= ~nf_GROUPNUMBER;
-	player.blob[0] |= (group & nf_GROUPNUMBER);
+	m_player.blob[0] &= ~nf_GROUPNUMBER;
+	m_player.blob[0] |= (group & nf_GROUPNUMBER);
 }
 
 void NETFunc::PlayerSetup::SetReadyToLaunch(bool b) {
-	if(player.bloblen == 0) {
-		player.bloblen = 1;
-		player.blob[0] = 0;
+	if(m_player.bloblen == 0) {
+		m_player.bloblen = 1;
+		m_player.blob[0] = 0;
 	}
 	if(b)
-		player.blob[0] |= nf_READYLAUNCH;
+		m_player.blob[0] |= nf_READYLAUNCH;
 	else
-		player.blob[0] &= ~nf_READYLAUNCH;
+		m_player.blob[0] &= ~nf_READYLAUNCH;
 }
 
 void NETFunc::PlayerSetup::Pack() {
 	Clear();
-	Push(description);
+	Push(m_description);
 }
 
 void NETFunc::PlayerSetup::Unpack() {
-	first = body;
-	Pop(description);
+	m_first = m_body;
+	Pop(m_description);
 }
 
 NETFunc::STATUS NETFunc::PlayerSetup::Load(FILE *f) {
-	if(fread(&player, sizeof(dp_playerId_t), 1, f) == 1)
-		if(fread(&(Packet::size), sizeof(SizeT), 1, f) == 1)
-			if(fread(body, Packet::size, 1, f) == 1) {
+	if(fread(&m_player, sizeof(dp_playerId_t), 1, f) == 1)
+		if(fread(&(Packet::m_size), sizeof(SizeT), 1, f) == 1)
+			if(fread(m_body, Packet::m_size, 1, f) == 1) {
 				Unpack();
 				return OK;
 			}
@@ -1459,10 +1396,10 @@ NETFunc::STATUS NETFunc::PlayerSetup::Load(FILE *f) {
 }
 
 NETFunc::STATUS NETFunc::PlayerSetup::Save(FILE *f) {
-	if(fwrite(&player, sizeof(dp_playerId_t), 1, f) == 1) {
+	if(fwrite(&m_player, sizeof(dp_playerId_t), 1, f) == 1) {
 		Pack();
-		if(fwrite(&(Packet::size), sizeof(SizeT), 1, f) == 1)
-			if(fwrite(body, Packet::size, 1, f) == 1)
+		if(fwrite(&(Packet::m_size), sizeof(SizeT), 1, f) == 1)
+			if(fwrite(m_body, Packet::m_size, 1, f) == 1)
 				return OK;
 	}
 	return ERR;
@@ -1513,22 +1450,22 @@ NETFunc::STATUS NETFunc::PlayerSetup::Update(void) {
 
 void NETFunc::Session::SetKey() {
 	int i;
-	dpGetSessionId(dp, &session, &key.buf[0], &i);
+	dpGetSessionId(s_dp, &m_session, &m_key.m_buf[0], &i);
 
-	key.len = static_cast<short>(i);
+	m_key.m_len = static_cast<short>(i);
 }
 
 NETFunc::Session::Session(void) {
-	memset(&session, 0, sizeof(dp_session_t));
-	session.dwSize = sizeof(dp_session_t);
-	session.maxPlayers = dp_MAXREALPLAYERS;
-	session.flags = dp_SESSION_FLAGS_CREATESESSION | dp_SESSION_FLAGS_ENABLE_PLAYERVARS;
-	session.guidApplication = GameType;
+	memset(&m_session, 0, sizeof(dp_session_t));
+	m_session.dwSize = sizeof(dp_session_t);
+	m_session.maxPlayers = dp_MAXREALPLAYERS;
+	m_session.flags = dp_SESSION_FLAGS_CREATESESSION | dp_SESSION_FLAGS_ENABLE_PLAYERVARS;
+	m_session.guidApplication = s_GameType;
 }
 
 NETFunc::Session::Session(dp_object_t *o, KeyStruct *k, long f):Key(k) {
-	session = o->sess;
-	flags = f;
+	m_session = o->sess;
+	m_flags = f;
 }
 
 void NETFunc::Session::WriteToFile(FILE *saveFile) const
@@ -1536,30 +1473,30 @@ void NETFunc::Session::WriteToFile(FILE *saveFile) const
 	NETFunc::Key::WriteToFile(saveFile);
 	sint32 tmp = 0;
 
-	c3files_fwrite(&session.dwSize, sizeof(session.dwSize), 1, saveFile);
-	c3files_fwrite(&session.adrMaster, sizeof(session.adrMaster), 1, saveFile); // 10
-	c3files_fwrite(&session.masterPseudoplayer, sizeof(session.masterPseudoplayer), 1, saveFile);
-	c3files_fwrite(&session.sessionType, sizeof(session.sessionType), 1, saveFile);
-	c3files_fwrite(&session.dwSession, sizeof(session.dwSession), 1, saveFile);
-	c3files_fwrite(&session.dwMaxPlayers, sizeof(session.dwMaxPlayers), 1, saveFile);
-	c3files_fwrite(&session.dwCurrentPlayers, sizeof(session.dwCurrentPlayers), 1, saveFile);
-	c3files_fwrite(&session.dwFlags, sizeof(session.dwFlags), 1, saveFile);
-	c3files_fwrite(&session.sessionName, sizeof(session.sessionName), 1, saveFile);
-	c3files_fwrite(&session.szUserField, sizeof(session.szUserField), 1, saveFile);
-	c3files_fwrite(&session.szPassword, sizeof(session.szPassword), 1, saveFile);
+	c3files_fwrite(&m_session.dwSize, sizeof(m_session.dwSize), 1, saveFile);
+	c3files_fwrite(&m_session.adrMaster, sizeof(m_session.adrMaster), 1, saveFile); // 10
+	c3files_fwrite(&m_session.masterPseudoplayer, sizeof(m_session.masterPseudoplayer), 1, saveFile);
+	c3files_fwrite(&m_session.sessionType, sizeof(m_session.sessionType), 1, saveFile);
+	c3files_fwrite(&m_session.dwSession, sizeof(m_session.dwSession), 1, saveFile);
+	c3files_fwrite(&m_session.dwMaxPlayers, sizeof(m_session.dwMaxPlayers), 1, saveFile);
+	c3files_fwrite(&m_session.dwCurrentPlayers, sizeof(m_session.dwCurrentPlayers), 1, saveFile);
+	c3files_fwrite(&m_session.dwFlags, sizeof(m_session.dwFlags), 1, saveFile);
+	c3files_fwrite(&m_session.sessionName, sizeof(m_session.sessionName), 1, saveFile);
+	c3files_fwrite(&m_session.szUserField, sizeof(m_session.szUserField), 1, saveFile);
+	c3files_fwrite(&m_session.szPassword, sizeof(m_session.szPassword), 1, saveFile);
 
-	tmp = static_cast<sint32>(session.dwReserved1); // Long 4 byte or 8 byte
+	tmp = static_cast<sint32>(m_session.dwReserved1); // Long 4 byte or 8 byte
 	c3files_fwrite(&tmp, sizeof(tmp), 1, saveFile);
 
-	tmp = static_cast<sint32>(session.dwUser1); // Long 4 byte or 8 byte
+	tmp = static_cast<sint32>(m_session.dwUser1); // Long 4 byte or 8 byte
 	c3files_fwrite(&tmp, sizeof(tmp), 1, saveFile);
 
-	c3files_fwrite(&session.reserved2, sizeof(session.reserved2), 1, saveFile);
+	c3files_fwrite(&m_session.reserved2, sizeof(m_session.reserved2), 1, saveFile);
 
 	sint8 space = 0; // Spacing in the original implementation
 	c3files_fwrite(&space, sizeof(space), 1, saveFile);
 
-	tmp = static_cast<sint32>(flags);
+	tmp = static_cast<sint32>(m_flags);
 	c3files_fwrite(&tmp, sizeof(tmp), 1, saveFile); // Long 4 byte or 8 byte
 }
 
@@ -1568,45 +1505,45 @@ void NETFunc::Session::ReadFromFile(FILE *saveFile)
 	NETFunc::Key::ReadFromFile(saveFile);
 	sint32 tmp = 0;
 
-	c3files_fread(&session.dwSize, sizeof(session.dwSize), 1, saveFile);
-	c3files_fread(&session.adrMaster, sizeof(session.adrMaster), 1, saveFile);
-	c3files_fread(&session.masterPseudoplayer, sizeof(session.masterPseudoplayer), 1, saveFile);
-	c3files_fread(&session.sessionType, sizeof(session.sessionType), 1, saveFile);
-	c3files_fread(&session.dwSession, sizeof(session.dwSession), 1, saveFile);
-	c3files_fread(&session.dwMaxPlayers, sizeof(session.dwMaxPlayers), 1, saveFile);
-	c3files_fread(&session.dwCurrentPlayers, sizeof(session.dwCurrentPlayers), 1, saveFile);
-	c3files_fread(&session.dwFlags, sizeof(session.dwFlags), 1, saveFile);
-	c3files_fread(&session.sessionName, sizeof(session.sessionName), 1, saveFile);
-	c3files_fread(&session.szUserField, sizeof(session.szUserField), 1, saveFile);
-	c3files_fread(&session.szPassword, sizeof(session.szPassword), 1, saveFile);
+	c3files_fread(&m_session.dwSize, sizeof(m_session.dwSize), 1, saveFile);
+	c3files_fread(&m_session.adrMaster, sizeof(m_session.adrMaster), 1, saveFile);
+	c3files_fread(&m_session.masterPseudoplayer, sizeof(m_session.masterPseudoplayer), 1, saveFile);
+	c3files_fread(&m_session.sessionType, sizeof(m_session.sessionType), 1, saveFile);
+	c3files_fread(&m_session.dwSession, sizeof(m_session.dwSession), 1, saveFile);
+	c3files_fread(&m_session.dwMaxPlayers, sizeof(m_session.dwMaxPlayers), 1, saveFile);
+	c3files_fread(&m_session.dwCurrentPlayers, sizeof(m_session.dwCurrentPlayers), 1, saveFile);
+	c3files_fread(&m_session.dwFlags, sizeof(m_session.dwFlags), 1, saveFile);
+	c3files_fread(&m_session.sessionName, sizeof(m_session.sessionName), 1, saveFile);
+	c3files_fread(&m_session.szUserField, sizeof(m_session.szUserField), 1, saveFile);
+	c3files_fread(&m_session.szPassword, sizeof(m_session.szPassword), 1, saveFile);
 
 	c3files_fread(&tmp, sizeof(tmp), 1, saveFile);
-	session.dwReserved1 = tmp; // Long 4 byte or 8 byte, for that the anet code must be fixed
+	m_session.dwReserved1 = tmp; // Long 4 byte or 8 byte, for that the anet code must be fixed
 	c3files_fread(&tmp, sizeof(tmp), 1, saveFile);
-	session.dwUser1 = tmp; // Long 4 byte or 8 byte
-	c3files_fread(&session.reserved2, sizeof(session.reserved2), 1, saveFile);
+	m_session.dwUser1 = tmp; // Long 4 byte or 8 byte
+	c3files_fread(&m_session.reserved2, sizeof(m_session.reserved2), 1, saveFile);
 
 	sint8 space = 0; // Spacing in the original implementation
 	c3files_fread(&space, sizeof(space), 1, saveFile);
 
 	c3files_fread(&tmp, sizeof(tmp), 1, saveFile);
-	flags = tmp; // Long 4 byte or 8 byte
+	m_flags = tmp; // Long 4 byte or 8 byte
 }
 
 char *NETFunc::Session::GetName(void) {
-	return session.sessionName;
+	return m_session.sessionName;
 }
 
 char *NETFunc::Session::GetPassword(void) {
-	return session.szPassword;
+	return m_session.szPassword;
 }
 
 short NETFunc::Session::GetPlayers(void) {
-	return session.currentPlayers;
+	return m_session.currentPlayers;
 }
 
 short NETFunc::Session::GetMaxPlayers(void) {
-	return session.maxPlayers;
+	return m_session.maxPlayers;
 }
 
 short NETFunc::Session::GetFree() {
@@ -1614,34 +1551,34 @@ short NETFunc::Session::GetFree() {
 }
 
 char *NETFunc::Session::GetUserField() {
-	return session.szUserField;
+	return m_session.szUserField;
 }
 
 dp_karma_t NETFunc::Session::GetKarma() {
-	return session.karma;
+	return m_session.karma;
 }
 
 bool NETFunc::Session::IsLobby() {
-	return (session.flags & dp_SESSION_FLAGS_ISLOBBY) != 0;
+	return (m_session.flags & dp_SESSION_FLAGS_ISLOBBY) != 0;
 }
 
 bool NETFunc::Session::IsServer() {
-	return (session.flags & dp_SESSION_FLAGS_ISSERVER) != 0;
+	return (m_session.flags & dp_SESSION_FLAGS_ISSERVER) != 0;
 }
 
 bool NETFunc::Session::IsClosed() {
-	return (session.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS) == 0;
+	return (m_session.flags & dp_SESSION_FLAGS_ENABLE_NEWPLAYERS) == 0;
 }
 
 bool NETFunc::Session::IsMine(void) {
-	return (flags & dp_OBJECTDELTA_FLAG_LOCAL) != 0;
+	return (m_flags & dp_OBJECTDELTA_FLAG_LOCAL) != 0;
 }
 
 bool NETFunc::Session::IsCurrentSession(void) {
-	return (flags & dp_OBJECTDELTA_FLAG_INOPENSESS) != 0;
+	return (m_flags & dp_OBJECTDELTA_FLAG_INOPENSESS) != 0;
 }
 
-NETFunc::Session NETFunc::session = Session();
+NETFunc::Session NETFunc::m_session = Session();
 
 template<>
 bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
@@ -1652,7 +1589,7 @@ bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
 		dp_objectDelta_packet_t *p = (dp_objectDelta_packet_t *)m->GetBody();
 		if(Equals((KeyStruct *)&p->keylen)) {
 			Session t(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
-			if(t.session.sessionType != GameType)
+			if(t.m_session.sessionType != s_GameType)
 				return false;
 			switch(p->status) {
 
@@ -1679,33 +1616,33 @@ bool NETFunc::ListHandler<NETFunc::Session>::Handle(Message *m) {
 
 template<>
 void NETFunc::ListHandler<NETFunc::Session>::SetKey(void) {
-	key.buf[0] = dp_KEY_SESSIONS;
-	key.len = 1;
+	m_key.m_buf[0] = dp_KEY_SESSIONS;
+	m_key.m_len = 1;
 }
 
 
 NETFunc::Game::Game(void): Session() {
-	hostile = false;
+	m_hostile = false;
 }
 
 NETFunc::Game::Game(dp_object_t *o, KeyStruct *k, long f): Session(o, k, f) {
-	hostile = false;
+	m_hostile = false;
 }
 
 NETFunc::Game::Game(Session *s): Session(*s) {
-	hostile = false;
+	m_hostile = false;
 }
 
 void NETFunc::Game::WriteToFile(FILE *saveFile) const
 {
 	NETFunc::Session::WriteToFile(saveFile);
-	c3files_fwrite(&hostile, sizeof(hostile), 1, saveFile);
+	c3files_fwrite(&m_hostile, sizeof(m_hostile), 1, saveFile);
 }
 
 void NETFunc::Game::ReadFromFile(FILE *saveFile)
 {
 	NETFunc::Session::ReadFromFile(saveFile);
-	c3files_fread(&hostile, sizeof(hostile), 1, saveFile);
+	c3files_fread(&m_hostile, sizeof(m_hostile), 1, saveFile);
 }
 
 void NETFunc::Packet::WriteToFile(FILE *saveFile) const
@@ -1713,8 +1650,8 @@ void NETFunc::Packet::WriteToFile(FILE *saveFile) const
 	sint32 space = 0; // Add the space from the original implementation
 	c3files_fwrite(&space, sizeof(space), 1, saveFile);
 
-	c3files_fwrite(&size, sizeof(size), 1, saveFile);
-	c3files_fwrite(&body, sizeof(body), 1, saveFile);
+	c3files_fwrite(&m_size, sizeof(m_size), 1, saveFile);
+	c3files_fwrite(&m_body, sizeof(m_body), 1, saveFile);
 
 	sint8 littleSpace = 0;
 	c3files_fwrite(&littleSpace, sizeof(littleSpace), 1, saveFile);
@@ -1731,8 +1668,8 @@ void NETFunc::Packet::ReadFromFile(FILE *saveFile)
 	sint32 space = 0; // Add the space from the original implementation
 	c3files_fread(&space, sizeof(space), 1, saveFile);
 
-	c3files_fread(&size, sizeof(size), 1, saveFile);
-	c3files_fread(&body, sizeof(body), 1, saveFile);
+	c3files_fread(&m_size, sizeof(m_size), 1, saveFile);
+	c3files_fread(&m_body, sizeof(m_body), 1, saveFile);
 
 	sint8 littleSpace = 0;
 	c3files_fread(&littleSpace, sizeof(littleSpace), 1, saveFile);
@@ -1743,54 +1680,54 @@ void NETFunc::Packet::ReadFromFile(FILE *saveFile)
 	sint32 replace = 0;
 	c3files_fread(&replace, sizeof(replace), 1, saveFile); // Problem
 
-	first = body + size;
+	m_first = m_body + m_size;
 }
 
 
 char NETFunc::Game::GetGroups(void)
 {
-	return static_cast<char>(session.dwUser1 & nf_GROUPNUMBER);
+	return static_cast<char>(m_session.dwUser1 & nf_GROUPNUMBER);
 }
 
 void NETFunc::Game::Set(dp_session_t *s)
 {
-	session = *s;
+	m_session = *s;
 }
 
 bool NETFunc::Game::IsLaunched(void) {
-	return (session.dwUser1 & nf_LAUNCHED) != 0;
+	return (m_session.dwUser1 & nf_LAUNCHED) != 0;
 }
 
 bool NETFunc::Game::IsSyncLaunch(void) {
-	return (session.dwUser1 & nf_SYNCLAUNCH) != 0;
+	return (m_session.dwUser1 & nf_SYNCLAUNCH) != 0;
 }
 
 bool NETFunc::Game::IsHostile(void) {
-	return hostile;
+	return m_hostile;
 }
 
 void NETFunc::Game::SetHostile(bool h) {
-	hostile = h;
+	m_hostile = h;
 }
 
 
-NETFunc::Lobby::Lobby(void): Session(), bad(false) {
-	strncpy(session.sessionName, LobbyName, dp_SNAMELEN);
-	session.flags |= dp_SESSION_FLAGS_ISLOBBY;
+NETFunc::Lobby::Lobby(void): Session(), m_bad(false) {
+	strncpy(m_session.sessionName, s_LobbyName, dp_SNAMELEN);
+	m_session.flags |= dp_SESSION_FLAGS_ISLOBBY;
 }
 
-NETFunc::Lobby::Lobby(dp_object_t *o, KeyStruct *k, long f): Session(o, k, f), bad(false) {
+NETFunc::Lobby::Lobby(dp_object_t *o, KeyStruct *k, long f): Session(o, k, f), m_bad(false) {
 }
 
 void NETFunc::Lobby::SetBad(bool b) {
-	bad = b;
+	m_bad = b;
 }
 
 bool NETFunc::Lobby::IsBad(void) {
-	return bad;
+	return m_bad;
 }
 
-NETFunc::Lobby NETFunc::lobby = Lobby();
+NETFunc::Lobby NETFunc::s_lobby = Lobby();
 
 template<>
 bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
@@ -1801,7 +1738,7 @@ bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
 		dp_objectDelta_packet_t *p = (dp_objectDelta_packet_t *)m->GetBody();
 		if(Equals((KeyStruct *)&p->keylen)) {
 			Lobby t(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
-			if(t.session.sessionType != GameType)
+			if(t.m_session.sessionType != s_GameType)
 				return false;
 			switch(p->status) {
 
@@ -1828,8 +1765,8 @@ bool NETFunc::ListHandler<NETFunc::Lobby>::Handle(Message *m) {
 
 template<>
 void NETFunc::ListHandler<NETFunc::Lobby>::SetKey(void) {
-	key.buf[0] = dp_KEY_SESSIONS;
-	key.len = 1;
+	m_key.m_buf[0] = dp_KEY_SESSIONS;
+	m_key.m_len = 1;
 }
 
 template<>
@@ -1849,7 +1786,7 @@ bool NETFunc::ListHandler<NETFunc::Game>::Handle(Message *m) {
 		dp_objectDelta_packet_t *p = (dp_objectDelta_packet_t *)m->GetBody();
 		if(Equals((KeyStruct *)&p->keylen)) {
 			Game t(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
-			if(t.session.sessionType != GameType)
+			if(t.m_session.sessionType != s_GameType)
 				return false;
 			t.SetHostile(IsHostile(&t));
 			switch(p->status) {
@@ -1877,47 +1814,47 @@ bool NETFunc::ListHandler<NETFunc::Game>::Handle(Message *m) {
 
 template<>
 void NETFunc::ListHandler<NETFunc::Game>::SetKey(void) {
-	key.buf[0] = dp_KEY_SESSIONS;
-	key.len = 1;
+	m_key.m_buf[0] = dp_KEY_SESSIONS;
+	m_key.m_len = 1;
 }
 
 
 NETFunc::PlayerList::PlayerList(void) {
-	count++;
-	if(!players)
-		players = new Players();
+	s_count++;
+	if(!s_players)
+		s_players = new Players();
 }
 
 NETFunc::PlayerList::~PlayerList() {
-	count--;
-	if(!count) {
-		delete players;
-		players = 0;
+	s_count--;
+	if(!s_count) {
+		delete s_players;
+		s_players = 0;
 	}
 }
 
 void NETFunc::PlayerList::SetKey(KeyStruct *k) {
-	if(players)
-		players->SetKey(k);
+	if(s_players)
+		s_players->SetKey(k);
 }
 
 NETFunc::Player *NETFunc::PlayerList::FindPlayer(dpid_t id) {
 	Players::iterator i;
-	for(i = players->begin(); i!=players->end(); i++)
+	for(i = s_players->begin(); i!=s_players->end(); i++)
 		if((*i)->GetId() == id)
 			return *i;
 	return 0;
 };
 
-NETFunc::PlayerList::Players *NETFunc::PlayerList::players = 0;
-int NETFunc::PlayerList::count = 0;
+NETFunc::PlayerList::Players *NETFunc::PlayerList::s_players = 0;
+int NETFunc::PlayerList::s_count = 0;
 
 NETFunc::GameSetup::GameSetup() {
-	description[0] = 0;
+	m_description[0] = 0;
 }
 
 NETFunc::GameSetup::GameSetup(Game *g):Game(*g), Packet() {
-	description[0] = 0;
+	m_description[0] = 0;
 }
 
 NETFunc::GameSetup::~GameSetup() {
@@ -1931,7 +1868,7 @@ void NETFunc::GameSetup::WriteToFile(FILE *saveFile) const
 	c3files_fwrite(&space, sizeof(space), 1, saveFile);
 	c3files_fwrite(&space, sizeof(space), 1, saveFile);
 	NETFunc::Packet::WriteToFile(saveFile);
-	c3files_fwrite(&description, sizeof(description), 1, saveFile);
+	c3files_fwrite(&m_description, sizeof(m_description), 1, saveFile);
 }
 
 void NETFunc::GameSetup::ReadFromFile(FILE *saveFile)
@@ -1942,32 +1879,32 @@ void NETFunc::GameSetup::ReadFromFile(FILE *saveFile)
 	c3files_fread(&space, sizeof(space), 1, saveFile);
 	c3files_fread(&space, sizeof(space), 1, saveFile);
 	NETFunc::Packet::ReadFromFile(saveFile);
-	c3files_fread(&description, sizeof(description), 1, saveFile);
+	c3files_fread(&m_description, sizeof(m_description), 1, saveFile);
 }
 
 char *NETFunc::GameSetup::GetDescription(void) {
-	return description;
+	return m_description;
 }
 
 void NETFunc::GameSetup::SetDescription(char *d) {
-	strncpy(description, d, nf_GAMEDESCLEN);
+	strncpy(m_description, d, nf_GAMEDESCLEN);
 }
 
 void NETFunc::GameSetup::SetGroups(char groups) {
-	session.dwUser1 &= ~nf_GROUPNUMBER;
-	session.dwUser1 |= (groups & nf_GROUPNUMBER);
+	m_session.dwUser1 &= ~nf_GROUPNUMBER;
+	m_session.dwUser1 |= (groups & nf_GROUPNUMBER);
 }
 
 void NETFunc::GameSetup::SetName(char *n) {
-	strncpy(session.sessionName, n, dp_SNAMELEN);
+	strncpy(m_session.sessionName, n, dp_SNAMELEN);
 }
 
 void NETFunc::GameSetup::SetPassword(char *p) {
-	strncpy(session.szPassword, p, dp_PASSWORDLEN);
+	strncpy(m_session.szPassword, p, dp_PASSWORDLEN);
 }
 
 void NETFunc::GameSetup::SetSize(short s) {
-	session.maxPlayers = s;
+	m_session.maxPlayers = s;
 }
 
 void NETFunc::GameSetup::SetUserField(char *u) {
@@ -1975,42 +1912,42 @@ void NETFunc::GameSetup::SetUserField(char *u) {
 }
 
 void NETFunc::GameSetup::SetUserField(void *u, size_t s) {
-	memcpy(session.szUserField, u, std::min<size_t>(s, dp_USERFIELDLEN));
+	memcpy(m_session.szUserField, u, std::min<size_t>(s, dp_USERFIELDLEN));
 }
 
 void NETFunc::GameSetup::SetLaunched(bool b) {
 	if(b)
-		session.dwUser1 |= nf_LAUNCHED;
+		m_session.dwUser1 |= nf_LAUNCHED;
 	else
-		session.dwUser1 &= ~nf_LAUNCHED;
+		m_session.dwUser1 &= ~nf_LAUNCHED;
 }
 
 void NETFunc::GameSetup::SetSyncLaunch(bool s) {
 	if(s)
-		session.dwUser1 |= nf_SYNCLAUNCH;
+		m_session.dwUser1 |= nf_SYNCLAUNCH;
 	else
-		session.dwUser1 &= ~nf_SYNCLAUNCH;
+		m_session.dwUser1 &= ~nf_SYNCLAUNCH;
 }
 
 void NETFunc::GameSetup::SetClosed(bool c) {
 	if(c)
-		session.flags &= ~dp_SESSION_FLAGS_ENABLE_NEWPLAYERS;
+		m_session.flags &= ~dp_SESSION_FLAGS_ENABLE_NEWPLAYERS;
 	else
-		session.flags |= dp_SESSION_FLAGS_ENABLE_NEWPLAYERS;
+		m_session.flags |= dp_SESSION_FLAGS_ENABLE_NEWPLAYERS;
 }
 
 void NETFunc::GameSetup::Pack() {
 	Clear();
-	Push(description);
+	Push(m_description);
 }
 
 void NETFunc::GameSetup::Unpack() {
-	first = body;
-	Pop(description);
+	m_first = m_body;
+	Pop(m_description);
 }
 
 NETFunc::STATUS NETFunc::GameSetup::Send(dp_t *p, dpid_t id, dpid_t from) {
-	Message message = Message(Message::GAMESESSION, &session, sizeof(dp_session_t));
+	Message message = Message(Message::GAMESESSION, &m_session, sizeof(dp_session_t));
 	if(NETFunc::Send(p, &message, id, from) != OK)
 		return ERR;
 	message = Message(Message::GAMEPACKET, GetBody(), GetSize());
@@ -2022,11 +1959,11 @@ NETFunc::STATUS NETFunc::GameSetup::Send(dp_t *p, dpid_t id, dpid_t from) {
 bool NETFunc::GameSetup::Handle(Message *m) {
 	if(m->GetCode() == Message::GAMESESSION) {
 		Game::Set((dp_session_t *)m->GetBody());
-		gotgame = true;
+		s_gotgame = true;
 		return true;
 	} else if(m->GetCode() == Message::GAMEPACKET) {
 		Packet::Set(m->GetBodySize(), m->GetBody());
-		gotgamepacket = true;
+		s_gotgamepacket = true;
 		return true;
 	}
 	return false;
@@ -2041,9 +1978,9 @@ bool NETFunc::GameSetup::Handle(dp_t *p, Message *m, dpid_t from) {
 }
 
 NETFunc::STATUS NETFunc::GameSetup::Load(FILE *f) {
-	if(fread(&session, sizeof(dp_session_t), 1, f) == 1)
-		if(fread(&(Packet::size), sizeof(SizeT), 1, f) == 1)
-			if(fread(body, Packet::size, 1, f) == 1) {
+	if(fread(&m_session, sizeof(dp_session_t), 1, f) == 1)
+		if(fread(&(Packet::m_size), sizeof(SizeT), 1, f) == 1)
+			if(fread(m_body, Packet::m_size, 1, f) == 1) {
 				Unpack();
 				return OK;
 			}
@@ -2051,10 +1988,10 @@ NETFunc::STATUS NETFunc::GameSetup::Load(FILE *f) {
 }
 
 NETFunc::STATUS NETFunc::GameSetup::Save(FILE *f) {
-	if(fwrite(&session, sizeof(dp_session_t), 1, f) == 1) {
+	if(fwrite(&m_session, sizeof(dp_session_t), 1, f) == 1) {
 		Pack();
-		if(fwrite(&(Packet::size), sizeof(SizeT), 1, f) == 1)
-			if(fwrite(body, Packet::size, 1, f) == 1)
+		if(fwrite(&(Packet::m_size), sizeof(SizeT), 1, f) == 1)
+			if(fwrite(m_body, Packet::m_size, 1, f) == 1)
 				return OK;
 	}
 	return ERR;
@@ -2088,9 +2025,9 @@ NETFunc::STATUS	NETFunc::Chat::Send(Player *p, char *m) {
 	if(GetStatus() != OK)
 		return BUSSY;
 	else {
-		Receive(&player, *(TYPE *)buffer, m);
+		Receive(&s_player, *(TYPE *)buffer, m);
 		Message message = Message(Message::CHAT, buffer, size);
-		return NETFunc::Send(netf->GetDP(), &message, id);
+		return NETFunc::Send(m_netf->GetDP(), &message, id);
 	}
 }
 
@@ -2103,16 +2040,16 @@ NETFunc::STATUS	NETFunc::Chat::SendGroup(char *m) {
 	if(GetStatus() != OK)
 		return BUSSY;
 	else {
-		Receive(&player, *(TYPE *)buffer, m);
+		Receive(&s_player, *(TYPE *)buffer, m);
 		Message message = Message(Message::CHAT, buffer, size);
-		return NETFunc::Send(netf->GetDP(), &message, dp_ID_BROADCAST);
+		return NETFunc::Send(m_netf->GetDP(), &message, dp_ID_BROADCAST);
 	}
 }
 
 bool NETFunc::Chat::Handle(Message *m) {
 	if(m->GetCode() == Message::CHAT) {
 		Player *p = FindPlayer(m->GetSender());
-		if(!IsMuted(p) && ((*(TYPE *)m->GetBody() == GROUP && p->GetGroup() == player.GetGroup()) || *(TYPE *)m->GetBody() != GROUP))
+		if(!IsMuted(p) && ((*(TYPE *)m->GetBody() == GROUP && p->GetGroup() == s_player.GetGroup()) || *(TYPE *)m->GetBody() != GROUP))
 			Receive(p, *(TYPE *)m->GetBody(), (char *)m->GetBody() + sizeof(TYPE));
 		return true;
 	}
@@ -2312,7 +2249,7 @@ bool NETFunc::Hostiles::Check(Key *s) {
 	return false;
 }
 
-NETFunc::Hostiles NETFunc::hostiles = Hostiles();
+NETFunc::Hostiles NETFunc::s_hostiles = Hostiles();
 
 bool NETFunc::Mutes::Check(Key *p) {
 	iterator i;
@@ -2323,73 +2260,73 @@ bool NETFunc::Mutes::Check(Key *p) {
 	return false;
 }
 
-NETFunc::Mutes NETFunc::mutes = Mutes();
+NETFunc::Mutes NETFunc::s_mutes = Mutes();
 
 
 NETFunc::NETFunc(void) {
-	transport = 0;
-	playerStats = new PlayerStats();
-	aiPlayers = new AIPlayers();
-	connected = false;
-	reconnected = true;
-	playerset = false;
-	game = false;
-	host = false;
-	launch = false;
-	launched = false;
-	lobby = Lobby();
-	memset(&appParam, 0, sizeof(dp_appParam_t));
+	s_transport = 0;
+	m_playerStats = new PlayerStats();
+	m_aiPlayers = new AIPlayers();
+	s_connected = false;
+	s_reconnected = true;
+	s_playerset = false;
+	s_game = false;
+	s_theHost = false;
+	s_launch = false;
+	s_launched = false;
+	s_lobby = Lobby();
+	memset(&m_appParam, 0, sizeof(dp_appParam_t));
 
 	FILE *f = fopen("netf.def", "rb");
 	if(f) {
-		fread(&servername, sizeof(servername) + sizeof(playername) + sizeof(sessionname), 1, f);
+		fread(&s_servername, sizeof(s_servername) + sizeof(s_playername) + sizeof(s_sessionname), 1, f);
 		fclose(f);
 	}
 
-	status = START;
+	s_status = START;
 }
 
 NETFunc::STATUS NETFunc::Connect(char *file) {
 
-	result = dpCreate(&dp, NULL, NULL, file);
-	if(result != dp_RES_OK)
+	s_result = dpCreate(&s_dp, NULL, NULL, file);
+	if(s_result != dp_RES_OK)
 		return ERR;
 
-	connected = true;
+	s_connected = true;
 	dp_transport_t t;
 	comm_driverInfo_t i;
 
-	dpGetCurrentTransportInfo(dp, &t, &i);
+	dpGetCurrentTransportInfo(s_dp, &t, &i);
 
 	KeyStruct k;
-	k.len = 0;
+	k.m_len = 0;
 
 	Transport trans = Transport(&i, &t, &k);
-	transport = new TransportSetup(&trans);
+	s_transport = new TransportSetup(&trans);
 
-	connected = true;
+	s_connected = true;
 
-	size = sizeof(dp_session_t);
+	s_size = sizeof(dp_session_t);
 
-	if(dpGetSessionDesc(dp, &session.session, &size) != dp_RES_OK)
+	if(dpGetSessionDesc(s_dp, &m_session.m_session, &s_size) != dp_RES_OK)
 		return ERR;
 
-	session.SetKey();
+	m_session.SetKey();
 
 	dp_caps_t info;
-	result = dpGetCaps(dp, &info, 0);
-	if(result != dp_RES_OK)
+	s_result = dpGetCaps(s_dp, &info, 0);
+	if(s_result != dp_RES_OK)
 		return ERR;
 
-	host = info.dwFlags & dp_CAPS_FLAGS_ISHOST;
+	s_theHost = info.dwFlags & dp_CAPS_FLAGS_ISHOST;
 
-	EnumPlayers(true, session.GetKey());
+	EnumPlayers(true, m_session.GetKey());
 
-	status = READY;
-	game = true;
-	launch = false;
-	launched = false;
-	canlaunch = false;
+	s_status = READY;
+	s_game = true;
+	s_launch = false;
+	s_launched = false;
+	s_canlaunch = false;
 
 
 	return OK;
@@ -2399,7 +2336,7 @@ NETFunc::~NETFunc(void) {
 
 	FILE *f = fopen("netf.def", "wb");
 	if(f) {
-		fwrite(&servername, sizeof(servername) + sizeof(playername) + sizeof(sessionname), 1, f);
+		fwrite(&s_servername, sizeof(s_servername) + sizeof(s_playername) + sizeof(s_sessionname), 1, f);
 		fclose(f);
 	}
 
@@ -2412,60 +2349,60 @@ NETFunc::~NETFunc(void) {
 	}
 
 	messages.clear();
-	if(transport)
-		delete transport;
-	if(playerStats)
-		delete playerStats;
-	if(aiPlayers)
-		delete aiPlayers;
+	if(s_transport)
+		delete s_transport;
+	if(m_playerStats)
+		delete m_playerStats;
+	if(m_aiPlayers)
+		delete m_aiPlayers;
 }
 
 NETFunc::STATUS NETFunc::GetStatus(void) {
-	return status;
+	return s_status;
 }
 
 bool NETFunc::Connected(void) {
-	return connected;
+	return s_connected;
 }
 
 dp_t *NETFunc::GetDP(void) {
-	return dp;
+	return s_dp;
 }
 
 NETFunc::Session *NETFunc::GetSession(void) {
-	return &session;
+	return &m_session;
 }
 
 NETFunc::Player *NETFunc::GetPlayer(void) {
-	return &player;
+	return &s_player;
 }
 
 NETFunc::TransportSetup *NETFunc::GetTransport(void) {
-	return transport;
+	return s_transport;
 }
 
 NETFunc::STATUS NETFunc::SetTransport(Transport *t) {
-	if(status == START) {
-		if(transport)
-			delete transport;
+	if(s_status == START) {
+		if(s_transport)
+			delete s_transport;
 		if(t->GetType() == Transport::INTERNET && adialup_willdial())
 			return BUSSY;
-		transport = new TransportSetup(t);
-		if(transport->GetType() == Transport::INTERNET) {
-			userId = dp_UID_NONE;
-			nextStatus = PRECONNECT;
+		s_transport = new TransportSetup(t);
+		if(s_transport->GetType() == Transport::INTERNET) {
+			s_userId = dp_UID_NONE;
+			m_nextStatus = PRECONNECT;
 		} else {
-			servername[0] = 0;
-			nextStatus = READY;
+			s_servername[0] = 0;
+			m_nextStatus = READY;
 		}
-		cancelDial = 0;
-#ifdef USE_SDL
-		threadHandle = SDL_CreateThread(ConnectThread, "Connect-thread", (void *)transport);
+		s_cancelDial = 0;
+#ifdef __AUI_USE_SDL__
+		m_threadHandle = SDL_CreateThread(ConnectThread, "Connect-thread", (void *)s_transport);
 #else
-		threadHandle = CreateThread(0, 0, ConnectThread, (void *)transport, 0, &threadId);
+		m_threadHandle = CreateThread(0, 0, ConnectThread, (void *)s_transport, 0, &m_threadId);
 #endif
-		if(threadHandle) {
-			status = CONNECT;
+		if(m_threadHandle) {
+			s_status = CONNECT;
 			return OK;
 		}
 	}
@@ -2477,52 +2414,52 @@ NETFunc::STATUS NETFunc::SetPlayerSetup(PlayerSetup *p) {
 	p->SetReadyToLaunch(false);
 	p->SetGroup(0);
 	p->SetGroupMaster(false);
-	playerSetup = *p;
-	playerset = true;
-	setplayer = true;
-	setplayerpacket = true;
+	s_playerSetup = *p;
+	s_playerset = true;
+	s_setplayer = true;
+	s_setplayerpacket = true;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetPlayerSetupPacket(PlayerSetup *p) {
-	if(!playerset)
+	if(!s_playerset)
 		return ERR;
-	playerSetup = *p;
-	setplayerpacket = true;
-	if(status != OK)
+	s_playerSetup = *p;
+	s_setplayerpacket = true;
+	if(s_status != OK)
 		return OK;
 
-	if(dpSetPlayerData(dp, player.GetId(), PlayerSetupPacketKey, p->GetBody(), p->GetSize(), 0) != dp_RES_OK)
+	if(dpSetPlayerData(s_dp, s_player.GetId(), s_PlayerSetupPacketKey, p->GetBody(), p->GetSize(), 0) != dp_RES_OK)
 		return ERR;
-	setplayerpacket = false;
+	s_setplayerpacket = false;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetPlayerSetupPlayer(PlayerSetup *p) {
-	if(!playerset)
+	if(!s_playerset)
 		return ERR;
-	playerSetup = *p;
-	setplayer = true;
-	if(status != OK)
+	s_playerSetup = *p;
+	s_setplayer = true;
+	if(s_status != OK)
 		return OK;
-	if(dpSetPlayerName(dp, player.GetId(), p->GetName()) != dp_RES_OK)
+	if(dpSetPlayerName(s_dp, s_player.GetId(), p->GetName()) != dp_RES_OK)
 		return ERR;
-	p->player.id = player.player.id;
-	player.player = p->player;
-	if(dpSetPlayerBlob(dp, player.GetId(), p->player.blob, p->player.bloblen) != dp_RES_OK)
+	p->m_player.id = s_player.m_player.id;
+	s_player.m_player = p->m_player;
+	if(dpSetPlayerBlob(s_dp, s_player.GetId(), p->m_player.blob, p->m_player.bloblen) != dp_RES_OK)
 		return ERR;
-	setplayer = false;
+	s_setplayer = false;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::GetPlayerSetupPacket(Player *p) {
 
 	if(p->IsInCurrentSession()) {
-		size = dpio_MAXLEN_UNRELIABLE;
+		s_size = dpio_MAXLEN_UNRELIABLE;
 
 
-		if(dpGetPlayerData(dp, p->GetId(), PlayerSetupPacketKey, buffer, &size, 0) == dp_RES_OK) {
-			PushMessage(new Message(Message::PLAYERPACKET, buffer, size));
+		if(dpGetPlayerData(s_dp, p->GetId(), s_PlayerSetupPacketKey, s_buffer, &s_size, 0) == dp_RES_OK) {
+			PushMessage(new Message(Message::PLAYERPACKET, s_buffer, s_size));
 			return OK;
 		}
 	}
@@ -2530,15 +2467,15 @@ NETFunc::STATUS NETFunc::GetPlayerSetupPacket(Player *p) {
 }
 
 NETFunc::STATUS NETFunc::SetReadyToLaunch(bool b) {
-	if(!playerset)
+	if(!s_playerset)
 		return ERR;
-	playerSetup.SetReadyToLaunch(b);
-	SetPlayerSetupPlayer(&playerSetup);
+	s_playerSetup.SetReadyToLaunch(b);
+	SetPlayerSetupPlayer(&s_playerSetup);
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetGroupMaster(Player *p) {
-	if(!host)
+	if(!s_theHost)
 		return ERR;
 	Player *m = players.FindGroupMaster(p->GetGroup());
 	PlayerSetup s;
@@ -2546,42 +2483,42 @@ NETFunc::STATUS NETFunc::SetGroupMaster(Player *p) {
 		if(m->Equals(p))
 			return OK;
 		m->SetGroupMaster(false);
-		s.Player::Set(&m->player);
+		s.Player::Set(&m->m_player);
 		SetRemotePlayerRecord(&s);
 	}
 	p->SetGroupMaster(true);
-	s.Player::Set(&p->player);
+	s.Player::Set(&p->m_player);
 	SetRemotePlayerRecord(&s);
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetRemotePlayerRecord(PlayerSetup *p) {
-	if(status != OK)
+	if(s_status != OK)
 		return ERR;
 
-	if(!host && (!playerset || !playerSetup.GetGroup() || playerSetup.GetGroup() != p->GetGroup() || player.IsGroupMaster()))
+	if(!s_theHost && (!s_playerset || !s_playerSetup.GetGroup() || s_playerSetup.GetGroup() != p->GetGroup() || s_player.IsGroupMaster()))
 		return ERR;
-	if(p->GetId() == player.GetId()) {
-		PushMessage(new Message(Message::SETPLAYERRECORD, &p->player, sizeof(dp_playerId_t)));
+	if(p->GetId() == s_player.GetId()) {
+		PushMessage(new Message(Message::SETPLAYERRECORD, &p->m_player, sizeof(dp_playerId_t)));
 	} else {
-		Message message = Message(Message::SETPLAYERRECORD, &p->player, sizeof(dp_playerId_t));
-		if(Send(dp, &message, p->GetId()) != OK)
+		Message message = Message(Message::SETPLAYERRECORD, &p->m_player, sizeof(dp_playerId_t));
+		if(Send(s_dp, &message, p->GetId()) != OK)
 			return ERR;
 	}
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetRemotePlayerPacket(PlayerSetup *p) {
-	if(status != OK)
+	if(s_status != OK)
 		return ERR;
 
-	if(!host && (!playerset || !playerSetup.GetGroup() || playerSetup.GetGroup() != p->GetGroup() || player.IsGroupMaster()))
+	if(!s_theHost && (!s_playerset || !s_playerSetup.GetGroup() || s_playerSetup.GetGroup() != p->GetGroup() || s_player.IsGroupMaster()))
 		return ERR;
-	if(p->GetId() == player.GetId())
+	if(p->GetId() == s_player.GetId())
 		SetPlayerSetupPacket(p);
 	else {
 		Message message = Message(Message::SETPLAYERPACKET, p->GetBody(), p->GetSize());
-		if(Send(dp, &message, p->GetId()) != OK)
+		if(Send(s_dp, &message, p->GetId()) != OK)
 			return ERR;
 	}
 	return OK;
@@ -2589,97 +2526,97 @@ NETFunc::STATUS NETFunc::SetRemotePlayerPacket(PlayerSetup *p) {
 
 
 NETFunc::STATUS NETFunc::SetGameSetup(GameSetup *g) {
-	if(!host)
+	if(!s_theHost)
 		return ERR;
 	g->SetLaunched(false);
 	gameSetup = *g;
-	game = true;
-	launch = false;
-	launched = false;
-	canlaunch = !gameSetup.IsSyncLaunch();
-	setgame = true;
-	setgamepacket = true;
+	s_game = true;
+	s_launch = false;
+	s_launched = false;
+	s_canlaunch = !gameSetup.IsSyncLaunch();
+	s_setgame = true;
+	s_setgamepacket = true;
 
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetGameSetupPacket(GameSetup *g) {
 	gameSetup = *g;
-	setgamepacket = true;
-	if(status != OK)
+	s_setgamepacket = true;
+	if(s_status != OK)
 		return OK;
 	Message message = Message(Message::GAMEPACKET, g->GetBody(), g->GetSize());
-	if(Send(dp, &message, dp_ID_BROADCAST) != OK)
+	if(Send(s_dp, &message, dp_ID_BROADCAST) != OK)
 		return ERR;
-	setgamepacket = false;
+	s_setgamepacket = false;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::SetGameSetupSession(GameSetup *g) {
 	gameSetup = *g;
-	setgame = true;
+	s_setgame = true;
 	if(!gameSetup.IsSyncLaunch())
-		canlaunch = true;
-	if(status != OK)
+		s_canlaunch = true;
+	if(s_status != OK)
 		return OK;
-	if(dpSetSessionDesc(dp, &g->session, 0) != dp_RES_OK)
+	if(dpSetSessionDesc(s_dp, &g->m_session, 0) != dp_RES_OK)
 		return ERR;
-	Message *m = new Message(Message::GAMESESSION, &g->session, sizeof(dp_session_t));
+	Message *m = new Message(Message::GAMESESSION, &g->m_session, sizeof(dp_session_t));
 
 	PushMessage(m);
-	if(Send(dp, m, dp_ID_BROADCAST) != OK)
+	if(Send(s_dp, m, dp_ID_BROADCAST) != OK)
 		return ERR;
-	setgame = false;
+	s_setgame = false;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::InsertAIPlayer(AIPlayer *p) {
-	if(!aiPlayers)
+	if(!m_aiPlayers)
 		return ERR;
 	AIPlayer aip(*p);
-	aiPlayers->NextKey();
-	aip.key = aiPlayers->curkey;
+	m_aiPlayers->NextKey();
+	aip.m_key = m_aiPlayers->m_curkey;
 	Message *m = new Message(Message::ADDAIPLAYER, aip.GetBody(), aip.GetSize());
 	PushMessage(m);
-	if(Send(dp, m, dp_ID_BROADCAST) != OK)
+	if(Send(s_dp, m, dp_ID_BROADCAST) != OK)
 		return ERR;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::DeleteAIPlayer(AIPlayer *p) {
-	if(!aiPlayers)
+	if(!m_aiPlayers)
 		return ERR;
 	Message *m = new Message(Message::DELAIPLAYER, p->GetBody(), p->GetSize());
 	PushMessage(m);
-	if(Send(dp, m, dp_ID_BROADCAST) != OK)
+	if(Send(s_dp, m, dp_ID_BROADCAST) != OK)
 		return ERR;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::ChangeAIPlayer(AIPlayer *p) {
-	if(!aiPlayers)
+	if(!m_aiPlayers)
 		return ERR;
 	Message *m = new Message(Message::CHGAIPLAYER, p->GetBody(), p->GetSize());
 	PushMessage(m);
-	if(Send(dp, m, dp_ID_BROADCAST) != OK)
+	if(Send(s_dp, m, dp_ID_BROADCAST) != OK)
 		return ERR;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::Launch() {
-	if(!launch)
+	if(!s_launch)
 		SetReadyToLaunch(true);
 
 
-	launch = true;
-	if(status == OK && canlaunch && !launched) {
-		if(host) {
+	s_launch = true;
+	if(s_status == OK && s_canlaunch && !s_launched) {
+		if(s_theHost) {
 			gameSetup.SetLaunched(true);
 			if(gameSetup.IsSyncLaunch())
 				gameSetup.SetClosed(true);
 			SetGameSetupSession(&gameSetup);
 		}
-		launched = true;
+		s_launched = true;
 		PushMessage(new Message(Message::GAMELAUNCH));
 		return OK;
 	}
@@ -2689,16 +2626,16 @@ NETFunc::STATUS NETFunc::Launch() {
 NETFunc::STATUS NETFunc::UnLaunchAll() {
 	Message *m = new Message(Message::UNLAUNCH);
 	PushMessage(m);
-	if(NETFunc::Send(dp, m, dp_ID_BROADCAST) != OK)
+	if(NETFunc::Send(s_dp, m, dp_ID_BROADCAST) != OK)
 		return ERR;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::Login(char *username, char *password) {
-	if(status == LOGIN) {
-		if(userId != dp_UID_NONE || !strlen(username)) {
+	if(s_status == LOGIN) {
+		if(s_userId != dp_UID_NONE || !strlen(username)) {
 			PushMessage(new Message(Message::LOGINOK));
-		} else if(dpAccountLogin(dp, username, password) != dp_RES_OK)
+		} else if(dpAccountLogin(s_dp, username, password) != dp_RES_OK)
 			return ERR;
 		return OK;
 	}
@@ -2707,12 +2644,12 @@ NETFunc::STATUS NETFunc::Login(char *username, char *password) {
 
 NETFunc::STATUS NETFunc::SetServer(Server *s) {
 
-	if(status == PRECONNECT || status == LOGIN) {
-		if(dpSetGameServerEx(dp, s->GetName(), GameType) != dp_RES_OK)
+	if(s_status == PRECONNECT || s_status == LOGIN) {
+		if(dpSetGameServerEx(s_dp, s->GetName(), s_GameType) != dp_RES_OK)
 			return ERR;
-		status = LOGIN;
+		s_status = LOGIN;
 
-		strncpy(servername, s->GetName(), 64);
+		strncpy(s_servername, s->GetName(), 64);
 		return OK;
 	}
 	return ERR;
@@ -2720,9 +2657,9 @@ NETFunc::STATUS NETFunc::SetServer(Server *s) {
 
 bool NETFunc::NeedUpdate(void) {
 
-	if(status == LOGIN) {
-		result = dpGetAppVersion(dp, &appParam);
-		if(result == dp_RES_OK)
+	if(s_status == LOGIN) {
+		s_result = dpGetAppVersion(s_dp, &m_appParam);
+		if(s_result == dp_RES_OK)
 			return true;
 	}
 	return false;
@@ -2730,9 +2667,9 @@ bool NETFunc::NeedUpdate(void) {
 
 NETFunc::STATUS NETFunc::DoUpdate(void) {
 
-	if(status == LOGIN) {
+	if(s_status == LOGIN) {
 
-		if(appParam.name) {
+		if(m_appParam.name) {
 			Quit();
 
 			while(GetStatus() != NETFunc::START) {
@@ -2741,10 +2678,10 @@ NETFunc::STATUS NETFunc::DoUpdate(void) {
 					delete m;
 			}
 
-			result = dpDownloadUpdate(dp, &appParam);
-			if(result == dp_RES_OK)
+			s_result = dpDownloadUpdate(s_dp, &m_appParam);
+			if(s_result == dp_RES_OK)
 				return BUSSY;
-			else if(result == dp_RES_EMPTY)
+			else if(s_result == dp_RES_EMPTY)
 				return OK;
 		}
 	}
@@ -2752,15 +2689,15 @@ NETFunc::STATUS NETFunc::DoUpdate(void) {
 }
 
 void NETFunc::SetHost(bool h) {
-	host = h;
+	s_theHost = h;
 }
 
 bool NETFunc::GotGameSetup() {
-	return gotgame && gotgamepacket;
+	return s_gotgame && s_gotgamepacket;
 }
 
 bool NETFunc::IsHost() {
-	return host;
+	return s_theHost;
 
 
 
@@ -2772,46 +2709,46 @@ bool NETFunc::IsHost() {
 }
 
 bool NETFunc::IsHostile(Key *s) {
-	return hostiles.Check(s);
+	return s_hostiles.Check(s);
 }
 
 bool NETFunc::IsMuted(Key *p) {
-	return mutes.Check(p);
+	return s_mutes.Check(p);
 }
 
 void NETFunc::Mute(Key *p, bool m) {
 	KeyStruct keys[2];
-	keys[0].buf[0] = dp_KEY_PLAYERS;
-	memcpy(&keys[0].buf[1], &session.key.buf[0], session.key.len);
-	keys[0].len = session.key.len + 1;
-	memcpy(&keys[1], &p->key, sizeof(KeyStruct));
+	keys[0].m_buf[0] = dp_KEY_PLAYERS;
+	memcpy(&keys[0].m_buf[1], &m_session.m_key.m_buf[0], m_session.m_key.m_len);
+	keys[0].m_len = m_session.m_key.m_len + 1;
+	memcpy(&keys[1], &p->m_key, sizeof(KeyStruct));
 	if(m) {
-		if(mutes.Find(p) == mutes.end())
-			mutes.Add(new Key(*p));
+		if(s_mutes.Find(p) == s_mutes.end())
+			s_mutes.Add(new Key(*p));
 	} else
-		mutes.Del(p);
+		s_mutes.Del(p);
 
 	PushMessage(new Message(Message::UPDATE, &keys[0], (sizeof(KeyStruct)<<1)));
 }
 
 NETFunc::STATUS NETFunc::Connect() {
 
-	if(!playerset)
+	if(!s_playerset)
 		return ERR;
 
-	if(status == READY) {
+	if(s_status == READY) {
 
-		if(transport && transport->GetType() == Transport::INTERNET) {
-			timer.Start(1000);
-			status = WAITDELAY;
-			nextStatus = OPENLOBBY;
+		if(s_transport && s_transport->GetType() == Transport::INTERNET) {
+			m_timer.Start(1000);
+			s_status = WAITDELAY;
+			m_nextStatus = OPENLOBBY;
 
 		} else {
 			EnumSessions(false);
 			EnumSessions(true);
-			timer.Start(2000);
-			status = WAITDELAY;
-			nextStatus = OPENLOBBY;
+			m_timer.Start(2000);
+			s_status = WAITDELAY;
+			m_nextStatus = OPENLOBBY;
 		}
 		return OK;
 	}
@@ -2820,133 +2757,133 @@ NETFunc::STATUS NETFunc::Connect() {
 
 NETFunc::STATUS NETFunc::Connect(dp_t *d, PlayerStats *stats, bool h) {
 
-	dp = d;
+	s_dp = d;
 
-	connected = true;
+	s_connected = true;
 
-	host = h;
+	s_theHost = h;
 
-	strncpy(player.player.name, playername, dp_PNAMELEN);
-	strncpy(session.session.sessionName, sessionname, dp_SNAMELEN);
+	strncpy(s_player.m_player.name, s_playername, dp_PNAMELEN);
+	strncpy(m_session.m_session.sessionName, s_sessionname, dp_SNAMELEN);
 
 	if(stats) {
-		playerStats = new PlayerStats();
+		m_playerStats = new PlayerStats();
 
 		PlayerStats::iterator i;
 		for(i=stats->begin(); i!=stats->end(); i++)
 			PushMessage(new Message(Message::ADDPLAYERSTAT, (*i)->GetBody(), (*i)->GetSize()));
 	}
 
-	status = READY;
-	game = true;
-	launch = false;
-	launched = false;
-	canlaunch = false;
-	reconnected = true;
+	s_status = READY;
+	s_game = true;
+	s_launch = false;
+	s_launched = false;
+	s_canlaunch = false;
+	s_reconnected = true;
 
 	dp_transport_t t;
 	comm_driverInfo_t i;
 
-	dpGetCurrentTransportInfo(dp, &t, &i);
+	dpGetCurrentTransportInfo(s_dp, &t, &i);
 
 	KeyStruct k;
-	k.len = 0;
+	k.m_len = 0;
 
 	switch(GetTransportType(&i)) {
 	case Transport::INTERNET:
 		{
 			Internet internet = Internet(&i, &t, &k);
-			transport = new TransportSetup(&internet);
+			s_transport = new TransportSetup(&internet);
 		}
-		if(dpSetGameServerEx(dp, servername, GameType) != dp_RES_OK)
+		if(dpSetGameServerEx(s_dp, s_servername, s_GameType) != dp_RES_OK)
 			return ERR;
 	break;
 	case Transport::IPX:
 		{
 			IPX ipx = IPX(&i, &t, &k);
-			transport = new TransportSetup(&ipx);
+			s_transport = new TransportSetup(&ipx);
 		}
 	break;
 	case Transport::MODEM:
 		{
 			Modem modem = Modem(&i, &t, &k);
-			transport = new TransportSetup(&modem);
+			s_transport = new TransportSetup(&modem);
 		}
 	break;
 	case Transport::NULLMODEM:
 		{
 			NullModem nullModem = NullModem(&i, &t, &k);
-			transport = new TransportSetup(&nullModem);
+			s_transport = new TransportSetup(&nullModem);
 		}
 	break;
 	default:
 		{
 			Transport trans = Transport(&i, &t, &k);
-			transport = new TransportSetup(&trans);
+			s_transport = new TransportSetup(&trans);
 		}
 		break;
 	}
 
-	size = sizeof(dp_session_t);
+	s_size = sizeof(dp_session_t);
 
-	if(dpGetSessionDesc(dp, &session.session, &size) != dp_RES_OK)
+	if(dpGetSessionDesc(s_dp, &m_session.m_session, &s_size) != dp_RES_OK)
 		return ERR;
 
-	session.SetKey();
+	m_session.SetKey();
 
-	EnumPlayers(false, session.GetKey());
-	EnumPlayers(true, session.GetKey());
+	EnumPlayers(false, m_session.GetKey());
+	EnumPlayers(true, m_session.GetKey());
 
 	dp_caps_t info;
-	result = dpGetCaps(dp, &info, 0);
-	if(result != dp_RES_OK)
+	s_result = dpGetCaps(s_dp, &info, 0);
+	if(s_result != dp_RES_OK)
 		return ERR;
 
-#ifdef USE_SDL
-	threadHandle = SDL_CreateThread(ReConnectThread, "Reconnect-thread", (void *) &reconnected);
+#ifdef __AUI_USE_SDL__
+	m_threadHandle = SDL_CreateThread(ReConnectThread, "Reconnect-thread", (void *) &s_reconnected);
 #else
-	threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&reconnected, 0, &threadId);
+	m_threadHandle = CreateThread(0, 0, ReConnectThread, (void *)&s_reconnected, 0, &m_threadId);
 #endif
 
-	return (threadHandle) ? OK : ERR;
+	return (m_threadHandle) ? OK : ERR;
 }
 
 void NETFunc::ReConnect(void) {
-	if(!reconnected) {
-		reconnected = true;
-#ifdef USE_SDL
-		SDL_WaitThread(threadHandle, NULL);
+	if(!s_reconnected) {
+		s_reconnected = true;
+#ifdef __AUI_USE_SDL__
+		SDL_WaitThread(m_threadHandle, NULL);
 #else
 		DWORD dw;
 
 		do
-			GetExitCodeThread(threadHandle, &dw);
+			GetExitCodeThread(m_threadHandle, &dw);
 		while(dw == STILL_ACTIVE);
 
-		CloseHandle(threadHandle);
+		CloseHandle(m_threadHandle);
 #endif
-		threadHandle = 0;
-		dpSetActiveThread(dp);
+		m_threadHandle = 0;
+		dpSetActiveThread(s_dp);
 	}
 }
 
 NETFunc::STATUS NETFunc::Reset() {
 
-	if(!playerset)
+	if(!s_playerset)
 		return ERR;
-	status = READY;
+	s_status = READY;
 	messages.clear();
 
 
 	return OK;
 }
 
-NETFunc::STATUS NETFunc::Join(Game *g, char *password) {
+NETFunc::STATUS NETFunc::Join(Game *g, const char *password) {
 
 	if(g->IsCurrentSession())
 		return ERR;
 
-	if(status == OK) {
+	if(s_status == OK) {
 
 		if(strlen(g->GetPassword()) != strlen(password) || strncmp(g->GetPassword(), password, dp_SNAMELEN)) {
 
@@ -2955,15 +2892,15 @@ NETFunc::STATUS NETFunc::Join(Game *g, char *password) {
 		} else if(g->GetFree() && !g->IsClosed() && !g->IsHostile()) {
 			Close();
 			*(Game *)&gameSetup = *g;
-			host = false;
-			game = true;
-			launch = false;
-			launched = false;
-			canlaunch = false;
-			gotgame = false;
-			gotgamepacket = false;
-			session= *(Session *)g;
-			nextStatus = OPENSESSION;
+			s_theHost = false;
+			s_game = true;
+			s_launch = false;
+			s_launched = false;
+			s_canlaunch = false;
+			s_gotgame = false;
+			s_gotgamepacket = false;
+			m_session= *(Session *)g;
+			m_nextStatus = OPENSESSION;
 			return OK;
 		} else
 			return ERR;
@@ -2976,13 +2913,13 @@ NETFunc::STATUS NETFunc::Join(Lobby *l) {
 	if(l->IsCurrentSession())
 		return ERR;
 
-	if(status == OK) {
+	if(s_status == OK) {
 
 		if(l->GetFree()) {
 			Close();
-			game = false;
-			session = *(Session *)l;
-			nextStatus = OPENSESSION;
+			s_game = false;
+			m_session = *(Session *)l;
+			m_nextStatus = OPENSESSION;
 			return OK;
 		} else
 			return ERR;
@@ -2991,84 +2928,84 @@ NETFunc::STATUS NETFunc::Join(Lobby *l) {
 }
 
 NETFunc::STATUS NETFunc::Create(GameSetup *g) {
-	if(!playerset)
+	if(!s_playerset)
 		return ERR;
 
-	if(status == OK) {
+	if(s_status == OK) {
 		Close();
 		g->SetLaunched(false);
 		gameSetup = *g;
-		host = true;
-		game = true;
-		launch = false;
-		launched = false;
-		canlaunch = !gameSetup.IsSyncLaunch();
-		gotgame = true;
-		gotgamepacket = true;
-		setgame = false;
-		setgamepacket = false;
+		s_theHost = true;
+		s_game = true;
+		s_launch = false;
+		s_launched = false;
+		s_canlaunch = !gameSetup.IsSyncLaunch();
+		s_gotgame = true;
+		s_gotgamepacket = true;
+		s_setgame = false;
+		s_setgamepacket = false;
 
-		session = *(Session *)g;
-		session.session.flags = dp_SESSION_FLAGS_CREATESESSION | dp_SESSION_FLAGS_ENABLE_PLAYERVARS;
-		nextStatus = OPENSESSION;
+		m_session = *(Session *)g;
+		m_session.m_session.flags = dp_SESSION_FLAGS_CREATESESSION | dp_SESSION_FLAGS_ENABLE_PLAYERVARS;
+		m_nextStatus = OPENSESSION;
 		return OK;
 	}
 	return BUSSY;
 }
 
 NETFunc::STATUS NETFunc::Leave(void) {
-	game = false;
-	host = false;
-	launch = false;
-	launched = false;
-	canlaunch = false;
-	SetPlayerSetup(&playerSetup);
+	s_game = false;
+	s_theHost = false;
+	s_launch = false;
+	s_launched = false;
+	s_canlaunch = false;
+	SetPlayerSetup(&s_playerSetup);
 	Close();
-	nextStatus = OPENLOBBY;
+	m_nextStatus = OPENLOBBY;
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::Disconnect(void) {
-	if(status == WAITCLOSE)
+	if(s_status == WAITCLOSE)
 		return ERR;
-	if(status != START)
-	if((status == READY && transport && transport->GetType() == Transport::INTERNET)) {
-		userId = dp_UID_NONE;
+	if(s_status != START)
+	if((s_status == READY && s_transport && s_transport->GetType() == Transport::INTERNET)) {
+		s_userId = dp_UID_NONE;
 		EnumServers(true);
 
-		timer.Start(1000);
-		status = WAITDELAY;
-		nextStatus = PRECONNECT;
-	} else if(status == PRECONNECT || status == LOGIN) {
+		m_timer.Start(1000);
+		s_status = WAITDELAY;
+		m_nextStatus = PRECONNECT;
+	} else if(s_status == PRECONNECT || s_status == LOGIN) {
 		EnumServers(false);
-		dpSetGameServerEx(dp, 0, GameType);
-		status = QUIT;
-	} else if(status == READY) {
-		status = QUIT;
-	} else if(status == WAITDELAY && nextStatus == PRECONNECT) {
+		dpSetGameServerEx(s_dp, 0, s_GameType);
+		s_status = QUIT;
+	} else if(s_status == READY) {
+		s_status = QUIT;
+	} else if(s_status == WAITDELAY && m_nextStatus == PRECONNECT) {
 		return BUSSY;
 	} else {
 		EnumSessions(false);
 		Close();
-		nextStatus = READY;
+		m_nextStatus = READY;
 	}
 	return OK;
 }
 
 NETFunc::STATUS NETFunc::Quit(void) {
-	if(status == START)
+	if(s_status == START)
 		return OK;
-	if(status == PRECONNECT || status == READY || status == LOGIN)
-		if(transport && transport->GetType() == Transport::INTERNET) {
-			dpSetGameServerEx(dp, 0, GameType);
-			timer.Start(1500);
-			status = WAITDELAY;
-			nextStatus = QUIT;
+	if(s_status == PRECONNECT || s_status == READY || s_status == LOGIN)
+		if(s_transport && s_transport->GetType() == Transport::INTERNET) {
+			dpSetGameServerEx(s_dp, 0, s_GameType);
+			m_timer.Start(1500);
+			s_status = WAITDELAY;
+			m_nextStatus = QUIT;
 		} else
-			status = QUIT;
+			s_status = QUIT;
 	else {
 		Close();
-		nextStatus = QUIT;
+		m_nextStatus = QUIT;
 	}
 	return OK;
 }
@@ -3080,24 +3017,24 @@ NETFunc::STATUS NETFunc::Send(dp_t *p, Message *m, dpid_t id, dpid_t from, bool 
 		return ERR;
 	memcpy(buf, m->Get(), m->GetSize());
 	if(from == dp_ID_BROADCAST)
-		from = player.GetId();
+		from = s_player.GetId();
 	return dpSend(p, from, id, r ? dp_SEND_RELIABLE : 0, buf, m->GetSize()) == dp_RES_OK ? OK : ERR;
 }
 
 bool NETFunc::Handle(Message *m) {
-	if(aiPlayers)
-		aiPlayers->Handle(m);
-	if(playerStats)
-		playerStats->Handle(m);
+	if(m_aiPlayers)
+		m_aiPlayers->Handle(m);
+	if(m_playerStats)
+		m_playerStats->Handle(m);
 	gameSetup.Handle(m);
 	players.Handle(m);
 
-	if(host && game) {
-		gameSetup.Handle(dp, m);
-		if(aiPlayers)
-			aiPlayers->Handle(dp, m);
-		if(playerStats)
-			playerStats->Handle(dp, m);
+	if(s_theHost && s_game) {
+		gameSetup.Handle(s_dp, m);
+		if(m_aiPlayers)
+			m_aiPlayers->Handle(s_dp, m);
+		if(m_playerStats)
+			m_playerStats->Handle(s_dp, m);
 
 		if(m->GetCode() == dp_OBJECTDELTA_PACKET_ID) {
 			dp_objectDelta_packet_t *p = (dp_objectDelta_packet_t *)m->GetBody();
@@ -3105,13 +3042,13 @@ bool NETFunc::Handle(Message *m) {
 				Player t = Player(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
 				if(p->flags & dp_OBJECTDELTA_FLAG_INOPENSESS) {
 					if(p->status == dp_RES_DELETED || p->status == dp_RES_CREATED) {
-						gameSetup.SetGroups(players.size() + (aiPlayers ? aiPlayers->size() : 0));
+						gameSetup.SetGroups(static_cast<char>(players.size() + (m_aiPlayers ? m_aiPlayers->size() : 0)));
 						SetGameSetupSession(&gameSetup);
 					}
 				}
 			}
 		} else if(m->GetCode() == Message::ADDAIPLAYER || m->GetCode() == Message::CHGAIPLAYER || m->GetCode() == Message::DELAIPLAYER) {
-			gameSetup.SetGroups(players.size() + (aiPlayers ? aiPlayers->size() : 0));
+			gameSetup.SetGroups(static_cast<char>(players.size() + (m_aiPlayers ? m_aiPlayers->size() : 0)));
 			SetGameSetupSession(&gameSetup);
 		}
 
@@ -3119,8 +3056,8 @@ bool NETFunc::Handle(Message *m) {
 
 	if(m->GetCode() == dp_ACCOUNT_PACKET_ID) {
 		dp_account_packet_t *p = (dp_account_packet_t *)m->GetBody();
-		userId = p->uid;
-		if(p->reason == dp_RES_OK && status == LOGIN) {
+		s_userId = p->uid;
+		if(p->reason == dp_RES_OK && s_status == LOGIN) {
 			PushMessage(new Message(Message::LOGINOK));
 		} else {
 			PushMessage(new Message(Message::LOGINERR));
@@ -3128,48 +3065,48 @@ bool NETFunc::Handle(Message *m) {
 		return true;
 	} else if(m->GetCode() == Message::LOGINOK) {
 		EnumServers(false);
-		status = READY;
+		s_status = READY;
 		return true;
 	} else if(m->GetCode() == Message::PLAYERENTER) {
 		dp_playerId_t *p = (dp_playerId_t *)m->GetBody();
 		Message message = Message(Message::PINGBACK);
-		Send(dp, &message, p->id);
+		Send(s_dp, &message, p->id);
 		return true;
 	}
 	else if(m->GetCode() == Message::RESET) {
-		if(((KeyStruct *)m->GetBody())->buf[0] == dp_KEY_SESSIONS)
-			lobbies.Clr();
+		if(((KeyStruct *)m->GetBody())->m_buf[0] == dp_KEY_SESSIONS)
+			s_lobbies.Clr();
 		return true;
 	} else if(m->GetCode() == dp_USER_HOST_PACKET_ID) {
-		host = true;
+		s_theHost = true;
 		if(!gameSetup.IsSyncLaunch())
-			canlaunch = true;
+			s_canlaunch = true;
 		PushMessage(new Message(Message::GAMEHOST));
 		return true;
 	} else if(m->GetCode() == Message::UNLAUNCH) {
-		launch = false;
-		launched = false;
-		playerSetup.SetReadyToLaunch(false);
-		SetPlayerSetupPlayer(&playerSetup);
+		s_launch = false;
+		s_launched = false;
+		s_playerSetup.SetReadyToLaunch(false);
+		SetPlayerSetupPlayer(&s_playerSetup);
 		return true;
 	} else if(m->GetCode() == dp_SESSIONLOST_PACKET_ID) {
-		status = CLOSE;
-		nextStatus = OPENLOBBY;
+		s_status = CLOSE;
+		m_nextStatus = OPENLOBBY;
 
 		PushMessage(new Message(Message::SESSIONERR));
 		return true;
 	} else if(m->GetCode() == Message::GAMESESSION || m->GetCode() == Message::GAMEPACKET) {
 		if(gameSetup.IsLaunched() && GotGameSetup())
-			canlaunch = true;
+			s_canlaunch = true;
 		return true;
 	} else if(m->GetCode() == Message::SETPLAYERRECORD) {
-		playerSetup.Player::Set((dp_playerId_t *)m->GetBody());
-		player.Set((dp_playerId_t *)m->GetBody());
-		SetPlayerSetupPlayer(&playerSetup);
+		s_playerSetup.Player::Set((dp_playerId_t *)m->GetBody());
+		s_player.Set((dp_playerId_t *)m->GetBody());
+		SetPlayerSetupPlayer(&s_playerSetup);
 		return true;
 	} else if(m->GetCode() == Message::SETPLAYERPACKET) {
-		playerSetup.Packet::Set(m->GetBodySize(), m->GetBody());
-		SetPlayerSetupPacket(&playerSetup);
+		s_playerSetup.Packet::Set(m->GetBodySize(), m->GetBody());
+		SetPlayerSetupPacket(&s_playerSetup);
 		return true;
 	} else if(m->GetCode() == Message::KICKED) {
 
@@ -3186,38 +3123,38 @@ bool NETFunc::Handle(Message *m) {
 		if(p->key[0] == dp_KEY_SESSIONS) {
 			Session s = Session(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
 
-			if(s.session.sessionType == GameType)
+			if(s.m_session.sessionType == s_GameType)
 			if(s.IsLobby()) {
-				*(Message::CODE *)(m->body) = Message::LOBBYDELTAPACKET;
+				*(Message::CODE *)(m->m_body) = Message::LOBBYDELTAPACKET;
 				Lobby l(&p->data, (KeyStruct *)&p->subkeylen, p->flags);
 				switch(p->status) {
 
 				case dp_RES_CREATED:
-					lobbies.Add(new Lobby(l));
+					s_lobbies.Add(new Lobby(l));
 					break;
 
 				case dp_RES_DELETED:
-					lobbies.Del(&l);
+					s_lobbies.Del(&l);
 					break;
 
 				case dp_RES_CHANGED:
-					lobbies.Chg(&l);
+					s_lobbies.Chg(&l);
 					break;
 				default:
 					break;
 				}
 			} else
-				*(Message::CODE *)(m->body) = Message::GAMEDELTAPACKET;
+				*(Message::CODE *)(m->m_body) = Message::GAMEDELTAPACKET;
 
-			if( ( s.Equals(&session) || s.IsCurrentSession() )
+			if( ( s.Equals(&m_session) || s.IsCurrentSession() )
 				&& (p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED)) {
-				if((session.session.flags & dp_OBJECTDELTA_FLAG_INOPENSESS) == 0) {
+				if((m_session.m_session.flags & dp_OBJECTDELTA_FLAG_INOPENSESS) == 0) {
 					p->flags |= dp_OBJECTDELTA_FLAG_INOPENSESS;
-					mutes.Clr();
+					s_mutes.Clr();
 					players.Clr();
 				}
-				s.flags |= dp_OBJECTDELTA_FLAG_INOPENSESS;
-				session = s;
+				s.m_flags |= dp_OBJECTDELTA_FLAG_INOPENSESS;
+				m_session = s;
 			}
 			return true;
 		} else if(p->key[0] == dp_KEY_PLAYERS) {
@@ -3237,26 +3174,26 @@ bool NETFunc::Handle(Message *m) {
 
 				} else if(p->status == dp_RES_CREATED || p->status == dp_RES_CHANGED) {
 
-					player = t;
-					if(status == READY) {
-						status = OK;
+					s_player = t;
+					if(s_status == READY) {
+						s_status = OK;
 
-						PushMessage(new Message(Message::ENTERGAME, session.GetKey(), sizeof(KeyStruct)));
+						PushMessage(new Message(Message::ENTERGAME, m_session.GetKey(), sizeof(KeyStruct)));
 					}
 					if(p->status == dp_RES_CREATED) {
-						Message message = Message(Message::PLAYERENTER, &player.player, sizeof(dp_playerId_t));
-						Send(dp, &message, dp_ID_BROADCAST);
+						Message message = Message(Message::PLAYERENTER, &s_player.m_player, sizeof(dp_playerId_t));
+						Send(s_dp, &message, dp_ID_BROADCAST);
 					}
 				}
 			}
 
 			if(p->flags & dp_OBJECTDELTA_FLAG_INOPENSESS) {
 				if(p->status == dp_RES_DELETED)
-					mutes.Del(&t);
+					s_mutes.Del(&t);
 
-				if(host && gameSetup.IsSyncLaunch()) {
+				if(s_theHost && gameSetup.IsSyncLaunch()) {
 
-					canlaunch = players.ReadyToLaunch() && GotGameSetup() &&
+					s_canlaunch = players.ReadyToLaunch() && GotGameSetup() &&
 						!(t.IsHost() && p->status == dp_RES_DELETED);
 				}
 				return true;
@@ -3267,149 +3204,154 @@ bool NETFunc::Handle(Message *m) {
 }
 
 void NETFunc::Execute(void) {
-	switch(status) {
+	switch(s_status) {
 	case CONNECT:
-#ifdef USE_SDL
+#ifdef __AUI_USE_SDL__
 		int dw;
 		// This is ugly, but there is no other way in SDL
 		// to determine if a thread is running
-		SDL_WaitThread(threadHandle, &dw);
+		// SDL3 has a better function for that
+		SDL_WaitThread(m_threadHandle, &dw);
+
+			m_threadHandle = NULL;
+			if (dw > 0) {
 #else
 		DWORD dw;
 
-		GetExitCodeThread(threadHandle, &dw);
+		GetExitCodeThread(m_threadHandle, &dw);
 		if(dw != STILL_ACTIVE) {
-			CloseHandle(threadHandle);
+			CloseHandle(m_threadHandle);
+
+			m_threadHandle = NULL;
+			if (dw) {
 #endif
-			threadHandle = 0;
-			if(dw) {
-				status = START;
+				s_status = START;
 
 				PushMessage(new Message(Message::NETWORKERR));
 			} else {
 
-				dpSetActiveThread(dp);
-				connected = true;
-				status = nextStatus;
-				if(status == PRECONNECT)
+				dpSetActiveThread(s_dp);
+				s_connected = true;
+				s_status = m_nextStatus;
+				if(s_status == PRECONNECT)
 					EnumServers(true);
 			}
-#ifndef USE_SDL
+#ifndef __AUI_USE_SDL__
 		}
 #endif
 		break;
 	case OK:
-		if(!session.IsServer() && session.IsLobby() && session.GetPlayers() == 1) {
+		if(!m_session.IsServer() && m_session.IsLobby() && m_session.GetPlayers() == 1) {
 
-			Lobby *l = lobbies.FindBest();
+			Lobby *l = s_lobbies.FindBest();
 			if(l) {
 
-				if(!session.Equals(l)) {
+				if(!m_session.Equals(l)) {
 
-					status = CLOSE;
-					nextStatus = OPENSESSION;
-					session.session = l->session;
+					s_status = CLOSE;
+					m_nextStatus = OPENSESSION;
+					m_session.m_session = l->m_session;
 				}
 			}
 		}
-		if(game) {
-			if(host) {
+		if(s_game) {
+			if(s_theHost) {
 
-				if(setgame)
+				if(s_setgame)
 					SetGameSetupSession(&gameSetup);
 
-				if(setgamepacket)
+				if(s_setgamepacket)
 					SetGameSetupPacket(&gameSetup);
 			}
 
-			if(!launched && launch && canlaunch) {
+			if(!s_launched && s_launch && s_canlaunch) {
 				Launch();
 			}
 		}
-		if(playerset) {
-			if(setplayer)
-				SetPlayerSetupPlayer(&playerSetup);
-			if(setplayerpacket)
-				SetPlayerSetupPacket(&playerSetup);
+		if(s_playerset) {
+			if(s_setplayer)
+				SetPlayerSetupPlayer(&s_playerSetup);
+			if(s_setplayerpacket)
+				SetPlayerSetupPacket(&s_playerSetup);
 		}
 		break;
 	case OPENLOBBY:
-		if(timeout.Finished() || retries == 0) {
+		if(m_timeout.Finished() || m_retries == 0) {
 			PushMessage(new Message(Message::NETWORKERR));
-			status = READY;
+			s_status = READY;
 			break;
 		} else
-			retries--;
-		status = JOINLOBBY;
+			m_retries--;
+		s_status = JOINLOBBY;
 
-		if(transport && transport->GetType() == Transport::INTERNET) {
-			dpSetGameServerEx(dp, servername, GameType);
-			if(dpOpen(dp, 0, SessionCallBack, this) != dp_RES_OK)
-				status = OPENLOBBY;
+		if(s_transport && s_transport->GetType() == Transport::INTERNET) {
+			dpSetGameServerEx(s_dp, s_servername, s_GameType);
+			if(dpOpen(s_dp, 0, SessionCallBack, this) != dp_RES_OK)
+				s_status = OPENLOBBY;
 		} else {
 
-			Lobby *l = lobbies.FindBest();
+			Lobby *l = s_lobbies.FindBest();
 			if(l) {
 
-				if(dpOpen(dp, &l->session, SessionCallBack, this) != dp_RES_OK) {
+				if(dpOpen(s_dp, &l->m_session, SessionCallBack, this) != dp_RES_OK) {
 					l->SetBad();
-					lobbies.Chg(l);
-					status = OPENLOBBY;
+					s_lobbies.Chg(l);
+					s_status = OPENLOBBY;
 				} else
-					session.session = l->session;
+					m_session.m_session = l->m_session;
 			} else
 
-				if(dpOpen(dp, &lobby.session, SessionCallBack, this) != dp_RES_OK)
-					status = OPENLOBBY;
+				if(dpOpen(s_dp, &s_lobby.m_session, SessionCallBack, this) != dp_RES_OK)
+					s_status = OPENLOBBY;
 		}
 		break;
 	case OPENSESSION:
-		status = JOINSESSION;
-		if(dpOpen(dp, &session.session, SessionCallBack, this) != dp_RES_OK) {
-			status = OPENLOBBY;
+		s_status = JOINSESSION;
+		if(dpOpen(s_dp, &m_session.m_session, SessionCallBack, this) != dp_RES_OK) {
+			s_status = OPENLOBBY;
 
 			PushMessage(new Message(Message::SESSIONERR));
 		}
 		break;
 	case CREATEPLAYER:
 
-		setplayerpacket = true;
-		setplayer = true;
-		if(dpCreatePlayer(dp, PlayerCallBack, this, playerSetup.GetName()) != dp_RES_OK) {
-			status = CLOSE;
-			nextStatus = OPENLOBBY;
+		s_setplayerpacket = true;
+		s_setplayer = true;
+		if(dpCreatePlayer(s_dp, PlayerCallBack, this, s_playerSetup.GetName()) != dp_RES_OK) {
+			s_status = CLOSE;
+			m_nextStatus = OPENLOBBY;
 
 			PushMessage(new Message(Message::SESSIONERR));
-		} else if(status == CREATEPLAYER)
-			status = BUSSY;
+		} else if(s_status == CREATEPLAYER)
+			s_status = BUSSY;
 		break;
 	case CLOSE:
-		dpClose(dp);
-		timer.Start(8000);
-		status = WAITCLOSE;
+		dpClose(s_dp);
+		m_timer.Start(8000);
+		s_status = WAITCLOSE;
 	case WAITCLOSE:
-		if(dpReadyToFreeze(dp) == dp_RES_OK || timer.Finished()) {
-			if(nextStatus != READY && nextStatus != OPENLOBBY && nextStatus != OPENSESSION && transport && transport->GetType() == Transport::INTERNET)
-				dpSetGameServerEx(dp, 0, GameType);
-			timer.Start(2000);
-			status = WAITDELAY;
+		if(dpReadyToFreeze(s_dp) == dp_RES_OK || m_timer.Finished()) {
+			if(m_nextStatus != READY && m_nextStatus != OPENLOBBY && m_nextStatus != OPENSESSION && s_transport && s_transport->GetType() == Transport::INTERNET)
+				dpSetGameServerEx(s_dp, 0, s_GameType);
+			m_timer.Start(2000);
+			s_status = WAITDELAY;
 		}
 		break;
 	case WAITDELAY:
-		if(timer.Finished()) {
-			status = nextStatus;
-			if(status == OPENLOBBY) {
-				lobbies.Reset();
-				timeout.Start(60000);
-				retries = 6;
+		if(m_timer.Finished()) {
+			s_status = m_nextStatus;
+			if(s_status == OPENLOBBY) {
+				s_lobbies.Reset();
+				m_timeout.Start(60000);
+				m_retries = 6;
 			}
 		}
-		if(status != START)
+		if(s_status != START)
 			break;
 	case QUIT:
-		dpDestroy(dp, 1);
-		connected = false;
-		status = START;
+		dpDestroy(s_dp, 1);
+		s_connected = false;
+		s_status = START;
 		break;
 	}
 }
@@ -3419,27 +3361,27 @@ NETFunc::SessionCallBack(dp_session_t *s, long *pTimeout, long flags, void *cont
 
 	if(s) {
 
-		((NETFunc *)context)->session.session = *s;
-		((NETFunc *)context)->session.SetKey();
-		((NETFunc *)context)->session.flags = 0;
+		((NETFunc *)context)->m_session.m_session = *s;
+		((NETFunc *)context)->m_session.SetKey();
+		((NETFunc *)context)->m_session.m_flags = 0;
 
-		strncpy(sessionname, s->sessionName, dp_SNAMELEN);
+		strncpy(s_sessionname, s->sessionName, dp_SNAMELEN);
 		EnumSessions(false);
-		if(((NETFunc *)context)->session.session.flags & dp_SESSION_FLAGS_ISLOBBY)
+		if(((NETFunc *)context)->m_session.m_session.flags & dp_SESSION_FLAGS_ISLOBBY)
 			EnumSessions(true);
 		dpSetPingIntervals( ((NETFunc *)context)->GetDP(), 5000, 5000 );
-		((NETFunc *)context)->status = CREATEPLAYER;
+		((NETFunc *)context)->s_status = CREATEPLAYER;
 	} else {
-		if((((NETFunc *)context)->session.session.flags & dp_SESSION_FLAGS_ISLOBBY)
-			&& ((NETFunc *)context)->transport
-			&& ((NETFunc *)context)->transport->GetType() != Transport::INTERNET) {
+		if((((NETFunc *)context)->m_session.m_session.flags & dp_SESSION_FLAGS_ISLOBBY)
+			&& ((NETFunc *)context)->s_transport
+			&& ((NETFunc *)context)->s_transport->GetType() != Transport::INTERNET) {
 
 			Lobby l;
-			session.session = l.session;
+			m_session.m_session = l.m_session;
 			l.SetBad();
-			((NETFunc *)context)->lobbies.Chg(&l);
+			((NETFunc *)context)->s_lobbies.Chg(&l);
 		}
-		((NETFunc *)context)->status = OPENLOBBY;
+		((NETFunc *)context)->s_status = OPENLOBBY;
 
 		PushMessage(new Message(Message::SESSIONERR));
 	}
@@ -3451,40 +3393,40 @@ NETFunc::PlayerCallBack(dpid_t id, dp_char_t *n, long flags, void *context) {
 
 	if(n) {
 
-		strcpy(((NETFunc *)context)->player.player.name, n);
-		((NETFunc *)context)->player.player.id = id;
-		((NETFunc *)context)->player.SetKey();
-		((NETFunc *)context)->status = OK;
+		strcpy(((NETFunc *)context)->s_player.m_player.name, n);
+		((NETFunc *)context)->s_player.m_player.id = id;
+		((NETFunc *)context)->s_player.SetKey();
+		((NETFunc *)context)->s_status = OK;
 
-		strncpy(playername, n, dp_PNAMELEN);
+		strncpy(s_playername, n, dp_PNAMELEN);
 
-		if(((NETFunc *)context)->session.IsLobby())
-			PushMessage(new Message(Message::ENTERLOBBY, ((NETFunc *)context)->session.GetKey(), sizeof(KeyStruct)));
+		if(((NETFunc *)context)->m_session.IsLobby())
+			PushMessage(new Message(Message::ENTERLOBBY, ((NETFunc *)context)->m_session.GetKey(), sizeof(KeyStruct)));
 		else
-			PushMessage(new Message(Message::ENTERGAME, ((NETFunc *)context)->session.GetKey(), sizeof(KeyStruct)));
+			PushMessage(new Message(Message::ENTERGAME, ((NETFunc *)context)->m_session.GetKey(), sizeof(KeyStruct)));
 	} else {
-		((NETFunc *)context)->status = CLOSE;
-		((NETFunc *)context)->nextStatus = OPENLOBBY;
+		((NETFunc *)context)->s_status = CLOSE;
+		((NETFunc *)context)->m_nextStatus = OPENLOBBY;
 
 		PushMessage(new Message(Message::SESSIONERR));
 	}
 }
 
 void NETFunc::CancelDial(void) {
-	cancelDial = 1;
+	s_cancelDial = 1;
 }
 
 NETFunc::STATUS NETFunc::Kick(Player *p) {
-	if(status == OK && p->IsInCurrentSession() && !p->IsMe())
-		if(player.IsHost()){
+	if(s_status == OK && p->IsInCurrentSession() && !p->IsMe())
+		if(s_player.IsHost()){
 			Message message = Message(Message::KICKED);
-			return Send(dp, &message, p->GetId(), player.GetId());
+			return Send(s_dp, &message, p->GetId(), s_player.GetId());
 		}
 
-		else if(player.IsGroupMaster() && player.GetGroup() == p->GetGroup())
+		else if(s_player.IsGroupMaster() && s_player.GetGroup() == p->GetGroup())
 		{
 			Message message = Message(Message::KICKED);
-			return Send(dp, &message, p->GetId(), player.GetId());
+			return Send(s_dp, &message, p->GetId(), s_player.GetId());
 		}
 	return ERR;
 }
@@ -3494,14 +3436,14 @@ NETFunc::STATUS NETFunc::Close(void) {
 
 
 
-		session = Session();
-		setplayer = true;
-		setplayerpacket = true;
+		m_session = Session();
+		s_setplayer = true;
+		s_setplayerpacket = true;
 
 
-		mutes.Clr();
+		s_mutes.Clr();
 		players.Clr();
-		status = CLOSE;
+		s_status = CLOSE;
 		return OK;
 
 }
@@ -3542,20 +3484,20 @@ bool NETFunc::HandleMessage(Message *m) {
 
 void NETFunc::Receive(void) {
 
-	size = 0;
-	source = dp_ID_NONE;
-	destination = dp_ID_NONE;
+	s_size = 0;
+	s_source = dp_ID_NONE;
+	s_destination = dp_ID_NONE;
 	Message *m;
-	if(connected) do {
+	if(s_connected) do {
 
-		size = dpio_MAXLEN_UNRELIABLE;
-		result = dpReceive(dp, &source, &destination, 0, buffer, &size);
-		switch (result) {
+		s_size = dpio_MAXLEN_UNRELIABLE;
+		s_result = dpReceive(s_dp, &s_source, &s_destination, 0, s_buffer, &s_size);
+		switch (s_result) {
 		case dp_RES_EMPTY:
 		break;
 		case dp_RES_OK:
 			m = 0;
-			m = new Message(buffer, size, source);
+			m = new Message(s_buffer, s_size, s_source);
 			if(m && ((char)m->GetCode() == dp_PACKET_INITIALBYTE || (char)m->GetCode() == nf_PACKET_INITIALBYTE || (char)m->GetCode() == ns_PACKET_INITIALBYTE) || m->GetCode() == Message::CHAT)
 				PushMessage(m);
 		break;
@@ -3571,14 +3513,14 @@ void NETFunc::Receive(void) {
 		case dp_RES_HOST_NOT_RESPONDING:
 			;
 			PushMessage(new Message(Message::NETWORKERR));
-			dpDestroy(dp, 1);
-			connected = false;
-			status = START;
+			dpDestroy(s_dp, 1);
+			s_connected = false;
+			s_status = START;
 			break;
 			default:
 			break;
 		}
-	} while(result == dp_RES_OK);
+	} while(s_result == dp_RES_OK);
 }
 
 NETFunc::Message *NETFunc::GetMessage(void) {
@@ -3609,62 +3551,62 @@ void NETFunc::PushMessage(Message *m) {
 	messages.Push(m);
 }
 
-dp_t *NETFunc::dp = 0;
+dp_t *NETFunc::s_dp = 0;
 
-dp_result_t	NETFunc::result = 0;
+dp_result_t	NETFunc::s_result = 0;
 
-char NETFunc::buffer[dpio_MAXLEN_UNRELIABLE] = "";
+char NETFunc::s_buffer[dpio_MAXLEN_UNRELIABLE] = "";
 
-size_t NETFunc::size = 0;
+size_t NETFunc::s_size = 0;
 
-dpid_t NETFunc::source = 0;
+dpid_t NETFunc::s_source = 0;
 
-NETFunc::STATUS NETFunc::status = RESET;
+NETFunc::STATUS NETFunc::s_status = RESET;
 
-dpid_t NETFunc::destination = 0;
+dpid_t NETFunc::s_destination = 0;
 
-dp_species_t NETFunc::GameType = 0;
+dp_species_t NETFunc::s_GameType = 0;
 
-char *NETFunc::LobbyName = "Lobby";
+char *NETFunc::s_LobbyName = "Lobby";
 
-char *NETFunc::DllPath = "anet";
+char *NETFunc::s_DllPath = "anet";
 
-int NETFunc::PlayerSetupPacketKey = 0;
+int NETFunc::s_PlayerSetupPacketKey = 0;
 
-long NETFunc::cancelDial = 0;
+long NETFunc::s_cancelDial = 0;
 
-bool NETFunc::connected = false;
+bool NETFunc::s_connected = false;
 
-bool NETFunc::reconnected = true;
+bool NETFunc::s_reconnected = true;
 
-NETFunc::PlayerSetup NETFunc::playerSetup = NETFunc::PlayerSetup();
+NETFunc::PlayerSetup NETFunc::s_playerSetup = NETFunc::PlayerSetup();
 
-bool NETFunc::playerset = false;
+bool NETFunc::s_playerset = false;
 
-bool NETFunc::setplayerpacket = false;
+bool NETFunc::s_setplayerpacket = false;
 
-bool NETFunc::setplayer = false;
+bool NETFunc::s_setplayer = false;
 
 NETFunc::GameSetup NETFunc::gameSetup = NETFunc::GameSetup();
 
-bool NETFunc::game = false;
+bool NETFunc::s_game = false;
 
-bool NETFunc::host = false;
+bool NETFunc::s_theHost = false;
 
-bool NETFunc::launch = false;
+bool NETFunc::s_launch = false;
 
-bool NETFunc::launched = false;
+bool NETFunc::s_launched = false;
 
-bool NETFunc::canlaunch = false;
+bool NETFunc::s_canlaunch = false;
 
-bool NETFunc::setgamepacket = false;
+bool NETFunc::s_setgamepacket = false;
 
-bool NETFunc::setgame = false;
+bool NETFunc::s_setgame = false;
 
-bool NETFunc::gotgamepacket = false;
+bool NETFunc::s_gotgamepacket = false;
 
-bool NETFunc::gotgame = false;
+bool NETFunc::s_gotgame = false;
 
-char NETFunc::servername[64] = "";
-char NETFunc::playername[dp_PNAMELEN] = "";
-char NETFunc::sessionname[dp_SNAMELEN] = "";
+char NETFunc::s_servername[64] = "";
+char NETFunc::s_playername[dp_PNAMELEN] = "";
+char NETFunc::s_sessionname[dp_SNAMELEN] = "";

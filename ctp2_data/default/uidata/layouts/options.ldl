@@ -52,12 +52,9 @@ OptionsWindow {
 
 	string	yanchor		"center"
 
-#	int	widthpix	247
-#	int	heightpix	240
-
 	int	widthpix	380
 
-	int	heightpix	365
+	int	heightpix	410
 
 
 	Name:CTP_GREY_TITLE_FONT {
@@ -139,6 +136,14 @@ OptionsWindow {
 		string	text	"str_ldl_KEYBOARD"
 	}
 
+	LanguageButton:OPTIONS_BUTTON  {
+
+		int		xpix		28
+
+		int		ypix		290
+
+		string	text	"str_ldl_LANGUAGE"
+	}
 
 	GameHeader:CTP2_STANDARD_FONT {
 
@@ -155,7 +160,6 @@ OptionsWindow {
 
 		string	text	"str_ldl_Game_Header"
 
-#		string	pattern	"error.tga"
 		string	pattern	"uptg20e.tga"
 	}
 
@@ -202,7 +206,7 @@ OptionsWindow {
 
 		string 	xanchor	"center"
 
-		int		ypix		295
+		int		ypix		340
 
 		string	text	"str_ldl_CHEAT_MODE"
 	}

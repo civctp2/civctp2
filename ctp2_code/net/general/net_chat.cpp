@@ -99,9 +99,9 @@ NetChat::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	}
 	if(m_destmask & ((uint32)1 << (uint32)g_network.GetPlayerIndex())) {
 		if(m_destmask == ((uint32)1 << (uint32)g_network.GetPlayerIndex())) {
-			g_network.AddChatText(m_str, (sint32)m_len, m_from, TRUE);
+			g_network.AddChatText(m_str, m_from, TRUE);
 		} else {
-			g_network.AddChatText(m_str, (sint32)m_len, m_from, FALSE);
+			g_network.AddChatText(m_str, m_from, FALSE);
 		}
 	}
 }

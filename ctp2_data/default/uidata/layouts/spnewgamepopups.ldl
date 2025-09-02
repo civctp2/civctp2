@@ -693,9 +693,20 @@ SPNewGameRulesScreen {
 		}
 	}
 
+	AlienEndGame:GAMEPLAY_CHECKBOX {
+		int	ypix	80
+		int	xpix	30 #emod
+		int	widthpix	275
+
+		stringtable {
+			string	string0	"str_tbl_ldl_AlienLife_Off"
+			string	string1	"str_tbl_ldl_AlienLife_On"
+		}
+	}
+
 #EMOD
 	Upgrade:GAMEPLAY_CHECKBOX {
-		int	ypix	80
+		int	ypix	110
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -706,7 +717,7 @@ SPNewGameRulesScreen {
 	}
 
 	NonRandomCivs:GAMEPLAY_CHECKBOX {
-		int	ypix	110
+		int	ypix	140
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -717,7 +728,7 @@ SPNewGameRulesScreen {
 	}
 
 	CityCapture:GAMEPLAY_CHECKBOX {
-		int	ypix	140
+		int	ypix	170
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -728,7 +739,7 @@ SPNewGameRulesScreen {
 	}
 
 	RevoltInsurgents:GAMEPLAY_CHECKBOX {
-		int	ypix	170
+		int	ypix	200
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -739,7 +750,7 @@ SPNewGameRulesScreen {
 	}
 
 	BarbSpawn:GAMEPLAY_CHECKBOX {
-		int	ypix	200
+		int	ypix	230
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -750,7 +761,7 @@ SPNewGameRulesScreen {
 	}
 
 	CityGold:GAMEPLAY_CHECKBOX {
-		int	ypix	230
+		int	ypix	260
 		int	xpix	30 #emod
 		int	widthpix	275
 
@@ -767,8 +778,6 @@ SPNewGameRulesScreen {
 		int	widthpix	123
 		int	heightpix	21
 	}
-
-#Add Settler Cheat?
 
 ############## COLUMN #2
 	RuleTwo:GAMEPLAY_CHECKBOX { #POPUP_TOGGLESWITCH
@@ -861,22 +870,23 @@ SPNewGameRulesScreen {
 }
 
 RuleDetailsStringTable {
-	int numstrings		15
+	int numstrings		16
 	string	string0		"str_tbl_ldl_RuleDetail_Bloodlust"
-	string	string1		"str_tbl_ldl_RuleDetail_Pollution"
-	string	string2		"str_tbl_ldl_RuleDetail_CityCaptureOptions"
-	string	string3		"str_tbl_ldl_RuleDetail_OneCityChallenge"
-	string	string4		"str_tbl_ldl_RuleDetail_RiotsCreateBarbarians"
-	string	string5		"str_tbl_ldl_RuleDetail_RiotsKillPopulation"
-	string	string6		"str_tbl_ldl_RuleDetail_BarbsSpawnBarbs"
-	string	string7		"str_tbl_ldl_RuleDetail_NonRandomCivs"
-	string	string8		"str_tbl_ldl_RuleDetail_Upgrade"
-	string	string9		"str_tbl_ldl_RuleDetail_NewCombat"
-	string	string10	"str_tbl_ldl_RuleDetail_NoGoodyHuts"
-	string	string11	"str_tbl_ldl_RuleDetail_UnitGold"
-	string	string12	"str_tbl_ldl_RuleDetail_CityMaintenance"
-	string	string13	"str_tbl_ldl_RuleDetail_NoCityLimit"
-	string	string14	"str_tbl_ldl_RuleDetail_Ages"
+	string	string1		"str_tbl_ldl_RuleDetail_AlienLife"
+	string	string2		"str_tbl_ldl_RuleDetail_Pollution"
+	string	string3		"str_tbl_ldl_RuleDetail_CityCaptureOptions"
+	string	string4		"str_tbl_ldl_RuleDetail_OneCityChallenge"
+	string	string5		"str_tbl_ldl_RuleDetail_RiotsCreateBarbarians"
+	string	string6		"str_tbl_ldl_RuleDetail_RiotsKillPopulation"
+	string	string7		"str_tbl_ldl_RuleDetail_BarbsSpawnBarbs"
+	string	string8		"str_tbl_ldl_RuleDetail_NonRandomCivs"
+	string	string9		"str_tbl_ldl_RuleDetail_Upgrade"
+	string	string10	"str_tbl_ldl_RuleDetail_NewCombat"
+	string	string11	"str_tbl_ldl_RuleDetail_NoGoodyHuts"
+	string	string12	"str_tbl_ldl_RuleDetail_UnitGold"
+	string	string13	"str_tbl_ldl_RuleDetail_CityMaintenance"
+	string	string14	"str_tbl_ldl_RuleDetail_NoCityLimit"
+	string	string15	"str_tbl_ldl_RuleDetail_Ages"
 }
 
 $

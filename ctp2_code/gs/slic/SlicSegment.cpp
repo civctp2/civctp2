@@ -404,7 +404,7 @@ void SlicSegment::Serialize(CivArchive &archive)
 		archive.StoreChunk((uint8 *)&m_type, ((uint8 *)&m_fromFile)+sizeof(m_fromFile));
 
 		if(m_id) {
-			l = strlen(m_id) + 1;
+			l = static_cast<sint32>(strlen(m_id) + 1);
 			archive << l;
 			archive.Store((uint8*)m_id, l);
 		} else {
@@ -416,7 +416,7 @@ void SlicSegment::Serialize(CivArchive &archive)
 		archive.Store((uint8*)m_trigger_symbols_indices, m_num_trigger_symbols * sizeof(sint32));
 		archive.Store((uint8*)m_lastShown, k_MAX_PLAYERS * sizeof(sint32));
 		if(m_uiComponent) {
-			l = strlen(m_uiComponent) + 1;
+			l = static_cast<sint32>(strlen(m_uiComponent) + 1);
 			archive << l;
 			archive.Store((uint8*)m_uiComponent, l);
 		} else {
@@ -431,8 +431,8 @@ void SlicSegment::Serialize(CivArchive &archive)
 		if(!m_filename) {
 			archive.PutSINT32(0);
 		} else {
-			archive.PutSINT32(strlen(m_filename));
-			archive.Store((uint8*)m_filename, strlen(m_filename));
+			archive.PutSINT32(static_cast<sint32>(strlen(m_filename)));
+			archive.Store((uint8*)m_filename, static_cast<sint32>(strlen(m_filename)));
 		}
 	} else {
 		archive.LoadChunk((uint8 *)&m_type, ((uint8 *)&m_fromFile)+sizeof(m_fromFile));
@@ -777,7 +777,7 @@ bool SlicSegment::GetSourceLines(sint32 &firstLineNum, sint32 &firstLineOffset, 
 	}
 }
 
-sint32 SlicSegment::FindLineNumber(sint32 offset)
+sint32 SlicSegment::FindLineNumber(size_t offset)
 {
 	sint32 curLine = -1;
 	bool foundOffset = false;

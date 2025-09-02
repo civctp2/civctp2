@@ -245,6 +245,7 @@ private:
     MapPoint GetFreeNeighborPos(MapPoint pos) const;
     bool RallyTroops();
     void GroupTroops();
+    uint32 GetMovementType() const;
 
     bool UnGroupTroops();
 

@@ -163,6 +163,7 @@ public:
     bool CanSettle() const;
 
     bool CanTransport() const;
+    bool HasTransporter() const;
     bool IsWounded() const;
     bool IsCargoWounded() const;
 
@@ -424,7 +425,7 @@ public:
 
     bool ExecuteMoveOrder(Order *order);
 
-    void CheckLoadSleepingCargoFromCity(Order *order);
+    void CheckLoadSleepingCargoFromCity();
 //  bool Move(WORLD_DIRECTION, Order *order); // commented, since not used any more
     bool FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order);
     bool FinishAttack(Order *order);
@@ -456,7 +457,6 @@ public:
     void SetUnloadMovementPoints();
 
     void ActionSuccessful(SPECATTACK attack, Unit &unit, const Unit &c);
-    void ActionUnsuccessful(const MapPoint &point);
 
     bool ExecuteSpecialOrder(Order *order, bool &keepGoing);
     void AddSpecialActionUsed(Unit &who);
@@ -475,7 +475,9 @@ public:
                            sint32 & maxdefense,
                            bool & cancapture,
                            bool & haszoc,
-                           bool & canbombard
+                           bool & canbombard,
+                           bool & canthrowparty,
+                           bool & canestablishembassy
                           ) const;
 
     bool IsStealth() const;
@@ -487,7 +489,9 @@ public:
                            sint32 & maxdefense,
                            bool & cancapture,
                            bool & haszoc,
-                           bool & canbombard
+                           bool & canbombard,
+                           bool & canthrowparty,
+                           bool & canestablishembassy
                           ) const;
 
     bool CanPerformSpecialAction() const;

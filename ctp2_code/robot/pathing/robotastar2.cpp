@@ -189,23 +189,24 @@ bool RobotAstar2::DefensivePathCallback (const bool & can_enter,
 	PLAYER_INDEX prev_owner;
 
 	pos_owner = g_theWorld->GetCell(pos)->GetOwner();
-	if (can_enter)
+	if (!can_enter)
 	{
-		if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
-			return true;
-
-		prev_owner = g_theWorld->GetCell(prev)->GetOwner();
-		if ((prev_owner == pos_owner) &&
-			!(m_incursionPermission & (0x1 << prev_owner)))
-		{
-			cost += k_MOVE_TREASPASSING_COST;
-			return true;
-		}
+		cost = k_ASTAR_BIG;
+		entry = ASTAR_ENTRY_TYPE(0);
+		return false;
 	}
 
-	cost = k_ASTAR_BIG;
-	entry = ASTAR_ENTRY_TYPE(0);
-	return false;
+	if ((pos_owner < 0) || (m_incursionPermission & (0x1 << pos_owner)))
+		return true;
+
+	prev_owner = g_theWorld->GetCell(prev)->GetOwner();
+	if((prev_owner == pos_owner) &&
+	   !(m_incursionPermission & (0x1 << prev_owner)))
+	{
+		cost += k_MOVE_TREASPASSING_COST;
+	}
+
+	return true;
 }
 
 bool RobotAstar2::FindPath( const PathType & pathType,
@@ -229,7 +230,6 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	m_pathType = pathType;
 	m_transDestCont = trans_dest_cont;
 	m_transMaxR = trans_max_r;
-	m_owner = g_theWorld->GetOwner(start);
 
 	sint32 nUnits;
 	uint32 move_intersection;
@@ -237,7 +237,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	m_is_robot = true;
 
 	bool isspecial, cancapture, haszoc, canbombard;
-	bool isstealth;
+	bool isstealth, canthrowparty, canestablishembassy;
 	sint32 maxattack, maxdefense;
 	army->CharacterizeArmy( isspecial,
 	    isstealth,
@@ -245,7 +245,9 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 	    maxdefense,
 	    cancapture,
 	    haszoc,
-	    canbombard);
+	    canbombard,
+	    canthrowparty,
+	    canestablishembassy);
 
 	if(isspecial && maxattack == 0 && !haszoc)
 	{

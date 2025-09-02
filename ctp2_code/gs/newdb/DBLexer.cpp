@@ -266,20 +266,34 @@ bool DBLexer::GetFloat(double &value)
 	return false;
 }
 
-bool DBLexer::GetStringIdAssignment(sint32 &strId)
+bool DBLexer::GetStringIdAssignment(sint32 &strId, char *&textID)
 {
 	sint32 tok = GetToken();
 	if(tok != k_Token_Name)
 		return false;
 
+	delete [] textID;
+	textID = new char[strlen(m_tokenText[m_whichTokenText]) + 1];
+	strcpy(textID, m_tokenText[m_whichTokenText]);
+
+	if(g_theStringDB == NULL)
+		return true;
+
 	return g_theStringDB->GetStringID(GetTokenText(), strId) != 0;
 }
 
-bool DBLexer::GetStringId(sint32 &strId)
+bool DBLexer::GetStringId(sint32 &strId, char *&textID)
 {
 	sint32 tok = GetCurrentToken();
 	if(tok != k_Token_Name)
 		return false;
+
+	delete [] textID;
+	textID = new char[strlen(m_tokenText[m_whichTokenText]) + 1];
+	strcpy(textID, m_tokenText[m_whichTokenText]);
+
+	if(g_theStringDB == NULL)
+		return true;
 
 	return g_theStringDB->GetStringID(GetTokenText(), strId) != 0;
 }
@@ -327,7 +341,7 @@ bool DBLexer::GetBitIndex(const char **bitnames, sint32 numBitnames, sint32 &ind
 	return false;
 }
 
-void DBLexer::ReportError(char *fmt, ...)
+void DBLexer::ReportError(const char *fmt, ...)
 {
 	va_list list;
 	va_start(list, fmt);

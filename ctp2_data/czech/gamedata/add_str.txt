@@ -1,0 +1,367 @@
+#----------------------------------------------------------------------------
+#
+# Project      : Call To Power 2
+# File type    : String text file
+# Description  : Contains additional strings that should go to other files
+#                eventually (Czech)
+# Id           : $Id:$
+#
+#----------------------------------------------------------------------------
+#
+# Disclaimer
+#
+# THIS FILE IS NOT GENERATED OR SUPPORTED BY ACTIVISION.
+#
+# This material has been developed at apolyton.net by the Apolyton CtP2 
+# Source Code Project. Contact the authors at ctp2source@apolyton.net.
+#
+#----------------------------------------------------------------------------
+#
+# Modifications from the original Activision code:
+#
+# - Removed diplomatic photo strings as they have been already moved back
+#   to civ_str.txt. - 7th April 2005 Martin Gühmann
+# - Moved BUILD_LIST_SEQUENCE_DEFAULT to gl_str.txt.
+#   - 7th April 2005 Martin Gühmann
+# - Moved Great Libary title string to ldl_str.txt. - 9th April 2005 Martin Gühmann
+# - Moved Diplomacy Embargo Button strings to tips_str.txt (Aug 14th 2005 Martin Gühmann)
+# - Moved trust loss strings to info_str.txt. (Aug 31rd 2005 Martin Gühmann)
+#
+#----------------------------------------------------------------------------
+
+# # Stuff moved from add_str.txt to ldl_str.txt 9/5/00 by Jonathan
+# # Please add all new strings below here - with note 
+# # explaining where they should go eventually.
+
+# More Stuff for LDL_STR
+# Multiplayer Disclaimer String
+str_ldl_MultiplayerDisclaimer	"Activision recommends a maximum of 4 players for Call to Power multiplayer games."
+
+## Stuff for LDL_STR.txt
+str_ldl_AutoCenter_On	"AutoCentr Zapnout"
+str_ldl_AutoCenter_Off	"AutoCentr Vypnout"
+
+str_ldl_ShowPoliticalBorders_On	"Zobrazit Politické Hranice"
+str_ldl_ShowPoliticalBorders_Off	"Skrýt Politické Hranice"
+
+str_ldl_ShowTradeRoutes_On			"Zobrazit Obchodní Cesty"
+str_ldl_ShowTradeRoutes_Off			"Skrýt Obchodní Cesty"
+
+# Got lost somehow, City manager button.
+str_ldl_DisbandUnit                 "Rozpustit"
+
+# City advisor
+# str_ldl_CityAdvisor "Mestský Poradce"
+
+# City Window
+str_ldl_CityWindowUpkeep "Údrzba"
+
+# Dip wizard strings
+# Gets displayed on the "Accept" button depending on context
+str_ldl_DipWizardClose "Close" 
+str_ldl_DipWizardCheckIntelligence "Check Intelligence"
+
+# Empire Manager
+str_ldl_People_ "People:"
+str_ldl_Cities_ "Cities:"
+
+# Info screen score tab list headers.  I don't know how to label these.  This is just so there's something
+# here for someone who does.
+str_ldl_SCORE_VALUE "Výpocet:"
+str_ldl_SCORE_TOTAL "Skore:"
+
+# List headers on wonder tab of info screen
+str_ldl_InfoScreenWonder "Div"
+str_ldl_InfoScreenYear "Rok"
+str_ldl_InfoScreenCity "Mesto"
+str_ldl_InfoScreenPlayer "Hrác"
+str_ldl_INFO_WONDER_TAB "Divy"
+
+
+str_ldl_DipDetails_EmbassyReq			"Potreba Velvyslanectví"
+str_ldl_RADAR_MAP_FILTER	"Filtrováno"
+
+# Replaces string in ldl_str.txt, changed to Status from Modifiers
+str_ldl_CityWinStatisticsTab "Status"
+
+#revised below
+# Added
+#str_code_CityWinTotalHappinessFormat "Total: %d"
+
+str_code_QueryRebuildCapitol "Are you sure you wish to rebuild your capitol?"
+str_code_QuerySwitchProduction "Switch production type? (City will lose %d%% stored production)"
+
+# Trade manager strings
+str_ldl_TradeManagerCities "Zobrazit mesta:"
+str_ldl_TradeManagerOwnCities "Vlastní"
+str_ldl_TradeManagerFriendlyCities "Prátelské"
+str_ldl_TradeManagerAllCities "Vsechny"
+str_ldl_TradeManagerCitiesPerGood "Mest za jedno zbozí:"
+
+# Added strings for the science screen.
+str_ldl_ResearchGoal		"* Cíl:"
+
+# TURN in all caps for control panel close button lable
+str_ldl_endbuttonTURN	"KOLO"
+
+# String for not showing dialogs again.
+str_ldl_DontShowAgain		"Tuto zprávu uz nezobrazuj."
+
+# In science picker, when the advance gives you tile improvements:
+ADVANCE_GIVES_TILE_IMPROVEMENTS "Vylepsení terénu:"
+
+str_ldl_RADAR_MAP_TRADE "Obchod"
+str_ldl_RADAR_MAP_TERRAIN "Terén"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 9/18/00
+##############################################
+
+BC_YEAR_FORMAT "%d BC"
+AD_YEAR_FORMAT "%d AD"
+
+
+# Advanced Options Title
+str_ldl_AdvancedOptions "POKROCILÉ NASTAVENÍ"
+
+#updated from ldl_str
+str_ldl_INFORMATION_DIALOG_TITLE 			"S T A T I S T I C S"
+
+str_COMPUTER_TURNS		"Hraje Pocítac..."
+
+#revised from ldl_str.txt
+str_code_TotalPollutionFormat "%d"
+str_ldl_CityWinHappiness "Nálada:"
+str_ldl_CityWinPollution "Znecistení:"
+
+#revised from above to eliminate phrase 'Total: '
+str_code_CityWinTotalHappinessFormat "%d"
+
+str_ldl_Starving "Hladoví"
+
+str_ldl_reloadSlic "Reload Slic"
+str_ReloadSlic_OK "Slic Reload OK!"
+str_ReloadSlic_Fail "Slic Reload Fail!  Check for syntax errors!"
+str_ldl_scen_notes "POZN:"
+
+#Unit Manager Advisor Window Title -- this is completely new
+str_ldl_MilitaryAdvisor "VOJENSKÝ PORADCE"
+
+#Trade Manager Advisor Window Title -- this is completely new
+str_ldl_TradeAdvisor	"OBCHODNÍ RÁDCE"
+
+#City Manager Advisor Window Title -- this is a revision from title to ALL CAPS
+# the original can be found in add_str, above.
+str_ldl_CityAdvisor	"MESTSKÝ RÁDCE"
+str_ldl_DeclareEmbargo "Embargo"
+str_ldl_IW_CONFIRM_EMBARGO "Vyhlásit embargo na {player[0].country_name}?"
+str_Goods_Generated "Zbozí generováno OK!"
+str_Goods_All_Gone "Zbozí Vymazáno OK!"
+str_ldl_RemoveGoods "Vymazat vsechno zbozí"
+str_ldl_GenerateGoods "Generovat Zbozí"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 9/26/00
+##############################################
+
+str_ldl_AddStuff "A D D  S T U F F"
+str_ldl_SelectCity "Vyber Mesto!"
+str_ldl_AddPW "Pridat Verejné Práce:"
+str_ldl_AddGold "Pridat Zlato:"
+
+# in Build Queue Editor Laod Screen
+str_ldl_LoadQueueColon "Nahrát Frontu:"
+
+#Main title for Intelligence Dialog box
+str_ldl_IntelligenceTitle "I N T E L I G E N C E"
+
+##############################################
+## PLEASE ENTER NEW STUFF BELOW THIS LINE
+## Strings above sent to be localized 10/01/00
+##############################################
+str_ldl_PosField "Pos:"
+
+str_ldl_CityEspionage "Spionáz Mesta"
+str_ldl_NatlManagerHotKey "F1"
+str_ldl_EmpireManagerHotKey "F2"
+str_ldl_ScienceHotKey "F3"
+str_ldl_UnitManagerHotKey "F4"
+str_ldl_TradeScreenHotKey "F5"
+str_ldl_IntelligenceHotKey "F6"
+str_ldl_ScoreHotKey "F7"
+str_ldl_GreatLibraryHotKey "F8"
+str_ldl_AdvancedHotKey "F9"
+str_ldl_ArmyManagementHotKey "G"
+str_ldl_Cheat_Mode_CaseHotKey "ctl+s"
+str_ldl_QuitHotKey "Q"
+str_ldl_SaveGameHotKey "!"
+str_ldl_LoadGameHotKey "@"
+
+str_ldl_TradeSummaryHotKey "ctl+t"
+str_ldl_GaiaHotkey "ctl+g"
+str_ldl_BuildQueueHotKey "ctl+b"
+str_ldl_CityManagementHotKey "ctl+i"
+str_ldl_NewProposalHotKey "ctl+d"
+
+str_ldl_TimelineHotKey "ctl+l"
+str_ldl_RankHotKey "ctl+k"
+str_ldl_RestartHotKey "ctl+z"
+
+str_ldl_NewGameHotKey "ctl+x"
+str_ldl_SoundHotKey "ctl+v"
+str_ldl_MusicHotKey "ctl+m"
+str_ldl_LanguageHotKey "Ctrl+j"
+str_ldl_GraphicsHotKey "ctl+f"
+str_ldl_GameplayHotKey "ctl+p"
+str_ldl_CityEspionageHotKey "ctl+e"
+str_ldl_FindMeButton "Locate!"
+str_ldl_FindX "X"
+str_ldl_FindY "Y"
+str_ldl_FindPosLabel "Najít Poz:"
+str_ldl_CityManager "Manazer Mesta"
+
+# Shows up over main map in upper left corner to say whose turn it is right now (has a colon appended by code, followed by leader name).
+str_tbl_ldl_Open_City_Management "Manazer Mestá"
+str_tbl_ldl_Open_Build_Queue "Mestská Stavební Fronta"
+str_tbl_ldl_Open_Trade_Summary "Obchodní Prehled"
+str_tbl_ldl_Open_Dip_Wizard "Nový Návrh"
+str_tbl_ldl_Gaia "Gaia"
+str_tbl_ldl_Open_Wonders "Divy"
+str_tbl_ldl_Open_Ranking "Poradí"
+str_tbl_ldl_Msg_Tab "Message Tab"
+str_tbl_ldl_TileImp_Tab "Terénní Vylepsení"
+str_tbl_ldl_Open_Scenario_Editor "Editor Scénáre"
+str_tbl_ldl_Sound_Options "Nastavení Zvuku"
+str_tbl_ldl_Graphics_Options "Grafické nastavení"
+str_tbl_ldl_Gameplay_Options "Herní Nastavení"
+str_tbl_ldl_Restart_Game "Restartovat Hru"
+str_tbl_ldl_New_Game "Nová Hra"
+str_tbl_ldl_Toggle_Radar "Schovat/Ukázat Radar"
+str_tbl_ldl_Toggle_Ctl_Panel "Schovat/Ukázat Kontrolní Panel"
+str_tbl_ldl_Toggle_All "Schovat/Ukázat Vse"
+str_tbl_ldl_Open_Army_Mgmt "Otevrít Armádní Manazer"
+str_ldl_UNIT_CONTROLS "OVLÁDÁNÍ JEDNOTKY"
+str_ldl_GreatLibrary "Velká Knihovna"
+str_control_key "ctrl"
+
+str_ldl_EnableAllMessages "Enable all messages"
+
+
+#################################
+#status text for scenario editor#
+#################################
+str_SE_MapSize "Zmena Velikosti Mapy nahraje novou mapu"
+str_SE_YearSpinner "Pocet Kol - Ukaz Rok for corresponding year"
+str_SE_YearDisplay "Zobrazit Rok"
+str_SE_Difficulty "Vyber herní Obtíznost"
+str_SE_Barbarians "Vyber barbarskou Hrozbu"
+str_SE_SaveMap "Uloz JEN Mapu"
+str_SE_LoadMap "Nahrej JEN Mapu"
+str_SE_SaveScenario "Uloz scénár do ulozené hry"
+str_SE_LoadScenario "Nahrát scénár"
+str_SE_WorldTab "Svetová Tab - vsechny globální nastavení"
+str_SE_UnitTab "Tab jednotek - umístit jednotky nejakého hráce"
+str_SE_CityTab "Mestská Tab - vytvorit/zmenit mesta pro nejakého hráce"
+str_SE_Civ_Button "Rísská Tab - zmenit nastavení pro vsechny hráce"
+str_SE_Hut "Umístit/vymazat Ruiny"
+str_SE_River "Place/remove Reky"
+str_SE_Good1 "Umístit/vymazat zbozí 1"
+str_SE_Good2 "Umístit/vymazat zbozí 2"
+str_SE_Good3 "*Umístit/vymazat zbozí 3 - you must define this in terrain.txt"
+str_SE_Good4 "*Umístit/vymazat zbozí 4 - you must define this in terrain.txt"
+str_SE_Pollution "Zmenit zbecistení zap/vyp"
+str_SE_Land "Zobrazit Pozemní Jednotky"
+str_SE_Sea "Zobrazit Námorní Jednotky"
+str_SE_Air "Zobrazit Vzdusné Jednotky"
+str_SE_Special "Zobrazit Nezarazené/Specialní jednotky"
+str_SE_PopSpinner "Nastavit populaci vybraného mesta"
+str_SE_AddBuildings "Pridat stavby do vybraného mesta"
+str_SE_AddWonders "Pridat div do vybraného mesta"
+str_SE_PlayerSelect "Vybrat hráce"
+str_SE_FullMode "Umístit pocátecní lokaci hráce, s národnostní volbou, pro vsechny národy"
+str_SE_NoCiv "Umístit pocátecní lokaci hráce, bez národnostní volby"
+str_SE_WithCiv "Umístit pocátecní lokaci podle národa, s volbou hráce"
+str_SE_JustCiv "Umístit pocátecní lokaci podle národa, regardless of player"
+str_SE_AddPW "Pridat Verejné Práce - vloz císlo a stiskni 'Enter'"
+str_SE_AddGold "pridat Zkati - vloz císlo a stiskni 'Enter'"
+str_SE_Erase "Vymazat nejakou jednotku nebo mesto"
+str_SE_ClearWorld "Vynmazat ze sveta vsechny pozemní ctverecky"
+str_SE_ReloadSlic "Reload SLIC soubory"
+str_SE_Fog "Nastavit Fog of War zap/vyp "
+str_SE_Copy "Nastavit Copy mod ZAP -klikni a táhni na vybrané území"
+str_SE_Paste "Nastavit Paste mod ZAP  - kursor umístí vlevo nahore volby"
+str_SE_SaveClip "Ulozit vybráné území do Clipboardu"
+str_SE_SmallBrush "Rozmístení jednotlivého ctverecku"
+str_SE_MedBrush "2x2 ctverce"
+str_SE_LargeBrush "8x8 ctverce"
+str_SE_LoadClip "Nahrát volbu z clipboardu"
+str_SE_Explore "Nastavit úplný Prozkoumaný svet"
+str_SE_Unexplore "Nastavit úplný Neprozkoumaný svet"
+str_SE_XWrap "Zvol X vlek ZAP/VYP"
+str_SE_YWrap "Zvol Y vlek ZAP/VYP"
+str_SE_Pos "Tato pozice kurzoru"
+str_SE_LegalOnly "Umístit jen ty jednotky, pro které hrác má tech. pokrok"
+str_SE_ShowLabels "Zvolit pojmenování ZAP/VYP"
+str_SE_AddAdvances "Pridat/Vymazat hrácovy tech. pokrok"
+str_SE_Nation "Vyber hrácuv Stát"
+str_SE_LeaderName "Zobraz/Zmen jméno vudce"
+str_SE_CityName "Zobraz/Zmen jméno vybraného mesta"
+str_SE_FindPosX "Vloz X koordináty"
+str_SE_FindPosY "Vloz Y koordináty"
+str_SE_FindMe "Klikni na centrum X,Y koordinátu"
+str_SE_RemoveGoods "Vymaz vsechno zbozí z mapy"
+str_SE_GenerateGoods "Pridej do mapy zbozí"
+str_SE_DebugAI "Show AI Army Goals"
+
+# Filename prefix for quicksaves.
+QUICKSAVE_NAME "QUICKSAVE"
+
+# Scenario editor <CHANGEME>
+str_ldl_Confirm_Restart		"Tímto restartujete hru, jste si jistý svým cinem?"
+
+# for the keymap screen
+str_tbl_ldl_Advanced_Options "Pokrocilé Nastavení"
+
+# Two items on the options menu
+str_ldl_ZoomOut "ZoomVen"
+str_ldl_ZoomIn "Zoom Do"
+
+# Added for network games, there are more restrictions on when you can initiate diplomacy
+str_code_CantInitiateDiplomacyNow "You cannot send a new proposal when it is not your turn, or when you are waiting for a response to a previous proposal."
+
+# Status text for minimize button on radar map
+STATUSBAR_MINIMAP_MINIMIZE "Klikni zde pro minimalizaci/maximalizaci okna"
+str_player_choice "Volba Hráce"
+
+# Entry on right click menu for the cargo view
+CONTEXT_VIEW_CARGO "  Zobrazit Náklad"
+
+# For netshell list header
+str_ldl_Settlers "Osadníci"
+
+# When units will be disbanded due to a government change, ask first:
+str_code_GovernmentChangeDisbandsUnits "Enacting this government will cause some of your units to be disbanded, are you sure you wish to enact it?"
+
+# For the science picker
+ADVANCE_GIVES_GOVS "Formy Vlády:"
+
+# New Status text strings
+STATUSBAR_TRADEMAN_OPEN_CITIES_SLIDER			"Use this to set the cities shown per good."
+STATUSBAR_TRADEMAN_OPEN_SORTBY_NATION_BUTTON	"Click here to sort list by the nations that receive them."
+STATUSBAR_CITYMAN_MAIN_CLEAR_BUTTON				"Klikni zde pro vymazání vsech polozek ze stavební fronty."
+STATUSBAR_DIPMAN_TABLE_DECLAREWAR_BUTTON		"Klikni zde pro vyhlásení války cizí zemi."
+STATUSBAR_DIPMAN_CREATE_INTELLIGENCE_BUTTON		"Click here to check intelligence on this nation."
+STATUSBAR_ARMYMAN_ADD_BUTTON					"Klikni zde pro pridání vybrané jednotky do této armády."
+STATUSBAR_ARMYMAN_ADD_ALL_BUTTON				"Klikni zde pro pridání vsech jednotek do této armády.."
+STATUSBAR_ARMYMAN_REMOVE_BUTTON					"Klikni zde pro vymazání oznacených jednotek v této armáde."
+STATUSBAR_ARMYMAN_REMOVE_ALL_BUTTON				"Klikni zde pro vymazání vsech jednotek z této armády."
+STATUSBAR_ARMYMAN_CLOSE_BUTTON					"Klikni zde pro uzavrení manazeru armády."
+STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Klikni zde pro vytvorení nové armády."
+
+# For the context menu, lets you get the tile info window for squares with cities/units.
+CONTEXT_TILE_INFO "Map Info"
+
+str_ldl_EditQueueReallyDelete "Permanently delete Queue %s?"
+

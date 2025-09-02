@@ -184,6 +184,10 @@ connectionselectwindow:nswindow {
 
 			string	text	"str_ldl_Debug_version"
 		}
+		udp {
+
+			string	text	"str_ldl_Unix_Internet"
+		}
 
 	}
 

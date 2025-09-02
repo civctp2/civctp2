@@ -101,6 +101,7 @@ import "victorymovie.ldl"
 import "victoryscreen.ldl"
 import "throneroom.ldl"
 import "musicscreen.ldl"
+import "LanguageScreen.ldl"
 import "sciencevictory.ldl"
 
 import "fancy.ldl"
@@ -453,7 +454,7 @@ CivMouse {
 	# for telling the mouse you will eventually have more
 	# cursors than what's listed here.
 	# Actual should go into a cursor database like the message icons.
-	int numcursors 92
+	int numcursors 93
 		
 	# C_DEFAULT
 	string cursor0	"uc001.tga"
@@ -931,6 +932,10 @@ CivMouse {
 	int hotspotx91 13
 	int hotspoty91 13
 
+	# 	Erase Cursor
+	string cursor92 "UC090.TGA"
+	int hotspotx92 8
+	int hotspoty92 41
 
 	# number of miliseconds between animation frames.
 # not needed?

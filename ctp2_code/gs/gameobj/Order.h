@@ -70,9 +70,10 @@ public:
 	// effectively deleted, twice. That is the design,
 	// whether that is good or bad is another question.
 	__attribute__((optimize("-O0"))) ~Order();
-#elif defined(WIN32)
+#elif defined(_MSC_VER) // This is actually about the compiler
 	~Order();
 #else
+#pragma message(__FILE__ "(" STRING(__LINE__) "): warning: Check whether your compiler makes trouble here")
 	~Order();
 #endif
 

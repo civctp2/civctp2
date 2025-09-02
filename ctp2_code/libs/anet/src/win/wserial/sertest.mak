@@ -61,7 +61,7 @@ CLEAN :
 
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /c
-CPP_PROJ=/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE"\
+CPP_PROJ=/nologo /ML /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /Fp"$(INTDIR)/sertest.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\sertest_/
 CPP_SBRS=.\.
@@ -119,7 +119,7 @@ CLEAN :
 # ADD BASE CPP /nologo /W3 /Gm /GX /Zi /Od /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\main" /I "..\..\..\h" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /YX /c
 CPP_PROJ=/nologo /MLd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\main" /I\
- "..\..\..\h" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /Fp"$(INTDIR)/sertest.pch"\
+ "..\..\..\h" /D "WIN32" /D "_DEBUG" /D "_CONSOLE" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Fp"$(INTDIR)/sertest.pch"\
  /YX /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\sertest0/
 CPP_SBRS=.\.

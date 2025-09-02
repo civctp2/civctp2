@@ -1281,7 +1281,7 @@ void World::GenerateTrenches()
 	}
 
 	m *= trench;
-	m *= 0.01;
+	m *= static_cast<sint32>(m * 0.01);
 
 	if (m < 1)
 		return;
@@ -2560,20 +2560,31 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 	if(stricmp(name, "none") == 0)
 		return NULL;
 #ifndef USE_COM_REPLACEMENT
+#if defined(_DEBUG)
+	char* name_dbg = strdup(name);
+	char *p = strrchr(name_dbg, '.');
+	if (p) strcpy(p, "d.dll"); // Change quickly to debug version
+	plugin = LoadLibrary(name_dbg);
+#else
 	plugin = LoadLibrary(name);
+#endif
 #else
 	char* name_so = strdup(name);
 	char *p = strrchr(name_so, '.');
-	if(p) strcpy(p, ".so");	// quickly change .dll to .so
+	if(p) strcpy(p, ".so"); // Quickly change .dll to .so
 	//printf("DLL, open %s => %s\n", name, CI_FixName(name_so));
 	plugin = dlopen(CI_FixName(name_so), RTLD_LAZY);
 	free(name_so);
 #endif
 	if(plugin == NULL) {
 #ifndef USE_COM_REPLACEMENT
-		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
+#if defined(_DEBUG)
+		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name_dbg);
 #else
-		fprintf(stderr, "Could not load library %s, using builtin map generator: %s", name, dlerror());
+		c3errors_ErrorDialog("Map Generator", "Could not load library %s, using builtin map generator", name);
+#endif
+#else
+		fprintf(stderr, "Could not load library %s, using builtin map generator: %s", name_so, dlerror());
 #endif
 		return NULL;
 	}
@@ -2585,10 +2596,15 @@ IMapGenerator *World::LoadMapPlugin(sint32 pass)
 	if(creator == NULL) {
 #ifndef USE_COM_REPLACEMENT
 		FreeLibrary(plugin);
+#if defined(_DEBUG)
+		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name_dbg);
+#else
+		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name);
+#endif
 #else
 		dlclose(plugin);
+		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name_so);
 #endif
-		c3errors_ErrorDialog("Map Generator", "Plugin %s is not a valid map generator", name);
 		return NULL;
 	}
 #ifndef USE_COM_REPLACEMENT

@@ -104,6 +104,7 @@
 // music added by ahenobarb
 #include "musicscreen.h"
 #include "optionwarningscreen.h"
+#include "LanguageScreen.h"
 #include "loadsavewindow.h"
 #include "km_screen.h"
 #include "optionswindow.h"
@@ -238,6 +239,7 @@ ControlPanelWindow          *g_controlPanel;
 extern Network              g_network;
 
 extern FilenameDB           *g_theMessageIconFileDB;
+extern BOOL                 g_toeMode;
 
 void TileImpSelectionCallback (aui_Control *control, uint32 action, uint32 data, void *cookie);
 
@@ -925,7 +927,10 @@ void OptionsMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 		musicscreen_displayMyWindow();
 		break;
 	case	CP_MENU_ITEM_13:
-		if(g_chatBox) g_chatBox->SetActive(!g_chatBox->IsActive());;
+		if(g_chatBox) g_chatBox->SetActive(!g_chatBox->IsActive());
+		break;
+	case	CP_MENU_ITEM_14:
+		LanguageScreen::DisplayWindow();
 		break;
 	}
 }
@@ -1192,6 +1197,18 @@ void ControlPanelWindow::RebuildMenus()
 	}
 	// else: No action: backwards compatibility for Mods.
 
+	MBCHAR const *  languageItemText   = g_theStringDB->GetNameStr("str_ldl_Language");
+	if (languageItemText)
+	{
+		mb->AddMenuItem(menu,
+			languageItemText,
+			KeyListItem::GetKeyFromKMScreen
+			(theKeyMap->get_keycode(KEY_FUNCTION_LANGUAGE_OPTIONS)),
+			(void *) CP_MENU_ITEM_14
+		);
+	}
+	// else: No action: backwards compatibility for Mods.
+
 	mb->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Advanced"),
 		KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_ADVANCED_OPTIONS)),(void *)CP_MENU_ITEM_3);
 	mb->AddMenuItem(menu, g_theStringDB->GetNameStr("str_ldl_Cheat_Mode_Case"),
@@ -1451,6 +1468,20 @@ void ControlPanelWindow::BuildOptionsMenu()
 			 chatBoxText,
 			 KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_CHAT_KEY)),
 			 (void *)CP_MENU_ITEM_13
+			);
+		}
+		// else: No action: backwards compatibility for Mods.
+	}
+	{
+		MBCHAR const *  languageItemText   = g_theStringDB->GetNameStr("str_ldl_Language");
+
+		if (languageItemText)
+		{
+			m_mainMenuBar->AddMenuItem
+			(menu,
+				languageItemText,
+				KeyListItem::GetKeyFromKMScreen(theKeyMap->get_keycode(KEY_FUNCTION_LANGUAGE_OPTIONS)),
+				(void *) CP_MENU_ITEM_14
 			);
 		}
 		// else: No action: backwards compatibility for Mods.
@@ -1882,7 +1913,8 @@ bool ControlPanelWindow::OrderDeliveryClick(const MapPoint &pos)
 		}
 		else
 		{
-			Assert(0);
+			// This is OK, if no movepoints are remaining
+			//Assert(0);
 		}
 
 		ClearTargetingMode();
@@ -2059,7 +2091,7 @@ void ControlPanelWindow::AddMessage(Message &message,bool initializing)
 	strncpy(tempStr, message.GetText(), k_MAX_MSG_LEN-1);
 
 	MBCHAR *begin,*end;
-	sint32 length;
+	size_t length;
 	while(strchr(tempStr,'<'))
 	{
 		begin=strchr(tempStr,'<');
@@ -2913,7 +2945,10 @@ void ControlPanelWindow::Idle()
 	else
 		// prevent resetting of scroll-cursor
 		if (!g_tiledMap->IsScrolling())
-			g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+			if(!g_toeMode)
+				g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+			else
+				g_cursorManager->SetCursor(CURSORINDEX_ERASE);
 }
 
 void ControlPanelWindow::Move( sint32 x, sint32 y )

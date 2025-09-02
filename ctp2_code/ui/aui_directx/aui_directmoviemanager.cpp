@@ -5,9 +5,6 @@
 
 #include "aui_ui.h"
 
-
-
-
 aui_DirectMovieManager::aui_DirectMovieManager(bool init, bool initDirect)
 :
 	aui_MovieManager        (init),

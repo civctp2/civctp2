@@ -66,7 +66,7 @@
 #endif
 #define lint
 
-void yyerror(char* err);
+void yyerror(const char* err);
 
 #ifdef _DEBUG
 FILE *debuglog;
@@ -152,7 +152,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed MessageBox %s\n", $2);
+		fprintf(debuglog, "Parsed MessageBox %s\n", $2.name);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -164,7 +164,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed AlertBox %s\n", $2);
+		fprintf(debuglog, "Parsed AlertBox %s\n", $2.name);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -176,7 +176,7 @@ messagebox: KW_MESSAGEBOX IDENTIFIER { slicif_start_segment($2.name); } body
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed HelpBox %s\n", $2);
+		fprintf(debuglog, "Parsed HelpBox %s\n", $2.name);
 #endif
 		obj->m_type = SLIC_OBJECT_MESSAGEBOX;
 		obj->m_id = $2.name;
@@ -190,7 +190,7 @@ trigger: KW_TRIGGER IDENTIFIER { slicif_start_segment($2.name); } KW_WHEN trigge
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed Trigger %s\n", $2);
+		fprintf(debuglog, "Parsed Trigger %s\n", $2.name);
 #endif
 
 		obj->m_is_alert = 0;
@@ -204,7 +204,7 @@ trigger: KW_TRIGGER IDENTIFIER { slicif_start_segment($2.name); } KW_WHEN trigge
 	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
-		fprintf(debuglog, "Parsed Trigger %s\n", $2);
+		fprintf(debuglog, "Parsed Trigger %s\n", $2.name);
 #endif
 		obj->m_is_alert = 0;
 		obj->m_is_help = 0;
@@ -221,7 +221,7 @@ eventhandler: KW_HANDLEEVENT '(' NAME ')'
 				  slicif_set_event_checking($3.name);
 		      }
 			  priority { slicif_start_segment(slicif_create_name($3.name)); } body
-    {
+	{
 		struct PSlicObject *obj = malloc(sizeof(struct PSlicObject));
 #ifdef _DEBUG
 	    fprintf(debuglog, "Parsed HandleEvent %s\n", $3.name);
@@ -493,7 +493,7 @@ const char *slicif_get_filename()
 	return include_filename_stack[include_stack_ptr];
 }
 
-void yyerror(char *s)
+void yyerror(const char *s)
 {
     extern int line;
 #ifdef _DEBUG

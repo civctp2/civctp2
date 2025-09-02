@@ -1,0 +1,83 @@
+#	LanguageScreen.ldl
+
+LanguageItem:CTP2_LIST_ITEM {
+	int widthpix 190
+	int heightpix 30
+	label:CTP2_HEADER_FONT {
+		int fontsize				14
+		string objecttype "ctp2_Static"
+		string just "left"
+		bool vertcenter true
+		int xpix 10
+		int widthpix 115
+		int heightpix 30
+	}
+}
+
+LanguageScreen {
+	string	pattern	"uptg20e.tga"
+
+	int widthpix  680
+	int heightpix 475
+
+	string	xanchor		"center"
+	string	yanchor		"center"
+	Name:CTP_GREY_TITLE_FONT {
+		string	parent	"c3_PopupTitle"
+		string xanchor "center"
+		int	ypix	22
+		int widthpct 50
+		int heightpix 20
+		string	text	"str_ldl_CAPS_LANGUAGE"
+	}
+
+	LanguageBox:CTP2_LISTBOX {
+		int xpix      48
+		int ypix      75
+		int widthpix  274
+		int heightpix 270
+
+		int focusindex 1
+	}
+
+	LanguageDescription : CTP2_BORDER_BOX {
+
+		string objecttype "ctp2_Static"
+		# Ignore mouse events.
+		bool		mouseblind		true
+
+		int  xpix      362
+		int  ypix       75
+		int  widthpix  274
+		int  heightpix 270
+		bool wordwrap TRUE
+		int  maxlength 512
+	}
+
+	SelectTrackButton:SP_BUTTON_SMALL {
+		bool	shadowfont	false
+		int	ypix	395
+
+		int	widthpix	300
+		int	heightpix	24
+
+		string	xanchor "center"
+		string	text	"str_ldl_Use_OS_Language"
+	}
+
+	Warning:CTP2_STANDARD_FONT {
+		int    fontcolorred    220
+		int    fontcolorgreen   10
+		int    fontcolorblue    10
+
+		string xanchor         "center"
+		int    ypix            365
+		int    widthpix        640
+		int    heightpix        30
+		string text            "str_ldl_RES_REBOOT_WARNING"
+		string textblttype     "fill"
+		string just            "center"
+	}
+}
+
+$

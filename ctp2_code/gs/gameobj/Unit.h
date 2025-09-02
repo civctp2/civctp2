@@ -141,7 +141,7 @@ public:
 	double GetHappyImprovement() const;
 	double GetHappyWonders() const;
 	double GetHappyCrime() const;
-	void CalcHappiness(sint32 &virtualGoldSpent, bool firstPass);
+	void CalcHappiness(bool firstPass = false);
 	sint32 PayWages(sint32 w);
 	sint32 GetWagesNeeded() const;
 
@@ -471,7 +471,7 @@ public:
 	sint32 GetNetCityProduction() const;
 	sint32 GetGrossCityProduction() const;
 	sint32 GetStoredCityFood() const;
-	sint32 GetNetCityFood() const;
+	double GetNetCityFood() const;
 
 	sint32 GetGrossCityFood() const;
 	sint32 GetNetCityGold() const;

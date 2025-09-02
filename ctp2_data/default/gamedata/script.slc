@@ -1064,24 +1064,28 @@ messagebox '94GossipFullReadiness' {
 	Title(ID_GOSSIP_CAPTION);
 	//Caption(ID_GOSSIP_CAPTION); //Caption isn't implemented use Title instead
 	Text(ID_GOSSIP_WARTIME_READINESS);//presuming these messages are used by the game engine
+	MessageType("GOSSIP");
 }
 
 messagebox '95GossipAlertReadiness' {
 	Title(ID_GOSSIP_CAPTION);
 	//Caption(ID_GOSSIP_CAPTION);
 	Text(ID_GOSSIP_ALERT_READINESS);
+	MessageType("GOSSIP");
 }
 
 messagebox '96GossipPeacetimeReadiness' {
 	Title(ID_GOSSIP_CAPTION);
 	//Caption(ID_GOSSIP_CAPTION);
 	Text(ID_GOSSIP_PEACETIME_READINESS);
+	MessageType("GOSSIP");
 }
 
 messagebox '97GossipBoring' {
 	Title(ID_GOSSIP_CAPTION);
 	//Caption(ID_GOSSIP_CAPTION);
 	Text(ID_GOSSIP_BORING);
+	MessageType("GOSSIP");
 }
 
 messagebox '98GossipMap' {
@@ -1089,6 +1093,7 @@ messagebox '98GossipMap' {
 	//Caption(ID_GOSSIP_CAPTION);
 	Text(ID_GOSSIP_MAP);
 	EyePoint(location[0]);
+	MessageType("GOSSIP");
 }
 
 messagebox '99AdvanceFromCapturingCity' {
@@ -1136,7 +1141,6 @@ alertbox '101StealWhichAdvance' {
 
 messagebox '102NoAdvancesToSteal' {
 	Text(ID_NO_ADVANCES_TO_STEAL);
-	MessageType("INVESTIGATE_CITY_ICON");
 	MessageType("ZOOMEYE");
 }
 
@@ -1999,6 +2003,7 @@ messagebox '145NoEmbassiesWonder' {
 
 messagebox '146GossipCompleteAttacker' {
 	Text(ID_GOSSIP_COMPLETE_ATTACKER) ;
+	MessageType("GOSSIP");
 }
 
 messagebox '149PartyCompleteVictim' {

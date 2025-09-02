@@ -49,13 +49,15 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
 str_ldl_Already_Offer				"Vous avez déjà proposé cette marchandise. Remplacer l'offre précédente ?"
 
 ##That one last change 03-07-99
-ENDGAME_WON_OTHER				"Tous les empires s'inclineront dorénavant devant un nouveau maître ; [player.1.leader_name] a terminé le projet de vie extraterrestre."
+ENDGAME_WON_OTHER				"Tous les empires s'inclineront dorénavant devant un nouveau maître ; [player[0].leader_name] a terminé le projet de vie extraterrestre."
 
 ##Comma is the separator in numbers.  In German this would be a period. (non breakable space in French)
 str_ldl_comma					" "
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE				"SCORE"
 str_ldl_POWER_GRAPH				"Courbe de puissance"
 str_ldl_DEFEAT					"DEFAITE"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"LE DESTITUE"
 str_ldl_THE_SQUIRREL_HEARTED			"LA POULE MOUILLEE"
 str_ldl_THE_RED_FACED				"LE CONFUS"
@@ -866,6 +869,7 @@ str_ldl_Known_To_You_And_Others			"Vos découvertes et celles des autres"
 str_ldl_LABORERS				"Ouvriers"
 str_ldl_Land					"Terre"
 str_ldl_Land_Grabber				"Expansionniste"
+str_ldl_LANGUAGE					"LANGUE"
 str_ldl_Large_64_x_128				"Grande"
 str_ldl_Last_Sale_Price_COLON			"Dernier prix de vente"
 str_ldl_Launch					"Lancer"
@@ -945,6 +949,7 @@ str_ldl_Offer					"Offre"
 str_ldl_OFFER_A_GIFT				"OFFRIR UN CADEAU"
 str_ldl_OFFER_AN_EXCHANGE			"PROPOSER UN ECHANGE"
 str_ldl_Offer_Good				"Offrir une marchandise"
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -1181,6 +1186,7 @@ str_ldl_Unit_Help				"Aide sur l'unité"
 str_ldl_UNIT_MOVEMENT				"DEPLACEMENT UNITE"
 str_ldl_UNIT_STATUS				"STATUT UNITE"
 str_ldl_Units					"Unités"
+str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
 str_ldl_UNLOAD_ALL				"DEBARQ. TOUS"
 str_ldl_Unpredictable				"Imprévisible"
 str_ldl_Untarnished				"Pur"
@@ -1413,6 +1419,8 @@ str_tbl_ldl_You_will_receive			"Vous allez recevoir"
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"Votre intention d'acheter a été transmise."
 str_tbl_ldl_Zoom_in_one_level			"Zoomer d'un niveau en avant"
 str_tbl_ldl_Zoom_out_one_level			"Zoomer d'un niveau en arrière"
+str_ldl_CAPS_LANGUAGE				"LANGUE"
+str_ldl_Use_OS_Language				"Use language from operating system"
 str_ldl_CAPS_MUSIC				"MUSIQUE"
 str_ldl_Select_Track				"Sélection piste"
 str_ldl_CAPS_SELECT_TRACK			"SELECTION PISTE"
@@ -2261,6 +2269,7 @@ str_ldl_MapFilters				"Filtres carte"
 str_ldl_Graphics				"Affichage"
 str_ldl_Sound					"Son"
 str_ldl_Music					"Musique"
+str_ldl_Language				"Langue"
 str_ldl_Advanced				"Avancé"
 str_ldl_SaveGame				"Sauv. partie"
 str_ldl_LoadGame				"Charger partie"
@@ -2747,8 +2756,6 @@ str_ldl_SET_GOAL				"Fixer objectif"
 str_ldl_SORT_BY_AGE				"Trier par âge"
 
 
-
-
 # Ranking Tab
 str_ldl_RANKING_MILITARY			"Militaire"
 str_ldl_RANKING_ECONOMIC			"Economique"
@@ -3088,7 +3095,7 @@ str_profile_CityClick                           "Sélectionner la ville au lieu d
 str_profile_DebugSlic                           "Messages du débogueur de Slic"
 str_profile_DebugSlicEvents                     "Messages de débogage des événements Slic"
 str_profile_EndTurnWithEmptyBuildQueues         "Finir tour sans construction en cours"
-str_profile_RunInBackground                     "Permettre fin de tour automatique"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "Amélioration des unités"
 str_profile_SmoothBorders                       "Frontières de l'empire lissées"
 str_profile_CivFlags                            "Unités avec drapeau de la civilisation"
@@ -3113,19 +3120,22 @@ str_profile_OneCityChallenge                    "Défi une ville"                
 str_profile_CityCaptureOptions                  "Options de capture des villes"                 # Captured city options
 str_profile_DebugCityAstar                      "Débogage du tracé du réseau routier"
 str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"                                 # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Sentineling units board automatically"         # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Added for extended keyboard mapping options keys 6/2004 L. Hirth
-str_tbl_ldl_Music_Options			"0ptions Musique"
-str_tbl_ldl_Decend				"Descend"
+str_tbl_ldl_Music_Options				"Options Musique"
+str_tbl_ldl_Language_Options			"Options Langue"
+str_tbl_ldl_Decend						"Descend"
 str_tbl_ldl_Execute_Eyepoint			"Focus sur objet (oeil)"
-str_tbl_ldl_Move_Order				"Ordre de mouvement"
-str_tbl_ldl_End_Unit_Turn			"Fin de tour pour l'unité"
+str_tbl_ldl_Move_Order					"Ordre de mouvement"
+str_tbl_ldl_End_Unit_Turn				"Fin de tour pour l'unité"
 str_tbl_ldl_Process_Unit_Orders			"Appliquer les ordres des unités"
-str_tbl_ldl_Group_Army				"Grouper toutes les unités"
-str_tbl_ldl_Ungroup_Army			"Dissocier les unités"
-str_tbl_ldl_Gamestate_Debug			"Etat mode Debug (playtest)"
-str_tbl_ldl_Rand_Test				"Test aléatoire (playtest)"
-str_tbl_ldl_Command_Enter			"Saisie de commande (playtest)"
+str_tbl_ldl_Group_Army					"Grouper toutes les unités"
+str_tbl_ldl_Ungroup_Army				"Dissocier les unités"
+str_tbl_ldl_Gamestate_Debug				"Etat mode Debug (playtest)"
+str_tbl_ldl_Rand_Test					"Test aléatoire (playtest)"
+str_tbl_ldl_Command_Enter				"Saisie de commande (playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"Saisie de commande (alternative) (playtest)"
 
 # New gamesetting options
@@ -3140,7 +3150,13 @@ str_ldl_SmoothBorders_On			"Icones de frontières lissés"
 str_ldl_SmoothBorders_Off			"Pixels fins pour Frontières"
 str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
 str_tbl_ldl_CityCaptureOptions_On		"Options de capture des villes"
 str_tbl_ldl_CityCaptureOptions_Off		"Pas d'options de capture des villes"
 str_tbl_ldl_OneCityChallenge_On			"Défi une ville"
@@ -3177,6 +3193,7 @@ str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."

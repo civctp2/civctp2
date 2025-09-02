@@ -21,6 +21,9 @@
 // _MSC_VER
 // - Compiler version (for the Microsoft C++ compiler only)
 //
+// USE_SDL
+// - Use SDL for sound and cdrom (originally, now disabled)
+//
 //----------------------------------------------------------------------------
 //
 // Modifications from the original Activision code:
@@ -39,6 +42,8 @@
 
 #include "c3files.h"
 #include <vector>	// list did not work: crashes on begin() for empty list
+
+class LanguageRecord;
 
 class CivPaths {
 private:
@@ -114,7 +119,16 @@ public:
 	void        ResetExtraDataPaths(void);
 	void        ReplaceFileSeperator(MBCHAR* path);
 
-protected:
+	void FindAndSetLocalizedPath();
+	const LanguageRecord* FindLanguage();
+
+	void SetLocalizedPath(const MBCHAR *path);
+
+	void SetLocaleFromLanguage();
+
+private:
+
+	bool CompareLocals(const MBCHAR *locale1, const wchar_t* locale2) const;
 
 	MBCHAR *    MakeAssetPath
 	(

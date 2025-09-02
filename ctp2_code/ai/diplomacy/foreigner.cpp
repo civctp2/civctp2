@@ -338,10 +338,10 @@ void Foreigner::RecomputeRegard(const DiplomacyRecord & diplomacy,
 				if (event_iter->duration <= 0 && regard_decay != NULL)
 				{
 					if (event_iter->regard > 0)
-						event_iter->regard *= regard_decay->GetPositiveDecay();
+						event_iter->regard = static_cast<ai::Regard>(event_iter->regard * regard_decay->GetPositiveDecay());
 
 					else
-						event_iter->regard *= regard_decay->GetNegativeDecay();
+						event_iter->regard = static_cast<ai::Regard>(event_iter->regard * regard_decay->GetNegativeDecay());
 				}
 
 				else if ((sint32) event_iter->turn + (sint32) event_iter->duration < decayRound) {
@@ -515,7 +515,7 @@ const NegotiationEventList & Foreigner::GetNegotiationEvents() const
 
 void Foreigner::ExecuteDelayedNegotiations()
 {
-	for(sint32 i = m_negotiationEvents.size() - 1; i >= 0; --i)
+	for(size_t i = 0; i < m_negotiationEvents.size(); ++i)
 	{
 		if(m_negotiationEvents[i].round < 0)
 		{

@@ -13,9 +13,11 @@
 
 #include "ldl_data.hpp"
 
-#ifdef __AUI_USE_SDL__
+#if defined(__AUI_USE_SDL__)
 #include "aui_sdlsurface.h"
 #include <string>
+#include <codecvt>
+#include <locale>
 #endif
 
 WNDPROC aui_TextField::m_windowProc = NULL;
@@ -59,8 +61,8 @@ aui_TextField::aui_TextField(
 	aui_TextBase( NULL ),
 	aui_Win( retval, id, x, y, width, height, ActionFunc, cookie ),
 #ifndef __AUI_USE_DIRECTX__
-	m_Font( NULL ),
 	m_Text( NULL ),
+	m_Font( NULL ),
 #endif
 	m_holdfont( NULL )
 {
@@ -93,7 +95,7 @@ AUI_ERRCODE aui_TextField::InitCommonLdl( const MBCHAR *ldlBlock )
 	const MBCHAR *font = block->GetString( k_AUI_TEXTFIELD_LDL_FONT );
 	sint32 fontheight = block->GetInt( k_AUI_TEXTFIELD_LDL_FONT );
 
-	sint32 maxFieldLen =
+	size_t maxFieldLen =
 		block->GetAttributeType( k_AUI_TEXTFIELD_LDL_MAXFIELDLEN ) == ATTRIBUTE_TYPE_INT ?
 		block->GetInt( k_AUI_TEXTFIELD_LDL_MAXFIELDLEN ) :
 		1024;
@@ -118,7 +120,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	BOOL autovscroll,
 	BOOL autohscroll,
 	BOOL isfilename,
-	sint32 maxFieldLen,
+	size_t maxFieldLen,
 	BOOL passwordReady )
 {
 	m_blink = FALSE;
@@ -127,7 +129,7 @@ AUI_ERRCODE aui_TextField::InitCommon(
 	m_isFileName = isfilename;
 	m_maxFieldLen = maxFieldLen;
 	m_passwordReady = passwordReady;
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	m_textHeight = 0;
 	m_hfont = NULL;
 	m_holdfont = NULL;
@@ -138,15 +140,15 @@ AUI_ERRCODE aui_TextField::InitCommon(
 #endif
 
 	if (font) strcpy(m_desiredFont, font);
-#ifdef __AUI_USE_DIRECTX__
+#if defined(__AUI_USE_DIRECTX__)
 	else strcpy(m_desiredFont, "\0");
 #else
 	else strcpy(m_desiredFont, "times.ttf");
 #endif
 
+#if defined(__AUI_USE_DIRECTX__)
 	if ( !m_registered ) return AUI_ERRCODE_INVALIDPARAM;
 
-#ifdef __AUI_USE_DIRECTX__
 	uint32 style = WS_CHILD;
 	if ( m_multiLine )
 	{
@@ -180,10 +182,17 @@ AUI_ERRCODE aui_TextField::InitCommon(
 
 	g_ui->AddWin( m_hwnd );
 
+#if defined(_WIN64)
 	if ( !m_windowProc )
-		m_windowProc = (WNDPROC)GetWindowLong( m_hwnd, GWL_WNDPROC );
+		m_windowProc = (WNDPROC)GetWindowLongPtr( m_hwnd, GWLP_WNDPROC );
 
-	SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)TextFieldWindowProc );
+	SetWindowLongPtr( m_hwnd, GWLP_WNDPROC, (LONG_PTR)TextFieldWindowProc );
+#else
+	if (!m_windowProc)
+		m_windowProc = (WNDPROC)GetWindowLong(m_hwnd, GWL_WNDPROC);
+
+	SetWindowLong(m_hwnd, GWL_WNDPROC, (LONG)TextFieldWindowProc);
+#endif
 
 	UpdateWindow( m_hwnd );
 
@@ -221,7 +230,8 @@ AUI_ERRCODE aui_TextField::InitCommon(
 		strncpy(m_Text, text, m_maxFieldLen);
 
 	// select nothing, move insertion point to end
-	m_selStart = m_selEnd = strlen(m_Text);
+	m_selStart = m_selEnd = static_cast<sint32>(strlen(m_Text));
+	m_viewStart = 0;
 
 	// This supposed to set the font size as far as I understand it. However,
 	// it doesn't do it without SetPointSize. At least it fixes an assert.
@@ -261,7 +271,11 @@ aui_TextField::~aui_TextField()
 	}
 
 	if ( m_winRefCount == 1 && m_windowProc )
-		SetWindowLong( m_hwnd, GWL_WNDPROC, (LONG)m_windowProc );
+#if defined(_WIN64)
+		SetWindowLongPtr(m_hwnd, GWLP_WNDPROC, (LONG_PTR)m_windowProc);
+#else
+		SetWindowLong(m_hwnd, GWL_WNDPROC, (LONG)m_windowProc);
+#endif
 
 	g_ui->RemoveWin(m_hwnd);
 #else
@@ -275,21 +289,20 @@ aui_TextField::~aui_TextField()
 #endif
 }
 
-sint32 aui_TextField::GetFieldText( MBCHAR *text, sint32 maxCount )
+size_t aui_TextField::GetFieldText( MBCHAR *text, size_t maxCount )
 {
 #ifdef __AUI_USE_DIRECTX__
 	return GetWindowText(m_hwnd, text, std::min(m_maxFieldLen, maxCount));
 #else
-	sint32 n = std::min(m_maxFieldLen,maxCount);
-	if (n <= 0)
-		return 0;
+	size_t n = std::min(m_maxFieldLen, maxCount);
+
 	strncpy(text, m_Text, n-1);
-	text[n] = '\0';
+	text[n-1] = '\0';
 	return strlen(text);
 #endif
 }
 
-BOOL aui_TextField::SetFieldText( const MBCHAR *text )
+BOOL aui_TextField::SetFieldText(const MBCHAR *text, size_t caretPos)
 {
 	m_draw |= m_drawMask & k_AUI_REGION_DRAWFLAG_UPDATE;
 
@@ -301,11 +314,21 @@ BOOL aui_TextField::SetFieldText( const MBCHAR *text )
 	return success;
 #else
 	strncpy(m_Text, text, m_maxFieldLen);
+	m_Text[m_maxFieldLen-1] = '\0'; // strncpy does not append '\0' if text is longer than m_maxFieldLen
 
-	// select nothing, move insertion point to end
-	m_selStart = m_selEnd = strlen(m_Text);
+	if (caretPos < 0 || caretPos > GetTextLength())
+	{
+		// select nothing, move insertion point to end
+		m_selStart = m_selEnd = GetTextLength();
+	}
+	else
+	{
+		m_selStart = m_selEnd = caretPos;
+	}
 
 	if ( GetKeyboardFocus() == this ) g_winFocus = this;
+
+	UpdateView();
 
 	return TRUE;
 #endif
@@ -351,27 +374,22 @@ BOOL aui_TextField::SetIsFileName( BOOL isFileName )
 	return wasFileName;
 }
 
-sint32 aui_TextField::SetMaxFieldLen( sint32 maxFieldLen )
+size_t aui_TextField::SetMaxFieldLen( size_t maxFieldLen )
 {
-	sint32 prevMaxFieldLen = m_maxFieldLen;
+	size_t prevMaxFieldLen = m_maxFieldLen;
 
 	m_maxFieldLen = maxFieldLen;
 
-#if 0 // not doing anything
 	if (m_maxFieldLen != prevMaxFieldLen)
 	{
-
+#if !defined(__AUI_USE_DIRECTX__)
+		char* newText = new char[maxFieldLen + 1];
+		strncpy(newText, m_Text, maxFieldLen);
+		newText[maxFieldLen] = '\0';
+		delete[] m_Text;
+		m_Text = newText;
+#endif
 	}
-#ifndef __AUI_USE_DIRECTX__ // Merged in from Linux branch but I leave it as it was for Windows, see above
-	char* newText = new char[maxFieldLen + 1];
-	strncpy(newText, m_Text, maxFieldLen);
-	newText[maxFieldLen] = '\0';
-	delete[] m_Text;
-	m_Text = newText;
-#else
-	fprintf(stderr, "%s L%d: SetMaxFieldLen doing nothing here!\n", __FILE__, __LINE__);
-#endif
-#endif
 
 	return prevMaxFieldLen;
 }
@@ -425,6 +443,7 @@ void aui_TextField::HitEnter() // Is this ; intended?
 			0 );
 }
 
+#if defined(__AUI_USE_DIRECTX__)
 BOOL aui_TextField::IsFileName( HWND hwnd )
 {
 	aui_TextField *textfield = (aui_TextField *)GetWinFromHWND( hwnd );
@@ -442,6 +461,7 @@ sint32 aui_TextField::GetMaxFieldLen( HWND hwnd )
 
 	return textfield->GetMaxFieldLen();
 }
+#endif // __AUI_USE_DIRECTX__
 
 AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 {
@@ -450,7 +470,9 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 	if ( !surface ) surface = m_window->TheSurface();
 
 	RECT rect = { 0, 0, m_width, m_height };
+#ifdef __AUI_USE_DIRECTX__
 	RECT srcRect = rect;
+#endif
 	OffsetRect( &rect, m_x + x, m_y + y );
 	ToWindow( &rect );
 
@@ -509,20 +531,47 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 		}
 	}
 #elif defined(__AUI_USE_SDL__)
-	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
-	// fill background
-	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
-	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, 0xff, 0xff, 0xff));
 
-	m_Font->DrawString(surface, &rect, &rect, m_Text,
-	                   k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
-	                   RGB(20,20,20), 0);
-	char save = m_Text[m_selStart];
-	m_Text[m_selStart] = '\0';
-	int offset = m_Font->GetStringWidth(m_Text);
-	m_Text[m_selStart] = save;
-	SDL_Rect r2 = { rect.left+offset-1, rect.top+2, 2, rect.bottom-rect.top-4 };
-	SDL_FillRect(SDLsurf, &r2, 0);
+#if defined(WIN32)
+	COLORREF winColor              = GetSysColor(COLOR_WINDOW);
+	COLORREF winTextColor          = GetSysColor(COLOR_WINDOWTEXT);
+	COLORREF winHighLightColor     = GetSysColor(COLOR_HIGHLIGHT);
+	COLORREF winHighLightTextColor = GetSysColor(COLOR_HIGHLIGHTTEXT);
+#else
+	// Maybe there is also a method on Linux for getting the colorefs by name
+	COLORREF winColor              = RGB(0xff, 0xff, 0xff);
+	COLORREF winTextColor          = RGB(20, 20, 20);
+	COLORREF winHighLightColor     = RGB(0x00, 0x78, 0xd7);
+	COLORREF winHighLightTextColor = RGB(0xff, 0xff, 0xff);
+#endif
+
+	SDL_Surface* SDLsurf = static_cast<aui_SDLSurface*>(surface)->DDS();
+
+	MBCHAR* text     =  m_Text     + m_viewStart;
+	size_t  selStart = (m_selStart > m_viewStart) ? m_selStart - m_viewStart : 0;
+	size_t  selEnd   = (m_selEnd   > m_viewStart) ? m_selEnd   - m_viewStart : 0;
+
+	// Fill background
+	SDL_Rect r1 = { rect.left, rect.top, rect.right-rect.left, rect.bottom-rect.top };
+	SDL_FillRect(SDLsurf, &r1, SDL_MapRGB(SDLsurf->format, GetRValue(winColor), GetGValue(winColor), GetBValue(winColor)));
+
+	m_Font->DrawString(surface, &rect, &rect, text,
+		k_AUI_BITMAPFONT_DRAWFLAG_JUSTLEFT,
+		winTextColor, 0, selStart, selEnd, winHighLightTextColor, winHighLightColor);
+
+	// Calculate caret position
+	// ToDo: Implement multiline
+	char save    = text[selEnd];
+	text[selEnd] = '\0';
+	int offset   = m_Font->GetStringWidth(text);
+	text[selEnd] = save;
+
+	// Draw blinking caret
+	if (m_blink && GetKeyboardFocus() == this)
+	{
+		SDL_Rect r2 = { rect.left + offset - 1, rect.top + 2, 2, rect.bottom - rect.top - 4 };
+		SDL_FillRect(SDLsurf, &r2, SDL_MapRGB(SDLsurf->format, GetRValue(winTextColor), GetGValue(winTextColor), GetBValue(winTextColor)));
+	}
 #endif
 
 	if ( surface == m_window->TheSurface() )
@@ -530,6 +579,39 @@ AUI_ERRCODE aui_TextField::DrawThis( aui_Surface *surface, sint32 x, sint32 y )
 
 	return AUI_ERRCODE_OK;
 }
+
+#if defined(__AUI_USE_SDL__)
+size_t aui_TextField::GetInvisibleNumToSelStart()
+{
+	RECT  rect   = { 0, 0, m_width, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + m_selEnd;
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	return stop - start;
+}
+
+void aui_TextField::UpdateView()
+{
+	if(m_selEnd <= m_viewStart)
+	{
+		m_viewStart = m_selEnd;
+	}
+	else
+	{
+		size_t invisibleNum = GetInvisibleNumToSelStart();
+		if(invisibleNum > 0)
+		{
+			m_viewStart += invisibleNum;
+		}
+	}
+
+	m_blink = TRUE;
+}
+#endif
 
 void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 {
@@ -554,6 +636,188 @@ void aui_TextField::PostChildrenCallback( aui_MouseEvent *mouseData )
 	}
 }
 
+#if defined(__AUI_USE_SDL__)
+void aui_TextField::MouseLDragInside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLDragInside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	m_selEnd = start - m_Text;
+
+	UpdateView();
+}
+
+void aui_TextField::MouseLDragOutside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLDragOutside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	m_selEnd = start - m_Text;
+
+	UpdateView();
+}
+
+void aui_TextField::MouseLGrabInside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLGrabInside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	m_selEnd = start - m_Text;
+
+	if(!mouseData->IsSetLeftShift()
+	&& !mouseData->IsSetRightShift())
+	{
+		m_selStart = m_selEnd;
+	}
+
+	UpdateView();
+}
+
+void aui_TextField::MouseLDoubleClickInside(aui_MouseEvent * mouseData)
+{
+	if ( IsDisabled() ) return;
+	aui_Win::MouseLGrabInside(mouseData);
+	POINT mousePos = mouseData->position;
+	ToWindow(&mousePos);
+
+	RECT  rect   = { 0, 0, mousePos.x, m_height };
+	POINT penPos = { 0, 0 };
+
+	const MBCHAR* start = m_Text + m_viewStart;
+	const MBCHAR*  stop = m_Text + GetTextLength();
+
+	m_Font->GetLineInfo(&rect, &penPos, NULL, NULL, &start, stop, true, true);
+
+	// Get the system preferred locale
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+
+	std::locale loc;
+	try
+	{
+		loc = std::locale(locales[0].language);
+	}
+	catch(std::runtime_error&)
+	{
+		// Nothing to do here we have a valid locale, just not the one we want
+	}
+
+	SDL_free(locales);
+
+	const MBCHAR* wordStart = start;
+	for(; wordStart > m_Text && std::isalnum(*wordStart, loc); wordStart--)
+	{
+		// Nothing to do
+	}
+
+	// If we are at the beginning and it is a word character, we don't add if space or something else we must add one
+	m_selStart = wordStart - m_Text + (std::isalnum(*wordStart, loc) ? 0 : 1);
+
+	if(m_selStart < m_viewStart)
+		m_viewStart = m_selStart;
+
+	const MBCHAR* wordEnd = start;
+	for(; wordEnd < stop && std::isalnum(*wordEnd, loc); wordEnd++)
+	{
+		// Nothing to do
+	}
+
+	m_selEnd = wordEnd - m_Text;
+
+	UpdateView();
+}
+
+void aui_TextField::SelectWordStart()
+{
+	// Get the system preferred locale
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+
+	std::locale loc;
+	try
+	{
+		loc = std::locale(locales[0].language);
+	}
+	catch(std::runtime_error&)
+	{
+		// Nothing to do here we have a valid locale, just not the one we want
+	}
+
+	SDL_free(locales);
+
+	const MBCHAR* wordStart = m_Text + m_selEnd;
+	const MBCHAR*      stop = m_Text + GetTextLength();
+
+	bool isNotAlphaNum = true;
+	for(; wordStart > m_Text && (std::isalnum(*wordStart, loc) || isNotAlphaNum); wordStart--)
+	{
+		if(isNotAlphaNum)
+			isNotAlphaNum = !std::isalnum(*wordStart, loc);
+
+		m_selEnd--;
+	}
+}
+
+void aui_TextField::SelectWordEnd()
+{
+	// Get the system preferred locale
+	SDL_Locale* locales = SDL_GetPreferredLocales();
+
+	std::locale loc;
+	try
+	{
+		loc = std::locale(locales[0].language);
+	}
+	catch(std::runtime_error&)
+	{
+		// Nothing to do here we have a valid locale, just not the one we want
+	}
+
+	SDL_free(locales);
+
+	const MBCHAR* wordEnd = m_Text + m_selEnd;
+	const MBCHAR*    stop = m_Text + GetTextLength();
+
+	bool isNotAlphaNum = true;
+	for(; wordEnd < stop && (std::isalnum(*wordEnd, loc) || isNotAlphaNum); wordEnd++)
+	{
+		if(isNotAlphaNum)
+			isNotAlphaNum = !std::isalnum(*wordEnd, loc);
+
+		m_selEnd++;
+	}
+}
+
+#endif
+
 void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
 {
 	if ( IsDisabled() ) return;
@@ -572,18 +836,20 @@ void aui_TextField::MouseLGrabOutside( aui_MouseEvent *mouseData )
 			0 );
 }
 
-void aui_TextField::SetSelection(sint32 start, sint32 end)
+void aui_TextField::SetSelection(size_t start, size_t end)
 {
 #ifdef __AUI_USE_DIRECTX__
 	SendMessage( m_hwnd, EM_SETSEL, (WPARAM)start, (LPARAM)end);
 	UpdateWindow( m_hwnd );
 #else
-	m_selStart = start;
-	m_selEnd = end;
+	size_t textLength = GetTextLength();
+
+	m_selStart = std::min(start, textLength);
+	m_selEnd   = std::min(end,   textLength);
 #endif
 }
 
-void aui_TextField::GetSelection(sint32 *start, sint32 *end)
+void aui_TextField::GetSelection(size_t *start, size_t *end)
 {
 #ifdef __AUI_USE_DIRECTX__
 	SendMessage(m_hwnd, EM_GETSEL, (WPARAM)start, (LPARAM)end);
@@ -595,7 +861,7 @@ void aui_TextField::GetSelection(sint32 *start, sint32 *end)
 
 void aui_TextField::SelectAll(void)
 {
-	SetSelection(9999, 9999);
+	SetSelection(0, GetTextLength());
 }
 
 #ifdef __AUI_USE_DIRECTX__
@@ -653,11 +919,15 @@ LRESULT CALLBACK TextFieldWindowProc( HWND hwnd, UINT message, WPARAM wParam, LP
 		return 0;
 	}
 
-	LRESULT lr = CallWindowProc(
+#if defined(_WIN64)
+	return CallWindowProc(
+		(__int64(__stdcall *)(HWND, unsigned int, unsigned __int64, __int64))aui_TextField::m_windowProc,
+		hwnd, message, wParam, lParam);
+#else
+	return CallWindowProc(
 		(long(__stdcall *)(HWND, unsigned int, unsigned int, long))aui_TextField::m_windowProc,
 		hwnd, message, wParam, lParam );
-
-	return lr;
+#endif
 }
 
 // Font enumeration proc
@@ -707,38 +977,305 @@ bool aui_TextField::HandleKey(uint32 wParam)
 {
 	if ( GetKeyboardFocus() == this )
 	{
+		// That's a bit hacky, but works
+		// We simply translate what we get for Ctrl+c, Ctrl+x, and Ctrl+v
+		// from SDLMessageHandler in civ3_main.cpp.
+		switch(wParam)
+		{
+			case 'a' - 'a' + 1:
+				wParam = SDLK_SELECT;
+				break;
+			case 'c' - 'a' + 1:
+				wParam = SDLK_COPY;
+				break;
+			case 'x' - 'a' + 1:
+				wParam = SDLK_CUT;
+				break;
+			case 'v' - 'a' + 1:
+				wParam = SDLK_PASTE;
+				break;
+			case VK_BACK:
+			case '\t' + 128:
+				break;
+			default:
+				if(wParam < ' ')
+					return true;
+				break;
+		}
+
 		switch ( wParam )
 		{
 			// Have to handle the enter key here so that buffered input will
 			// be handled correctly with the Windows message queue.
-			case VK_RETURN:
+			case VK_RETURN + 128: // Set to VK_RETURN + 128 to hit escape rules in keymap
 				aui_TextField::HitEnter();
 				break;
 			// No tags allowed, they are for "tabbing focus" between controls.
-			case VK_TAB:
-				fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
+			case '\t' + 128:
+			//	fprintf(stderr, "%s L%d: Tab ignored in TextField!\n", __FILE__, __LINE__);
 				return false;
 			case VK_BACK:
 			{
 				std::string str(m_Text); // char array to c++ string
-				if( str.length() > 0 )
-					str.pop_back(); //lop off character
-					SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+				if (m_selStart == m_selEnd)
+				{
+					if (str.length() > 0 && m_selStart > 0)
+					{
+						if (str.length() <= m_selStart)
+						{
+							str.pop_back(); //lop off character
+							SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+						}
+						else
+						{
+							m_selStart--;
+							m_selEnd--;
+							str.erase(m_selStart, 1);
+							SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+						}
+					}
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					str.erase(m_selStart, m_selEnd - m_selStart);
+					SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selEnd = m_selStart;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					str.erase(m_selEnd, m_selStart - m_selEnd);
+					SetFieldText(str.c_str(), m_selEnd); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selStart = m_selEnd;
+				}
+				else
+				{
+					Assert(0);
+				}
+				break;
+			}
+			case SDLK_DELETE:
+			{
+				std::string str(m_Text); // char array to c++ string
+				if(m_selStart == m_selEnd)
+				{
+					if (str.length() > 0 && static_cast<size_t>(m_selStart) < str.length())
+					{
+						str.erase(m_selStart, 1);
+						SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					}
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					str.erase(m_selStart, m_selEnd - m_selStart);
+					SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selEnd = m_selStart;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					str.erase(m_selEnd, m_selStart - m_selEnd);
+					SetFieldText(str.c_str(), m_selEnd); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selStart = m_selEnd;
+				}
+				else
+				{
+					Assert(0);
+				}
+				break;
+			}
+			case SDLK_UP    + 256:
+		//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 256:
+		//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 256:
+				if(m_selStart == m_selEnd)
+				{
+					if(m_selEnd > 0) m_selEnd--;
+
+					m_selStart = m_selEnd;
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					m_selEnd = m_selStart;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					m_selStart = m_selEnd;
+				}
+
+				UpdateView();
+				break;
+			case SDLK_RIGHT + 256:
+				if(m_selStart == m_selEnd)
+				{
+					if(strlen(m_Text) > m_selEnd) m_selEnd++;
+					m_selStart = m_selEnd;
+				}
+				else if(m_selEnd > m_selStart)
+				{
+					m_selStart = m_selEnd;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					m_selEnd = m_selStart;
+				}
+
+				UpdateView();
+				break;
+			case SDLK_UP    + 512:
+				//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 512:
+				//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 512:
+				if(m_selEnd > 0) m_selEnd--;
+				UpdateView();
+				break;
+			case SDLK_RIGHT + 512:
+				if(strlen(m_Text) > m_selEnd) m_selEnd++;
+				UpdateView();
+				break;
+			case SDLK_UP    + 768:
+				//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 768:
+				//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 768:
+				SelectWordStart();
+				m_selStart = m_selEnd;
+				UpdateView();
+				break;
+			case SDLK_RIGHT + 768:
+				SelectWordEnd();
+				m_selStart = m_selEnd;
+				UpdateView();
+				break;
+			case SDLK_UP    + 1024:
+				//		if(m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_DOWN  + 1024:
+				//		if (m_multiLine) /* ToDo: Implement multiline */;
+				break;
+			case SDLK_LEFT  + 1024:
+				SelectWordStart();
+				UpdateView();
+				break;
+			case SDLK_RIGHT + 1024:
+				SelectWordEnd();
+				UpdateView();
+				break;
+			case SDLK_SELECT:
+				SelectAll();
+				break;
+			case SDLK_COPY:
+			{
+				if(m_selStart != m_selEnd)
+				{
+					size_t start  = (m_selStart < m_selEnd) ? m_selStart : m_selEnd;
+					size_t end    = (m_selStart < m_selEnd) ? m_selEnd : m_selStart;
+					size_t length = end - start;
+
+					std::string str(m_Text);
+					SDL_SetClipboardText(str.substr(start, length).c_str());
+				}
+
+				break;
+			}
+			case SDLK_CUT:
+			{
+				if(m_selStart != m_selEnd)
+				{
+					size_t start  = (m_selStart < m_selEnd) ? m_selStart : m_selEnd;
+					size_t end    = (m_selStart < m_selEnd) ? m_selEnd : m_selStart;
+					size_t length = end - start;
+
+					std::string str(m_Text);
+					SDL_SetClipboardText(str.substr(start, length).c_str());
+
+					str.erase(start, length);
+					SetFieldText(str.c_str(), start); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+					m_selStart = start;
+					m_selEnd = start;
+				}
+
+				break;
+			}
+			case SDLK_PASTE:
+			{
+				if(!SDL_HasClipboardText())
 					break;
+
+				char* clipboardText = SDL_GetClipboardText();
+
+				size_t selLength = (m_selStart < m_selEnd) ? m_selEnd - m_selStart: m_selStart - m_selEnd;
+
+				if(GetTextLength() + strlen(clipboardText) - selLength >= GetMaxFieldLen() - 1)
+				{
+					SDL_free(clipboardText);
+					break;
+				}
+
+				std::string str(m_Text);
+
+				if(m_selStart != m_selEnd)
+				{
+					size_t start  = (m_selStart < m_selEnd) ? m_selStart : m_selEnd;
+					size_t end    = (m_selStart < m_selEnd) ? m_selEnd : m_selStart;
+					size_t length = end - start;
+
+					str.erase(start, length);
+					m_selStart = start;
+					m_selEnd = start;
+				}
+
+				str.insert(m_selStart, clipboardText);
+				SetFieldText(str.c_str(), m_selStart + strlen(clipboardText)); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+
+				SDL_free(clipboardText);
+
+				break;
 			}
 			case ' ':
 			// fprintf(stderr, "%s L%d: space!\n", __FILE__, __LINE__);
 			default:
 			{ // append char to char array, apparently easiest with std::string
 
-				static MBCHAR text[ 1025 ];
-				GetFieldText( text, 1024 );
+				size_t selLength = (m_selStart < m_selEnd) ? m_selEnd - m_selStart: m_selStart - m_selEnd;
 				// Don't let any more characters in if you're at the max.
-				if ( (sint32)strlen( text ) >= GetMaxFieldLen() ) return 0;
+				if ( (sint32)strlen( m_Text ) - selLength >= GetMaxFieldLen() - 1) break;
 
+#if 0
+				// Attempt to put unicode characters in, but does not work
+				// Maybe the whole thing has to be converted
+				std::string source(m_Text); // char array to c++ string
+				std::wstring_convert<std::codecvt_utf8<wchar_t>> converter;
+				std::wstring wide_str = converter.from_bytes(source);
+
+				wide_str += static_cast<wchar_t>(wParam); // Append wide char to wide string
+				std::string str = converter.to_bytes(wide_str);
+#else
 				std::string str(m_Text); // char array to c++ string
-				str += static_cast<char>(wParam); // append char to string
-				SetFieldText(str.c_str()); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
+
+				if (m_selEnd > m_selStart)
+				{
+					str.erase(m_selStart, m_selEnd - m_selStart);
+					m_selEnd = m_selStart;
+				}
+				else if(m_selEnd < m_selStart)
+				{
+					str.erase(m_selEnd, m_selStart - m_selEnd);
+					m_selStart = m_selEnd;
+				}
+
+
+				str.insert(m_selStart, 1, static_cast<char>(wParam));
+				m_selStart++;
+				m_selEnd++;
+#endif
+				SetFieldText(str.c_str(), m_selStart); // c++ string to char array, use SetFieldText (not just modify m_Text) to cause re-drawing
 				g_soundManager->AddGameSound(GAMESOUNDS_EDIT_TEXT);// play key sound ;-)
 				break;
 			}

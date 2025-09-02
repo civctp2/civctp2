@@ -244,7 +244,7 @@ CLEAN :
 # ADD CPP /nologo /G5 /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "DPRNT" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /FR /YX /c
 CPP_PROJ=/nologo /G5 /Zp1 /MDd /W3 /Gm /GX /Zi /Od /I "..\h" /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "DPRNT" /D "WIN32" /D "_WINDOWS" /D\
- "DYNALINK" /D "dp_ANET2" /FR"$(INTDIR)/" /Fp"$(INTDIR)/wipx.pch" /YX\
+ "DYNALINK" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/" /Fp"$(INTDIR)/wipx.pch" /YX\
  /Fo"$(INTDIR)/" /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\wipx2d/
 CPP_SBRS=.\wipx2d/
@@ -324,7 +324,7 @@ CLEAN :
 # ADD CPP /nologo /G5 /Zp1 /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D "dp_ANET2" /FAcs /YX /c
 CPP_PROJ=/nologo /G5 /Zp1 /MD /W3 /GX /O2 /Oy- /I "..\h" /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_WINDOWS" /D "DYNALINK" /D\
- "dp_ANET2" /FAcs /Fa"$(INTDIR)/" /Fp"$(INTDIR)/wipx.pch" /YX /Fo"$(INTDIR)/" /c\
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FAcs /Fa"$(INTDIR)/" /Fp"$(INTDIR)/wipx.pch" /YX /Fo"$(INTDIR)/" /c\
  
 CPP_OBJS=.\wipx2/
 CPP_SBRS=.\.

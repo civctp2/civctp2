@@ -222,7 +222,7 @@ void slicif_add_object(struct PSlicObject *obj)
 	slicif_add_op(SOP_STOP);
 	obj->m_code          = (unsigned char *)malloc(s_code_ptr - s_code);
 	memcpy(obj->m_code, s_code, s_code_ptr - s_code);
-	obj->m_codeSize      = s_code_ptr - s_code;
+	obj->m_codeSize      = static_cast<int>(s_code_ptr - s_code);
 	obj->m_from_file     = s_file_num;
 	const char *filename = slicif_get_filename();
 	obj->m_filename      = (char *)malloc(strlen(filename) + 1);
@@ -678,13 +678,13 @@ void slicif_add_op(SOP op, ...)
 			*((int *)s_code_ptr) = -1;
 			s_code_ptr += sizeof(int);
 
-			offset = s_code_ptr - s_code;
+			offset = static_cast<int>(s_code_ptr - s_code);
 			*((int *)s_block_ptr[ival]) = offset;
 			s_block_ptr[ival][-1] = SOP_JMP;
 
 			break;
 		case SOP_BUTN:
-			offset = s_block_ptr[s_level] - s_code;
+			offset = static_cast<int>(s_block_ptr[s_level] - s_code);
 			*((int *)s_code_ptr) = offset + sizeof(int);
 			s_code_ptr += sizeof(int);
 
@@ -693,7 +693,7 @@ void slicif_add_op(SOP op, ...)
 			s_code_ptr += sizeof(int);
 			break;
 		case SOP_OCLS:
-			offset = s_block_ptr[s_level] - s_code;
+			offset = static_cast<int>(s_block_ptr[s_level] - s_code);
 			*((int *)s_code_ptr) = offset + sizeof(int);
 			s_code_ptr += sizeof(int);
 			break;
@@ -1100,7 +1100,7 @@ void slicif_end_if()
 {
 	int i;
 	for(i = 0; i < s_if_stack[s_if_level].count; i++) {
-		*((int *)s_if_stack[s_if_level].array[i]) = s_code_ptr - s_code;
+		*((int *)s_if_stack[s_if_level].array[i]) = static_cast<int>(s_code_ptr - s_code);
 	}
 	--s_if_level;
 }
@@ -1108,7 +1108,7 @@ void slicif_end_if()
 void slicif_start_while()
 {
 	++s_while_level;
-	s_while_stack[s_while_level].expression = s_code_ptr - s_code;
+	s_while_stack[s_while_level].expression = static_cast<int>(s_code_ptr - s_code);
 	s_while_stack[s_while_level].increment = -1;
 }
 
@@ -1151,7 +1151,7 @@ void slicif_end_while()
 //              time.
 //
 //----------------------------------------------------------------------------
-void slicif_dump_code(unsigned char* code, int codeSize)
+void slicif_dump_code(unsigned char* code, size_t codeSize)
 {
 	unsigned char* codePtr = code;
 	double dval;
@@ -1166,7 +1166,7 @@ void slicif_dump_code(unsigned char* code, int codeSize)
 
 	while(codePtr < code + codeSize) {
 		SOP op = (SOP)*codePtr;
-		fprintf(debuglog, "%04lx: ", codePtr - code);
+		fprintf(debuglog, "%04zx: ", codePtr - code);
 		codePtr++;
 		switch(op) {
 			case SOP_PUSHI:
@@ -1881,7 +1881,7 @@ void slicif_start_for()
 void slicif_for_expression()
 {
 	++s_while_level;
-	s_while_stack[s_while_level].expression = s_code_ptr - s_code;
+	s_while_stack[s_while_level].expression = static_cast<int>(s_code_ptr - s_code);
 	s_while_stack[s_while_level].increment = -1;
 }
 
@@ -1889,7 +1889,7 @@ void slicif_for_continue()
 {
 
 	slicif_add_op(SOP_JMP, -1);
-	s_while_stack[s_while_level].increment = s_code_ptr - s_code;
+	s_while_stack[s_while_level].increment = static_cast<int>(s_code_ptr - s_code);
 }
 
 void slicif_start_for_body()
@@ -2054,7 +2054,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 
 		if(type != SLIC_SYM_IVAR && type != SLIC_SYM_PLAYER && type != SLIC_SYM_LOCATION &&
 			type != SLIC_SYM_CITY && type != SLIC_SYM_UNIT && type != SLIC_SYM_ARMY) {
-			sprintf(errbuf, "Argument %u requires a symbol", s_currentEventArgument[s_parenLevel] + 1);
+			sprintf(errbuf, "Argument %zu requires a symbol", s_currentEventArgument[s_parenLevel] + 1);
 			yyerror(errbuf);
 		}
 		return;
@@ -2083,7 +2083,7 @@ void slicif_check_arg_symbol(SLIC_SYM type, char *typeName)
 		return;
 	}
 	if(symType != type) {
-		sprintf(errbuf, "Type mismatch for argument %u, expected %s", s_currentEventArgument[s_parenLevel] + 1, typeName);
+		sprintf(errbuf, "Type mismatch for argument %zu, expected %s", s_currentEventArgument[s_parenLevel] + 1, typeName);
 		yyerror(errbuf);
 		return;
 	}
@@ -2145,7 +2145,7 @@ void slicif_check_num_args()
 
 	if((s_currentEvent < GEV_MAX) && s_parenLevel == 1) {
 		if((s_currentEventArgument[s_parenLevel]) != g_gevManager->GetNumArgs(s_currentEvent)) {
-			sprintf(errbuf, "Wrong number of arguments for event %s, expected %u",
+			sprintf(errbuf, "Wrong number of arguments for event %s, expected %zu",
 			        g_gevManager->GetEventName(s_currentEvent),
 			        g_gevManager->GetNumArgs(s_currentEvent));
 			yyerror(errbuf);

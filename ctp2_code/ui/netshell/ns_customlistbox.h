@@ -125,7 +125,7 @@ public:
 				NFT *t;
 				do {
 					t = new NFT();
-					t->SetKey(&(this->curkey));
+					t->SetKey(&(this->m_curkey));
 					if(t->Load(file) == NETFunc::OK) {
 
 						this->InsertItem(t);
@@ -144,7 +144,7 @@ public:
 
 	void InsertItem(NFT *t) {
 		this->NextKey();
-		t->SetKey(&(this->curkey));
+		t->SetKey(&(this->m_curkey));
 		this->Insert(this->Add(t));
 	}
 
@@ -159,8 +159,8 @@ public:
 
 	AUI_ERRCODE Save(void) {
 
-		memset(&(this->curkey), 0, sizeof(this->curkey));
-		this->curkey.len = 1;
+		memset(&(this->m_curkey), 0, sizeof(this->m_curkey));
+		this->m_curkey.m_len = 1;
 		FILE *file = fopen(m_filename, "wb");
 		if(file) {
 
@@ -173,7 +173,7 @@ public:
 			for(; i!=this->end(); i++, j++) {
 				if ( this->FindItem( *i ) == this->GetSelectedItem() )
 				{
-					(*i)->SetKey(&(this->curkey));
+					(*i)->SetKey(&(this->m_curkey));
 					(*i)->Save(file);
 					this->NextKey();
 
@@ -184,7 +184,7 @@ public:
 			for(i=this->begin(), j=0; i!=this->end(); i++, j++) {
 				if ( j != first )
 				{
-					(*i)->SetKey(&(this->curkey));
+					(*i)->SetKey(&(this->m_curkey));
 					(*i)->Save(file);
 					this->NextKey();
 				}

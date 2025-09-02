@@ -53,28 +53,28 @@ AUI_ERRCODE C3Blitter::Blt16To16(
 	RECT *srcRect,
 	uint32 flags )
 {
-#ifndef __linux__
+#if defined(_MSC_VER) && defined(_X86_) // Fast blitters rely on VS x86 assembler code
 	if ((flags & k_AUI_BLITTER_FLAG_FAST))
 	{
 
 #if defined(_TRY_ALL_BLITTERS)
-	    static int  which_blit  = 0;
+		static int  which_blit  = 0;
 
-  	   	switch(which_blit)
-  	   	{
+		switch(which_blit)
+		{
 			case 0:_Blt16To16Fast = &C3Blitter::Blt16To16Fast   ; break;
 			case 1:_Blt16To16Fast = &C3Blitter::Blt16To16FastFPU; break;
 			case 2:_Blt16To16Fast = &C3Blitter::Blt16To16FastMMX; break;
-  	   	}
+		}
 
-	   	which_blit ++;
+		which_blit ++;
 
 		if(which_blit>2)
-		   which_blit = 0;
-		   
+			which_blit = 0;
 #endif
-	   return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
-	} else
+		return (this->*_Blt16To16Fast)(destSurf, destRect, srcSurf, srcRect, flags);
+	}
+	else
 #endif
 	{
 		if (g_useDDBlit)
@@ -134,7 +134,7 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
 	uint16 *        destBuf         = (uint16 *)destSurf->Buffer();
-    bool            wasDestLocked   = destBuf != NULL;
+	bool            wasDestLocked   = destBuf != NULL;
 
 	if (wasDestLocked)
 	{
@@ -151,9 +151,9 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 	{
 		uint16 *    origDestBuf     = destBuf;
 		uint16 *    srcBuf          = (uint16 *)srcSurf->Buffer();
-        bool        wasSrcLocked    = srcBuf != NULL;
+		bool        wasSrcLocked    = srcBuf != NULL;
 
-        if (wasSrcLocked)
+		if (wasSrcLocked)
 		{
 			srcBuf += srcRect->top * srcPitch + srcRect->left;
 		}
@@ -179,13 +179,13 @@ AUI_ERRCODE C3Blitter::Blt16To16Fast(
 				do
 				{
 					destBuf += destPitch;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_X86_)
 					__asm {
 							mov		ecx, scanWidth
-				  			mov		esi, srcBuf
-				  			mov     edx, ecx
-				  			shr     ecx, 3
-				  			mov		edi, destBuf
+							mov		esi, srcBuf
+							mov     edx, ecx
+							shr     ecx, 3
+							mov		edi, destBuf
 							test	ecx, ecx
 							jz		L3
 L0:
@@ -213,7 +213,7 @@ L1:
 L2:
 					}
 #else // _MSC_VER
-                    Assert(0);
+					Assert(0);
 #endif // _MSC_VER
 				} while ( (srcBuf += srcPitch) != stop );
 			}
@@ -249,7 +249,6 @@ L2:
 			}
 			else
 			{
-
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
@@ -288,7 +287,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	const sint32    destPitch       = destSurf->Pitch() / 2;
 	const sint32    srcPitch        = srcSurf->Pitch() / 2;
 	uint16 *        destBuf         = (uint16 *)destSurf->Buffer();
-    bool            wasDestLocked   = destBuf != NULL;
+	bool            wasDestLocked   = destBuf != NULL;
 
 	if (wasDestLocked)
 	{
@@ -305,7 +304,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	{
 		uint16 *    origDestBuf     = destBuf;
 		uint16 *    srcBuf          = (uint16 *)srcSurf->Buffer();
-        bool        wasSrcLocked    = srcBuf != NULL;
+		bool        wasSrcLocked    = srcBuf != NULL;
 
 		if (wasSrcLocked)
 		{
@@ -334,18 +333,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 
 				do
 				{
-
-
-
-
-
-
-
-
-
 					destBuf += destPitch;
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_X86_)
 					_asm
 					{
 						mov eax, scanWidth
@@ -373,7 +363,7 @@ AUI_ERRCODE C3Blitter::Blt16To16FastMMX(
 	   					shr ecx,1
 	   					rep movsw
 					}
-#else // _MSCVER
+#elif!defined(_MSC_VER) // _MSCVER
 //					Assert(0);
                     //fprintf(stderr, "%s L%d: Using Blt16To16FastMMX!\n", __FILE__, __LINE__);
                     __asm__ (
@@ -532,9 +522,9 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 
 
 					destBuf += destPitch;
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_X86_)
 					_asm
-			  		{
+					{
 						mov eax, scanWidth
 						mov esi, srcBuf
 						mov ecx, eax
@@ -622,13 +612,13 @@ AUI_ERRCODE C3Blitter::Blt16To16FastFPU(
 
 bool C3Blitter::CheckMMXTechnology(void)
 {
-#ifdef __linux__
+#if defined(__linux__)
 	return false;
 #else
     bool retval = true;
     DWORD RegEDX = 0;
 
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_X86_)
     __try {
             _asm {
                     mov eax, 1
@@ -647,7 +637,7 @@ bool C3Blitter::CheckMMXTechnology(void)
        __try { _asm emms }
        __except(EXCEPTION_EXECUTE_HANDLER) { retval = false; }
     }
-#else // _MSC_VER
+#elif !defined(_MSC_VER) // _MSC_VER // @ToDo figure out which one it should be
     try {
         __asm__ ( // what's this good for??? Setting an opcode?
             "movl $1,%%eax                \n\t"
@@ -684,10 +674,7 @@ bool C3Blitter::CheckMMXTechnology(void)
 
 void BlockCopy(uint8 *src, uint8 *dest, uint32 len)
 {
-#ifdef __linux__
-	memcpy(dest, src, len);
-#else
-#ifdef _MSC_VER
+#if defined(_MSC_VER) && defined(_X86_)
 	__asm {
 		mov		esi, src
 		mov		edi, dest
@@ -708,7 +695,6 @@ End:	add		ecx, eax
 	rep movsb
 	}
 #else // _MSC_VER
-	Assert(0);
+	memcpy(dest, src, len);
 #endif // _MSC_VER
-#endif
 }

@@ -73,7 +73,7 @@ long int g_closed_nodes   = 0;
 float Astar::EstimateFutureCost(const MapPoint &pos, const MapPoint &dest)
 {
 	sint32 dist = pos.NormalizedDistance(dest);
-	return dist * k_MIN_MOVE_COST;
+	return static_cast<float>(dist * k_MIN_MOVE_COST);
 }
 
 void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point, float &new_entry_cost)

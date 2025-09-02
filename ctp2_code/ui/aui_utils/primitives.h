@@ -66,9 +66,16 @@ struct fRect
 };
 
 enum LINE_FLAGS {
-	LF_NONE             = 0x00,
-	LF_ANTI_ALIASED     = 0x01,
-	LF_SHADOW           = 0x02
+	LF_NONE         = 0x00,
+	LF_ANTI_ALIASED = 0x01,
+	LF_SHADOW       = 0x02
+};
+
+enum TRIANGLE_ID {
+	TI_LEFT_TOP,
+	TI_LEFT_BOTTOM,
+	TI_RIGHT_TOP,
+	TI_RIGHT_BOTTOM
 };
 
 // All kind of patterns may be defined and used
@@ -85,15 +92,21 @@ static const uint32 LINE_PATTERN_DASH_LENGTH = 8;
 extern C3UI			*g_c3ui;
 
 inline aui_BitmapFont * getBitmapFont()
-    {
-    aui_BitmapFont *font= NULL;
+{
+	aui_BitmapFont *font= NULL;
 
-    font = g_c3ui->LoadBitmapFont("arialbd.ttf"); // using hard coded font name (from TiledMapFontStringTable) because this is needed in the debug version before DB initialization
-    Assert(font);
-    font->SetPointSize(9); // size set for TiledMapFontStringTable
+	font = g_c3ui->LoadBitmapFont("arialbd.ttf"); // using hard coded font name (from TiledMapFontStringTable) because this is needed in the debug version before DB initialization
+	Assert(font);
+	font->SetPointSize(9); // size set for TiledMapFontStringTable
 
-    return font;
-    }
+	return font;
+}
+
+inline void freeBitmapFont(aui_BitmapFont * font)
+{
+	g_c3ui->UnloadBitmapFont(font);
+}
+
 #endif
 
 PRIMITIVES_ERRCODE	primitives_FrameRect16(aui_Surface *pSurface,RECT *pRect,Pixel16 color);
@@ -172,6 +185,9 @@ inline void primitives_ClippedFrame16(aui_Surface & surf, sint32 x, sint32 y, si
 	primitives_ClippedFrameRect16(surf, frameRect, color, alpha);
 }
 void primitives_ClippedShadowRect16(aui_Surface & surf, const RECT & rect);
+
+void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGLE_ID triangleId, Pixel16 color,
+		uint8 alpha = pixelutils_OPAQUE, bool antiAliased = false);
 
 // Clipped lines primitives
 void primitives_SetPatternOffset(sint32 x, sint32 y);

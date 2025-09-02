@@ -235,7 +235,7 @@ double Happy::CalcTooManyCities(Player *p)
 	double res;
 	if (num_cities <= t
 		|| g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAINoCityLimit() && p->IsRobot()
-		|| g_theProfileDB->IsNoCityLimit())
+		|| g_theGameSettings->IsNoCityLimit())
 	{
 		res = 0.0;
 		//add option for flexible city limits (set to map size?)
@@ -744,6 +744,7 @@ double Happy::GetGreedyPopHappiness(CityData &cd)
 void Happy::AddTimer(sint32 turns, double adjust, HAPPY_REASON reason)
 {
 	m_timedChanges.push_back(HappyTimer(turns, adjust, reason));
+	m_tracker->AddTimedChange(reason, adjust);
 }
 
 void Happy::RemoveTimerReason(HAPPY_REASON reason)

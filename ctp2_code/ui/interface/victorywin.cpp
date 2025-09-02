@@ -308,7 +308,7 @@ sint32 victorywin_AddWonders(const MBCHAR *windowBlock )
 	AUI_ERRCODE		errcode = AUI_ERRCODE_OK;
 	MBCHAR			controlBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	int i = 0;
+	size_t i = 0;
 
 	s_wonderIcons = new ctp2_Static *[k_VICWIN_WONDERICON_MAX];
 
@@ -486,7 +486,7 @@ sint32 victorywin_UpdateData( sint32 type )
 	strcpy(strbuf, pl->GetDescriptionString());
 
 	if (s_highScoreWin) {
-		if(g_theGameSettings && g_theGameSettings->GetKeeppScore()) {
+		if(g_theGameSettings && g_theGameSettings->IsKeepScore()) {
 			s_highScoreWin->m_highScoreDB->AddHighScore(strbuf,curScore);
 		}
 	}

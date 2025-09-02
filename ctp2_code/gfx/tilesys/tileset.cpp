@@ -453,7 +453,7 @@ void TileSet::LoadMapIcons(void)
 	MBCHAR		name[_MAX_PATH];
 	MBCHAR		path[_MAX_PATH];
 	uint16		width, height;
-	uint32		len;
+	size_t		len;
 	Pixel16		*tga;
 	Pixel16		*data;
 

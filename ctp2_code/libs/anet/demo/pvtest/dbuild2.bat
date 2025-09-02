@@ -1,1 +1,1 @@
-cl /D dp_ANET2 /D WIN32 /D DEBUG /Zi /I "..\..\h" /I "..\utils" pvtest.c ..\utils\raw.c ..\utils\eclock.c ..\..\win\lib\anet2d.lib
+cl /D dp_ANET2 /D WIN32 /D DEBUG /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /Zi /I "..\..\h" /I "..\utils" pvtest.c ..\utils\raw.c ..\utils\eclock.c ..\..\win\lib\anet2d.lib

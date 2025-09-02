@@ -52,6 +52,7 @@ FEAT_GOT_MASS_PRODUCTION	"Félicitations ! Votre nation est la première à mettre 
 FEAT_GOT_COMPUTER		"Félicitations ! Votre nation invente l'informatique ! Vos laboratoires de recherche peuvent désormais traiter des nombres plus grands, multiplier leurs expériences et accroître leur efficacité. Votre production scientifique augmente de {FeatDB(Value[0]).EffectIncreaseScience} % pendant les {FeatDB(Value[0]).Duration} prochains tours !"  
 FEAT_GOT_ROBOTICS		"Félicitations ! Votre nation invente la robotique ! Cette force de travail affiche une productivité et une efficacité bien supérieures à celles des humains. Pendant les {FeatDB(Value[0]).Duration} prochains tours, votre production augmente de {FeatDB(Value[0]).EffectIncreaseProduction} % !"
 FEAT_GOT_LIFE_EXTENSION		"Félicitations ! Votre nation met au point le prolongement de la vie. Votre peuple est quasiment immortel : chacun peut échanger son corps décrépit contre un nouvel organisme plein de vigueur ! Le bonheur de votre nation augmente de {FeatDB(Value[0]).EffectIncreaseHappiness} points pendant les {FeatDB(Value[0]).Duration} tours suivants !"  
+FEAT_GOT_METALLURGY	"We have unravelled the secrets of Metallurgy! Unfortunately, older gunpowder weapons have been distributed to less advanced civilizations"
 
 ## CONSTRUCTION-RELATED FEATS
 

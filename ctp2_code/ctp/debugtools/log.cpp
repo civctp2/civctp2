@@ -569,7 +569,7 @@ static inline void Log_MiddleCreateMessage (char *message, const char *message_t
 		}
 	}
 
-	sprintf (message, "[%12s::%15s::%5d@%7d] %s",
+	sprintf (message, "[%12s::%15s::%5d@%7lld] %s",
 		log_class,
 		adjusted_module_scan,
 		logging->module_line,

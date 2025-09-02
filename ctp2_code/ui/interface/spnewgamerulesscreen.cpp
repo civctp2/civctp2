@@ -82,6 +82,7 @@ extern ProfileDB	*g_theProfileDB;
 extern Network				g_network;
 static c3_PopupWindow	*s_spNewGameRulesScreen	= NULL;
 static aui_Switch		*s_genocide			= NULL,
+						*s_alienEndGame		= NULL,
 						*s_pollution		= NULL,
 						*s_citycapture		= NULL,
 						*s_onecity			= NULL,
@@ -103,6 +104,7 @@ static aui_StringTable	*m_ruleDetailsStrings = NULL;
 enum
 {
 	R_GENOCIDE,
+	R_ENDGAME,
 	R_POLLUTION,
 	GP_CITYCAPTURE,
 	R_ONECITY,
@@ -122,6 +124,7 @@ enum
 static uint32 check[] =
 {
 	R_GENOCIDE,
+	R_ENDGAME,
 	R_POLLUTION,
 	GP_CITYCAPTURE,
 	R_ONECITY,
@@ -144,6 +147,7 @@ sint32 spnewgamerulesscreen_updateData()
 	if(!g_theProfileDB) return -1;
 
 	s_genocide       ->SetState( g_theProfileDB->IsGenocideRule            () );
+	s_alienEndGame   ->SetState( g_theProfileDB->IsAlienEndGameOn          () );
 	s_pollution      ->SetState( g_theProfileDB->IsPollutionRule           () );
 	s_citycapture    ->SetState( g_theProfileDB->IsCityCaptureOptions      () );
 	s_onecity        ->SetState( g_theProfileDB->IsOneCityChallenge        () );
@@ -194,24 +198,34 @@ sint32 spnewgamerulesscreen_removeMyWindow(uint32 action)
 }
 
 
-AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
+AUI_ERRCODE spnewgamerulesscreen_Initialize( aui_Control::ControlActionCallback *callback )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 	MBCHAR		windowBlock[ k_AUI_LDL_MAXBLOCK + 1 ];
 
-	if ( s_spNewGameRulesScreen ) return AUI_ERRCODE_OK;
+	if(s_spNewGameRulesScreen)
+	{
+		if(callback)
+		{
+			s_spNewGameRulesScreen->Ok()->SetActionFuncAndCookie(callback, NULL);
+		}
+
+		return AUI_ERRCODE_OK;
+	}
 
 	strcpy(windowBlock, "SPNewGameRulesScreen");
 
 	s_spNewGameRulesScreen = new c3_PopupWindow( &errcode, aui_UniqueId(), windowBlock, 16, AUI_WINDOW_TYPE_FLOATING, false);
-		Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
-		if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
 
-		s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
-		s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
-		s_spNewGameRulesScreen->SetStronglyModal(TRUE);
+	Assert( AUI_NEWOK(s_spNewGameRulesScreen, errcode) );
+	if ( !AUI_NEWOK(s_spNewGameRulesScreen, errcode) ) errcode;
+
+	s_spNewGameRulesScreen->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
+	s_spNewGameRulesScreen->GrabRegion()->Resize(s_spNewGameRulesScreen->Width(),s_spNewGameRulesScreen->Height());
+	s_spNewGameRulesScreen->SetStronglyModal(TRUE);
 
 	s_genocide			= spNew_aui_Switch(&errcode, windowBlock, "RuleOne",             spnewgamerulesscreen_checkPress, &check[R_GENOCIDE     ]);
+	s_alienEndGame		= spNew_aui_Switch(&errcode, windowBlock, "AlienEndGame",        spnewgamerulesscreen_checkPress, &check[R_ENDGAME      ]);
 	s_pollution			= spNew_aui_Switch(&errcode, windowBlock, "RuleTwo",             spnewgamerulesscreen_checkPress, &check[R_POLLUTION    ]);
 	s_citycapture		= spNew_aui_Switch(&errcode, windowBlock, "CityCapture",         spnewgamerulesscreen_checkPress, &check[GP_CITYCAPTURE ]); //emod5
 	s_onecity			= spNew_aui_Switch(&errcode, windowBlock, "OneCity",             spnewgamerulesscreen_checkPress, &check[R_ONECITY      ]); //emod5
@@ -239,7 +253,11 @@ AUI_ERRCODE spnewgamerulesscreen_Initialize( void )
 	MBCHAR block[ k_AUI_LDL_MAXBLOCK + 1 ];
 	sprintf( block, "%s.%s", windowBlock, "Name" );
 	s_spNewGameRulesScreen->AddTitle( block );
-	s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_exitPress );
+
+	if(callback == NULL)
+		s_spNewGameRulesScreen->AddClose( spnewgamerulesscreen_exitPress );
+	else
+		s_spNewGameRulesScreen->AddClose( callback );
 
 	errcode = aui_Ldl::SetupHeirarchyFromRoot( windowBlock );
 	Assert( AUI_SUCCESS(errcode) );
@@ -257,6 +275,7 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	keypress_RemoveHandler(s_spNewGameRulesScreen);
 
 	mycleanup(s_genocide);
+	mycleanup(s_alienEndGame);
 	mycleanup(s_pollution);
 	mycleanup(s_citycapture);
 	mycleanup(s_onecity);
@@ -273,9 +292,9 @@ AUI_ERRCODE spnewgamerulesscreen_Cleanup()
 	mycleanup(s_ages);
 	mycleanup(m_ruleDetails);
 
-    delete m_ruleDetailsStrings;
+	delete m_ruleDetailsStrings;
 	delete s_spNewGameRulesScreen;
-    m_ruleDetailsStrings = NULL;
+	m_ruleDetailsStrings = NULL;
 	s_spNewGameRulesScreen = NULL;
 
 	return AUI_ERRCODE_OK;
@@ -291,7 +310,7 @@ void spnewgamerulesscreen_agesPress(aui_Control *control, uint32 action, uint32 
 		m_ruleDetails->Show();
 
 		char buf[1024];
-		sprintf(buf, "%s", m_ruleDetailsStrings->GetString(14));
+		sprintf(buf, "%s", m_ruleDetailsStrings->GetString(15));
 
 		m_ruleDetails->SetText(buf);
 	}
@@ -314,20 +333,21 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 
 		switch(checkbox)
 		{
-			case R_GENOCIDE     : rule = 0; break;
-			case R_POLLUTION    : rule = 1; break;
-			case GP_CITYCAPTURE : rule = 2; break;
-			case R_ONECITY      : rule = 3; break;
-			case R_INSURGENT    : rule = 4; break;
-			case R_CASUALTY     : rule = 5; break;
-			case R_BARBSPAWN    : rule = 6; break;
-			case R_NonRandomCivs: rule = 7; break;
-			case R_UPGRADE      : rule = 8; break;
-			case R_NEWCOMBAT    : rule = 9; break;
-			case R_NOGOODYHUTS  : rule = 10; break;
-			case R_UNITGOLD     : rule = 11; break;
-			case R_CITYGOLD     : rule = 12; break;
-			case R_NOCITYLIMIT  : rule = 13; break;
+			case R_GENOCIDE     : rule =  0; break;
+			case R_ENDGAME      : rule =  1; break;
+			case R_POLLUTION    : rule =  2; break;
+			case GP_CITYCAPTURE : rule =  3; break;
+			case R_ONECITY      : rule =  4; break;
+			case R_INSURGENT    : rule =  5; break;
+			case R_CASUALTY     : rule =  6; break;
+			case R_BARBSPAWN    : rule =  7; break;
+			case R_NonRandomCivs: rule =  8; break;
+			case R_UPGRADE      : rule =  9; break;
+			case R_NEWCOMBAT    : rule = 10; break;
+			case R_NOGOODYHUTS  : rule = 11; break;
+			case R_UNITGOLD     : rule = 12; break;
+			case R_CITYGOLD     : rule = 13; break;
+			case R_NOCITYLIMIT  : rule = 14; break;
 			default             : Assert(0); break;
 		};
 
@@ -355,6 +375,7 @@ void spnewgamerulesscreen_checkPress(aui_Control *control, uint32 action, uint32
 	switch(checkbox)
 	{
 		case R_GENOCIDE     : func = &ProfileDB::SetGenocideRule            ; break;
+		case R_ENDGAME      : func = &ProfileDB::SetAlienEndGame            ; break;
 		case R_POLLUTION    : func = &ProfileDB::SetPollutionRule           ; break;
 		case GP_CITYCAPTURE : func = &ProfileDB::SetCityCaptureOptions      ; break;
 		case R_ONECITY      : func = &ProfileDB::SetOneCity                 ; break;

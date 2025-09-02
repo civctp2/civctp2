@@ -291,7 +291,7 @@ AUI_ERRCODE aui_BitmapFont::Load( void )
 
 AUI_ERRCODE aui_BitmapFont::Unload( void )
 {
-	for ( sint32 i = m_surfaceList->L(); i; i-- )
+	for ( size_t i = m_surfaceList->L(); i; i-- )
 		delete m_surfaceList->RemoveHead();
 
 	memset( m_glyphs, 0, sizeof( m_glyphs ) );
@@ -764,7 +764,11 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 	const MBCHAR *string,
 	uint32 flags,
 	COLORREF color,
-	sint32 underline )
+	sint32 underline,
+	size_t selStart,
+	size_t selEnd,
+	COLORREF highLightColorFG,
+	COLORREF highLightColorBG )
 {
 	AUI_ERRCODE errcode;
 
@@ -796,6 +800,9 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 	size_t          len     =
 		std::min<size_t>(strlen(string), k_AUI_BITMAPFONT_MAXSTRLEN);
 	const MBCHAR *  stop    = ptr + len;
+
+	const MBCHAR *  selStartPtr = start + (selStart <= selEnd ? selStart : selEnd);
+	const MBCHAR *    selEndPtr = start + (selStart <= selEnd ? selEnd   : selStart);
 
 	POINT penPos = { bound->left, bound->top + m_baseLine };
 
@@ -867,22 +874,27 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 		{
 			penPos.x = bound->left;
 
-			errcode = RenderLine(
-				surface,
-				bound,
-				clip,
-				&penPos,
-				&ptr,
-				stop,
-				color,
-#if !defined(_JAPANESE)
-				underline );
-#else
-				underline,
-				NULL,
-				NULL,
-				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP) );
+			errcode = RenderLine
+			(
+			    surface,
+			    bound,
+			    clip,
+			    &penPos,
+			    &ptr,
+			    stop,
+			    color,
+			    underline,
+			    selStartPtr,
+			    selEndPtr,
+			    highLightColorFG,
+			    highLightColorBG
+#if defined(_JAPANESE)
+			  , NULL,
+			    NULL,
+			    (flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP)
 #endif
+			);
+
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) return errcode;
 
@@ -912,22 +924,27 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 			penPos.x = bound->right - penPos.x;
 			ptr = start;
 
-			errcode = RenderLine(
-				surface,
-				bound,
-				clip,
-				&penPos,
-				&ptr,
-				stop,
-				color,
-#if !defined(_JAPANESE)
-				underline );
-#else
-				underline,
-				NULL,
-				NULL,
-				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP) );
+			errcode = RenderLine
+			(
+			    surface,
+			    bound,
+			    clip,
+			    &penPos,
+			    &ptr,
+			    stop,
+			    color,
+			    underline,
+			    selStartPtr,
+			    selEndPtr,
+			    highLightColorFG,
+			    highLightColorBG
+#if defined(_JAPANESE)
+			  , NULL,
+			    NULL,
+			   (flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP)
 #endif
+			);
+
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) return errcode;
 
@@ -965,14 +982,18 @@ AUI_ERRCODE aui_BitmapFont::DrawString(
 				&ptr,
 				stop,
 				color,
-#if !defined(_JAPANESE)
-				underline );
-#else
 				underline,
+				selStartPtr,
+				selEndPtr,
+				highLightColorFG,
+				highLightColorBG
+#if defined(_JAPANESE)
 				NULL,
 				NULL,
-				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP) );
+				(flags & k_AUI_BITMAPFONT_DRAWFLAG_WORDWRAP)
 #endif
+			);
+
 			Assert( AUI_SUCCESS(errcode) );
 			if ( !AUI_SUCCESS(errcode) ) return errcode;
 
@@ -996,6 +1017,10 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 	const MBCHAR *stop,
 	COLORREF color,
 	sint32 underline,
+	const MBCHAR *selStartPtr,
+	const MBCHAR *selEndPtr,
+	COLORREF highLightColorFG,
+	COLORREF highLightColorBG,
 	sint32 *ascend,
 	sint32 *descend,
 	bool wrap,
@@ -1029,11 +1054,11 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 			return AUI_ERRCODE_OK;
 
 		case '\b':
-            gi = GetGlyphInfo(' ');
+			gi = GetGlyphInfo(' ');
 			if (gi)
-            {
+			{
 				penPos->x -= gi->advance;
-            }
+			}
 			break;
 
 		case '\t':
@@ -1089,14 +1114,29 @@ AUI_ERRCODE aui_BitmapFont::RenderLine(
 
 			if ( surface )
 			{
+				bool isSelected = selStartPtr != selEndPtr && selStartPtr <= ptr && ptr < selEndPtr;
+				COLORREF actualColor = (isSelected ? highLightColorFG : color);
+
+				if(g_ui->TheBlitter() && isSelected)
+				{
+					RECT bgRect = *bound;
+					bgRect.left = penPos->x;
+					bgRect.right = bgRect.left + gi->advance;
+
+					AUI_ERRCODE errcode = g_ui->TheBlitter()->ColorBlt(
+						surface,
+						&bgRect,
+						highLightColorBG,
+						0);
+				}
 
 				AUI_ERRCODE errcode = RenderGlyph(
 					surface,
 					clip,
 					penPos,
 					gi,
-					color,
-					underline );
+					actualColor,
+					underline);
 				Assert( AUI_SUCCESS(errcode) );
 				if ( !AUI_SUCCESS(errcode) ) return errcode;
 			}
@@ -1165,6 +1205,10 @@ AUI_ERRCODE aui_BitmapFont::GetLineInfo(
 		stop,
 		0,
 		0,
+		NULL,
+		NULL,
+		0,
+		0,
 		ascend,
 		descend,
 		wrap != NULL,
@@ -1183,10 +1227,10 @@ sint32 aui_BitmapFont::GetStringWidth( const MBCHAR * a_String )
 	POINT penPos = { 0, 0 };
 
 	(void) RenderLine(NULL, NULL, NULL,
-		              &penPos,
-		              &a_String,
-		              a_String + strlen(a_String)
-                     );
+	                  &penPos,
+	                  &a_String,
+	                  a_String + strlen(a_String)
+	                 );
 
 	return penPos.x;
 }
@@ -1200,10 +1244,8 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph(
 	POINT *penPos,
 	GlyphInfo *gi,
 	COLORREF color,
-	sint32 underline )
+	sint32 underline)
 {
-
-
 	RECT srcRect = gi->bbox;
 	RECT destRect = srcRect;
 	OffsetRect(
@@ -1251,10 +1293,10 @@ AUI_ERRCODE aui_BitmapFont::RenderGlyph(
 	srcRect.right -= rightClip;
 	srcRect.bottom -= bottomClip;
 
-    Assert(16 == destSurf->BitsPerPixel());
-    if (16 != destSurf->BitsPerPixel()) return AUI_ERRCODE_INVALIDPARAM;
+	Assert(16 == destSurf->BitsPerPixel());
+	if (16 != destSurf->BitsPerPixel()) return AUI_ERRCODE_INVALIDPARAM;
 
-    return RenderGlyph16(destSurf, &destRect, gi->surface, &srcRect, color);
+	return RenderGlyph16(destSurf, &destRect, gi->surface, &srcRect, color);
 }
 
 
@@ -1399,7 +1441,7 @@ bool aui_BitmapFont::TruncateString( MBCHAR *name, sint32 width )
 
 	if ( string != stop )
 	{
-		sint32 end = string - name - 3;
+		size_t end = (string - name - 3) > 0 ? string - name - 3 : 0;
 		Assert( end > 0 );
 		if ( end > 0 )
 		{
@@ -1443,7 +1485,7 @@ void aui_BitmapFont::DumpCachedSurfaces( aui_Surface *destSurf )
 	uint16 *origDestBuf = destBuf;
 
 	ListPos position = m_surfaceList->GetHeadPosition();
-	for ( sint32 i = m_surfaceList->L(); i; i-- )
+	for ( size_t i = m_surfaceList->L(); i; i-- )
 	{
 		aui_Surface *srcSurf = m_surfaceList->GetNext( position );
 

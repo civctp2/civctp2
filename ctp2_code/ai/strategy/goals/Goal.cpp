@@ -608,7 +608,7 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update, c
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	if(CtpAiDebug::DebugLogCheck(m_playerId, -1, -1))
 	{
-		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1, ("\n"));
+		AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1, ("\n"));
 		projected_strength          .Log_Debug_Info(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, "The Projected Strength:          ");
 		m_current_needed_strength   .Log_Debug_Info(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, "The Needed Strength:             ");
 		Squad_Strength strength;
@@ -1108,6 +1108,9 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 				if (cell->GetNumDBImprovements() <= 0)
 					continue;
 
+				if (cell->GetNumPillagableTerrainImprovements() <= 0)
+					continue;
+
 				if (cell->CanEnter(army->GetMovementType()))
 				{
 					sint32 tmp_squared_dist = MapPoint::GetSquaredDistance(it.Pos(), army->RetPos());
@@ -1278,14 +1281,14 @@ void Goal::Compute_Needed_Troop_Flow()
 {
 	MapAnalysis &  mapAnalysis = MapAnalysis::GetMapAnalysis();
 	const MapPoint pos         = Get_Target_Pos();
-	const float   threat      = static_cast<float>(mapAnalysis.GetThreat          (m_playerId, pos));
-	const float   attack      = static_cast<float>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
-	const float   defense     = static_cast<float>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
-	const float   ranged      = static_cast<float>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
-	const float   bombardLand = static_cast<float>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
-	const float   bombardSea  = static_cast<float>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
-	const float   bombardAir  = static_cast<float>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
-	const float   value       = static_cast<float>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
+	const float    threat      = static_cast<float>(mapAnalysis.GetThreat          (m_playerId, pos));
+	const float    attack      = static_cast<float>(mapAnalysis.GetEnemyAttack     (m_playerId, pos));
+	const float    defense     = static_cast<float>(mapAnalysis.GetEnemyDefense    (m_playerId, pos));
+	const float    ranged      = static_cast<float>(mapAnalysis.GetEnemyRanged     (m_playerId, pos));
+	const float    bombardLand = static_cast<float>(mapAnalysis.GetEnemyBombardLand(m_playerId, pos));
+	const float    bombardSea  = static_cast<float>(mapAnalysis.GetEnemyBombardSea (m_playerId, pos));
+	const float    bombardAir  = static_cast<float>(mapAnalysis.GetEnemyBombardAir (m_playerId, pos));
+	const float    value       = static_cast<float>(mapAnalysis.GetEnemyValue      (m_playerId, pos));
 
 	m_current_needed_strength   = Squad_Strength(1);
 		// why only one unit ? Why then zero units? - Martin Gühmann
@@ -1430,38 +1433,38 @@ void Goal::Compute_Needed_Troop_Flow()
 		Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 	const StrategyRecord::ForceMatch *force_match = NULL;
 
-	switch (goal_record->GetForceMatch())
+	switch(goal_record->GetForceMatch())
 	{
-	case k_Goal_ForceMatch_Offensive_Bit:
-		force_match = strategy.GetOffensivePtr();
-		break;
-	case k_Goal_ForceMatch_Defensive_Bit:
-		force_match = strategy.GetDefensivePtr();
-		break;
-	case k_Goal_ForceMatch_StealthAttack_Bit:
-		force_match = strategy.GetStealthAttackPtr();
-		break;
-	case k_Goal_ForceMatch_Bombard_Bit:
-		force_match = strategy.GetBombardPtr();
-		break;
-	case k_Goal_ForceMatch_Special_Bit:
-		force_match = strategy.GetSpecialPtr();
-		break;
-	case k_Goal_ForceMatch_Harass_Bit:
-		force_match = strategy.GetHarassPtr();
-		break;
-	default:
+		case k_Goal_ForceMatch_Offensive_Bit:
+			force_match = strategy.GetOffensivePtr();
+			break;
+		case k_Goal_ForceMatch_Defensive_Bit:
+			force_match = strategy.GetDefensivePtr();
+			break;
+		case k_Goal_ForceMatch_StealthAttack_Bit:
+			force_match = strategy.GetStealthAttackPtr();
+			break;
+		case k_Goal_ForceMatch_Bombard_Bit:
+			force_match = strategy.GetBombardPtr();
+			break;
+		case k_Goal_ForceMatch_Special_Bit:
+			force_match = strategy.GetSpecialPtr();
+			break;
+		case k_Goal_ForceMatch_Harass_Bit:
+			force_match = strategy.GetHarassPtr();
+			break;
+		default:
 
-		Assert(false);
+			Assert(false);
 	}
 
 	Assert(force_match);
 	m_current_needed_strength.Set_Force_Matching(
-		static_cast<float>(force_match->GetAttackMatch()),
-		static_cast<float>(force_match->GetDefenseMatch()),
-		static_cast<float>(force_match->GetRangedMatch()),
-		static_cast<float>(force_match->GetBombardMatch()),
-		static_cast<float>(force_match->GetValueMatch()));
+	    static_cast<float>(force_match->GetAttackMatch()),
+	    static_cast<float>(force_match->GetDefenseMatch()),
+	    static_cast<float>(force_match->GetRangedMatch()),
+	    static_cast<float>(force_match->GetBombardMatch()),
+	    static_cast<float>(force_match->GetValueMatch()));
 
 	// Set_Pos_Strength also retrieves the transport capacity at pos
 	// which of course need not be matched
@@ -1503,7 +1506,6 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	double report_garrison_bonus = bonus;
 #endif //_DEBUG
 
-
 	// This is expensive, because of pillage, get city target first.
 	dest_pos = Get_Target_Pos(agent_ptr->Get_Army());
 
@@ -1537,28 +1539,32 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 		(!diplomat.IncursionPermission(target_owner)))
 	{
 		bool isspecial, cancapture, haszoc, canbombard;
-		bool isstealth;
+		bool isstealth, canthrowparty, canestablishembassy;
 		sint32 maxattack, maxdefense;
 
 		if(!agent_ptr->Get_Army()->HasCargo())
 		{
-			agent_ptr->Get_Army()->CharacterizeArmy( isspecial,
-				isstealth,
-				maxattack,
-				maxdefense,
-				cancapture,
-				haszoc,
-				canbombard);
+			agent_ptr->Get_Army()->CharacterizeArmy(isspecial,
+			    isstealth,
+			    maxattack,
+			    maxdefense,
+			    cancapture,
+			    haszoc,
+			    canbombard,
+			    canthrowparty,
+			    canestablishembassy);
 		}
 		else
 		{
-			agent_ptr->Get_Army()->CharacterizeCargo( isspecial,
-				isstealth,
-				maxattack,
-				maxdefense,
-				cancapture,
-				haszoc,
-				canbombard);
+			agent_ptr->Get_Army()->CharacterizeCargo(isspecial,
+			    isstealth,
+			    maxattack,
+			    maxdefense,
+			    cancapture,
+			    haszoc,
+			    canbombard,
+			    canthrowparty,
+			    canestablishembassy);
 		}
 
 		if (!isspecial || maxattack > 0 || haszoc)
@@ -2027,6 +2033,7 @@ Utility Goal::Compute_Raw_Priority()
 	double report_cell_CityConnected     = 0.0;
 	double report_cell_SmallEmpireBonus  = 0.0;
 	double report_cell_WeakestEnemyBonus = 0.0;
+	double report_cell_BarbarianBonus    = 0.0;
 #endif //_DEBUG
 
 	double maxThreat = static_cast<double>(map.GetMaxThreat(m_playerId));
@@ -2346,6 +2353,21 @@ Utility Goal::Compute_Raw_Priority()
 	report_cell_lastvalue         = cell_value;
 #endif //_DEBUG
 
+	if
+	  (
+	       target_owner == 0
+	    && cbRec
+	    && cbRec->GetBarbarianBonus() != 0
+	  )
+	{
+		cell_value += cbRec->GetBarbarianBonus();
+	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	report_cell_BarbarianBonus    = cell_value - report_cell_lastvalue;
+	report_cell_lastvalue         = cell_value;
+#endif //_DEBUG
+
 	sint32 threaten_bonus = GetThreatenBonus();
 
 	m_raw_priority = (Utility) cell_value + threaten_bonus;
@@ -2388,7 +2410,7 @@ Utility Goal::Compute_Raw_Priority()
 		        report_cell_NoOwnerTerritory
 		       );
 
-		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1, ("%s\t\t%8f,\t\t\t%8f,\t%i,\t\t\t%8f,\t%8f,\t%8f,\t%s\n",
+		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, -1, ("%s\t\t%8f,\t\t\t%8f,\t%i,\t\t\t%8f,\t%8f,\t%8f,\t%8f,\t%s\n",
 		                                 buff,
 		                                 report_cell_SlaveryProtection,
 		                                 report_cell_SmallCitySize,
@@ -2396,6 +2418,7 @@ Utility Goal::Compute_Raw_Priority()
 		                                 report_cell_CityConnected,
 		                                 report_cell_SmallEmpireBonus,
 		                                 report_cell_WeakestEnemyBonus,
+		                                 report_cell_BarbarianBonus,
 		                                 (g_theWorld->HasCity(target_pos) ? g_theWorld->GetCity(target_pos).GetName() : "field")));
 	}
 	// For some reason the following does not work in VC6:
@@ -2693,9 +2716,11 @@ bool Goal::IsInvalidByDiplomacy() const
 			// execute it if there is no incursion permission
 			// (depending on alignement) - Calvitix
 			if((!diplomat.IncursionPermission(target_owner) &&
-				(diplomat.GetPersonality()->GetAlignmentGood() ||
-				 diplomat.GetPersonality()->GetAlignmentNeutral()))
-			   && !goal_record->GetSquadClassStealth())
+			    (diplomat.GetPersonality()->GetAlignmentGood() ||
+			     diplomat.GetPersonality()->GetAlignmentNeutral()))
+			   && (!goal_record->GetSquadClassStealth()
+			   &&  !goal_record->GetSquadClassCanEstablishEmbassy()
+			   &&  !goal_record->GetSquadClassCanThrowParty()))
 			{
 				AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, m_goal_type, 0,
 					("\t Player %d GOAL %x (%s) (%3d,%3d): Diplomacy match failed : No permission to enter territory of player %d\n", m_playerId, this, g_theGoalDB->Get(m_goal_type)->GetNameText(), target_pos.x, target_pos.y, target_owner));
@@ -2767,6 +2792,8 @@ bool Goal::IsTargetImmune() const
 		bool cancapture;
 		bool haszoc;
 		bool canbombard;
+		bool canthrowparty;
+		bool canestablishembassy;
 
 		m_target_army->CharacterizeArmy
 		                               (
@@ -2776,8 +2803,9 @@ bool Goal::IsTargetImmune() const
 		                                maxdefense,
 		                                cancapture,
 		                                haszoc,
-		                                canbombard
-		                               );
+		                                canbombard,
+		                                canthrowparty,
+		                                canestablishembassy);
 
 		if(isspecial && !m_target_army->IsVisible(m_playerId))
 			return true;
@@ -2853,7 +2881,7 @@ bool Goal::IsTargetImmune() const
 	// @ToDo adapt if no new civ is created but Barbarians.
 	if(order_record->GetUnitPretest_CanInciteRevolution())
 	{
-		if(g_player[target_owner]->GetNumCities() == 1)
+		if(g_player[target_owner]->GetNumCities() == 1 || target_owner == PLAYER_BARBARIAN)
 			return true;
 	}
 
@@ -2888,6 +2916,16 @@ bool Goal::IsTargetImmune() const
 		if(    g_player[m_playerId]->HasWarWith(m_target_city.GetOwner())
 		    || g_player[m_playerId]->HasEmbassyWith(m_target_city->GetOwner())
 		    || wonderutil_GetCloseEmbassies(g_player[m_target_city.GetOwner()]->m_builtWonders)
+		  )
+		{
+			return true;
+		}
+	}
+
+	if (order_record->GetUnitPretest_ThrowParty())
+	{
+		if(    g_player[m_playerId]->HasWarWith(m_target_city.GetOwner())
+		    || !Diplomat::GetDiplomat(m_target_city.GetOwner()).ReadyToParty()
 		  )
 		{
 			return true;
@@ -4311,6 +4349,7 @@ Agent_ptr Goal::GetRallyAgent() const
 	MapPoint targetPos              = Get_Target_Pos();
 	Agent_ptr rallyAgent            = NULL;
 	sint32 minDistance              = 0x7fffffff;
+	uint32 combinedMovementType     = GetMovementType();
 
 	for
 	(
@@ -4335,8 +4374,17 @@ Agent_ptr Goal::GetRallyAgent() const
 
 		if(distance < minDistance)
 		{
-			minDistance = distance;
-			rallyAgent  = agent_ptr;
+			Cell *cell = g_theWorld->GetCell(agent_ptr->Get_Pos());
+			if(cell->CanEnter(combinedMovementType))
+			{
+				minDistance = distance;
+				rallyAgent = agent_ptr;
+			}
+			else if(rallyAgent == NULL)
+			{
+				// Just put an rally agent in, just in case we won't get anything better
+				rallyAgent = agent_ptr;
+			}
 		}
 	}
 
@@ -4973,4 +5021,29 @@ MapPoint Goal::GetClosestCargoPos(const Agent_ptr agent_ptr) const
 void Goal::ResetNeededTransport()
 {
 	m_current_needed_strength.Set_Transport(0);
+}
+
+uint32 Goal::GetMovementType() const
+{
+	uint32 tmp = 0xffffffffu;
+
+	for
+	(
+	    Agent_List::const_iterator agent_iter  = m_agents.begin();
+	                               agent_iter != m_agents.end();
+	                             ++agent_iter
+	)
+	{
+		Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
+		Assert(agent_ptr);
+
+		if(agent_ptr->Get_Is_Dead())
+		{
+			continue;
+		}
+
+		tmp &= agent_ptr->Get_Army()->GetMovementType();
+	}
+
+	return tmp;
 }

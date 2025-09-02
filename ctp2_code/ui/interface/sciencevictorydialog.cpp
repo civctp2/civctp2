@@ -218,25 +218,23 @@ void ScienceVictoryDialog::Hide()
 
 void ScienceVictoryDialog::SetSwitchState(sint32 switchState)
 {
-
-	if(m_switch->IsHidden()) {
+	if(m_switch->IsHidden())
+	{
 		m_switchState = switchState;
 		return;
 	}
 
-
-
-
-	for(sint32 childIndex = 0; childIndex < m_switch->NumChildren(); childIndex++) {
-
+	for(size_t childIndex = 0; childIndex < m_switch->NumChildren(); childIndex++)
+	{
 		aui_Region *child = m_switch->GetChildByIndex(childIndex);
 
-		if(childIndex == switchState) {
-
+		if(childIndex == switchState)
+		{
 			if(child->IsHidden())
 				child->Show();
-		} else {
-
+		}
+		else
+		{
 			if(!child->IsHidden())
 				child->Hide();
 		}

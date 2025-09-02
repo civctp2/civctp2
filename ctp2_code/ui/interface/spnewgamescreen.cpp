@@ -18,7 +18,8 @@
 //
 // Compiler flags
 //
-// - None
+// USE_SDL
+// - Compile with sdl support instead of mss (define: civsound.h)
 //
 //----------------------------------------------------------------------------
 //
@@ -702,7 +703,7 @@ aui_StringTable* spNewStringTable(AUI_ERRCODE *errcode, const MBCHAR *ldlme)
 
 void spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *mytable, const MBCHAR *listitemparent, const MBCHAR *listitemme)
 {
-	for (sint32 i = 0; i < mytable->GetNumStrings(); ++i)
+	for (size_t i = 0; i < mytable->GetNumStrings(); ++i)
 	{
 		mydrop->AddItem
 		    (new SPDropDownListItem
@@ -712,7 +713,7 @@ void spFillDropDown(AUI_ERRCODE *retval, c3_DropDown *mydrop, aui_StringTable *m
 }
 void spFillListBox(AUI_ERRCODE *retval, c3_ListBox *mylist, aui_StringTable *mytable, const MBCHAR *listitemparent, const MBCHAR *listitemme)
 {
-	for (sint32 i = 0; i < mytable->GetNumStrings(); i++)
+	for (size_t i = 0; i < mytable->GetNumStrings(); i++)
 		{
 		mylist->AddItem
 		    (new SPDropDownListItem

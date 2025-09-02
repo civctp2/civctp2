@@ -415,6 +415,9 @@ void CtpAi::GroupWithEscort(const Army & army)
 			 army->GetMovementType()) != army->GetMovementType())
 			continue;
 
+		if (tmp_army->HasTransporter())
+			continue;
+
 		unit_rec = tmp_army[0].GetDBRec();
 		tmp_strength = static_cast<sint32>
 			(unit_rec->GetAttack() *
@@ -423,7 +426,7 @@ void CtpAi::GroupWithEscort(const Army & army)
 			 unit_rec->GetArmor()
 			);
 
-		if (min_strength < 0 || tmp_strength < min_strength)
+		if (tmp_strength > 0 && (min_strength < 0 || tmp_strength < min_strength))
 		{
 			min_strength = tmp_strength;
 			min_army = tmp_army;
@@ -1052,7 +1055,8 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 
 	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
-		Diplomat::GetDiplomat(player).InitForeigner(deadPlayerId);
+		if (g_player[player])
+			Diplomat::GetDiplomat(player).InitForeigner(deadPlayerId);
 	}
 
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
@@ -1244,7 +1248,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true, player_ptr->m_advances->HasAllAdvances());
+		Governor::GetGovernor(player).SetSliders(sliders_setting, player_ptr->m_advances->HasAllAdvances());
 
 		DPRINTF(k_DBG_AI, ("//  elapsed time = %d ms\n", (GetTickCount() - t1)));
 
@@ -1632,7 +1636,7 @@ void CtpAi::NetworkClientBeginTurn(PLAYER_INDEX player)
 		Governor::SlidersSetting sliders_setting;
 
 		Governor::GetGovernor(player).OptimizeSliders(sliders_setting);
-		Governor::GetGovernor(player).SetSliders(sliders_setting, true, player_ptr->m_advances->HasAllAdvances());
+		Governor::GetGovernor(player).SetSliders(sliders_setting, player_ptr->m_advances->HasAllAdvances());
 
 		DPRINTF(k_DBG_AI, (LOG_SECTION_START));
 		DPRINTF(k_DBG_AI, ("// COMPUTE GOODS TRADE ROUTES -- Turn %d\n", g_player[player]->m_current_round));

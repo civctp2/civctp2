@@ -46,7 +46,7 @@ BOOL ctpregistry_SetKeyValue(void *key, MBCHAR *subKey,
 					  0,
 					  REG_SZ,
 					  (CONST BYTE *)value,
-					  strlen(value) + 1);
+					  static_cast<DWORD>(strlen(value) + 1));
 		RegCloseKey(theKey);
 		return TRUE;
 	}

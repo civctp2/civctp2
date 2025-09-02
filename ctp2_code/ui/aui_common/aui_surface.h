@@ -17,7 +17,7 @@
 //
 // Compiler flags
 //
-// USE_SDL
+// __AUI_USE_SDL__
 //
 //----------------------------------------------------------------------------
 //
@@ -35,7 +35,7 @@
 #define __AUI_SURFACE_H__
 
 #include "aui_base.h"
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_thread.h>
 #endif
@@ -115,15 +115,9 @@ public:
 	virtual AUI_ERRCODE Lock( RECT *rect, LPVOID *buffer, DWORD flags );
 	virtual AUI_ERRCODE Unlock( LPVOID buffer );
 
-#ifndef USE_SDL
+#ifdef __AUI_USE_DIRECTX__
 	virtual AUI_ERRCODE GetDC( HDC *hdc );
 	virtual AUI_ERRCODE ReleaseDC( HDC hdc );
-#endif
-
-#ifdef USE_SDL
-	SDL_mutex *LPCS( void ) const { return m_cs; };
-#else
-	LPCRITICAL_SECTION LPCS( void ) const { return &m_cs; };
 #endif
 
 	virtual BOOL IsOK( void ) const { return m_saveBuffer != NULL; }
@@ -138,7 +132,7 @@ public:
 
 protected:
 	static sint32 m_surfaceRefCount;
-#ifdef USE_SDL
+#if defined(__AUI_USE_SDL__)
 	static SDL_mutex *m_cs;
 #else
 	static	CRITICAL_SECTION	m_cs;
@@ -154,10 +148,12 @@ protected:
 	sint32	m_size;
 	uint8	*m_buffer;
 
+#if defined(__AUI_USE_DIRECTX__)
 	HDC		m_hdc;
 	bool	m_dcIsGot;
 	HBITMAP	m_hbitmap;
 	HBITMAP	m_holdbitmap;
+#endif
 
 	AUI_SURFACE_PIXELFORMAT m_pixelFormat;
 	uint32	m_chromaKey;

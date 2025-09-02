@@ -131,7 +131,7 @@ AUI_ERRCODE MessageIconWindow::InitCommon( Message *data,
 
 
 
-	uint32 pos = messagelist->GetList()->L();
+	uint32 pos = static_cast<uint32>(messagelist->GetList()->L());
 
 	if ( pos > ( g_messageMaxVisible + messagelist->GetOffset() )) {
 		if(data->GetOwner() == g_selected_item->GetVisiblePlayer())

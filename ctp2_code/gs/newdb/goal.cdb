@@ -54,7 +54,9 @@ Goal {
 		CanBombard,
 		Special,
 		Stealth,
-		CanTransport
+		CanTransport,
+		CanEstablishEmbassy,
+		CanThrowParty
 	}
 
 	Bits TargetType {
@@ -110,6 +112,7 @@ Goal {
 		Int SmallTargetEmpireBonus         = 0
 		Int SmallTargetEmpireSize          = 0
 		Int WeakestEnemyBonus              = 0
+		Int BarbarianBonus                 = 0
 	}
 	
 	Bit(struct ConnectionBoni) ConnectionBoni

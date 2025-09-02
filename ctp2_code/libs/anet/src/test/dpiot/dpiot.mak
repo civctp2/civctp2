@@ -2,13 +2,13 @@
 
 # kludgy way to make sure correct defines used for loopback and internet drivers
 dpiot.exe: dpiot.c
-	cl -W3 -Zi /MDd -DDPRNT -Ddp_ANET2 dpiot.c ../../../demo/utils/unistd.c -I../../../h ../../../win/lib/dp2d.lib
+	cl -W3 -Zi /MDd -DDPRNT -Ddp_ANET2 /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"  dpiot.c ../../../demo/utils/unistd.c -I../../../h ../../../win/lib/dp2d.lib
 
 dpiot.loop: dpiot.c
-	cl -W3 -Zi /MDd -DDPRNT -Ddp_ANET2 -DLOOP dpiot.c ../../../demo/utils/unistd.c -I../../../h ../../../win/lib/dp2d.lib
+	cl -W3 -Zi /MDd -DDPRNT -Ddp_ANET2 -DLOOP /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"  dpiot.c ../../../demo/utils/unistd.c -I../../../h ../../../win/lib/dp2d.lib
 
 dpiot.internet: dpiot.c
-	cl -W3 -Zi /MDd -DDPRNT -Ddp_ANET2 -DINET dpiot.c ../../../demo/utils/unistd.c -I../../../h ../../../win/lib/dp2d.lib
+	cl -W3 -Zi /MDd -DDPRNT -Ddp_ANET2 -DINET /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"  dpiot.c ../../../demo/utils/unistd.c -I../../../h ../../../win/lib/dp2d.lib
 
 # IPX address to connect to if testing IPX
 IPXADR=0.0.16.0,0.aa.0.b7.13.e

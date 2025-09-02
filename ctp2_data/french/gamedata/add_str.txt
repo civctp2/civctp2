@@ -33,7 +33,7 @@
 # # Please add all new strings below here - with note 
 # # explaining where they should go eventually.
 
-# More Stuuf for LDL_STR
+# More Stuff for LDL_STR
 # Multiplayer Disclaimer String
 str_ldl_MultiplayerDisclaimer	"Activision recommende a maximum de 4 joueurs pour les Jeux en réseau de Call to Power."
 
@@ -86,7 +86,7 @@ str_ldl_CityWinStatisticsTab "Statut"
 
 #revised below
 # Added
-##str_code_CityWinTotalHappinessFormat "Total : %d"
+#str_code_CityWinTotalHappinessFormat "Total : %d"
 
 str_code_QueryRebuildCapitol "Etes-vous sûr de vouloir reconstruire votre palais ?"
 str_code_QuerySwitchProduction "Switch production type? (City will lose %d%% stored production)"
@@ -212,6 +212,7 @@ str_ldl_RestartHotKey "Ctrl+z"
 str_ldl_NewGameHotKey "Ctrl+x"
 str_ldl_SoundHotKey "Ctrl+v"
 str_ldl_MusicHotKey "Ctrl+m"
+str_ldl_LanguageHotKey "Ctrl+j"
 str_ldl_GraphicsHotKey "Ctrl+f"
 str_ldl_GameplayHotKey "Ctrl+p"
 str_ldl_CityEspionageHotKey "Ctrl+e"
@@ -330,7 +331,6 @@ str_ldl_ZoomIn "Zoom avt"
 # Added for network games, there are more restrictions on when you can initiate diplomacy
 str_code_CantInitiateDiplomacyNow "Vous ne pouvez pas envoyer de nouvelle proposition lorsque ce n'est pas votre tour ou lorsque vous attendez une réponse à une proposition formulée précédemment."
 
-
 # Status text for minimize button on radar map
 STATUSBAR_MINIMAP_MINIMIZE "Cliquez ici pour réduire la fenêtre"
 str_player_choice "Choix des joueurs"
@@ -363,4 +363,5 @@ STATUSBAR_ARMYMAN_NEW_ARMY_BUTTON				"Cliquez ici pour créer une nouvelle armée.
 # For the context menu, lets you get the tile info window for squares with cities/units.
 CONTEXT_TILE_INFO "Info carte"
 
+str_ldl_EditQueueReallyDelete "Permanently delete Queue %s?"
 

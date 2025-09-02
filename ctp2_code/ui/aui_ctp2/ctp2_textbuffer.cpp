@@ -254,7 +254,7 @@ void ctp2_TextBuffer::AddText(MBCHAR *text, COLOR color)
 	col = 0;
 	while (*end != '\0') {
 		if (*end == '\n') {
-			AddLine(start, (end-start), color);
+			AddLine(start, static_cast<sint32>(end-start), color);
 			start = end+1;
 			col = 0;
 		}
@@ -272,12 +272,12 @@ void ctp2_TextBuffer::AddText(MBCHAR *text, COLOR color)
 
 			if (tempCol == 0) {
 				end = start + (m_numDisplayedColumns - 1);
-				AddLine(start, (end-start), color);
+				AddLine(start, static_cast<sint32>(end-start), color);
 				col = 0;
 			} else {
 				col = tempCol;
 				end = tempEnd;
-				AddLine(start, (end-start), color);
+				AddLine(start, static_cast<sint32>(end-start), color);
 				col = 0;
 			}
 		}
@@ -286,7 +286,7 @@ void ctp2_TextBuffer::AddText(MBCHAR *text, COLOR color)
 		col++;
 	}
 	if (start != end) {
-		AddLine(start, (end-start)+1, color);
+		AddLine(start, static_cast<sint32>(end-start)+1, color);
 	}
 }
 

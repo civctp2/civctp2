@@ -54,6 +54,7 @@
 #include "citywindow.h"
 
 #include "km_screen.h"
+#include "LanguageScreen.h"
 #include "EndgameWindow.h"
 #include "creditsscreen.h"
 
@@ -123,7 +124,7 @@ sint32 open_WorkView( void )
 void close_WorkView(void)
 {
 	if (g_workWindow)
-    {
+	{
 		g_c3ui->RemoveWindow(g_workWindow->Id());
 	}
 }
@@ -363,7 +364,7 @@ bool open_GreatLibrary( void )
 void close_GreatLibrary(void)
 {
 	if (g_greatLibrary)
-    {
+	{
 		g_greatLibrary->Remove();
 	}
 }
@@ -393,6 +394,11 @@ sint32 open_KeyMappingScreen( void )
 	return km_screen_displayMyWindow();
 }
 
+void open_LanguageScreen( void )
+{
+	LanguageScreen::DisplayWindow();
+}
+
 sint32 open_ScenarioEditor(void)
 {
 	return ScenarioEditor::Display();
@@ -408,34 +414,10 @@ void close_KeyMappingScreen( void )
 	km_screen_removeMyWindow(AUI_BUTTON_ACTION_EXECUTE);
 }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void close_LanguageScreen( void )
+{
+	LanguageScreen::RemoveWindow(AUI_BUTTON_ACTION_EXECUTE);
+}
 
 /// Open alien life window (removed CTP1 functionality)
 sint32 open_EndGame()
@@ -472,9 +454,9 @@ sint32 open_TutorialWin( void )
 void close_TutorialWin(void)
 {
 	if (g_tutorialWin)
-    {
-    	g_tutorialWin->Remove();
-    }
+	{
+		g_tutorialWin->Remove();
+	}
 }
 
 
@@ -486,7 +468,7 @@ sint32 open_CreditsScreen()
 
 	AUI_ERRCODE auiErr = g_c3ui->AddWindow(g_creditsWindow);
 	Assert(auiErr == AUI_ERRCODE_OK);
-    return (auiErr == AUI_ERRCODE_OK) ? 0 : -1;
+	return (auiErr == AUI_ERRCODE_OK) ? 0 : -1;
 }
 
 void close_CreditsScreen(void)
@@ -526,6 +508,7 @@ void close_AllScreens(void)
 	close_GreatLibrary();
 	close_OptionsScreen();
 	close_KeyMappingScreen();
+	close_LanguageScreen();
 	close_TutorialWin();
 	close_ScenarioEditor();
 	EditQueue::Hide();
@@ -533,16 +516,16 @@ void close_AllScreens(void)
 	ScienceVictoryDialog::Close();
 
 	if (g_battleViewWindow)
-    {
+	{
 		g_modalWindow = 1;
 
 		battleview_ExitButtonActionCallback
-            (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		    (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 	}
-    else
-    {
-	    g_modalWindow = 0;
-    }
+	else
+	{
+		g_modalWindow = 0;
+	}
 }
 
 //----------------------------------------------------------------------------
@@ -575,6 +558,7 @@ void close_AllScreensAndUpdateInfoScreen(void)
 	close_GreatLibrary();
 	close_OptionsScreen();
 	close_KeyMappingScreen();
+	close_LanguageScreen();
 	close_TutorialWin();
 	close_ScenarioEditor();
 	EditQueue::Hide();
@@ -582,13 +566,13 @@ void close_AllScreensAndUpdateInfoScreen(void)
 	ScienceVictoryDialog::Close();
 
 	if (g_battleViewWindow)
-    {
+	{
 		g_modalWindow = 1;
 		battleview_ExitButtonActionCallback
-            (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
+		    (NULL, AUI_BUTTON_ACTION_EXECUTE, 0, NULL);
 	}
-    else
-    {
-        g_modalWindow = 0;
-    }
+	else
+	{
+		g_modalWindow = 0;
+	}
 }

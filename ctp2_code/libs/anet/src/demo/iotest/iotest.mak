@@ -62,7 +62,7 @@ CLEAN :
 # ADD BASE CPP /nologo /W3 /GX /O2 /D "WIN32" /D "NDEBUG" /D "_CONSOLE" /YX /c
 # ADD CPP /nologo /MD /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "DPRNT" /D "dp_ANET2" /YX /c
 CPP_PROJ=/nologo /MD /W3 /GX /O2 /I "..\..\..\h" /I "..\..\..\demo\utils" /D\
- "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "DPRNT" /D "dp_ANET2"\
+ "NDEBUG" /D "WIN32" /D "_CONSOLE" /D "DPRNT" /D "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH"\
  /Fp"$(INTDIR)/iotest.pch" /YX /Fo"$(INTDIR)/" /c 
 CPP_OBJS=.\Release/
 CPP_SBRS=.\.
@@ -126,7 +126,7 @@ CLEAN :
 # ADD CPP /nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\..\..\h" /I "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "DPRNT" /D "dp_ANET2" /FR /YX /c
 CPP_PROJ=/nologo /MDd /W3 /Gm /GX /Zi /Od /I "..\..\..\h" /I\
  "..\..\..\demo\utils" /D "_DEBUG" /D "WIN32" /D "_CONSOLE" /D "DPRNT" /D\
- "dp_ANET2" /FR"$(INTDIR)/" /Fp"$(INTDIR)/iotest.pch" /YX /Fo"$(INTDIR)/"\
+ "dp_ANET2" /D "_CRT_SECURE_NO_DEPRECATE" /D "_CRT_NONSTDC_NO_DEPRECATE" /D "WINDOWS_IGNORE_PACKING_MISMATCH" /FR"$(INTDIR)/" /Fp"$(INTDIR)/iotest.pch" /YX /Fo"$(INTDIR)/"\
  /Fd"$(INTDIR)/" /c 
 CPP_OBJS=.\Debug/
 CPP_SBRS=.\Debug/
@@ -233,7 +233,7 @@ DEP_CPP_IOTES=\
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\win\lib\dpd.lib
+SOURCE=..\..\..\win\lib\dpd.lib
 
 !IF  "$(CFG)" == "iotest - Win32 Release"
 
@@ -245,7 +245,7 @@ SOURCE=\mw2\commdll\win\lib\dpd.lib
 ################################################################################
 # Begin Source File
 
-SOURCE=\mw2\commdll\demo\utils\raw.c
+SOURCE=..\..\..\demo\utils\raw.c
 DEP_CPP_RAW_C=\
 	"..\..\..\demo\utils\raw.h"\
 	"..\..\..\demo\utils\rawlin.c"\

@@ -418,7 +418,6 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wi
 
 	for(sint32 y=0; y<height; y++)
 	{
-
 		srcPixel = buf + width * y;
 
 		startDataPtr = dataPtr;
@@ -428,16 +427,11 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, Pixel32 *shadowBuf, uint16 wi
 			*table++ = k_EMPTY_TABLE_ENTRY;
 		} else {
 
-			*table++ = startDataPtr - startOfData;
+			*table++ = static_cast<uint16>(startDataPtr - startOfData);
 		}
 	}
 
-	sint32 resultSize = (dataPtr - outBuf);
-
-
-
-
-
+	size_t resultSize = (dataPtr - outBuf);
 
 	returnBuf = new Pixel16[resultSize];
 
@@ -477,14 +471,11 @@ Pixel16 * spriteutils_RGB32ToEncoded(Pixel32 *buf, uint16 width, uint16 height, 
 			*table++ = k_EMPTY_TABLE_ENTRY;
 		} else {
 
-			*table++ = startDataPtr - startOfData;
+			*table++ = static_cast<uint16>(startDataPtr - startOfData);
 		}
 	}
 
-	sint32 resultSize = (dataPtr - outBuf);
-
-
-
+	size_t resultSize = (dataPtr - outBuf);
 
 	returnBuf = new Pixel16[resultSize];
 
@@ -672,6 +663,7 @@ void spriteutils_ConvertPixelFormat(Pixel16 *frame, sint32 width, sint32 height)
 						break;
 					default:
 						Assert(FALSE);
+						return; // With this return it does not crash, to land here something must have gone wrong before
 				}
 				tag = *rowData++;
 			}

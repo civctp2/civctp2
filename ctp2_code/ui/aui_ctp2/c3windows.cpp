@@ -72,7 +72,6 @@
 #include "c3windows.h"
 
 #include "CivPaths.h"
-#include "videoutils.h"
 
 #include "workwin.h"
 #include "statswindow.h"

@@ -3,6 +3,8 @@
 
 #ifdef __AUI_USE_DIRECTX__
 
+#include <ddraw.h>
+#include <dinput.h>
 
 class aui_DirectX
 {

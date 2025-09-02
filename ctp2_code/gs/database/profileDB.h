@@ -210,6 +210,7 @@ private:
     sint32		m_civIndex;
 
     MBCHAR	m_gameName[_MAX_PATH];
+    MBCHAR	m_LanguageDirectory[_MAX_PATH];
     MBCHAR	m_leaderName[k_MAX_NAME_LEN];
     MBCHAR	m_civName[k_MAX_NAME_LEN];
     MBCHAR	m_saveNote[_MAX_PATH];
@@ -402,14 +403,18 @@ private:
     sint32 m_newcombat;
     /// Enable no goody huts
     sint32 m_noGoodyHuts;
-	/// Enable random map settings (wet/dry, warm/cold etc.)
+    /// Enable random map settings (wet/dry, warm/cold etc.)
     sint32 m_randomCustomMap;
-	/// Starting age in single player only
+    /// Starting age in single player only
     sint32 m_spStartingAge;
-	/// Ending age in single player only
+    /// Ending age in single player only
     sint32 m_spEndingAge;
     /// Show what a city is producing under it's name
     sint32 m_showCityProduction;
+    /// Swtich between windowed and fullscreen mode
+    sint32 m_windowedMode;
+    /// Sleeping units automatically board
+    sint32 m_sleepingUnitsBoard;
 
     PointerList<ProfileVar> *m_vars;
     BOOL m_loadedFromTutorial;
@@ -445,9 +450,6 @@ public:
     sint32 GetValueByName(const char *name) const;
     void SetValueByName(const char *name, sint32 value);
 
-
-
-
     //Added by Martin Gühmann to avoid an assert if NumPlayer is under the maximum supported players.
     void SetNPlayers(uint32 n)                          { Assert((n > 1) && (n <= k_MAX_PLAYERS)); m_nPlayers = n; }
 
@@ -456,6 +458,7 @@ public:
     void SetSaveNote(MBCHAR const * note)               { strcpy(m_saveNote, note); }
     void SetIsSaved(BOOL isSaved)                       { m_isSaved = isSaved; }
     void SetGameName(MBCHAR const * name)               { strcpy(m_gameName, name); }
+    void SetLanguageDirectory(MBCHAR const * lanDir)    { strcpy(m_LanguageDirectory, lanDir); }
 
     void SetCivIndex(sint32 civ)                        { m_civIndex = civ; }
     void SetPlayerIndex(PLAYER_INDEX index)             { m_playerNumber = index; }
@@ -467,7 +470,7 @@ public:
     void SetRiskLevel(uint32 x)                         { Assert((x>=0) && (x<5)); m_risklevel = x; }
     void SetPowerPoints(sint32 powerPoints)             { m_powerPoints = powerPoints; }
 
-    void SetGenocideRule(BOOL rule)                     { m_genocide = rule; }
+    void SetGenocideRule(BOOL rule);
     void SetTradeRule(BOOL rule)                        { m_trade = rule; }
     void SetSimpleCombatRule(BOOL rule)                 { m_simplecombat = rule; }
     void SetPollutionRule(BOOL rule);
@@ -547,7 +550,7 @@ public:
     void SetThroneRoom(BOOL throneRoom)                 { m_throneRoom = throneRoom; }
 
     void SetMaxPlayers(sint32 max)                      { m_max_players = max; }
-    void SetAlienEndGame(BOOL on)                       { m_alienEndGame = on; }
+	void SetAlienEndGame(BOOL on);
     void SetAllowAISettleMoveCheat(BOOL on)             { m_allow_ai_settle_move_cheat = on; }
     void SetAllUnitCompleteMessages(BOOL on)            { m_unitCompleteMessages = on; }
     void SetNonContinuousUnitCompleteMessages(BOOL on)  { m_nonContinuousUnitCompleteMessages = on; }
@@ -582,33 +585,37 @@ public:
     void SetDisplayPolitical(BOOL on)                   { m_displayPolitical = on;}
     void SetDisplayCapitols(BOOL on)                    { m_displayCapitols = on;}
     void SetDisplayRelations(BOOL on)                   { m_displayRelations = on;}
+    void SetRunInBackground(BOOL on)                    { m_runInBackground = on;}
     void SetShowCivFlags(BOOL on)                       { m_CivFlags = on; }
-    void SetCityCaptureOptions(BOOL on)                 { m_cityCaptureOptions = on; }
+    void SetCityCaptureOptions(BOOL on);
     void SetShowSmooth(BOOL on)                         { m_smoothBorders = on; }
-    void SetOneCity(BOOL on)                            { m_OneCityChallenge = on; }
-    void SetRevoltInsurgents (BOOL on)                  { m_RevoltInsurgents = on; }
+	void SetOneCity(BOOL on);
+	void SetRevoltInsurgents(BOOL on);
     void SetAICityDefenderBonus(BOOL on)                { m_AICityDefenderBonus = on; }
     void SetBarbarianCities(BOOL on)                    { m_BarbarianCities = on; }
     void SetSectarianHappiness(BOOL on)                 { m_SectarianHappiness = on; }
-    void SetRevoltCasualties(BOOL on)                   { m_RevoltCasualties = on; }
+	void SetRevoltCasualties(BOOL on);
     void SetBarbarianCamps(BOOL on)                     { m_BarbarianCamps = on; }
-    void SetBarbarianSpawnsBarbarian(BOOL on)           { m_BarbarianSpawnsBarbarian = on; }
+	void SetBarbarianSpawnsBarbarian(BOOL on);
     void SetAINoSinking(BOOL on)                        { m_AINoSinking = on; }
-    void SetGoldPerUnitSupport(BOOL on)                 { m_GoldPerUnitSupport = on; }
-    void SetGoldPerCity(BOOL on)                        { m_GoldPerCity = on; }
+	void SetGoldPerUnitSupport(BOOL on);
+	void SetGoldPerCity(BOOL on);
     void SetAIMilitiaUnit(BOOL on)                      { m_AIMilitiaUnit = on; }
     void SetNRG(BOOL on)                                { m_NRG = on; }
     void SetEnemyHealth(BOOL on)                        { m_showEnemyHealth = on; }  //emod2 - implementing a scenario editor switch
     void SetCityLeavesRuins(BOOL on)                    { m_ruin = on; }
     void SetDebugAI(BOOL on)                            { m_debugai = on; }
-    void SetNoCityLimit(BOOL on)                        { m_NoCityLimit = on; }
-    void SetUpgrade(BOOL on)                            { m_upgrade = on; }
-    void SetNewCombat(BOOL on)                          { m_newcombat = on; }
+	void SetNoCityLimit(BOOL on);
+	void SetUpgrade(BOOL on);
+	void SetNewCombat(BOOL on);
     void SetNoGoodyHuts(BOOL on)                        { m_noGoodyHuts = on; }
     void SetRandomCustomMap(BOOL on)                    { m_randomCustomMap = on; }
     void SetSPStartingAge(sint32 x)                     { m_spStartingAge = x; }
     void SetSPEndingAge(sint32 x)                       { m_spEndingAge = x; }
     void SetShowCityProduction(BOOL on)                 { m_showCityProduction = on; }
+
+    void SetWindowedMode(BOOL val)                      { m_windowedMode = val; }
+    void SetSleepingUnitsBoard(BOOL val)                { m_sleepingUnitsBoard = val; }
 
     sint32      GetNPlayers() const             { return m_nPlayers; }
 
@@ -621,6 +628,7 @@ public:
     MBCHAR      *GetSaveNote()                  { return m_saveNote; }
     BOOL        IsSaved() const                 { return m_isSaved; }
     MBCHAR      *GetGameName()                  { return m_gameName; }
+    MBCHAR      *GetLanguageDirectory()         { return m_LanguageDirectory; }
     sint32      GetCivIndex() const             { return m_civIndex; }
 
     PLAYER_INDEX    GetPlayerIndex() const      { return m_playerNumber; }
@@ -834,6 +842,7 @@ public:
     double PercentContinent()                   { return m_continent; }
     double PercentHomogenous()                  { return m_homogenous; }
     sint32 PercentRichness()                    { return m_richness; }
+    BOOL    IsRunInBackground()                 { return m_runInBackground; }
     BOOL    IsSmoothBorders()                   { return m_smoothBorders; } //emod3
     BOOL    GetShowArmyNames()                  { return m_showArmyNames; } //emod3
     BOOL    IsCityCaptureOptions()              { return m_cityCaptureOptions; } //emod3
@@ -864,6 +873,8 @@ public:
     sint32  GetSPEndingAge() const              { return m_spEndingAge; }
     BOOL    IsShowCityProduction()              { return m_showCityProduction; }
 
+    BOOL    IsWindowedMode() const              { return m_windowedMode; }
+    BOOL    IsSleepingUnitsBoard() const        { return m_sleepingUnitsBoard; }
 };
 
 extern ProfileDB *g_theProfileDB;

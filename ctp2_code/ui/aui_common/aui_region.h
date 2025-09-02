@@ -227,8 +227,8 @@ public:
 	virtual AUI_ERRCODE	RemoveChild( uint32 regionId );
 	aui_Region			*GetChild( uint32 regionId );
 
-	aui_Region	*GetChildByIndex(sint32 index);
-	sint32		NumChildren(void);
+	aui_Region	*GetChildByIndex(size_t index);
+	size_t		NumChildren(void);
 
 	virtual void DeleteChildren();
 

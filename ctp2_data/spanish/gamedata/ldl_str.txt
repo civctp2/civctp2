@@ -49,6 +49,8 @@
 # - Added new strings for redesigned empire manager. - 22-Jul-2009 Maq
 # -Added strings for view capital buttons - 4-Jan-EPW
 # -Added string for relationships 7-Jan-EPW
+#
+#
 #----------------------------------------------------------------------------
 
 ##Those darn hard-coded strings 03-09-99
@@ -468,6 +470,7 @@ str_ldl_CIV_SCORE				"PUNTOS IMP."
 str_ldl_POWER_GRAPH				"GRÁFICO DE PODER"
 str_ldl_DEFEAT					"DERROTA"
 
+# So we offend female leaders
 str_ldl_THE_DESTITUTE				"EL INDIGENTE"
 str_ldl_THE_SQUIRREL_HEARTED			"EL CORAZÓN DE ARDILLA"
 str_ldl_THE_RED_FACED				"EL AVERGONZADO"
@@ -866,6 +869,7 @@ str_ldl_Known_To_You_And_Others			"Conocidos por ti y por otros"
 str_ldl_LABORERS				"Obreros"
 str_ldl_Land					"Tierra"
 str_ldl_Land_Grabber				"Acaparador de tierras"
+str_ldl_LANGUAGE					"IDIOMA"
 str_ldl_Large_64_x_128				"Grande"
 str_ldl_Last_Sale_Price_COLON			"Ultimo precio de venta:"
 str_ldl_Launch					"Lanzar"
@@ -945,6 +949,7 @@ str_ldl_Offer					"Ofrecer"
 str_ldl_OFFER_A_GIFT				"OFRECER UN REGALO"
 str_ldl_OFFER_AN_EXCHANGE			"OFRECER UN INTERCAMBIO"
 str_ldl_Offer_Good				"Ofrecer mercancía "
+str_ldl_Routes_COLON				"Routes:"
 
 ###	rsh012599 - DO NOT CHANGE THIS TO "Close"...there is already an 'str_ldl_Close'
 ###				- if you see a ui screen that says 'Ok' where it should be 'Close' tell Ryan
@@ -1181,6 +1186,7 @@ str_ldl_Unit_Help				"Ayuda de unidad"
 str_ldl_UNIT_MOVEMENT				"MOVIMIENTO UNIDAD"
 str_ldl_UNIT_STATUS				"ESTADO DE UNIDAD"
 str_ldl_Units					"Unidades"
+str_ldl_Unix_Internet			"Unix Internet: Your connection to the internet on Unix systems"
 str_ldl_UNLOAD_ALL				"DESEMBARCAR"
 str_ldl_Unpredictable				"Imprevisible"
 str_ldl_Untarnished				"Intachable"
@@ -1413,6 +1419,8 @@ str_tbl_ldl_You_will_receive			"Recibirás"
 str_tbl_ldl_Your_Intent_to_Purchase_has_been_Sent	"Tu intención de comprar ha sido enviada."
 str_tbl_ldl_Zoom_in_one_level			"Acercar un nivel"
 str_tbl_ldl_Zoom_out_one_level			"Alejar un nivel "
+str_ldl_CAPS_LANGUAGE				"IDIOMA"
+str_ldl_Use_OS_Language				"Use language from operating system"
 str_ldl_CAPS_MUSIC				"MÚSICA"
 str_ldl_Select_Track				"Seleccionar pista"
 str_ldl_CAPS_SELECT_TRACK			"SELECCIONAR PISTA"
@@ -2261,6 +2269,7 @@ str_ldl_MapFilters				"Filtros de mapas"
 str_ldl_Graphics				"Gráficos"
 str_ldl_Sound					"Sonido"
 str_ldl_Music					"Música"
+str_ldl_Language				"Idioma"
 str_ldl_Advanced				"Avanzado"
 str_ldl_SaveGame				"Guardar partida"
 str_ldl_LoadGame				"Cargar partida"
@@ -2747,8 +2756,6 @@ str_ldl_SET_GOAL				"Fijar objetivo"
 str_ldl_SORT_BY_AGE				"Ordenar por edad"
 
 
-
-
 # Ranking Tab
 str_ldl_RANKING_MILITARY			"Militar"
 str_ldl_RANKING_ECONOMIC			"Económico"
@@ -3088,7 +3095,7 @@ str_profile_CityClick                           "Select City Instead Of Army"
 str_profile_DebugSlic                           "Slic Debug Messages"
 str_profile_DebugSlicEvents                     "Slic Event Debug Messages"
 str_profile_EndTurnWithEmptyBuildQueues         "End turn with empty build queues"
-str_profile_RunInBackground                     "Allow end turn in background"
+str_profile_RunInBackground                     "Game runs in background"
 str_profile_Upgrade                             "Unit upgrading"
 str_profile_SmoothBorders                       "Smooth empire borders"
 str_profile_CivFlags                            "Show Civilization Unit flags"
@@ -3102,30 +3109,33 @@ str_profile_RevoltInsurgents                    "Revolting cities create barbari
 str_profile_BarbarianCamps                      "Entrenched Barbarians create Tile Imps"        # Entrenched barbarians create an imp
 str_profile_BarbarianSpawnsBarbarian            "Entrenched Barbarians spawn Barbarians"        # Entrenched barbs create more barbs
 str_profile_AINoSinking                         "AI ships don't sink"                           # AI ships don't sink
-str_profile_AINoCityLimit                       "AI No City LImit"                              # AI not affected by city limit
+str_profile_AINoCityLimit                       "AI No City Limit"                              # AI not affected by city limit
 str_profile_GoldPerUnitSupport                  "1 Gold Per Unit Cost"                          # All pay thins int times unit support calculation
 str_profile_GoldPerCity                         "2 Gold Per City x City Limit"                  # Everyone pays gold amount per city
-str_profile_AINoShieldHunger                    "AI doesn't pay Shield Hunger"                  # AI doesn't pay shield hunger (gets lots of units)
-str_profile_AINoGoldHunger                      "AI doesn't pay Unit Gold"                      # AI doesnt pay unit gold hunger
+str_profile_AINoShieldHunger                    "AI does not pay Shield Hunger"                 # AI doesn't pay shield hunger (gets lots of units)
+str_profile_AINoGoldHunger                      "AI does not pay Unit Gold"                     # AI doesnt pay unit gold hunger
 str_profile_AIFreeUpgrade                       "AI Free Upgrades"                              # AI doesn't pay goldfor upgrades
 str_profile_AIMilitiaUnit                       "AI Free Militia Unit"                          # If city is empty at turn start AI gets cheapest unit
 str_profile_OneCityChallenge                    "One City Challenge"                            # One city challenge
 str_profile_CityCaptureOptions                  "City Capture Options"                          # Captured city options
 str_profile_DebugCityAstar                      "Debug road build path"
 str_profile_NewCombat                           "New Combat"
+str_profile_WindowedMode                        "Windowed Mode"                                 # Run the game in a Window, only available in SDL builds
+str_profile_SleepingUnitsBoard                  "Sentineling units board automatically"         # Sleeping units in cities and on airfields board autoatically, if a transporter passes. This setting is ignored by the AI.
 
 # Añadido para extender las opciones del teclado. 6/2004 L. Hirth
-str_tbl_ldl_Music_Options			"Opciones de Musica"
-str_tbl_ldl_Decend				"Descender"
+str_tbl_ldl_Music_Options				"Opciones de Musica"
+str_tbl_ldl_Language_Options			"Opciones de Idioma"
+str_tbl_ldl_Decend						"Descender"
 str_tbl_ldl_Execute_Eyepoint			"Enfocar en el objeto (ojo)"
-str_tbl_ldl_Move_Order				"Orden de movimiento"
-str_tbl_ldl_End_Unit_Turn			"Terminar el turno de esta unidad"
+str_tbl_ldl_Move_Order					"Orden de movimiento"
+str_tbl_ldl_End_Unit_Turn				"Terminar el turno de esta unidad"
 str_tbl_ldl_Process_Unit_Orders			"Proceder con las ordenes de esta unidad"
-str_tbl_ldl_Group_Army				"Agrupar estas unidades al ejercito"
-str_tbl_ldl_Ungroup_Army			"desagrupar ejercito(s)"
-str_tbl_ldl_Gamestate_Debug			"Eliminar errores del estado del juego (playtest)"
-str_tbl_ldl_Rand_Test				"Prueba al azar (playtest)"
-str_tbl_ldl_Command_Enter			"Insertar comando (playtest)"
+str_tbl_ldl_Group_Army					"Agrupar estas unidades al ejercito"
+str_tbl_ldl_Ungroup_Army				"Desagrupar ejercito(s)"
+str_tbl_ldl_Gamestate_Debug				"Eliminar errores del estado del juego (playtest)"
+str_tbl_ldl_Rand_Test					"Prueba al azar (playtest)"
+str_tbl_ldl_Command_Enter				"Insertar comando (playtest)"
 str_tbl_ldl_Command_Enter_Alternate		"Insertar comando alterno (playtest)"
 
 # New gamesetting options
@@ -3140,7 +3150,13 @@ str_ldl_SmoothBorders_On			"Smooth Icon Borders"
 str_ldl_SmoothBorders_Off			"Thin Pixel Borders"
 str_ldl_Good_Animations_Off			"Good Animations Off"
 str_ldl_Good_Animations_On			"Good Animations On"
+str_ldl_Windowed_Mode_Off			"Play in Fullscreen Mode"
+str_ldl_Windowed_Mode_On			"Play in Windowed Mode"
+str_ldl_Run_In_Background_Off		"Game stops in background"
+str_ldl_Run_In_Background_On		"Game runs in background"
 
+str_tbl_ldl_AlienLife_Off				"Win without the Gaia Controller"
+str_tbl_ldl_AlienLife_On				"Win with the Gaia Controller"
 str_tbl_ldl_CityCaptureOptions_On		"City Capture Options"
 str_tbl_ldl_CityCaptureOptions_Off		"No City Capture Options"
 str_tbl_ldl_OneCityChallenge_On			"One City Challenge"
@@ -3177,6 +3193,7 @@ str_tbl_ldl_RandomCustomMap_On			"Random Settings"
 
 # Rules window description strings.
 str_tbl_ldl_RuleDetail_Bloodlust		"Bloodlust\nFor victory, you must defeat all opponents."
+str_tbl_ldl_RuleDetail_AlienLife		"Science Victory\nYou can win by building the Gaia Controller."
 str_tbl_ldl_RuleDetail_Pollution		"Pollution\nPollution increases unhappiness in cities, creates dead terrain in heavily polluting cities, and in extreme cases causes worldwide flooding or desertification of the land."
 str_tbl_ldl_RuleDetail_CityCaptureOptions	"City Capture Options\nOn capturing a city you will be given 3 choices - liberate: give the city to the barbarian player, raze: burn the city to the ground, and occupy: keep the city."
 str_tbl_ldl_RuleDetail_OneCityChallenge		"One City Challenge\nNo human player can build units that can create cities."

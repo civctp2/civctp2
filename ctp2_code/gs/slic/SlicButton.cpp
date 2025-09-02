@@ -111,11 +111,11 @@ void SlicButton::Serialize(CivArchive &archive)
 		archive << m_isCloseEvent;
 
 		if(m_segment) {
-			l = strlen(m_segment->GetName()) + 1;
+			l = static_cast<sint32>(strlen(m_segment->GetName()) + 1);
 			archive << l;
 			archive.Store((uint8*)m_segment->GetName(), l);
 		} else {
-			l = strlen(m_segmentName) + 1;
+			l = static_cast<sint32>(strlen(m_segmentName) + 1);
 			archive << l;
 			archive.Store((uint8*)m_segmentName, l);
 		}

@@ -52,7 +52,7 @@ AUI_ERRCODE ctp2_TabGroup::DoneInstantiatingThis(const MBCHAR *ldlBlock)
 {
 
 	ListPos position = ChildList()->GetHeadPosition();
-	for(int countdown = ChildList()->L(); countdown; countdown--) {
+	for(size_t countdown = ChildList()->L(); countdown; countdown--) {
 
 		ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 
@@ -72,7 +72,7 @@ AUI_ERRCODE ctp2_TabGroup::Show()
 
 	bool foundCurrentActiveTab = false;
 	ListPos position = ChildList()->GetHeadPosition();
-	for(int countdown = ChildList()->L(); countdown; countdown--) {
+	for(size_t countdown = ChildList()->L(); countdown; countdown--) {
 
 		ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));
 
@@ -112,7 +112,7 @@ AUI_ERRCODE ctp2_TabGroup::Draw(aui_Surface *surface, sint32 x, sint32 y)
 	if(errcode == AUI_ERRCODE_OK) {
 
 		ListPos position = ChildList()->GetHeadPosition();
-		int countdown;
+		size_t countdown;
 		for(countdown = ChildList()->L(); countdown; countdown--) {
 
 			ctp2_Tab *tab = static_cast<ctp2_Tab*>(ChildList()->GetNext(position));

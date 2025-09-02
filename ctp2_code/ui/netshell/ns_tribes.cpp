@@ -106,7 +106,7 @@ ns_TribesDropDown::ns_TribesDropDown(
 		return;
 	}
 
-	sint32 numCivs = g_nsTribes->GetStrings()->GetNumStrings();
+	sint32 numCivs = static_cast<sint32>(g_nsTribes->GetStrings()->GetNumStrings());
 	for ( sint32 i = 0; i < numCivs; i++ )
 	{
 		const MBCHAR *name = g_nsTribes->GetStrings()->GetString( i );

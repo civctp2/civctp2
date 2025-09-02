@@ -40,11 +40,11 @@
 //----------------------------------------------------------------------------
 
 #if defined(__AUI_USE_DIRECTX__)
-#include <dinput.h>	    	// DIK_...
+#include <dinput.h>         // DIK_...
 #endif
 
 // Not really a library, but needed in the export section
-#include "ctp2_inttypes.h"	// uint##
+#include "ctp2_inttypes.h"  // uint##
 
 //----------------------------------------------------------------------------
 // Export overview

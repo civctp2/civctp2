@@ -277,11 +277,11 @@ int validateComm(void *comm);
 
 typedef struct {
 	char signature[comm_DRIVER_SIGLEN];
-	size_t recordLen;				/* sizeof(comm_driverInfo_t) */
-	char name[comm_DRIVER_NAMELEN];	/* Name to present to user */
-	short version;					/* Major, minor rev. in high, low byte */
-	short capabilities;				/* What driver can do/wants to do */
-	short needs;					/* What fields in commInitReq_t to fill in */
+	size_t recordLen;               /* sizeof(comm_driverInfo_t) */
+	char name[comm_DRIVER_NAMELEN]; /* Name to present to user */
+	short version;                  /* Major, minor rev. in high, low byte */
+	short capabilities;             /* What driver can do/wants to do */
+	short needs;                    /* What fields in commInitReq_t to fill in */
 } comm_driverInfo_t;
 
 /* Special value for commInitReq_t.portnum */
@@ -958,7 +958,7 @@ typedef int
 (*COMMSETPARAM)(
 	commSetParamReq_t *		req,		/* Request (or NULL) */
 	commSetParamResp_t *	resp		/* Response (or NULL) */
-	COMM_3RDPARAM)				 		/* comm context pointer */
+	COMM_3RDPARAM)						/* comm context pointer */
 ;
 extern COMMSETPARAM commSetParam;
 #else
@@ -966,7 +966,7 @@ DLLEXPORT int cdecl
 commSetParam(
 	commSetParamReq_t *		req,		/* Request (or NULL) */
 	commSetParamResp_t *	resp		/* Response (or NULL) */
-	COMM_3RDPARAM)				 		/* comm context pointer */
+	COMM_3RDPARAM)						/* comm context pointer */
 ;
 #endif
 

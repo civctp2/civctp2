@@ -106,6 +106,7 @@ GOAL_SEIGE {
     SmallTargetEmpireSize             3
     SmallTargetEmpireBonus          500
     WeakestEnemyBonus              1000
+    BarbarianBonus                 1000
   }
 
   ThreatenType:DestroyCity
@@ -1010,9 +1011,15 @@ GOAL_SOOTHSAY {
 ## 26 ##########################################################
 
 GOAL_ESTABLISH_EMBASSY {
-  NeedsEscort
+
+//  Diplomats are now unexpellable, and the escort is a joke
+//  if somebody really wants to kill the diplomat. Otherwise
+//  the escort would need to be a serious attack force.
+//  The diplomat could still be protected from Barbarians.
+//  NeedsEscort // Currently not used in the code
 
   SquadClass:Special
+  SquadClass:CanEstablishEmbassy
 
   TargetType:City
   TargetOwner:Ally
@@ -1022,7 +1029,7 @@ GOAL_ESTABLISH_EMBASSY {
 
   Execute   ORDER_ESTABLISH_EMBASSY
 
-  // just want to establish embassy at closest city.
+  // We just want to establish embassy at the closest city.
   ThreatBonus               0
   EnemyValueBonus           0
   AlliedValueBonus          0
@@ -1750,9 +1757,15 @@ GOAL_POISON_CITY {
 ## 46 ##########################################################
 
 GOAL_THROW_PARTY {
-  NeedsEscort
+
+//  Diplomats are now unexpellable, and the escort is a joke
+//  if somebody really wants to kill the diplomat. Otherwise
+//  the escort would need to be a serious attack force.
+//  The diplomat could still be protected from Barbarians.
+//  NeedsEscort // Currently not used in the code
 
   SquadClass:Special
+  SquadClass:CanThrowParty
 
   TargetType:City
   TargetOwner:Ally
@@ -1762,7 +1775,7 @@ GOAL_THROW_PARTY {
 
   Execute   ORDER_THROW_PARTY
  
-  // just want to establish embassy at closest city.
+  // We just want to throw a party at the closest city.
   ThreatBonus               0
   EnemyValueBonus           0
   AlliedValueBonus          0

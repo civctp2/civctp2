@@ -52,7 +52,7 @@ void *sliccmd_array_lookup_sym(char *arrayName, int index);
 void sliccmd_parse_done(struct sliccmdExpValue *v, int action);
 void sliccmd_type_error();
 
-void sliccmd_error(char *s);
+void sliccmd_error(const char *s);
 
 void sliccmd_clear_symbols();
 
@@ -62,7 +62,7 @@ void *sliccmd_get_db_name_sym(void *dbptr, const char *name);
 void *sliccmd_get_db_name_sym_by_index(void *dbptr, int index);
 
 int sliccmd_parse(int action, char *cmd, char *output, int outputlen, int useDialogs, char *catString);
-void scerror(char *s);
+void scerror(const char *s);
 
 #if defined(__cplusplus)
 }

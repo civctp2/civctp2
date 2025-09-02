@@ -809,14 +809,14 @@ AdvanceListItem::~AdvanceListItem()
 {
 	ListPos position = m_childList->GetHeadPosition();
 
-	for ( sint32 i = m_childList->L(); i; i-- ) {
+	for ( size_t i = m_childList->L(); i; i-- ) {
 		aui_Region		*subControl;
 
 		subControl = m_childList->GetNext( position );
 		if (subControl) {
 			ListPos	subPos = subControl->ChildList()->GetHeadPosition();
 
-			for (sint32 j = subControl->ChildList()->L(); j; j--) {
+			for (size_t j = subControl->ChildList()->L(); j; j--) {
 				delete subControl->ChildList()->GetNext(subPos);
 			}
 		}

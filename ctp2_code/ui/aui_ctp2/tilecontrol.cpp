@@ -42,8 +42,7 @@
 #include "ResourceRecord.h"
 #include "profileDB.h"
 
-// Added by Martin Gühmann
-extern sint32 g_isFastCpu; // Actual permernent set to 1
+extern sint32 g_isFastCpu; // Actually permernently set to 1
 
 TileControl::TileControl(AUI_ERRCODE * retval, uint32 id, MBCHAR * ldlBlock )
 :

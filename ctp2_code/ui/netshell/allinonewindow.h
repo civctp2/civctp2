@@ -28,7 +28,22 @@ extern AllinoneWindow *g_allinoneWindow;
 
 #include "StartingPosition.h"
 
-struct ns_ScenarioInfo {
+struct ns_ScenarioInfo
+{
+	ns_ScenarioInfo()
+	:
+	    isScenario          (0),
+	    m_numStartPositions (0),
+	    m_startInfoType     (0),
+	    m_haveSavedGame     (0)
+	{
+		std::fill(m_fileName,     m_fileName     + _MAX_PATH,          '\0');
+		std::fill(m_gameName,     m_gameName     + _MAX_PATH,          '\0');
+		std::fill(m_civs,         m_civs         + k_MAX_START_POINTS,   0 );
+		std::fill(m_legalCivs,    m_legalCivs    + k_MAX_PLAYERS,        0 );
+		std::fill(m_scenarioName, m_scenarioName + _MAX_PATH,          '\0');
+	}
+
 	uint8 isScenario;
 	MBCHAR m_fileName[_MAX_PATH];
 	MBCHAR m_gameName[_MAX_PATH];
@@ -38,7 +53,6 @@ struct ns_ScenarioInfo {
 	uint8 m_haveSavedGame;
 	sint32 m_legalCivs[k_MAX_PLAYERS];
 	MBCHAR m_scenarioName[_MAX_PATH];
-
 };
 
 class AllinoneWindow : public ns_Window
@@ -74,7 +88,7 @@ public:
 
 
 
-	BOOL WhoHasTribe( sint32 index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale );
+	BOOL WhoHasTribe( size_t index, uint16 *curKey, BOOL *curIsAI, BOOL *curIsFemale );
 
 
 
@@ -179,12 +193,12 @@ public:
 
 
 
-
 		CONTROL_AGESBUTTON,
 		CONTROL_MAPSIZEBUTTON,
 		CONTROL_WORLDTYPEBUTTON,
 		CONTROL_WORLDSHAPEBUTTON,
 		CONTROL_DIFFICULTYBUTTON,
+		CONTROL_MORERULESBUTTON,
 
 
 
@@ -243,10 +257,10 @@ public:
 
 	void	UpdateTribeSwitches( void );
 
+	void	UpdateDisplay( void );
 
 protected:
 	void	UpdateConfig( void );
-	void	UpdateDisplay( void );
 
 	bool m_createdExclusions;
 
@@ -320,6 +334,7 @@ protected:
     AUI_ACTION_BASIC(WorldTypeButtonAction);
     AUI_ACTION_BASIC(WorldShapeButtonAction);
     AUI_ACTION_BASIC(DifficultyButtonAction);
+	AUI_ACTION_BASIC(MoreRulesButtonAction);
 
 	friend class CivPointsButtonAction;
 	friend class HandicappingSwitchAction;
@@ -422,7 +437,11 @@ void AllinoneTribeCallback(
 
 
 
-
+void AllinoneMoreRulesCallback(
+	aui_Control *control,
+	uint32 action,
+	uint32 data,
+	void* cookie );
 void AllinoneDifficultyCallback(
 	aui_Control *control,
 	uint32 action,

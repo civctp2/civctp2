@@ -45,9 +45,6 @@ extern CivApp *g_civApp;
 #include "netshell.h"
 #include "ns_customlistbox.h"
 
-
-
-
 #include "connectionselectwindow.h"
 #include "playerselectwindow.h"
 #include "passwordscreen.h"
@@ -75,7 +72,6 @@ ConnectionSelectWindow::ConnectionSelectWindow(
 	if ( !AUI_SUCCESS(*retval) ) return;
 }
 
-
 AUI_ERRCODE ConnectionSelectWindow::InitCommon( void )
 {
 	m_controls = new aui_Control *[ m_numControls = CONTROL_MAX ];
@@ -86,23 +82,11 @@ AUI_ERRCODE ConnectionSelectWindow::InitCommon( void )
 	return AUI_ERRCODE_OK;
 }
 
-
 AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 {
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
-
-
-
 	aui_Control *control;
-
-
-
-
-
-
-
-
 
 	control = new c3_Static(
 		&errcode,
@@ -168,18 +152,9 @@ AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 	if ( !AUI_NEWOK(control,errcode) ) return errcode;
 	m_controls[ CONTROL_CANCELBUTTON ] = control;
 
-
 	aui_Ldl::SetupHeirarchyFromRoot( "connectionselectwindow" );
 
-
-
-
 	aui_Action *action;
-
-
-
-
-
 
 	action = new OKButtonAction;
 	Assert( action != NULL );
@@ -195,7 +170,6 @@ AUI_ERRCODE ConnectionSelectWindow::CreateControls( void )
 	Assert( action != NULL );
 	if ( !action ) return AUI_ERRCODE_MEMALLOCFAILED;
 	m_controls[ CONTROL_CONNECTIONTYPELISTBOX ]->SetAction( action );
-
 
 	m_controls[ CONTROL_CONNECTIONDESCRIPTIONTEXTFIELD ]->Enable( FALSE );
 
@@ -219,18 +193,6 @@ void ConnectionSelectWindow::Update(void)
 		b->Enable(TRUE);
 
 		NETFunc::Transport *t = item->GetNetShellObject()->GetNETFuncObject();
-
-
-
-
-
-
-
-
-
-
-
-
 
 		char *filename = t->GetFileName();
 		char *slash = strrchr(filename, '/');
@@ -260,14 +222,13 @@ void ConnectionSelectWindow::Update(void)
 	}
 }
 
-
 AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 {
-    while (NETFunc::Message * m = g_netfunc->GetMessage())
-    {
+	while (NETFunc::Message * m = g_netfunc->GetMessage())
+	{
 		g_netfunc->HandleMessage(m);
 
-        if (NETFunc::Message::NETWORKERR == m->GetCode())
+		if (NETFunc::Message::NETWORKERR == m->GetCode())
 		{
 			passwordscreen_displayMyWindow(PASSWORDSCREEN_MODE_CONNECTIONERR);
 		}
@@ -276,13 +237,12 @@ AUI_ERRCODE ConnectionSelectWindow::Idle( void )
 	}
 
 	if (g_netfunc->GetStatus() == NETFunc::READY)
-    {
+	{
 		g_netshell->GotoScreen( NetShell::SCREEN_PLAYERSELECT );
 	}
 
 	return AUI_ERRCODE_OK;
 }
-
 
 void ConnectionSelectWindow::ConnectionListBoxAction::Execute(
 	aui_Control *control,
@@ -313,7 +273,6 @@ void ConnectionSelectWindow::ConnectionListBoxAction::Execute(
 	}
 }
 
-
 void ConnectionSelectWindow::OKButtonAction::Execute(
 	aui_Control *control,
 	uint32 action,
@@ -333,18 +292,14 @@ void ConnectionSelectWindow::OKButtonAction::Execute(
 			if ( ((FakeTransport *)t)->GetSubType() ==
 					FakeTransport::EMAIL )
 			{
-
 				NetShell::Leave( k_NS_FLAGS_DESTROY, TRUE );
 				g_civApp->PostStartGameAction();
-
 			}
 			else if ( ((FakeTransport *)t)->GetSubType() ==
 					FakeTransport::HOTSEAT )
 			{
-
 				NetShell::Leave( k_NS_FLAGS_DESTROY, TRUE );
 				g_civApp->PostStartGameAction();
-
 			}
 		}
 		else
@@ -361,7 +316,6 @@ void ConnectionSelectWindow::OKButtonAction::Execute(
 		}
 	}
 }
-
 
 void ConnectionSelectWindow::CancelButtonAction::Execute(
 	aui_Control *control,

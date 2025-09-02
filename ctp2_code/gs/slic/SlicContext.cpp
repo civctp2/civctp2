@@ -367,7 +367,7 @@ void SlicContext::Serialize(CivArchive &archive)
 		if(m_numMadlibs > 0) {
 			archive.Store((uint8*)m_madlibChoiceList, m_numMadlibs * sizeof(sint32));
 			archive.Store((uint8*)m_madlibNameList, m_numMadlibs * sizeof(sint32));
-        }
+		}
 
 		archive << m_numAttitudes;
 		if(m_numAttitudes > 0)
@@ -379,7 +379,7 @@ void SlicContext::Serialize(CivArchive &archive)
 
 		archive << m_numActions;
 		for(sint32 i = 0; i < m_numActions; i++) {
-			l = strlen(m_actionList[i]) + 1;
+			l = static_cast<sint32>(strlen(m_actionList[i]) + 1);
 			archive << l;
 			archive.Store((uint8*)m_actionList[i], l);
 		}
@@ -618,9 +618,9 @@ void SlicContext::AddAction(const MBCHAR *action)
 		delete [] m_actionList;
 	}
 	m_actionList = newList;
-    sint32 n = strlen(action) + 1;
+	size_t n = strlen(action) + 1;
 	newList[m_numActions] = new MBCHAR[n];
-    memset(newList[m_numActions], 0, n);
+	memset(newList[m_numActions], 0, n);
 	strcpy(newList[m_numActions], action);
 	m_numActions++;
 }

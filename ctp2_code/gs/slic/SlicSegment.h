@@ -34,7 +34,6 @@
 #include "slicif.h"
 #include "StringHash.h"
 #include "GameEventHook.h"
-#include "GameEventHook.h"
 #include "SlicError.h"
 #include "SlicFunc.h"
 #include "gstypes.h"
@@ -72,7 +71,7 @@ private:
 	GAME_EVENT m_event;
 	GAME_EVENT_PRIORITY m_priority;
 	sint32 m_fromFile;
-    sint32 m_lastShown[k_MAX_PLAYERS];
+	sint32 m_lastShown[k_MAX_PLAYERS];
 	sint32 m_firstLineNumber;
 
 
@@ -95,7 +94,7 @@ public:
 	SlicSegment();
 	SlicSegment(sint32 slicifIndex);
 	SlicSegment(CivArchive &archive);
-	~SlicSegment();
+	virtual ~SlicSegment();
 	void Serialize(CivArchive &archive);
 
 	void *operator new(size_t size);
@@ -135,7 +134,7 @@ public:
 	const char *GetFilename() { return m_filename; }
 	uint8 *FindNextLine(uint8 *start);
 	bool GetSourceLines(sint32 &firstLineNum, sint32 &firstLineOffset, sint32 &lastLineNum);
-	sint32 FindLineNumber(sint32 offset);
+	sint32 FindLineNumber(size_t offset);
 	bool LineHasBreak(sint32 line, bool &conditional);
 
 	void SetBreak(sint32 lineNumber, bool setBreak);
@@ -163,7 +162,7 @@ public:
 		m_segments = NULL;
 		m_nextSegment = 0;
 	}
-	~SlicSegmentHash() {
+	virtual ~SlicSegmentHash() {
 		delete [] m_segments;
 	}
 

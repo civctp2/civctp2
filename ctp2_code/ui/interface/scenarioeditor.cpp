@@ -155,6 +155,7 @@
 #include "network.h"
 #include "AttractWindow.h"
 #include "gfx_options.h"
+#include "spnewgamerulesscreen.h"
 
 extern C3UI *               g_c3ui;
 extern sint32               g_fog_toggle;
@@ -163,6 +164,7 @@ extern ControlPanelWindow * g_controlPanel;
 extern sint32               g_startInfoType;
 extern CivApp *             g_civApp;
 extern MBCHAR               g_slic_filename[_MAX_PATH];
+extern CursorManager*       g_cursorManager;
 
 extern void WhackScreen();
 
@@ -276,11 +278,11 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	// MBCHAR m_scenarioName[k_SCENARIO_NAME_MAX];
 {
 	m_scenarioName[0] = 0;
-    if (g_theWorld)
-    {
-	    m_xWrap = g_theWorld->IsXwrap();
-	    m_yWrap = g_theWorld->IsYwrap();
-    }
+	if (g_theWorld)
+	{
+		m_xWrap = g_theWorld->IsXwrap();
+		m_yWrap = g_theWorld->IsYwrap();
+	}
 
 	m_window = (ctp2_Window *)aui_Ldl::BuildHierarchyFromRoot(s_scenarioEditorBlock);
 	Assert(m_window);
@@ -345,7 +347,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	//aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod
 	//s_ShowEnemyHealth		= spNew_aui_Switch(err, s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth", ShowEnemyHealth, NULL); //emod5
 	//ctp2_Switch *s_ShowEnemyHealth = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.ShowEnemyHealth");
-    //s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
+	//s_ShowEnemyHealth->SetState(g_theProfileDB->GetShowEnemyHealth());
 
 	m_debugAI = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.DebugAI");
 	m_debugAI->SetActionFuncAndCookie(DebugAI, NULL);
@@ -388,10 +390,6 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.SetGovernment", SetGovernment, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.PlayerSelect", LimitPlayerChoice, NULL);
-
-
-
-
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.Civ.FullModeSwitch",
 									CivModeSwitch, (void *)SCEN_START_LOC_MODE_NONE);
@@ -459,7 +457,7 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldExtraControls.RemoveGoods", RemoveGoods, NULL);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldExtraControls.GenerateGoods", GenerateGoods, NULL);
-	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.World.Pollution", Pollution, NULL);
+	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "TabGroup.World.Rules", Rules, NULL);
 
 	m_eraseButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "UniversalControls.EraseButton");
 
@@ -467,12 +465,12 @@ ScenarioEditor::ScenarioEditor(AUI_ERRCODE *err)  //called by intialize does sam
 	m_addStuffWindow->SetDraggable( TRUE);
 
 	ctp2_Switch *pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.XWrapButton");
-    pButton->SetState((m_xWrap) ? 1 : 0);
+	pButton->SetState((m_xWrap) ? 1 : 0);
 
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.XWrapButton", SetXWrap, NULL);
 
 	pButton = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "WorldControls.YWrapButton");
-    pButton->SetState((m_yWrap) ? 1 : 0);
+	pButton->SetState((m_yWrap) ? 1 : 0);
 	aui_Ldl::SetActionFuncAndCookie(s_scenarioEditorBlock, "WorldControls.YWrapButton", SetYWrap, NULL);
 
 	*err = AUI_ERRCODE_OK;
@@ -1620,9 +1618,6 @@ void ScenarioEditor::CloseAddStuff(aui_Control *control, uint32 action, uint32 d
 	g_c3ui->RemoveWindow(s_scenarioEditor->m_addStuffWindow->Id());
 }
 
-
-
-
 void ScenarioEditor::ToggleLabels(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
 	switch ( action ) {
@@ -2342,7 +2337,7 @@ void ScenarioEditor::NameTheScenarioCallback(MBCHAR *text, sint32 accepted, void
 
 		strcpy(s_scenarioEditor->m_scenarioName, text);
 
-		s_wasKeepingScore = g_theGameSettings->GetKeeppScore();
+		s_wasKeepingScore = g_theGameSettings->IsKeepScore();
 		g_theGameSettings->SetKeepScore( TRUE );
 
 		scenarioeditor_SetSaveOptionsFromMode();
@@ -2781,12 +2776,7 @@ void ScenarioEditor::SetupGlobalControls()
 		dd->SetSelectedItem(g_theProfileDB->GetDifficulty());
 	}
 
-	ctp2_Switch *pollSwitch = (ctp2_Switch *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.World.Pollution");
-	Assert(pollSwitch);
-	if(pollSwitch)
-	{
-		pollSwitch->SetState(g_theProfileDB->IsPollutionRule() ? 1 : 0);
-	}
+	m_debugAI->SetState(g_graphicsOptions->IsArmyTextOn());
 
 
 	table = new aui_StringTable(&err, "WorldControlsStringTable");
@@ -2843,13 +2833,11 @@ void ScenarioEditor::UpdatePlayerCount()
 	st->SetText(tempstr);
 }
 
-//Added by Martin Gühmann
-
 //----------------------------------------------------------------------------
 //
-// Name       : ScenarioEditor::Pollution
+// Name       : ScenarioEditor::Rules
 //
-// Description: Handles calls when the pollution on/off button is pressed.
+// Description: Handles calls when the rules button is pressed.
 //
 // Parameters : control - The controll element on that an action was
 //                        performed.
@@ -2861,25 +2849,16 @@ void ScenarioEditor::UpdatePlayerCount()
 //
 // Returns    : -
 //
-// Remark(s)  : Only enables disables pulltion if
-//              action == AUI_BUTTON_ACTION_PRESS.
+// Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ScenarioEditor::Pollution(aui_Control *control, uint32 action, uint32 data, void *cookie)
+void ScenarioEditor::Rules(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	//No idea why the above action is called more than once
-	//but this action is only called when the button is actually
-	//pressed. The result now is that pollution is not turned off
-	//automaticly when the Scenario Editor is used.
-	if(action != AUI_BUTTON_ACTION_PRESS)
+	if(action != AUI_SWITCH_ACTION_ON)
 		return;
 
-	ctp2_Button *sw = (ctp2_Button *)control;
-
-	sw->SetToggleState(!sw->GetToggleState());
-	//This makes sure that also on the first press on that button the
-	//whole think work.
-	g_theProfileDB->SetPollutionRule(!g_theProfileDB->IsPollutionRule());
+	g_theGameSettings->SaveToProfile();
+	spnewgamerulesscreen_displayMyWindow();
 }
 
 AUI_ACTION_BASIC(ReopenEditorAction);
@@ -2911,14 +2890,6 @@ void ScenarioEditor::MapSize(aui_Control *control, uint32 action, uint32 data, v
 
 	MessageBoxDialog::Query( "str_ldl_Confirm_Restart", "ConfirmMapSizeRestart",
 		ScenarioEditor::ChangeMapSizeCallback, (void*)mapSize );
-
-
-
-
-
-
-
-
 }
 
 void ScenarioEditor::ChangeMapSizeCallback(bool response, void *userData)
@@ -3095,11 +3066,88 @@ void ScenarioEditor::LeaderName(aui_Control *control, uint32 action, uint32 data
 
 void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data, void *cookie)
 {
-	if(action != AUI_BUTTON_ACTION_EXECUTE) return;
+	if (action == AUI_SWITCH_ACTION_OFF)
+	{
+		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
+		g_toeMode = 0;
+		return;
+	}
 
+	if (action != AUI_SWITCH_ACTION_ON) return;
 
+	// Switch off all terrain switches
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
+	{
+		if (s_scenarioEditor->m_terrainSwitches[i])
+		{
+			s_scenarioEditor->m_terrainSwitches[i]->SetState(0);
+		}
+	}
 
+	// Switch off all terrain improvement switches
+	for (sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++)
+	{
+		if (s_scenarioEditor->m_terrainImpSwitches[i])
+		{
+			s_scenarioEditor->m_terrainImpSwitches[i]->SetState(0);
+		}
+	}
 
+	// Switch off all city switches
+	ctp2_ListBox *lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.City.List");
+	Assert(lb);
+
+	if (lb)
+	{
+		for (sint32 itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++) {
+			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(itemIndex);
+			Assert(item);
+			if (!item)
+				continue;
+
+			ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+			Assert(box);
+			if (!box)
+				continue;
+
+			for (sint32 i = 0; i < k_CITY_COLS_PER_ROW; i++) {
+				ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i);
+				if (!sw || sw->IsHidden())
+					break;
+
+				sw->SetState(0);
+			}
+		}
+	}
+
+	// Switch off all unit switches
+	lb = (ctp2_ListBox *)aui_Ldl::GetObject(s_scenarioEditorBlock, "TabGroup.Unit.List");
+	Assert(lb);
+
+	if (lb)
+	{
+		for (sint32 itemIndex = 0; itemIndex < lb->NumItems(); itemIndex++)
+		{
+			ctp2_ListItem *item = (ctp2_ListItem *)lb->GetItemByIndex(itemIndex);
+			Assert(item);
+			if (!item)
+				continue;
+
+			ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+			Assert(box);
+			if (!box)
+				continue;
+
+			for (sint32 i = 0; i < k_UNIT_COLS_PER_ROW; i++)
+			{
+				ctp2_Switch *sw = (ctp2_Switch *)box->GetChildByIndex(i * 2);
+				if (!sw || sw->IsHidden())
+					break;
+
+				sw->SetState(0);
+			}
+		}
+	}
 
 	if (PlaceUnitsMode() || PlaceCityMode() || PlaceStartFlags() || PaintHutMode() || PaintRiverMode() || PaintGoodsMode())
 	{
@@ -3109,7 +3157,8 @@ void ScenarioEditor::EraseMode(aui_Control *control, uint32 action, uint32 data,
 		}
 	}
 
-	g_toeMode = !g_toeMode;
+	g_cursorManager->SetCursor(CURSORINDEX_ERASE);
+	g_toeMode = 1;
 }
 
 void ScenarioEditor::WorldTabSwitch(aui_Control *control, uint32 action, uint32 data, void *cookie)
@@ -3255,6 +3304,7 @@ sint32 ScenarioEditor::GetLastPlayer()
 
 void ScenarioEditor::DisableErase(void)
 {
+	g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 	g_toeMode = 0;
 	s_scenarioEditor->m_eraseButton->SetState(0);
 }

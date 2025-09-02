@@ -290,7 +290,7 @@ public:
 	SlicStructDescription *GetStructDescription(SLIC_SYM which);
 	SlicStructDescription *GetStructDescription(SLIC_BUILTIN which);
 
-	void Break(SlicSegment *segment, sint32 codeOffset, SlicObject *context, SlicStack *stack,
+	void Break(SlicSegment *segment, size_t codeOffset, SlicObject *context, SlicStack *stack,
 			   MessageData *message);
 	void Continue();
 	bool AtBreak() const { return m_atBreak; }

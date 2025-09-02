@@ -79,8 +79,6 @@ void MapAnalysis::Resize
     const sint16 & resolution
 )
 {
-	sint32 old_size = m_threatGrid.size();
-
 	m_threatGrid        .resize(maxPlayerId);
 	m_attackGrid        .resize(maxPlayerId);
 	m_defenseGrid       .resize(maxPlayerId);
@@ -136,24 +134,24 @@ void MapAnalysis::ResizeContinents()
 {
 	sint32 maxLandCont = g_theWorld->GetMaxLandContinent() -
 	                        g_theWorld->GetMinLandContinent();
-	sint32 maxPlayerId = m_threatGrid.size();
+	sint32 maxPlayerId = static_cast<sint32>(m_threatGrid.size());
 	m_cityOnContinent.Resize(maxPlayerId, maxLandCont, FALSE);
 	m_armyOnContinent.Resize(maxPlayerId, maxLandCont, FALSE);
 }
 
-void MapAnalysis::AddPiracyIncome(const PLAYER_INDEX playerId,
-const PLAYER_INDEX victimId,
+void MapAnalysis::AddPiracyIncome(const size_t playerId,
+const size_t victimId,
 const sint16 route_value)
 {
 
-	sint32 index = (victimId * m_piracyLossGrid.size()) + playerId;
+	size_t index = (victimId * m_piracyLossGrid.size()) + playerId;
 	Assert(index >= 0);
-	Assert(static_cast<size_t>(index) < m_piracyIncomeMatrix.size());
+	Assert(index < m_piracyIncomeMatrix.size());
 
 	m_piracyIncomeMatrix[index] += route_value;
 }
 
-void MapAnalysis::RecalcCityRanks(sint32 player)
+void MapAnalysis::RecalcCityRanks(size_t player)
 {
 	Player* player_ptr = g_player[player];
 	Assert(player_ptr != NULL);
@@ -322,7 +320,7 @@ void MapAnalysis::BeginTurn()
 				                && !army->IsCivilian();
 				if(is_military)
 				{
-					m_armyOnContinent.Set(player, cont, TRUE);
+					m_armyOnContinent.Set(static_cast<sint32>(player), cont, TRUE);
 				}
 			}
 
@@ -393,7 +391,7 @@ void MapAnalysis::BeginTurn()
 			g_theWorld->GetContinent(pos, cont, is_land);
 			if (is_land)
 			{
-				m_cityOnContinent.Set(player, cont, TRUE);
+				m_cityOnContinent.Set(static_cast<sint32>(player), cont, TRUE);
 
 				m_continentSize[player] += g_theWorld->GetLandContinentSize(cont) / num_cities;
 			}
@@ -455,13 +453,13 @@ void MapAnalysis::BeginTurn()
 	DPRINTF(k_DBG_MAPANALYSIS, ("\n"));
 }
 
-sint32 MapAnalysis::GetAlliedGrid(const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const
+sint32 MapAnalysis::GetAlliedGrid(const MapGridVector & gridVector, const size_t & player, const MapPoint & pos) const
 {
 	sint32 value = 0;
 
-	for(sint32 i = gridVector.size() - 1; i >= 0; i--)
+	for(size_t i = 0; i < gridVector.size(); i++)
 	{
-		if(Scheduler::CachedIsAllyRegard(player, i))
+		if(Scheduler::CachedIsAllyRegard(static_cast<sint32>(player), static_cast<sint32>(i)))
 		{
 			value += gridVector[i].GetGridValue(pos);
 		}
@@ -470,13 +468,13 @@ sint32 MapAnalysis::GetAlliedGrid(const MapGridVector & gridVector, const sint32
 	return value;
 }
 
-sint32 MapAnalysis::GetMaxAlliedGrid(const MapGridVector & gridVector, const sint32 & player) const
+sint32 MapAnalysis::GetMaxAlliedGrid(const MapGridVector & gridVector, const size_t & player) const
 {
 	sint32 value = 0;
 
-	for(sint32 i = gridVector.size() - 1; i >= 0; i--)
+	for(size_t i = 0; i < gridVector.size(); i++)
 	{
-		if(Scheduler::CachedIsAllyRegard(player, i))
+		if(Scheduler::CachedIsAllyRegard(static_cast<sint32>(player), static_cast<sint32>(i)))
 		{
 			value += gridVector[i].GetMaxGridValue();
 		}
@@ -485,16 +483,16 @@ sint32 MapAnalysis::GetMaxAlliedGrid(const MapGridVector & gridVector, const sin
 	return value;
 }
 
-sint32 MapAnalysis::GetEnemyGrid(const MapGridVector & gridVector, const sint32 & player, const MapPoint & pos) const
+sint32 MapAnalysis::GetEnemyGrid(const MapGridVector & gridVector, const size_t & player, const MapPoint & pos) const
 {
 	sint32 value = 0;
 
-	for(sint32 i = gridVector.size() - 1; i >= 0; i--)
+	for(size_t i = 0; i < gridVector.size(); i++)
 	{
 		if
 		  (
 		        player != i
-		    && !Scheduler::CachedIsNeutralRegard(player, i)
+		    && !Scheduler::CachedIsNeutralRegard(static_cast<sint32>(player), static_cast<sint32>(i))
 		  )
 		{
 			value += gridVector[i].GetGridValue(pos);
@@ -504,16 +502,16 @@ sint32 MapAnalysis::GetEnemyGrid(const MapGridVector & gridVector, const sint32 
 	return value;
 }
 
-sint32 MapAnalysis::GetMaxEnemyGrid(const MapGridVector & gridVector, const sint32 & player) const
+sint32 MapAnalysis::GetMaxEnemyGrid(const MapGridVector & gridVector, const size_t & player) const
 {
 	sint32 value = 0;
 
-	for(sint32 i = gridVector.size() - 1; i >= 0; i--)
+	for(size_t i = 0; i < gridVector.size(); i++)
 	{
 		if
 		  (
 		        player != i
-		    && !Scheduler::CachedIsNeutralRegard(player, i)
+		    && !Scheduler::CachedIsNeutralRegard(static_cast<sint32>(player), static_cast<sint32>(i))
 		  )
 		{
 			value += gridVector[i].GetMaxGridValue();
@@ -610,12 +608,12 @@ double MapAnalysis::GetPowerRank(const CityData * city) const
 	return (max_power > 0.0) ? (power / max_power) : 0.0;
 }
 
-void MapAnalysis::CalcEmpireCenter(const PLAYER_INDEX playerId)
+void MapAnalysis::CalcEmpireCenter(const size_t playerId)
 {
 	// For now disabled // why? //
 	m_empireCenter[playerId] = g_player[playerId]->CalcEmpireCenter();
 
-	DPRINTF(k_DBG_MAPANALYSIS, ("Empire Center for player %d :  rc(%3d,%3d)   \n",
+	DPRINTF(k_DBG_MAPANALYSIS, ("Empire Center for player %zu :  rc(%3d,%3d)   \n",
 	        playerId,
 	        m_empireCenter[playerId].x,
 	        m_empireCenter[playerId].y));
@@ -775,9 +773,9 @@ sint32 MapAnalysis::AtRiskCitiesValue
 sint32 MapAnalysis::GetPiracyIncomeByPlayer(const PLAYER_INDEX playerId,
 const PLAYER_INDEX victimId) const
 {
-	sint32 index = (victimId * m_piracyLossGrid.size()) + playerId;
+	size_t index = (victimId * m_piracyLossGrid.size()) + playerId;
 	Assert(index >= 0);
-	Assert(static_cast<size_t>(index) < m_piracyIncomeMatrix.size());
+	Assert(index < m_piracyIncomeMatrix.size());
 
 	return m_piracyIncomeMatrix[index];
 }

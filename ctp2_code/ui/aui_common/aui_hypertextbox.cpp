@@ -175,7 +175,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 		hyperText = m_hyperText;
 	}
 
-	uint32 len = strlen( hyperText );
+	size_t len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
 	const MBCHAR *ptr = hyperText;
@@ -255,7 +255,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 			{
 				aui_Static *hs = CreateHyperStatic(
 					ptr,
-					len,
+					static_cast<uint32>(len),
 					m_hyperTtffile,
 					m_hyperPointSize,
 					m_hyperBold,
@@ -309,7 +309,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					}
 					else
 					{
-						uint32 truncLen = ptr - start;
+						size_t truncLen = ptr - start;
 
 						penPos.x = penPos.y = 0;
 						const MBCHAR *testPtr = start;
@@ -340,7 +340,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 						else
 						{
 							len -= truncLen;
-							hs->SetText( start, truncLen );
+							hs->SetText( start, static_cast<uint32>(truncLen) );
 
 							hs->Move( m_curStaticPos.x, m_curStaticPos.y );
 							hs->Resize( penPos.x, hs->Height() );
@@ -377,7 +377,7 @@ AUI_ERRCODE aui_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
-					for ( sint32 i = m_hyperStaticList->L(); i; i-- )
+					for ( size_t i = m_hyperStaticList->L(); i; i-- )
 						m_hyperStaticList->GetNext( pos )->Offset( 0, -topY );
 				}
 			}

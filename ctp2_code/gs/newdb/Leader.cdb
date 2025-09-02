@@ -22,62 +22,62 @@
 #
 #-----------------------------------------------------------------------------
 
-Leader{
-   StringID              LeaderName
-   StringID              EmissaryPhoto
-   StringID              PersonalityDescription 
-   Record Personality    Personality
-   Int                   Parchment = 0          
-   Int                   Capital = 0
-   Bit                   IsMale
-   Bit					 IsFemale
-   Int                   HappyInc             = 0
+Leader {
+	StringID              LeaderName
+	StringID              EmissaryPhoto
+	StringID              PersonalityDescription 
+	Record Personality    Personality
+	Int                   Parchment            = 0
+	Int                   Capital              = 0
+	Bit                   IsMale
+	Bit                   IsFemale
+	Int                   HappyInc             = 0
 
- // Leader Specific Bonuses
-   Int                   ProductionBonus      = 0
-   Int                   FoodBonus            = 0
-   Int                   CommerceBonus        = 0
-   Int                   ScienceBonus         = 0
-   Int                   IncreaseBoatMovement = 0
-   Int                   IncreaseHp           = 0
+	// Leader Specific Bonuses
+	Int                   ProductionBonus      = 0
+	Int                   FoodBonus            = 0
+	Int                   CommerceBonus        = 0
+	Int                   ScienceBonus         = 0
+	Int                   IncreaseBoatMovement = 0
+	Int                   IncreaseHp           = 0
 
-   Bit(Float)            OffenseBonusLand
-   Bit(Float)            OffenseBonusWater
-   Bit(Float)            OffenseBonusAir
+	Bit(Float)            OffenseBonusLand
+	Bit(Float)            OffenseBonusWater
+	Bit(Float)            OffenseBonusAir
 
-// From building.cdb to add Leader traits
-   Bit(Float)            LowerCrime
-   Bit(Float)            LowerPeaceMovement
-   Bit(Int)              GoldPerCitizen
-   Bit(Float)            SciencePerPop
+	// From building.cdb to add Leader traits
+	Bit(Float)            LowerCrime
+	Bit(Float)            LowerPeaceMovement
+	Bit(Int)              GoldPerCitizen
+	Bit(Float)            SciencePerPop
 
-// From Wonder.cdb for additional Leader attributes
-   Bit(Int)              ReduceReadinessCost
-   Bit(Int)              GoldPerWaterTradeRoute
-   Bit(Int)              GoldPerTelevision
-   Bit(Int)              GoldPerInternationalTradeRoute
-   Bit                   AllBoatsDeepWater
-   Bit(Int)              DecreaseMaintenance
-   Bit                   PreventConversion
-   Bit                   ProtectFromBarbarians
-   Bit(Float)            PollutionPercent
-   Bit(Float)            PollutionAmount
+	// From Wonder.cdb for additional Leader attributes
+	Bit(Int)              ReduceReadinessCost
+	Bit(Int)              GoldPerWaterTradeRoute
+	Bit(Int)              GoldPerTelevision
+	Bit(Int)              GoldPerInternationalTradeRoute
+	Bit                   AllBoatsDeepWater
+	Bit(Int)              DecreaseMaintenance
+	Bit                   PreventConversion
+	Bit                   ProtectFromBarbarians
+	Bit(Float)            PollutionPercent
+	Bit(Float)            PollutionAmount
 
-//from difficulty.cdb  - we should look into make it leader specific and have a modifier in the difficulty
-// Start Unit Chance modified by difficulty
-    //add code to gameinit.cpp
-   	//Struct UnitChance{
-	//	Record Unit StartUnit
-	//	Int            HumanChance    
-	//	Int            AIChance       
+	// From difficulty.cdb  - we should look into make it leader specific and have a modifier in the difficulty
+	// Start Unit Chance modified by difficulty
+	// add code to gameinit.cpp
+	//Struct UnitChance {
+	//	Record Unit       StartUnit
+	//	Int               HumanChance
+	//	Int               AIChance
 	//}
-   
- // Start Advance Chance modified by difficulty to make leaders start with a different tech
-    
-   	//Struct AdvanceChance{
+
+	// Start Advance Chance modified by difficulty to make leaders start with a different tech
+
+	//Struct AdvanceChance {
 	//	# Don't change in this struct anything, otherwise you break loading the old DiffDB.txt.
-	//	Record Advance StartAdvance
-	//	Int            HumanChance    # Needs to be checked
-	//	Int            AIChance       # Needs to be checked
+	//	Record Advance    StartAdvance
+	//	Int               HumanChance    # Needs to be checked
+	//	Int               AIChance       # Needs to be checked
 	//}
 }

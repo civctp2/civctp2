@@ -101,6 +101,7 @@
 #include "TerrainRecord.h"
 #include "SlicObject.h"
 #include "profileDB.h"
+#include "GameSettings.h"
 
 extern Pollution *  g_thePollution;
 
@@ -213,7 +214,7 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 	}
 
 	r = g_player[owner]->RemoveUnitReference(*this, cause, killedBy); // executed also for the TempSlaveUnit due to m_all_units->Insert(u); in Player::CreateUnitNoPosition such that m_all_units->Num() > 0 in Player::CheckPlayerDead()
-	Assert(r);
+	Assert(r); // asserts in case of former TempSlaveUnit passed on to new civ, not clear why, see Player.cpp
 
 	Unit transport = GetTransport();
 	if(transport.IsValid())
@@ -1465,10 +1466,9 @@ double Unit::GetHappyCrime() const
 	return GetData()->GetHappyCrime();
 }
 
-void Unit::CalcHappiness(sint32 &virtualGoldSpent, bool firstPass)
-
+void Unit::CalcHappiness(bool firstPass)
 {
-	AccessData()->CalcHappiness(virtualGoldSpent, firstPass);
+	AccessData()->CalcHappiness(firstPass);
 }
 
 bool Unit::IsPatrolling() const
@@ -1809,7 +1809,7 @@ sint32 Unit::GetStoredCityFood() const
 {
 	return GetData()->GetStoredCityFood();
 }
-sint32 Unit::GetNetCityFood() const
+double Unit::GetNetCityFood() const
 {
 	return GetData()->GetNetCityFood();
 }
@@ -2490,7 +2490,7 @@ bool Unit::UnitValidForOrder(const OrderRecord * order_rec) const
 //		order_valid = unit_rec->GetParatrooperTransport();
 	else if(order_rec->GetUnitPretest_CanUpgrade())
 	{
-		if(g_theProfileDB->IsUpgrade())
+		if(g_theGameSettings->IsUpgrade())
 		{
 			order_valid = (GetData()->GetBestUpgradeUnitType() >= 0);
 		}

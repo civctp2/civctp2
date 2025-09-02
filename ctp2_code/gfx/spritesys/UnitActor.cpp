@@ -262,7 +262,19 @@ void UnitActor::GetIDAndType(
 	sint32         & spriteID,
 	GROUPTYPE      & groupType) const
 {
-	bool isCity = g_theUnitDB->Get(unitType, g_player[owner]->GetGovernmentType())->GetHasPopAndCanBuild();
+	bool isCity = false;
+	if(g_player[owner] != NULL)
+	{
+		isCity = g_theUnitDB->Get(unitType, g_player[owner]->GetGovernmentType())->GetHasPopAndCanBuild();
+	}
+	else
+	{
+		isCity = g_theUnitDB->Get(unitType)->GetHasPopAndCanBuild();
+		// Actually, this shoould not happen
+		// Remove comment if you figure out this situation is valid
+		Assert(false);
+	}
+
 	if (isCity)
 	{
 		if (citySprite >= 0) {

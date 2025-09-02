@@ -145,8 +145,8 @@ AUI_ERRCODE c3_HyperTextBox::InitCommonLdl( const MBCHAR *ldlBlock )
 	Assert( AUI_SUCCESS(errcode) );
 	if ( !AUI_SUCCESS(errcode) ) return errcode;
 
-	if(block->GetAttribute(k_CTP2_LISTBOX_LDL_BEVELWIDTH)) {
-		m_bevelWidth = block->GetInt(k_CTP2_LISTBOX_LDL_BEVELWIDTH);
+	if(block->GetAttribute(k_AUI_LDL_BEVELWIDTH)) {
+		m_bevelWidth = block->GetInt(k_AUI_LDL_BEVELWIDTH);
 	} else {
 		m_bevelWidth = k_C3_HYPERTEXTBOX_BEVELWIDTH;
 	}
@@ -230,7 +230,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 		hyperText = m_hyperText;
 	}
 
-	uint32 len = strlen( hyperText );
+	size_t len = strlen( hyperText );
 	if ( !len ) return AUI_ERRCODE_OK;
 
 	const MBCHAR *ptr = hyperText;
@@ -390,7 +390,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 #endif
 				aui_Static *hs = CreateHyperStatic(
 					ptr,
-					len,
+					static_cast<uint32>(len),
 					m_hyperTtffile,
 					m_hyperPointSize,
 					m_hyperBold,
@@ -449,7 +449,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 					}
 					else
 					{
-						uint32 truncLen = ptr - start;
+						size_t truncLen = ptr - start;
 
 						penPos.x = penPos.y = 0;
 						const MBCHAR *testPtr = start;
@@ -480,7 +480,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 						else
 						{
 							len -= truncLen;
-							hs->SetText( start, truncLen );
+							hs->SetText( start, static_cast<uint32>(truncLen) );
 
 							hs->Move( m_curStaticPos.x, m_curStaticPos.y );
 							hs->Resize( penPos.x, hs->Height() );
@@ -517,7 +517,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 					sint32 topY = m_hyperStaticList->GetHead()->Y();
 					ListPos pos = m_hyperStaticList->GetHeadPosition();
-					for ( sint32 i = m_hyperStaticList->L()-1; i; i-- )
+					for ( size_t i = m_hyperStaticList->L()-1; i; i-- )
 						m_hyperStaticList->GetNext( pos )->Offset( 0, -topY );
 
 					m_virtualHeight -= topY;
@@ -553,7 +553,7 @@ AUI_ERRCODE c3_HyperTextBox::AddHyperStatics( const MBCHAR *hyperText )
 
 void c3_HyperTextBox::RemoveHyperLinks( void )
 {
-	for (sint32 i = m_hyperLinkList->L(); i; --i)
+	for (size_t i = m_hyperLinkList->L(); i; --i)
 	{
 		delete m_hyperLinkList->RemoveTail();
 	}

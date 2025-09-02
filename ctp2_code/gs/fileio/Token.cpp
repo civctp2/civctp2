@@ -355,14 +355,14 @@ void Token::NextString()
 	if (searching) {
 		m_current_type = TOKEN_STRING;
 		strcpy (m_val_string, m_buf);
-		m_val_string_len = strlen(m_val_string);
+		m_val_string_len = static_cast<sint32>(strlen(m_val_string));
 	}
 }
 
 bool Token::HandleImport(void)
 {
 	if (Next() != TOKEN_QUOTED_STRING)
-    {
+	{
 		Assert(FALSE);
 		return false;
 	}

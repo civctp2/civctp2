@@ -1,8 +1,8 @@
 # 8
 
 //
-// How strategies were hardencoded in the ctp2.exe, note
-// non ambigious startegies are not listed here.
+// How strategies were hard encoded in the ctp2.exe, note
+// non ambiguous strategies are not listed here.
 //
 // Expansion: Maximum or Exploration: Wide 
 //  ==> STRATEGY_AGRESSIVE_START else STRATEGY_CAREFUL_START
@@ -16,7 +16,7 @@
 // Exploration: Medium  ==> STRATEGY_EXPLORE_FAR
 // Exploration: Wide    ==> STRATEGY_EXPLORE_WIDE
 //
-// Defense startegies for Exploration: Minimal or Conquest: Agressive:
+// Defense startegies for Exploration: Minimal or Conquest: Aggressive:
 // none:      STRATEGY_DEFENSE_NONE
 // very low:  STRATEGY_DEFENSE_NONE
 // low:       STRATEGY_DEFENSE_VERY_LOW
@@ -57,7 +57,7 @@ PERSONALITY_KAHN {
   ExpansionStrategy        {  Strategy STRATEGY_SETTLE_LARGE      Priority 1100 }
   ExplorationStrategy      {  Strategy STRATEGY_EXPLORE_WIDE      Priority 1000 }
 
-  MaxIslandSize 100 // Maximum tiles an island has so that the following startegy is used.
+  MaxIslandSize 100 // Maximum tiles an island has so that the following strategy is used.
   IslandNationStrategy     {  Strategy STRATEGY_ISLAND_MILITARIST Priority 150  }
 
   StartLowDefenceStrategy  {  Strategy STRATEGY_DEFENSE_NONE      Priority 800  }
@@ -72,9 +72,9 @@ PERSONALITY_KAHN {
 
   CitiesOverLimit 10 // Additional cities the AI can build, default value 0.
   // Priorities here must be higher than everything before otherwise the AI ruins
-  // its empire by to many cities.
-  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 } // Applied if AI is over city limit
-  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 } // Applied if AI has the wonder that gives revolted cities.
+  // its empire with to many cities.
+  OverCityLimitStrategy    {  Strategy STRATEGY_TOO_MANY_CITIES   Priority 2000 } // Applied if AI is over the city limit
+  NoRevolutionStrategy     {  Strategy STRATEGY_NO_REVOLUTON      Priority 2000 } // Applied if AI is over the city limit and has the wonder that gives revolting cities.
 
   Exploration: Wide
   Expansion: Maximum

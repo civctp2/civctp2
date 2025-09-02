@@ -214,8 +214,8 @@ namespace
             KEY_FUNCTION_REMAP_KEYBOARD,
             KEY_FUNCTION_OPEN_OPTIONS_SCREEN,
             KEY_FUNCTION_SOUND_OPTIONS,
-            // Apolyton addition (Ahenobarb)
             KEY_FUNCTION_MUSIC_OPTIONS,
+            KEY_FUNCTION_LANGUAGE_OPTIONS,
             KEY_FUNCTION_GRAPHICS_OPTIONS,
             KEY_FUNCTION_GAMEPLAY_OPTIONS,
             KEY_FUNCTION_ADVANCED_OPTIONS,
@@ -565,7 +565,7 @@ sint32 km_screen_remapKey( WPARAM wParam, LPARAM lParam )
 	KEY_FUNCTION keyFunc = KEY_FUNCTION(item->GetKey());
 	uint32 keycode = item->GetKeycode();
 
-	theKeyMap->remap_key( keyFunc, wParam, keycode );
+	theKeyMap->remap_key( keyFunc, static_cast<uint32>(wParam), keycode );
 	item->UpdateKey( theKeyMap->get_keycode(keyFunc) );
 
 

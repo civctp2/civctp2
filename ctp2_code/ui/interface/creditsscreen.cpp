@@ -176,7 +176,12 @@ class c3_SimpleAnimation : public aui_Static {
 public:
 
 	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, MBCHAR *ldlBlock)
-	:	aui_Static(retval, id, ldlBlock),
+	:
+		// Virtual inheritance, these must be called here, otherwise default constructors without arguments are called
+		aui_ImageBase(ldlBlock),
+		aui_TextBase(ldlBlock, (const MBCHAR *)NULL),
+		// Normal inheritance
+		aui_Static(retval, id, ldlBlock),
 		m_frames(NULL),
 		m_currentFrame(0),
 		m_animationSpeed(100),
@@ -187,7 +192,12 @@ public:
 
 	c3_SimpleAnimation(AUI_ERRCODE *retval, uint32 id, sint32 x, sint32 y, sint32 width, sint32 height,
 		const MBCHAR *text = NULL, uint32 maxLength = 0 )
-	:	aui_Static(retval, id, x, y, width, height, text, maxLength),
+	:
+		// Virtual inheritance, these must be called here, otherwise default constructors without arguments are called
+		aui_ImageBase((sint32)0),
+		aui_TextBase(text, maxLength),
+		// Normal inheritance
+		aui_Static(retval, id, x, y, width, height, text, maxLength),
 		m_frames(NULL),
 		m_currentFrame(0),
 		m_animationSpeed(100),
@@ -221,7 +231,7 @@ private:
 
 	aui_StringTable *m_frames;
 
-	sint32 m_currentFrame;
+	size_t m_currentFrame;
 
 	sint32 m_animationSpeed;
 
@@ -344,7 +354,7 @@ private:
 
 	aui_StringTable *m_frames;
 
-	sint32 m_currentFrame;
+	size_t m_currentFrame;
 
 	sint32 m_blendSpeed;
 
@@ -784,7 +794,7 @@ AUI_ERRCODE CreditsWindow::Idle()
 
 void CreditsWindow::InitCommonLdl(MBCHAR *ldlBlock)
 {
-    ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
+	ldl_datablock * datablock = aui_Ldl::FindDataBlock(ldlBlock);
 	Assert(datablock != NULL);
 	if(!datablock) return;
 

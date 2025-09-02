@@ -397,7 +397,17 @@ STDEHANDLER(ArmyExpelOrderEvent)
 	if(!args->GetPos(0, pos)) return GEV_HD_Continue;
 
 	a->AddOrders(UNIT_ORDER_EXPEL , pos);
-	g_soundManager->AddGameSound(GAMESOUNDS_ALERT);
+	
+	if(g_selected_item->IsAutoCenterOn() 
+	    && !g_director->TileWillBeCompletelyVisible(pos.x, pos.y)
+	    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
+	    ){ // center on expell pos if generally visible but not in current view
+	    g_director->AddCenterMap(pos);
+	    }
+	
+	if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)){ // game sound only if expel position is visible (not in FOW)
+	    g_soundManager->AddGameSound(GAMESOUNDS_ALERT);
+	    }
 
 	return GEV_HD_Continue;
 }
@@ -728,7 +738,7 @@ STDEHANDLER(ArmyMoveEvent)
 		return GEV_HD_Continue;
 	}
 
-	armyData->CheckLoadSleepingCargoFromCity(NULL);
+	armyData->CheckLoadSleepingCargoFromCity();
 
 	if (armyData->IsMovePointsEnough(newPos))
 	{
@@ -938,9 +948,18 @@ STDEHANDLER(MoveIntoTransportEvent)
 
 		a->RemainNumUnits(canMoveIntoTransport);
 	}
-	else
+	else if(g_selected_item->GetVisiblePlayer() == a.GetOwner()) // center and sound only if army belongs to visible player
 	{
-		g_soundManager->AddGameSound(GAMESOUNDS_ILLEGAL_MOVE);
+	if(g_selected_item->IsAutoCenterOn() 
+	    && !g_director->TileWillBeCompletelyVisible(pos.x, pos.y)
+	    && g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)
+	    ){ // center on expell pos if generally visible but not in current view
+	    g_director->AddCenterMap(pos);
+	    }
+	
+	if(g_player[g_selected_item->GetVisiblePlayer()]->IsVisible(pos)){ // game sound only if position is visible (not in FOW)
+	    g_soundManager->AddGameSound(GAMESOUNDS_ILLEGAL_MOVE);
+	    }
 	}
 
 	return GEV_HD_Continue;

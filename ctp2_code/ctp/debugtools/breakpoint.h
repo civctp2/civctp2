@@ -11,7 +11,7 @@
 extern "C" {
 #endif
 
-#ifdef WIN32
+#if defined(_MSC_VER) && defined(_X86_)
 #define Breakpoint() __asm { int 03h }
 #else
 #include <csignal>

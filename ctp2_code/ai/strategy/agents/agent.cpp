@@ -160,6 +160,8 @@ SQUAD_CLASS Agent::Compute_Squad_Class()
 	bool   cancapture;
 	bool   haszoc;
 	bool   canbombard;
+	bool   canthrowparty;
+	bool   canestablishembassy;
 	sint32 transports;
 	sint32 max;
 	sint32 empty;
@@ -176,7 +178,9 @@ SQUAD_CLASS Agent::Compute_Squad_Class()
 		    maxdefense,
 		    cancapture,
 		    haszoc,
-		    canbombard);
+		    canbombard,
+		    canthrowparty,
+		    canestablishembassy);
 	}
 	else
 	{
@@ -187,7 +191,9 @@ SQUAD_CLASS Agent::Compute_Squad_Class()
 		    maxdefense,
 		    cancapture,
 		    haszoc,
-		    canbombard);
+		    canbombard,
+		    canthrowparty,
+		    canestablishembassy);
 	}
 
 	m_squad_class |= k_Goal_SquadClass_CanExplore_Bit;
@@ -215,6 +221,12 @@ SQUAD_CLASS Agent::Compute_Squad_Class()
 
 	if(canTransport)
 		m_squad_class |= k_Goal_SquadClass_CanTransport_Bit;
+
+	if(canthrowparty)
+		m_squad_class |= k_Goal_SquadClass_CanThrowParty_Bit;
+
+	if(canestablishembassy)
+		m_squad_class |= k_Goal_SquadClass_CanEstablishEmbassy_Bit;
 
 	return m_squad_class;
 }
@@ -507,7 +519,7 @@ bool Agent::EstimateTransportUtility(const Agent_ptr transport, Utility & utilit
 
 	size_t move_type_bonus = transport->m_army->CountMovementTypeSea() * 1000;
 
-	utility = move_type_bonus + (trans_rounds * -100) - tile_count /*+ cargoCapacity*100*/; // Could be added, but not needed
+	utility = static_cast<sint32>(move_type_bonus + (trans_rounds * -100) - tile_count) /*+ cargoCapacity*100*/; // Could be added, but not needed
 
 	AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_army->GetOwner(), Get_Goal_Type(), -1,
 	("\t\t%9x (%3d,%3d),\t%9x (%3d,%3d),\t%8d,\t%8d,\t%8d,\t%8d,\t%8d\t%20s\t%20s\n",

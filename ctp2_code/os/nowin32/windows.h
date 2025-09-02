@@ -27,8 +27,6 @@
 #error "WIN32 defined, but included windows.h from os/nowin32!"
 #endif
 
-#define HAVE_UNISTD_H
-
 #include "ctp2_config.h" // Needs HAVE_CONFIG_H defined, defines HAVE_INTTYPES_H and HAVE_STDINT_H
 
 #include <assert.h>
@@ -175,7 +173,12 @@ typedef struct hwnd_t* HWND;
 /* Constants */
 #define _MAX_FNAME 256
 #define _MAX_DIR _MAX_FNAME
-#define _MAX_PATH PATH_MAX
+#if !defined(_MAX_PATH)
+// Already defined in config.h
+#define _MAX_PATH 260 // Needs to be 260 otherwise you cannot load savegames from Windows.
+#elif _MAX_PATH != 260
+#error "_MAX_PATH must be 260 otherwise you cannot load savegames from Windows."
+#endif
 #define DBL_MAX        1.7976931348623158e+308
 #define MAX_PATH PATH_MAX
 #define SND_ASYNC 0x0001

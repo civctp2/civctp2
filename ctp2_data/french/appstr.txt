@@ -1,0 +1,18 @@
+fra
+Polices de caractères
+Direct X
+DirectMedia
+Initialiser
+CD-ROM
+Mémoire
+Impossible de trouver le répertoire Windows.
+Impossible d'initialiser DirectX. Veuillez réinstaller DirectX à partir du CD Call to Power II.
+Votre carte vidéo doit supporter 16 bits par pixel à une résolution de 800x600 ou plus.
+Call to Power II ne peut fonctionner sans DirectX.
+Impossible de localiser un fichier nécessaire. Veuillez procéder de nouveau à l'installation à partir du CD Call to Power II.
+Placez le CD Call to Power II dans votre lecteur CD-ROM.
+Veuillez vérifier que le CD Call to Power II se trouve dans votre lecteur CD-ROM.
+Call to Power II requiert DirectMedia. Veuillez réinstaller DirectMedia à partir du CD Call to Power II.
+Vous n'avez pas beaucoup de mémoire pour exécuter Call to Power II.  Veuillez quitter les autres programmes actifs ou lisez le fichier README pour obtenir des conseils sur la façon d'augmenter la mémoire disponible.
+Vous n'avez presque plus de mémoire pour exécuter Call to Power II. Veuillez quitter les autres programmes actifs ou lisez le fichier README pour obtenir des conseils sur la façon d'augmenter la mémoire disponible pour Call to Power II.
+Il vous faut plus de mémoire pour exécuter Call to Power II. Veuillez quitter les autres programmes actifs ou lisez le fichier README pour obtenir des conseils sur la façon d'augmenter la mémoire disponible.
