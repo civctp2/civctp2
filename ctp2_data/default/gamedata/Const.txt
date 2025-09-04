@@ -393,7 +393,8 @@ COMBAT_ELITE_CHANCE 0.00
 COMBAT_LEADER_CHANCE 0.00 
 CITY_ON_TRADE_ROUTE_BONUS  0.3   # if a trade route passes through a city and the desination and source is not the same as the city owner then you get this percentage of the trade route value
 DOMESTIC_TRADE_COEF 0.5 # coefficient for the reduction of trade route value in case of domestic trade (value < 1.0 promotes foreign trade)
-PACT_TRADE_COEF  1.05  # surplus in trade route values in case of a standing trade pact
+TRADE_COEF 1.002 # factor for trade route value depending on squared distance to good, if TradeCoef= 1.002 then the VPC is 2 times for a good that needs 2 Caravans to trade (in comparison as if the good would only need 1 Caravan to trade), if TradeCoef= 1 then there is only a linear dependency (as it used to be)
+PACT_TRADE_COEF  1.5  # surplus in trade route values in case of a standing trade pact
 
 # Can be overwritten in strategies.txt for each strategy separately, here is the default value if you do not set here:
 TurnsAcceptedForOnePop 30

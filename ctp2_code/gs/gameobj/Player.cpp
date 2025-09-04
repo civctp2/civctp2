@@ -3005,14 +3005,14 @@ TradeRoute Player::CreateTradeRoute(Unit sourceCity,
 			if(!sourceCity.HasResource(sourceResource) &&
 				sourceCity.CD()->IsLocalResource(sourceResource)) {
 				if(sourceCity.AccessData()->GetCityData()->BreakOneSourceRoute(sourceType, sourceResource)) {
-					g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood,
+				    g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_SendGood, // resent GEV_SendGood if an existing route had to be broken to make the good available for the new route
 										   GEA_Int, sourceResource,
 										   GEA_City, sourceCity,
 										   GEA_City, destCity,
 										   GEA_End);
 				}
 				return TradeRoute();
-			}
+			} // if good is not bound to an existing route, just continue!
 			break;
 		case ROUTE_TYPE_FOOD:
 		case ROUTE_TYPE_GOLD:

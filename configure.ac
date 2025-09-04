@@ -154,6 +154,13 @@ else
 fi
 AM_CONDITIONAL(INTERNAL_ANET, test x$enable_anet == xno)
 
+AC_ARG_ENABLE([precisetraderoutecalc],
+              AC_HELP_STRING([--enable-precisetraderoutecalc],[enable precise (but slower) trade route calculation]),,
+	      [enable_precisetraderoutecalc=no])
+if test x$enable_precisetraderoutecalc = xyes; then
+	AC_DEFINE(USE_PRECISETRADEROUTECALC,1,[enable precise (but slower) trade route calculation])
+fi
+
 AX_SUBDIRS_CONFIGURE([ctp2_code/libs/freetype-1.3.1], [--enable-shared=no], [], [], [])
 
 if test x$enable_debug = xno; then
