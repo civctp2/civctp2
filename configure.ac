@@ -163,6 +163,29 @@ fi
 AC_DEFINE(CTP2_ENABLE_SLICDEBUG,1,[In every version])
 AC_SUBST(CTP2_ENABLE_SLICDEBUG) # What is this good for?
 
+# Define --enable-ffmpeg4movies (default: no)
+AC_ARG_ENABLE([ffmpeg4movies],
+  AS_HELP_STRING([--enable-ffmpeg4movies],
+    [Enable support for playing movies with FFmpeg via SDL (off by default, because the FFmpeg-API still changes a lot)]),
+  [enable_ffmpeg4movies=$enableval],
+  [enable_ffmpeg4movies=no])
+
+case "$enable_ffmpeg4movies" in
+  yes|no) ;;
+  '') enable_ffmpeg4movies=yes ;;   # user passed --enable-ffmpeg4movies with no value
+esac
+
+# Only run ffmpeg4movies checks if explicitly enabled
+if test "x$enable_ffmpeg4movies" = "xyes"; then
+  AM_PATH_SDL_FFMPEG([1.0])dnl   # macro implemented in ctp2_code/os/autoconf/sdl_ffmpeg.m4
+else
+  AC_MSG_RESULT([ffmpeg4movies support: disabled])
+  have_ffmpeg4movies=no
+fi
+
+# Export a conditional for Makefile.am
+AM_CONDITIONAL([HAVE_FFMPEG4MOVIES], [test "x$have_ffmpeg4movies" = "xyes"])
+
 AC_CONFIG_FILES([
    GNUmakefile
    ctp2_code/Makefile
