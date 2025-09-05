@@ -11,5 +11,6 @@ mkdir -p /debian/opt/ctp2/
 cp -r /opt/ctp2/ /debian/opt/
 
 find ./debian -type d | xargs chmod 755 # to avoid error: control directory has bad permissions 777 (must be >=0755 and <=0775)
+$( [ "${BTYP##*plain*}" ] || echo ', libavcodec61 (>= 7), libavformat61 (>= 7), libswscale8 (>= 7), libavfilter10' ) >> 
 dpkg-deb --build /debian # uses debian/ to built debian.deb
 mv /debian.deb /deb/ctp2-$BTYP.deb

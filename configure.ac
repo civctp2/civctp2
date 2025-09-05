@@ -166,7 +166,7 @@ AC_SUBST(CTP2_ENABLE_SLICDEBUG) # What is this good for?
 # Define --enable-ffmpeg4movies (default: no)
 AC_ARG_ENABLE([ffmpeg4movies],
   AS_HELP_STRING([--enable-ffmpeg4movies],
-    [Enable support for playing movies with FFmpeg via SDL (off by default, because the FFmpeg-API still changes a lot)]),
+    [Enable support for playing movies with FFmpeg over SDL (off by default, because the FFmpeg-API still changes a lot)]),
   [enable_ffmpeg4movies=$enableval],
   [enable_ffmpeg4movies=no])
 

@@ -17,7 +17,8 @@ FROM system as builder
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y --no-install-recommends \
-    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev libavdevice-dev libavfilter-dev \
+    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev \
+    $( [ "${BTYP##*plain*}" ] || echo libavcodec-dev libavformat-dev libswscale-dev libavdevice-dev libavfilter-dev ) \
     byacc gcc g++ binutils-gold automake make libtool unzip flex git ca-certificates
 
 ### set default compilers
@@ -40,7 +41,7 @@ RUN cd /ctp2 \
     && ./autogen.sh && \
     CFLAGS="$CFLAGS -Wno-misleading-indentation $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
     CXXFLAGS="$CXXFLAGS -Wno-misleading-indentation -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
-    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules --enable-ffmpeg4movies $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
+    ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules  $( [ "${BTYP##*plain*}" ] || echo --enable-ffmpeg4movies ) $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \
     && cp -r /ctp2/ctp2_data/ /opt/ctp2/ \

@@ -15,7 +15,6 @@ variables:
   IMAGE_TAG: $CI_REGISTRY_IMAGE/$CI_COMMIT_REF_SLUG
 
 .build: &build
-  stage: build
 # tags:
 #   - multicore
   variables:
@@ -51,6 +50,7 @@ variables:
     - 'curl -sS -f -L --header  "Private-Token: ${ARTIFACTKEY}" -o ctp2CD.zip "${CI_API_V4_URL}/projects/${CI_PROJECT_NAMESPACE}%2Fctp2CD/jobs/artifacts/master/download?job=ctp2CDpack"'
     - mkdir -p ctp2CD/
     - unzip ctp2CD.zip -d ctp2CD/
+    - CI_TAG= ${CI_JOB_NAME} == plain || ${CI_JOB_NAME} == noffmpeg4movies ? plain : debug
     - docker pull $IMAGE_TAG:test-${CI_JOB_NAME} || true
     - docker build --pull
                    --cache-from $IMAGE_TAG:system-latest
@@ -69,10 +69,20 @@ variables:
     - build.log
 
 plain:
+  stage: build
   <<: *build
 
 debug:
+  stage: build
   <<: *build
+
+noffmpeg4movies :
+  stage: ffmpeg4movies_failure
+  <<: *build
+  rules:
+    - if: '$CI_PIPELINE_STATUS == "failed"'
+      when: on_success
+    - when: never
 
 .test: &test
   stage: test
