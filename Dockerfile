@@ -1,7 +1,10 @@
 ################################################################################
 # base system
 ################################################################################
-FROM ubuntu:24.04 as system
+ARG TIMESTAMP=20240530
+
+FROM ubuntu:noble-"$TIMESTAMP" as system
+ARG TIMESTAMP # has to be redeclared for stage: https://docs.docker.com/build/building/variables/#scoping
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
@@ -9,6 +12,16 @@ RUN useradd -m $USERNAME && \
     usermod --shell /bin/bash $USERNAME && \
     usermod -aG video,audio $USERNAME
 
+ENV DEBIAN_FRONTEND=noninteractive
+ENV TZ=Etc/UTC
+
+RUN apt-get update && \
+    apt-get install -y --no-install-recommends ca-certificates # essential to avoid error for snapshot repos: "No system certificates available."
+
+ENV SNAPSHOT_ID=${TIMESTAMP}T000000Z
+
+RUN echo "APT::Snapshot $SNAPSHOT_ID;" > /etc/apt/apt.conf.d/50snapshot && \
+    cat /etc/apt/apt.conf.d/50snapshot
 
 ################################################################################
 # builder
@@ -20,7 +33,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
 RUN apt-get update && \
-    DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y --no-install-recommends \
+    apt-get install -y --no-install-recommends \
     libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
     byacc gcc-${COMPILER_VERSION} g++-${COMPILER_VERSION} automake make libtool unzip flex git ca-certificates
 
@@ -74,7 +87,7 @@ COPY ctp2CD/ /opt/ctp2/
 COPY deb/ /deb/
 
 ## apt install installs local deb-file with its dependencies: https://unix.stackexchange.com/questions/159094/how-to-install-a-deb-file-by-dpkg-i-or-by-apt#159114
-RUN apt-get update && apt install -y --no-install-recommends \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     gdb libstdc++-11-dev \
     /deb/ctp2-${BTYP}.deb && \
     apt-get clean && \
