@@ -20,6 +20,8 @@ RUN apt-get update && \
 
 ENV SNAPSHOT_ID=${TIMESTAMP}T000000Z
 RUN sed -i 's/^deb /deb [snapshot=yes] /' /etc/apt/sources.list # needed for snapshots in ubuntu:22.04 : https://documentation.ubuntu.com/server/how-to/software/snapshot-service/#prerequisites
+RUN sed -i '/jammy-updates/d;/jammy-backports/d;/jammy-security/d' /etc/apt/sources.list # seem to not have a Release file for chosen snapshot
+
 
 RUN echo "APT::Snapshot $SNAPSHOT_ID;" > /etc/apt/apt.conf.d/50snapshot && \
     cat /etc/apt/apt.conf.d/50snapshot && \
