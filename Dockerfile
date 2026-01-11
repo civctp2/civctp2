@@ -16,7 +16,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates # essential to avoid error for snapshot repos: "No system certificates available."
+    apt-get install -y --no-install-recommends ca-certificates apt # essential to avoid error for snapshot repos: "No system certificates available."
 
 # snapshots work for ubuntu:22.04 only with apt >= 2.4.11 released 20231007_10:53:53 (https://launchpad.net/ubuntu/+source/apt/2.4.11):
 ENV SNAPSHOT_ID=20231007T000000Z
