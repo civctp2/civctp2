@@ -31,21 +31,10 @@ RUN echo "APT::Snapshot $SNAPSHOT_ID;" > /etc/apt/apt.conf.d/50snapshot && \
 ################################################################################
 FROM system as builder
 
-ARG COMPILER_VERSION=11
-ENV DEBIAN_FRONTEND=noninteractive
-ENV TZ=Etc/UTC
-
 RUN apt-get update && \
     apt-get install -y --no-install-recommends \
     libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
-    byacc gcc-${COMPILER_VERSION} g++-${COMPILER_VERSION} automake make libtool unzip flex git ca-certificates
-
-RUN update-alternatives --install /usr/bin/gcc gcc /usr/bin/gcc-${COMPILER_VERSION} 10 && \
-    update-alternatives --install /usr/bin/g++ g++ /usr/bin/g++-${COMPILER_VERSION} 10 && \
-    update-alternatives --install /usr/bin/cc  cc  /usr/bin/gcc 30 && \
-    update-alternatives --install /usr/bin/c++ c++ /usr/bin/g++ 30 && \
-    update-alternatives --remove cpp /usr/bin/cpp && \
-    update-alternatives --install /usr/bin/cpp cpp /usr/bin/g++ 30
+    byacc gcc g++ automake make libtool unzip flex git ca-certificates
 
 ### set default compilers
 RUN cc --version && \
