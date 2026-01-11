@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-ARG TIMESTAMP=20220531
+ARG TIMESTAMP=20231128
 
 FROM ubuntu:jammy-"$TIMESTAMP" as system
 ARG TIMESTAMP # has to be redeclared for stage: https://docs.docker.com/build/building/variables/#scoping
@@ -16,10 +16,11 @@ ENV DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
 
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends ca-certificates apt # essential to avoid error for snapshot repos: "No system certificates available."
+    apt-get install -y --no-install-recommends ca-certificates apt=2.4.11 # essential to avoid error for snapshot repos: "No system certificates available."
 
 ENV SNAPSHOT_ID=${TIMESTAMP}T000000Z
 RUN sed -i 's/^deb /deb [snapshot=yes] /' /etc/apt/sources.list # needed for snapshots in ubuntu:22.04 : https://documentation.ubuntu.com/server/how-to/software/snapshot-service/#prerequisites
+
 
 RUN echo "APT::Snapshot $SNAPSHOT_ID;" > /etc/apt/apt.conf.d/50snapshot && \
     cat /etc/apt/apt.conf.d/50snapshot && \
