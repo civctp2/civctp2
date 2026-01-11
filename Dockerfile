@@ -1,9 +1,9 @@
 ################################################################################
 # base system
 ################################################################################
-ARG TIMESTAMP=20240530
+ARG TIMESTAMP=20220531
 
-FROM ubuntu:noble-"$TIMESTAMP" as system
+FROM ubuntu:jammy-"$TIMESTAMP" as system
 ARG TIMESTAMP # has to be redeclared for stage: https://docs.docker.com/build/building/variables/#scoping
 
 ENV USERNAME diUser
