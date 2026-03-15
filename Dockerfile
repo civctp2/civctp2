@@ -1,7 +1,7 @@
 ################################################################################
 # base system
 ################################################################################
-FROM debian as system
+FROM ubuntu:rolling as system
 
 ENV USERNAME diUser
 RUN useradd -m $USERNAME && \
@@ -17,7 +17,7 @@ FROM system as builder
 
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive TZ=Etc/UTC apt-get install -y --no-install-recommends \
-    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev libavcodec-dev libavformat-dev libswscale-dev \
+    libsdl2-dev libsdl2-mixer-dev libsdl2-image-dev libtiff-dev \
     byacc gcc g++ binutils-gold automake make libtool unzip flex git ca-certificates
 
 ### set default compilers
@@ -38,8 +38,8 @@ ARG BTYP
 
 RUN cd /ctp2 \
     && ./autogen.sh && \
-    CFLAGS="$CFLAGS -Wno-misleading-indentation $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
-    CXXFLAGS="$CXXFLAGS -Wno-misleading-indentation -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O3 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CFLAGS="$CFLAGS -Wno-misleading-indentation -Wno-implicit-function-declaration $( [ "${BTYP##*debug*}" ] && echo -O0 || echo -g -rdynamic ) -fuse-ld=gold" \
+    CXXFLAGS="$CXXFLAGS -Wno-misleading-indentation -fpermissive $( [ "${BTYP##*debug*}" ] && echo -O0 || echo -g -rdynamic ) -fuse-ld=gold" \
     ./configure --prefix=/opt/ctp2 --bindir=/opt/ctp2/ctp2_program/ctp --enable-silent-rules --enable-precisetraderoutecalc $( [ "${BTYP##*debug*}" ] || echo --enable-debug ) \
     && make -j"$(nproc)" \
     && make -j"$(nproc)" install \

@@ -147,7 +147,7 @@ CTPDB=$(top_builddir)/ctp2_code/gs/dbgen/ctpdb$(EXEEXT)
 $(CTPDB): ../dbgen/Makefile
 	$(MAKE) -C ../dbgen
 
-CTPDatabase.cpp: $(newdb_CDBHDRFILES)
+CTPDatabase.cpp: $(newdb_CDBHDRFILES) $(newdb_CDBSTAMPFILES)
 
 AdvanceBranchRecord.cpp \
 AdvanceBranchRecord.h: AdvanceBranchRecord.stamp

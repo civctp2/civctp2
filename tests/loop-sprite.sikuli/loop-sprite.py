@@ -19,6 +19,7 @@ def main():
     if waitVanish(Pattern("ctp2progress-bar.png").similar(0.95), 100): # wait until progressbar vanishes
         wait(10) # some more time
         click(Pattern("ctp2sprite-sprite-name-field.png").similar(0.95).targetOffset(0, -10)) # text field needs click to get focus
+        click(Pattern("ctp2sprite-sprite-name-field.png").similar(0.95).targetOffset(0, -10)) # click again on text field because sometimes first click has no effect
         Settings.TypeDelay = 0.1; # ctp2-SDL needs some more time
         type(spriteFName)
         click("ctp2sprite-load-btn.png")

@@ -93,7 +93,7 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 	        (source.GetOwner(), source.RetPos(), destination.RetPos(), path, cost, FALSE)
 	   )
 	{
-		return static_cast<sint32>(std::round(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0)));
+		return static_cast<sint32>(std::round(std::max<float>(tradeutil_GetNetTradeCosts(cost), 1.0)));
 	}
 
 	return DISTANCE_UNKNOWN;
@@ -106,7 +106,7 @@ sint32 tradeutil_GetTradeDistance(const Unit &source, const Unit &destination)
 	double cost = g_theWorld->CalcTerrainFreightCost(source.RetPos()) *
 	               static_cast<double>(source.RetPos().NormalizedDistance(destination.RetPos()));
 
-	return static_cast<sint32>(std::max<double>(tradeutil_GetNetTradeCosts(cost), 1.0));
+	return static_cast<sint32>(std::max<float>(tradeutil_GetNetTradeCosts(cost), 1.0));
 
 #endif // USE_PRECISETRADEROUTECALC
 }

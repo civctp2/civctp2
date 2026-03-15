@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 ## shell script to build debian package from within GitLab CI
 ## expects ctp2 to be installed under /opt in the GL-CI docker image (DI)
@@ -11,5 +11,7 @@ mkdir -p /debian/opt/ctp2/
 cp -r /opt/ctp2/ /debian/opt/
 
 find ./debian -type d | xargs chmod 755 # to avoid error: control directory has bad permissions 777 (must be >=0755 and <=0775)
+echo >> debian/DEBIAN/control # adds final new line expected by dpkg-deb
+cat debian/DEBIAN/control
 dpkg-deb --build /debian # uses debian/ to built debian.deb
 mv /debian.deb /deb/ctp2-$BTYP.deb

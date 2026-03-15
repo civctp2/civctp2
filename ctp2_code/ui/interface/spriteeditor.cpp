@@ -494,23 +494,25 @@ bool SpriteEditWindow::FileExists(const char *name)
 
 void SpriteEditWindow::LoadSprite(const char *name)
 {
-	char tbuffer[256];
+	const int SIZE= 256;
+	char tbuffer[SIZE + 1];
+	tbuffer[0]= 0;
 
 	m_loopInProgress = false;
 	m_stopAfterLoop  = true;
 
 	if (name == NULL)
 	{
-		m_fileName->GetFieldText(tbuffer,128);
-
-		name = tbuffer;
+		m_fileName->GetFieldText(tbuffer, SIZE);
+		if (tbuffer == NULL || tbuffer[0] == 0){
+		   fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer);
+		   return;
+		}
 	}
-
-	if (name == NULL)
-		return;
-
-	sprintf(tbuffer, "%s", name);
-
+	else {
+	  snprintf(tbuffer, SIZE, "%s", name);
+	}
+	
 	m_frame=0;
 	m_facing=k_DEFAULTSPRITEFACING;
 
@@ -609,11 +611,12 @@ void SpriteEditWindow::LoadSprite(const char *name)
 
 void SpriteEditWindow::SaveSprite(const char *name)
 {
-	char tbuffer[256];
+	const int SIZE= 256;
+	char tbuffer[SIZE + 1];
 
 	if(name==NULL)
 	{
-		m_fileName->GetFieldText(tbuffer, 128);
+		m_fileName->GetFieldText(tbuffer, SIZE);
 		name = tbuffer;
 	}
 

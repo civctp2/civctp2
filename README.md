@@ -133,7 +133,7 @@ The build itself is pretty classing and straight forward:
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -O3 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -O3 -fuse-ld=gold" ./configure --enable-silent-rules
+CFLAGS="$CFLAGS -O0 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -O0 -fuse-ld=gold" ./configure --enable-silent-rules
 make -j$(nproc)
 ```
 
@@ -145,7 +145,7 @@ CFLAGS="$CFLAGS -g -O0 -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAG
 make -j$(nproc)
 ```
 
-Most optimizations are completely disabled at -O0 even if individual optimization flags are specified. In case CTP2 becomes to slow to be useful you can use higher levels of optimization such as -O1, or -O2.
+Most optimizations are completely disabled at -O0 even if individual optimization flags are specified. In case CTP2 becomes to slow to be useful you can use higher levels of optimization such as -O1, or -O2 however these have let to spurious segfaults, double free and other crashes of the game and therefore are not recommended here to start with.
 
 With `make clean` you can delete all intermedia and output for a clean rebuild. You can look at `./configure` for more options, but there aren't many.
 
