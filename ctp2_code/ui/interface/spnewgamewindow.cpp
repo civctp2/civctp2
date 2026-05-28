@@ -25,11 +25,11 @@
 // Modifications from the original Activision code:
 //
 // - Fixed crash when the game tries to display invalid text strings,
-//   by Martin Gühmann.
+//   by Martin Gï¿½hmann.
 // - Tribe index check updated.
 // - Allowed for a number of players less than 3 to be displayed
 //   - JJB 2005/06/28
-// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gühmann)
+// - Replaced old civilisation database by new one. (Aug 21st 2005 Martin Gï¿½hmann)
 // - Added setting up of single-player start and end age values. (11-Apr-2009 Maq)
 // - Ensure agesscreen::s_numAges is set when selecting a scenario directly.
 //
@@ -70,6 +70,11 @@
 extern LoadSaveMapWindow			*g_loadSaveMapWindow;
 
 extern MBCHAR g_scenarioName[k_SCENARIO_NAME_MAX];
+
+static const MBCHAR *SafeText(const MBCHAR *text)
+{
+	return text ? text : "";
+}
 
 SPNewGameWindow::SPNewGameWindow(AUI_ERRCODE *retval, uint32 id,
 		const MBCHAR *ldlBlock, sint32 bpp, AUI_WINDOW_TYPE type, bool bevel)
@@ -201,9 +206,9 @@ SPNewGameWindow::~SPNewGameWindow()
 void SPNewGameWindow::Update( void )
 {
 	MBCHAR s[_MAX_PATH];
-	sint32 index;
+	sint32 index = 0;
 
-	m_spTribe->SetText( g_theProfileDB->GetCivName() );
+	m_spTribe->SetText(SafeText(g_theProfileDB->GetCivName()));
 
 	if ( m_useCustomMap && g_loadSaveMapWindow && g_loadSaveMapWindow->GetSaveMapInfo() )
 	{
@@ -219,9 +224,12 @@ void SPNewGameWindow::Update( void )
 	}
 
 	index = g_theProfileDB->GetDifficulty();
-//Added by Martin Gühmann
-//Makes sure that the game doesn't crash if the according map size string is invalid.
-	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index) );
+	if (index < 0) {
+		index = 0;
+	} else if (index > (SP_NEWGAME_STR_DEITY - SP_NEWGAME_STR_CHIEFTAIN)) {
+		index = SP_NEWGAME_STR_DEITY - SP_NEWGAME_STR_CHIEFTAIN;
+	}
+	sprintf( s, "%s", SafeText(m_string->GetString(SP_NEWGAME_STR_CHIEFTAIN + index)) );
 	m_spDifficulty->SetText( s );
 
 
@@ -241,6 +249,9 @@ void SPNewGameWindow::Update( void )
 	case MAPSIZE_GIGANTIC:
 		index = 3;
 		break;
+	default:
+		index = 0;
+		break;
 	}
 
 
@@ -255,15 +266,18 @@ void SPNewGameWindow::Update( void )
 
 
 
-//Added by Martin Gühmann
+//Added by Martin Gï¿½hmann
 //Makes sure that the game doesn't crash if the according map size string is invalid.
-	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_SMALL + index) );
+	sprintf( s, "%s", SafeText(m_string->GetString(SP_NEWGAME_STR_SMALL + index)) );
 	m_spMapSize->SetText( s );
 
 	sint32 shape = g_theProfileDB->GetWorldShape();
-//Added by Martin Gühmann
-//Makes sure that the game doesn't crash if the according world shape string is invalid.
-	sprintf( s, "%s", m_string->GetString(SP_NEWGAME_STR_EARTH + shape) );
+	if (shape < 0) {
+		shape = 0;
+	} else if (shape >= WORLD_SHAPE_COUNT) {
+		shape = WORLD_SHAPE_EARTH;
+	}
+	sprintf( s, "%s", SafeText(m_string->GetString(SP_NEWGAME_STR_EARTH + shape)) );
 	m_worldShapeButton->SetText( s );
 
 
@@ -281,7 +295,7 @@ void SPNewGameWindow::Update( void )
 			m_scenarioName->SetText(g_scenarioName);
 			m_scenarioName->ShouldDraw(TRUE);
 		}
-		m_spScenario->SetText(g_theStringDB->GetNameStr("str_ldl_SP_STANDARD_GAME"));
+		m_spScenario->SetText(SafeText(g_theStringDB->GetNameStr("str_ldl_SP_STANDARD_GAME")));
 		m_spScenario->ShouldDraw(TRUE);
 		m_scenarioName->Show();
 		m_scenarioStaticText->Show();
@@ -298,12 +312,12 @@ void SPNewGameWindow::Update( void )
 	// No scenario loaded.
 	} else {
 
-		m_scenarioName->SetText(g_theStringDB->GetNameStr("str_ldl_SP_STANDARD_GAME"));
+		m_scenarioName->SetText(SafeText(g_theStringDB->GetNameStr("str_ldl_SP_STANDARD_GAME")));
 		m_scenarioName->Hide();
 		m_scenarioStaticText->Hide();
 		m_scenarioName->ShouldDraw(TRUE);
 
-		m_spScenario->SetText(g_theStringDB->GetNameStr("str_ldl_SP_SCENARIO_PICKER"));
+		m_spScenario->SetText(SafeText(g_theStringDB->GetNameStr("str_ldl_SP_SCENARIO_PICKER")));
 		m_spScenario->ShouldDraw(TRUE);
 
 		sint32 ages		= g_theAgeDB->NumRecords();

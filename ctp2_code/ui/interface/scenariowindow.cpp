@@ -71,6 +71,21 @@ ScenarioWindow                      *s_ScenarioWindow = NULL;
 
 extern MBCHAR                       g_scenarioName[k_SCENARIO_NAME_MAX];
 
+static void ScenarioWindowTrySetPreviewImage(ctp2_Static *imageControl, const MBCHAR *imagePath)
+{
+	if (!imageControl || !imagePath || !c3files_PathIsValid(imagePath)) {
+		return;
+	}
+
+	aui_Image *preview = g_c3ui->LoadImage(imagePath);
+	if (!preview) {
+		return;
+	}
+
+	g_c3ui->UnloadImage(preview);
+	imageControl->SetImage(imagePath);
+}
+
 
 
 
@@ -149,34 +164,34 @@ void ScenarioWindow::FillListWithScenarios(ctp2_ListBox *available)
 
 			ctp2_ListItem	*item=NULL;
 			item = (ctp2_ListItem *) aui_Ldl::BuildHierarchyFromRoot(ldlBlock);
-			Assert(item);
-			if (item) {
-				ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
-				Assert(box);
-				if(box) {
-					ctp2_Static *name = (ctp2_Static *)box->GetChildByIndex(0);
-					if(name) {
-						name->SetText(scen->m_name);
-					}
-
-					ctp2_Static *description = (ctp2_Static *)box->GetChildByIndex(1);
-					if(description) {
-						description->SetText(scen->m_description);
-					}
-
-					ctp2_Static *image = (ctp2_Static *)box->GetChildByIndex(2);
-					if(image) {
-						MBCHAR imPath[_MAX_PATH];
-						sprintf(imPath, "%s\\%s", scen->m_path, "scenicon.tga");
-						if(c3files_PathIsValid(imPath)) {
-							image->SetImage(imPath);
-						}
-					}
-				}
-				item->SetUserData((void *)scen);
-
-				available->AddItem(item );
+			if (!item) {
+				continue;
 			}
+
+			ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+			if(!box) {
+				continue;
+			}
+
+			ctp2_Static *name = (ctp2_Static *)box->GetChildByIndex(0);
+			if(name) {
+				name->SetText(scen->m_name);
+			}
+
+			ctp2_Static *description = (ctp2_Static *)box->GetChildByIndex(1);
+			if(description) {
+				description->SetText(scen->m_description);
+			}
+
+			ctp2_Static *image = (ctp2_Static *)box->GetChildByIndex(2);
+			if(image) {
+				MBCHAR imPath[_MAX_PATH];
+				sprintf(imPath, "%s\\%s", scen->m_path, "scenicon.tga");
+				ScenarioWindowTrySetPreviewImage(image, imPath);
+			}
+
+			item->SetUserData((void *)scen);
+			available->AddItem(item );
 		}
 	}
 }
@@ -205,32 +220,34 @@ void ScenarioWindow::FillListWithScenarioPacks(ctp2_ListBox *available,bool hide
 		{
 			ctp2_ListItem	*item=NULL;
 			item = (ctp2_ListItem*) aui_Ldl::BuildHierarchyFromRoot("ScenarioPackListItem");
-			Assert(item);
-			if (item) {
-				ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
-				if(box) {
-					ctp2_Static *name = (ctp2_Static *)box->GetChildByIndex(0);
-					if(name) {
-						name->SetText(scenPack->m_name);
-					}
-
-					ctp2_Static *description = (ctp2_Static *)box->GetChildByIndex(1);
-					if(description) {
-						description->SetText(scenPack->m_description);
-					}
-
-					ctp2_Static *image = (ctp2_Static *)box->GetChildByIndex(2);
-					if(image) {
-						MBCHAR imPath[_MAX_PATH];
-						sprintf(imPath, "%s\\%s", scenPack->m_path, "packicon.tga");
-						if(c3files_PathIsValid(imPath)) {
-							image->SetImage(imPath);
-						}
-					}
-				}
-				item->SetUserData(scenPack);
-				available->AddItem(item );
+			if (!item) {
+				continue;
 			}
+
+			ctp2_Static *box = (ctp2_Static *)item->GetChildByIndex(0);
+			if(!box) {
+				continue;
+			}
+
+			ctp2_Static *name = (ctp2_Static *)box->GetChildByIndex(0);
+			if(name) {
+				name->SetText(scenPack->m_name);
+			}
+
+			ctp2_Static *description = (ctp2_Static *)box->GetChildByIndex(1);
+			if(description) {
+				description->SetText(scenPack->m_description);
+			}
+
+			ctp2_Static *image = (ctp2_Static *)box->GetChildByIndex(2);
+			if(image) {
+				MBCHAR imPath[_MAX_PATH];
+				sprintf(imPath, "%s\\%s", scenPack->m_path, "packicon.tga");
+				ScenarioWindowTrySetPreviewImage(image, imPath);
+			}
+
+			item->SetUserData(scenPack);
+			available->AddItem(item );
 		}
 	}
 }
