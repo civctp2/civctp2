@@ -72,6 +72,7 @@
 #endif
 
 static bool debug_dump_whole_stack = false;
+static const size_t k_FUNCTION_NAME_BUFFER_LEN = 16384;
 
 void Debug_FunctionNameFindAddresses(FILE *fp);
 int Debug_FunctionNameOpen (const char *map_file_name);
@@ -850,7 +851,7 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 	size_t caller;
 	const char *caller_name;
 	int index;
-	MBCHAR function_name[_MAX_PATH];
+	MBCHAR function_name[k_FUNCTION_NAME_BUFFER_LEN];
 
 	size_t callstack_function[k_CALL_STACK_SIZE];
 
@@ -881,9 +882,9 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 			caller_name = Debug_FunctionNameAndOffsetGet (caller, &offset);
 
 #if SIZE_MAX == UINT64_MAX
-			sprintf(function_name, "  0x%016zx  [%s + 0x%zx]\n", caller, caller_name, offset);
+			snprintf(function_name, sizeof(function_name), "  0x%016zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 #elif SIZE_MAX == UINT32_MAX
-			sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
+			snprintf(function_name, sizeof(function_name), "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 #else
 #error Code is only implemented for 32 or 64 bit or your compiler does not the needed macros
 #endif
@@ -891,9 +892,9 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 		else
 		{
 #if SIZE_MAX == UINT64_MAX
-			sprintf(function_name, "  0x%016zx\n", caller);
+			snprintf(function_name, sizeof(function_name), "  0x%016zx\n", caller);
 #elif SIZE_MAX == UINT32_MAX
-			sprintf(function_name, "  0x%08zx\n", caller);
+			snprintf(function_name, sizeof(function_name), "  0x%08zx\n", caller);
 #endif
 		}
 
@@ -920,7 +921,7 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 
 	size_t offset;
 
-	MBCHAR function_name[_MAX_PATH];
+	MBCHAR function_name[k_FUNCTION_NAME_BUFFER_LEN];
 	s_stackTraceString[0] = 0;
 	while(!feof(f))
 	{
@@ -936,9 +937,9 @@ char * c3debug_ExceptionStackTraceFromFile(FILE *f)
 				caller_name = Debug_FunctionNameAndOffsetGet(caller, &offset);
 
 #if SIZE_MAX == UINT64_MAX
-				sprintf(function_name, "  0x%016zx  [%s + 0x%zx]\n", caller, caller_name, offset);
+				snprintf(function_name, sizeof(function_name), "  0x%016zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 #elif SIZE_MAX == UINT32_MAX
-				sprintf(function_name, "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
+				snprintf(function_name, sizeof(function_name), "  0x%08zx  [%s + 0x%zx]\n", caller, caller_name, offset);
 #else
 #error Code is only implemented for 32 or 64 bit or your compiler does not the needed macros
 #endif
