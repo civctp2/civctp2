@@ -87,7 +87,14 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     // Argh, audio format mismatch!!!
 	m_Audio = Mix_QuickLoad_RAW((Uint8 *) m_dataptr, (Uint32) m_datasize);
 # else
-    m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, static_cast<int>(m_datasize)), 1);
+	m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, static_cast<int>(m_datasize)), 1);
+	// Compensate for possible SDL bug: if alen=0, then abuf may have been freed by
+	// realloc inside SDL. Since the behavior of realloc(ptr, 0) is implementation
+	// dependent, conservatively assume that realloc has freed the memory, and set abuf
+	// to NULL to prevent it from being freed again by SDL's Mix_FreeChunk.
+	if (!m_Audio->alen) {
+		m_Audio->abuf = NULL;
+	}
 # endif
 #endif
 }
