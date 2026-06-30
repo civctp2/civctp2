@@ -145,19 +145,38 @@ CFLAGS="$CFLAGS -g -O0 -fno-omit-frame-pointer -fuse-ld=gold" CXXFLAGS="$CXXFLAG
 make -j$(nproc)
 ```
 
-Most optimizations are completely disabled at -O0 even if individual optimization flags are specified. In case CTP2 becomes to slow to be useful you can use higher levels of optimization such as -O1, or -O2 however these have let to spurious segfaults, double free and other crashes of the game and therefore are not recommended here to start with.
+[AddressSanitizer](https://clang.llvm.org/docs/AddressSanitizer.html) is a gcc debugging feature that detects memory misuse during runtime. To build with AddressSanitizer, ensure that `CFLAGS` and `CXXFLAGS` include `-fsanitize=address -g -fno-omit-frame-pointer` when running `./configure`. AddressSanitizer is _incompatible_ with `--enable-debug`.
+Leak reports from `dbgen` (a build utility) will halt the build, so build with: `ASAN_OPTIONS=detect_leaks=0 make -j$(nproc)`. When running CTP2, `ASAN_OPTIONS=new_delete_type_mismatch=0` is recommended. To also suppress leak reports at exit, use `ASAN_OPTIONS=new_delete_type_mismatch=0:detect_leaks=0`.
+
+[clang-tidy](https://clang.llvm.org/extra/clang-tidy/) is a static analyzer that detects potential bugs. Be aware that it also produces false positives. To use clang-tidy, [download](https://releases.llvm.org/download.html) a "clang+llvm" tarball and unpack.
+1. __Append__ the clang+llvm "bin" directory to your path: `PATH=$PATH:path-to-clang+llvm-dir/bin`
+1. `make clean`
+1.  Make with: `scan-build -analyze-headers -o /tmp/analysis make -j$(nproc)`
+    * `scan-build` is provided by clang+llvm. It intercepts gcc invocations.
+    * In this example, analysis reports are stored in `/tmp/analysis`.
+    * Expect the analysis to take 10x longer than a normal build.
+1. To view the analysis reports, run `scan-view /tmp/analysis/subdir`.
+    * Replace `subdir` with the directory in the "scan-view" message output by `scan-build`.
+    * `scan-view` opens the report in a browser.
+    * `scan-view` requires Python 2, and will fail if only Python 3 is available. Work-around:
+        * Change `clang-18.1.8/share/scan-view/ScanView.py`, Line 848:
+            * Python 2: `data = f.read().decode("utf-8")`
+            * Python 3: `data = f.read().decode("utf-8", errors='replace')`
+        * Run `scan-view` with: `python3 $(which scan-view) /tmp/analysis/subdir`
+
+Most optimizations are completely disabled at -O0 even if individual optimization flags are specified. In case CTP2 becomes too slow to be useful you can use higher levels of optimization such as -O1, or -O2 however these have led to spurious segfaults, double free and other crashes of the game and therefore are not recommended here to start with.
 
 With `make clean` you can delete all intermedia and output for a clean rebuild. You can look at `./configure` for more options, but there aren't many.
 
 Also, note that `make -j$(nproc)` may fail the first time. Some files are auto-generated and the make dependencies don't catch that.
 
-Finally, you may have to use gold instead of ld for link (add `-fuse-ld=gold` to your CFLAGS & CXXFLAGS if needed).
+Finally, you may have to use `gold` or `lld` instead of `ld` for link (add `-fuse-ld=gold` or `-fuse-ld=lld` to your CFLAGS & CXXFLAGS if needed).
 
 If you get the message on the terminal: `Failed to load module "atk-bridge"`. Install at-spi with `sudo apt install at-spi`.
 
 ### Running
 
-When everything is ready, simply go to the program folder, for example with `cd ~/ctp2/ctp2_code/ctp` and launch the game with `./ctp2` or you can also type `./ctp2_code/ctp/ctp2` ifyour in the folder `~/ctp2/`.
+When everything is ready, simply go to the program folder, for example with `cd ~/ctp2/ctp2_code/ctp` and launch the game with `./ctp2` or you can also type `./ctp2_code/ctp/ctp2` if you are in the folder `~/ctp2/`.
 
 ### Installation
 
