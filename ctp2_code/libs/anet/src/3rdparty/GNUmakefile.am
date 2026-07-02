@@ -17,7 +17,7 @@ MD5_ZIP_CONTENTS = \
 	md5/md5c.c \
 	md5/mddriver.c \
 	md5/rfc1321.txt
-CLEANFILES = \
+MAINTAINERCLEANFILES = \
 	$(noinst_DATA) \
 	$(D3DES_ZIP_CONTENTS) \
 	$(MD5_ZIP_CONTENTS)
