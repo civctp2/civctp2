@@ -262,6 +262,41 @@ SlicSegment::SlicSegment(CivArchive &archive)
 	Serialize(archive);
 }
 
+namespace {
+
+//----------------------------------------------------------------------------
+//
+// Name       : ClearPointerField
+//
+// Description: Helper function for destructor
+//
+// Parameters : pointer of any type T
+//
+// Globals    : none
+//
+// Returns    : none
+//
+// Remark(s)  : Assigns NULL to a pointer, even with compiler optimizations
+//              enabled.
+//
+//              With optimizations, the compiler may skip the assignment in
+//              the destructor because it assumes the destructor will only be
+//              called once, and therefore no code will ever look at the new
+//              value.
+//
+//              Unfortunately, because Pool manages the memory, the memory
+//              is not actually freed, and when the program quits, the
+//              destructor is called again, and not assigning NULL will result
+//              in a double free.
+//
+//----------------------------------------------------------------------------
+template <typename T>
+inline void ClearPointerField(T * volatile & p) {
+	p = NULL;
+}
+
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : SlicSegment::~SlicSegment
@@ -283,25 +318,25 @@ SlicSegment::~SlicSegment()
 	if(m_id)
 	{
 		free(m_id);
-		m_id = NULL;
+		ClearPointerField(m_id);
 	}
 
 	if(m_code)
 	{
 		free(m_code);
-		m_code = NULL;
+		ClearPointerField(m_code);
 	}
 
 	if(m_uiComponent)
 	{
 		free(m_uiComponent);
-		m_uiComponent = NULL;
+		ClearPointerField(m_uiComponent);
 	}
 
 	if(m_filename)
 	{
 		free(m_filename);
-		m_filename = NULL;
+		ClearPointerField(m_filename);
 	}
 
 	delete [] m_trigger_symbols_indices;
@@ -312,10 +347,10 @@ SlicSegment::~SlicSegment()
 	// Has to be set to NULL, because SlicSegments are deleted twice,
 	// first from the StringHashNode and then from the pool. Actuially,
 	// not a very nice design, but with this extra stuff it should be harmless.
-	m_trigger_symbols_indices = NULL;
-	m_trigger_symbols         = NULL;
-	m_parameter_indices       = NULL;
-	m_parameter_symbols       = NULL;
+	ClearPointerField(m_trigger_symbols_indices);
+	ClearPointerField(m_trigger_symbols);
+	ClearPointerField(m_parameter_indices);
+	ClearPointerField(m_parameter_symbols);
 }
 
 //----------------------------------------------------------------------------
