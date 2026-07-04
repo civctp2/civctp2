@@ -157,7 +157,11 @@ Fixed:    Center the background image in the MP start screen.
 ::End SDL specific changes::
 
 ::Other fixes, changes, additions
-          up to 2025-12-12 or PR #431
+Fixed:    The game does not crash if somebody asks for a pollution reduction
+          and his pollution is zero.
+Fixed:    The enslave settler tutorial message is sent to the victim as supposed.
+Fixed:    Remove a final dot on Linux from savegame names, this is an invalid file
+          name. The Windows version does this automatically.
 Fixed:    The AI does not try to disband armies that are needed for garrison or
           have orders.
 Fixed:    The AI does not run over spies and other units that it could not see
