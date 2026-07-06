@@ -473,7 +473,7 @@ bool UnitData::DeductMoveCost(const Unit &me, const double cost, bool &out_of_fu
 {
 	const UnitRecord *rec = GetDBRec();
 
-	sint32 bonus;
+	sint32 bonus = 0;
 	if(rec->GetMoveBonus(bonus))
 	{
 		m_movement_points -= bonus;
@@ -882,7 +882,7 @@ bool UnitData::IsMovePointsEnough(const MapPoint &pos) const
 		return true;
 	} else {
 		double cost;
-		sint32 fixMoveCosts;
+		sint32 fixMoveCosts = 0;
 
 		if (GetDBRec()->GetMovementTypeAir() ) {
 			cost = k_MOVE_AIR_COST;
@@ -894,7 +894,7 @@ bool UnitData::IsMovePointsEnough(const MapPoint &pos) const
 		          !GetDBRec()->GetMovementTypeLand()
 		          )
 		{
-			sint32 icost;
+			sint32 icost = std::numeric_limits<sint32>::max();
 			g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 			cost = icost;
 		} else {

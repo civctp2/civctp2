@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Added note about my continent error. Having terrain that was Air only caused it.
 //
 //----------------------------------------------------------------------------
@@ -439,9 +439,12 @@ sint32 World::GetWaterContinentSize(sint32 cont_num) const
 
 void World::GetContinent(const MapPoint &pos, sint16 &cont_number, bool &is_land) const
 {
+#if defined(_DEBUG)
 	// E note: I got this error when I made Muntains air only.
 	// So this method only checks land and water
 	static bool REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT  = false; // Made static so it shows only once
+#endif
+
 	is_land = !IsWater(pos);
 
 	cont_number = GetCell(pos)->m_continent_number;
@@ -454,8 +457,10 @@ void World::GetContinent(const MapPoint &pos, sint16 &cont_number, bool &is_land
 	     || (!is_land && cont_number >= LAND_CONTINENT_START)
 	   )
 	{
+#if defined(_DEBUG) 
 		Assert(REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT);
 		REPORTED_MAP_CONTINENT_NUMBERING_INCORRECT = true;
+#endif
 		is_land = false;
 		cont_number = 0;
 	}

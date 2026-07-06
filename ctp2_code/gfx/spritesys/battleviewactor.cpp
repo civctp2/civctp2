@@ -132,12 +132,12 @@ void BattleViewActor::DumpAllActions()
 	if (m_curAction)
 	{
 		delete m_curAction;
-		m_curAction = NULL;
+		m_curAction = nullptr;
 	}
 
 	while (m_actionQueue.GetNumItems() > 0)
 	{
-		Action * otherAction;
+		Action * otherAction = nullptr;
 		m_actionQueue.Dequeue(otherAction);
 		delete otherAction;
 	}

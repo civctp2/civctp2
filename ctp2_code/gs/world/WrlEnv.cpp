@@ -783,12 +783,19 @@ void World::CutImprovements(const MapPoint &point)
 	while(thisCell->GetNumDBImprovements())
 	{
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(thisCell->GetDBImprovement(0));
-		sint32 intRad, sqRad;
+		sint32 intRad = 0;
+		sint32 sqRad = 0;
 		Assert(rec);
 		if(rec && rec->GetIntBorderRadius(intRad))
 		{
-			rec->GetSquaredBorderRadius(sqRad);
-			terrainutil_RemoveBorders(point, thisCell->GetOwner(), intRad, sqRad, Unit());
+			if(rec->GetSquaredBorderRadius(sqRad))
+			{
+				terrainutil_RemoveBorders(point, thisCell->GetOwner(), intRad, sqRad, Unit());
+			}
+			else
+			{
+				Assert(false);
+			}
 		}
 		thisCell->RemoveDBImprovement(thisCell->GetDBImprovement(0));
 	}

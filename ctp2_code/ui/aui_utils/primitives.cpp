@@ -2966,8 +2966,8 @@ void primitives_ClippedTriangle16(aui_Surface & surf, const RECT & rect, TRIANGL
 		return;
 	}
 
-	sint32 x3;
-	sint32 y3;
+	sint32 x3 = 0;
+	sint32 y3 = 0;
 	switch (triangleId) {
 		case TI_LEFT_TOP:
 			x3 = rect.left;

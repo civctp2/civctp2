@@ -1586,9 +1586,9 @@ void Goal::Compute_Needed_Troop_Flow()
 			const StrategyRecord & strategy =
 				Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
 
-			sint32 offensive_garrison;
-			sint32 defensive_garrison;
-			sint32 ranged_garrison;
+			sint32 offensive_garrison = 1; // Have at least one unit as garrison if this is not defined in strategies.txt
+			sint32 defensive_garrison = 0;
+			sint32 ranged_garrison    = 0;
 			strategy.GetOffensiveGarrisonCount(offensive_garrison);
 			strategy.GetDefensiveGarrisonCount(defensive_garrison);
 			strategy.GetRangedGarrisonCount(ranged_garrison);
@@ -1597,6 +1597,8 @@ void Goal::Compute_Needed_Troop_Flow()
 			// Added ranged units - Calvitix
 			m_current_needed_strength.Set_Defense(threat * 2 / 3);
 			m_current_needed_strength.Set_Ranged(threat / 3);
+//			m_current_needed_strength.Set_Defense(attack); // Unclear whether this is better
+//			m_current_needed_strength.Set_Ranged(ranged);
 			m_current_needed_strength.Set_Value(value);
 			// Must be consitent with the garrison calculation
 			// Original code
@@ -1604,12 +1606,15 @@ void Goal::Compute_Needed_Troop_Flow()
 
 			//not used for the moment (only attack or defense strength is considerated
 			//(see army_strength > operator) - Calvitix
-			m_current_needed_strength.Set_Defenders(static_cast<sint8>(defensive_garrison + offensive_garrison));
-			m_current_needed_strength.Set_Ranged_Units(static_cast<sint8>(ranged_garrison));
+			if(!goal_record->GetForceMatchSpecial())
+			{
+				m_current_needed_strength.Set_Defenders(static_cast<sint8>(defensive_garrison + offensive_garrison));
+				m_current_needed_strength.Set_Ranged_Units(static_cast<sint8>(ranged_garrison));
+			}
 
 			// This includes also the slave garrison
 			Assert(m_target_city.IsValid());
-			if(m_target_city.IsValid())
+			if(m_target_city.IsValid() && !goal_record->GetForceMatchSpecial())
 				m_current_needed_strength.Set_Unit_Count(m_target_city.CD()->GetNeededGarrison());
 		}
 	}
@@ -2898,7 +2903,10 @@ bool Goal::IsInvalidByDiplomacy() const
 	const GoalRecord *goal_record = g_theGoalDB->Get(m_goal_type);
 	Diplomat & diplomat = Diplomat::GetDiplomat(m_playerId);
 	PLAYER_INDEX target_owner = Get_Target_Owner();
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	MapPoint target_pos = Get_Target_Pos();
+#endif
 
 	Player *player_ptr = g_player[m_playerId];
 	Assert(player_ptr != NULL);

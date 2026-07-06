@@ -2792,7 +2792,7 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 {
     if (!data || (x < 0) || (y < 0)) return;
 
-	uint8 * surfBase;
+	uint8 * surfBase = nullptr;
 	sint32	surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
@@ -3201,7 +3201,7 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
     y+=GetZoomTileHeadroom();
     if (y < 0) return;
 
-	uint8 * surfBase;
+	uint8 * surfBase = nullptr;
 	sint32	surfPitch;
 
     SurfaceLock lock    = SurfaceLock(surface);
