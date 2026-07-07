@@ -36,6 +36,8 @@
 //
 //----------------------------------------------------------------------------
 
+#include <strings.h>
+
 #include "c3.h"
 
 #include "civsound.h"
@@ -59,7 +61,7 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 {
     const char *fname;
 	if(soundID < 0)
-		fname = 0;
+		fname = NULL;
 	else
 		fname = g_theSoundDB->Get(soundID)->GetValue();
 
@@ -67,12 +69,23 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     m_isPlaying = FALSE;
     m_isLooping = FALSE;
 
-    if (0 == fname) {
+    if (!fname) {
         m_soundFilename[0] = 0;
         m_dataptr = NULL;
         m_datasize = 0;
         return;
     }
+#if defined(USE_SDL)
+	// "NULL.WAV" contains no audio data, and with this file SDL 2.x
+	// returns a pointer that it has already freed, which it later
+	// tries to free again in Mix_FreeChunk.
+	if (strcasecmp(fname, "NULL.WAV") == 0) {
+		m_soundFilename[0] = 0;
+		m_dataptr = NULL;
+		m_datasize = 0;
+		return;
+	}
+#endif
 
     strcpy(m_soundFilename, fname);
 
@@ -88,13 +101,8 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
 	m_Audio = Mix_QuickLoad_RAW((Uint8 *) m_dataptr, (Uint32) m_datasize);
 # else
 	m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, static_cast<int>(m_datasize)), 1);
-	// Compensate for possible SDL bug: if alen=0, then abuf may have been freed by
-	// realloc inside SDL. Since the behavior of realloc(ptr, 0) is implementation
-	// dependent, conservatively assume that realloc has freed the memory, and set abuf
-	// to NULL to prevent it from being freed again by SDL's Mix_FreeChunk.
-	if (!m_Audio->alen) {
-		m_Audio->abuf = NULL;
-	}
+	// If alen=0, then abuf may have been freed by realloc inside SDL 2.x.
+	Assert(m_Audio->alen);
 # endif
 #endif
 }
