@@ -77,14 +77,13 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     if (!fname) {
         return;
     }
-#if defined(USE_SDL)
+
 	// "NULL.WAV" contains no audio data, and with this file SDL 2.x
 	// returns a pointer that it has already freed, which it later
 	// tries to free again in Mix_FreeChunk.
 	if (strcasecmp(fname, "NULL.WAV") == 0) {
 		return;
 	}
-#endif
 
     size_t      l_dataSize = 0;
     m_dataptr   = g_SoundPF->getData(fname, l_dataSize);
