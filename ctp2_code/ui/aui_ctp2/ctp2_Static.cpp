@@ -311,6 +311,19 @@ AUI_ERRCODE ctp2_Static::DrawThis(
 			m_pattern->Draw( surface, &rect );
 	}
 
+	// Sizable multi-image statics (e.g. the control-panel unit/city name banner:
+	// left cap + stretched center + right cap) draw chromakey-transparent cap
+	// images; the transparent surround around the cap art is never painted, so it
+	// shows uninitialized surface memory as rainbow static -- the documented
+	// "fill blits transparent -> surface never painted -> heap garbage" fugly, here
+	// on the name banner. Lay the center (parchment) segment across the FULL rect
+	// first so those transparent pixels show the scroll texture, not heap garbage.
+	// (No pattern is set for these controls, so nothing else fills the base.)
+	if ( m_multiImageStatic && !m_pattern )
+	{
+		DrawThisStateImage( STATIC_IMAGE_CENTER, surface, &rect );
+	}
+
 	if(GetNumberOfLayers()) {
 
 		DrawLayers(surface, &rect);
