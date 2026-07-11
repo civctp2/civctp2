@@ -233,6 +233,18 @@ AUI_ERRCODE aui_ImageList::DrawImages(aui_Surface *destSurf, RECT *destRect)
 
 		aui_Surface *srcSurf = info->m_image->TheSurface();
 
+		// A failed image load can leave a non-NULL aui_Image with no surface
+		// (aui_ResourceElement ctor bails before Load), or a surface whose
+		// logical size is degenerate. Blitting either is an access violation
+		// (software Blt16To16 trusts these values), so skip and name the file.
+		if (!srcSurf || srcSurf->Width() <= 0 || srcSurf->Height() <= 0)
+		{
+			DPRINTF(k_DBG_FIX, ("DrawImages: skipping unloadable/degenerate image '%s' (surface=%p, w=%d, h=%d)\n",
+				info->m_image->GetFilename(), srcSurf,
+				srcSurf ? srcSurf->Width() : -1, srcSurf ? srcSurf->Height() : -1));
+			continue;
+		}
+
 		RECT srcRect = { 0, 0, srcSurf->Width(), srcSurf->Height() };
 
 		RECT subDestRect = {
@@ -258,21 +270,53 @@ AUI_ERRCODE aui_ImageList::DrawImages(aui_Surface *destSurf, RECT *destRect)
 		}
 
 
-		switch(info->m_bltType) {
-			default:
-			case AUI_IMAGEBASE_BLTTYPE_COPY:
-				err = g_ui->TheBlitter()->Blt(destSurf, subDestRect.left,
-					subDestRect.top, srcSurf, &srcRect, flag);
-				break;
+		// SEH: a control can survive in the draw list while its image surfaces
+		// have been freed (seen drawing stale setup-screen statics during
+		// CivApp::InitializeGame's progress redraw) — the blit then reads a dead
+		// buffer whose metadata is self-consistent. Catch the AV per image for
+		// EVERY blt type so one dead surface cannot kill the process.
+		// (All locals are PODs, so SEH is legal here.)
+		char dbgName[80];
+		dbgName[0] = '\0';
+		__try
+		{
+			// Snapshot the filename inside the guard: if the aui_Image object is
+			// freed, reading it faults here (caught) instead of in the failure log.
+			strncpy(dbgName, info->m_image->GetFilename(), sizeof(dbgName) - 1);
+			dbgName[sizeof(dbgName) - 1] = '\0';
 
-			case AUI_IMAGEBASE_BLTTYPE_STRETCH:
-				err = g_ui->TheBlitter()->StretchBlt(destSurf, &subDestRect,
-					srcSurf, &srcRect, flag);
-				break;
-			case AUI_IMAGEBASE_BLTTYPE_TILE:
-				err = g_ui->TheBlitter()->TileBlt(destSurf, &subDestRect,
-					srcSurf, &srcRect, 0, 0, flag );
-				break;
+			switch(info->m_bltType) {
+				default:
+				case AUI_IMAGEBASE_BLTTYPE_COPY:
+					err = g_ui->TheBlitter()->Blt(destSurf, subDestRect.left,
+						subDestRect.top, srcSurf, &srcRect, flag);
+					break;
+
+				case AUI_IMAGEBASE_BLTTYPE_STRETCH:
+					err = g_ui->TheBlitter()->StretchBlt(destSurf, &subDestRect,
+						srcSurf, &srcRect, flag);
+					break;
+				case AUI_IMAGEBASE_BLTTYPE_TILE:
+					err = g_ui->TheBlitter()->TileBlt(destSurf, &subDestRect,
+						srcSurf, &srcRect, 0, 0, flag );
+					break;
+			}
+		}
+		__except ( EXCEPTION_EXECUTE_HANDLER )
+		{
+			err = AUI_ERRCODE_INVALIDPARAM;
+		}
+
+		// Name the offending image when a blit fails (e.g. the Blt16To16 SEH
+		// guard caught an access violation on a dead buffer), then keep drawing —
+		// one bad image must not kill the whole UI pass.
+		if (err != AUI_ERRCODE_OK)
+		{
+			DPRINTF(k_DBG_FIX, ("DrawImages: blit FAILED (err=%d) for image '%s' "
+				"(surface %dx%d) bltType=%d bltFlag=%d state=%d index=%d\n",
+				err, dbgName, srcRect.right, srcRect.bottom,
+				info->m_bltType, info->m_bltFlag, m_currentState, imageIndex));
+			err = AUI_ERRCODE_OK;
 		}
 	}
 

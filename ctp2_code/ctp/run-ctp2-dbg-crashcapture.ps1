@@ -67,6 +67,70 @@ function Resolve-LaunchSource {
     return $null
 }
 
+function Test-DependencyPresence {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Root,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Name
+    )
+
+    $searchPaths = @(
+        (Join-Path $Root $Name),
+        (Join-Path $env:WINDIR ("System32\" + $Name)),
+        (Join-Path $env:WINDIR ("SysWOW64\" + $Name))
+    )
+
+    foreach ($path in $searchPaths) {
+        if (Test-Path $path) {
+            return $true
+        }
+    }
+
+    return $false
+}
+
+function Get-MissingLaunchDependencies {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Root,
+
+        [Parameter(Mandatory = $true)]
+        [string]$LaunchRelativePath
+    )
+
+    $required = switch ($LaunchRelativePath.ToLowerInvariant()) {
+        'ctp2-dbg.exe' { @('MSVCP140D.dll', 'VCRUNTIME140D.dll', 'ucrtbased.dll', 'MSVCRTD.dll') }
+        default { @() }
+    }
+
+    $missing = New-Object System.Collections.Generic.List[string]
+    foreach ($name in $required) {
+        if (-not (Test-DependencyPresence -Root $Root -Name $name)) {
+            $missing.Add($name)
+        }
+    }
+
+    return $missing
+}
+
+function Get-MissingRequiredPaths {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string[]]$Paths
+    )
+
+    $missing = New-Object System.Collections.Generic.List[string]
+    foreach ($path in $Paths) {
+        if (-not (Test-Path $path)) {
+            $missing.Add($path)
+        }
+    }
+
+    return $missing
+}
+
 function Write-PreflightReport {
     param(
         [Parameter(Mandatory = $true)]
@@ -302,9 +366,24 @@ $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 $logsDir = Join-Path $root 'logs'
 $profilePath = Join-Path $root 'userprofile.txt'
 $launchSource = Resolve-LaunchSource -SourceRoot $SourceRoot -PreferRelease:$PreferRelease
+$launchMode = if ($PreferRelease) { 'release-preferred' } else { 'debug-preferred' }
 
 if (-not $launchSource) {
     throw "No launchable x86 source executable was found under $SourceRoot"
+}
+
+$missingLaunchDependencies = Get-MissingLaunchDependencies -Root $root -LaunchRelativePath $launchSource.RelativePath
+if ($missingLaunchDependencies.Count -gt 0 -and $launchSource.RelativePath -ieq 'ctp2-dbg.exe') {
+    $releaseSourcePath = Join-Path $SourceRoot 'ctp2.exe'
+    if (Test-Path $releaseSourcePath) {
+        Write-Warning ("Debug launch blocked by missing dependency: {0}. Falling back to ctp2.exe." -f ($missingLaunchDependencies -join ', '))
+        $launchSource = [pscustomobject]@{
+            SourcePath   = $releaseSourcePath
+            RelativePath = 'ctp2.exe'
+        }
+        $launchMode = 'release-fallback'
+        $missingLaunchDependencies = @()
+    }
 }
 
 $exePath = Join-Path $root $launchSource.RelativePath
@@ -327,20 +406,40 @@ $launchArgs = @('noassertdialogs') + @(
         $_ -ne $null -and -not [string]::IsNullOrWhiteSpace([string]$_)
     }
 )
+$mapRuntimePaths = @(
+    (Join-Path $root 'dll\map\Crater.dll'),
+    (Join-Path $root 'dll\map\fault.dll'),
+    (Join-Path $root 'dll\map\geometric.dll'),
+    (Join-Path $root 'dll\map\plasma2.dll')
+)
+$requiredBaseUiPaths = @(
+    (Join-Path $root '..\..\ctp2_data\default\graphics\pictures\uptg20e.tga'),
+    (Join-Path $root '..\..\ctp2_data\default\graphics\pictures\uptg20e2.tga')
+)
+$forbiddenScenarioUiPaths = @(
+    (Join-Path $root '..\..\Scenarios\mom\scen0000\default\graphics\pictures\uptg20e.tga'),
+    (Join-Path $root '..\..\Scenarios\mom\scen0000\default\graphics\pictures\uptg20e2.tga')
+)
 $scanRows = @(
     [pscustomobject]@{ Role = 'planned-exe'; Path = $launchSource.SourcePath; Machine = $sourceExeMachine },
     [pscustomobject]@{ Role = 'release-exe'; Path = (Join-Path $root 'ctp2.exe'); Machine = (Get-PeMachine (Join-Path $root 'ctp2.exe')) },
     [pscustomobject]@{ Role = 'core-runtime'; Path = (Join-Path $root 'SDL2.dll'); Machine = (Get-PeMachine (Join-Path $root 'SDL2.dll')) },
     [pscustomobject]@{ Role = 'core-runtime'; Path = (Join-Path $root 'SDL2_image.dll'); Machine = (Get-PeMachine (Join-Path $root 'SDL2_image.dll')) },
     [pscustomobject]@{ Role = 'core-runtime'; Path = (Join-Path $root 'SDL2_mixer.dll'); Machine = (Get-PeMachine (Join-Path $root 'SDL2_mixer.dll')) },
+    [pscustomobject]@{ Role = 'map-runtime'; Path = (Join-Path $root 'dll\map\Crater.dll'); Machine = (Get-PeMachine (Join-Path $root 'dll\map\Crater.dll')) },
+    [pscustomobject]@{ Role = 'map-runtime'; Path = (Join-Path $root 'dll\map\fault.dll'); Machine = (Get-PeMachine (Join-Path $root 'dll\map\fault.dll')) },
+    [pscustomobject]@{ Role = 'map-runtime'; Path = (Join-Path $root 'dll\map\geometric.dll'); Machine = (Get-PeMachine (Join-Path $root 'dll\map\geometric.dll')) },
+    [pscustomobject]@{ Role = 'map-runtime'; Path = (Join-Path $root 'dll\map\plasma2.dll'); Machine = (Get-PeMachine (Join-Path $root 'dll\map\plasma2.dll')) },
     [pscustomobject]@{ Role = 'debug-sidecar'; Path = (Join-Path $root 'anet2d.dll'); Machine = (Get-PeMachine (Join-Path $root 'anet2d.dll')) },
     [pscustomobject]@{ Role = 'debug-sidecar'; Path = (Join-Path $root 'tiffd.dll'); Machine = (Get-PeMachine (Join-Path $root 'tiffd.dll')) },
     [pscustomobject]@{ Role = 'debug-sidecar'; Path = (Join-Path $root 'zlibwapid.dll'); Machine = (Get-PeMachine (Join-Path $root 'zlibwapid.dll')) }
 )
 $exeMachine = ($scanRows | Where-Object { $_.Role -eq 'planned-exe' } | Select-Object -First 1).Machine
 $blockingMismatch = $scanRows | Where-Object {
-    $_.Role -eq 'core-runtime' -and $_.Machine -ne 'missing' -and $_.Machine -ne $exeMachine
+    ($_.Role -eq 'core-runtime' -or $_.Role -eq 'map-runtime') -and $_.Machine -ne 'missing' -and $_.Machine -ne $exeMachine
 }
+$missingRequiredUi = Get-MissingRequiredPaths -Paths $requiredBaseUiPaths
+$forbiddenScenarioUi = @($forbiddenScenarioUiPaths | Where-Object { Test-Path $_ })
 
 $enableLogsLine = $null
 if (Test-Path $profilePath) {
@@ -358,10 +457,19 @@ if ($enableLogsValue -and $enableLogsValue -notmatch '^(?i:EnableLogs=(Yes|True|
 
 Write-Host "Executable : $exePath"
 Write-Host "Source exe  : $($launchSource.SourcePath)"
-Write-Host "Launch mode : $(if ($PreferRelease) { 'release-preferred' } else { 'debug-preferred' })"
+Write-Host "Launch mode : $launchMode"
 Write-Host "Working dir: $root"
 Write-Host "Arguments  : $($launchArgs -join ' ')"
 Write-Host "Executable arch: $exeMachine"
+if ($missingLaunchDependencies.Count -gt 0) {
+    Write-Warning ("Missing launch dependencies: {0}" -f ($missingLaunchDependencies -join ', '))
+}
+if ($missingRequiredUi.Count -gt 0) {
+    Write-Warning ("Missing required base UI sheets: {0}" -f ($missingRequiredUi -join ', '))
+}
+if ($forbiddenScenarioUi.Count -gt 0) {
+    Write-Warning ("Scenario override should not exist for shared UI sheets: {0}" -f ($forbiddenScenarioUi -join ', '))
+}
 
 $overlayState = $null
 if ($blockingMismatch -and -not $ForceRun) {
@@ -381,6 +489,12 @@ if ($blockingMismatch -and -not $ForceRun) {
     Write-Host "Staging x86 runtime overlay from: $SourceRoot"
     $overlayState = Stage-X86RuntimeOverlay -SourceRoot $SourceRoot -InstallRoot $root -LaunchSourcePath $launchSource.SourcePath -LaunchRelativePath $launchSource.RelativePath
     Write-Host "Overlay mode: active (will restore original installed files after exit)"
+}
+
+if (($missingRequiredUi.Count -gt 0 -or $forbiddenScenarioUi.Count -gt 0) -and -not $ForceRun) {
+    Write-Warning "Blocked launch: required progress-window UI sheet checklist failed."
+    Write-Warning "Repair with: python patch_ctp2_images.py --base-only"
+    return
 }
 
 try {

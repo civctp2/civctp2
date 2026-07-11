@@ -282,6 +282,27 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 	const sint32 destPitch = destSurf->Pitch() / 2;
 	const sint32 srcPitch = srcSurf->Pitch() / 2;
 
+	// The pixel loops below index the PHYSICAL allocation via Buffer()/Pitch(),
+	// but Blt clips only against the LOGICAL Width()/Height(). A surface whose
+	// logical size disagrees with its real allocation (e.g. an aui_SDLSurface
+	// wrapping the screen SDL_Surface with takeOwnership=FALSE reports the
+	// requested size over the screen's buffer/pitch) walks out of bounds here
+	// -> access violation. Refuse the blit and name the mismatch instead.
+	if (destRect->top < 0 || destRect->left < 0
+	||  srcRect->top < 0  || srcRect->left < 0
+	||  (destRect->bottom - 1) * destSurf->Pitch() + destRect->right * 2 > destSurf->Size()
+	||  (srcRect->bottom - 1) * srcSurf->Pitch() + srcRect->right * 2 > srcSurf->Size())
+	{
+		DPRINTF(k_DBG_FIX, ("Blt16To16: refused out-of-bounds blit: "
+			"dest rect(%d,%d,%d,%d) w=%d h=%d pitch=%d size=%d; "
+			"src rect(%d,%d,%d,%d) w=%d h=%d pitch=%d size=%d\n",
+			destRect->left, destRect->top, destRect->right, destRect->bottom,
+			destSurf->Width(), destSurf->Height(), destSurf->Pitch(), destSurf->Size(),
+			srcRect->left, srcRect->top, srcRect->right, srcRect->bottom,
+			srcSurf->Width(), srcSurf->Height(), srcSurf->Pitch(), srcSurf->Size()));
+		return AUI_ERRCODE_INVALIDPARAM;
+	}
+
 	uint16 *    destBuf         = (uint16 *)destSurf->Buffer();
 	bool        wasDestLocked   = destBuf != NULL;
 
@@ -316,6 +337,21 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 		if ( srcBuf )
 		{
 			uint16 *origSrcBuf = srcBuf;
+
+			// A surface can pass the geometry guard above and still fault below when
+			// its Buffer() points at freed/reallocated memory (metadata consistent,
+			// pixels dead). Catch the AV in place, log both surfaces' identities, and
+			// fail this blit instead of killing the process — DrawImages then names
+			// the offending image file. (All locals are PODs, so SEH is legal here.)
+			// Snapshot geometry NOW: the handler must not call surface methods — if
+			// the surface OBJECT itself is freed, a deref there double-faults and
+			// kills the process with no trace (seen as a KERNELBASE.dll AV).
+			const sint32 dbgDW = destSurf->Width(),  dbgDH = destSurf->Height();
+			const sint32 dbgDP = destSurf->Pitch(),  dbgDS = destSurf->Size();
+			const sint32 dbgSW = srcSurf->Width(),   dbgSH = srcSurf->Height();
+			const sint32 dbgSP = srcSurf->Pitch(),   dbgSS = srcSurf->Size();
+			__try
+			{
 
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
@@ -463,6 +499,21 @@ AUI_ERRCODE aui_Blitter::Blt16To16(
 			}
 			else
 			{
+				retcode = AUI_ERRCODE_INVALIDPARAM;
+			}
+
+			}
+			__except ( EXCEPTION_EXECUTE_HANDLER )
+			{
+				DPRINTF(k_DBG_FIX, ("Blt16To16: ACCESS VIOLATION caught in pixel loop: "
+					"destSurf=%p buf=%p w=%d h=%d pitch=%d size=%d; "
+					"srcSurf=%p buf=%p w=%d h=%d pitch=%d size=%d; "
+					"flags=0x%x destRect(%d,%d,%d,%d) srcRect(%d,%d,%d,%d)\n",
+					destSurf, origDestBuf, dbgDW, dbgDH, dbgDP, dbgDS,
+					srcSurf, origSrcBuf, dbgSW, dbgSH, dbgSP, dbgSS,
+					flags,
+					destRect->left, destRect->top, destRect->right, destRect->bottom,
+					srcRect->left, srcRect->top, srcRect->right, srcRect->bottom));
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
@@ -854,6 +905,19 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 		{
 			uint16 *origSrcBuf = srcBuf;
 
+			// Same dead-buffer containment as Blt16To16: a self-consistent surface
+			// whose Buffer() points at freed memory (e.g. Pattern::Draw tiling onto
+			// a window surface deleted+reallocated mid-construction by
+			// aui_Window::Resize) must fail this blit, not kill the process.
+			// Snapshot geometry NOW: the handler must not call surface methods — a
+			// freed surface OBJECT would double-fault there (KERNELBASE AV, no trace).
+			const sint32 dbgDW = destSurf->Width(),  dbgDH = destSurf->Height();
+			const sint32 dbgDP = destSurf->Pitch(),  dbgDS = destSurf->Size();
+			const sint32 dbgSW = srcSurf->Width(),   dbgSH = srcSurf->Height();
+			const sint32 dbgSP = srcSurf->Pitch(),   dbgSS = srcSurf->Size();
+			__try
+			{
+
 			if ( flags & k_AUI_BLITTER_FLAG_COPY )
 			{
 				const sint32 destScanWidth = 2 *
@@ -958,6 +1022,21 @@ AUI_ERRCODE aui_Blitter::TileBlt16To16(
 			}
 			else
 			{
+				retcode = AUI_ERRCODE_INVALIDPARAM;
+			}
+
+			}
+			__except ( EXCEPTION_EXECUTE_HANDLER )
+			{
+				DPRINTF(k_DBG_FIX, ("TileBlt16To16: ACCESS VIOLATION caught in pixel loop: "
+					"destSurf=%p buf=%p w=%d h=%d pitch=%d size=%d; "
+					"srcSurf=%p buf=%p w=%d h=%d pitch=%d size=%d; "
+					"flags=0x%x anchor(%d,%d) destRect(%d,%d,%d,%d) srcRect(%d,%d,%d,%d)\n",
+					destSurf, origDestBuf, dbgDW, dbgDH, dbgDP, dbgDS,
+					srcSurf, origSrcBuf, dbgSW, dbgSH, dbgSP, dbgSS,
+					flags, anchorx, anchory,
+					destRect->left, destRect->top, destRect->right, destRect->bottom,
+					srcRect->left, srcRect->top, srcRect->right, srcRect->bottom));
 				retcode = AUI_ERRCODE_INVALIDPARAM;
 			}
 
