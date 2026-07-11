@@ -64,6 +64,9 @@
 #ifdef _MSC_VER
 #pragma warning( disable : 4013 )
 #endif
+#ifdef __GNUC__
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
+#endif
 #define lint
 
 void yyerror(const char* err);
