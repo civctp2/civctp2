@@ -841,6 +841,22 @@ bool GaiaController::CanStartCountdown() const
 	if (NumSatellitesLaunched() < NumSatellitesRequired())
 		return false;
 
+	// Gate on endgame WONDERS too. The tower/mainframe/satellite requirements above
+	// resolve to 0 for an endgame object the engine doesn't recognise by its hard-coded
+	// name (InitializeStatics only matches ENDGAME_PROCESSING_TOWER / _POWER_SATELLITE /
+	// _GAIA_COMPUTER). A wonder-only endgame (e.g. MoM's ENDGAME_MOM_MASTERY ->
+	// WONDER_RUNE_OF_RULERSHIP) would otherwise let EVERY player start the countdown from
+	// turn 1; an AI then auto-wins a science victory ~TurnsToActivate turns in and flags
+	// all others (the human) DEFEATED without conquest. Require the player to actually hold
+	// every endgame wonder first. sm_endgameWonders is a per-wonder bitmask; a 0 mask
+	// (stock science victory, no endgame wonders) leaves this a no-op.
+	sint32 wondersRequired = 0;
+	for (uint64 mask = sm_endgameWonders; mask != 0x0; mask >>= 1)
+		if (mask & 0x1) ++wondersRequired;
+
+	if (NumWondersBuilt() < wondersRequired)
+		return false;
+
 	return true;
 }
 
