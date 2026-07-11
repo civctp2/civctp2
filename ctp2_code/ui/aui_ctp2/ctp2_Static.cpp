@@ -311,16 +311,18 @@ AUI_ERRCODE ctp2_Static::DrawThis(
 			m_pattern->Draw( surface, &rect );
 	}
 
-	// Sizable multi-image statics (e.g. the control-panel unit/city name banner:
-	// left cap + stretched center + right cap) draw chromakey-transparent cap
-	// images; the transparent surround around the cap art is never painted, so it
-	// shows uninitialized surface memory as rainbow static -- the documented
-	// "fill blits transparent -> surface never painted -> heap garbage" fugly, here
-	// on the name banner. Lay the center (parchment) segment across the FULL rect
-	// first so those transparent pixels show the scroll texture, not heap garbage.
-	// (No pattern is set for these controls, so nothing else fills the base.)
+	// Sizable multi-image statics (e.g. the control-panel unit/city name banner and
+	// the MAYOR banner: left cap + stretched center + right cap) draw chromakey-
+	// transparent cap AND center images; every transparent pixel is left unpainted and
+	// shows uninitialized surface memory as rainbow static -- the "fill blits transparent
+	// -> surface never painted -> heap garbage" fugly. The center image is itself
+	// chromakey-transparent at its edges, so laying it across the rect alone did NOT
+	// cover everything. First CLEAR the whole rect to black (the control panel behind
+	// these banners is dark, so black transparent-pixels blend), THEN lay the center
+	// (parchment) over the middle, so NO uninitialized pixel can survive.
 	if ( m_multiImageStatic && !m_pattern )
 	{
+		g_ui->TheBlitter()->ColorBlt( surface, &rect, RGB(0,0,0), 0 );
 		DrawThisStateImage( STATIC_IMAGE_CENTER, surface, &rect );
 	}
 
