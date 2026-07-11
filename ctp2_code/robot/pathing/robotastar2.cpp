@@ -227,7 +227,9 @@ bool RobotAstar2::FindPath( const PathType & pathType,
                             float & total_cost,
                             sint32 additionalUnits)
 {
-	sint32 cutoff = 20000;
+	// Scale with the map size so oversized (e.g. modded "ultra gigantic")
+	// maps are not cut off before every reachable tile has been considered.
+	sint32 cutoff = 2 * g_theWorld->GetXWidth() * g_theWorld->GetYHeight();
 
 	sint32 nodes_opened = 0;
 	bool is_broken_path = false;
