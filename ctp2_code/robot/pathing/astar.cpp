@@ -454,7 +454,7 @@ bool Astar::FindPath
 			searching = false;
 		}
 
-	} while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
+	} while ((searching || (best && (k_ASTAR_BIG <= best->m_entry_cost ))) && (nodes_opened < cutoff));
 
 	Assert(nodes_opened < cutoff);
 
