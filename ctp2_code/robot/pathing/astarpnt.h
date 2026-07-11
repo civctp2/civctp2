@@ -87,7 +87,8 @@ public:
 		m_total_cost  (0.0f),
 		m_queue_idx   (-1),
 		m_parent      (NULL),
-		m_next        (NULL)
+		m_next        (NULL),
+		m_reopen_count(0)
 	{}
 
 	/// Determine whether a route through this point costs less than a route
@@ -194,6 +195,9 @@ private:
 	sint32 m_queue_idx;
 	AstarPoint *m_parent;
 	AstarPoint *m_next;
+	/// Number of times this point has been reopened within the current
+	/// search. Reset whenever the point is (re)claimed for a new search.
+	sint32 m_reopen_count;
 
 	friend class RobotAstar2;
 	friend class Astar;
