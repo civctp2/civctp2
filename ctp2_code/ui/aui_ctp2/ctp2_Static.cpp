@@ -300,6 +300,18 @@ AUI_ERRCODE ctp2_Static::DrawThis(
 		return m_drawFunc(this, surface, rect, m_drawCookie);
 	}
 
+	// FUGLY FIX: sizable multi-image banners (control-panel city/unit name plate, MAYOR
+	// bar: left cap + stretched center + right cap) are chromakey-transparent in the cap
+	// ornament gaps AND at the center edges. Every transparent pixel is left unpainted and
+	// shows uninitialized surface memory as rainbow static ("fill blits transparent ->
+	// surface never painted -> heap garbage"). Pre-clear the WHOLE banner rect to black up
+	// front -- on EVERY draw path (patterned or not, images or layers) and before any image
+	// is laid down -- so no transparent pixel can ever expose heap memory. The panel behind
+	// these banners is dark, so cleared gaps blend in. Supersedes the earlier center-only
+	// clear, which left the left/right scroll caps uncovered (non-deterministic static).
+	if ( m_multiImageStatic )
+		g_ui->TheBlitter()->ColorBlt( surface, &rect, RGB(0,0,0), 0 );
+
 	if ( m_pattern )
 	{
 		if ( m_srcWidthPix || m_srcHeightPix )
@@ -309,21 +321,6 @@ AUI_ERRCODE ctp2_Static::DrawThis(
 		}
 		else
 			m_pattern->Draw( surface, &rect );
-	}
-
-	// Sizable multi-image statics (e.g. the control-panel unit/city name banner and
-	// the MAYOR banner: left cap + stretched center + right cap) draw chromakey-
-	// transparent cap AND center images; every transparent pixel is left unpainted and
-	// shows uninitialized surface memory as rainbow static -- the "fill blits transparent
-	// -> surface never painted -> heap garbage" fugly. The center image is itself
-	// chromakey-transparent at its edges, so laying it across the rect alone did NOT
-	// cover everything. First CLEAR the whole rect to black (the control panel behind
-	// these banners is dark, so black transparent-pixels blend), THEN lay the center
-	// (parchment) over the middle, so NO uninitialized pixel can survive.
-	if ( m_multiImageStatic && !m_pattern )
-	{
-		g_ui->TheBlitter()->ColorBlt( surface, &rect, RGB(0,0,0), 0 );
-		DrawThisStateImage( STATIC_IMAGE_CENTER, surface, &rect );
 	}
 
 	if(GetNumberOfLayers()) {
