@@ -157,8 +157,9 @@ float UnitAstar::ComputeValidMoveCost(const MapPoint & pos, const Cell & cell) c
 			(m_move_intersection & k_Unit_MovementType_ShallowWater_Bit));
 	if (is_tunnel_and_boat)
 	{
-		sint32 icost_without_tunnel;
-		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost_without_tunnel);
+		// The cost the boat would pay for this terrain if it ignored the
+		// tunnel improvement, i.e. the terrain's base movement cost.
+		sint32 const icost_without_tunnel = g_theWorld->GetCell(pos)->GetBaseMoveCosts();
 		return std::min(m_army_minmax_move, static_cast<float>(icost_without_tunnel));
 	}
 
