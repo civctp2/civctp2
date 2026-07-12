@@ -876,7 +876,7 @@ bool UnitAstar::FindBrokenPath(const MapPoint &start, const MapPoint &dest,
     else
     {
         sint32 nodes_opened = 0;
-        sint32 cutoff       = 2000000000;
+        sint32 cutoff       = Astar_MaxSearchNodes();
 
         if (Astar::FindPath(start, no_enter_pos, good_path, total_cost, false, cutoff, nodes_opened))
         {
@@ -1112,7 +1112,7 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 
 	InitArmy (army, nUnits, move_intersection, move_union, m_army_minmax_move);
 
-	sint32 cutoff       = 2000000000;
+	sint32 cutoff       = Astar_MaxSearchNodes();
 	sint32 nodes_opened = 0;
 	bool result = FindPath(army, nUnits, move_intersection, move_union,
 	                       start, owner, dest, good_path, is_broken_path, bad_path,

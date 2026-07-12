@@ -58,6 +58,11 @@ void Astar_Cleanup()
 	g_astar_mem.CleanUp();
 }
 
+sint32 Astar_MaxSearchNodes()
+{
+	return 2 * g_theWorld->GetXWidth() * g_theWorld->GetYHeight();
+}
+
 #define k_MIN_MOVE_COST 10.0
 
 float g_cost_factor = k_MIN_MOVE_COST;
