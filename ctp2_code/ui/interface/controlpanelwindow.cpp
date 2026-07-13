@@ -2447,7 +2447,7 @@ void ControlPanelWindow::CreateTileImpBanks()
 				thePaneLDL = "tfLandButtonBank";
 				group_id = CP_TERRAFORM_LAND;
 
-				sint32 col;
+				sint32 col = 0;
 				timpRec->GetColumn(col);
 				column = (uint32)col;
 			}
@@ -2459,7 +2459,7 @@ void ControlPanelWindow::CreateTileImpBanks()
 				thePaneLDL = "tfOceanButtonBank";
 				group_id = CP_TERRAFORM_OCEAN;
 
-				sint32 col;
+				sint32 col = 0;
 				timpRec->GetColumn(col);
 				column = (uint32)col;
 			}

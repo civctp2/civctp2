@@ -62,7 +62,7 @@ for(sint32 wndr=0;forEachBuilt>0;wndr++,forEachBuilt>>=1) \
 #define INT_WNDR(func, getfunc)\
     sint32 amt = 0;\
     FOREACH_WNDR(func) {\
-        sint32 add;\
+        sint32 add = 0;\
         g_theWonderDB->Get(wndr)->getfunc(add);\
         amt += add;\
     }\

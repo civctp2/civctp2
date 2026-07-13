@@ -451,7 +451,7 @@ bool buildingutil_HaveFoodVat(const uint64 built_improvements,
 	FOREACH_BUILT(HasFoodVat, owner)
 	{
 		atLeastOne = true;
-		double coef;
+		double coef = 0.0;
 		rec->GetFoodVat(coef);
 		food_to_pollution_coef += coef;
 	}

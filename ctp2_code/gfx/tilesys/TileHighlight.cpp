@@ -124,7 +124,7 @@ double GetEntryCost
 		    ? g_theWorld->GetTerrain(a_Place)->GetEnvCityPtr()
 		    : g_theWorld->GetTerrain(a_Place)->GetEnvBase();
 
-		sint32	icost;
+		sint32	icost = 0;
 		if (bareTerrainProperties->GetMovement(icost))
 		{
 			cost = icost;

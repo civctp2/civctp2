@@ -609,7 +609,7 @@ STDEHANDLER(GiveMap_ProposalResponseEvent)
 	sint32 receiver_saw_map =
 		AgreementMatrix::s_agreements.GetAgreementDuration(receiver, sender, PROPOSAL_REQUEST_MAP);
 
-	sint32 want_map_turns;
+	sint32 want_map_turns = 25; // The setting in diplomacy.txt
 	receiver_diplomat.GetCurrentDiplomacy(sender).GetWantMapTurns(want_map_turns);
 
 	if (receiver_saw_map != -1 &&
@@ -1326,13 +1326,13 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 			}
 		}
 	}
-	else if ((receiver_pollution / sender_pollution) < 1.0)
+	else if (receiver_pollution > sender_pollution)
 	{
 		DiplomacyArg arg;
 		double percent = 0.0;
 		DIPLOMATIC_TONE tone = DIPLOMATIC_TONE_EQUAL;
 
-		if (receiver_diplomat.GetPersonality()->GetDiscoveryEcotopian())
+		if (receiver_diplomat.GetPersonality()->GetDiscoveryEcotopian() && sender_pollution != 0) // Avoid devision by zero, it doesn't matter if sender_pollution == 0 anyway
 		{
 			percent = (double)(sender_pollution - receiver_pollution) / sender_pollution;
 			percent -= 0.05;
@@ -1366,7 +1366,6 @@ STDEHANDLER(HonorPollutionAgreement_ProposalResponseEvent)
 	}
 	else
 	{
-
 		receiver_diplomat.ConsiderResponse(sender, RESPONSE_REJECT, reject_priority);
 	}
 	return GEV_HD_Continue;
