@@ -42,9 +42,12 @@
 #include "slicif.h"
 #include <math.h>
 
-#if defined(_MSC_VER)
 /* Avoid silly warnings */
+#if defined(_MSC_VER)
 #pragma warning( disable : 4013 )
+#endif
+#if defined(__GNUC__)
+#pragma GCC diagnostic ignored "-Wimplicit-function-declaration"
 #endif
 
 #define lint

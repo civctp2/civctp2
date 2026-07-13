@@ -608,7 +608,7 @@ sint32 UnseenCell::GetFoodProduced() const
 		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
-		sint32 bonus;
+		sint32 bonus = 0;
 		if (effect && effect->GetBonusFood(bonus))
 		{
 			food += bonus;

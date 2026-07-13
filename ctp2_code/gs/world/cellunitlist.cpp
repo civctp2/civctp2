@@ -29,9 +29,9 @@
 //   suggestions by NelsonAndBronte.
 // - Make unit types with 0 movement stand still (compiler option).
 // - Handled crashes with invalid units.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Standartized army strength computation. (30-Apr-2008 Martin Gühmann)
-// - Position strength can now be calculated independently from position. (13-Aug-2008 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - Standartized army strength computation. (30-Apr-2008 Martin GÃ¼hmann)
+// - Position strength can now be calculated independently from position. (13-Aug-2008 Martin GÃ¼hmann)
 // - Added LowestMoveBonusUnit to return movement required if cellunitlist contains
 //	 only movebonus units, otherwise regular move cost check is used. (15-Mar-2009 Maq)
 // - Changed occurances of UnitRecord::GetMaxHP to
@@ -742,28 +742,32 @@ bool CellUnitList::IsMovePointsEnough(const double cost) const
 
 bool CellUnitList::IsMovePointsEnough(const MapPoint &pos) const
 {
-
-    double cost;
-    if (GetMovementTypeAir()) {
-        cost = k_MOVE_AIR_COST;
-	// Prevent ships from diving under and using tunnels.
-	} else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand()) {
-		sint32 icost;
+	double cost;
+	if (GetMovementTypeAir())
+	{
+		// Prevent ships from diving under and using tunnels.
+		cost = k_MOVE_AIR_COST;
+	}
+	else if (g_theWorld->IsTunnel(pos) && !GetMovementTypeLand())
+	{
+		sint32 icost = std::numeric_limits<sint32>::max();
 		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost);
 		cost = icost;
-    } else {
-        cost = g_theWorld->GetMoveCost(pos);
-    }
+	}
+	else
+	{
+		cost = g_theWorld->GetMoveCost(pos);
+	}
 	sint32 value;
 	if (HighestMoveBonusUnit(value)) { cost = value; }
 
-    return IsMovePointsEnough(cost);
+	return IsMovePointsEnough(cost);
 }
 
 bool CellUnitList::HighestMoveBonusUnit(sint32 & value) const
 {
 	sint32 highvalue = 0;// highest movebonus unit bonus
-	sint32 tmp;
+	sint32 tmp = 0;
     for (sint32 i = 0; i < m_nElements; i++)
 	{
 		UnitRecord const * rec = m_array[i].GetDBRec();

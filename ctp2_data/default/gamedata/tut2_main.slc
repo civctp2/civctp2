@@ -623,7 +623,7 @@ int_t i;
 }
 
 HandleEvent(DisbandCity) 'TDisbandCity' pre {
-player[0] = city[0].owner;
+	player[0] = city[0].owner;
 	if(IsHumanPlayer(player[0]) && city[0].population <= 3) {
 		Message(g.player, 'TMDisbandCity');
 		DisableTrigger('TDisbandCity');
@@ -634,7 +634,7 @@ player[0] = city[0].owner;
 }
 
 HandleEvent(EnslaveSettler) 'TSettlerEnslaved' post {
-player[0] = army[0].owner;
+	player[0] = army[1].owner;
 	if(IsHumanPlayer(player[0])) {
 		Message(player[0], 'TMSettlerEnslaved');
 		DisableTrigger('TSettlerEnslaved');

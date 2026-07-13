@@ -1225,7 +1225,7 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 #else
 static void main_CivExceptionHandler(int sig)
 {
-	MBCHAR * s;
+	const MBCHAR * s;
 
 	switch (sig)
 	{
@@ -1578,7 +1578,7 @@ int WINAPI CivMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, PSTR szCmdLine,
 	char result[PATH_MAX];
 	ssize_t count = readlink("/proc/self/exe", result, PATH_MAX);
 
-	const char *path;
+	const char *path = nullptr;
 	if (count != -1) {
 		path = dirname(result);
 	}

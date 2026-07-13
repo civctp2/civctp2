@@ -761,9 +761,10 @@ void loadsavescreen_SaveGame(const MBCHAR *usePath, const MBCHAR *useName)
 
 		// Check for invalid characters in filename.
 		bool charschanged2=false;
-		for(i=0; i<strlen(saveInfo->fileName); i++)
+		size_t length = strlen(saveInfo->fileName);
+		for(i = 0; i < length; i++)
 		{
-			if(strchr(testchars,saveInfo->fileName[i]))
+			if(strchr(testchars, saveInfo->fileName[i]))
 			{
 				saveInfo->fileName[i]='#';
 				charschanged2=true;
@@ -772,6 +773,13 @@ void loadsavescreen_SaveGame(const MBCHAR *usePath, const MBCHAR *useName)
 		if(charschanged2 && !charschanged)
 		{
 			MessageBoxDialog::Information("str_ldl_InvalidCharsFixed", "InfoInvalidCharsFixed");
+		}
+
+		// Remove a final dot as this is a makes the file invalid
+		// Windows removes that automatically, Linux does not
+		if(length > 0 && strchr(".", saveInfo->fileName[length - 1]))
+		{
+			saveInfo->fileName[length - 1] = '\0';
 		}
 
 		// Full path, including the save file's filename
