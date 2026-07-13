@@ -4,7 +4,16 @@
 
 sint32 g_check_mem;
 
-#if !defined(_DEBUG_MEMORY) // Some error checking for the final version
+#define USING_ASAN false
+#if defined(__has_feature)
+#  if __has_feature(address_sanitizer)
+#    define USING_ASAN true
+#  endif
+#endif
+
+// Overriding new() and delete() breaks AddressSanitizer because
+// it tries to do the same thing.
+#if !USING_ASAN && !defined(_DEBUG_MEMORY) // Some error checking for the final version
 
 void* operator new(const size_t size)
 {
