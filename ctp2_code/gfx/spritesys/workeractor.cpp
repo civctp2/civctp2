@@ -36,7 +36,7 @@ WorkerActor::~WorkerActor()
 	delete m_curAction;
 
 	while (m_actionQueue.GetNumItems() > 0) {
-		Action * action;
+		Action * action = nullptr;
 		m_actionQueue.Dequeue(action);
 		delete action;
 	}

@@ -114,7 +114,7 @@ SlicFrame::SlicFrame(SlicSegment *segment, sint32 offset)
     m_currentLine  (-1),
     m_segment      (segment),
     m_stack        (new SlicStack),
-  //m_argListArray
+  //m_argListArray  // This doesn't seem to be used.
     m_argList      (NULL),
     m_resultObject (NULL),
     m_messageData  (NULL)

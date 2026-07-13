@@ -802,9 +802,11 @@ QuadTreeNode<T>::RemoveDegenerate(DynamicArray<T> &rebuildList)
 
 template <class T> void QuadTree<T>::Insert(T newObj)
 {
+#if defined(_DEBUG)	
 	MapPoint pos = GetPos(newObj);
 	Assert(pos.x >= 0 && pos.x < m_width);
 	Assert(pos.y >= 0 && pos.y < m_height);
+#endif
 
 	if(m_top) {
 		m_top->AddObject(newObj);

@@ -3312,7 +3312,7 @@ sint32 Diplomat::GetAcceptPriority(const PLAYER_INDEX foreignerId,
 
 	const DiplomacyRecord::ProposalElement * elem =
 	    m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
-	sint32 value;
+	sint32 value = std::numeric_limits<sint32>::min();
 	elem->GetAcceptPriority(value);
 	return value;
 }
@@ -3325,7 +3325,7 @@ sint32 Diplomat::GetRejectPriority(const PLAYER_INDEX foreignerId,
 	const DiplomacyRecord::ProposalElement * elem =
 	    m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
 
-	sint32 value;
+	sint32 value = std::numeric_limits<sint32>::min();
 	elem->GetRejectPriority(value);
 	return value;
 }
@@ -3338,7 +3338,7 @@ sint32 Diplomat::GetSenderRegardResult(const PLAYER_INDEX foreignerId,
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
 
-	sint32 value;
+	sint32 value = 0;
 	elem->GetSenderRegardResult(value);
 	return value;
 }
@@ -3354,7 +3354,7 @@ sint32 Diplomat::GetReceiverRegardResult(const PLAYER_INDEX foreignerId,
 	Assert(elem);
 	if(!elem) return 0;
 
-	sint32 value;
+	sint32 value = 0;
 	elem->GetReceiverRegardResult(value);
 	return value;
 }
@@ -3367,7 +3367,7 @@ sint32 Diplomat::GetViolationRegardCost(const PLAYER_INDEX foreignerId,
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
 
-	sint32 value;
+	sint32 value = 0;
 	elem->GetViolationRegardCost(value);
 	return value;
 }
@@ -3380,7 +3380,7 @@ sint32 Diplomat::GetViolationTrustCost(const PLAYER_INDEX foreignerId,
 	const DiplomacyRecord::ProposalElement * elem =
 		m_diplomacy[foreignerId].GetProposalElement(s_proposalTypeToElemIndex[proposalType]);
 
-	sint32 value;
+	sint32 value = 0;
 	elem->GetViolationTrustCost(value);
 	return value;
 }
@@ -4467,7 +4467,7 @@ bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & de
 	Player * player_ptr = g_player[m_playerId];
 	Assert(player_ptr);
 
-	sint32 max_piracy_events;
+	sint32 max_piracy_events = 3; // Original value in strategies.txt
 	GetCurrentStrategy().GetMaxPiracyEvents(max_piracy_events);
 
 	sint32 num_cities = player_ptr->m_all_cities->Num();
@@ -4503,7 +4503,7 @@ void Diplomat::ComputeTradeRoutePiracyRisk()
 
 	sint32 cur_round = player_ptr->GetCurRound();
 
-	sint32 piracy_memory_turns;
+	sint32 piracy_memory_turns = 3; // Original value in strategies.txt, even so diplomats remember twice as long
 	GetCurrentStrategy().GetPiracyMemoryTurns(piracy_memory_turns);
 
 	sint32 num_cities = player_ptr->m_all_cities->Num();

@@ -226,8 +226,9 @@ void CivArchive::TypeCheck(const uint8 archive_type_check)
 	}
 	else
 	{
-		uint8 val;
-		val = *m_pbInsert;
+#if defined(_DEBUG) || defined(USE_LOGGING)
+		uint8 val = *m_pbInsert;
+#endif
 		m_pbInsert++;
 
 		Assert(archive_type_check == val);

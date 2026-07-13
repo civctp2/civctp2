@@ -26,7 +26,7 @@
 //
 // - Memory leak repaired.
 // - Propagate feat accomplishments.
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
 // - Added HasFeat to check if a feat has been achieved by E 5-11-2006
 //
 //----------------------------------------------------------------------------
@@ -362,7 +362,7 @@ void FeatTracker::AddFeat(sint32 type, sint32 player, sint32 round)
 
 	AddFeatToEffectLists(theFeat);
 
-	const MBCHAR *slicMessage;
+	const MBCHAR *slicMessage = nullptr;
 	SlicObject *so;
 	if(rec->GetSlicMessage(slicMessage))
 	{
@@ -531,7 +531,8 @@ void FeatTracker::CheckBuildingFeat(Unit &city, sint32 building)
 						numCities++;
 				}
 
-				sint32 num, percent;
+				sint32 num = 0;
+				sint32 percent = 0;
 
 				if(bf->GetNum(num))
 				{
