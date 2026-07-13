@@ -105,7 +105,7 @@ STDEHANDLER(ThreatenedCity_MotivationEvent)
 
 	if (at_risk_value > total_value * 0.10)
 	{
-		sint32 priority;
+		sint32 priority = std::numeric_limits<sint32>::min();
 
 		diplomat.GetCurrentStrategy().GetFearCityDefense(priority);
 		motivation.priority = static_cast<sint16>(priority);
@@ -142,7 +142,7 @@ STDEHANDLER(DesireGold_MotivationEvent)
 
 	if ( rank < 75 || low_reserves || capitalist_personality)
 	{
-		sint32 priority;
+		sint32 priority = std::numeric_limits<sint32>::min();
 		diplomat.GetCurrentStrategy().GetDesireGold(priority);
 
 		Motivation motivation;
@@ -182,7 +182,7 @@ STDEHANDLER(DesireMakeFriend_MotivationEvent)
 
 	if ( (friendly_personality && friends == 0) || (((friend_power + our_power) * 1.5 ) < enemy_threat))
 	{
-		sint32 priority;
+		sint32 priority = std::numeric_limits<sint32>::min();
 
 		diplomat.GetCurrentStrategy().GetDesireMakeFriend(priority);
 		motivation.priority = (sint16) priority;
@@ -219,7 +219,7 @@ STDEHANDLER(StopPiracy_MotivationEvent)
 
 	if ( piracy_loss > income * 0.2)
 	{
-		sint32 priority;
+		sint32 priority = std::numeric_limits<sint32>::min();
 
 		diplomat.GetCurrentStrategy().GetFearPiracy(priority);
 		motivation.priority = (sint16) priority;
@@ -245,7 +245,7 @@ STDEHANDLER(EnlistFriends_MotivationEvent)
 		return GEV_HD_Continue;
 
 	Diplomat & diplomat = Diplomat::GetDiplomat(playerId);
-	sint32 priority;
+	sint32 priority = std::numeric_limits<sint32>::min();
 
 	sint32 friends = diplomat.GetFriendCount();
 	sint32 enemies = diplomat.GetEnemyCount();
@@ -296,7 +296,7 @@ STDEHANDLER(PressAdvantage_MotivationEvent)
 
 	if (!friendly_personality && ((friend_power + our_power) > (enemy_threat * ratio)))
 	{
-		sint32 priority;
+		sint32 priority = std::numeric_limits<sint32>::min();
 
 		diplomat.GetCurrentStrategy().GetDesireAttack(priority);
 		motivation.priority = (sint16) priority;
@@ -331,7 +331,7 @@ STDEHANDLER(FearRank_MotivationEvent)
 	sint32 enemies = diplomat.GetEnemyCount();
 	sint32 at_war_count = diplomat.AtWarCount();
 	sint32 rank = g_player[playerId]->GetRank(STRENGTH_CAT_KNOWLEDGE);
-	sint32 priority;
+	sint32 priority = std::numeric_limits<sint32>::min();
 	Motivation motivation;
 
 	if ( enemies > 0 || rank < 75  ||

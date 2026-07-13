@@ -389,7 +389,7 @@ sint32 Cell::GetFoodProduced() const
 				g_theTerrainImprovementDB->Get(m_objects->Access(i).m_id & k_ID_KEY_MASK);
 			const TerrainImprovementRecord::Effect *effect;
 			effect = terrainutil_GetTerrainEffect(impRec, m_terrain_type);
-			sint32 bonus;
+			sint32 bonus = 0;
 			if(effect && effect->GetBonusFood(bonus)) {
 				food += bonus;
 			}
@@ -1040,7 +1040,7 @@ sint32 Cell::GetBaseMoveCosts()
 	bool gotMovement = rec->GetEnvBase()->GetMovement(base);
 	Assert(gotMovement);
 
-	sint32 m;
+	sint32 m = 0;
 	if(HasCity() && rec->HasEnvCity() && rec->GetEnvCityPtr()->GetMovement(m)) {
 		base = std::min(base, m);
 	}

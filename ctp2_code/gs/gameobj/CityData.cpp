@@ -7595,8 +7595,8 @@ bool CityData::CanBuildBuilding(sint32 type) const
 					numCities++;
 			}
 
-			sint32 num;
-			sint32 percent;
+			sint32 num = 0;
+			sint32 percent = 0;
 			bool enoughNum     = false;
 			bool enoughPercent = false;
 
@@ -7780,7 +7780,7 @@ bool CityData::CanBuildBuilding(sint32 type) const
 	}
 
 	// added by E - some buildings can only be built once city reaches certain size
-	sint32 pop;
+	sint32 pop = 0;
 	if(rec->GetNeedsPopCountToBuild(pop))
 	{
 		if(PopCount() <= pop)
@@ -7927,7 +7927,8 @@ bool CityData::CanBuildWonder(sint32 type) const
 					numCities++;
 			}
 
-			sint32 num, percent;
+			sint32 num = 0;
+			sint32 percent = 0;
 
 			if(bf->GetNum(num))
 			{

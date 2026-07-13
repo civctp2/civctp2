@@ -315,7 +315,7 @@ STDEHANDLER(ExchangeMaps_NewProposalEvent) {
 	if (AgreementMatrix::s_agreements.HasAgreement(sender,receiver,PROPOSAL_TREATY_DECLARE_WAR) )
 		return GEV_HD_Continue;
 
-	sint32 want_map_turns;
+	sint32 want_map_turns = 25; // The setting in diplomacy.txt
 	sender_diplomat.GetCurrentDiplomacy(receiver).GetWantMapTurns(want_map_turns);
 
 	ai::Agreement found;

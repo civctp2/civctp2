@@ -222,21 +222,22 @@ GOAL_HARASS {
 
   Execute   ORDER_ATTACK
 
-  ThreatBonus             100
-  EnemyValueBonus        -500
-  AlliedValueBonus       1500
-  PowerBonus              500
-  DistanceToHomeBonus     -10
-  DistanceToEnemyBonus      0
-  InHomeTerritoryBonus   1000
-  NoOwnerTerritoryBonus     0
-  InEnemyTerritoryBonus     0
-  WoundedArmyBonus     -10000
-  NotVisibleBonus     -500000
-  ChokePointBonus          50
-  UnexploredBonus     -999999
-  ObsoleteArmyBonus       100
-  TreaspassingArmyBonus     0
+  ThreatBonus               100
+  EnemyValueBonus          -500
+  AlliedValueBonus         1500
+  PowerBonus                500
+  DistanceToHomeBonus       -10
+  DistanceToEnemyBonus        0
+  InHomeTerritoryBonus     1000
+  NoOwnerTerritoryBonus       0
+  InEnemyTerritoryBonus       0
+  WoundedArmyBonus       -10000
+  NotVisibleBonus       -500000
+  ChokePointBonus            50
+  UnexploredBonus       -999999
+  ObsoleteArmyBonus         100
+  TreaspassingArmyBonus       0
+# InVisionRangeBonus     200000 // This does not seem to be right, what else?
 
   ThreatenType:DestroyCity
   ThreatenBonus 5000

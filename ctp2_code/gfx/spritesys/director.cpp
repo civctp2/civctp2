@@ -107,6 +107,7 @@ extern bool g_doingFastRounds;
 #define k_ELAPSED_CEILING 100
 
 enum DQACTION_TYPE {
+	DQACTION_INVALID = -1,
 	DQACTION_MOVE,
 	DQACTION_MOVEPROJECTILE,
 	DQACTION_SPECEFFECT,
@@ -1393,9 +1394,11 @@ public:
 
 	virtual void Dump()
 	{
+#if defined(_DEBUG) || defined(USE_LOGGING)
 		DPRINTF(k_DBG_UI, ("Combat Flash\n"));
 		const MapPoint pos = m_activeActor->GetMapPos();
 		DPRINTF(k_DBG_UI, ("  flashPosition          :%d,%d\n", pos.x, pos.y));
+#endif
 	}
 };
 
@@ -1430,11 +1433,13 @@ public:
 
 	virtual void Dump()
 	{
+#if defined(_DEBUG) || defined(USE_LOGGING)
 		DPRINTF(k_DBG_UI, ("Special Effect\n"));
 		const MapPoint pos = m_activeActor->GetMapPos();
 		DPRINTF(k_DBG_UI, ("  position               :%d,%d\n", pos.x, pos.y));
 		DPRINTF(k_DBG_UI, ("  spriteID               :%d\n", spriteID));
 		DPRINTF(k_DBG_UI, ("  soundID                :%d\n", soundID));
+#endif
 	}
 protected:
 	sint32 spriteID;
@@ -2468,7 +2473,7 @@ void DirectorImpl::FinalizeAnimatingActions()
 
 void DirectorImpl::ExternalActionFinished(DEACTION_TYPE externalActionType)
 {
-	DQACTION_TYPE actionType;
+	DQACTION_TYPE actionType = DQACTION_INVALID;
 	switch(externalActionType) {
 		case DEA_BEGIN_SCHEDULER:
 			actionType = DQACTION_BEGIN_SCHEDULER;
