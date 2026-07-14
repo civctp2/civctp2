@@ -25,7 +25,12 @@
 // Modifications from the original Activision code:
 //
 // - Variable scope corrected
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin GÃ¼hmann)
+// - New()/Delete() used to find a free slot by scanning every block's
+//   used-bitmask from the start of the pool on every single allocation,
+//   which is O(number of blocks the pool has ever grown to) per call and
+//   never improves even once elements are freed, since blocks are never
+//   released back. Replaced with an O(1) intrusive free list.
 //
 //----------------------------------------------------------------------------
 
@@ -33,7 +38,6 @@
 #define __TECH_MEMORY_H__
 
 #define k_TECH_MEMORY_DEFAULT_BLOCKSIZE		20
-#define k_TECH_MEMORY_BITSPERDWORD			(sizeof(unsigned)<<3)
 
 template< class T >
 class tech_Memory
@@ -50,63 +54,32 @@ protected:
 	{
 		Block(size_t blockSize)
 		:
-			pNext      (0),
-			usedSize   (blockSize / k_TECH_MEMORY_BITSPERDWORD),
-			used       (0),
-			dataSize   (blockSize),
-			data       (0)
-		{
-			size_t const remainder = dataSize % k_TECH_MEMORY_BITSPERDWORD;
-			if (remainder)
-			{
-				usedSize++;
-			}
-
-			used = new unsigned[usedSize];
-			if (used)
-			{
-				memset( used, 0, usedSize * sizeof( unsigned ) );
-
-				if (remainder)
-				{
-					used[usedSize - 1] = ~(( 1 << remainder ) - 1);
-				}
-			}
-
-			data = new T[dataSize];
-		};
+			pNext (0),
+			data  (new T[blockSize])
+		{};
 
 		virtual ~Block()
 		{
-			if (used)
-			{
-				delete[] used;
-				used = 0;
-			}
-
-			if (data)
-			{
-				delete[] data;
-				data = 0;
-			}
+			delete[] data;
 		};
 
-		Block *     pNext;
-		size_t      usedSize;
-		unsigned *  used;
-		size_t      dataSize;
-		T *         data;
+		Block * pNext;
+		T *     data;
 	};
 
-	T *UseFreeElement( void );
-
-	void UnuseElement( T *t );
+	// A free slot's own storage holds the pointer to the next free slot,
+	// instead of a separate used/free bitmask. This is safe because a
+	// slot only ever sits on the free list between calls to Delete() and
+	// New(): New() always hands the slot back to a caller that fully
+	// repopulates its fields before use, exactly as callers already had
+	// to do when this pool tracked free slots via a bitmask instead.
+	static T *&NextFree( T *slot ) { return *reinterpret_cast<T **>(slot); }
 
 	size_t m_blockSize;
-	Block *m_pFirst;
-	Block *m_pLast;
+	Block * m_pFirst;
+	Block * m_pLast;
+	T *     m_pFreeList;
 };
-
 
 
 
@@ -116,8 +89,12 @@ tech_Memory< T >::tech_Memory( size_t blockSize )
 	:
 	m_blockSize( blockSize ? blockSize : k_TECH_MEMORY_DEFAULT_BLOCKSIZE ),
 	m_pFirst( 0 ),
-	m_pLast( 0 )
+	m_pLast( 0 ),
+	m_pFreeList( 0 )
 {
+	// The free list needs room to store a T* inside a free T slot.
+	static_assert(sizeof(T) >= sizeof(T *),
+	              "tech_Memory<T> requires sizeof(T) >= sizeof(T*)");
 }
 
 
@@ -132,98 +109,50 @@ tech_Memory< T >::~tech_Memory()
 	}
 
 	m_pFirst = m_pLast = 0;
+	m_pFreeList = 0;
 }
 
 
 template< class T >
 T *tech_Memory< T >::New( void )
 {
-	if (m_pLast)
+	if ( !m_pFreeList )
 	{
-		T * t = UseFreeElement();
+		Block *newBlock = new Block(m_blockSize);
 
-		if (t)
+		if ( m_pLast )
 		{
-			return t;
+			m_pLast->pNext = newBlock;
 		}
+		else
+		{
+			m_pFirst = newBlock;
+		}
+		m_pLast = newBlock;
 
-		m_pLast->pNext = new Block(m_blockSize);
-		m_pLast = m_pLast->pNext;
-	} else {
-		m_pLast = m_pFirst = new Block(m_blockSize);
+		// Chain every slot in the new block onto the free list.
+		for ( size_t i = 0; i < m_blockSize; i++ )
+		{
+			T *slot = &newBlock->data[i];
+			NextFree(slot) = m_pFreeList;
+			m_pFreeList = slot;
+		}
 	}
 
-	*(m_pLast->used) |= 1;
-	return m_pLast->data;
+	T *t = m_pFreeList;
+	m_pFreeList = NextFree(t);
+	return t;
 }
 
 
 template< class T >
 void tech_Memory< T >::Delete( T *t )
 {
-	UnuseElement( t );
-}
-
-
-template< class T >
-T *tech_Memory< T >::UseFreeElement( void )
-{
-
-	for ( Block *pBlock = m_pFirst; pBlock; pBlock = pBlock->pNext )
-	{
-		T *t = pBlock->data;
-		T *stopT = t + m_blockSize;
-
-		unsigned *pUsed = pBlock->used;
-		unsigned *pStop = pUsed + pBlock->usedSize;
-		for ( ; pUsed != pStop; pUsed++ )
-		{
-
-			unsigned freeSlots = ~(*pUsed);
-			if ( freeSlots )
-			{
-				unsigned freeSlot = 1;
-				while ( !(freeSlots & 1) )
-				{
-					if ( ++t == stopT ) return 0;
-					freeSlot <<= 1;
-					freeSlots >>= 1;
-				}
-
-				*pUsed |= freeSlot;
-				return t;
-			}
-
-			t += k_TECH_MEMORY_BITSPERDWORD;
-		}
-	}
-
-	return 0;
-}
-
-
-template< class T >
-void tech_Memory< T >::UnuseElement( T *t )
-{
-
 	if ( !t ) return;
 
-	size_t offset = 0;
-	Block *			pBlock = m_pFirst;
-	for ( ; pBlock ; pBlock = pBlock->pNext )
-	{
-		offset = t - pBlock->data;
-		if ( offset < m_blockSize )
-			break;
-	}
-
-	if ( !pBlock ) return;
-
-	pBlock->used[ offset / k_TECH_MEMORY_BITSPERDWORD ] &=
-		~( 1 << ( offset % k_TECH_MEMORY_BITSPERDWORD ) );
+	NextFree(t) = m_pFreeList;
+	m_pFreeList = t;
 }
-
-
 
 
 #endif
