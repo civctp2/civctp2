@@ -1085,9 +1085,10 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 
 	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
 	{
-		Diplomat::GetDiplomat(player).InitForeigner(newPlayerId);
 		if (g_player[player])
 		{
+			Diplomat::GetDiplomat(player).InitForeigner(newPlayerId);
+
 			// Reset conact made as this might not have been
 			// handled in RemovePlayer from save games of
 			// previous versions
