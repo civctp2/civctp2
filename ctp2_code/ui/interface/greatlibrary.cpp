@@ -552,8 +552,7 @@ void GreatLibrary::SortByAgeCallback(aui_Control * control, uint32 action, uint3
 	ctp2_Button * sortByAgeButton = static_cast<ctp2_Button*>(control);
 	sortByAgeButton->SetToggleState(!sortByAgeButton->GetToggleState());
 
-	GreatLibrary * greatLibrary = static_cast<GreatLibrary*>(cookie.m_voidPtr);
-	greatLibrary->UpdateList(greatLibrary->m_listDatabase);
+	g_greatLibrary->UpdateList(g_greatLibrary->m_listDatabase);
 }
 
 TechListItem::TechListItem(AUI_ERRCODE * retval, sint32 index, DATABASE database, const MBCHAR * ldlBlock)
