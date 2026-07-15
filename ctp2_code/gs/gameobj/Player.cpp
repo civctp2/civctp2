@@ -2267,6 +2267,8 @@ void Player::BeginTurn()
 
 		m_gold->ClearStats();
 
+		m_vision->GarbageCollectUnseen();
+
 		BeginTurnPollution();
 
 		//BeginTurnAllCities();  //2-27-2007  the intro says this method was removed
