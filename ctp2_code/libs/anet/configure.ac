@@ -36,7 +36,6 @@ AC_OUTPUT([
    demo/GNUmakefile
    demo/gtest/GNUmakefile
    src/GNUmakefile
-   src/3rdparty/GNUmakefile
    src/linux/GNUmakefile
    src/linux/dp/GNUmakefile
    src/test/GNUmakefile
