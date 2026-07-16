@@ -99,7 +99,6 @@ CANT_ATTACK_TEAMMATES			"{player[0].leader_name} is your teammate, you cannot at
 ## Useful diplomacy messages that should be reimplemented ##
 CEASE_FIRE_BROKEN				"Niehonorowi {player[0].civ_name_plural} zdradzili nasz Traktat Pokojowy, atakujac nas bez prowokacji."
 LEAVE_OUR_LANDS_BROKEN			"{player[0].civ_name_plural} zdradzili pakt o nie naruszaniu terytorium."
-LEAVE_OUR_LANDS_BROKEN_BY_YOU	"Zdradzile(a)s twoja obietnice o wycofaniu twoich oddzialow z terytorium {player[0].civ_name_singular}."
 REDUCE_POLLUTION_BROKEN			"{player[0].civ_name_plural} zdradzili umowe o zmniejszeniu zanieczyszczen."
 REDUCE_POLLUTION_BROKEN_BY_YOU	"Zdradzile(a)s twoja umowe o zmniejszeniu zanieczyszczen z [player.1.civ_name_plural]."
 STOP_TRADE_WITH_BROKEN			"{player[0].civ_name_plural} zdradzili swoja umowe o zaprzestaniu handlu z {player[1].civ_name_plural}."
