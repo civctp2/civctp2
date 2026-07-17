@@ -25,7 +25,7 @@
 // Modifications from the original Activision code:
 //
 // - SnipEndUntilCanEnter is now base on the army's ability to enter cell
-//   and not based on its movement type. (8-Feb-2008 Martin Gühmann)
+//   and not based on its movement type. (8-Feb-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -34,6 +34,7 @@
 #include "dynarr.h"
 #include "Path.h"
 
+#include "Astar.h"
 #include "MapPoint.h"
 #include "Cell.h"
 #include "World.h"
@@ -84,8 +85,15 @@ void Path::FlattenAstarList(AstarPoint *best)
 	Assert(best);
 	AstarPoint *    ptr = best;
 
+	// A valid path cannot revisit a tile, so it cannot be longer than the
+	// map has tiles; more than that means the parent chain is cyclic.
+	sint32 const max_path_length = Astar_MaxSearchNodes();
+
 	sint32 n;
-	for(n = 0; ptr->m_parent; n++, ptr = ptr->m_parent) { Assert(n >= 0); }; // Check for endless loop
+	for(n = 0; ptr->m_parent; n++, ptr = ptr->m_parent)
+	{
+		Assert(n < max_path_length);
+	}
 
 	m_current = m_start = ptr->m_pos;
 	m_next = 0;

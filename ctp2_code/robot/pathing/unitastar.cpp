@@ -157,8 +157,9 @@ float UnitAstar::ComputeValidMoveCost(const MapPoint & pos, const Cell & cell) c
 			(m_move_intersection & k_Unit_MovementType_ShallowWater_Bit));
 	if (is_tunnel_and_boat)
 	{
-		sint32 icost_without_tunnel;
-		(void) g_theWorld->GetTerrain(pos)->GetEnvBase()->GetMovement(icost_without_tunnel);
+		// The cost the boat would pay for this terrain if it ignored the
+		// tunnel improvement, i.e. the terrain's base movement cost.
+		sint32 const icost_without_tunnel = g_theWorld->GetCell(pos)->GetBaseMoveCosts();
 		return std::min(m_army_minmax_move, static_cast<float>(icost_without_tunnel));
 	}
 
@@ -876,7 +877,7 @@ bool UnitAstar::FindBrokenPath(const MapPoint &start, const MapPoint &dest,
     else
     {
         sint32 nodes_opened = 0;
-        sint32 cutoff       = 2000000000;
+        sint32 cutoff       = Astar_MaxSearchNodes();
 
         if (Astar::FindPath(start, no_enter_pos, good_path, total_cost, false, cutoff, nodes_opened))
         {
@@ -1112,7 +1113,7 @@ bool UnitAstar::FindPath(Army &army,  MapPoint const & start,
 
 	InitArmy (army, nUnits, move_intersection, move_union, m_army_minmax_move);
 
-	sint32 cutoff       = 2000000000;
+	sint32 cutoff       = Astar_MaxSearchNodes();
 	sint32 nodes_opened = 0;
 	bool result = FindPath(army, nUnits, move_intersection, move_union,
 	                       start, owner, dest, good_path, is_broken_path, bad_path,

@@ -79,7 +79,7 @@ sint32 TradeAstar::GetMaxDir(MapPoint &pos) const
 bool TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const MapPoint &dest,
                       Path &a_path, float &total_cost, const bool isunit)
 {
-	sint32 cutoff = 2000000000;
+	sint32 cutoff = Astar_MaxSearchNodes();
 	sint32 nodes_opened=0;
 	m_owner = owner;
 

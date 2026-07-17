@@ -227,7 +227,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
                             float & total_cost,
                             sint32 additionalUnits)
 {
-	sint32 cutoff = 20000;
+	sint32 cutoff = Astar_MaxSearchNodes();
 
 	sint32 nodes_opened = 0;
 	bool is_broken_path = false;
