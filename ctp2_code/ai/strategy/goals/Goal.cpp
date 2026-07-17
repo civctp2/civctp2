@@ -4213,10 +4213,10 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 		// Check if is single squad
 		// Return true if we are a transporter and we need transporters
 		// SUB_TASK_TRANSPORT_TO_GOAL
-		uint32 move_intersection =
+		uint32 move_union =
 		        the_army->Get_Army()->GetMovementType() | the_army->Get_Army()->GetCargoMovementType();
 
-		found = the_army->FindPathToBoard(move_intersection, goal_pos, false, found_path);
+		found = the_army->FindPathToBoard(move_union, goal_pos, false, found_path);
 
 		Assert(found); // Problem
 
