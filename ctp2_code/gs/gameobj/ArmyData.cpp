@@ -2487,6 +2487,8 @@ ORDER_RESULT ArmyData::Sue(const MapPoint &point)
 		return ORDER_RESULT_ILLEGAL;
 	}
 
+	AddSpecialActionUsed(m_array[uindex]);
+
 	g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_Lawsuit,
 	                       GEA_Army, m_id,
 	                       GEA_Unit, m_array[uindex].m_id,
@@ -3585,6 +3587,8 @@ ORDER_RESULT ArmyData::UndergroundRailway(const MapPoint &point)
 
 	if(g_rand->Next(100) < sint32(success * 100.0))
 	{
+		AddSpecialActionUsed(m_array[uindex]);
+
 		g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_UndergroundRailwayUnit,
 		                       GEA_Unit, m_array[uindex].m_id,
 		                       GEA_City, c,
@@ -9826,6 +9830,11 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		for(sint32 i = m_nElements - 1; i >= 0; i--)
 		{
 			Assert(!m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW));
+			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW))
+			{
+				DPRINTF(k_DBG_SPECIAL_ACTION, ("DIAG: clearing JUST_NOW (illegal branch, order %d) on unit id 0x%lx\n",
+				                          (sint32) order->m_order, m_array[i].m_id));
+			}
 			m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 		}
 		return true;
@@ -9930,6 +9939,8 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		{
 			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW))
 			{
+				DPRINTF(k_DBG_SPECIAL_ACTION, ("DIAG: clearing JUST_NOW (deduct branch, order %d) on unit id 0x%lx\n",
+				                          (sint32) order->m_order, m_array[i].m_id));
 				m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 				if(order_rec)
 				{
@@ -9946,6 +9957,9 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 void ArmyData::AddSpecialActionUsed(Unit &who)
 {
+	DPRINTF(k_DBG_SPECIAL_ACTION, ("DIAG: AddSpecialActionUsed on unit id 0x%lx, type %s, owner %d\n%s\n",
+	                          who.m_id, g_theStringDB->GetIdStr(g_theUnitDB->GetName(who.GetType())),
+	                          who.GetOwner(), c3debug_StackTrace()));
 	who.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);
 	who.SetFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 }
