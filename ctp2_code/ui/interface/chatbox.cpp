@@ -318,14 +318,26 @@ BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 
 		for (sint32 i = 0; i < n && !gDone; i++)
 		{
+			DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd iteration %d/%d before StartNextPlayer, curPlayer=%d, visPlayer=%d\n",
+			                          i, n, g_selected_item->GetCurPlayer(), g_selected_item->GetVisiblePlayer()));
+
 			NewTurnCount::StartNextPlayer(false);
+
+			DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd iteration %d/%d after StartNextPlayer, curPlayer=%d, visPlayer=%d\n",
+			                          i, n, g_selected_item->GetCurPlayer(), g_selected_item->GetVisiblePlayer()));
 
 			g_director->NextPlayer();
 			do
 			{
 				g_controlPanel->Idle();
 				if (g_civApp)
+				{
+					DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd calling g_civApp->Process(), curPlayer=%d\n",
+					                          g_selected_item->GetCurPlayer()));
 					g_civApp->Process();
+					DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd returned from g_civApp->Process(), curPlayer=%d\n",
+					                          g_selected_item->GetCurPlayer()));
+				}
 
 #if defined(__AUI_USE_SDL__)
 				SDL_Event event;
@@ -367,7 +379,14 @@ BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 			while
 			     (
 			          g_selected_item != NULL
-			      &&  g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
+			      &&  (   g_selected_item->GetCurPlayer() != g_selected_item->GetVisiblePlayer()
+			           // The cursor reaching the visible player doesn't mean the event
+			           // queue for that transition (and any earlier one) has actually
+			           // drained yet - keep going until it has, so the next iteration's
+			           // StartNextPlayer() doesn't advance the cursor out from under
+			           // still-queued turn-begin events for the player just reached.
+			           ||  g_gevManager->EventsPending()
+			          )
 			      && !gDone
 			     );
 		}
