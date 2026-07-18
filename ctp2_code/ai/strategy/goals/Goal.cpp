@@ -4218,6 +4218,20 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 
 		found = the_army->FindPathToBoard(move_union, goal_pos, false, found_path);
 
+		if (!found)
+		{
+			const Unit & first_unit = the_army->Get_Army()->Get(0);
+			DPRINTF(k_DBG_SCHEDULER,
+			        ("GOAL %x: GotoGoalTaskSolution: FindPathToBoard failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d) - %s\n",
+			         this,
+			         the_army->Get_Army().m_id,
+			         first_unit.GetType(),
+			         g_theUnitDB->GetNameStr(first_unit.GetType()),
+			         the_army->Get_Pos().x, the_army->Get_Pos().y,
+			         goal_pos.x, goal_pos.y,
+			         GetTargetName()));
+		}
+
 		Assert(found); // Problem
 
 		if (found)
