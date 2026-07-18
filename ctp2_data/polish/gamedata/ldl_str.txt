@@ -2837,6 +2837,7 @@ str_ldl_CityWinUnitsTab "Jednostki"
 
 # autosave string
 AUTOSAVE_NAME				"AUTOZAPIS"
+AUTOSAVE_NAME_PREVIOUS				"AUTOZAPIS2"
 
 TRADE_ROUTE_RESET 			"Trade route reset!"
 

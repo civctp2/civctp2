@@ -2837,6 +2837,7 @@ str_ldl_CityWinUnitsTab "部队"
 
 # autosave string
 AUTOSAVE_NAME				"自动记录"
+AUTOSAVE_NAME_PREVIOUS				"自动记录2"
 
 TRADE_ROUTE_RESET 			"重设贸易路线！"
 

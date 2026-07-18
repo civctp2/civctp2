@@ -2994,6 +2994,7 @@ str_ldl_CityWinUnitsTab "ユニット"
 
 # 自動セーブのストリング
 AUTOSAVE_NAME				"自動セーブ"
+AUTOSAVE_NAME_PREVIOUS				"自動セーブ2"
 
 TRADE_ROUTE_RESET 			"貿易ルートの変更！"
 

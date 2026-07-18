@@ -2837,6 +2837,7 @@ str_ldl_CityWinUnitsTab				"Unità"
 
 # autosave string
 AUTOSAVE_NAME					"AUTOSAVE"
+AUTOSAVE_NAME_PREVIOUS					"AUTOSAVE2"
 
 TRADE_ROUTE_RESET				"Rotta commerciale ripristinata!"
 

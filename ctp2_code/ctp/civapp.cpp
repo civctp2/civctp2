@@ -2785,6 +2785,39 @@ void CivApp::AutoSave(sint32 player, bool isQuickSave)
 		strcat(fullpath, FILE_SEP);
 		strcat(fullpath, filename);
 
+		if (!isQuickSave && c3files_PathIsValid(fullpath))
+		{
+			// Keep the previous turn's autosave around as a debugging aid.
+			// Not needed for crashes (the previous autosave is still there
+			// at that point), but for issues that get merely logged (e.g.
+			// an Assert) while the turn completes normally: by the time
+			// they're noticed, the autosave has already moved past the
+			// state where they happened. Having the turn before still
+			// available lets that state be reproduced.
+			MBCHAR const *  previousAutosaveName =
+			    g_theStringDB->GetNameStr("AUTOSAVE_NAME_PREVIOUS");
+
+			MBCHAR			previousAutosaveNameBuf[_MAX_PATH];
+			if (!previousAutosaveName)
+			{
+				// GetNameStr(char const*) returns NULL, not a placeholder,
+				// when the key is missing (e.g. an incomplete mod locale) -
+				// fall back to appending "2" to the regular autosave name
+				// so the previous-turn backup still happens.
+				sprintf(previousAutosaveNameBuf, "%s2", autosaveName);
+				previousAutosaveName = previousAutosaveNameBuf;
+			}
+
+			MBCHAR			previousFilename[_MAX_PATH];
+			sprintf(previousFilename, "%s-%s", previousAutosaveName, leaderName);
+
+			MBCHAR			previousFullpath[_MAX_PATH];
+			sprintf(previousFullpath, "%s%s%s%s%s", path, FILE_SEP, leaderName, FILE_SEP, previousFilename);
+
+			remove(previousFullpath);
+			rename(fullpath, previousFullpath);
+		}
+
 		g_isScenario = FALSE;
 		GameFile().Save(fullpath, NULL);
 	}
