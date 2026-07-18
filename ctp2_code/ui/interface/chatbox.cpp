@@ -386,6 +386,13 @@ BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 			           // StartNextPlayer() doesn't advance the cursor out from under
 			           // still-queued turn-begin events for the player just reached.
 			           ||  g_gevManager->EventsPending()
+			           // DirectorImpl's own action queue (e.g. a queued
+			           // DQActionBeginScheduler) is a separate queue from
+			           // GameEventManager's, and executing an action from it can
+			           // itself queue further GEV events (e.g. GEV_BeginScheduler) -
+			           // wait for it too, and let repeated Process() calls drain
+			           // whatever that refills in either queue.
+			           ||  !g_director->CaughtUp()
 			          )
 			      && !gDone
 			     );
