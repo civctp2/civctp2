@@ -9832,7 +9832,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 			Assert(!m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW));
 			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW))
 			{
-				DPRINTF(k_DBG_SPECIAL_ACTION, ("DIAG: clearing JUST_NOW (illegal branch, order %d) on unit id 0x%lx\n",
+				DPRINTF(k_DBG_SPECIAL_ACTION, ("SPECIAL_ACTION: clearing JUST_NOW (illegal branch, order %d) on unit id 0x%lx\n",
 				                          (sint32) order->m_order, m_array[i].m_id));
 			}
 			m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
@@ -9939,7 +9939,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 		{
 			if(m_array[i].Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW))
 			{
-				DPRINTF(k_DBG_SPECIAL_ACTION, ("DIAG: clearing JUST_NOW (deduct branch, order %d) on unit id 0x%lx\n",
+				DPRINTF(k_DBG_SPECIAL_ACTION, ("SPECIAL_ACTION: clearing JUST_NOW (deduct branch, order %d) on unit id 0x%lx\n",
 				                          (sint32) order->m_order, m_array[i].m_id));
 				m_array[i].ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 				if(order_rec)
@@ -9957,7 +9957,7 @@ bool ArmyData::ExecuteSpecialOrder(Order *order, bool &keepGoing)
 
 void ArmyData::AddSpecialActionUsed(Unit &who)
 {
-	DPRINTF(k_DBG_SPECIAL_ACTION, ("DIAG: AddSpecialActionUsed on unit id 0x%lx, type %s, owner %d\n%s\n",
+	DPRINTF(k_DBG_SPECIAL_ACTION, ("SPECIAL_ACTION: AddSpecialActionUsed on unit id 0x%lx, type %s, owner %d\n%s\n",
 	                          who.m_id, g_theStringDB->GetIdStr(g_theUnitDB->GetName(who.GetType())),
 	                          who.GetOwner(), c3debug_StackTrace()));
 	who.SetFlag(k_UDF_USED_SPECIAL_ACTION_THIS_TURN);

@@ -256,7 +256,7 @@ void NewTurnCount::ChooseNextActivePlayer()
 		count++;
 	} while( g_player[g_selected_item->GetCurPlayer()] == NULL );
 
-	DPRINTF(k_DBG_SCHEDULER, ("DIAG: ChooseNextActivePlayer: %d -> %d\n",
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: ChooseNextActivePlayer: %d -> %d\n",
 	                          oldPlayer, g_selected_item->GetCurPlayer()));
 
 	g_director->FlushPendingBeginScheduler();

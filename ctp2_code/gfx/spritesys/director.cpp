@@ -3087,7 +3087,7 @@ void DirectorImpl::AddBeginScheduler(sint32 player)
 {
 	if (player != g_selected_item->GetCurPlayer())
 	{
-		DPRINTF(k_DBG_SCHEDULER, ("DIAG: AddBeginScheduler(%d) deferred, curPlayer=%d\n",
+		DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: AddBeginScheduler(%d) deferred, curPlayer=%d\n",
 		                          player, g_selected_item->GetCurPlayer()));
 
 		// A diplomacy negotiation (or other deferred event) can conclude
@@ -3113,7 +3113,7 @@ void DirectorImpl::FlushPendingBeginScheduler()
 	sint32 const player = g_selected_item->GetCurPlayer();
 	if (player >= 0 && player < k_MAX_PLAYERS && m_pendingBeginScheduler[player])
 	{
-		DPRINTF(k_DBG_SCHEDULER, ("DIAG: FlushPendingBeginScheduler firing deferred AddBeginScheduler(%d)\n", player));
+		DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: FlushPendingBeginScheduler firing deferred AddBeginScheduler(%d)\n", player));
 		m_pendingBeginScheduler[player] = false;
 		AddBeginScheduler(player);
 	}

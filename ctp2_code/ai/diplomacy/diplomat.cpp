@@ -2873,7 +2873,7 @@ void Diplomat::ContinueDiplomacy(const PLAYER_INDEX & foreignerId) {
 			if(!g_network.IsActive() ||
 			   (g_network.IsHost() && g_network.IsLocalPlayer(m_playerId)))
 			{
-				DPRINTF(k_DBG_SCHEDULER, ("DIAG: ContinueDiplomacy(%d) with foreigner %d concluding, curPlayer=%d\n",
+				DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: ContinueDiplomacy(%d) with foreigner %d concluding, curPlayer=%d\n",
 				                          m_playerId, foreignerId, g_selected_item->GetCurPlayer()));
 				g_director->AddBeginScheduler(m_playerId);
 			}

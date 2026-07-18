@@ -531,7 +531,7 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 
 	sint32 round = g_player[playerId]->GetCurRound();
 
-	DPRINTF(k_DBG_SCHEDULER, ("DIAG: CtpAi_BeginSchedulerEvent(%d), curPlayer=%d\n",
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: CtpAi_BeginSchedulerEvent(%d), curPlayer=%d\n",
 	                          playerId, g_selected_item->GetCurPlayer()));
 
 #ifdef _DEBUG
@@ -1107,7 +1107,7 @@ void CtpAi::BeginMapAnalysis(const PLAYER_INDEX player)
 	if(s_maxPlayers <= 0)
 		return;
 
-	DPRINTF(k_DBG_SCHEDULER, ("DIAG: BeginMapAnalysis(%d), curPlayer=%d\n",
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: BeginMapAnalysis(%d), curPlayer=%d\n",
 	                          player, g_selected_item->GetCurPlayer()));
 
 	Assert(player < s_maxPlayers);
@@ -1134,7 +1134,7 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 	if(s_maxPlayers <= 0)
 		return;
 
-	DPRINTF(k_DBG_SCHEDULER, ("DIAG: BeginTurn(%d), curPlayer=%d\n",
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: BeginTurn(%d), curPlayer=%d\n",
 	                          player, g_selected_item->GetCurPlayer()));
 
 	Assert(player < s_maxPlayers);
