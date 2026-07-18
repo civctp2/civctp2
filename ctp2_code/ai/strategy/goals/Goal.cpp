@@ -4220,15 +4220,27 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 		if (!found)
 		{
 			const Unit & first_unit = the_army->Get_Army()->Get(0);
+			// Same "is land" definition HasAdjacentFreeLand uses.
+			bool const targetIsLand =
+			    g_theWorld->IsLand(goal_pos) || g_theWorld->IsMountain(goal_pos);
+			bool const targetIsNextToWater =
+			    g_theWorld->IsNextToWater(goal_pos.x, goal_pos.y);
+			bool const targetHasAdjacentFreeLand =
+			    g_theWorld->HasAdjacentFreeLand(goal_pos, m_playerId);
 			DPRINTF(k_DBG_SCHEDULER,
-			        ("GOAL %x: GotoGoalTaskSolution: FindPathToBoard failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d) - %s\n",
+			        ("GOAL %x (%s): GotoGoalTaskSolution: FindPathToBoard failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d) - %s, %d units there, %s, %s, %s\n",
 			         this,
+			         g_theGoalDB->Get(m_goal_type)->GetNameText(),
 			         the_army->Get_Army().m_id,
 			         first_unit.GetType(),
 			         g_theUnitDB->GetNameStr(first_unit.GetType()),
 			         the_army->Get_Pos().x, the_army->Get_Pos().y,
 			         goal_pos.x, goal_pos.y,
-			         GetTargetName()));
+			         GetTargetName(),
+			         g_theWorld->GetCell(goal_pos)->GetNumUnits(),
+			         targetIsLand ? "land" : "not land",
+			         targetIsNextToWater ? "next to water" : "not next to water",
+			         targetHasAdjacentFreeLand ? "has adjacent free land" : "has no adjacent free land"));
 		}
 
 		Assert(found); // Problem
