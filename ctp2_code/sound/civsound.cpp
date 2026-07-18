@@ -36,8 +36,6 @@
 //
 //----------------------------------------------------------------------------
 
-#include <strings.h>
-
 #include "c3.h"
 
 #include "civsound.h"
@@ -78,10 +76,13 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
         return;
     }
 
-	// "NULL.WAV" contains no audio data, and with this file SDL 2.x
-	// returns a pointer that it has already freed, which it later
-	// tries to free again in Mix_FreeChunk.
-	if (strcasecmp(fname, "NULL.WAV") == 0) {
+	// "NULL.WAV" contains no audio data, and for this file SDL 2.x
+	// returns a pointer that it has already freed. It later tries to
+	// free it again in Mix_FreeChunk.
+	// The file is located inside an archive, and archive look-up is
+	// case-insensitive, however "NULL.WAV" is what appears in the
+	// sound configuration files, so that is what we check here.
+	if (strcmp(fname, "NULL.WAV") == 0) {
 		return;
 	}
 
