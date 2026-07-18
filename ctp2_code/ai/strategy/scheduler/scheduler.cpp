@@ -663,7 +663,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 				("[%d] Starting to match resources to %s: %x (x=%d,y=%d), match %d, %s\n",
-					count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, oldMatchValue, (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")));
+					count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, oldMatchValue, Goal::GetTargetName(pos)));
 		count++;
 #endif
 
@@ -2287,7 +2287,7 @@ void Scheduler::Assign_Garrison()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 			("[%d] Starting to match garrison resources with %s: %x (x=%d,y=%d), match %d, %s\n",
-				count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, goal_ptr->Get_Matching_Value(), (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")));
+				count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, goal_ptr->Get_Matching_Value(), Goal::GetTargetName(pos)));
 		count++;
 #endif
 		if (goal_ptr->Get_Matches_Num() > 0)

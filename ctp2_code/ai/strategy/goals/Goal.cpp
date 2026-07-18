@@ -479,9 +479,8 @@ const Squad_Strength Goal::Get_Strength_Needed() const // Rename to missing stre
 	return needed_strength;
 }
 
-const char* Goal::GetTargetName() const
+const char* Goal::GetTargetName(const MapPoint & pos)
 {
-	MapPoint pos = Get_Target_Pos();
 	return g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : (pos.IsValid() ? "field" : "invalid");
 }
 
@@ -2194,7 +2193,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	tieBreaker,
 	g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0).GetType()),
 	agent_ptr->Get_Army()->GetName(),
-	(g_theWorld->HasCity(curr_pos) ? g_theWorld->GetCity(curr_pos).GetName() : "field"),
+	Goal::GetTargetName(curr_pos),
 	GetTargetName()
 	));
 #endif //_DEBUG

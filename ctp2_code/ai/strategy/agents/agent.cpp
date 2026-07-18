@@ -275,7 +275,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 	            g_theUnitDB->GetNameStr(m_army->Get(0).GetType()),
 	            m_army->Num(),
 	            m_army->GetCargoNum(),
-	            (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")
+	            Goal::GetTargetName(pos)
 	           )
 	          );
 
@@ -678,7 +678,7 @@ void Agent::Group_With( Agent_ptr second_army )
 
 	MapPoint dest_pos = m_goal->Get_Target_Pos();
 
-	sprintf(myString, "Grouping at (%d,%d) to %s %s (%d,%d)", pos.x, pos.y, goalString, (g_theWorld->HasCity(m_goal->Get_Target_Pos()) ? g_theWorld->GetCity(m_goal->Get_Target_Pos()).GetName() : "field"), dest_pos.x, dest_pos.y);
+	sprintf(myString, "Grouping at (%d,%d) to %s %s (%d,%d)", pos.x, pos.y, goalString, m_goal->GetTargetName(), dest_pos.x, dest_pos.y);
 	g_graphicsOptions->AddTextToArmy(m_army, myString, 220, m_goal->Get_Goal_Type());
 
 	delete[] goalString;
@@ -916,7 +916,7 @@ void Agent::WaitHere(const MapPoint & goal_pos)
 		MapPoint pos;
 		m_army->GetPos(pos);
 		MBCHAR * myString = new MBCHAR[255];
-		sprintf(myString, "Waiting GROUP @ (%d,%d) to %s GO (%d,%d)", pos.x, pos.y, (g_theWorld->HasCity(Get_Target_Pos()) ? g_theWorld->GetCity(Get_Target_Pos()).GetName() : "field"), goal_pos.x, goal_pos.y);
+		sprintf(myString, "Waiting GROUP @ (%d,%d) to %s GO (%d,%d)", pos.x, pos.y, Goal::GetTargetName(Get_Target_Pos()), goal_pos.x, goal_pos.y);
 		g_graphicsOptions->AddTextToArmy(m_army, myString, 220, Get_Goal_Type());
 		delete[] myString;
 	}
