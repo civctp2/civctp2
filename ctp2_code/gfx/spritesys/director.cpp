@@ -700,6 +700,7 @@ public:
 	virtual void AddInvokeThroneRoom();
 	virtual void AddInvokeResearchAdvance(const MBCHAR *text);
 	virtual void AddBeginScheduler(sint32 player);
+	virtual void FlushPendingBeginScheduler();
 
 	// Animations
 	virtual void AddTradeRouteAnimation(const TradeRoute &tradeRoute);
@@ -759,6 +760,12 @@ private:
 
 	sint32                            m_lastPlayer;
 	sint32                            m_lastRound;
+
+	// Set for a player when AddBeginScheduler(player) is called while
+	// player isn't the currently active one (e.g. a diplomacy negotiation
+	// concludes for them during a different player's turn). Consumed by
+	// FlushPendingBeginScheduler() once that player's turn becomes current.
+	bool                              m_pendingBeginScheduler[k_MAX_PLAYERS];
 };
 
 Director* Director::CreateDirector() {
@@ -2247,6 +2254,7 @@ DirectorImpl::DirectorImpl()
 		m_lastRound          (-1)
 {
 	std::fill(m_timeLog, m_timeLog + k_TIME_LOG_SIZE, 0);
+	std::fill(m_pendingBeginScheduler, m_pendingBeginScheduler + k_MAX_PLAYERS, false);
 
 	delete m_instance;
 	m_instance = this;
@@ -3077,8 +3085,20 @@ void DirectorImpl::AddInvokeResearchAdvance(const MBCHAR *message)
 
 void DirectorImpl::AddBeginScheduler(sint32 player)
 {
-	Assert(player == g_selected_item->GetCurPlayer());
-	if (player != g_selected_item->GetCurPlayer()) {
+	if (player != g_selected_item->GetCurPlayer())
+	{
+		DPRINTF(k_DBG_SCHEDULER, ("DIAG: AddBeginScheduler(%d) deferred, curPlayer=%d\n",
+		                          player, g_selected_item->GetCurPlayer()));
+
+		// A diplomacy negotiation (or other deferred event) can conclude
+		// for a player after the currently active player has already
+		// moved on. Defer the request instead of dropping it - it fires
+		// once FlushPendingBeginScheduler() sees this player become the
+		// active one.
+		if (player >= 0 && player < k_MAX_PLAYERS)
+		{
+			m_pendingBeginScheduler[player] = true;
+		}
 		return;
 	}
 
@@ -3086,6 +3106,17 @@ void DirectorImpl::AddBeginScheduler(sint32 player)
 
 	DQActionBeginScheduler *action = new DQActionBeginScheduler(player);
 	m_actionQueue->AddTail(action);
+}
+
+void DirectorImpl::FlushPendingBeginScheduler()
+{
+	sint32 const player = g_selected_item->GetCurPlayer();
+	if (player >= 0 && player < k_MAX_PLAYERS && m_pendingBeginScheduler[player])
+	{
+		DPRINTF(k_DBG_SCHEDULER, ("DIAG: FlushPendingBeginScheduler firing deferred AddBeginScheduler(%d)\n", player));
+		m_pendingBeginScheduler[player] = false;
+		AddBeginScheduler(player);
+	}
 }
 
 
