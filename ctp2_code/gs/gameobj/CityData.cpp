@@ -9729,7 +9729,14 @@ void CityData::CollectOtherGold(const bool projectedOnly)
 
 	if(!projectedOnly)
 	{
-		g_player[m_owner]->m_gold->AddIncome(m_net_gold);
+		if (m_net_gold < 0)
+		{
+			g_player[m_owner]->m_gold->SubIncome(-m_net_gold);
+		}
+		else
+		{
+			g_player[m_owner]->m_gold->AddIncome(m_net_gold);
+		}
 	}
 }
 
