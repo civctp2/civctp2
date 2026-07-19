@@ -283,7 +283,7 @@ void Agent::Log_Debug_Info(const int & log, const Goal * const goal) const
 		("\t\t   -------\n"));
 }
 
-bool Agent::FindPathToBoard(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits)
+bool Agent::FindPathForTransportTasks(const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits)
 {
 	MapPoint start_pos;
 	m_army->GetPos(start_pos);

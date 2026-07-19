@@ -4028,7 +4028,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		uint32 move_intersection =
 			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 
-		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path, the_army->Get_Army()->Num());
+		found = the_transport->FindPathToPickUpCargo(move_intersection, dest_pos, check_dest, found_path, the_army->Get_Army()->Num());
 
 		if (!found)
 		{
@@ -4151,6 +4151,23 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 	return false;
 }
 
+#if defined(_DEBUG)
+namespace
+{
+	// "Inspect" (left button, response == true): stay paused so the
+	// selected army/player can be looked at freely.
+	// "Continue" (right button, response == false): resume event
+	// processing immediately.
+	void GotoGoalTaskSolution_InspectOrContinue(bool response, Cookie)
+	{
+		if (!response)
+		{
+			g_gevManager->GotUserInput();
+		}
+	}
+}
+#endif
+
 bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 {
 	if(the_army->Get_Army()->CheckValidDestination(goal_pos)) // If we are already moving along a path
@@ -4215,7 +4232,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 		uint32 move_union =
 		        the_army->Get_Army()->GetMovementType() | the_army->Get_Army()->GetCargoMovementType();
 
-		found = the_army->FindPathToBoard(move_union, goal_pos, false, found_path);
+		found = the_army->FindPathToGoalWhileLoaded(move_union, goal_pos, false, found_path);
 
 		if (!found)
 		{
@@ -4228,7 +4245,7 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 			bool const targetHasAdjacentFreeLand =
 			    g_theWorld->HasAdjacentFreeLand(goal_pos, m_playerId);
 			DPRINTF(k_DBG_SCHEDULER,
-			        ("GOAL %x (%s): GotoGoalTaskSolution: FindPathToBoard failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d) - %s, %d units there, %s, %s, %s\n",
+			        ("GOAL %x (%s): GotoGoalTaskSolution: FindPathToGoalWhileLoaded failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d) - %s, %d units there, %s, %s, %s\n",
 			         this,
 			         g_theGoalDB->Get(m_goal_type)->GetNameText(),
 			         the_army->Get_Army().m_id,
