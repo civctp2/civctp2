@@ -318,12 +318,12 @@ BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 
 		for (sint32 i = 0; i < n && !gDone; i++)
 		{
-			DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd iteration %d/%d before StartNextPlayer, curPlayer=%d, visPlayer=%d\n",
+			DPRINTF(k_DBG_SCHEDULER_DETAIL, ("PLAYER_SYNC: /rnd iteration %d/%d before StartNextPlayer, curPlayer=%d, visPlayer=%d\n",
 			                          i, n, g_selected_item->GetCurPlayer(), g_selected_item->GetVisiblePlayer()));
 
 			NewTurnCount::StartNextPlayer(false);
 
-			DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd iteration %d/%d after StartNextPlayer, curPlayer=%d, visPlayer=%d\n",
+			DPRINTF(k_DBG_SCHEDULER_DETAIL, ("PLAYER_SYNC: /rnd iteration %d/%d after StartNextPlayer, curPlayer=%d, visPlayer=%d\n",
 			                          i, n, g_selected_item->GetCurPlayer(), g_selected_item->GetVisiblePlayer()));
 
 			g_director->NextPlayer();
@@ -332,10 +332,10 @@ BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 				g_controlPanel->Idle();
 				if (g_civApp)
 				{
-					DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd calling g_civApp->Process(), curPlayer=%d\n",
+					DPRINTF(k_DBG_SCHEDULER_DETAIL, ("PLAYER_SYNC: /rnd calling g_civApp->Process(), curPlayer=%d\n",
 					                          g_selected_item->GetCurPlayer()));
 					g_civApp->Process();
-					DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: /rnd returned from g_civApp->Process(), curPlayer=%d\n",
+					DPRINTF(k_DBG_SCHEDULER_DETAIL, ("PLAYER_SYNC: /rnd returned from g_civApp->Process(), curPlayer=%d\n",
 					                          g_selected_item->GetCurPlayer()));
 				}
 
