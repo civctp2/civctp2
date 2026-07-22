@@ -2774,6 +2774,8 @@ str_ldl_SV_COUNTDOWN_SEQUENCE		"%dターンでガイア コントローラーのオンライン接続.
 # メッセージ ボックス
 str_ldl_MB_OK						"OK"
 str_ldl_MB_CANCEL					"ｷｬﾝｾﾙ"
+str_ldl_MB_Inspect					"調査"
+str_ldl_MB_Continue					"続行"
 
 # 軍管理
 str_ldl_ArmyManagement "軍管理"

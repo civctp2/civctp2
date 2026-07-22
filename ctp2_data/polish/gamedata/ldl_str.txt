@@ -2614,6 +2614,8 @@ str_ldl_SV_COUNTDOWN_SEQUENCE		"Gaia Controller online in %d turns..."
 # Message Box
 str_ldl_MB_OK						"OK"
 str_ldl_MB_CANCEL					"Anuluj"
+str_ldl_MB_Inspect					"Sprawdü"
+str_ldl_MB_Continue					"Kontynuuj"
 
 # Army Management
 str_ldl_ArmyManagement "Zarzadca Wojskowy"

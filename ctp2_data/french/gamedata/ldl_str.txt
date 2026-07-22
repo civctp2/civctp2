@@ -2614,6 +2614,8 @@ str_ldl_SV_COUNTDOWN_SEQUENCE			"Contrôleur Gaia connecté dans %d tours..."
 # Message Box
 str_ldl_MB_OK					"OK"
 str_ldl_MB_CANCEL				"Annuler"
+str_ldl_MB_Inspect				"Inspecter"
+str_ldl_MB_Continue				"Continuer"
 
 # Army Management
 str_ldl_ArmyManagement				"Gest. d'armée"

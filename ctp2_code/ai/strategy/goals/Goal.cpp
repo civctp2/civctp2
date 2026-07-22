@@ -142,6 +142,11 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "gstypes.h"
 #include "gfx_options.h"
 #include "World.h"
+#include "SelItem.h"
+#include "MessageBoxDialog.h"
+#include "GameEventManager.h"
+#include "tiledmap.h"
+#include "director.h"
 
 #include "ctpaidebug.h"
 
@@ -4154,16 +4159,59 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 #if defined(_DEBUG)
 namespace
 {
-	// "Inspect" (left button, response == true): stay paused so the
-	// selected army/player can be looked at freely.
-	// "Continue" (right button, response == false): resume event
-	// processing immediately.
-	void GotoGoalTaskSolution_InspectOrContinue(bool response, Cookie)
+	struct GotoGoalTaskSolution_InspectContext
 	{
-		if (!response)
+		GotoGoalTaskSolution_InspectContext(PLAYER_INDEX p, const Army & a)
+		: playerId(p), army(a) {}
+
+		PLAYER_INDEX playerId;
+		Army army;
+	};
+
+	// Processing is halted the instant the failure is detected (before the
+	// message box even appears) - otherwise the game keeps running while
+	// the box sits unanswered, and by the time a choice is made the
+	// moment being inspected has already passed.
+	//
+	// "Inspect" (left button, response == true): bring the affected
+	// player on screen (they stay a robot - this only changes who is
+	// shown, not who is in control), select the stuck army, and center
+	// the map on it, so it can be looked at freely. Stays paused.
+	// "Continue" (right button, response == false): resume immediately,
+	// no screen changes.
+	void GotoGoalTaskSolution_InspectOrContinue(bool response, Cookie userData)
+	{
+		GotoGoalTaskSolution_InspectContext * context =
+		    static_cast<GotoGoalTaskSolution_InspectContext *>(userData.m_voidPtr);
+
+		if (response)
+		{
+			sint32 const oldVisiblePlayer = g_selected_item->GetVisiblePlayer();
+			g_selected_item->SetPlayerOnScreen(context->playerId);
+			if (oldVisiblePlayer != g_selected_item->GetVisiblePlayer())
+			{
+				// SetPlayerOnScreen only updates game-logic state (who's
+				// selected, UI panels); the renderer's cached vision
+				// pointer is separate and needs this to actually redraw
+				// the new player's tiles/units/cities instead of the old
+				// player's.
+				g_tiledMap->CopyVision();
+			}
+			g_selected_item->ForceDirectorSelect(context->army);
+
+			// Other ForceDirectorSelect callers piggyback on a unit-selection
+			// action that's already about to run as part of normal turn
+			// processing. There isn't one here, so queue it ourselves.
+			g_director->AddSelectUnit(0);
+
+			g_director->AddCenterMap(context->army->RetPos());
+		}
+		else
 		{
 			g_gevManager->GotUserInput();
 		}
+
+		delete context;
 	}
 }
 #endif
@@ -4261,6 +4309,26 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 		}
 
 		Assert(found); // Problem
+
+#if defined(_DEBUG)
+		if (!found)
+		{
+			// Halt immediately so the game doesn't keep running out from
+			// under the message box while it sits unanswered. Screen
+			// switch/selection/centering stay deferred to "Inspect"; see
+			// GotoGoalTaskSolution_InspectOrContinue.
+			g_gevManager->SetNeedUserInput();
+			MessageBoxDialog::Query
+			(
+			    "GotoGoalTaskSolution: FindPathToGoalWhileLoaded failed - see log for details.",
+			    "GotoGoalTaskSolutionFindPathToGoalWhileLoadedFailed",
+			    &GotoGoalTaskSolution_InspectOrContinue,
+			    new GotoGoalTaskSolution_InspectContext(m_playerId, the_army->Get_Army()),
+			    "str_ldl_MB_Inspect",
+			    "str_ldl_MB_Continue"
+			);
+		}
+#endif
 
 		if (found)
 		{

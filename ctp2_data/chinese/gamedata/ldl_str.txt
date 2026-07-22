@@ -2614,6 +2614,8 @@ str_ldl_SV_COUNTDOWN_SEQUENCE		"盖亚控制器在%d回合内开始运转……"
 # Message Box
 str_ldl_MB_OK						"确定"
 str_ldl_MB_CANCEL					"取消"
+str_ldl_MB_Inspect					"检查"
+str_ldl_MB_Continue					"继续"
 
 # Army Management
 str_ldl_ArmyManagement "军务官"
