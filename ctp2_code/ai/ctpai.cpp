@@ -1059,6 +1059,18 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	}
 
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
+
+	// The agreement-matrix clear above can change what ComputeDesireWarWith
+	// returns for deadPlayerId; refresh every survivor's cached entry so it
+	// isn't left stale for whoever reuses this player slot next.
+	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
+	{
+		if (g_player[player] && (player != deadPlayerId))
+		{
+			Diplomat::GetDiplomat(player).UpdateDesireWarWith(deadPlayerId);
+		}
+	}
+
 	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
 
 	if (deadPlayerId + 1 >= s_maxPlayers)
@@ -1098,8 +1110,21 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 			// Also true for embassies
 			g_player[player]->ContactKilled(newPlayerId);
 			g_player[player]->CloseEmbassy(newPlayerId);
+
+			// A reused player slot can leave a stale desire-war-with cache
+			// entry behind (from whoever previously occupied it, or the
+			// default from Resize()); refresh it now that newPlayerId is
+			// a real, initialized player.
+			if (player != newPlayerId)
+			{
+				Diplomat::GetDiplomat(player).UpdateDesireWarWith(newPlayerId);
+			}
 		}
 	}
+
+	// newPlayerId's own cache, for every foreigner, is equally stale after
+	// Initialize()/Resize() above - refresh it the same way BeginTurn() does.
+	Diplomat::GetDiplomat(newPlayerId).ComputeAllDesireWarWith();
 }
 
 void CtpAi::BeginMapAnalysis(const PLAYER_INDEX player)
