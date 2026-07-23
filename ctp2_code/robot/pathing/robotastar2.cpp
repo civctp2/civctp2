@@ -38,6 +38,7 @@
 #include "World.h"          // g_theWorld
 #include "ArmyData.h"
 #include "Diplomat.h"
+#include "player.h"
 #include "ctpaidebug.h"
 
 uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
@@ -47,6 +48,16 @@ RobotAstar2 RobotAstar2::s_aiPathing;
 RobotAstar2::RobotAstar2()
 {
 	m_pathType = PATH_TYPE_DEFAULT;
+}
+
+bool RobotAstar2::IsMoveZOC(const MapPoint & start, const MapPoint & dest) const
+{
+	if (g_player[m_owner]->IsRobot() && !g_player[m_owner]->IsVisible(dest))
+	{
+		return false;
+	}
+
+	return UnitAstar::IsMoveZOC(start, dest);
 }
 
 bool RobotAstar2::TransportPathCallback (const bool & can_enter,

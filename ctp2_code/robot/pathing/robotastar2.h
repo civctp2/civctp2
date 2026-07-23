@@ -86,6 +86,11 @@ private:
 	bool EntryCost(const MapPoint & prev, const MapPoint & pos,
 	               float &cost, bool & is_zoc, ASTAR_ENTRY_TYPE & entry);
 
+	// A robot can't actually know what's exerting ZOC on a tile it
+	// currently can't see, so don't let UnitAstar::IsMoveZOC's always-
+	// omniscient robot shortcut block AI pathfinding toward it.
+	bool IsMoveZOC(const MapPoint & start, const MapPoint & dest) const;
+
 	void RecalcEntryCost(AstarPoint *parent, AstarPoint *node,
 	                     float &new_entry_cost, bool &new_is_zoc,
 	                     ASTAR_ENTRY_TYPE &new_entry);
