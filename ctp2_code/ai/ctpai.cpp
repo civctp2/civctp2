@@ -2196,21 +2196,21 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if (army->NumOrders() > 0)
 			continue;
 
-	//	if(army.CanEntrench())
-	//	{
+		if(army.CanEntrench())
+		{
 			// We need to find something more interesting to do here
 			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
 									GEV_EntrenchOrder,
 									GEA_Army, army.m_id,
 									GEA_End);
-	/*	}
-		else
-		{
-			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
-									GEV_SleepOrder,
-									GEA_Army, army.m_id,
-									GEA_End);
-		}*/
+		}
+		// No sleep fallback here: this function only ever runs for robot
+		// players (see the IsRobot() check above), and sleeping is purely
+		// a human-UI convenience (skip this unit in the "next unmoved
+		// unit" cycle) that also hides the unit on the map. The scheduler
+		// re-evaluates every army's goals every turn regardless of sleep
+		// state, so it buys the AI nothing - just leave a non-entrenching
+		// idle army without a new order.
 	}
 
 	CtpAi::SpendGoldToRushBuy(player);
