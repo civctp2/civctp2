@@ -4025,6 +4025,25 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 				pos = dest_pos;
 			}
 
+			const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+			Utility val = Compute_Agent_Matching_Value(the_transport);
+			uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+			const char * myText = goal_rec->GetNameText();
+			MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+			MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+			memset(goalString, 0, strlen(myText) + 40);
+			memset(myString,   0, strlen(myText) + 80);
+
+			for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+			{
+				goalString[myComp] = myText[myComp + 5];
+			}
+
+			sprintf(myString, "Boat waiting at (%d,%d) to board %s for %s", dest_pos.x, dest_pos.y, GetTargetName(), goalString);
+			g_graphicsOptions->AddTextToArmy(the_transport->Get_Army(), myString, magnitude, m_goal_type);
+			delete[] myString;
+			delete[] goalString;
+
 			the_transport->Set_Target_Pos(dest_pos);
 			the_transport->Set_Can_Be_Executed(false);
 			return true;
@@ -4041,11 +4060,27 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			        ("GOAL %x (%d):GotoTransportTaskSolution:: No path found from army to destination (x=%d,y=%d) (SUB_TASK_TRANSPORT_TO_BOARD):\n",
 			        this, m_goal_type, dest_pos.x, dest_pos.y));
 			the_transport->Log_Debug_Info(k_DBG_SCHEDULER, this);
-			        uint8 magnitude = 220;
-			        MBCHAR * myString = new MBCHAR[256];
-			        sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
-			        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
-			        delete[] myString;
+
+			const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+			Utility val = Compute_Agent_Matching_Value(the_transport);
+			uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+			const char * myText = goal_rec->GetNameText();
+			MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+			MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+			memset(goalString, 0, strlen(myText) + 40);
+			memset(myString,   0, strlen(myText) + 80);
+
+			for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+			{
+				goalString[myComp] = myText[myComp + 5];
+			}
+
+			sprintf(myString, "NO PATH -> BOARD (%d,%d) %s for %s", dest_pos.x, dest_pos.y, GetTargetName(), goalString);
+			g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
+
+			delete[] myString;
+			delete[] goalString;
+
 			Set_Cannot_Be_Used(the_transport, true);
 		}
 		else
@@ -4063,6 +4098,28 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 
 			if(found_path.GetMovesRemaining() == 0)
 			{
+				// FollowPathToTask above is skipped whenever there are no
+				// moves left to make, so this is the only place left to
+				// report that the transport is in position and waiting.
+				const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+				Utility val = Compute_Agent_Matching_Value(the_transport);
+				uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+				const char * myText = goal_rec->GetNameText();
+				MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+				MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+				memset(goalString, 0, strlen(myText) + 40);
+				memset(myString,   0, strlen(myText) + 80);
+
+				for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+				{
+					goalString[myComp] = myText[myComp + 5];
+				}
+
+				sprintf(myString, "Boat waiting at (%d,%d) to board %s for %s", pos.x, pos.y, GetTargetName(), goalString);
+				g_graphicsOptions->AddTextToArmy(the_transport->Get_Army(), myString, magnitude, m_goal_type);
+				delete[] myString;
+				delete[] goalString;
+
 				the_transport->Set_Can_Be_Executed(false);
 				the_transport->Set_Target_Pos(pos);
 			}
