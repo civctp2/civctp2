@@ -100,7 +100,12 @@ void Astar::DecayOrtho(AstarPoint *parent, AstarPoint *point, float &new_entry_c
 
 	if (is_ortho)
 	{
-		new_entry_cost = point->m_entry_cost * 0.95f;
+		// Decay the freshly computed edge cost, not the node's old stored
+		// m_entry_cost - reading the stale value here made every reopen of
+		// an orthogonal neighbor shrink its cost by another 5% regardless
+		// of the actual new edge cost, always looking like an improvement
+		// and reopening the same tile until it hit k_ASTAR_MAX_REOPENS.
+		new_entry_cost = new_entry_cost * 0.95f;
 	}
 }
 
