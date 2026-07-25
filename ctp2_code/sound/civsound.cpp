@@ -57,9 +57,14 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     m_associatedObject(associatedObject)
 
 {
+	// Initialize fields in case of early return.
+	m_soundFilename[0] = 0;
+	m_dataptr = NULL;
+	m_datasize = 0;
+
     const char *fname;
 	if(soundID < 0)
-		fname = 0;
+		fname = NULL;
 	else
 		fname = g_theSoundDB->Get(soundID)->GetValue();
 
@@ -67,18 +72,28 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     m_isPlaying = FALSE;
     m_isLooping = FALSE;
 
-    if (0 == fname) {
-        m_soundFilename[0] = 0;
-        m_dataptr = NULL;
-        m_datasize = 0;
+    if (!fname) {
         return;
     }
 
-    strcpy(m_soundFilename, fname);
+	// "NULL.WAV" contains no audio data, and for this file SDL 2.x
+	// returns a pointer that it has already freed. It later tries to
+	// free it again in Mix_FreeChunk.
+	// The file is located inside an archive, and archive look-up is
+	// case-insensitive, however "NULL.WAV" is what appears in the
+	// sound configuration files, so that is what we check here.
+	if (strcmp(fname, "NULL.WAV") == 0) {
+		return;
+	}
 
     size_t      l_dataSize = 0;
-    m_dataptr   = g_SoundPF->getData(m_soundFilename, l_dataSize);
-    m_datasize  = static_cast<sint32>(l_dataSize);
+    m_dataptr   = g_SoundPF->getData(fname, l_dataSize);
+	if (!m_dataptr) {
+		return;
+	}
+
+    strcpy(m_soundFilename, fname);
+    m_datasize = static_cast<sint32>(l_dataSize);
 
 #if !defined(USE_SDL)
 	m_hAudio = AIL_quick_load_mem(m_dataptr, m_datasize);
@@ -87,7 +102,9 @@ CivSound::CivSound(const uint32 &associatedObject, const sint32 &soundID)
     // Argh, audio format mismatch!!!
 	m_Audio = Mix_QuickLoad_RAW((Uint8 *) m_dataptr, (Uint32) m_datasize);
 # else
-    m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, static_cast<int>(m_datasize)), 1);
+	m_Audio = Mix_LoadWAV_RW(SDL_RWFromMem(m_dataptr, static_cast<int>(m_datasize)), 1);
+	// If alen=0, then abuf may have been freed by realloc inside SDL 2.x.
+	Assert(m_Audio->alen);
 # endif
 #endif
 }
