@@ -285,6 +285,13 @@ bool Astar::FindPath
 		return Cleanup(dest, a_path, total_cost, isunit, best);
 	}
 
+	// A long-distance search over uniform-cost terrain legitimately ties a
+	// huge number of tiles, so any one of them can end up reopened many
+	// times as the frontier of near-equal-cost candidates expands - that's
+	// normal, not a runaway. Scale the safety cap with distance instead of
+	// using one flat number for every search, short or long.
+	sint32 const    maxReopens  = k_ASTAR_MAX_REOPENS + start.NormalizedDistance(dest);
+
 	Cell *          c           = g_theWorld->GetCell(start);
 	Assert(c);
 	if (!c)
@@ -342,6 +349,7 @@ bool Astar::FindPath
 				ASTAR_ENTRY_TYPE	bType;		// entry type from best
 				if (EntryCost(best->m_pos, next_pos, bMove, bZoc, bType))
 				{
+					float const		rawMove	= bMove;
 					DecayOrtho(best, c->m_point, bMove);
 
 					float const		oldG	=
@@ -350,13 +358,28 @@ bool Astar::FindPath
 
 					if (bestG < oldG && (c->m_point->m_parent == NULL || c->m_point != best->m_parent))
 					{
-						// A tile that gets reopened far more than a healthy
-						// search ever needs is the signature of a cost-
-						// decreasing cycle (e.g. via DecayOrtho) rather than
-						// normal progress. Trips the debugger right here,
-						// on the offending tile, instead of at some
-						// arbitrary later iteration count.
-						Assert(++c->m_point->m_reopen_count < k_ASTAR_MAX_REOPENS);
+						// Only log the final few reopens right before the
+						// Assert below trips, showing the exact cost sequence
+						// (raw vs decayed edge cost, oldG vs bestG) that pushed
+						// it over the edge. Plenty of searches reopen a tile
+						// more than a handful of times without ever being a
+						// real problem, so logging from a low threshold
+						// floods the log with routine, uninteresting reopens.
+						if (c->m_point->m_reopen_count > maxReopens - 5)
+						{
+							DPRINTF(k_DBG_ASTAR,
+							    ("REOPEN_DIAG: tile (%d,%d) reopen #%d via parent (%d,%d): oldG=%.3f bestG=%.3f rawEdgeCost=%.3f decayedEdgeCost=%.3f pastCostAtParent=%.3f\n",
+							     next_pos.x, next_pos.y, c->m_point->m_reopen_count + 1,
+							     best->m_pos.x, best->m_pos.y, oldG, bestG, rawMove, bMove, past_cost));
+						}
+
+						// A tile that gets reopened far more than this search's
+						// distance-scaled cap ever needs is the signature of a
+						// cost-decreasing cycle (e.g. via DecayOrtho) rather
+						// than normal progress. Trips the debugger right here,
+						// on the offending tile, instead of at some arbitrary
+						// later iteration count.
+						Assert(++c->m_point->m_reopen_count < maxReopens);
 
 						if (c->m_point->GetExpanded())
 						{
