@@ -287,10 +287,11 @@ bool Astar::FindPath
 
 	// A long-distance search over uniform-cost terrain legitimately ties a
 	// huge number of tiles, so any one of them can end up reopened many
-	// times as the frontier of near-equal-cost candidates expands - that's
-	// normal, not a runaway. Scale the safety cap with distance instead of
-	// using one flat number for every search, short or long.
-	sint32 const    maxReopens  = k_ASTAR_MAX_REOPENS + start.NormalizedDistance(dest);
+	// times as the frontier of near-equal-cost candidates expands. The
+	// number of tied candidates in an open 2D area grows roughly with the
+	// square of the distance, not linearly with it, so scale the safety
+	// cap the same way instead of using one flat number for every search.
+	sint32 const    maxReopens  = k_ASTAR_MAX_REOPENS + MapPoint::GetSquaredDistance(start, dest);
 
 	Cell *          c           = g_theWorld->GetCell(start);
 	Assert(c);
