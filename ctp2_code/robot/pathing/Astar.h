@@ -75,6 +75,17 @@ protected:
 
 	virtual sint32 GetMaxDir(MapPoint &pos) const = 0;
 
+	// Used to restrict diagnostic logging (AI_DPRINTF) to a single debug
+	// player. Subclasses that track an owner (e.g. UnitAstar) override
+	// this; subclasses that don't (e.g. CityAstar, TradeAstar) keep the
+	// -1 default, which AI_DPRINTF treats as "don't filter by player".
+	virtual PLAYER_INDEX GetOwner() const { return -1; }
+
+	// Same idea as GetOwner(), but for filtering diagnostics down to a
+	// single debug army (CtpAiDebug::SetDebugArmies) instead of/as well
+	// as a single player.
+	virtual sint32 GetArmyId() const { return -1; }
+
 	virtual void RecalcEntryCost(AstarPoint *parent,
 	    AstarPoint *node, float &new_entery_cost,
 	    bool &new_is_zoc, ASTAR_ENTRY_TYPE &entry);

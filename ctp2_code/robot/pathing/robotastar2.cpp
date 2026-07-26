@@ -290,7 +290,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 			m_army_minmax_move);
 	}
 
-	AI_DPRINTF(k_DBG_ASTAR, -1, -1, -1,("\n"));
+	AI_DPRINTF(k_DBG_ASTAR, army.GetOwner(), -1, army.m_id,("\n"));
 	if(!UnitAstar::FindPath(army,
 	                        nUnits + additionalUnits,
 	                        move_intersection,
@@ -354,7 +354,8 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 			}
 		}
 
-		DPRINTF(k_DBG_ASTAR,("\tCheckEnter, StartPos (%d, %d), DestPos (%d, %d), ThisPos (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", m_start.x, m_start.y, m_dest.x, m_dest.y, prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
+		AI_DPRINTF(k_DBG_ASTAR, m_owner, -1, m_army.m_id,
+		    ("\tCheckEnter, StartPos (%d, %d), DestPos (%d, %d), ThisPos (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", m_start.x, m_start.y, m_dest.x, m_dest.y, prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
 
 		if (cost < 1.0)
 		{

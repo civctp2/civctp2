@@ -82,7 +82,13 @@ bool TradeAstar::FindPath(const PLAYER_INDEX owner, const MapPoint &start, const
 	sint32 cutoff = Astar_MaxSearchNodes();
 	sint32 nodes_opened=0;
 	m_owner = owner;
+	m_start = start;
 
 	return Astar::FindPath(start, dest, a_path, total_cost, isunit,
 	        cutoff, nodes_opened);
+}
+
+sint32 TradeAstar::GetArmyId() const
+{
+	return g_theWorld->GetCity(m_start).m_id;
 }

@@ -966,6 +966,15 @@ void CtpAi::Initialize(bool initDiplomat)
 	CtpAiDebug::SetDebugPlayer(1);
 	CtpAiDebug::SetDebugGoalType(-1); // GOAL_SIEGE = 1, all goals = -1
 	CtpAiDebug::SetDebugArmies(unit_list);
+
+	// Use this if you need to debug a single army in RobotAstar2
+	// or a city as starting pint for a trade route or road for
+	// TradeAstar or CityAstar.
+	// The ID you get for instance from Astar::FindPath, it will
+	// be in the log before the Assert there fires. Then just
+	// replace the ID here.
+//	CtpAiDebug::SetDebugArmy(0xd00020ed);
+
 #endif
 }
 

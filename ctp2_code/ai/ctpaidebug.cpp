@@ -110,4 +110,18 @@ void CtpAiDebug::SetDebugArmies(const CellUnitList & unit_list)
 	}
 }
 
+void CtpAiDebug::SetDebugArmy(const sint32 & armyID)
+{
+	// Add the army ID to the first slot
+	s_debugArmies[0] = armyID;
+	// Set the other slots to invalid
+	for (sint32 i = 1; i < k_MAX_ARMY_SIZE; i++)
+	{
+		s_debugArmies[i] = -1;
+	}
+	DPRINTF(k_DBG_FIX,
+	    ("Set army 0x%x as debug army 0x%x\n",
+	     armyID, s_debugArmies[0]));
+}
+
 #endif // _DEBUG

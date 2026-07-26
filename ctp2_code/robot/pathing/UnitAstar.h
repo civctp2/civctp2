@@ -86,6 +86,9 @@ public:
 				ASTAR_ENTRY_TYPE & entry);
 	virtual sint32 GetMaxDir(MapPoint & pos) const;
 
+	virtual PLAYER_INDEX GetOwner() const { return m_owner; }
+	virtual sint32 GetArmyId() const { return m_army.m_id; }
+
 	// Wraps g_theWorld->IsMoveZOC() so a subclass (RobotAstar2) can change
 	// how AI pathfinding treats ZOC without touching the underlying game
 	// rule used everywhere else (e.g. move-execution validation). Always

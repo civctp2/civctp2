@@ -37,6 +37,7 @@
 #include "AVLHeap.h"
 #include "Path.h"
 #include "World.h"
+#include "ctpaidebug.h"
 
 #ifdef PRINT_COSTS
 #include "gfx_options.h"
@@ -368,7 +369,7 @@ bool Astar::FindPath
 						// floods the log with routine, uninteresting reopens.
 						if (c->m_point->m_reopen_count > maxReopens - 5)
 						{
-							DPRINTF(k_DBG_ASTAR,
+							AI_DPRINTF(k_DBG_ASTAR, GetOwner(), -1, GetArmyId(),
 							    ("REOPEN_DIAG: tile (%d,%d) reopen #%d via parent (%d,%d): oldG=%.3f bestG=%.3f rawEdgeCost=%.3f decayedEdgeCost=%.3f pastCostAtParent=%.3f\n",
 							     next_pos.x, next_pos.y, c->m_point->m_reopen_count + 1,
 							     best->m_pos.x, best->m_pos.y, oldG, bestG, rawMove, bMove, past_cost));
@@ -380,6 +381,15 @@ bool Astar::FindPath
 						// than normal progress. Trips the debugger right here,
 						// on the offending tile, instead of at some arbitrary
 						// later iteration count.
+						if (c->m_point->m_reopen_count + 1 >= maxReopens)
+						{
+							// If you only want to track the army/city from that the path originated
+							// then feed the ID reported here into CtpAiDebug::SetDebugArmy in
+							// CtpAi::Initialize
+							DPRINTF(k_DBG_FIX,
+							    ("Astar::FindPath: reopen cap about to trip, player %d, army 0x%x\n",
+							     GetOwner(), GetArmyId()));
+						}
 						Assert(++c->m_point->m_reopen_count < maxReopens);
 
 						if (c->m_point->GetExpanded())
@@ -476,7 +486,8 @@ bool Astar::FindPath
 
 		if (best)
 		{
-			DPRINTF(k_DBG_ASTAR,("\tCheckBest , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
+			AI_DPRINTF(k_DBG_ASTAR, GetOwner(), -1, GetArmyId(),
+			    ("\tCheckBest , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
 			if (best->m_pos == dest)
 			{
 				float               cost;
@@ -503,7 +514,8 @@ bool Astar::FindPath
 	Assert(nodes_opened < cutoff);
 
 	bool const r =  Cleanup(dest, a_path, total_cost, isunit, best);
-	DPRINTF(k_DBG_ASTAR, ("\tFinalPathCosts: %f , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", total_cost, start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
+	AI_DPRINTF(k_DBG_ASTAR, GetOwner(), -1, GetArmyId(),
+	    ("\tFinalPathCosts: %f , StartPos (%d, %d), DestPos (%d, %d), BestPos (%d, %d)\n", total_cost, start.x, start.y, dest.x, dest.y, best->m_pos.x, best->m_pos.y));
 
 #ifdef TRACK_ASTAR_NODES
 	g_paths_found++;

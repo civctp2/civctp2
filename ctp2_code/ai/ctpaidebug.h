@@ -32,7 +32,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gühmann)
+// - USE_LOGGING now works in a final version. (30-Jun-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 #ifdef HAVE_PRAGMA_ONCE
@@ -66,6 +66,7 @@ public:
 	static void SetDebugGoalType(const sint32 goal_type);
 
 	static void SetDebugArmies(const CellUnitList & unit_list);
+	static void SetDebugArmy(const sint32 & armyID);
 
 private:
 
