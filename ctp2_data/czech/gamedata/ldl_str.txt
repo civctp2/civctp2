@@ -2614,6 +2614,8 @@ str_ldl_SV_COUNTDOWN_SEQUENCE		"Gaia Controller online in %d turns..."
 # Message Box
 str_ldl_MB_OK						"OK"
 str_ldl_MB_CANCEL					"Storno"
+str_ldl_MB_Inspect					"Prozkoumat"
+str_ldl_MB_Continue					"Pokraèovat"
 
 # Army Management
 str_ldl_ArmyManagement "Manazer Armády"
@@ -2837,6 +2839,7 @@ str_ldl_CityWinUnitsTab "Units"
 
 # autosave string
 AUTOSAVE_NAME				"AUTOSAVE"
+AUTOSAVE_NAME_PREVIOUS				"AUTOSAVE2"
 
 TRADE_ROUTE_RESET 			"Trade route reset!"
 

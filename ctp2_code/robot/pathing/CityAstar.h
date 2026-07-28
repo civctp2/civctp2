@@ -43,6 +43,11 @@ class CityAstar : public Astar
 	bool EntryCost(const MapPoint &prev, const MapPoint &pos,
 	                        float &cost, bool &is_zoc, ASTAR_ENTRY_TYPE &entry);
 	sint32 GetMaxDir(MapPoint &pos) const;
+	PLAYER_INDEX GetOwner() const { return m_owner; }
+
+	// The city at m_start, if any - lets diagnostics filter by the city
+	// this search is being run for, the same way UnitAstar filters by army.
+	sint32 GetArmyId() const;
 
 public:
 	CityAstar()

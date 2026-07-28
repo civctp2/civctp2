@@ -152,7 +152,8 @@ public:
     Utility Get_Matching_Value() const;
     void    Set_Matching_Value(Utility combinedUtility);
     Utility Mark_For_Garrison(Plan_List & matches);
-    const char* GetTargetName() const;
+    const char* GetTargetName() const { return GetTargetName(Get_Target_Pos()); }
+    static const char* GetTargetName(const MapPoint & pos);
 
     bool Add_Match(const Agent_ptr & agent, const bool update_match_value = true, const bool needsCargo = false);
     bool Add_Transport_Match(const Agent_ptr & agent) { return Add_Match(agent, true, true); };

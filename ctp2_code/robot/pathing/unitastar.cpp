@@ -80,6 +80,11 @@ UnitAstar::UnitAstar()
 	ClearMem();
 }
 
+bool UnitAstar::IsMoveZOC(const MapPoint & start, const MapPoint & dest) const
+{
+	return g_theWorld->IsMoveZOC(m_owner, start, dest, true);
+}
+
 //----------------------------------------------------------------------------
 //
 // Name       : UnitAstar::StraightLine
@@ -497,7 +502,7 @@ bool UnitAstar::CheckMoveUnion(const MapPoint & prev, const MapPoint & pos, cons
 			}
 		}
 
-		if (can_be_zoc && g_theWorld->IsMoveZOC (m_owner, prev, pos, true) &&
+		if (can_be_zoc && IsMoveZOC(prev, pos) &&
 		    !IsBeachLanding(prev,pos,m_move_intersection)
 		   )
 		{
@@ -528,7 +533,7 @@ bool UnitAstar::CheckMoveIntersection(const MapPoint & prev, const MapPoint & po
 	}
 	else if (the_pos_cell.CanEnter(m_move_intersection))
 	{
-		if (can_be_zoc && g_theWorld->IsMoveZOC (m_owner, prev, pos, true) &&
+		if (can_be_zoc && IsMoveZOC(prev, pos) &&
 			!IsBeachLanding(prev,pos,m_move_intersection))
 		{
 			is_zoc = true;
@@ -1074,7 +1079,7 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 			}
 		}
 
-		if (!g_theWorld->IsMoveZOC (m_owner, neighbor, dest, true))
+		if (!IsMoveZOC(neighbor, dest))
 		{
 			return true;
 		}
@@ -1089,15 +1094,36 @@ bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 	{
 		if (!g_player[m_owner]->IsExplored(dest))
 		{
+			DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): not explored\n", dest.x, dest.y));
 			return false;
 		}
 	}
 
-	if (!PretestDest_Enterable         (start, dest)) return false;
-	if (!PretestDest_HasRoom           (start, dest)) return false;
-	if (!PretestDest_SameLandContinent (start, dest)) return false;
-	if (!PretestDest_SameWaterContinent(start, dest)) return false;
-	if (!PretestDest_ZocEnterable      (start, dest)) return false;
+	if (!PretestDest_Enterable(start, dest))
+	{
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): not enterable\n", dest.x, dest.y));
+		return false;
+	}
+	if (!PretestDest_HasRoom(start, dest))
+	{
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): no room\n", dest.x, dest.y));
+		return false;
+	}
+	if (!PretestDest_SameLandContinent(start, dest))
+	{
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): different land continent\n", dest.x, dest.y));
+		return false;
+	}
+	if (!PretestDest_SameWaterContinent(start, dest))
+	{
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): different water continent\n", dest.x, dest.y));
+		return false;
+	}
+	if (!PretestDest_ZocEnterable(start, dest))
+	{
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): every approach is zone-of-control blocked\n", dest.x, dest.y));
+		return false;
+	}
 
 	return true;
 }
@@ -1159,10 +1185,16 @@ bool UnitAstar::FindPath(
 	Assert(VerifyMem());
 
 	bool result;
-	if (PretestDest(start, dest) &&
-			Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened)) {
+	bool const pretestPassed = PretestDest(start, dest);
+	bool const searchSucceeded = pretestPassed &&
+			Astar::FindPath(start, dest, good_path, total_cost, false, cutoff, nodes_opened);
+	if (searchSucceeded) {
 		result = true;
 	} else {
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: UnitAstar::FindPath failed from (%d,%d) to (%d,%d): %s\n",
+		                                 start.x, start.y, dest.x, dest.y,
+		                                 pretestPassed ? "PretestDest passed, full A* search failed"
+		                                               : "rejected by PretestDest before searching"));
 		if (no_bad_path) {
 			result = false;
 		} else {

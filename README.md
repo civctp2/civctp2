@@ -137,6 +137,8 @@ CFLAGS="$CFLAGS -O3 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -O3 -fuse-ld=gold" ./conf
 make -j$(nproc)
 ```
 
+Movie playback (e.g. the intro movie) requires passing `--enable-ffmpeg4movies` to `configure`, in addition to having the ffmpeg libraries installed - it is off by default because the FFmpeg API still changes a lot. Without it, the game builds and runs fine, it just won't play any movies.
+
 If you want to build a debug version it is:
 
 ```

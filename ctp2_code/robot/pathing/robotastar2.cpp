@@ -38,6 +38,7 @@
 #include "World.h"          // g_theWorld
 #include "ArmyData.h"
 #include "Diplomat.h"
+#include "player.h"
 #include "ctpaidebug.h"
 
 uint32 const    INCURSION_PERMISSION_ALL    = 0xffffffffu;
@@ -47,6 +48,16 @@ RobotAstar2 RobotAstar2::s_aiPathing;
 RobotAstar2::RobotAstar2()
 {
 	m_pathType = PATH_TYPE_DEFAULT;
+}
+
+bool RobotAstar2::IsMoveZOC(const MapPoint & start, const MapPoint & dest) const
+{
+	if (g_player[m_owner]->IsRobot() && !g_player[m_owner]->IsVisible(dest))
+	{
+		return false;
+	}
+
+	return UnitAstar::IsMoveZOC(start, dest);
 }
 
 bool RobotAstar2::TransportPathCallback (const bool & can_enter,
@@ -279,7 +290,7 @@ bool RobotAstar2::FindPath( const PathType & pathType,
 			m_army_minmax_move);
 	}
 
-	AI_DPRINTF(k_DBG_ASTAR, -1, -1, -1,("\n"));
+	AI_DPRINTF(k_DBG_ASTAR, army.GetOwner(), -1, army.m_id,("\n"));
 	if(!UnitAstar::FindPath(army,
 	                        nUnits + additionalUnits,
 	                        move_intersection,
@@ -343,7 +354,8 @@ bool RobotAstar2::EntryCost( const MapPoint &prev,
 			}
 		}
 
-		DPRINTF(k_DBG_ASTAR,("\tCheckEnter, StartPos (%d, %d), DestPos (%d, %d), ThisPos (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", m_start.x, m_start.y, m_dest.x, m_dest.y, prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
+		AI_DPRINTF(k_DBG_ASTAR, m_owner, -1, m_army.m_id,
+		    ("\tCheckEnter, StartPos (%d, %d), DestPos (%d, %d), ThisPos (%d, %d), NextPos (%d, %d), IsZoc: %d, EntryType: %d, Cost: %f\n", m_start.x, m_start.y, m_dest.x, m_dest.y, prev.x, prev.y, pos.x, pos.y, is_zoc, entry, cost));
 
 		if (cost < 1.0)
 		{

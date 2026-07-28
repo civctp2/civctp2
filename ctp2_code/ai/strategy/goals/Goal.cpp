@@ -142,6 +142,11 @@ const Utility Goal::MAX_UTILITY =  99999999;
 #include "gstypes.h"
 #include "gfx_options.h"
 #include "World.h"
+#include "SelItem.h"
+#include "MessageBoxDialog.h"
+#include "GameEventManager.h"
+#include "tiledmap.h"
+#include "director.h"
 
 #include "ctpaidebug.h"
 
@@ -479,9 +484,8 @@ const Squad_Strength Goal::Get_Strength_Needed() const // Rename to missing stre
 	return needed_strength;
 }
 
-const char* Goal::GetTargetName() const
+const char* Goal::GetTargetName(const MapPoint & pos)
 {
-	MapPoint pos = Get_Target_Pos();
 	return g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : (pos.IsValid() ? "field" : "invalid");
 }
 
@@ -2194,7 +2198,7 @@ Utility Goal::Compute_Agent_Matching_Value(const Agent_ptr agent_ptr) const
 	tieBreaker,
 	g_theUnitDB->GetNameStr(agent_ptr->Get_Army()->Get(0).GetType()),
 	agent_ptr->Get_Army()->GetName(),
-	(g_theWorld->HasCity(curr_pos) ? g_theWorld->GetCity(curr_pos).GetName() : "field"),
+	Goal::GetTargetName(curr_pos),
 	GetTargetName()
 	));
 #endif //_DEBUG
@@ -4021,6 +4025,25 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 				pos = dest_pos;
 			}
 
+			const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+			Utility val = Compute_Agent_Matching_Value(the_transport);
+			uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+			const char * myText = goal_rec->GetNameText();
+			MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+			MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+			memset(goalString, 0, strlen(myText) + 40);
+			memset(myString,   0, strlen(myText) + 80);
+
+			for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+			{
+				goalString[myComp] = myText[myComp + 5];
+			}
+
+			sprintf(myString, "Boat waiting at (%d,%d) to board %s for %s", dest_pos.x, dest_pos.y, GetTargetName(), goalString);
+			g_graphicsOptions->AddTextToArmy(the_transport->Get_Army(), myString, magnitude, m_goal_type);
+			delete[] myString;
+			delete[] goalString;
+
 			the_transport->Set_Target_Pos(dest_pos);
 			the_transport->Set_Can_Be_Executed(false);
 			return true;
@@ -4029,7 +4052,7 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 		uint32 move_intersection =
 			the_transport->Get_Army().GetMovementType() | the_army->Get_Army().GetMovementType();
 
-		found = the_transport->FindPathToBoard(move_intersection, dest_pos, check_dest, found_path, the_army->Get_Army()->Num());
+		found = the_transport->FindPathToPickUpCargo(move_intersection, dest_pos, check_dest, found_path, the_army->Get_Army()->Num());
 
 		if (!found)
 		{
@@ -4037,11 +4060,27 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 			        ("GOAL %x (%d):GotoTransportTaskSolution:: No path found from army to destination (x=%d,y=%d) (SUB_TASK_TRANSPORT_TO_BOARD):\n",
 			        this, m_goal_type, dest_pos.x, dest_pos.y));
 			the_transport->Log_Debug_Info(k_DBG_SCHEDULER, this);
-			        uint8 magnitude = 220;
-			        MBCHAR * myString = new MBCHAR[256];
-			        sprintf(myString, "NO PATH -> BOARD (%d,%d)", dest_pos.x, dest_pos.y);
-			        g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
-			        delete[] myString;
+
+			const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+			Utility val = Compute_Agent_Matching_Value(the_transport);
+			uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+			const char * myText = goal_rec->GetNameText();
+			MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+			MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+			memset(goalString, 0, strlen(myText) + 40);
+			memset(myString,   0, strlen(myText) + 80);
+
+			for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+			{
+				goalString[myComp] = myText[myComp + 5];
+			}
+
+			sprintf(myString, "NO PATH -> BOARD (%d,%d) %s for %s", dest_pos.x, dest_pos.y, GetTargetName(), goalString);
+			g_graphicsOptions->AddTextToArmy(the_army->Get_Army(), myString, magnitude, m_goal_type);
+
+			delete[] myString;
+			delete[] goalString;
+
 			Set_Cannot_Be_Used(the_transport, true);
 		}
 		else
@@ -4059,6 +4098,28 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 
 			if(found_path.GetMovesRemaining() == 0)
 			{
+				// FollowPathToTask above is skipped whenever there are no
+				// moves left to make, so this is the only place left to
+				// report that the transport is in position and waiting.
+				const GoalRecord *goal_rec = g_theGoalDB->Get(m_goal_type);
+				Utility val = Compute_Agent_Matching_Value(the_transport);
+				uint8 magnitude = (uint8) (((5000000 - val)* 255.0) / 5000000);
+				const char * myText = goal_rec->GetNameText();
+				MBCHAR * myString   = new MBCHAR[strlen(myText) + 80];
+				MBCHAR * goalString = new MBCHAR[strlen(myText) + 40];
+				memset(goalString, 0, strlen(myText) + 40);
+				memset(myString,   0, strlen(myText) + 80);
+
+				for (uint8 myComp = 0; myComp < strlen(myText) - 5; myComp++)
+				{
+					goalString[myComp] = myText[myComp + 5];
+				}
+
+				sprintf(myString, "Boat waiting at (%d,%d) to board %s for %s", pos.x, pos.y, GetTargetName(), goalString);
+				g_graphicsOptions->AddTextToArmy(the_transport->Get_Army(), myString, magnitude, m_goal_type);
+				delete[] myString;
+				delete[] goalString;
+
 				the_transport->Set_Can_Be_Executed(false);
 				the_transport->Set_Target_Pos(pos);
 			}
@@ -4152,6 +4213,66 @@ bool Goal::GotoTransportTaskSolution(Agent_ptr the_army, Agent_ptr the_transport
 	return false;
 }
 
+#if defined(_DEBUG)
+namespace
+{
+	struct GotoGoalTaskSolution_InspectContext
+	{
+		GotoGoalTaskSolution_InspectContext(PLAYER_INDEX p, const Army & a)
+		: playerId(p), army(a) {}
+
+		PLAYER_INDEX playerId;
+		Army army;
+	};
+
+	// Processing is halted the instant the failure is detected (before the
+	// message box even appears) - otherwise the game keeps running while
+	// the box sits unanswered, and by the time a choice is made the
+	// moment being inspected has already passed.
+	//
+	// "Inspect" (left button, response == true): bring the affected
+	// player on screen (they stay a robot - this only changes who is
+	// shown, not who is in control), select the stuck army, and center
+	// the map on it, so it can be looked at freely. Stays paused.
+	// "Continue" (right button, response == false): resume immediately,
+	// no screen changes.
+	void GotoGoalTaskSolution_InspectOrContinue(bool response, Cookie userData)
+	{
+		GotoGoalTaskSolution_InspectContext * context =
+		    static_cast<GotoGoalTaskSolution_InspectContext *>(userData.m_voidPtr);
+
+		if (response)
+		{
+			sint32 const oldVisiblePlayer = g_selected_item->GetVisiblePlayer();
+			g_selected_item->SetPlayerOnScreen(context->playerId);
+			if (oldVisiblePlayer != g_selected_item->GetVisiblePlayer())
+			{
+				// SetPlayerOnScreen only updates game-logic state (who's
+				// selected, UI panels); the renderer's cached vision
+				// pointer is separate and needs this to actually redraw
+				// the new player's tiles/units/cities instead of the old
+				// player's.
+				g_tiledMap->CopyVision();
+			}
+			g_selected_item->ForceDirectorSelect(context->army);
+
+			// Other ForceDirectorSelect callers piggyback on a unit-selection
+			// action that's already about to run as part of normal turn
+			// processing. There isn't one here, so queue it ourselves.
+			g_director->AddSelectUnit(0);
+
+			g_director->AddCenterMap(context->army->RetPos());
+		}
+		else
+		{
+			g_gevManager->GotUserInput();
+		}
+
+		delete context;
+	}
+}
+#endif
+
 bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 {
 	if(the_army->Get_Army()->CheckValidDestination(goal_pos)) // If we are already moving along a path
@@ -4213,12 +4334,58 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 		// Check if is single squad
 		// Return true if we are a transporter and we need transporters
 		// SUB_TASK_TRANSPORT_TO_GOAL
-		uint32 move_intersection =
+		uint32 move_union =
 		        the_army->Get_Army()->GetMovementType() | the_army->Get_Army()->GetCargoMovementType();
 
-		found = the_army->FindPathToBoard(move_intersection, goal_pos, false, found_path);
+		found = the_army->FindPathToGoalWhileLoaded(move_union, goal_pos, false, found_path);
+
+		if (!found)
+		{
+			const Unit & first_unit = the_army->Get_Army()->Get(0);
+			// Same "is land" definition HasAdjacentFreeLand uses.
+			bool const targetIsLand =
+			    g_theWorld->IsLand(goal_pos) || g_theWorld->IsMountain(goal_pos);
+			bool const targetIsNextToWater =
+			    g_theWorld->IsNextToWater(goal_pos.x, goal_pos.y);
+			bool const targetHasAdjacentFreeLand =
+			    g_theWorld->HasAdjacentFreeLand(goal_pos, m_playerId);
+			DPRINTF(k_DBG_SCHEDULER,
+			        ("GOAL %x (%s): GotoGoalTaskSolution: FindPathToGoalWhileLoaded failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d) - %s, %d units there, %s, %s, %s\n",
+			         this,
+			         g_theGoalDB->Get(m_goal_type)->GetNameText(),
+			         the_army->Get_Army().m_id,
+			         first_unit.GetType(),
+			         g_theUnitDB->GetNameStr(first_unit.GetType()),
+			         the_army->Get_Pos().x, the_army->Get_Pos().y,
+			         goal_pos.x, goal_pos.y,
+			         GetTargetName(),
+			         g_theWorld->GetCell(goal_pos)->GetNumUnits(),
+			         targetIsLand ? "land" : "not land",
+			         targetIsNextToWater ? "next to water" : "not next to water",
+			         targetHasAdjacentFreeLand ? "has adjacent free land" : "has no adjacent free land"));
+		}
 
 		Assert(found); // Problem
+
+#if defined(_DEBUG)
+		if (!found)
+		{
+			// Halt immediately so the game doesn't keep running out from
+			// under the message box while it sits unanswered. Screen
+			// switch/selection/centering stay deferred to "Inspect"; see
+			// GotoGoalTaskSolution_InspectOrContinue.
+			g_gevManager->SetNeedUserInput();
+			MessageBoxDialog::Query
+			(
+			    "GotoGoalTaskSolution: FindPathToGoalWhileLoaded failed - see log for details.",
+			    "GotoGoalTaskSolutionFindPathToGoalWhileLoadedFailed",
+			    &GotoGoalTaskSolution_InspectOrContinue,
+			    new GotoGoalTaskSolution_InspectContext(m_playerId, the_army->Get_Army()),
+			    "str_ldl_MB_Inspect",
+			    "str_ldl_MB_Continue"
+			);
+		}
+#endif
 
 		if (found)
 		{

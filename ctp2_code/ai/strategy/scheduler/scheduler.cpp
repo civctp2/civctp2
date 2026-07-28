@@ -628,6 +628,20 @@ void Scheduler::Sort_Goals()
 //     excess agents to donor agents.
 //
 //////////////////////////////////////////////////////////////////////////
+
+namespace
+{
+	// Re-matching recomputes every goal's value each cycle purely from
+	// which agents are still free, so two near-tied goals sharing the same
+	// one or two agents can otherwise evict each other's already-committed
+	// agent over noise-level score changes (observed: two
+	// GOAL_ESTABLISH_EMBASSY goals endlessly swapping the same two
+	// diplomats back and forth on <0.2% deltas, with neither unit ever
+	// actually moving). Require a decisive lead before a competing goal is
+	// allowed to bump an already-committed agent.
+	double const k_MatchValueReprioritizeMargin = 0.02;
+}
+
 void Scheduler::Match_Resources(const bool move_armies)
 {
 	bool out_of_transports = false; // this tells us if we have run out of available transports or not
@@ -663,7 +677,7 @@ void Scheduler::Match_Resources(const bool move_armies)
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 				("[%d] Starting to match resources to %s: %x (x=%d,y=%d), match %d, %s\n",
-					count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, oldMatchValue, (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")));
+					count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, oldMatchValue, Goal::GetTargetName(pos)));
 		count++;
 #endif
 
@@ -710,7 +724,10 @@ void Scheduler::Match_Resources(const bool move_armies)
 			if(tmp_goal_iter != m_goals.end())
 			{
 				Utility nextMatchValue = static_cast<Goal_ptr>(*tmp_goal_iter)->Get_Matching_Value();
-				if(newMatchValue < nextMatchValue)
+				Utility const oldMatchValueAbs = (oldMatchValue < 0) ? -oldMatchValue : oldMatchValue;
+				Utility const margin =
+				    static_cast<Utility>(oldMatchValueAbs * k_MatchValueReprioritizeMargin);
+				if(newMatchValue < nextMatchValue - margin)
 				{
 					AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 					    ("\t\tGOAL (goal: %x)(agent count: %d) -- Match value change (old: %d, new: %d): Rollback agents and reprioritize goal.\n",
@@ -2287,7 +2304,7 @@ void Scheduler::Assign_Garrison()
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
 			("[%d] Starting to match garrison resources with %s: %x (x=%d,y=%d), match %d, %s\n",
-				count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, goal_ptr->Get_Matching_Value(), (g_theWorld->HasCity(pos) ? g_theWorld->GetCity(pos).GetName() : "field")));
+				count, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText(), goal_ptr, pos.x, pos.y, goal_ptr->Get_Matching_Value(), Goal::GetTargetName(pos)));
 		count++;
 #endif
 		if (goal_ptr->Get_Matches_Num() > 0)

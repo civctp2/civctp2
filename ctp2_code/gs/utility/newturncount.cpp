@@ -248,12 +248,18 @@ void NewTurnCount::StartNextPlayer(bool stop)
 void NewTurnCount::ChooseNextActivePlayer()
 {
 	sint32 count = 0;
+	sint32 const oldPlayer = g_selected_item->GetCurPlayer();
 
 	do {
 		g_selected_item->NextPlayer();
 		g_director->NextPlayer();
 		count++;
 	} while( g_player[g_selected_item->GetCurPlayer()] == NULL );
+
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: ChooseNextActivePlayer: %d -> %d\n",
+	                          oldPlayer, g_selected_item->GetCurPlayer()));
+
+	g_director->FlushPendingBeginScheduler();
 }
 
 void NewTurnCount::StartNewYear()

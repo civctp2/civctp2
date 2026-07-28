@@ -3002,6 +3002,8 @@ void UnitData::BeginTurn()
 
 	Assert(!Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW));
 	if(Flag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW)) {
+		DPRINTF(k_DBG_SPECIAL_ACTION, ("SPECIAL_ACTION: stuck k_UDF_USED_SPECIAL_ACTION_JUST_NOW on unit id 0x%lx, type %s, owner %d\n",
+		                          m_id, g_theStringDB->GetIdStr(g_theUnitDB->GetName(m_type)), m_owner));
 		ClearFlag(k_UDF_USED_SPECIAL_ACTION_JUST_NOW);
 		needsEnqueue = true;
 	}

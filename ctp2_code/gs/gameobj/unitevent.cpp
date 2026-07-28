@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - AddUnitToArmyEvent does not crash in the debug version if the unit to
-//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gühmann)
-// - Added an upgrade unit event. (13-Sep-2008 Martin Gühmann)
+//   be is transported and has therefore no army. This makes slic code save. (7-Nov-2007 Martin Gï¿½hmann)
+// - Added an upgrade unit event. (13-Sep-2008 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -276,7 +276,6 @@ STDEHANDLER(UndergroundRailwayUnitEvent)
 		Assert(hc.m_id != 0);
 		return GEV_HD_Continue;
 	}
-	u->GetArmy()->AddSpecialActionUsed(u);
 
 	MapPoint cpos;
 	hc.GetPos(cpos);

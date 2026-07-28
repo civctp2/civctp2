@@ -132,6 +132,7 @@ public:
 	virtual void AddInvokeThroneRoom() = 0;
 	virtual void AddInvokeResearchAdvance(const MBCHAR *text) = 0;
 	virtual void AddBeginScheduler(sint32 player) = 0;
+	virtual void FlushPendingBeginScheduler() = 0;
 
 	// Animations
 	virtual void AddTradeRouteAnimation(const TradeRoute &tradeRoute) = 0;

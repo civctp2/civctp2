@@ -531,6 +531,9 @@ STDEHANDLER(CtpAi_BeginSchedulerEvent)
 
 	sint32 round = g_player[playerId]->GetCurRound();
 
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: CtpAi_BeginSchedulerEvent(%d), curPlayer=%d\n",
+	                          playerId, g_selected_item->GetCurPlayer()));
+
 #ifdef _DEBUG
 	static bool s_allOk = true;
 	if(s_allOk)
@@ -963,6 +966,15 @@ void CtpAi::Initialize(bool initDiplomat)
 	CtpAiDebug::SetDebugPlayer(1);
 	CtpAiDebug::SetDebugGoalType(-1); // GOAL_SIEGE = 1, all goals = -1
 	CtpAiDebug::SetDebugArmies(unit_list);
+
+	// Use this if you need to debug a single army in RobotAstar2
+	// or a city as starting pint for a trade route or road for
+	// TradeAstar or CityAstar.
+	// The ID you get for instance from Astar::FindPath, it will
+	// be in the log before the Assert there fires. Then just
+	// replace the ID here.
+//	CtpAiDebug::SetDebugArmy(0xd00020ed);
+
 #endif
 }
 
@@ -1056,6 +1068,18 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 	}
 
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
+
+	// The agreement-matrix clear above can change what ComputeDesireWarWith
+	// returns for deadPlayerId; refresh every survivor's cached entry so it
+	// isn't left stale for whoever reuses this player slot next.
+	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
+	{
+		if (g_player[player] && (player != deadPlayerId))
+		{
+			Diplomat::GetDiplomat(player).UpdateDesireWarWith(deadPlayerId);
+		}
+	}
+
 	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
 
 	if (deadPlayerId + 1 >= s_maxPlayers)
@@ -1095,14 +1119,30 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 			// Also true for embassies
 			g_player[player]->ContactKilled(newPlayerId);
 			g_player[player]->CloseEmbassy(newPlayerId);
+
+			// A reused player slot can leave a stale desire-war-with cache
+			// entry behind (from whoever previously occupied it, or the
+			// default from Resize()); refresh it now that newPlayerId is
+			// a real, initialized player.
+			if (player != newPlayerId)
+			{
+				Diplomat::GetDiplomat(player).UpdateDesireWarWith(newPlayerId);
+			}
 		}
 	}
+
+	// newPlayerId's own cache, for every foreigner, is equally stale after
+	// Initialize()/Resize() above - refresh it the same way BeginTurn() does.
+	Diplomat::GetDiplomat(newPlayerId).ComputeAllDesireWarWith();
 }
 
 void CtpAi::BeginMapAnalysis(const PLAYER_INDEX player)
 {
 	if(s_maxPlayers <= 0)
 		return;
+
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: BeginMapAnalysis(%d), curPlayer=%d\n",
+	                          player, g_selected_item->GetCurPlayer()));
 
 	Assert(player < s_maxPlayers);
 	Assert(player == g_selected_item->GetCurPlayer());
@@ -1127,6 +1167,9 @@ void CtpAi::BeginTurn(const PLAYER_INDEX player)
 {
 	if(s_maxPlayers <= 0)
 		return;
+
+	DPRINTF(k_DBG_SCHEDULER, ("PLAYER_SYNC: BeginTurn(%d), curPlayer=%d\n",
+	                          player, g_selected_item->GetCurPlayer()));
 
 	Assert(player < s_maxPlayers);
 	Assert(player == g_selected_item->GetCurPlayer());
@@ -2162,21 +2205,21 @@ void CtpAi::ExecuteOpportunityActions(const PLAYER_INDEX player)
 		if (army->NumOrders() > 0)
 			continue;
 
-	//	if(army.CanEntrench())
-	//	{
+		if(army.CanEntrench())
+		{
 			// We need to find something more interesting to do here
 			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
 									GEV_EntrenchOrder,
 									GEA_Army, army.m_id,
 									GEA_End);
-	/*	}
-		else
-		{
-			g_gevManager->AddEvent( GEV_INSERT_AfterCurrent,
-									GEV_SleepOrder,
-									GEA_Army, army.m_id,
-									GEA_End);
-		}*/
+		}
+		// No sleep fallback here: this function only ever runs for robot
+		// players (see the IsRobot() check above), and sleeping is purely
+		// a human-UI convenience (skip this unit in the "next unmoved
+		// unit" cycle) that also hides the unit on the map. The scheduler
+		// re-evaluates every army's goals every turn regardless of sleep
+		// state, so it buys the AI nothing - just leave a non-entrenching
+		// idle army without a new order.
 	}
 
 	CtpAi::SpendGoldToRushBuy(player);

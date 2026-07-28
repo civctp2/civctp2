@@ -192,6 +192,11 @@ sint32 CityAstar::GetMaxDir(MapPoint &pos) const
 	return SOUTH;
 }
 
+sint32 CityAstar::GetArmyId() const
+{
+	return g_theWorld->GetCity(m_start).m_id;
+}
+
 bool CityAstar::IsConnected
 (
     PLAYER_INDEX        owner,

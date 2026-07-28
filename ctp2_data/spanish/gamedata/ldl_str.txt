@@ -2614,6 +2614,8 @@ str_ldl_SV_COUNTDOWN_SEQUENCE			"Controlador Gaia listo en %d turnos..."
 # Message Box
 str_ldl_MB_OK					"SÍ"
 str_ldl_MB_CANCEL				"Cancelar"
+str_ldl_MB_Inspect				"Inspeccionar"
+str_ldl_MB_Continue				"Continuar"
 
 # Army Management
 str_ldl_ArmyManagement				"Administrador del ejército"
@@ -2837,6 +2839,7 @@ str_ldl_CityWinUnitsTab				"Unidades"
 
 # autosave string
 AUTOSAVE_NAME					"AUTOSAVE"
+AUTOSAVE_NAME_PREVIOUS					"AUTOSAVE2"
 
 TRADE_ROUTE_RESET				"¡Restablecer ruta comercial!"
 

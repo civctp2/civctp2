@@ -2795,6 +2795,11 @@ void SelectedItem::ForceDirectorSelect(const Army &army)
 	if(army.IsValid() && IsPlayerVisible(army.GetOwner()))
 	{
 		m_force_select_army = army;
+
+		// DirectorUnitSelection only honors m_force_select_army when this is
+		// false; otherwise it assumes a manual selection already happened
+		// and does nothing at all. A forced select should always win.
+		m_selected_something_since_director_select = false;
 	}
 }
 

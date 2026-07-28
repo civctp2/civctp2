@@ -123,7 +123,36 @@ public:
 
 	bool CanMove() const { return m_army.IsValid() && m_army->CanMove(); };
 
-	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits = 0);
+	// Shared A* solver (PATH_TYPE_TRANSPORT) behind all transport-related
+	// task pathfinding below - it doesn't itself know or care whether the
+	// mover is empty, being picked up, or already loaded.
+	bool FindPathForTransportTasks( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits = 0);
+
+	// The three wrappers below exist purely so each call site gets a name
+	// that actually describes what it's doing there, since the three
+	// scenarios that need this pathing are conceptually different even
+	// though they share the same underlying solver.
+
+	// An empty transport moving to rendezvous with cargo waiting to be
+	// picked up (SUB_TASK_TRANSPORT_TO_BOARD).
+	bool FindPathToPickUpCargo( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path, sint32 additionalUnits = 0)
+	{
+		return FindPathForTransportTasks(move_intersection, dest_pos, check_dest, found_path, additionalUnits);
+	}
+
+	// A land army moving to rendezvous with a transport in order to board
+	// it (SUB_TASK_CARGO_TO_BOARD).
+	bool FindPathToBoard( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path)
+	{
+		return FindPathForTransportTasks(move_intersection, dest_pos, check_dest, found_path);
+	}
+
+	// An already-loaded transport moving toward its actual destination,
+	// cargo staying aboard the whole way (SUB_TASK_TRANSPORT_TO_GOAL).
+	bool FindPathToGoalWhileLoaded( const uint32 & move_intersection, const MapPoint & dest_pos, const bool & check_dest, Path & found_path)
+	{
+		return FindPathForTransportTasks(move_intersection, dest_pos, check_dest, found_path);
+	}
 
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path );
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost);

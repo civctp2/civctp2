@@ -1519,8 +1519,6 @@ STDEHANDLER(LawsuitEvent)
 		}
 	}
 
-	a->AddSpecialActionUsed(lawyer);
-
 	if(utype >= 0) {
 		SlicObject *so = new SlicObject("161SueCompleteVictim");
 		so->AddRecipient(victim);
