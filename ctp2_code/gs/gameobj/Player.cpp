@@ -1395,9 +1395,9 @@ Unit Player::CreateCity(
 	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
-	sint32 offensive_garrison;
-	sint32 defensive_garrison;
-	sint32 ranged_garrison;
+	sint32 offensive_garrison = 0;
+	sint32 defensive_garrison = 0;
+	sint32 ranged_garrison    = 0;
 	strategy.GetOffensiveGarrisonCount(offensive_garrison);
 	strategy.GetDefensiveGarrisonCount(defensive_garrison);
 	strategy.GetRangedGarrisonCount(ranged_garrison);
@@ -2266,6 +2266,8 @@ void Player::BeginTurn()
 		}
 
 		m_gold->ClearStats();
+
+		m_vision->GarbageCollectUnseen();
 
 		BeginTurnPollution();
 

@@ -965,7 +965,6 @@ module.include.files=\
 	../../../ctp2_code/robot/aibackdoor/civarchive.h\
 	../../../ctp2_code/robot/aibackdoor/semi_dynamic_array.h\
 	../../../ctp2_code/robot/utility/RoboInit.h\
-	../../../ctp2_code/robot/pathing/BFS.h\
 	../../../ctp2_code/robot/pathing/CityAstar.h\
 	../../../ctp2_code/robot/pathing/Astar.h\
 	../../../ctp2_code/robot/pathing/RobotAstar.h\
@@ -973,7 +972,6 @@ module.include.files=\
 	../../../ctp2_code/robot/pathing/Path.h\
 	../../../ctp2_code/robot/pathing/AVLHeap.h\
 	../../../ctp2_code/robot/pathing/astarpnt.h\
-	../../../ctp2_code/robot/pathing/AstarQ.h\
 	../../../ctp2_code/robot/pathing/TestP.h\
 	../../../ctp2_code/robot/pathing/TradeAstar.h\
 	../../../ctp2_code/robot/pathing/robotastar2.h\
@@ -1977,12 +1975,10 @@ module.source.files=\
 	../../../ctp2_code/robot/pathing/CityAstar.cpp\
 	../../../ctp2_code/robot/pathing/AstarPnt.cpp\
 	../../../ctp2_code/robot/pathing/TradeAstar.cpp\
-	../../../ctp2_code/robot/pathing/AstarQ.cpp\
 	../../../ctp2_code/robot/pathing/AVLHeap.cpp\
 	../../../ctp2_code/robot/pathing/astar.cpp\
 	../../../ctp2_code/robot/pathing/TestP.cpp\
 	../../../ctp2_code/robot/pathing/robotastar2.cpp\
-	../../../ctp2_code/robot/pathing/BFS.cpp\
 	../../../ctp2_code/robot/pathing/unitastar.cpp\
 	../../../ctp2_code/sound/soundmanager.cpp\
 	../../../ctp2_code/sound/ear_util.cpp\

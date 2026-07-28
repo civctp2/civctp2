@@ -197,6 +197,14 @@ public:
 	void DeleteUnseenCells();
 	void ClearUnseen();
 
+	// The unseen-cell quadtree can accumulate "degenerate" branches (a
+	// node with only one remaining child) as tiles move in and out of
+	// vision over a long session; this rebuilds them away. Must only be
+	// called from a point with no QuadTree modification (Insert/Remove)
+	// already in progress higher up the call stack, since it deletes and
+	// reinserts nodes - a per-turn hook such as Player::BeginTurn is safe.
+	void GarbageCollectUnseen();
+
 	sint32 GetOwner() const { return m_owner; }
 
 	void SetAmOnScreen(bool amOnScreen) { m_amOnScreen = amOnScreen; };

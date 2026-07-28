@@ -58,6 +58,11 @@ void Astar_Cleanup()
 	g_astar_mem.CleanUp();
 }
 
+sint32 Astar_MaxSearchNodes()
+{
+	return 2 * g_theWorld->GetXWidth() * g_theWorld->GetYHeight();
+}
+
 #define k_MIN_MOVE_COST 10.0
 
 float g_cost_factor = k_MIN_MOVE_COST;
@@ -289,6 +294,7 @@ bool Astar::FindPath
 
 	c->m_point = g_astar_mem.GetNew();
 	c->m_search_count = g_search_count;
+	c->m_point->m_reopen_count = 0;
 
 	if (!InitPoint(NULL, c->m_point, start, 0.0, dest))
 	{
@@ -339,6 +345,14 @@ bool Astar::FindPath
 
 					if (bestG < oldG && (c->m_point->m_parent == NULL || c->m_point != best->m_parent))
 					{
+						// A tile that gets reopened far more than a healthy
+						// search ever needs is the signature of a cost-
+						// decreasing cycle (e.g. via DecayOrtho) rather than
+						// normal progress. Trips the debugger right here,
+						// on the offending tile, instead of at some
+						// arbitrary later iteration count.
+						Assert(++c->m_point->m_reopen_count < k_ASTAR_MAX_REOPENS);
+
 						if (c->m_point->GetExpanded())
 						{
 							// The node has already been expanded: propagate the
@@ -394,6 +408,7 @@ bool Astar::FindPath
 #endif
 				c->m_point = g_astar_mem.GetNew();
 				c->m_search_count = g_search_count;
+				c->m_point->m_reopen_count = 0;
 
 				if (InitPoint(best, c->m_point, next_pos, past_cost, dest))
 				{
@@ -454,7 +469,7 @@ bool Astar::FindPath
 			searching = false;
 		}
 
-	} while (searching || (best && (k_ASTAR_BIG <= best->m_entry_cost )) && (nodes_opened < cutoff));
+	} while ((searching || (best && (k_ASTAR_BIG <= best->m_entry_cost ))) && (nodes_opened < cutoff));
 
 	Assert(nodes_opened < cutoff);
 

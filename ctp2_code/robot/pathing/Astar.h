@@ -47,6 +47,19 @@ class AstarPoint;
 
 const float k_ASTAR_BIG = 7654321.0f;
 
+// A healthy search reopens any given tile only a handful of times (e.g. once
+// per neighbouring direction). Far more than that within a single search is
+// the signature of a cost-decreasing cycle rather than normal progress; see
+// AstarPoint::m_reopen_count.
+const sint32 k_ASTAR_MAX_REOPENS = 50;
+
+// Upper bound for anything that scales with the number of tiles a search may
+// need to touch: the open-list cutoff, the maximum sane path length, etc.
+// Scales with the actual map size (with a safety margin against cost-
+// improvement revisits) so oversized, e.g. modded, maps are not truncated by
+// a value tuned for the stock map sizes.
+extern sint32 Astar_MaxSearchNodes();
+
 class Astar
 {
 private:

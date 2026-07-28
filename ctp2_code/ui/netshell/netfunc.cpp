@@ -2245,7 +2245,9 @@ NETFunc::NETFunc(void) {
 
 	FILE *f = c3files_fopen(C3DIR_APPBASE, "netf.def", "rb");
 	if(f) {
-		fread(&s_servername, sizeof(s_servername) + sizeof(s_playername) + sizeof(s_sessionname), 1, f);
+		fread(&s_servername, sizeof(s_servername), 1, f);
+		fread(&s_playername, sizeof(s_playername), 1, f);
+		fread(&s_sessionname, sizeof(s_sessionname), 1, f);
 		fclose(f);
 	}
 
@@ -2302,7 +2304,9 @@ NETFunc::~NETFunc(void) {
 
 	FILE *f = c3files_fopen(C3DIR_APPBASE, "netf.def", "wb");
 	if(f) {
-		fwrite(&s_servername, sizeof(s_servername) + sizeof(s_playername) + sizeof(s_sessionname), 1, f);
+		fwrite(&s_servername, sizeof(s_servername), 1, f);
+		fwrite(&s_playername, sizeof(s_playername), 1, f);
+		fwrite(&s_sessionname, sizeof(s_sessionname), 1, f);
 		fclose(f);
 	}
 

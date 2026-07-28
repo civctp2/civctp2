@@ -121,6 +121,11 @@ void Vision::Clear()
 	m_unseenCells = new UnseenCellQuadTree(m_width, m_height, m_isYwrap);
 }
 
+void Vision::GarbageCollectUnseen()
+{
+	m_unseenCells->GarbageCollector();
+}
+
 void Vision::AddExplored(MapPoint pos, double radius)
 {
 	FillCircle(pos, radius, CIRCLE_OP_ADD); // makes also visible, i.e. removes ucell from m_unseenCells

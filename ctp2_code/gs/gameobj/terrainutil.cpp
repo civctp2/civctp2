@@ -381,7 +381,7 @@ sint32 terrainutil_GetBonusProductionExport(sint32 impType, const MapPoint &pos,
 	if(!effect)
 		return -1;
 
-	sint32 value;
+	sint32 value = 0;
 	effect->GetBonusProductionExport(value);
 	return value;
 }

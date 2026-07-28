@@ -69,6 +69,12 @@
 
 #include "AdvanceRecord.h"
 #include <algorithm>                    // std::fill
+#if defined(__GNUC__)
+#include <csignal>                      // sig_atomic_t, SIG_DFL, raise
+#include <execinfo.h>                   // backtrace, backtrace_symbols_fd
+#include <fcntl.h>                      // open
+#include <unistd.h>                     // write, close, _exit, STDERR_FILENO
+#endif
 #include "ancientwindows.h"
 #include "appstrings.h"
 #include "aui.h"
@@ -1225,8 +1231,26 @@ static LONG _cdecl main_CivExceptionHandler(LPEXCEPTION_POINTERS pException)
 #else
 static void main_CivExceptionHandler(int sig)
 {
-	const MBCHAR * s;
+	// This handler also runs for fatal signals (SIGABRT, SIGSEGV, SIGILL,
+	// SIGFPE), which can fire while the process is in an inconsistent
+	// state - e.g. mid-malloc, holding glibc's internal heap lock, which
+	// is exactly what happens when malloc itself detects heap corruption
+	// and aborts via SIGABRT. In that case the rich diagnostics below
+	// (fprintf, DPRINTF, c3debug_StackTrace - none of which are async-
+	// signal-safe, and can themselves need that same lock) will hang
+	// rather than print anything, leaving the process stuck forever with
+	// no way to interrupt it - not even Ctrl+C, since its handler is this
+	// same function.
+	//
+	// Guard against that: if this handler is re-entered - the signal
+	// arrives again, e.g. because the user sends it again after noticing
+	// nothing is happening - skip straight to an async-signal-safe-only
+	// fallback (raw write()/backtrace_symbols_fd(), no malloc involved)
+	// and terminate immediately, so the process can never get stuck no
+	// matter what state the first attempt got wedged in.
+	static volatile sig_atomic_t s_inHandler = 0;
 
+	const MBCHAR * s;
 	switch (sig)
 	{
 		case SIGABRT: s = "Abnormal Terminination (SIGABRT)";        break;
@@ -1238,6 +1262,24 @@ static void main_CivExceptionHandler(int sig)
 		case SIGQUIT: s = "Quit Signal (SIGQUIT)";                   break;
 		default:      s = "Unknown/Unspecified";                     break;
 	}
+
+	if (s_inHandler)
+	{
+		// Nothing useful to do if even this fails - the process is being
+		// forced to exit either way.
+		static const char reentered[] = "re-entered the crash handler for signal '";
+		if (write(STDERR_FILENO, reentered, strlen(reentered)) < 0) {}
+		if (write(STDERR_FILENO, s, strlen(s)) < 0) {}
+		static const char forcing[] = "'; forcing exit.\n";
+		if (write(STDERR_FILENO, forcing, strlen(forcing)) < 0) {}
+
+		void * frames[64];
+		int const frameCount = backtrace(frames, 64);
+		backtrace_symbols_fd(frames, frameCount, STDERR_FILENO);
+
+		_exit(128 + sig);
+	}
+	s_inHandler = 1;
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
 	// Print to file and stderr
@@ -1272,7 +1314,13 @@ static void main_CivExceptionHandler(int sig)
 	}
 
 #endif // _DEBUG
-	exit(sig);
+
+	// Let the OS terminate the process normally (producing a core dump for
+	// the fatal signals) instead of calling exit(), which is not async-
+	// signal-safe itself and could hang for the same reason as above.
+	s_inHandler = 0;
+	signal(sig, SIG_DFL);
+	raise(sig);
 }
 #endif // _MSC_VER
 
@@ -1525,6 +1573,16 @@ int CivMain
 	signal(SIGSEGV, main_CivExceptionHandler);
 	signal(SIGTERM, main_CivExceptionHandler);
 	signal(SIGQUIT, main_CivExceptionHandler);
+
+	// backtrace() can do lazy one-time setup (e.g. loading libgcc's unwind
+	// tables) on its first call, which glibc does not guarantee is safe to
+	// do for the first time from within a signal handler. Prime it here,
+	// at a normal, safe point, so main_CivExceptionHandler's use of it
+	// later is never the first call.
+	{
+		void * primeFrames[1];
+		backtrace(primeFrames, 1);
+	}
 
 	// FIXME: Remove unneeded arguments.
 	HINSTANCE hInstance = NULL;

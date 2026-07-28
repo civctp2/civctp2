@@ -24,7 +24,7 @@
 //
 // Modifications from the original Activision code:
 //
-// - Standardized code (May 21th 2006 Martin Gühmann)
+// - Standardized code (May 21th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -185,45 +185,48 @@ AUI_ERRCODE aui_DirtyList::SubtractRect( RECT *sub )
 
 AUI_ERRCODE aui_DirtyList::Minimize( void )
 {
+	// For each rect, merge it with every mergeable rect that comes after it
+	// in the list, growing it in place as merges are found. A merge only
+	// ever removes items from the remaining tail, so once a rect has been
+	// checked against everything currently after it, it never needs to be
+	// revisited: re-scanning from this rect's own position after a merge
+	// (rather than restarting from the head of the whole list) is enough
+	// to catch further merges made possible by its growth, without redoing
+	// comparisons against rects already settled earlier in the list.
+	//
+	// nextPos is always recomputed as "whatever currently follows
+	// curLinkPos" rather than reused directly, since curLinkPos is never
+	// itself deleted and its pNext is kept correct across deletions, while
+	// a stale copy of a successor position could be dangling if that very
+	// link was just removed by a merge.
+	ListPos curLinkPos = GetHeadPosition();
 
-	BOOL shouldContinue = L() > 1;
-
-	while ( shouldContinue )
+	while ( curLinkPos )
 	{
+		RECT *curRect = GetAt( curLinkPos );
 
-		shouldContinue = FALSE;
+		ListPos nextPos = curLinkPos;
+		GetNext( nextPos );
 
-		ListPos curPos = GetHeadPosition();
-
-		for ( size_t i = L() - 1; i; i-- )
+		while ( nextPos )
 		{
+			ListPos prevPos = nextPos;
+			RECT *nextRect = GetNext( nextPos );
 
-			RECT *curRect = GetNext( curPos );
-
-			ListPos nextPos = curPos;
-
-			for ( size_t j = i; j; j-- )
+			RECT conRect;
+			if ( Rectangle_SmartConsolidate( &conRect, curRect, nextRect ) )
 			{
+				m_rectMemory->Delete( nextRect );
+				DeleteAt( prevPos );
 
-				ListPos prevPos = nextPos;
-				RECT *nextRect = GetNext( nextPos );
+				CopyRect( curRect, &conRect );
 
-				RECT conRect;
-				if ( Rectangle_SmartConsolidate( &conRect, curRect, nextRect ) )
-				{
-
-					m_rectMemory->Delete( nextRect );
-					DeleteAt( prevPos );
-
-					CopyRect( curRect, &conRect );
-
-					shouldContinue = L() > 1;
-					break;
-				}
+				nextPos = curLinkPos;
+				GetNext( nextPos );
 			}
-
-			if ( shouldContinue ) break;
 		}
+
+		GetNext( curLinkPos );
 	}
 
 	return AUI_ERRCODE_OK;
