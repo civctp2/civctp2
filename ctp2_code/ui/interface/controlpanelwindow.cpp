@@ -113,6 +113,7 @@
 #include "message.h"
 
 #include "cursormanager.h"
+#include "ScriptTargetMode.h"
 #include "debugwindow.h"
 
 #include "c3cmdline.h"
@@ -1810,6 +1811,8 @@ bool ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
 			return TileImpClick(pos);
 	case	CP_TARGETING_MODE_TERRAFORM_PENDING:
 			return TerraFormClick(pos);
+	case	CP_TARGETING_MODE_SCRIPT_PENDING:
+			return ScriptTargetClick(pos);
 	default:
 			ClearTargetingMode();
 	}
@@ -1967,6 +1970,11 @@ void ControlPanelWindow::ClearTargetingMode()
 	m_currentTerrainRec    = NULL;
 	m_currentTerrainImpRec = NULL;
 
+	// Deactivate script targeting if it was active (avoid recursion — just
+	// reset the flag, don't call Cancel() which calls back into us)
+	if(g_scriptTargetMode && g_scriptTargetMode->IsActive())
+		g_scriptTargetMode->Deactivate();
+
 	if(g_cursorManager)
 		g_cursorManager->SetCursor(CURSORINDEX_DEFAULT);
 
@@ -1976,6 +1984,19 @@ void ControlPanelWindow::ClearTargetingMode()
 	g_tiledMap->GetMouseTilePos(pos);
 	tileimptracker_DisplayData(pos, -1);
 	specialAttackWindow_DisplayData(pos, -1);
+}
+
+void ControlPanelWindow::SetScriptTargetingMode()
+{
+	m_targetingMode = CP_TARGETING_MODE_SCRIPT_PENDING;
+}
+
+bool ControlPanelWindow::ScriptTargetClick(const MapPoint &pos)
+{
+	if (g_scriptTargetMode)
+		return g_scriptTargetMode->HandleClick(pos);
+	ClearTargetingMode();
+	return false;
 }
 
 void ControlPanelWindow::CreateTabGroup(const MBCHAR *ldlBlock)

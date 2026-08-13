@@ -187,6 +187,12 @@ private:
 	double              m_hp;
 	double              m_movement_points;
 
+	// MoM spell buff overlays (added by stat modifier patch)
+	sint32              m_attackMod;
+	sint32              m_defenseMod;
+	sint32              m_hpMaxMod;
+	sint32              m_moveMod;
+
 	// 4 byte in a 32 bit program, 8 byte in a 64 bit program
 	UnitDynamicArray   *m_cargo_list;
 	CityData           *m_city_data;
@@ -299,6 +305,17 @@ public:
 	double GetHP() const;
 	void DeductHP(const double fp);
 	void SetHP(const double hp);
+
+	// MoM spell buff overlay accessors
+	sint32 GetAttackMod() const { return m_attackMod; }
+	sint32 GetDefenseMod() const { return m_defenseMod; }
+	sint32 GetHpMaxMod() const { return m_hpMaxMod; }
+	sint32 GetMoveMod() const { return m_moveMod; }
+	void   SetAttackMod(sint32 v) { m_attackMod = v; }
+	void   SetDefenseMod(sint32 v) { m_defenseMod = v; }
+	void   SetHpMaxMod(sint32 v) { m_hpMaxMod = v; }
+	void   SetMoveMod(sint32 v) { m_moveMod = v; }
+	void   ClearBuffs() { m_attackMod = 0; m_defenseMod = 0; m_hpMaxMod = 0; m_moveMod = 0; }
 
 	double GetMovementPoints() const { return m_movement_points; };
 	void   SetMovementPoints(double mp);

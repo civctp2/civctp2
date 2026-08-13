@@ -48,7 +48,8 @@ libgsslic_la_SOURCES = \
 	SlicStack.cpp \
 	SlicStruct.cpp \
 	SlicSymbol.cpp \
-	SlicSymTab.cpp
+	SlicSymTab.cpp \
+	ScriptTargetMode.cpp
 
 lex.sc.c: sliccmd.l sc.tab.h
 	$(LEX) -i -Psc -o$@ $<

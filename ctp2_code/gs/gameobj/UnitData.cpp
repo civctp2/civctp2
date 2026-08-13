@@ -326,6 +326,12 @@ void UnitData::Create(const sint32 t,
 	m_fuel            = CalculateTotalFuel();
 	m_movement_points = CalculateTotalMovePoints();
 
+	// MoM spell buff overlays — start at zero
+	m_attackMod  = 0;
+	m_defenseMod = 0;
+	m_hpMaxMod   = 0;
+	m_moveMod    = 0;
+
 	// PFT 17 Mar 05, don't FIRST_MOVE flag immobile units
 	if( !IsImmobile() )
 		SetFlag(k_UDF_FIRST_MOVE);
@@ -1250,6 +1256,9 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 
 	double				base	= rec->GetAttack();
 	double				bonuses	= 0.0;//cumulative % bonuses
+
+	// MoM spell buff overlay — flat additive before percentage bonuses
+	base += m_attackMod;
 
 	sint32 intAttack = (sint32)base;
 	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
@@ -2191,6 +2200,12 @@ void UnitData::Serialize(CivArchive &archive)
 		archive<<m_hp;
 		archive<<m_movement_points;
 
+		// MoM spell buff overlays
+		archive<<m_attackMod;
+		archive<<m_defenseMod;
+		archive<<m_hpMaxMod;
+		archive<<m_moveMod;
+
 		archive<<m_type;
 		archive<<m_visibility;
 		archive<<m_temp_visibility;
@@ -2247,6 +2262,12 @@ void UnitData::Serialize(CivArchive &archive)
 		archive>>m_fuel;
 		archive>>m_hp;
 		archive>>m_movement_points;
+
+		// MoM spell buff overlays
+		archive>>m_attackMod;
+		archive>>m_defenseMod;
+		archive>>m_hpMaxMod;
+		archive>>m_moveMod;
 
 		archive>>m_type;
 		archive>>m_visibility;
@@ -3467,6 +3488,9 @@ double UnitData::GetDefense(const Unit &attacker) const
 	double base			= myRec->GetDefense();
 	double bonuses		= 0.0;// cumulative bonuses
 	Cell *		   cell = g_theWorld->GetCell(m_pos);
+
+	// MoM spell buff overlay — flat additive before percentage bonuses
+	base += m_defenseMod;
 
 	sint32 intDef = (sint32)base;
 	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
@@ -6253,7 +6277,7 @@ sint32 UnitData::CalculateTotalHP() const
 	sint32 wonderHPBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	sint32 featHPBonus    = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_HIT_POINTS, m_owner);
 
-	return GetDBRec()->GetMaxHP() + wonderHPBonus + civHPBonus + featHPBonus;
+	return GetDBRec()->GetMaxHP() + wonderHPBonus + civHPBonus + featHPBonus + m_hpMaxMod;
 }
 
 sint32 UnitData::CalculateTotalFuel() const
@@ -6288,6 +6312,9 @@ double UnitData::CalculateTotalMovePoints() const
 			movePoints += amt;
 		}
 	}
+
+	// MoM spell buff overlay — flat additive to move points
+	movePoints += static_cast<double>(m_moveMod);
 
 	return movePoints;
 }

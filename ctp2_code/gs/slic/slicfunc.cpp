@@ -7853,3 +7853,178 @@ SFN_ERROR Slic_GetStoredProduction::Call(SlicArgList *args)
 
 	return SFN_ERROR_OK;
 }
+
+//----------------------------------------------------------------------------
+// Unit stat modifier builtins
+//----------------------------------------------------------------------------
+
+// ModifyUnitStat(unit, stat_id, delta)
+// stat_id: 0=attack, 1=defense, 2=hpmax, 3=move
+// Returns 1 on success, 0 on failure
+SFN_ERROR Slic_ModifyUnitStat::Call(SlicArgList *args)
+{
+	if(args->Count() != 3)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 statId;
+	if(!args->GetInt(1, statId))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 delta;
+	if(!args->GetInt(2, delta))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	UnitData *ud = unit.AccessData();
+	switch(statId) {
+		case 0: ud->SetAttackMod(ud->GetAttackMod() + delta); break;
+		case 1: ud->SetDefenseMod(ud->GetDefenseMod() + delta); break;
+		case 2: ud->SetHpMaxMod(ud->GetHpMaxMod() + delta); break;
+		case 3: ud->SetMoveMod(ud->GetMoveMod() + delta); break;
+		default:
+			m_result.m_int = 0;
+			return SFN_ERROR_OK;
+	}
+
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+// ClearUnitBuffs(unit)
+// Returns 1 on success, 0 on failure
+SFN_ERROR Slic_ClearUnitBuffs::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	unit.AccessData()->ClearBuffs();
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+// HealUnit(unit, amount)
+// Returns 1 on success, 0 on failure
+SFN_ERROR Slic_HealUnit::Call(SlicArgList *args)
+{
+	if(args->Count() != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 amount;
+	if(!args->GetInt(1, amount))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	UnitData *ud = unit.AccessData();
+	double newHP = ud->GetHP() + static_cast<double>(amount);
+	double maxHP = static_cast<double>(ud->CalculateTotalHP());
+	if(newHP > maxHP) newHP = maxHP;
+	if(newHP < 0.0) newHP = 0.0;
+	ud->SetHP(newHP);
+
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+// GetUnitHP(unit)
+// Returns current HP as integer
+SFN_ERROR Slic_GetUnitHP::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	m_result.m_int = static_cast<sint32>(unit.AccessData()->GetHP());
+	return SFN_ERROR_OK;
+}
+
+// GetUnitMaxHP(unit)
+// Returns max HP as integer
+SFN_ERROR Slic_GetUnitMaxHP::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	m_result.m_int = unit.AccessData()->CalculateTotalHP();
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+// SLIC script targeting builtins
+//----------------------------------------------------------------------------
+#include "ScriptTargetMode.h"
+
+// BeginTargetMode(callback_name)
+// Enters crosshair cursor mode. When player clicks a tile, fires the named
+// SLIC segment with player and location context.
+SFN_ERROR Slic_BeginTargetMode::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	char *callbackName;
+	if(!args->GetString(0, callbackName))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!callbackName || callbackName[0] == '\0')
+		return SFN_ERROR_TYPE_ARGS;
+
+	// Use the current visible player as the casting player
+	sint32 player = 0;
+	if(g_selected_item)
+		player = g_selected_item->GetVisiblePlayer();
+
+	if(g_scriptTargetMode)
+		g_scriptTargetMode->Begin(player, callbackName);
+
+	return SFN_ERROR_OK;
+}
+
+// IsTargetModeActive()
+// Returns 1 if spell targeting mode is currently active, 0 otherwise.
+SFN_ERROR Slic_IsTargetModeActive::Call(SlicArgList *args)
+{
+	m_result.m_int = (g_scriptTargetMode && g_scriptTargetMode->IsActive()) ? 1 : 0;
+	return SFN_ERROR_OK;
+}
