@@ -117,17 +117,26 @@ AUI_ERRCODE initialplayscreen_Initialize( void )
 	  spriteTest->Hide();
 	}
 	
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton",
-											initialplayscreen_emailPress, nullptr);
-	Assert(errcode == AUI_ERRCODE_OK);
+	if (aui_Ldl::GetObject(s_initplayWindowLDLBlock, "EmailButton"))
+	{
+		errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "EmailButton",
+												initialplayscreen_emailPress, nullptr);
+		Assert(errcode == AUI_ERRCODE_OK);
+	}
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "HotseatButton",
-											initialplayscreen_hotseatPress, nullptr);
-	Assert(errcode == AUI_ERRCODE_OK);
+	if (aui_Ldl::GetObject(s_initplayWindowLDLBlock, "HotseatButton"))
+	{
+		errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "HotseatButton",
+												initialplayscreen_hotseatPress, nullptr);
+		Assert(errcode == AUI_ERRCODE_OK);
+	}
 
-	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "MPButton",
-											initialplayscreen_mpPress, nullptr);
-	Assert(errcode == AUI_ERRCODE_OK);
+	if (aui_Ldl::GetObject(s_initplayWindowLDLBlock, "MPButton"))
+	{
+		errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "MPButton",
+												initialplayscreen_mpPress, nullptr);
+		Assert(errcode == AUI_ERRCODE_OK);
+	}
 
 	errcode = aui_Ldl::SetActionFuncAndCookie(s_initplayWindowLDLBlock, "QuitButton",
 											initialplayscreen_quitPress, nullptr);

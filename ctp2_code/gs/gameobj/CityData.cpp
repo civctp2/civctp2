@@ -11686,6 +11686,12 @@ void CityData::Militia()
 	{
 		sint32 cheapUnit = g_player[m_owner]->GetCheapestMilitaryUnit(cpos);
 
+		// No buildable military unit (a fully tech-gated MoM player with no attack-unit
+		// advance yet): skip militia instead of creating unit index -1. Mirrors the
+		// slave-uprising guard (~line 6277). Prevents the Player.cpp:6736 assert/crash.
+		if (cheapUnit < 0)
+			return;
+
 		// If DiffDB AI gets a free unit when city ungarrisoned then give cheapest unit
 		if((g_theDifficultyDB->Get(g_theGameSettings->GetDifficulty())->GetAIMilitiaUnit()
 		|| 	g_theProfileDB->IsAIMilitiaUnit() && !g_network.IsActive())

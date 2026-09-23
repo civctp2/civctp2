@@ -58,6 +58,7 @@
 #include "Sci.h"
 #include "screenutils.h"
 #include "SelItem.h"
+#include "SlicContext.h"
 #include "StrDB.h"
 #include "TerrainImprovementRecord.h"
 #include "terrainutil.h"
@@ -251,23 +252,23 @@ void ScienceManagementDialog::UpdateScience()
 	sprintf(buffer, "%d", player->GetCurrentScienceCost());
 	m_scienceTotalValue->SetText(buffer);
 
-	size_t      textLength  = 0;
-	MBCHAR *    description = reinterpret_cast<MBCHAR *>
-        (g_GreatLibPF->getData
-            (currentAdvanceRecord->GetIcon()->GetVari(),
-		     textLength
-            )
-        );
+	SlicContext context;
+	context.AddAdvance(currentAdvance);
 
-    if (description)
-    {
-	    m_scienceDescription->SetHyperText(description);
-	    g_GreatLibPF->freeData(description);
-    }
-    else
-    {
-        m_scienceDescription->SetHyperText("");
-    }
+	const MBCHAR *description = NULL;
+	if (const IconRecord *icon = currentAdvanceRecord->GetIcon()) {
+		if (icon->GetVari() && stricmp(icon->GetVari(), "NULL") != 0) {
+			description = glutil_LoadText(icon->GetVari(), context);
+		}
+		if (!description && icon->GetGameplay() && stricmp(icon->GetGameplay(), "NULL") != 0) {
+			description = glutil_LoadText(icon->GetGameplay(), context);
+		}
+		if (!description && icon->GetHistorical() && stricmp(icon->GetHistorical(), "NULL") != 0) {
+			description = glutil_LoadText(icon->GetHistorical(), context);
+		}
+	}
+
+	m_scienceDescription->SetHyperText(description ? description : "");
 }
 
 void ScienceManagementDialog::ClearScience()

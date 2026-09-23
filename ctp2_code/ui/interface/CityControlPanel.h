@@ -95,6 +95,8 @@ private:
 
 	bool GetSelectedCity(Unit & selectedCity);
 
+	bool GetSelectedCityData(Unit & selectedCity, CityData *& cityData);
+
 	void UpdateBuildItem();
 
 	void NoBuildItem();

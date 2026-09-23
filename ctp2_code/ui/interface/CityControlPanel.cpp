@@ -269,13 +269,14 @@ void CityControlPanel::RushBuyBuildButtonActionCallback(aui_Control * control, u
 	}
 
 	Unit selectedCity;
-	if (!((CityControlPanel*)cookie.m_voidPtr)->GetSelectedCity(selectedCity)) {
+	CityData * cityData = NULL;
+	if (!((CityControlPanel*)cookie.m_voidPtr)->GetSelectedCityData(selectedCity, cityData)) {
 		return;
 	}
 
-	if (!selectedCity.GetCityData()->AlreadyBoughtFront())
+	if (!cityData->AlreadyBoughtFront())
 	{
-		selectedCity.GetCityData()->AddBuyFront();
+		cityData->AddBuyFront();
 		((CityControlPanel *) cookie.m_voidPtr)->m_currentTurns = 0; // Force update of city control panel
 		((CityControlPanel *) cookie.m_voidPtr)->Update();
 		CityWindow::UpdateCity(selectedCity);
@@ -309,10 +310,11 @@ void CityControlPanel::ToggleGovernorButtonActionCallback(aui_Control *control,
 	if(selIndex < 0 || selIndex >= player->m_all_cities->Num())
 		return;
 
-	CityData *cityData =
-		player->GetCityFromIndex(
-		cityControlPanel->m_cityListDropDown->GetSelectedItem()
-		).GetCityData();
+	Unit selectedCity;
+	CityData * cityData = NULL;
+	if (!cityControlPanel->GetSelectedCityData(selectedCity, cityData)) {
+		return;
+	}
 	cityData->SetUseGovernor(!cityData->GetUseGovernor());
 
 	cityControlPanel->UpdateGovernor();
@@ -342,9 +344,12 @@ void CityControlPanel::SelectGovernorActionCallback(aui_Control *control,
 		return;
 
 	Unit selectedCity;
-	if(cityControlPanel->GetSelectedCity(selectedCity)) {
-		selectedCity.GetCityData()->SetBuildListSequenceIndex(static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
+	CityData * cityData = NULL;
+	if (!cityControlPanel->GetSelectedCityData(selectedCity, cityData)) {
+		return;
 	}
+
+	cityData->SetBuildListSequenceIndex(static_cast<ctp2_DropDown*>(control)->GetSelectedItem());
 
 	cityControlPanel->UpdateGovernor();
 }
@@ -358,6 +363,17 @@ bool CityControlPanel::GetSelectedCity(Unit & selectedCity)
 
 	selectedCity.m_id = selItem->GetUserDataUint32();
 	return selectedCity.IsValid();
+}
+
+bool CityControlPanel::GetSelectedCityData(Unit & selectedCity, CityData *& cityData)
+{
+	if (!GetSelectedCity(selectedCity)) {
+		cityData = NULL;
+		return false;
+	}
+
+	cityData = selectedCity.GetCityData();
+	return cityData != NULL;
 }
 
 //----------------------------------------------------------------------------
@@ -431,11 +447,18 @@ void CityControlPanel::UpdateBuildItem()
 
 	Unit       city     = player->GetCityFromIndex(city_index);
 	CityData * cityData = city.GetCityData();
+	if (!city.IsValid() || !cityData)
+	{
+		m_rushBuyCost->SetText("---");
+		m_buildRushBuy->Enable(false);
+		ClearBuildItem();
+		return;
+	}
 
 	sint32       numberOfItems = m_cityListDropDown->GetListBox()->NumItems();
-	BuildQueue * queue         = cityData ? cityData->GetBuildQueue() : NULL;
+	BuildQueue * queue         = cityData->GetBuildQueue();
 	BuildNode  * head          = queue ? queue->GetHead() : NULL;
-	sint32 const cost          = cityData ? cityData->GetOvertimeCost() : 0;
+	sint32 const cost          = cityData->GetOvertimeCost();
 	bool const   isMyTurn      = visiblePlayer == g_selected_item->GetCurPlayer();
 
 	// Do update the rush buy button, even when the production has not changed.
@@ -456,7 +479,7 @@ void CityControlPanel::UpdateBuildItem()
 		m_buildRushBuy->Enable(isMyTurn && (cost <= player->GetGold()));
 	}
 
-	sint32 turns = cityData ? cityData->HowMuchLonger() : CITY_PRODUCTION_HALTED;
+	sint32 turns = cityData->HowMuchLonger();
 
 	if ((m_currentCity.m_id == city.m_id) &&
 	    (m_currentNumItems == numberOfItems) &&
@@ -484,7 +507,7 @@ void CityControlPanel::UpdateBuildItem()
 	m_buildItemIconButton->Enable(true);
 	m_buildItemTurnButton->Enable(true);
 
-	if(queue->GetLen() < 1) {
+	if(!queue || queue->GetLen() < 1) {
 		NoBuildItem();
 		return;
 	}
@@ -584,8 +607,18 @@ void CityControlPanel::UpdateGovernor()
 		return;
 
 	Unit city = player->GetCityFromIndex(city_index);
+	CityData * cityData = city.GetCityData();
+	if (!city.IsValid() || !cityData) {
+		m_governorToggleButton->Enable(false);
+		m_governorToggleButton->SetText("");
+		m_governorDropDown->Enable(false);
+		m_governorDropDown->SetSelectedItem(-1);
+		m_useGovernor = false;
+		m_currentGovernor = -1;
+		return;
+	}
 
-	if(city.GetCityData()->GetUseGovernor()) {
+	if(cityData->GetUseGovernor()) {
 		if(!m_useGovernor) {
 
 			m_governorToggleButton->SetText("X");
@@ -597,10 +630,10 @@ void CityControlPanel::UpdateGovernor()
 			m_governorDropDown->Enable(true);
 		}
 
-		if(m_currentGovernor != city.GetCityData()->GetBuildListSequenceIndex()) {
+		if(m_currentGovernor != cityData->GetBuildListSequenceIndex()) {
 			m_governorDropDown->SetSelectedItem(
-				city.GetCityData()->GetBuildListSequenceIndex());
-			m_currentGovernor = city.GetCityData()->GetBuildListSequenceIndex();
+				cityData->GetBuildListSequenceIndex());
+			m_currentGovernor = cityData->GetBuildListSequenceIndex();
 		}
 	} else {
 

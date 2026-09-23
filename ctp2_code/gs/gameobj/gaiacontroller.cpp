@@ -22,7 +22,7 @@
 // Modifications from the original Activision code:
 //
 // - Fixed neutral tile improvment bug by preventing the game
-//   from reading invalid memory, by Martin Gühmann.
+//   from reading invalid memory, by Martin Gï¿½hmann.
 //
 //----------------------------------------------------------------------------
 
@@ -58,12 +58,12 @@
 uint64 GaiaController::sm_endgameImprovements = 0x0;
 uint64 GaiaController::sm_endgameBuildings = 0x0;
 uint64 GaiaController::sm_endgameWonders = 0x0;
-sint32 GaiaController::sm_towerEndgameIndex = 0x0;
-sint32 GaiaController::sm_satelliteEndgameIndex = 0x0;
-sint32 GaiaController::sm_mainframeEndgameIndex = 0x0;
-sint32 GaiaController::sm_towerTileImpIndex = 0x0;
-sint32 GaiaController::sm_satelliteBuildingIndex = 0x0;
-sint32 GaiaController::sm_mainframeBuildingIndex = 0x0;
+sint32 GaiaController::sm_towerEndgameIndex = -1;
+sint32 GaiaController::sm_satelliteEndgameIndex = -1;
+sint32 GaiaController::sm_mainframeEndgameIndex = -1;
+sint32 GaiaController::sm_towerTileImpIndex = -1;
+sint32 GaiaController::sm_satelliteBuildingIndex = -1;
+sint32 GaiaController::sm_mainframeBuildingIndex = -1;
 
 GaiaController::GaiaController(const PLAYER_INDEX player)
 {
@@ -104,37 +104,50 @@ void GaiaController::InitializeStatics()
 	const BuildingRecord *building_rec;
 	const WonderRecord *wonder_rec;
 
+	sm_towerEndgameIndex = -1;
+	sm_satelliteEndgameIndex = -1;
+	sm_mainframeEndgameIndex = -1;
+	sm_towerTileImpIndex = -1;
+	sm_satelliteBuildingIndex = -1;
+	sm_mainframeBuildingIndex = -1;
+
 	sm_towerEndgameIndex =
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_PROCESSING_TOWER");
 
-	Assert(sm_towerEndgameIndex >= 0);
 	if (sm_towerEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_towerEndgameIndex))
 	{
 		terr_rec = g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->
 			GetTerrainImprovementPtr();
-		sm_towerTileImpIndex = terr_rec->GetIndex();
+		if (terr_rec)
+		{
+			sm_towerTileImpIndex = terr_rec->GetIndex();
+		}
 	}
 
 	sm_satelliteEndgameIndex =
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_POWER_SATELLITE");
 
-	Assert(sm_satelliteEndgameIndex >= 0);
 	if (sm_satelliteEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex))
 	{
 		building_rec = g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->
 			GetBuildingPtr();
-		sm_satelliteBuildingIndex = building_rec->GetIndex();
+		if (building_rec)
+		{
+			sm_satelliteBuildingIndex = building_rec->GetIndex();
+		}
 	}
 
 	sm_mainframeEndgameIndex =
 		g_theEndGameObjectDB->FindRecordNameIndex("ENDGAME_GAIA_COMPUTER");
 
-	Assert(sm_mainframeEndgameIndex >= 0);
 	if (sm_mainframeEndgameIndex >= 0 && g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex))
 	{
 		building_rec = g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex)->
 			GetBuildingPtr();
-		sm_mainframeBuildingIndex = building_rec->GetIndex();
+		if (building_rec)
+		{
+			sm_mainframeBuildingIndex = building_rec->GetIndex();
+		}
 	}
 
 	sm_endgameImprovements = 0x0;
@@ -195,13 +208,19 @@ void GaiaController::RecomputeCoverage()
 	if (player_ptr == NULL)
 		return;
 
+	m_coveredCells.Reset(0);
+	m_numTowersBuilt = 0;
+	if (sm_towerTileImpIndex < 0)
+	{
+		m_percentCoverage = 0.0f;
+		return;
+	}
+
 	sint32 radius = GetTowerRadius();
 
 	const DynamicArray<Installation> *tile_imps =
 		player_ptr->m_allInstallations;
 
-	m_coveredCells.Reset(0);
-	m_numTowersBuilt = 0;
 	sint32 covered_cells = 0;
 
 	for(sint32 i = 0; i < tile_imps->Num(); i++)
@@ -322,7 +341,7 @@ STDEHANDLER(GaiaController_CutImprovements)
 	Cell *cell = g_theWorld->GetCell(pos);
 	owner = cell->GetOwner();
 
-	//Added by Martin Gühmann to prevent
+	//Added by Martin Gï¿½hmann to prevent
 	//the game from accessing an invalid
 	//area of memory, plain arrays don't
 	//have out of bounds array, so accessing
@@ -366,7 +385,7 @@ STDEHANDLER(GaiaController_ImprovementComplete)
 	if(!args->GetInt(0, type))
 		return GEV_HD_Continue;
 
-	//Added by Martin Gühmann to prevent
+	//Added by Martin Gï¿½hmann to prevent
 	//the game from accessing an invalid
 	//area of memory, plain arrays don't
 	//have out of bounds array, so accessing
@@ -693,6 +712,8 @@ sint16 GaiaController::NumWondersBuilt() const
 sint16 GaiaController::NumSatellitesRequired() const
 {
 	sint32 value = 0;
+	if (sm_satelliteEndgameIndex < 0 || !g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex))
+		return 0;
 	g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMinNeeded(value);
 
 	return (sint16) value;
@@ -701,6 +722,8 @@ sint16 GaiaController::NumSatellitesRequired() const
 sint16 GaiaController::MaxSatellitesAllowed() const
 {
 	sint32 value = 0;
+	if (sm_satelliteEndgameIndex < 0 || !g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex))
+		return 0;
 	g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex)->GetMaxNeeded(value);
 
 	return (sint16) value;
@@ -709,6 +732,8 @@ sint16 GaiaController::MaxSatellitesAllowed() const
 sint16 GaiaController::NumMainframesRequired() const
 {
 	sint32 value = 0;
+	if (sm_mainframeEndgameIndex < 0 || !g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex))
+		return 0;
 	g_theEndGameObjectDB->Get(sm_mainframeEndgameIndex)->GetMinNeeded(value);
 
 	return (sint16) value;
@@ -717,6 +742,8 @@ sint16 GaiaController::NumMainframesRequired() const
 sint16 GaiaController::NumTowersRequired() const
 {
 	sint32 value = 0;
+	if (sm_towerEndgameIndex < 0 || !g_theEndGameObjectDB->Get(sm_towerEndgameIndex))
+		return 0;
 	g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinNeeded(value);
 
 	return (sint16) value;
@@ -725,6 +752,8 @@ sint16 GaiaController::NumTowersRequired() const
 double GaiaController::TowerCoverageRequired() const
 {
 	double value = 0;
+	if (sm_towerEndgameIndex < 0 || !g_theEndGameObjectDB->Get(sm_towerEndgameIndex))
+		return 0;
 	g_theEndGameObjectDB->Get(sm_towerEndgameIndex)->GetMinCoverage(value);
 
 	return value;
@@ -732,12 +761,14 @@ double GaiaController::TowerCoverageRequired() const
 
 sint16 GaiaController::GetTowerRadius() const
 {
-	Assert(sm_towerEndgameIndex >= 0);
+	if (sm_towerEndgameIndex < 0 || sm_satelliteEndgameIndex < 0)
+		return 0;
 	const EndGameObjectRecord *tower_rec =
 		g_theEndGameObjectDB->Get(sm_towerEndgameIndex);
-	Assert(sm_satelliteEndgameIndex >= 0);
 	const EndGameObjectRecord *satellite_rec =
 		g_theEndGameObjectDB->Get(sm_satelliteEndgameIndex);
+	if (!tower_rec || !satellite_rec)
+		return 0;
 
 	sint32 min_radius = 0;
 	tower_rec->GetMinRadius(min_radius);
@@ -751,7 +782,8 @@ sint16 GaiaController::GetTowerRadius() const
 
 	sint32 max_satellites = 0;
 	satellite_rec->GetMaxNeeded(max_satellites);
-	Assert(max_satellites);
+	if (max_satellites <= min_satellites || max_radius <= min_radius)
+		return (sint16) min_radius;
 
 	sint16 add_radius = 0;
 	if ( (m_numSatellites > min_satellites) &&
@@ -807,6 +839,22 @@ bool GaiaController::CanStartCountdown() const
 		return false;
 
 	if (NumSatellitesLaunched() < NumSatellitesRequired())
+		return false;
+
+	// Gate on endgame WONDERS too. The tower/mainframe/satellite requirements above
+	// resolve to 0 for an endgame object the engine doesn't recognise by its hard-coded
+	// name (InitializeStatics only matches ENDGAME_PROCESSING_TOWER / _POWER_SATELLITE /
+	// _GAIA_COMPUTER). A wonder-only endgame (e.g. MoM's ENDGAME_MOM_MASTERY ->
+	// WONDER_RUNE_OF_RULERSHIP) would otherwise let EVERY player start the countdown from
+	// turn 1; an AI then auto-wins a science victory ~TurnsToActivate turns in and flags
+	// all others (the human) DEFEATED without conquest. Require the player to actually hold
+	// every endgame wonder first. sm_endgameWonders is a per-wonder bitmask; a 0 mask
+	// (stock science victory, no endgame wonders) leaves this a no-op.
+	sint32 wondersRequired = 0;
+	for (uint64 mask = sm_endgameWonders; mask != 0x0; mask >>= 1)
+		if (mask & 0x1) ++wondersRequired;
+
+	if (NumWondersBuilt() < wondersRequired)
 		return false;
 
 	return true;
@@ -897,8 +945,12 @@ bool GaiaController::GaiaControllerTileImp(const sint32 type) const
 
 bool GaiaController::CanBuildTowers(const bool & check_pw) const
 {
+	if (sm_towerTileImpIndex < 0)
+		return false;
 	const TerrainImprovementRecord *rec =
 		g_theTerrainImprovementDB->Get(sm_towerTileImpIndex);
+	if (!rec)
+		return false;
 
 	return terrainutil_CanPlayerBuild(rec, m_playerId, check_pw);
 }
@@ -908,9 +960,12 @@ sint32 GaiaController::ScoreTowerPosition(MapPoint & pos, const MapPoint empire_
 	static sint32 optimal_distance = -1;
 	if (optimal_distance < 0)
 	{
+		if (sm_towerEndgameIndex < 0)
+			return 0;
 		const EndGameObjectRecord *tower_rec =
 			g_theEndGameObjectDB->Get(sm_towerEndgameIndex);
-		Assert(tower_rec);
+		if (!tower_rec)
+			return 0;
 
 		sint32 min_radius = 0;
 		tower_rec->GetMinRadius(min_radius);
@@ -1005,6 +1060,8 @@ sint32 GaiaController::AddsCoverage(const MapPoint & pos, sint32 radius) const
 
 void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) const
 {
+	if (sm_towerTileImpIndex < 0)
+		return;
 	sint32 radius = GetTowerRadius();
 	MapPoint pos;
 
@@ -1025,6 +1082,8 @@ void GaiaController::ComputeTowerCandidates(Scored_MapPoint_List & candidates) c
 
 void GaiaController::GetTowerPositions(MapPoint_List & towers) const
 {
+	if (sm_towerTileImpIndex < 0)
+		return;
 	const DynamicArray<Installation> *tile_imps =
 		g_player[m_playerId]->m_allInstallations;
 
@@ -1134,8 +1193,12 @@ float GaiaController::GetMaxTowerCoverage() const
 
 bool GaiaController::PopNextTowerPosition(MapPoint & pos)
 {
+	if (sm_towerTileImpIndex < 0)
+		return false;
 	const TerrainImprovementRecord *rec =
 		g_theTerrainImprovementDB->Get(sm_towerTileImpIndex);
+	if (!rec)
+		return false;
 
 	bool found = false;
 	while (m_newTowerPositions.size() > 0 && !found)

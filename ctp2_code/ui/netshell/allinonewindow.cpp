@@ -111,6 +111,62 @@ AllinoneWindow *g_allinoneWindow = NULL;
 DialogBoxWindow *g_rulesWindow = NULL;
 DialogBoxWindow *g_exclusionsWindow = NULL;
 
+namespace
+{
+	const size_t k_AllinoneReviewCapacity = 24576;
+
+	void AppendBounded(MBCHAR *buffer, size_t capacity, const MBCHAR *text)
+	{
+		if (!buffer || !text || capacity == 0) return;
+
+		size_t currentLength = strlen(buffer);
+		if (currentLength >= capacity - 1) return;
+
+		strncat(buffer, text, capacity - currentLength - 1);
+	}
+
+	void AppendLineBounded(MBCHAR *buffer, size_t capacity, const MBCHAR *text)
+	{
+		AppendBounded(buffer, capacity, text);
+		AppendBounded(buffer, capacity, "\n");
+	}
+
+	void TerminateTrailingComma(MBCHAR *buffer)
+	{
+		if (!buffer) return;
+
+		size_t length = strlen(buffer);
+		if (length > 2) {
+			buffer[length - 2] = '\0';
+		}
+	}
+
+	void AppendReviewListEntry(MBCHAR *buffer, size_t capacity, aui_Switch *item)
+	{
+		if (!buffer || !item || !item->GetState()) return;
+
+		AppendBounded(buffer, capacity, item->GetText());
+		AppendBounded(buffer, capacity, ", ");
+	}
+
+	void AddItemToColumnList(tech_WLList<aui_Switch *> &columnList, ListPos &position, aui_Switch *item)
+	{
+		if (!item) return;
+
+		if (!columnList.L()) {
+			columnList.AddTail(item);
+			position = columnList.GetHeadPosition();
+			return;
+		}
+
+		if (!position) {
+			position = columnList.GetHeadPosition();
+		}
+
+		columnList.GetAt(position)->AddChild(item);
+	}
+}
+
 #ifdef _DEBUG
 #define DEBUG_PushChatMessage(arg) (g_netfunc->PushChatMessage("DEBUG: " arg))
 #else
@@ -983,7 +1039,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 	{
 		if ( !g_nsUnits->m_noIndex[ i ] )
 		{
-			unitList.GetNext( pos )->AddChild( item );
+			AddItemToColumnList(unitList, pos, item);
 
 			item = new aui_Switch(
 				&errcode,
@@ -1002,7 +1058,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 		}
 	}
 
-	unitList.GetAt( pos )->AddChild( item );
+	AddItemToColumnList(unitList, pos, item);
 	pos = unitList.GetHeadPosition();
 	for ( size_t j = unitList.L(); j; j-- )
 		listbox->AddItem( (aui_Item *)unitList.GetNext( pos ) );
@@ -1039,7 +1095,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	for ( i++; i < m_numAvailImprovements; i++ )
 	{
-		improvementList.GetNext( pos )->AddChild( item );
+		AddItemToColumnList(improvementList, pos, item);
 
 		item = new aui_Switch(
 			&errcode,
@@ -1057,7 +1113,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			pos = improvementList.GetHeadPosition();
 	}
 
-	improvementList.GetAt( pos )->AddChild( item );
+	AddItemToColumnList(improvementList, pos, item);
 	pos = improvementList.GetHeadPosition();
 	for ( size_t j = improvementList.L(); j; j-- )
 		listbox->AddItem( (aui_Item *)improvementList.GetNext( pos ) );
@@ -1094,7 +1150,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 
 	for ( i++; i < m_numAvailWonders; i++ )
 	{
-		wonderList.GetNext( pos )->AddChild( item );
+		AddItemToColumnList(wonderList, pos, item);
 
 		item = new aui_Switch(
 			&errcode,
@@ -1112,7 +1168,7 @@ AUI_ERRCODE AllinoneWindow::CreateExclusions( void )
 			pos = wonderList.GetHeadPosition();
 	}
 
-	wonderList.GetAt( pos )->AddChild( item );
+	AddItemToColumnList(wonderList, pos, item);
 	pos = wonderList.GetHeadPosition();
 	for ( size_t j = wonderList.L(); j; j-- )
 		listbox->AddItem( (aui_Item *)wonderList.GetNext( pos ) );
@@ -2501,11 +2557,11 @@ void AllinoneWindow::UpdateDisplay( void )
 
 	m_numAvailImprovements = g_gamesetup.GetNumAvailImprovements();
 	for ( i = 0; i < m_numAvailImprovements; i++ )
-		m_improvements[ i ]->SetState( g_gamesetup.GetImprovement( i ) );
+		if ( m_improvements[ i ] ) m_improvements[ i ]->SetState( g_gamesetup.GetImprovement( i ) );
 
 	m_numAvailWonders = g_gamesetup.GetNumAvailWonders();
 	for ( i = 0; i < m_numAvailWonders; i++ )
-		m_wonders[ i ]->SetState( g_gamesetup.GetWonder( i ) );
+		if ( m_wonders[ i ] ) m_wonders[ i ]->SetState( g_gamesetup.GetWonder( i ) );
 
 	if ( !g_gamesetup.GetHandicapping() )
 	{
@@ -3616,26 +3672,23 @@ void AllinoneWindow::SpitOutGameSetup( void )
 {
 	bool displayedSomething = false;
 
-	const sint32 biglen = 2 << 15;
+	const size_t biglen = k_AllinoneReviewCapacity;
 	static MBCHAR info[ biglen + 1 ];
 	static MBCHAR moreinfo[ biglen + 1 ];
 	static MBCHAR temp[ biglen + 1 ];
+	ns_ChatBox *chatbox = (ns_ChatBox *)m_controls[ CONTROL_CHATBOX ];
+	if ( !chatbox ) return;
 
 	memset( info, 0, sizeof( info ) );
 
 	ns_String customRules( "strings.customrules" );
-	strncat( info, customRules.GetString(), biglen );
-	strncat( info, "\n", biglen );
+	AppendLineBounded( info, sizeof( info ), customRules.GetString() );
 
 	memset( moreinfo, 0, sizeof( moreinfo ) );
 	sint32 i;
 	for ( i = 0; i < m_numAvailUnits; i++ )
 	{
-		if ( m_units[ i ] && m_units[ i ]->GetState() )
-		{
-			strcat( moreinfo, m_units[ i ]->GetText() );
-			strcat( moreinfo, ", " );
-		}
+		AppendReviewListEntry( moreinfo, sizeof( moreinfo ), m_units[ i ] );
 	}
 	size_t len = strlen( moreinfo );
 	if ( len > 2 )
@@ -3643,23 +3696,18 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		ns_String excludedUnitInfo( "strings.excludedunitinfo" );
 
 		strncpy( temp, excludedUnitInfo.GetString(), biglen );
+		temp[ biglen ] = '\0';
+		TerminateTrailingComma( moreinfo );
+		AppendBounded( temp, sizeof( temp ), moreinfo );
 
-		moreinfo[ len - 2 ] = '\0';
-		strcat( temp, moreinfo );
-
-		strncat( info, temp, biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), temp );
 		displayedSomething = true;
 	}
 
 	memset( moreinfo, 0, sizeof( moreinfo ) );
 	for ( i = 0; i < m_numAvailImprovements; i++ )
 	{
-		if ( m_improvements[ i ]->GetState() )
-		{
-			strcat( moreinfo, m_improvements[ i ]->GetText() );
-			strcat( moreinfo, ", " );
-		}
+		AppendReviewListEntry( moreinfo, sizeof( moreinfo ), m_improvements[ i ] );
 	}
 	len = strlen( moreinfo );
 	if ( len > 2 )
@@ -3668,23 +3716,18 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"strings.excludedimprovementinfo" );
 
 		strncpy( temp, excludedImprovementInfo.GetString(), biglen );
+		temp[ biglen ] = '\0';
+		TerminateTrailingComma( moreinfo );
+		AppendBounded( temp, sizeof( temp ), moreinfo );
 
-		moreinfo[ len - 2 ] = '\0';
-		strcat( temp, moreinfo );
-
-		strncat( info, temp, biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), temp );
 		displayedSomething = true;
 	}
 
 	memset( moreinfo, 0, sizeof( moreinfo ) );
 	for ( i = 0; i < m_numAvailWonders; i++ )
 	{
-		if ( m_wonders[ i ]->GetState() )
-		{
-			strcat( moreinfo, m_wonders[ i ]->GetText() );
-			strcat( moreinfo, ", " );
-		}
+		AppendReviewListEntry( moreinfo, sizeof( moreinfo ), m_wonders[ i ] );
 	}
 	len = strlen( moreinfo );
 	if ( len > 2 )
@@ -3692,36 +3735,33 @@ void AllinoneWindow::SpitOutGameSetup( void )
 		ns_String excludedWonderInfo( "strings.excludedwonderinfo" );
 
 		strncpy( temp, excludedWonderInfo.GetString(), biglen );
+		temp[ biglen ] = '\0';
+		TerminateTrailingComma( moreinfo );
+		AppendBounded( temp, sizeof( temp ), moreinfo );
 
-		moreinfo[ len - 2 ] = '\0';
-		strcat( temp, moreinfo );
-
-		strncat( info, temp, biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), temp );
 		displayedSomething = true;
 	}
 
 	aui_Switch *sw = (aui_Switch *)m_controls[ CONTROL_DYNAMICJOINSWITCH ];
-	if ( sw->GetState() )
+	if ( sw && sw->GetState() )
 	{
 		ns_String dynamicJoin( "strings.dynamicjoin" );
-		strncat( info, dynamicJoin.GetString(), biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), dynamicJoin.GetString() );
 		displayedSomething = true;
 	}
 
 	sw = (aui_Switch *)m_controls[ CONTROL_HANDICAPPINGSWITCH ];
-	if ( sw->GetState() )
+	if ( sw && sw->GetState() )
 	{
 		ns_String handicapping( "strings.handicapping" );
-		strncat( info, handicapping.GetString(), biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), handicapping.GetString() );
 		displayedSomething = true;
 	}
 	else
 	{
 		c3_EditButton *r = (c3_EditButton *)m_controls[ CONTROL_CIVPOINTSBUTTON ];
-		if ( r->GetValue() > r->GetMinimum() )
+		if ( r && r->GetValue() > r->GetMinimum() )
 		{
 			{
 				ns_String goldInfo( "strings.goldinfo" );
@@ -3730,14 +3770,13 @@ void AllinoneWindow::SpitOutGameSetup( void )
 					"%s%d",
 					goldInfo.GetString(),
 					r->GetValue() );
-				strncat( info, temp, biglen );
-				strncat( info, "\n", biglen );
+				AppendLineBounded( info, sizeof( info ), temp );
 			}
 
 			displayedSomething = true;
 		}
 		r = (c3_EditButton *)m_controls[ CONTROL_PWPOINTSBUTTON ];
-		if ( r->GetValue() > r->GetMinimum() )
+		if ( r && r->GetValue() > r->GetMinimum() )
 		{
 			{
 				ns_String pwInfo( "strings.pwinfo" );
@@ -3746,8 +3785,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 					"%s%d",
 					pwInfo.GetString(),
 					r->GetValue() );
-				strncat( info, temp, biglen );
-				strncat( info, "\n", biglen );
+				AppendLineBounded( info, sizeof( info ), temp );
 			}
 
 			displayedSomething = true;
@@ -3755,20 +3793,18 @@ void AllinoneWindow::SpitOutGameSetup( void )
 	}
 
 	sw = (aui_Switch *)m_controls[ CONTROL_BLOODLUSTSWITCH ];
-	if ( sw->GetState() )
+	if ( sw && sw->GetState() )
 	{
 		ns_String bloodlust( "strings.bloodlust" );
-		strncat( info, bloodlust.GetString(), biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), bloodlust.GetString() );
 		displayedSomething = true;
 	}
 
 	sw = (aui_Switch *)m_controls[ CONTROL_POLLUTIONSWITCH ];
-	if ( !sw->GetState() )
+	if ( sw && !sw->GetState() )
 	{
 		ns_String pollution( "strings.pollution" );
-		strncat( info, pollution.GetString(), biglen );
-		strncat( info, "\n", biglen );
+		AppendLineBounded( info, sizeof( info ), pollution.GetString() );
 		displayedSomething = true;
 	}
 
@@ -3783,7 +3819,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s: %s\n",
 			mapsize.GetString(),
 			mapsizestrings.GetString( g_gamesetup.GetMapSize() ) );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldtype1( "strings.worldtype1" );
 		sprintf(
@@ -3791,7 +3827,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s%d\n",
 			worldtype1.GetString(),
 			g_gamesetup.GetWorldType1() );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldtype2( "strings.worldtype2" );
 		sprintf(
@@ -3799,7 +3835,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s%d\n",
 			worldtype2.GetString(),
 			g_gamesetup.GetWorldType2() );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldtype3( "strings.worldtype3" );
 		sprintf(
@@ -3807,7 +3843,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s%d\n",
 			worldtype3.GetString(),
 			g_gamesetup.GetWorldType3() );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldtype4( "strings.worldtype4" );
 		sprintf(
@@ -3815,7 +3851,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s%d\n",
 			worldtype4.GetString(),
 			g_gamesetup.GetWorldType4() );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldtype5( "strings.worldtype5" );
 		sprintf(
@@ -3823,7 +3859,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s%d\n",
 			worldtype5.GetString(),
 			g_gamesetup.GetWorldType5() );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldtype6( "strings.worldtype6" );
 		sprintf(
@@ -3831,7 +3867,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s%d\n",
 			worldtype6.GetString(),
 			g_gamesetup.GetWorldType6() );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String worldshape( "strings.worldshape" );
 		aui_StringTable worldshapestrings( &errcode, "strings.worldshapestrings" );
@@ -3840,7 +3876,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s: %s\n",
 			worldshape.GetString(),
 			worldshapestrings.GetString( g_gamesetup.GetWorldShape() ) );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String difficulty1( "strings.difficulty1" );
 		aui_StringTable difficulty1strings( &errcode, "strings.difficulty1strings" );
@@ -3849,7 +3885,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s: %s\n",
 			difficulty1.GetString(),
 			difficulty1strings.GetString( g_gamesetup.GetDifficulty1() ) );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String difficulty2( "strings.difficulty2" );
 		aui_StringTable difficulty2strings( &errcode, "strings.difficulty2strings" );
@@ -3858,7 +3894,7 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s: %s\n",
 			difficulty2.GetString(),
 			difficulty2strings.GetString( g_gamesetup.GetDifficulty2() ) );
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 
 		ns_String startage( "strings.startage" );
 		sprintf(
@@ -3875,24 +3911,17 @@ void AllinoneWindow::SpitOutGameSetup( void )
 			"%s %s\n",
 			endage.GetString(),
 			g_theAgeDB->Get(g_gamesetup.GetEndAge())->GetNameText());
-		strncat( info, temp, biglen );
+		AppendBounded( info, sizeof( info ), temp );
 	}
 
 	if ( !displayedSomething )
 	{
 		ns_String defaultGameSetup( "strings.defaultgamesetup" );
-		strncat( info, defaultGameSetup.GetString(), biglen );
-		strncat( info, "\n", biglen );
-	}
-
-	if ( len > 2 )
-	{
-		moreinfo[ len - 2 ] = '\0';
+		AppendLineBounded( info, sizeof( info ), defaultGameSetup.GetString() );
 	}
 
 	aui_TextBase textStyle( "styles.system", (const MBCHAR *)NULL );
-	((ns_ChatBox *)m_controls[ CONTROL_CHATBOX ])->
-		AppendText( info, textStyle.GetTextColor(), FALSE, FALSE );
+	chatbox->AppendText( info, textStyle.GetTextColor(), FALSE, FALSE );
 }
 
 void AllinoneWindow::DialogBoxPopDownAction::Execute(

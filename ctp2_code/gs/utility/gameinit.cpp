@@ -137,6 +137,7 @@
 #include "TurnCnt.h"
 #include "UnitActor.h"
 #include "UnitData.h"
+#include "CivilisationRecord.h"		// g_theCivilisationDB (player-count cap)
 #include "UnitDynArr.h"
 #include "UnitPool.h"
 #include "UnitRecord.h"
@@ -1134,6 +1135,17 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 			break;
 		}
 
+	// Cap players at the number of distinct civilisations. CivilisationPool::Create's
+	// overflow guard is defective (it wraps the civ index back to 1 and never fires the
+	// intended "no more civs" error), so requesting more players than civs silently
+	// assigns DUPLICATE civs (e.g. MoM has 5 tribes; 7 players made 3 of them "Life").
+	// Fewer, distinct-civ players also relieves early-game map crowding.
+	{
+		sint32 const maxCivPlayers = g_theCivilisationDB->NumRecords() - 1;
+		if (nPlayers > maxCivPlayers)
+			nPlayers = maxCivPlayers;
+	}
+
 	g_theProfileDB->SetNPlayers(nPlayers);
 
 	Assert(g_theWorld);
@@ -1525,6 +1537,14 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 				nPlayers = i + 1;
 				break;
 			}
+		}
+
+		// Cap at distinct-civ count (see the companion note above) — prevents the
+		// CivilisationPool duplicate-civ silent overflow on this init path too.
+		{
+			sint32 const maxCivPlayers = g_theCivilisationDB->NumRecords() - 1;
+			if (nPlayers > maxCivPlayers)
+				nPlayers = maxCivPlayers;
 		}
 
 		Assert(nPlayers <= k_MAX_PLAYERS);

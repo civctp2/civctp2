@@ -334,6 +334,12 @@ void ScienceVictoryDialog::UpdateConstructionList(
 
 	m_mainframeList->Clear();
 
+	const sint32 mainframeIndex = GaiaController::GetMainframeBuildingIndex();
+	if (mainframeIndex < 0) {
+		m_mainframeList->BuildListEnd();
+		return;
+	}
+
 	UnitDynamicArray *cityList =
 		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
 
@@ -342,7 +348,7 @@ void ScienceVictoryDialog::UpdateConstructionList(
 
 		Unit city = cityList->Get(cityIndex);
 
-		if(city.HaveImprovement(GaiaController::GetMainframeBuildingIndex())) {
+		if(city.HaveImprovement(mainframeIndex)) {
 			m_mainframeList->AddItem(CreateMainframeItem(city, -1));
 			continue;
 		}
@@ -351,8 +357,7 @@ void ScienceVictoryDialog::UpdateConstructionList(
 
 		if(buildQueue->GetLen() &&
 			(buildQueue->GetHead()->m_category == k_GAME_OBJ_TYPE_IMPROVEMENT) &&
-			(buildQueue->GetHead()->m_type ==
-			GaiaController::GetMainframeBuildingIndex())) {
+			(buildQueue->GetHead()->m_type == mainframeIndex)) {
 
 			m_mainframeList->AddItem(
 				CreateMainframeItem(city, city.HowMuchLonger()));
@@ -461,10 +466,14 @@ sint32 ScienceVictoryDialog::CompareMainframeCities(ctp2_ListItem *item1,
 	Assert(city1.IsValid());
 	Assert(city2.IsValid());
 
+	const sint32 mainframeIndex = GaiaController::GetMainframeBuildingIndex();
+	if (mainframeIndex < 0)
+		return 0;
+
 	bool mainframe1 = (city1.HaveImprovement(
-		GaiaController::GetMainframeBuildingIndex()) == TRUE);
+		mainframeIndex) == TRUE);
 	bool mainframe2 = (city2.HaveImprovement(
-		GaiaController::GetMainframeBuildingIndex()) == TRUE);
+		mainframeIndex) == TRUE);
 
 
 	if(mainframe1 != mainframe2)
@@ -529,24 +538,26 @@ void ScienceVictoryDialog::BuildButtonActionCallback(aui_Control *control,
 
 	UnitDynamicArray *cityList =
 		g_player[g_selected_item->GetVisiblePlayer()]->GetAllCitiesList();
+	const sint32 mainframeIndex = GaiaController::GetMainframeBuildingIndex();
+	const sint32 satelliteIndex = GaiaController::GetSatelliteBuildingIndex();
 
 	sint32 cityIndex;
-	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
+	if (mainframeIndex >= 0) for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 
 		Unit city = cityList->Get(cityIndex);
 
-		if(!city.HaveImprovement(GaiaController::GetMainframeBuildingIndex())) {
+		if(!city.HaveImprovement(mainframeIndex)) {
 			EditQueue::Display(city);
 			return;
 		}
 	}
 
 
-	for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
+	if (satelliteIndex >= 0) for(cityIndex = 0; cityIndex < cityList->Num(); cityIndex++) {
 
 		Unit city = cityList->Get(cityIndex);
 
-		if(!city.HaveImprovement(GaiaController::GetSatelliteBuildingIndex())) {
+		if(!city.HaveImprovement(satelliteIndex)) {
 			EditQueue::Display(city);
 			return;
 		}

@@ -825,6 +825,14 @@ AUI_ERRCODE aui_Ldl::SetActionFuncAndCookie
 	AUI_ERRCODE		errcode = control
 	                          ? control->SetActionFuncAndCookie(actionFunc, cookie)
 	                          : AUI_ERRCODE_NOCONTROL;
+	if (errcode != AUI_ERRCODE_OK)
+	{
+		DPRINTF(k_DBG_FIX,
+		        ("aui_Ldl::SetActionFuncAndCookie failed for '%s' (control=%p, errcode=%d)\n",
+		         ldlBlock ? ldlBlock : "(null)",
+		         control,
+		         errcode));
+	}
 	Assert(errcode == AUI_ERRCODE_OK);
 
 	return errcode;

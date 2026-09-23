@@ -391,9 +391,17 @@ void spnewgamescreen_editorPress( aui_Control *control, uint32 action, uint32 da
 
 void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, uint32 data, Cookie cookie )
 {
+	const MBCHAR *scenarioPath = g_civPaths->GetCurScenarioPath();
+	if (!scenarioPath || !c3files_PathIsValid(scenarioPath)) {
+		if (g_spNewGameWindow) {
+			g_spNewGameWindow->Update();
+		}
+		return;
+	}
+
 	MBCHAR	tempPath[_MAX_PATH];
 	sprintf(tempPath, "%s%s%s",
-	        g_civPaths->GetCurScenarioPath(),
+	        scenarioPath,
 	        FILE_SEP,
 	        k_SCENARIO_DEFAULT_SAVED_GAME_NAME
 	       );
@@ -413,7 +421,7 @@ void spnewgamescreen_scenarioExitCallback(aui_Control *control, uint32 action, u
 
 		if (GameFile::FetchExtendedSaveInfo(tempPath, saveInfo)) {
 			MBCHAR scenPath[_MAX_PATH];
-			strcpy(scenPath, g_civPaths->GetCurScenarioPath());
+			strcpy(scenPath, scenarioPath);
 			g_startInfoType = saveInfo->startInfoType;
 			loadsavescreen_BeginLoadProcess(saveInfo, scenPath);
 		}

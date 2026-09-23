@@ -100,6 +100,20 @@ static EditQueue * s_editQueue = NULL;
 
 static const MBCHAR * s_editQueueBlock = "BuildEditorWindow";
 
+void EditQueue::SelectFirstVisibleItemIfNeeded()
+{
+	if (!s_editQueue) {
+		return;
+	}
+
+	ctp2_ListBox *visibleList = s_editQueue->GetVisibleItemList();
+	if (visibleList && visibleList->NumItems() > 0 && !visibleList->GetSelectedItem()) {
+		visibleList->SelectItem((sint32)0);
+		s_editQueue->ShowSelectedInfo();
+		s_editQueue->UpdateButtons();
+	}
+}
+
 extern C3UI * g_c3ui;
 
 EditItemInfo * EditItemInfo::Construct(const char * string)
@@ -415,6 +429,7 @@ AUI_ERRCODE EditQueue::Display(const Unit & city)
 	AUI_ERRCODE err = Display();
 
 	SetCity(city);
+	SelectFirstVisibleItemIfNeeded();
 
 	return err;
 }
@@ -424,12 +439,7 @@ AUI_ERRCODE EditQueue::Display(const UnitDynamicArray & cities)
 	AUI_ERRCODE err = Display();
 
 	SetMultiCities(cities);
-
-	ctp2_ListBox *visibleList = s_editQueue->GetVisibleItemList();
-
-	if(visibleList && visibleList->NumItems() > 0 && !visibleList->GetSelectedItem()) {
-		visibleList->SelectItem((sint32)0);
-	}
+	SelectFirstVisibleItemIfNeeded();
 
 	return err;
 }
@@ -1270,7 +1280,10 @@ void EditQueue::SetCity(const Unit & city)
 	if (s_editQueue->m_queueList->NumItems() > 0) {
 		s_editQueue->m_queueList->SelectItem(0);
 	} else {
-		ShowSelectedInfo();
+		SelectFirstVisibleItemIfNeeded();
+		if (!s_editQueue->GetVisibleItemList() || !s_editQueue->GetVisibleItemList()->GetSelectedItem()) {
+			ShowSelectedInfo();
+		}
 	}
 
 	Unit currentCity;
@@ -2936,7 +2949,7 @@ void EditQueue::SetItemDescription(
 		const char * statText = icon->GetStatText();
 		const char * descString = NULL;
 		const char * greatLibraryText = NULL;
-		if (strrchr(statText, '.') && (!(stricmp(strrchr(statText, '.'), ".txt"))))
+		if (statText && strrchr(statText, '.') && (!(stricmp(strrchr(statText, '.'), ".txt"))))
 		{
 			size_t   size = 0;
 			MBCHAR * fileText = reinterpret_cast<MBCHAR *>(g_GreatLibPF->getData(statText, size, C3DIR_GL));
@@ -2948,15 +2961,18 @@ void EditQueue::SetItemDescription(
 			}
 			g_GreatLibPF->freeData(fileText);
 		}
-		else {
+		else if (statText) {
 			greatLibraryText = glutil_LoadText(statText, context);
 		}
 
 		if( !allocatedText && !greatLibraryText) {
-			descString = g_theStringDB->GetNameStr(icon->GetStatText());
+			descString = statText ? g_theStringDB->GetNameStr(statText) : NULL;
 		}
 
-		Assert(descString || allocatedText || greatLibraryText);
+		if(!descString && !allocatedText && !greatLibraryText) {
+			DPRINTF(k_DBG_UI, ("EditQueue: missing Great Library text for '%s'\n", statText ? statText : "(null)"));
+			descString = statText ? statText : "";
+		}
 		MBCHAR interpretedText[2048];
 		if (descString) {
 			stringutils_Interpret(descString, context, interpretedText);

@@ -101,6 +101,8 @@
 #include "workwin.h"
 
 #include "SlicEngine.h"
+#include "SlicObject.h"
+#include "ScriptTargetMode.h"
 
 #include "segmentlist.h"
 
@@ -330,7 +332,12 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		else if (g_civApp->IsGameLoaded())
 		{
-			if(g_currentMessageWindow &&
+			// Cancel script targeting mode on ESC (before checking messages)
+			if(g_scriptTargetMode && g_scriptTargetMode->IsActive())
+			{
+				g_scriptTargetMode->Cancel();
+			}
+			else if(g_currentMessageWindow &&
 			   g_currentMessageWindow->GetMessage() &&
 			   (g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())))
 			{
@@ -343,7 +350,14 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 				{
 					Assert(msg->IsAlertBox());
 					MessageData *data = msg->AccessData();
-					if(data->GetNumButtons() <= 2 && data->GetNumButtons() > 0)
+					// Allow ESC to dismiss any alertbox that has a close event,
+					// regardless of button count (was limited to <= 2 buttons).
+					SlicButton *closeBtn = data->GetCloseEvent();
+					if(closeBtn)
+					{
+						closeBtn->Callback();
+					}
+					else if(data->GetNumButtons() > 0)
 					{
 						data->GetButton(0)->Callback();
 					}
@@ -400,6 +414,20 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 	if (!g_civApp->IsGameLoaded())
 	{
 		return TRUE;
+	}
+
+	// MoM: interactive SLIC test hotkey. The stock TRIGGER_LIST_KEY_PRESSED
+	// path is dead (no AddTrigger callers), so fire the segment directly.
+	if (static_cast<char>(wParam) == 'j' && g_slicEngine && g_selected_item)
+	{
+		if (g_slicEngine->GetSegment("MagicMenu"))
+		{
+			SlicObject *so = new SlicObject("MagicMenu");
+			so->AddRecipient(g_selected_item->GetVisiblePlayer());
+			so->AddPlayer(g_selected_item->GetVisiblePlayer());
+			g_slicEngine->Execute(so);
+			return 0;
+		}
 	}
 
 	KEY_FUNCTION	kf = theKeyMap->get_function(static_cast<uint32>(wParam));

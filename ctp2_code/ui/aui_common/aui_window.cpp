@@ -238,6 +238,13 @@ AUI_ERRCODE aui_Window::Resize( sint32 width, sint32 height )
 	if ( reallocSurface ) MakeSureSurfaceIsValid();
 
 	m_dirtyList->Flush();
+	// Unconditional paint (original engine behavior). An earlier guard here that
+	// skipped Draw() for windows not yet attached to g_ui suppressed construction-
+	// time paints of controls like CityControlPanel (sized via ctp2_DropDown::AddItem
+	// before the parent window is registered) — leaving their surfaces unpainted
+	// = the rainbow-static "fuglies". The dead-buffer blit crash this once guarded
+	// against is now contained by the SEH handlers in Blt16To16/TileBlt16To16, which
+	// fail only the faulting blit instead of suppressing the whole paint.
 	Draw();
 
 	return AUI_ERRCODE_OK;

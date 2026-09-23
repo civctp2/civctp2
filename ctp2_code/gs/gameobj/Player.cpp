@@ -6778,7 +6778,10 @@ sint32 Player::GetCheapestMilitaryUnit(const MapPoint& pos)
 		}
 	}
 
-	Assert(cheapindex >= 0);
+	// MoM is fully tech-gated: a player with no researched attack-unit advance legitimately
+	// has NO buildable military unit (Attack>0), so cheapindex == -1 is a VALID state here,
+	// not an error. Do NOT Assert -- vanilla only avoided this by shipping a no-prereq
+	// Warrior. Callers MUST guard cheapindex < 0 (slave uprising at ~6277 and Militia do).
 	return cheapindex;
 }
 

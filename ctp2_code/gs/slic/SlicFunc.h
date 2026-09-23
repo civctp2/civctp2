@@ -24,8 +24,8 @@
 // Modifications from the original Activision code:
 //
 // - Readded all the slicfunctions of the patch, maybe some of them belong
-//   better into slicfuncai.h, by Martin Gühmann.
-// - New slic functions added by Martin Gühmann:
+//   better into slicfuncai.h, by Martin Gï¿½hmann.
+// - New slic functions added by Martin Gï¿½hmann:
 //   - CargoCapacity     Gets number of additional units a unit can carry.
 //   - MaxCargoSize      Gets the maximum number of units a unit can carry.
 //   - CargoSize         Gets the current number of units a unit is carrying.
@@ -36,7 +36,7 @@
 // - New slic function by Solver: IsOnSameContinent - Checks whether two
 //   locations are on the same continent.
 // - Added AddSlaves function modelled after the AddPops function.
-// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gühmann)
+// - Added GetContinentSize slic function. (Dec 24th 2006 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -602,7 +602,7 @@ SLICFUNC(SFR_VOID, MinimizeAction)
 SLICFUNC(SFR_INT, IsUnitAtHead)
 SLICFUNC(SFR_VOID, OpenScenarioEditor)
 
-//New Slicfunctions of CTP2.1 readded by Martin Gühmann
+//New Slicfunctions of CTP2.1 readded by Martin Gï¿½hmann
 SLICFUNC(SFR_VOID, DestroyBuilding)
 SLICFUNC(SFR_VOID, OpenBuildQueue)
 SLICFUNC(SFR_INT, TileHasImprovement)
@@ -618,7 +618,7 @@ SLICFUNC(SFR_VOID, AddSlaves);
 //New slicfunctions by MrBaggins
 SLICFUNC(SFR_VOID, PlantSpecificGood);
 SLICFUNC(SFR_VOID, RemoveGood);
-//New slicfunctions by Martin Gühmann
+//New slicfunctions by Martin Gï¿½hmann
 SLICFUNC(SFR_INT, CargoCapacity);
 SLICFUNC(SFR_INT, MaxCargoSize);
 SLICFUNC(SFR_INT, CargoSize);
@@ -645,5 +645,16 @@ SLICFUNC(SFR_INT, CreateBuilding)
 SLICFUNC(SFR_INT, CreateWonder)
 SLICFUNC(SFR_INT, UnitMovementLeft)
 SLICFUNC(SFR_INT, GetStoredProduction)
+
+// Unit stat modifier builtins
+SLICFUNC(SFR_INT, ModifyUnitStat)
+SLICFUNC(SFR_INT, ClearUnitBuffs)
+SLICFUNC(SFR_INT, HealUnit)
+SLICFUNC(SFR_INT, GetUnitHP)
+SLICFUNC(SFR_INT, GetUnitMaxHP)
+
+// Script-driven targeting
+SLICFUNC(SFR_VOID, BeginTargetMode)
+SLICFUNC(SFR_INT, IsTargetModeActive)
 
 #endif // __SLICFUNC_H__

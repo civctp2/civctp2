@@ -120,6 +120,7 @@ private:
 	static const MBCHAR * GetSelectedQueueName();
 
 	static void ShowSelectedInfo();
+	static void SelectFirstVisibleItemIfNeeded();
 	static void ClearChoiceList(ctp2_ListBox * choiceList);
 	static bool EditingCity(const Unit & city);
 
