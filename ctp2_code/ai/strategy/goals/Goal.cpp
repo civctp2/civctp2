@@ -924,6 +924,9 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update)
 		)
 		{
 			Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
+			if (agent_ptr->Get_Is_Dead())
+				continue;
+
 			if (agent_ptr->Get_Army()->Num() > 1 || agent_ptr->Get_Army()->HasCargo())
 			{
 				rallyInProgress = true;

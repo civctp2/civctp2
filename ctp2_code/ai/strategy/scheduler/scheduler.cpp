@@ -372,6 +372,15 @@ void Scheduler::Process_Agent_Changes()
 		if(theAgent->Get_Is_Dead())
 		{
 			Remove_Matches_For_Agent(theAgent);
+
+			// Remove_Matches_For_Agent only rolls back a goal that still has
+			// a match for the agent; one whose match is gone would keep the
+			// deleted agent in its list
+			if (theAgent->Get_Goal())
+			{
+				theAgent->Get_Goal()->Rollback_Agent(theAgent);
+			}
+
 			delete theAgent;
 			agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 			continue;
