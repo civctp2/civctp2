@@ -8488,16 +8488,22 @@ bool ArmyData::MoveIntoTransport(const MapPoint &pos, CellUnitList &transports)
 			{
 				count++;
 
-				m_array[i].SetIsInTransport(transports[j]);
+				// SetIsInTransport takes the unit out of this army, and the units
+				// after it move down a slot. Those are usually gone already, but
+				// not one that no transport could take: m_array[i] would then be
+				// that unit, which went into the cargo instead of this one while
+				// staying in the army.
+				Unit passenger = m_array[i];
+				passenger.SetIsInTransport(transports[j]);
 				bool dummy_out_of_fuel;
-				m_array[i].DeductMoveCost
+				passenger.DeductMoveCost
 				    (g_theConstDB->Get(0)->GetMoveEnterTransportCost(), dummy_out_of_fuel);
 
-				g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
-				m_array[i].UndoVision();
-				m_array[i].RemoveUnitVision();
+				g_theWorld->RemoveUnitReference(m_pos, passenger);
+				passenger.UndoVision();
+				passenger.RemoveUnitVision();
 
-				transports[j].InsertCargo(m_array[i]);
+				transports[j].InsertCargo(passenger);
 
 				transports[j].GetArmy()->WakeUp();
 
@@ -8762,20 +8768,25 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 				{
 					CheckWasEnemyVisible(to_pt);
 
+					Unit u = debark[i];
 					bool inserted = false;
 					for(sint32 j = 0; j < m_nElements && !inserted; j++)
 					{
-						inserted = m_array[j].InsertCargo(debark[i]);
+						inserted = m_array[j].InsertCargo(u);
 						if(inserted)
 						{
-							Unit u = debark[i];
 							u.GetInserted(m_array[j]);
 							break;
 						}
 					}
 
 					Assert(inserted);
-					debark.DelIndex(i);
+					// GetInserted has taken it out of debark already; deleting
+					// index i again would drop the next unit
+					if (i < debark.Num() && debark[i].m_id == u.m_id)
+					{
+						debark.DelIndex(i);
+					}
 					i--;
 				}
 			}
@@ -8787,19 +8798,24 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 			{
 				for(i = debark.Num() - 1; i >= 0; i--)
 				{
+					Unit u = debark[i];
 					bool inserted = false;
 					for(sint32 j = 0; j < m_nElements && !inserted; j++)
 					{
-						inserted = m_array[j].InsertCargo(debark[i]);
+						inserted = m_array[j].InsertCargo(u);
 						if(inserted)
 						{
-							debark[i].GetInserted(m_array[j]);
+							u.GetInserted(m_array[j]);
 							break;
 						}
 					}
 
 					Assert(inserted);
-					debark.DelIndex(i);
+					// as above: GetInserted may have taken it out already
+					if (i < debark.Num() && debark[i].m_id == u.m_id)
+					{
+						debark.DelIndex(i);
+					}
 				}
 			}
 		}
