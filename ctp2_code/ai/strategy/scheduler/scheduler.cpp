@@ -381,6 +381,15 @@ void Scheduler::Process_Agent_Changes()
 				theAgent->Get_Goal()->Rollback_Agent(theAgent);
 			}
 
+			// The generic goals (one per goal type, whose matches stand in for
+			// goals without their own) hold a plan for nearly every agent, and
+			// get new ones only in Raw_Prioritize_Goals: until then their
+			// plans would point at the deleted agent
+			for (size_t i = 0; i < m_generic_goals.size(); ++i)
+			{
+				m_generic_goals[i]->Remove_Match(theAgent);
+			}
+
 			delete theAgent;
 			agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 			continue;
