@@ -1093,29 +1093,39 @@ STDEHANDLER(AftermathEvent)
 		g_director->AddTerminateFaceoff(td);
 	}
 
-	//// similar to ArmyData::IsWounded()
-	double attacker_relTotHP= 0;
-	if(army.IsValid() && army.Num() > 0)
+	// The attacker won if it has a unit left and the defender has none. Units killed in
+	// the battle are still listed (their GEV_KillUnit comes after this event), with HP
+	// below 1, which is what CTP2Combat counts as dead. Without a real battle (defenders
+	// that can't fight, ArmyData::Fight) all the defenders are being killed. Comparing
+	// average HPs instead could make a retreat a win (veteran rolls, slaves), and a kill
+	// of full-HP caravans a loss, with no victory move.
+	bool attackerAlive = false;
+	if(army.IsValid())
 	{
 		for(sint32 i = 0; i < army.Num(); i++)
 		{
-			attacker_relTotHP+= army[i].GetHP();
+			if(army[i].GetHP() >= 0.99999)
+			{
+				attackerAlive = true;
+				break;
+			}
 		}
-		attacker_relTotHP/= army.Num();
 	}
-	
-	//// similar to ArmyData::IsWounded()
-	double defender_relTotHP= 0;
-	if(defender.Num() > 0)
+
+	bool defenderAlive = false;
+	if(fromARealBattle)
 	{
 		for(sint32 i = 0; i < defender.Num(); i++)
 		{
-			defender_relTotHP+= defender[i].GetHP();
+			if(defender[i].IsValid() && defender[i].GetHP() >= 0.99999)
+			{
+				defenderAlive = true;
+				break;
+			}
 		}
-		defender_relTotHP/= defender.Num();
 	}
 
-	bool attackerWon = attacker_relTotHP > defender_relTotHP;
+	bool attackerWon = attackerAlive && !defenderAlive;
 
 	if(attackerWon)
 	{
