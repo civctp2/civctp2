@@ -2800,6 +2800,7 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 	if (!surface)
     {
         surface     = m_surface;
+		surfBase    = m_surfBase;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())
@@ -3209,6 +3210,7 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 	if (!surface)
     {
         surface     = m_surface;
+		surfBase    = m_surfBase;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())
