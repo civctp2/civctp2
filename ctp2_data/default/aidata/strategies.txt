@@ -396,7 +396,7 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11500
+        Priority 11750
         BuildListSequence BUILD_LIST_SEQUENCE_FIGHT_DEFICIT
         HasBuildingsThenStop BUILDING_BUILD_LIST_GOLD
         HasDeficit
@@ -1726,7 +1726,7 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11500
+        Priority 11750
         BuildListSequence BUILD_LIST_SEQUENCE_FIGHT_DEFICIT
         HasBuildingsThenStop BUILDING_BUILD_LIST_GOLD
         HasDeficit
@@ -2316,7 +2316,7 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11500
+        Priority 11750
         BuildListSequence BUILD_LIST_SEQUENCE_FIGHT_DEFICIT
         HasBuildingsThenStop BUILDING_BUILD_LIST_GOLD
         HasDeficit
@@ -2911,7 +2911,7 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11500
+        Priority 11750
         BuildListSequence BUILD_LIST_SEQUENCE_FIGHT_DEFICIT
         HasBuildingsThenStop BUILDING_BUILD_LIST_GOLD
         HasDeficit
@@ -3496,7 +3496,7 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11500
+        Priority 11750
         BuildListSequence BUILD_LIST_SEQUENCE_FIGHT_DEFICIT
         HasBuildingsThenStop BUILDING_BUILD_LIST_GOLD
         HasDeficit
@@ -4083,7 +4083,7 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 11500
+        Priority 11750
         BuildListSequence BUILD_LIST_SEQUENCE_FIGHT_DEFICIT
         HasBuildingsThenStop BUILDING_BUILD_LIST_GOLD
         HasDeficit
