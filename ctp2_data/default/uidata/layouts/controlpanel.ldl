@@ -394,13 +394,12 @@ CityListItem:CTP2_LIST_ITEM {
 
 	Label:CTP2_STATIC_BACKGROUND {
 		# Location.
-		int	xpix		15
+		int	xpix		0
 
 		# Size.
 		int	widthpix	180
 		int heightpix	25
 
-		# Left justify.
 		string 	just 		"center"
 		bool	vertcenter	true
 	}
