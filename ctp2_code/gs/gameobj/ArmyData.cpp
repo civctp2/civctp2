@@ -2645,20 +2645,13 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 
 	//InformAI(UNIT_ORDER_EXPEL, point);//does nothing here but could be implemented
 
-	bool 			foundCity	= false;
-	MapPoint 		cpos;
 	CellUnitList 	expelled;
 	for(i = 0; i < n; i++)
 	{
 		if(cell->AccessUnit(i).CanBeExpelled() &&
 		   cell->AccessUnit(i).GetVisibility() & (1 << m_owner))
 		{
-			Unit u = cell->AccessUnit(i);
-
-			foundCity = u.NearestFriendlyCityWithRoom(cpos, numToExpel,
-			                                          u.GetArmy());
-
-			expelled.Insert(u);
+			expelled.Insert(cell->AccessUnit(i));
 		}
 	}
 
@@ -2667,6 +2660,19 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 	{
 		for(i = 0; i < n; i++)
 		{
+			// Computed per unit, not shared across the loop via one cpos/
+			// foundCity - this tile can hold units from more than one
+			// owner, and NearestFriendlyCityWithRoom() resolves to a city
+			// belonging to THAT unit's own civ. Reusing one result for
+			// every unit (the original bug here, copied into and later
+			// fixed in Slic_Liberate::Call - see foreign_tile_sharing_
+			// root_cause memory) sent whichever owner was computed last
+			// to every other owner's "friendly" city - a real way for a
+			// teleport order's target to end up foreign-occupied.
+			MapPoint cpos;
+			bool foundCity = expelled[i].NearestFriendlyCityWithRoom(cpos, numToExpel,
+			                                                         expelled[i].GetArmy());
+
 			if(foundCity)
 			{
 				Army newArmy;
