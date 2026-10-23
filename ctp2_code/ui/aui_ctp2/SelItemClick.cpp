@@ -46,6 +46,7 @@
 #include "Cell.h"
 #include "citywindow.h"
 #include "controlpanelwindow.h"
+#include "ScriptTargetMode.h"
 #include "GameEventManager.h"
 #include "gfx_options.h"
 #include "helptile.h"
@@ -889,6 +890,13 @@ void SelectedItem::NewRegisterClick(const MapPoint &pos, const aui_MouseEvent *d
 		button = SELECT_BUTTON_LEFT_DRAG;
 	else if(leftDrop)
 		button = SELECT_BUTTON_LEFT_DROP;
+
+	// Right-click cancels script targeting, as ESC does, before map hit-testing.
+	if(right && g_scriptTargetMode != NULL && g_scriptTargetMode->IsActive())
+	{
+		g_scriptTargetMode->Cancel();
+		return;
+	}
 
 	SELECT_TYPE clickedThing = GetClickedThing(pos, button != SELECT_BUTTON_LEFT_DROP);
 

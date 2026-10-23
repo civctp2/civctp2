@@ -959,6 +959,9 @@
     <ClCompile Include="..\gs\slic\SlicSymTab.cpp">
       <Filter>gs\slic</Filter>
     </ClCompile>
+    <ClCompile Include="..\gs\slic\ScriptTargetMode.cpp">
+      <Filter>gs\slic</Filter>
+    </ClCompile>
     <ClCompile Include="..\gs\slic\y.tab.c">
       <Filter>gs\slic</Filter>
     </ClCompile>
@@ -3224,6 +3227,9 @@
       <Filter>gs\slic</Filter>
     </ClInclude>
     <ClInclude Include="..\gs\slic\StringHash.h">
+      <Filter>gs\slic</Filter>
+    </ClInclude>
+    <ClInclude Include="..\gs\slic\ScriptTargetMode.h">
       <Filter>gs\slic</Filter>
     </ClInclude>
     <ClInclude Include="..\gs\slic\y.tab.h">

@@ -992,6 +992,15 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_UnitMovementLeft);
 	m_functionHash->Add(new Slic_GetStoredProduction);
 
+	// Unit stat modifier builtins
+	m_functionHash->Add(new Slic_ModifyUnitStat);
+	m_functionHash->Add(new Slic_ClearUnitStatModifiers);
+	m_functionHash->Add(new Slic_HealUnit);
+
+	// Script-driven targeting
+	m_functionHash->Add(new Slic_BeginTargetMode);
+	m_functionHash->Add(new Slic_IsTargetModeActive);
+
 }
 
 void SlicEngine::Link()
