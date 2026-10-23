@@ -2661,14 +2661,16 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 		for(i = 0; i < n; i++)
 		{
 			// Computed per unit, not shared across the loop via one cpos/
-			// foundCity - this tile can hold units from more than one
-			// owner, and NearestFriendlyCityWithRoom() resolves to a city
-			// belonging to THAT unit's own civ. Reusing one result for
-			// every unit (the original bug here, copied into and later
-			// fixed in Slic_Liberate::Call - see foreign_tile_sharing_
-			// root_cause memory) sent whichever owner was computed last
-			// to every other owner's "friendly" city - a real way for a
-			// teleport order's target to end up foreign-occupied.
+			// foundCity - this tile has a single owner, but can still
+			// hold several distinct Army groupings of that owner (e.g. a
+			// naval stack and a land stack both garrisoned at the same
+			// city), and NearestFriendlyCityWithRoom()'s result depends
+			// on the specific army's own movement type (its testWaterMove
+			// check) as well as its owner. Reusing one army's result for
+			// every other army (the original bug here, copied into and
+			// later fixed in Slic_Liberate::Call - see foreign_tile_
+			// sharing_root_cause memory) could send e.g. a naval stack to
+			// a landlocked city it can never actually reach.
 			MapPoint cpos;
 			bool foundCity = expelled[i].NearestFriendlyCityWithRoom(cpos, numToExpel,
 			                                                         expelled[i].GetArmy());
