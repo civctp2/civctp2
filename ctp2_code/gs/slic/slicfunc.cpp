@@ -7663,23 +7663,52 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 		for(i = 0; i < n; i++)
 		{
 			// Computed per unit, not shared across the loop like the old
-			// single cpos/foundCity did - this tile can hold units from
-			// more than one owner, and NearestFriendlyCityWithRoom()
-			// resolves to a city belonging to THAT unit's own civ. Reusing
-			// one result for every unit sent whichever owner was computed
-			// last to every other owner's "friendly" city - a real way
-			// for a teleport order's target to end up foreign-occupied.
-			// See foreign_tile_sharing_root_cause memory.
+			// single cpos/foundCity did - this tile has a single owner,
+			// but can still hold several distinct Army groupings of that
+			// owner (e.g. a naval stack and a land stack both garrisoned
+			// at the same city), and NearestFriendlyCityWithRoom()'s
+			// result depends on the specific army's own movement type as
+			// well as its owner. Reusing one army's result for every
+			// other army could send e.g. a naval stack to a landlocked
+			// city it can never actually reach. See
+			// foreign_tile_sharing_root_cause memory.
 			MapPoint cpos;
 			bool foundCity = expelled[i].NearestFriendlyCityWithRoom(cpos, n, expelled[i].GetArmy());
 
 			if(foundCity)
 			{
+				// Split this one unit off into its own army, mirroring
+				// ArmyData::Expel (this function's own source), rather
+				// than sending expelled[i]'s whole, possibly-still-
+				// multi-unit army - otherwise a single multi-unit army
+				// gets a GEV_GetExpelledOrder queued once per unit it
+				// contains, redundantly re-teleporting the same army,
+				// each time with whichever cpos that particular unit's
+				// own computation happened to return.
+				Army newArmy;
+				if(expelled[i].GetArmy().Num() > 1)
+				{
+					newArmy = g_player[expelled[i].GetOwner()]->GetNewArmy(CAUSE_NEW_ARMY_EXPELLED);
+				}
+				else
+				{
+					newArmy = expelled[i].GetArmy();
+				}
+
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GetExpelledOrder,
-					GEA_Army, expelled[i].GetArmy(),
+					GEA_Army, newArmy,
 					GEA_MapPoint, cpos,
 					GEA_Player, PLAYER_INDEX_VANDALS,
 					GEA_End);
+
+				if(expelled[i].GetArmy().Num() > 1)
+				{
+					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
+						GEA_Unit, expelled[i],
+						GEA_Army, newArmy,
+						GEA_Int, CAUSE_NEW_ARMY_EXPELLED,
+						GEA_End);
+				}
 			}
 			else
 			{
