@@ -2094,8 +2094,11 @@ void SlicEngine::RunUITriggers(const MBCHAR *controlName)
 	if(trig) {
 		SlicSegment *seg = trig->GetSegment();
 		if(seg && seg->IsEnabled()) {
-			m_uiExecuteObjects->AddTail(new SlicObject(seg));
-
+			SlicObject * obj = new SlicObject(seg);
+			// Same recipient as RunHelpTriggers gives its object.
+			if (g_selected_item)
+				obj->AddRecipient(g_selected_item->GetVisiblePlayer());
+			m_uiExecuteObjects->AddTail(obj);
 		}
 	}
 }
