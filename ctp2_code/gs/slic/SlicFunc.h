@@ -651,4 +651,8 @@ SLICFUNC(SFR_INT, ModifyUnitStat)
 SLICFUNC(SFR_INT, ClearUnitStatModifiers)
 SLICFUNC(SFR_INT, HealUnit)
 
+// Script-driven map targeting builtins
+SLICFUNC(SFR_VOID, BeginTargetMode)
+SLICFUNC(SFR_INT, IsTargetModeActive)
+
 #endif // __SLICFUNC_H__

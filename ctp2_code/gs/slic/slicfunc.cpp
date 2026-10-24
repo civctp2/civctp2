@@ -106,6 +106,7 @@
 #include "screenutils.h"
 #include "greatlibrary.h"
 #include "SelItem.h"
+#include "ScriptTargetMode.h"
 #include "BuildingRecord.h"
 #include "buildingutil.h"	//EMOD
 #include "GovernmentRecord.h" //EMOD
@@ -7960,5 +7961,47 @@ SFN_ERROR Slic_HealUnit::Call(SlicArgList *args)
 	}
 
 	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+// SLIC script targeting builtins
+//----------------------------------------------------------------------------
+
+// BeginTargetMode(callback_name)
+// Enters the crosshair cursor mode. When the player clicks a tile, the named
+// SLIC segment is fired with the player and the location as context. The
+// player is the one whose screen is shown: the click comes from the local mouse.
+SFN_ERROR Slic_BeginTargetMode::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	char *callbackName;
+	if(!args->GetString(0, callbackName))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!callbackName || callbackName[0] == '\0')
+		return SFN_ERROR_TYPE_ARGS;
+
+	// Use the current visible player as the casting player
+	sint32 player = 0;
+	if(g_selected_item)
+		player = g_selected_item->GetVisiblePlayer();
+
+	if(g_scriptTargetMode)
+		g_scriptTargetMode->Begin(player, callbackName);
+
+	return SFN_ERROR_OK;
+}
+
+// IsTargetModeActive()
+// Returns 1 if script targeting mode is currently active, 0 otherwise.
+SFN_ERROR Slic_IsTargetModeActive::Call(SlicArgList *args)
+{
+	if(args->Count() != 0)
+		return SFN_ERROR_NUM_ARGS;
+
+	m_result.m_int = (g_scriptTargetMode && g_scriptTargetMode->IsActive()) ? 1 : 0;
 	return SFN_ERROR_OK;
 }
