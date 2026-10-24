@@ -131,8 +131,8 @@ void SlicParameterSymbol::Serialize(CivArchive &archive)
 
 BOOL SlicParameterSymbol::GetIntValue(sint32 &value) const
 {
-	SlicObject *context = g_slicEngine->GetContext();
-	SlicArgList *argList = context->GetArgList();
+	SlicObject *context = g_slicEngine ? g_slicEngine->GetContext() : NULL;
+	SlicArgList *argList = context ? context->GetArgList() : NULL;
 	if(!argList) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 			c3errors_ErrorDialog("Slic", "Parameter %s used outside function call", GetName());
@@ -144,8 +144,8 @@ BOOL SlicParameterSymbol::GetIntValue(sint32 &value) const
 
 BOOL SlicParameterSymbol::GetPlayer(sint32 &value) const
 {
-	SlicObject *context = g_slicEngine->GetContext();
-	SlicArgList *argList = context->GetArgList();
+	SlicObject *context = g_slicEngine ? g_slicEngine->GetContext() : NULL;
+	SlicArgList *argList = context ? context->GetArgList() : NULL;
 	if(!argList) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 			c3errors_ErrorDialog("Slic", "Parameter %s used outside function call", GetName());
@@ -157,8 +157,8 @@ BOOL SlicParameterSymbol::GetPlayer(sint32 &value) const
 
 BOOL SlicParameterSymbol::GetPos(MapPoint &pos) const
 {
-	SlicObject *context = g_slicEngine->GetContext();
-	SlicArgList *argList = context->GetArgList();
+	SlicObject *context = g_slicEngine ? g_slicEngine->GetContext() : NULL;
+	SlicArgList *argList = context ? context->GetArgList() : NULL;
 	if(!argList) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 			c3errors_ErrorDialog("Slic", "Parameter %s used outside function call", GetName());
@@ -170,8 +170,8 @@ BOOL SlicParameterSymbol::GetPos(MapPoint &pos) const
 
 BOOL SlicParameterSymbol::GetUnit(Unit &u) const
 {
-	SlicObject *context = g_slicEngine->GetContext();
-	SlicArgList *argList = context->GetArgList();
+	SlicObject *context = g_slicEngine ? g_slicEngine->GetContext() : NULL;
+	SlicArgList *argList = context ? context->GetArgList() : NULL;
 	if(!argList) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 			c3errors_ErrorDialog("Slic", "Parameter %s used outside function call", GetName());
@@ -183,8 +183,8 @@ BOOL SlicParameterSymbol::GetUnit(Unit &u) const
 
 BOOL SlicParameterSymbol::GetArmy(Army &a) const
 {
-	SlicObject *context = g_slicEngine->GetContext();
-	SlicArgList *argList = context->GetArgList();
+	SlicObject *context = g_slicEngine ? g_slicEngine->GetContext() : NULL;
+	SlicArgList *argList = context ? context->GetArgList() : NULL;
 	if(!argList) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 			c3errors_ErrorDialog("Slic", "Parameter %s used outside function call", GetName());
@@ -196,8 +196,8 @@ BOOL SlicParameterSymbol::GetArmy(Army &a) const
 
 BOOL SlicParameterSymbol::GetCity(Unit &c) const
 {
-	SlicObject *context = g_slicEngine->GetContext();
-	SlicArgList *argList = context->GetArgList();
+	SlicObject *context = g_slicEngine ? g_slicEngine->GetContext() : NULL;
+	SlicArgList *argList = context ? context->GetArgList() : NULL;
 	if(!argList) {
 		if(g_theProfileDB && g_theProfileDB->IsDebugSlic()) {
 			c3errors_ErrorDialog("SLIC Parameter %s used outside function call", GetName());
