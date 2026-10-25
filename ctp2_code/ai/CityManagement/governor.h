@@ -434,6 +434,8 @@ private:
 
 	sint32 GetBestRoadImprovement(const MapPoint & pos) const;
 
+	bool HasUnfinishedFoodProdOrGoldImprovement(const MapPoint & pos) const;
+	bool HasFoodProdOrGoldImprovement(const MapPoint & pos) const;
 	void GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const;
 
 	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;

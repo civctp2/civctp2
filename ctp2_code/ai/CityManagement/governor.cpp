@@ -174,6 +174,7 @@
 #include "StrategyRecord.h"
 #include "TerrainRecord.h"
 #include "terrainutil.h"
+#include "TerrImprove.h"
 #include "TradeRouteData.h"
 #include "tradeutil.h"
 #include "Unit.h"
@@ -1318,14 +1319,24 @@ void Governor::PlaceTileImprovements()
 		// terrain-rich ring 1 can keep winning every one of its own
 		// candidates there turn after turn while a sibling city's equally
 		// deserving but lower-terrain ring 1 never gets a look in, since
-		// nothing discounts a ring as it fills up. First pass: tally, for
-		// this city, how many of each ring's eligible tiles already carry
-		// a finished improvement (same eligibility filter as the second
-		// pass below, so the denominator matches what can actually compete).
+		// nothing discounts a ring as it fills up. The loop below both
+		// tallies, for this city, how many of each ring's eligible tiles
+		// already count as improved and gathers this turn's candidates in
+		// one pass, since both share the same eligibility filter.
 		sint32 const maxRing = g_theCitySizeDB->NumRecords();
 		std::vector<sint32> ringTotal(maxRing, 0);
 		std::vector<sint32> ringImproved(maxRing, 0);
 
+		TiGoalQueue cityTileImpGoals;
+		// A tile counts toward ringImproved[] (but never becomes a
+		// candidate) if it already has a food/prod/gold improvement under
+		// construction, or carries a non-Fort/Airfield/detector-style
+		// installation, or FindBestTileImprovement has nothing better to
+		// offer it and it already carries a finished food/prod/gold
+		// improvement. Otherwise, if FindBestTileImprovement finds a
+		// candidate - whether the tile is bare or already improved, no
+		// distinction is made here - it goes into cityTileImpGoals for
+		// scoring below.
 		for (it.Start(); !it.End(); it.Next())
 		{
 			if(unit.RetPos() == it.Pos())
@@ -1334,106 +1345,75 @@ void Governor::PlaceTileImprovements()
 			Cell const * cell = g_theWorld->GetCell(it.Pos());
 
 			if(cell->GetCityOwner() != unit)
-				continue;
-
-			if(cell->GetNumUnfinishedImprovements() > 0)
-				continue;
-
-			if(g_theInstallationTree->GetCount(it.Pos()) > 0
-			&& g_theWorld->GetCell(it.Pos())->GetTerrainType() != terrainutil_GetDead())
 				continue;
 
 			sint32 const ring = city->GetRing(it.Pos());
 			if(ring >= 0 && ring < maxRing)
 			{
 				ringTotal[ring]++;
-				if(cell->GetNumBuiltImprovementTypes() > 0)
-					ringImproved[ring]++;
 			}
-		}
-
-		// Second pass: gather candidates as before, but a brand-new-
-		// improvement candidate (one with no improvement at all yet) is
-		// now gated two ways:
-		//
-		// (1) Hard-gated by its immediately-inner ring: it doesn't compete
-		// at all - not even discounted, excluded entirely - until that
-		// inner ring is completely improved. A soft, proportional discount
-		// was tried first and wasn't strict enough: once an inner ring was
-		// mostly (not completely) done, its own few remaining tiles were
-		// often the worst-terrain leftovers (the better ones get taken
-		// first), so a good-terrain outer-ring tile could still outscore
-		// them even heavily discounted - exactly the "ring 1 has a few
-		// empty spots, ring 2 fills anyway" symptom this replaces. Since
-		// ring 2's own gate is ring 1's completeness, ring 3's is ring 2's,
-		// and so on, the whole inside-out ordering falls out of chaining
-		// just the immediately-inner ring at each level, with no need to
-		// look back further than one ring. Ring 1 itself has no inner ring
-		// (ring 0 is the city tile, never a candidate, so ringTotal[0]
-		// stays 0) and so is never gated.
-		//
-		// (2) Still discounted by the fraction of its OWN ring already
-		// improved, same as before the hard gate was added - once a ring
-		// unlocks, its own candidates all compete together in this turn's
-		// shared budget, and without this one city's whole ring could
-		// still hog an entire turn's budget the same way the original
-		// ring-saturation bug did, just one ring later.
-		//
-		// Upgrade candidates (a tile that already has some improvement)
-		// are exempt from both - they aren't claiming fresh ring real
-		// estate from another ring, so neither "wait your turn" reasoning
-		// applies.
-		for (it.Start(); !it.End(); it.Next())
-		{
-			if(unit.RetPos() == it.Pos())
-				continue;
-
-			Cell const * cell = g_theWorld->GetCell(it.Pos());
-
-			if(cell->GetCityOwner() != unit)
-				continue;
+			else
+			{
+				Assert(false);
+			}
 
 			if(cell->GetNumUnfinishedImprovements() > 0)
+			{
+				if(HasUnfinishedFoodProdOrGoldImprovement(it.Pos()))
+					ringImproved[ring]++;
+
 				continue;
+			}
 
 			if(g_theInstallationTree->GetCount(it.Pos()) > 0
 			&& g_theWorld->GetCell(it.Pos())->GetTerrainType() != terrainutil_GetDead())
+			{
+				ringImproved[ring]++;
 				continue;
+			}
 
 			if(FindBestTileImprovement(it.Pos(), ti_goal))
 			{
-				sint32 const ring = city->GetRing(it.Pos());
-				if(cell->GetNumBuiltImprovementTypes() == 0 && ring >= 0 && ring < maxRing)
-				{
-					sint32 const innerRing = ring - 1;
-					if(innerRing >= 0 && ringImproved[innerRing] < ringTotal[innerRing])
-						continue;    // inner ring isn't fully improved yet - this ring doesn't compete at all
-
-					// Still needed even with the hard gate above: once a
-					// ring IS unlocked, its own candidates all compete
-					// together in this turn's shared budget - without this,
-					// one city's whole ring could still hog an entire
-					// turn's budget the same way the original ring-
-					// saturation bug did, just one ring later.
-					if(ringTotal[ring] > 0)
-					{
-						double const ringStillUnimproved =
-						    1.0 - static_cast<double>(ringImproved[ring]) /
-						          static_cast<double>(ringTotal[ring]);
-						ti_goal.utility *= ringStillUnimproved;
-					}
-
-					sint32 const innerRing = ring - 1;
-					if(innerRing >= 0 && ringTotal[innerRing] > 0)
-					{
-						double const innerRingImprovedFraction =
-						    static_cast<double>(ringImproved[innerRing]) /
-						    static_cast<double>(ringTotal[innerRing]);
-						ti_goal.utility *= innerRingImprovedFraction;
-					}
-				}
-				m_tileImprovementGoals.push_back(ti_goal);
+				cityTileImpGoals.push_back(ti_goal);
 			}
+			else if(HasFoodProdOrGoldImprovement(it.Pos()))
+			{
+				ringImproved[ring]++;
+			}
+		}
+
+		for
+		(
+		    TiGoalQueue::const_iterator   iter  = cityTileImpGoals.begin();
+		                                  iter != cityTileImpGoals.end();
+		                                ++iter
+		)
+		{
+			ti_goal = *iter;
+			sint32 const ring = city->GetRing(ti_goal.pos);
+			if(ringTotal[ring] > 0)
+			{
+				// Soft, proportional discount, not a hard gate: a ring
+				// that is e.g. half-improved only loses half of one
+				// ring-step's worth of utility (GetRingImprovementPriorityFraction()
+				// is the gap GetRingImprovementPriority() leaves between
+				// two adjacent rings), so a fully-improved inner ring can
+				// at most bring its own candidates down to parity with the
+				// next ring out - it can never outweigh a utility
+				// difference bigger than one ring-step, such as one of the
+				// strategy's own Improve*Bonus additions below. That is
+				// also why disabling those bonuses was needed to see the
+				// ring order win cleanly in a playtest: with them active,
+				// a city's single favorite improvement category can still
+				// out-bid the ring discount every time.
+				double ringStillUnimproved =
+				          static_cast<double>(ringImproved[ring]) /
+				          static_cast<double>(ringTotal[ring]);
+				ringStillUnimproved *= city->GetRingImprovementPriorityFraction();
+				ti_goal.utility -= ringStillUnimproved;
+			}
+
+			m_tileImprovementGoals.push_back(ti_goal);
 		}
 	}
 
@@ -1454,9 +1434,9 @@ void Governor::PlaceTileImprovements()
 
 	for
 	(
-		TiGoalQueue::const_iterator iter = m_tileImprovementGoals.begin();
-		iter != max_iter;
-		++iter
+	    TiGoalQueue::const_iterator   iter  = m_tileImprovementGoals.begin();
+	                                  iter != max_iter;
+	                                ++iter
 	)
 	{
 		sint32 const needed_pw =
@@ -2415,6 +2395,97 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 		return -1;
 
 	return terr_imp_rec->GetIndex();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::HasFoodProdOrGoldImprovement
+//
+// Description: Checks Whether the tile has a food, production, or gold
+//              improvement finished or under construction.
+//
+// Parameters : pos: Position of the tile on the map
+//
+// Globals    : g_theWorld:                Map information
+//              g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : Whether pos has a food, production, or gold improvement
+//              finished or under construction.
+//
+//----------------------------------------------------------------------------
+bool Governor::HasUnfinishedFoodProdOrGoldImprovement(const MapPoint & pos) const
+{
+	Cell const *  cell = g_theWorld->GetCell(pos);
+	if (cell->HasCity()) // Do not find improvements for city tiles
+		return false;
+
+	for (sint32 index = 0; index < cell->GetNumUnfinishedImprovements(); index++)
+	{
+		sint32                                     type = cell->GetUnfinishedImprovement(index).GetType();
+		const TerrainImprovementRecord *            rec = g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		if (effect == NULL)
+			continue;
+
+		if(effect->HasBonusFood())
+			return true;
+
+		if(effect->HasBonusProduction())
+			return true;
+
+		if(effect->HasBonusGold())
+			return true;
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::HasFoodProdOrGoldImprovement
+//
+// Description: Checks Whether the tile has a food, production, or gold
+//              improvement finished or under construction.
+//
+// Parameters : pos: Position of the tile on the map
+//
+// Globals    : g_theWorld:                Map information
+//              g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : Whether pos has a food, production, or gold improvement
+//              finished or under construction.
+//
+//----------------------------------------------------------------------------
+bool Governor::HasFoodProdOrGoldImprovement(const MapPoint & pos) const
+{
+	Cell const *  cell = g_theWorld->GetCell(pos);
+	if (cell->HasCity()) // Do not find improvements for city tiles
+		return false;
+
+	if(HasUnfinishedFoodProdOrGoldImprovement(pos))
+		return true;
+
+	for (sint32 index = 0; index < cell->GetNumBuiltImprovementTypes(); index++)
+	{
+		sint32                                     type = cell->GetBuiltImprovementType(index);
+		const TerrainImprovementRecord *            rec = g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		if (effect == NULL)
+			continue;
+
+		if(effect->HasBonusFood())
+			return true;
+
+		if(effect->HasBonusProduction())
+			return true;
+
+		if(effect->HasBonusGold())
+			return true;
+	}
+
+	return false;
 }
 
 //----------------------------------------------------------------------------
