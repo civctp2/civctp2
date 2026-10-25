@@ -113,6 +113,7 @@
 #include "message.h"
 
 #include "cursormanager.h"
+#include "ScriptTargetMode.h"
 #include "debugwindow.h"
 
 #include "c3cmdline.h"
@@ -1642,6 +1643,8 @@ void ControlPanelWindow::TargetingMode()
 	case	CP_TARGETING_MODE_TERRAFORM_PENDING:
 			TerraFormUpdate();
 			break;
+	case	CP_TARGETING_MODE_SCRIPT_PENDING:
+			break;
 	default:
 			ClearTargetingMode();
 	}
@@ -1810,6 +1813,8 @@ bool ControlPanelWindow::ExecuteTargetingModeClick(const MapPoint &pos)
 			return TileImpClick(pos);
 	case	CP_TARGETING_MODE_TERRAFORM_PENDING:
 			return TerraFormClick(pos);
+	case	CP_TARGETING_MODE_SCRIPT_PENDING:
+			return ScriptTargetClick(pos);
 	default:
 			ClearTargetingMode();
 	}
@@ -1976,6 +1981,19 @@ void ControlPanelWindow::ClearTargetingMode()
 	g_tiledMap->GetMouseTilePos(pos);
 	tileimptracker_DisplayData(pos, -1);
 	specialAttackWindow_DisplayData(pos, -1);
+}
+
+void ControlPanelWindow::SetScriptTargetingMode()
+{
+	m_targetingMode = CP_TARGETING_MODE_SCRIPT_PENDING;
+}
+
+bool ControlPanelWindow::ScriptTargetClick(const MapPoint &pos)
+{
+	if (g_scriptTargetMode)
+		return g_scriptTargetMode->HandleClick(pos);
+	ClearTargetingMode();
+	return false;
 }
 
 void ControlPanelWindow::CreateTabGroup(const MBCHAR *ldlBlock)
