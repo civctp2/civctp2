@@ -1,18 +1,31 @@
-# SLIC city validity member
+---
+description: 'SLIC city handle validity member contract and runtime checks'
+import: []
+---
 
-## Requirement
+***definitions***
 
-The built-in `city_t` structure shall expose `valid` as an integer member.
+- :CityHandle: is a SLIC `city_t` value that may or may not resolve to a live city.
+- :ValidityMember: is the integer `city.valid` member exposed to SLIC scripts.
 
-## Contract
+***implementation reqs***
 
-- Reading `city.valid` shall return `1` when the city handle resolves through `GetCity`.
-- Reading `city.valid` shall return `0` when the handle does not resolve.
-- Reading `city.valid` shall itself succeed for either handle state.
-- Registering this member shall not change existing city member behavior.
+- The built-in `city_t` structure exposes `valid` as an integer member.
+- Reading `city.valid` returns the result of resolving the handle through `GetCity`.
+- Registering `valid` preserves existing city member behavior.
 
-## Validation
+***test reqs***
 
-- Build the Windows `Final-SDL|Win32` executable.
-- Load the MoM scenario and advance three turns through the UI harness.
-- Require zero SLIC errors and a live, responsive game through turn three.
+- Use the integrated MoM Final-SDL Win32 executable and the included `mom_test_builtins.slc` fixture.
+- Capture SLIC errors and game liveness during every probe.
+
+***functional specs***
+
+- A valid city handle reports valid.
+  - Given a city returned by `GetCityByIndex(0, 0, city)`, when the probe reads `city.valid`, then the result shall be `1` and the success callback shall fire.
+- A default city handle reports invalid.
+  - Given a default initialized `city_t` local, when the probe reads `city.valid`, then the result shall be `0` and the invalid callback shall fire without a SLIC error.
+- City validity remains safe during ordinary MoM play.
+  - Given a fresh MoM game, when the game advances three turns, then it shall remain responsive with zero SLIC errors.
+- Existing city callbacks remain available.
+  - Given a valid city handle, when the city/build callback reads city data, then it shall complete without a SLIC error.
