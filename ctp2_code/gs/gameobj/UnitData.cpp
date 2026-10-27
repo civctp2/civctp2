@@ -587,6 +587,9 @@ sint32 UnitData::ResetMovement()
 		m_movement_points += amt;
 	}
 
+	// Stat modifier: the per-turn reset must keep the move modifier
+	m_movement_points += static_cast<double>(m_moveModifier);
+
 	if(Flag(k_UDF_IS_ENTRENCHING)) {
 		if(Flag(k_UDF_FIRST_MOVE)) {
 			SetFlag(k_UDF_IS_ENTRENCHED);
@@ -3884,6 +3887,9 @@ double UnitData::GetDefCounterAttack(const Unit &attacker) const
 	double base			= myRec->GetDefense();
 	double bonuses		= 0.0;// cumulative bonuses
 	Cell *		   cell = g_theWorld->GetCell(m_pos);
+
+	// Stat modifier: same as GetDefense
+	base += m_defenseModifier;
 
 	sint32 intDef = (sint32)base;
 	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
