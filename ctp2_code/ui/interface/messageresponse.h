@@ -22,6 +22,10 @@ class MessageResponseSubmitAction;
 union Cookie;
 // MBCHAR
 
+// Give SLIC response buttons the number keys 1-9, so a scripted menu can be
+// answered from the keyboard.
+void messageresponse_AssignNumberKeys(tech_WLList<ctp2_Button *> * buttons);
+
 class MessageResponseListItem : public c3_ListItem
 {
 public:
