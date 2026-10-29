@@ -125,13 +125,17 @@ GOAL_GARRISON {
 GOAL_SEIGE {
   RallyFirst
 
-  # NeverSatisfied made this goal keep absorbing agents forever, since it
-  # has no natural stopping point - Is_Satisfied() never returns true, so
-  # Commit_Agent kept accepting every available agent in a single
-  # matching pass (one instance reached 255 committed agents in a
-  # playtest, wrapping Squad_Strength's sint8 counters). There is no
-  # point sending more troops than necessary, so disabled.
-  #NeverSatisfied
+  # NeverSatisfied re-enabled (2026-10-29): it used to let this goal
+  # absorb every available agent in one matching pass, since
+  # Is_Satisfied() never returns true and Commit_Agent had no natural
+  # stopping point (one instance reached 255 agents, wrapping
+  # Squad_Strength's sint8 counters). That's now guarded by a hard
+  # unit ceiling in Goal::Commit_Agent itself, independent of any
+  # goal's own satisfaction logic - so deliberately overshooting the
+  # computed minimum here gives slack against losing a unit to
+  # bombardment while massing, instead of aborting the siege over a
+  # single casualty.
+  NeverSatisfied
 
   # NoRollback locked this goal's committed agents in for good once
   # matched, even when a much better opportunity for those same units
