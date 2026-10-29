@@ -11295,14 +11295,17 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	Path *      tmp_path            = new Path(path);
 	MapPoint    target_pos;
 
-	if (tmp_path->GetMovesRemaining() > 0)
-	{
-		target_pos = tmp_path->GetEnd();
-	}
-	else
-	{
-		target_pos = m_pos;
-	}
+	// Path::GetEnd() walks the path's own steps and is correct regardless
+	// of how many moves are left - including the common case of a path
+	// that reaches a real, distant destination using up every move doing
+	// so. The previous m_pos fallback here conflated that case with a
+	// genuinely empty path (already at the goal), silently replacing a
+	// real, far-away target with the army's own tile - harmless for most
+	// orders, but actively wrong for BombardOrder below, whose own range
+	// check (dist = m_pos.NormalizedDistance(target_pos)) would then
+	// always see dist==0 and treat itself as already in range of its own
+	// tile.
+	target_pos = tmp_path->GetEnd();
 	if (s_orderDBToEventMap == NULL)
 		AssociateEventsWithOrdersDB();
 
@@ -11335,6 +11338,22 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 			    ("ArmyData::PerformOrderHere: army 0x%lx (owner %d) order %s needs range %d but only %d moves remain at (x=%d,y=%d), turn=%d\n",
 			     m_id, m_owner, g_theOrderDB->GetNameStr(order_rec->GetIndex()), range, moves,
 			     target_pos.x, target_pos.y, g_player[m_owner]->m_current_round));
+
+			// Is this a genuinely immobile siege unit (IsImmobile() is a
+			// fixed per-unit-type DB property - UnitRecord::GetCantMove()
+			// or MaxMovePoints < 1.0 - not transient state), or a normally
+			// mobile unit that's actually drained to 0 moves for some
+			// other reason? One line per unit in the army, since a stack
+			// can mix types.
+			for (sint32 unit_i = 0; unit_i < Num(); unit_i++)
+			{
+				Unit const & diag_unit = Access(unit_i);
+				DPRINTF(k_DBG_GAMESTATE,
+				    ("ArmyData::PerformOrderHere: unit %d/%d in army 0x%lx: %s, maxMovePoints %.2f, movementPoints %.2f, fuel %d, immobile %d, turn=%d\n",
+				     unit_i + 1, Num(), m_id, g_theUnitDB->GetNameStr(diag_unit.GetType()),
+				     diag_unit.GetMaxMovePoints(), diag_unit.GetMovementPoints(), diag_unit.GetFuel(),
+				     diag_unit.IsImmobile(), g_player[m_owner]->m_current_round));
+			}
 		}
 		Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());
 	}
