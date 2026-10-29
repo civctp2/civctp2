@@ -438,11 +438,11 @@ STRATEGY_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 12000
+        Priority 11900
         BuildListSequence BUILD_LIST_SEQUENCE_OVERCROWDED_CITIES
         HasBuildingsThenStop BUILDING_BUILD_LIST_OVERCROWDED_CITIES
         Advice BUILD_GROWTH_ADVICE
-        MinOvercrowding 1
+        MinOvercrowding 5
     }
 
     BuildListSequenceElement {
@@ -1687,11 +1687,11 @@ STRATEGY_SCIENTIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 12000
+        Priority 11900
         BuildListSequence BUILD_LIST_SEQUENCE_OVERCROWDED_CITIES
         HasBuildingsThenStop BUILDING_BUILD_LIST_OVERCROWDED_CITIES
         Advice BUILD_GROWTH_ADVICE
-        MinOvercrowding 1
+        MinOvercrowding 5
     }
 
     BuildListSequenceElement {
@@ -2278,11 +2278,11 @@ STRATEGY_MILITARIST_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 12000
+        Priority 11900
         BuildListSequence BUILD_LIST_SEQUENCE_OVERCROWDED_CITIES
         HasBuildingsThenStop BUILDING_BUILD_LIST_OVERCROWDED_CITIES
         Advice BUILD_GROWTH_ADVICE
-        MinOvercrowding 1
+        MinOvercrowding 5
     }
 
     BuildListSequenceElement {
@@ -2874,11 +2874,11 @@ STRATEGY_ECONOMIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 12000
+        Priority 11900
         BuildListSequence BUILD_LIST_SEQUENCE_OVERCROWDED_CITIES
         HasBuildingsThenStop BUILDING_BUILD_LIST_OVERCROWDED_CITIES
         Advice BUILD_GROWTH_ADVICE
-        MinOvercrowding 1
+        MinOvercrowding 5
     }
 
     BuildListSequenceElement {
@@ -3457,11 +3457,11 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 12000
+        Priority 11900
         BuildListSequence BUILD_LIST_SEQUENCE_OVERCROWDED_CITIES
         HasBuildingsThenStop BUILDING_BUILD_LIST_OVERCROWDED_CITIES
         Advice BUILD_GROWTH_ADVICE
-        MinOvercrowding 1
+        MinOvercrowding 5
     }
 
     BuildListSequenceElement {
@@ -4045,11 +4045,11 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     }
 
     BuildListSequenceElement {
-        Priority 12000
+        Priority 11900
         BuildListSequence BUILD_LIST_SEQUENCE_OVERCROWDED_CITIES
         HasBuildingsThenStop BUILDING_BUILD_LIST_OVERCROWDED_CITIES
         Advice BUILD_GROWTH_ADVICE
-        MinOvercrowding 1
+        MinOvercrowding 5
     }
 
     BuildListSequenceElement {
