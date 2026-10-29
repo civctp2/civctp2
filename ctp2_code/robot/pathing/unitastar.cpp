@@ -1028,7 +1028,21 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 
 		if ((start.x == neighbor.x) && (start.y == neighbor.y))
 		{
-			return true;
+			// This neighbor direction IS the actual start->dest move being
+			// evaluated, not just a candidate approach tile to vet - skip
+			// the occupancy/ownership checks below (they exist to judge
+			// OTHER tiles we'd have to stand on first, not our own current
+			// position) and go straight to the real question: is this one
+			// specific edge itself ZOC-blocked? Previously this returned
+			// true unconditionally, assuming "already adjacent" meant
+			// "ZOC can't be a problem" - which missed the classic ZOC
+			// corner-cut case (an enemy adjacent to both start and dest
+			// blocking the direct move between two otherwise-fine tiles).
+			if (!IsMoveZOC(neighbor, dest))
+			{
+				return true;
+			}
+			continue;
 		}
 
 		if (!PretestDest_Enterable(start, neighbor)) continue;
