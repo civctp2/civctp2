@@ -2529,6 +2529,28 @@ double CityData::GetRingImprovementPriority(MapPoint pos) const
 
 	return static_cast<double>(stepsIn) / static_cast<double>(maxPossibleRing);
 }
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetRingImprovementPriorityFraction
+//
+// Description: Gets the diference between the tile improvement priorities
+//              between two adjacent rings.
+//
+// Parameters : -
+//
+// Globals    : g_theCitySizeDB: The city size database
+//
+// Returns    : The diference between the tile improvement priorities
+//              between two adjacent rings.
+//
+//----------------------------------------------------------------------------
+double CityData::GetRingImprovementPriorityFraction()
+{
+	sint32 const maxPossibleRing = g_theCitySizeDB->NumRecords() - 1;
+
+	return 1.0 / static_cast<double>(maxPossibleRing);
+}
 #endif
 
 //----------------------------------------------------------------------------

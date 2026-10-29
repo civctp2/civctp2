@@ -301,6 +301,7 @@ Governor::Governor(PLAYER_INDEX const & playerId)
 	m_currentUnitCount          (),
 	m_neededFreight             (0),
 	m_tileImprovementGoals      (),
+	m_cityTileImpGoals          (),
 	m_canBuildLandSettlers      (false),
 	m_canBuildSeaSettlers       (false)
 { ; }
@@ -328,6 +329,7 @@ Governor::Governor(Governor const & copyme)
 	m_currentUnitCount          (),
 	m_neededFreight             (copyme.m_neededFreight),
 	m_tileImprovementGoals      (),
+	m_cityTileImpGoals          (),
 	m_canBuildLandSettlers      (copyme.m_canBuildLandSettlers),
 	m_canBuildSeaSettlers       (copyme.m_canBuildSeaSettlers)
 {
@@ -339,6 +341,9 @@ Governor::Governor(Governor const & copyme)
 	          copyme.m_tileImprovementGoals.end(),
 	          std::back_inserter(m_tileImprovementGoals)
 	         );
+	// m_cityTileImpGoals deliberately left empty, unlike the above - it's
+	// pure scratch space local to one PlaceTileImprovements call, never
+	// holding meaningful state between calls.
 }
 
 //----------------------------------------------------------------------------
@@ -360,6 +365,7 @@ Governor::~Governor()
 {
 	UnitCountVector().swap(m_currentUnitCount);
 	TiGoalQueue().swap(m_tileImprovementGoals);
+	TiGoalQueue().swap(m_cityTileImpGoals);
 }
 
 void Governor::SetPlayerId(const PLAYER_INDEX &playerId)
@@ -1327,7 +1333,12 @@ void Governor::PlaceTileImprovements()
 		std::vector<sint32> ringTotal(maxRing, 0);
 		std::vector<sint32> ringImproved(maxRing, 0);
 
-		TiGoalQueue cityTileImpGoals;
+		// m_cityTileImpGoals (a Governor member, not a local) is reused
+		// city after city, turn after turn - clear() keeps its already-
+		// grown heap buffer instead of freeing and reallocating it from
+		// empty on every single city, which otherwise fragments the heap
+		// over a long game (see tileimp_placement_priority memory).
+		m_cityTileImpGoals.clear();
 		// A tile counts toward ringImproved[] (but never becomes a
 		// candidate) if it already has a food/prod/gold improvement under
 		// construction, or carries a non-Fort/Airfield/detector-style
@@ -1335,7 +1346,7 @@ void Governor::PlaceTileImprovements()
 		// offer it and it already carries a finished food/prod/gold
 		// improvement. Otherwise, if FindBestTileImprovement finds a
 		// candidate - whether the tile is bare or already improved, no
-		// distinction is made here - it goes into cityTileImpGoals for
+		// distinction is made here - it goes into m_cityTileImpGoals for
 		// scoring below.
 		for (it.Start(); !it.End(); it.Next())
 		{
@@ -1374,7 +1385,7 @@ void Governor::PlaceTileImprovements()
 
 			if(FindBestTileImprovement(it.Pos(), ti_goal))
 			{
-				cityTileImpGoals.push_back(ti_goal);
+				m_cityTileImpGoals.push_back(ti_goal);
 			}
 			else if(HasFoodProdOrGoldImprovement(it.Pos()))
 			{
@@ -1384,34 +1395,21 @@ void Governor::PlaceTileImprovements()
 
 		for
 		(
-		    TiGoalQueue::const_iterator   iter  = cityTileImpGoals.begin();
-		                                  iter != cityTileImpGoals.end();
+		    TiGoalQueue::const_iterator   iter  = m_cityTileImpGoals.begin();
+		                                  iter != m_cityTileImpGoals.end();
 		                                ++iter
 		)
 		{
 			ti_goal = *iter;
-			sint32 const ring = city->GetRing(ti_goal.pos);
-			if(ringTotal[ring] > 0)
-			{
-				// Soft, proportional discount, not a hard gate: a ring
-				// that is e.g. half-improved only loses half of one
-				// ring-step's worth of utility (GetRingImprovementPriorityFraction()
-				// is the gap GetRingImprovementPriority() leaves between
-				// two adjacent rings), so a fully-improved inner ring can
-				// at most bring its own candidates down to parity with the
-				// next ring out - it can never outweigh a utility
-				// difference bigger than one ring-step, such as one of the
-				// strategy's own Improve*Bonus additions below. That is
-				// also why disabling those bonuses was needed to see the
-				// ring order win cleanly in a playtest: with them active,
-				// a city's single favorite improvement category can still
-				// out-bid the ring discount every time.
-				double ringStillUnimproved =
-				          static_cast<double>(ringImproved[ring]) /
-				          static_cast<double>(ringTotal[ring]);
-				ringStillUnimproved *= city->GetRingImprovementPriorityFraction();
-				ti_goal.utility -= ringStillUnimproved;
-			}
+			sint32 const ring         = city->GetRing(ti_goal.pos);
+			sint32 const terrain_type = g_theWorld->GetCell(ti_goal.pos)->GetTerrainType();
+
+			// Moved here from inside FindBestTileImprovement: the per-ring
+			// saturation discount ScaleUtilityForCitySize now also applies
+			// (on top of its own ring-distance scaling) needs this city's
+			// ring tallies finalized first - see its own comment.
+			ScaleUtilityForCitySize(ti_goal, city, ti_goal.pos, terrain_type, strategy,
+			                         ringImproved[ring], ringTotal[ring]);
 
 			m_tileImprovementGoals.push_back(ti_goal);
 		}
@@ -2279,8 +2277,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const
 		}
 	}
 
-	ScaleUtilityForCitySize(goal, city, pos, terrain_type, strategy);
-
 	return (goal.type >= 0);
 }
 
@@ -2288,63 +2284,75 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const
 //
 // Name       : Governor::ScaleUtilityForCitySize
 //
-// Description: Final adjustment step for FindBestTileImprovement's
-//              candidate utility, based on the owning city's size - not
+// Description: Final adjustment step for a gathered tile-improvement
+//              candidate's utility, based on the owning city's size - not
 //              its actual resource needs (see [[tileimp_need_vs_terrain]]
-//              in the session's own notes; the category itself, above
-//              this call, is already picked by terrain capability, not
-//              need). Split out of FindBestTileImprovement as a first
-//              refactoring step toward making this need-aware.
+//              in the session's own notes). Two ring-related adjustments:
+//              the original ring-distance preference (inner rings over
+//              outer ones), and - moved in from PlaceTileImprovements, see
+//              [[tileimp_placement_priority]] - a per-ring-per-city
+//              saturation discount on top, of up to one ring-step's worth
+//              of utility, proportional to how much of its own ring this
+//              city has already improved, so one city's fully-saturated
+//              ring can't keep winning a shared turn's budget over a
+//              sibling city's still-empty same-numbered ring. The
+//              saturation discount needs the whole city's ring tallies
+//              finalized first, so - unlike before - this whole function
+//              can no longer be called from inside FindBestTileImprovement
+//              while that city's gathering loop is still running (the
+//              tallies for the current/later rings aren't final yet);
+//              PlaceTileImprovements now calls it once per gathered
+//              candidate, after its own gathering loop (and so the
+//              tallies) is complete.
 //
-// Parameters : goal:         The candidate goal, utility adjusted in place
-//              city:         The tile's owning city (NULL clears utility)
-//              pos:          Position of the candidate tile
-//              terrain_type: The tile's current terrain type
-//              strategy:     The city owner's current strategy
+// Parameters : goal:              The candidate goal, utility adjusted in place
+//              city:              The tile's owning city (NULL clears utility)
+//              pos:               Position of the candidate tile
+//              terrain_type:      The tile's current terrain type
+//              strategy:          The city owner's current strategy
+//              ringImprovedCount: How many of this candidate's ring's eligible tiles this city already counts as improved
+//              ringTotalCount:    How many of this candidate's ring's tiles are eligible at all
 //
 // Globals    : -
 //
 // Returns    : -
 //
 //----------------------------------------------------------------------------
-void Governor::ScaleUtilityForCitySize(TiGoal & goal, CityData * city, const MapPoint & pos, sint32 terrain_type, const StrategyRecord & strategy) const
+void Governor::ScaleUtilityForCitySize(TiGoal & goal, CityData * city, const MapPoint & pos, sint32 terrain_type, const StrategyRecord & strategy, sint32 ringImprovedCount, sint32 ringTotalCount) const
 {
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	// CTP1: utilisation depends on worker placement, and is either 0 or 1.
 #else
-	// CTP2: scale by ring distance from the city - inner rings preferred
-	// over outer ones - as a fraction from 0.0 to 1.0. (Was the current
-	// worker headcount via GetUtilisationRatio, which is circular here:
-	// an outer ring has no workers precisely because nothing's built
-	// there yet.)
 	if ((goal.type >= 0) && city)
 	{
-		sint32 citySize;
-		city->GetPop(citySize);
-
-		// Only decrease utility if the city has grown beyond the first ring.
-		if(citySize > unitutil_GetSmallCityMaxSize())
+		// Also cleanup if the city does not use the tile
+		if(terrain_type != terrainutil_GetDead())
 		{
-			// Also cleanup if the city does not use the tile
-			if(terrain_type != terrainutil_GetDead())
-			{
 #if defined(NEW_RESOURCE_PROCESS)
-				sint32 ring = city->GetRing(pos);
-				goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
+			sint32 ring = city->GetRing(pos);
+			goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
 #else
-				goal.utility *= city->GetRingImprovementPriority(pos);
-#endif
+			double ringFactor = city->GetRingImprovementPriority(pos);
+
+			// Soft, proportional discount on top, not a hard gate: a
+			// ring that is e.g. half-improved only loses half of one
+			// ring-step's worth of utility (GetRingImprovementPriorityFraction()
+			// is the gap GetRingImprovementPriority() leaves between
+			// two adjacent rings), so a fully-improved inner ring can
+			// at most bring its own candidates down to parity with the
+			// next ring out - it can never outweigh a utility
+			// difference bigger than one ring-step, such as one of the
+			// strategy's own Improve*Bonus additions applied earlier.
+			if(ringTotalCount > 0)
+			{
+				double ringStillUnimproved =
+				          static_cast<double>(ringImprovedCount) /
+				          static_cast<double>(ringTotalCount);
+				ringFactor -= ringStillUnimproved * city->GetRingImprovementPriorityFraction();
 			}
-		}
-		else
-		{
-			// 0.0 only silences -Wmaybe-uninitialized: GetImproveSmallCityGrowthBonus
-			// writes bonus whenever it returns true, and every strategy in
-			// strategies.txt sets this field.
-			double bonus = 0.0;
-			strategy.GetImproveSmallCityGrowthBonus(bonus);
-			bonus        *= strategy.GetSmallCityImproveCoeff();
-			goal.utility += bonus;
+
+			goal.utility *= ringFactor;
+#endif
 		}
 	}
 	else

@@ -926,6 +926,25 @@ sint32 Cell::GetNumUnfinishedImprovements() const
 	return c;
 }
 
+TerrainImprovement Cell::GetUnfinishedImprovement(sint32 index) const
+{
+	Assert(m_objects);
+	Assert(m_env & k_BIT_ENV_HAS_IMPROVEMENT);
+	if(m_objects && (m_env & k_BIT_ENV_HAS_IMPROVEMENT)) {
+		sint32 i, c = 0;
+		for(i = 0; i < m_objects->Num(); i++) {
+			if((m_objects->Access(i).m_id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_UNFINISHED_IMPROVEMENT) {
+				if(c == index)
+					return TerrainImprovement(m_objects->Access(i).m_id);
+				c++;
+			}
+		}
+	}
+
+	Assert(false);
+	return TerrainImprovement();
+}
+
 TerrainImprovement Cell::AccessUnfinishedImprovement(sint32 index)
 {
 	Assert(m_objects);

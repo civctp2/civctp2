@@ -302,6 +302,7 @@ public:
 	void InvalidateContinent() { m_continentIDs.InvalidateContinent(); }
 
 	sint32 GetNumUnfinishedImprovements() const;
+	TerrainImprovement GetUnfinishedImprovement(sint32 index) const;
 	TerrainImprovement AccessUnfinishedImprovement(sint32 index);
 
 	void Serialize(CivArchive &archive) ;

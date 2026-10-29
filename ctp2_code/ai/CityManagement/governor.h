@@ -430,7 +430,7 @@ private:
 	// cleanup terraform.
 	void ScoreFallbackTerraform(TiGoal & goal, const MapPoint & pos, sint32 terrain_type, sint32 food_ter, sint32 prod_ter, sint32 gold_ter, double growth_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem, Player * player_ptr) const;
 
-	void ScaleUtilityForCitySize(TiGoal & goal, CityData * city, const MapPoint & pos, sint32 terrain_type, const StrategyRecord & strategy) const;
+	void ScaleUtilityForCitySize(TiGoal & goal, CityData * city, const MapPoint & pos, sint32 terrain_type, const StrategyRecord & strategy, sint32 ringImprovedCount, sint32 ringTotalCount) const;
 
 	sint32 GetBestRoadImprovement(const MapPoint & pos) const;
 
@@ -455,6 +455,12 @@ private:
 	sint32              m_neededFreight;
 	/// Currently considered tile improvements
 	TiGoalQueue         m_tileImprovementGoals;
+	/// Scratch buffer for one city's gathered tile-improvement candidates
+	/// within PlaceTileImprovements - a Governor member (like
+	/// m_tileImprovementGoals) rather than a per-city local so its heap
+	/// buffer is grown once and reused turn after turn, city after city,
+	/// instead of being allocated and freed from empty every single time.
+	TiGoalQueue         m_cityTileImpGoals;
 	bool                m_canBuildLandSettlers;
 	bool                m_canBuildSeaSettlers;
 };

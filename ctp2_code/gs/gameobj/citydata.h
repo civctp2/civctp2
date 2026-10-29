@@ -778,9 +778,10 @@ public:
 	                 sint32 origOwner);
 
 #if !defined(NEW_RESOURCE_PROCESS)
-	void	GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
-	double	GetUtilisationRatio(uint32 const squaredDistance) const;
-	double	GetRingImprovementPriority(MapPoint pos) const;
+	       void   GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
+	       double GetUtilisationRatio(uint32 const squaredDistance) const;
+	       double GetRingImprovementPriority(MapPoint pos) const;
+	static double GetRingImprovementPriorityFraction();
 #endif
 
 	sint32 PopCount() const;
