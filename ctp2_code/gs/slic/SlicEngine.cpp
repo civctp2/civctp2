@@ -787,6 +787,8 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_SetStringByDBIndex);
 	m_functionHash->Add(new Slic_GetStringDBIndex);
 	m_functionHash->Add(new Slic_UnitHasUserFlag);
+	m_functionHash->Add(new Slic_SetUnitUserFlag);
+	m_functionHash->Add(new Slic_ClearUnitUserFlag);
 
 	m_functionHash->Add(new Slic_BlankScreen);
 	m_functionHash->Add(new Slic_AddCenter);

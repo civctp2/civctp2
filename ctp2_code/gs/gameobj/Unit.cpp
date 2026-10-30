@@ -2227,6 +2227,21 @@ void Unit::ClearFlag(uint32 flag)
 	AccessData()->ClearFlag(flag);
 }
 
+bool Unit::UserFlag(sint32 n) const
+{
+	return GetData()->UserFlag(n);
+}
+
+void Unit::SetUserFlag(sint32 n)
+{
+	AccessData()->SetUserFlag(n);
+}
+
+void Unit::ClearUserFlag(sint32 n)
+{
+	AccessData()->ClearUserFlag(n);
+}
+
 const Unit &Unit::GetTransport() const
 {
 	return GetData()->GetTransport();

@@ -312,6 +312,7 @@ void UnitData::Create(const sint32 t,
 							  i.m_id, t, o));
 
 	m_flags = 0;
+	m_userFlags = 0;
 	m_actor = 0;
 	m_type = t;
 
@@ -364,6 +365,8 @@ UnitData::UnitData(CivArchive &archive) : GameObj(0)
 #ifdef _DEBUG
 	m_text[0] = 0;
 #endif
+
+	m_userFlags = 0;
 
 	m_cargo_list = NULL;
 	m_city_data = NULL;

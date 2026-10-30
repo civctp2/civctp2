@@ -207,6 +207,7 @@ private:
 	uint32              m_temp_visibility;
 	uint32              m_radar_visibility;
 	uint32              m_flags;
+	uint32              m_userFlags;   // Script-owned bits 1..32, runtime only (not archived).
 
 	MapPoint            m_pos;
 
@@ -256,6 +257,11 @@ public:
 	bool Flag(uint32 f) const { return (m_flags & f) != 0; }
 	void SetFlag(uint32 f) { m_flags |= f; }
 	void ClearFlag(uint32 f) { m_flags &= ~(f); }
+
+	// User flags are numbered 1..32 and belong to scripts; the engine never reads them.
+	bool UserFlag(sint32 n) const { return (m_userFlags & (1u << (n - 1))) != 0; }
+	void SetUserFlag(sint32 n) { m_userFlags |= (1u << (n - 1)); }
+	void ClearUserFlag(sint32 n) { m_userFlags &= ~(1u << (n - 1)); }
 
 	bool IsImmobile()const; //PFT
 	bool CantGroup()const; //by E
