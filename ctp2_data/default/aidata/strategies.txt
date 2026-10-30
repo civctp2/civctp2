@@ -220,7 +220,11 @@ STRATEGY_DEFAULT {
     ImproveGoodBonus  75
 
     // bonus for growth improvements in smallest 20% of our cities
-    ImproveSmallCityGrowthBonus  100
+    // Reduced from 100 to 10 (2026-10-30): growth_rank has the same
+    // self-reinforcing-percentile problem ImproveLargeCityProductionBonus
+    // had below (see its own comment) - just on the growth axis instead
+    // of production.
+    ImproveSmallCityGrowthBonus  10
 
     // bonus for production improvements in most productive 20% of our cities
     // Reduced from 150 to 10 (2026-09-11): production_rank is a percentile
@@ -1494,7 +1498,11 @@ STRATEGY_SCIENTIST_DEFAULT {
     ImproveGoodBonus  75
 
     // bonus for growth improvements in smallest 20% of our cities
-    ImproveSmallCityGrowthBonus  100
+    // Reduced from 100 to 10 (2026-10-30): growth_rank has the same
+    // self-reinforcing-percentile problem ImproveLargeCityProductionBonus
+    // had below (see its own comment) - just on the growth axis instead
+    // of production.
+    ImproveSmallCityGrowthBonus  10
 
     // bonus for production improvements in most productive 20% of our cities
     // Reduced from 150 to 10 (2026-09-11): production_rank is a percentile
@@ -2083,7 +2091,11 @@ STRATEGY_MILITARIST_DEFAULT {
     ImproveGoodBonus  75
 
     // bonus for growth improvements in smallest 20% of our cities
-    ImproveSmallCityGrowthBonus  100
+    // Reduced from 100 to 10 (2026-10-30): growth_rank has the same
+    // self-reinforcing-percentile problem ImproveLargeCityProductionBonus
+    // had below (see its own comment) - just on the growth axis instead
+    // of production.
+    ImproveSmallCityGrowthBonus  10
 
     // bonus for production improvements in most productive 20% of our cities
     // Reduced from 150 to 10 (2026-09-11): production_rank is a percentile
@@ -2677,7 +2689,11 @@ STRATEGY_ECONOMIC_DEFAULT {
     ImproveGoodBonus  75
 
     // bonus for growth improvements in smallest 20% of our cities
-    ImproveSmallCityGrowthBonus  100
+    // Reduced from 100 to 10 (2026-10-30): growth_rank has the same
+    // self-reinforcing-percentile problem ImproveLargeCityProductionBonus
+    // had below (see its own comment) - just on the growth axis instead
+    // of production.
+    ImproveSmallCityGrowthBonus  10
 
     // bonus for production improvements in most productive 20% of our cities
     // Reduced from 150 to 10 (2026-09-11): production_rank is a percentile
@@ -3263,7 +3279,11 @@ STRATEGY_ECOTOPIAN_DEFAULT {
     ImproveGoodBonus  75
 
     // bonus for growth improvements in smallest 20% of our cities
-    ImproveSmallCityGrowthBonus  100
+    // Reduced from 100 to 10 (2026-10-30): growth_rank has the same
+    // self-reinforcing-percentile problem ImproveLargeCityProductionBonus
+    // had below (see its own comment) - just on the growth axis instead
+    // of production.
+    ImproveSmallCityGrowthBonus  10
 
     // bonus for production improvements in most productive 20% of our cities
     // Reduced from 150 to 10 (2026-09-11): production_rank is a percentile
@@ -3852,7 +3872,11 @@ STRATEGY_DIPLOMATIC_DEFAULT {
     ImproveGoodBonus  75
 
     // bonus for growth improvements in smallest 20% of our cities
-    ImproveSmallCityGrowthBonus  100
+    // Reduced from 100 to 10 (2026-10-30): growth_rank has the same
+    // self-reinforcing-percentile problem ImproveLargeCityProductionBonus
+    // had below (see its own comment) - just on the growth axis instead
+    // of production.
+    ImproveSmallCityGrowthBonus  10
 
     // bonus for production improvements in most productive 20% of our cities
     // Reduced from 150 to 10 (2026-09-11): production_rank is a percentile
