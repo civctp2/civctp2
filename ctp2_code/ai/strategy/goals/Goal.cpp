@@ -5232,6 +5232,53 @@ Agent_ptr Goal::GetRallyAgent() const
 	{
 		Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
 
+		// A garrison-needed agent must stay put, not get walked outside its
+		// city as a rally anchor - RallyTroops()'s MoveOutOfCity() would try
+		// exactly that, which Goal::FollowPathToTask already refuses
+		// (Assert(false), hit once in a 2026-10-31 playtest) since the
+		// agent is needed for garrison. Never offer it as a candidate here
+		// in the first place, instead of relying on that later refusal.
+		//
+		// This is a symptom fix, not the root cause: Commit_Agent
+		// (Goal.cpp:280) is only supposed to let an agent this goal commits
+		// be garrison-needed when the goal's own target is exactly where
+		// the agent already sits (dest_pos == curr_pos - "defend in
+		// place", no move required). Mark_For_Garrison is also supposed to
+		// skip ever flagging an agent already owned by a different,
+		// unrelated goal (Goal.cpp:730-734). Both guards together should
+		// make it impossible for this goal to hold a committed agent that
+		// is garrison-needed AND whose current position differs from this
+		// goal's target - yet the 2026-10-31 hit had exactly that (agent
+		// owned by this GOAL_CHOKEPOINT instance, target a fixed field
+		// position nowhere near the agent's city). Assert on that specific
+		// combination so a recurrence is caught at its actual mechanism
+		// instead of silently absorbed here.
+		if(agent_ptr->IsNeededForGarrison())
+		{
+			if(agent_ptr->Get_Pos() != targetPos)
+			{
+				// Unconditional (not AI_DPRINTF's player/goal/army-gated
+				// channel) - the 2026-10-31 hit's own explanatory DPRINTF
+				// never printed because the gate didn't happen to match
+				// that player/goal, leaving no record of the goal type,
+				// owning goal, or army involved to actually diagnose the
+				// mechanism. This is rare enough (one hit so far) that an
+				// always-on trace here costs nothing and guarantees the
+				// next occurrence is actually readable.
+				Goal_ptr owningGoal = agent_ptr->Get_Goal();
+				DPRINTF(k_DBG_SCHEDULER,
+				    ("GOAL %x (%s): GetRallyAgent: skipping garrison-needed army 0x%lx at (x=%d,y=%d) - owned by goal %x (%s), this goal's target (x=%d,y=%d)\n",
+				     this, g_theGoalDB->Get(m_goal_type)->GetNameText(),
+				     agent_ptr->Get_Army().m_id,
+				     agent_ptr->Get_Pos().x, agent_ptr->Get_Pos().y,
+				     owningGoal,
+				     owningGoal ? g_theGoalDB->Get(owningGoal->Get_Goal_Type())->GetNameText() : "none",
+				     targetPos.x, targetPos.y));
+			}
+			Assert(agent_ptr->Get_Pos() == targetPos);
+			continue;
+		}
+
 		if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
 		{
 			if(rallyAgent == NULL)
@@ -5260,7 +5307,9 @@ Agent_ptr Goal::GetRallyAgent() const
 		}
 	}
 
-	Assert(rallyAgent != NULL);
+	// rallyAgent can legitimately be NULL here now: every committed agent
+	// may be garrison-needed (skipped above). RallyTroops() already treats
+	// a NULL rally agent as "nothing to rally" and returns.
 
 	return rallyAgent;
 }
