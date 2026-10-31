@@ -459,6 +459,11 @@ bool Agent::FindPath(const Army & army, const MapPoint & target_pos, const bool 
 	return false;
 }
 
+bool Agent::WasLastFindPathZocBlocked()
+{
+	return RobotAstar2::s_aiPathing.WasLastPretestZocBlocked();
+}
+
 double Agent::GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const
 {
 	double move_point_cost = 0.0;

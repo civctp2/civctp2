@@ -5155,7 +5155,8 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 			}
 		}
 
-		if(!GotoGoalTaskSolution(rallyAgent, rallyPos))
+		if(!GotoGoalTaskSolution(rallyAgent, rallyPos)
+		&& !Agent::WasLastFindPathZocBlocked())
 		{
 			// Same pathfind-failure class as the sibling MoveAwayFromTargetCity/
 			// MoveToTarget call sites - log what we know to see why on the
@@ -5163,6 +5164,15 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 			// means the neighbor search above never found an empty,
 			// enterable cell at all (every neighbor blocked/occupied), as
 			// opposed to finding one but still failing to path there.
+			//
+			// Skipped above when the failure was specifically "every
+			// approach to this neighbor is ZOC-blocked right now" (hit
+			// 2026-10-31, turn 465, GOAL_ATTACK) - that's the same
+			// already-understood, deferred pathfind-failure class as
+			// GotoGoalTaskSolution's own Assert(found) bucket (see
+			// gototaskgoal_findpath_transport_assert), not a
+			// MoveOutOfCity-specific bug, so it doesn't need its own
+			// assert or log entry every time it recurs.
 			const Unit & first_unit = rallyAgent->Get_Army()->Get(0);
 			DPRINTF(k_DBG_SCHEDULER,
 			    ("GOAL %x (%s): MoveOutOfCity: GotoGoalTaskSolution failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d), foundEmptyNeighbor %d, HasCargo %d\n",

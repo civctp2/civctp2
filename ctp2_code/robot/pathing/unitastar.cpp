@@ -78,6 +78,7 @@ namespace
 }
 
 UnitAstar::UnitAstar()
+	: m_lastPretestZocBlocked(false)
 {
 	ClearMem();
 }
@@ -1113,6 +1114,8 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 
 bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 {
+	m_lastPretestZocBlocked = false;
+
 	if (!m_is_robot)
 	{
 		if (!g_player[m_owner]->IsExplored(dest))
@@ -1145,6 +1148,7 @@ bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 	if (!PretestDest_ZocEnterable(start, dest))
 	{
 		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): every approach is zone-of-control blocked\n", dest.x, dest.y));
+		m_lastPretestZocBlocked = true;
 		return false;
 	}
 
