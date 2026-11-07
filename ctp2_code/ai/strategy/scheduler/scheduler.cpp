@@ -388,6 +388,19 @@ void Scheduler::Process_Agent_Changes()
 				theAgent->Get_Goal()->Rollback_Agent(theAgent);
 			}
 			Remove_Matches_For_Agent(theAgent);
+
+			// Remove_Matches_For_Agent only walks m_goals_of_type (the real,
+			// per-type goal lists) - the generic goals (one per goal type,
+			// standing in for goals without their own, see m_generic_goals)
+			// hold a plan for nearly every agent too, and only get fresh
+			// ones once a turn in Raw_Prioritize_Goals. Left alone, a
+			// deleted agent's plan would sit in those until the next
+			// rebuild, pointing at freed memory in the meantime (PR #466).
+			for (size_t i = 0; i < m_generic_goals.size(); ++i)
+			{
+				m_generic_goals[i]->Remove_Match(theAgent);
+			}
+
 			delete theAgent;
 			agent_ptr_iter = m_agents.erase(agent_ptr_iter);
 			continue;
