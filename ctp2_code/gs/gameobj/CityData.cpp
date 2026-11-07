@@ -4303,6 +4303,21 @@ double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &bas
 		baseRate = maxGrowthRate;
 		overcrowdingCoeff = 1;
 	}
+	else if(maxPop <= overcrowding)
+	{
+		// Building bonuses (GetBuildingOvercrowdingBonus/
+		// GetBuildingMaxPopIncrease) are added independently on top of the
+		// size record's base values, so they can tie maxPop and
+		// overcrowding exactly - PopCount() is then also pinned to that
+		// same value by the population cap, making the division below
+		// 0.0/0.0. The resulting NaN overcrowdingCoeff slips past
+		// CityWindow::DrawGrowthBar's [0,1] clamp (every NaN comparison
+		// is false) and casting it to sint32 there is undefined behavior,
+		// which is what was tripping aui_Blitter::ColorBlt's rect assert.
+		// No room is left before the cap here, so it's fully overcrowded.
+		baseRate = 0.0;
+		overcrowdingCoeff = 0;
+	}
 	else
 	{
 		double popRatio = static_cast<double>(PopCount() - overcrowding) / static_cast<double>(maxPop - overcrowding);
