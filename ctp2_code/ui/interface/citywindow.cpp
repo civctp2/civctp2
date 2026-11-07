@@ -1697,6 +1697,27 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	if(!s_cityWindow->m_city.IsValid())
 		return AUI_ERRCODE_OK;
 
+	CityData *cd = s_cityWindow->m_city.GetCityData();
+
+	if(rect.left > rect.right || rect.top > rect.bottom)
+	{
+		// Caught before the very first ColorBlt() below (RGB(0,0,0),
+		// using 'rect' unmodified) - a Windows 64-bit playtest (2026-11-01,
+		// 11 hits) hit aui_Blitter::ColorBlt's own
+		// Assert(destRect->left <= destRect->right) right there, meaning
+		// the control's *incoming* rect was already inverted, before this
+		// function's own +=2/-=2 inset or the overcrowding-coefficient
+		// math (68780c060) ever runs. That fix only covered the
+		// post-shrink width<=0 case below; it never touches 'rect' itself.
+		DPRINTF(k_DBG_UI,
+		    ("CityWindow::DrawGrowthBar: incoming rect already inverted for city %s - rect (%d,%d)-(%d,%d)\n",
+		     cd ? cd->GetName() : "?",
+		     rect.left, rect.top, rect.right, rect.bottom));
+		bool degenerateGrowthBarRect = false;
+		Assert(degenerateGrowthBarRect);
+		return AUI_ERRCODE_OK;
+	}
+
 	RECT destRect = rect;
 	AUI_ERRCODE err;
 
@@ -1708,7 +1729,6 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	destRect.right -= 2;
 
 	sint32 width = destRect.right - destRect.left;
-	CityData *cd = s_cityWindow->m_city.GetCityData();
 
 	if(width <= 0)
 	{
