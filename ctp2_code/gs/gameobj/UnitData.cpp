@@ -4656,7 +4656,7 @@ void UnitData::HearGossip(Unit c)
 				for(i = 0; i < n; i++) {
 					cost = g_player[oplayer]->m_all_armies->Access(i).GetCost();
 					if(cost > maxCost) {
-						cost = maxCost;
+						maxCost = cost;
 						maxCostUnits.Clear();
 						maxCostUnits.Insert(g_player[oplayer]->m_all_armies->
 											Access(i).Access(0));
