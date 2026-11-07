@@ -618,11 +618,12 @@ void CombatField::FindOpponents(CombatField &opposite)
 
 		sint32 yo;
 
+		// Find a free row of ours that faces an opponent
 		for(yo = 0; yo < m_height; yo++) {
-			if(m_field[k_FRONT_COL][y].IsActive())
+			if(m_field[k_FRONT_COL][yo].IsActive())
 
 				continue;
-			if(opposite.m_field[k_FRONT_COL][y].IsActive())
+			if(!opposite.m_field[k_FRONT_COL][yo].IsActive())
 
 				continue;
 
