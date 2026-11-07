@@ -718,8 +718,22 @@ RadarMapCell::Type RadarRenderWorld::GetMapCellValue(const MapPoint & worldPos) 
 
 	sint32 owner = g_tiledMap->GetVisibleCellOwner(worldPos);
 	COLOR landColor = static_cast<COLOR>(COLOR_TERRAIN_0 + TERRAIN_GRASSLAND);
+	// RadarMap::SetMapOverlayCell() fills the overlay array with COLOR_MAX
+	// as its "no overlay here" sentinel - one past the last valid ColorSet
+	// index. Passing that straight through to ColorSet::GetColor() (e.g.
+	// via ScienceVictoryDialog's Gaia coverage overlay, which only marks
+	// covered/tower tiles and leaves everything else at the sentinel)
+	// tripped ColorSet.cpp:277's bounds Assert on every uncovered tile,
+	// every frame the dialog was open. Only take the overlay's color when
+	// this cell actually has one; otherwise fall through to the same
+	// political/terrain coloring used when the overlay is off entirely.
+	COLOR overlayColor = COLOR_MAX;
 	if (m_radarProperties.m_displayOverlay && m_radarProperties.m_mapOverlay) {
-		landColor = m_radarProperties.m_mapOverlay[worldPos.y * m_mapSize.x + worldPos.x];
+		overlayColor = m_radarProperties.m_mapOverlay[worldPos.y * m_mapSize.x + worldPos.x];
+	}
+	if (overlayColor != COLOR_MAX)
+	{
+		landColor = overlayColor;
 	}
 	else if (m_radarProperties.m_displayPolitical && owner >= 0)
 	{
@@ -733,8 +747,18 @@ RadarMapCell::Type RadarRenderWorld::GetMapCellValue(const MapPoint & worldPos) 
 		landColor = static_cast<COLOR>(COLOR_TERRAIN_0 + g_tiledMap->GetVisibleTerrainType(worldPos));
 	}
 
-	const COLOR waterColor = isLand ? COLOR_BLACK : static_cast<COLOR>(COLOR_TERRAIN_0 +
+	COLOR waterColor = isLand ? COLOR_BLACK : static_cast<COLOR>(COLOR_TERRAIN_0 +
 			(m_radarProperties.m_displayTerrain ? g_tiledMap->GetVisibleTerrainType(worldPos) : TERRAIN_WATER_DEEP));
+	// The original (pre-RadarMapCell::Type) RadarTileColor() returned one
+	// unified color for the whole tile when overlaid, covering land and
+	// water alike. This land/water-crossing renderer only ever wired the
+	// overlay into landColor above, silently dropping overlay coverage on
+	// water tiles (isLand uses landColor, water uses waterColor - see
+	// RadarMapCell::GetPixel16()). Apply it here too, to match.
+	if (overlayColor != COLOR_MAX)
+	{
+		waterColor = overlayColor;
+	}
 	return RadarMapCell::createValue(landColor, waterColor, isLand);
 }
 

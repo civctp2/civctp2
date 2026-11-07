@@ -301,6 +301,20 @@ void MilitaryReadiness::RecalcCost()
 	const sint32   n = all_armies->Num();
 	for(sint32 i = 0; i < n; i++)
 	{
+		// Same stale-reference risk as the other occurrences of this
+		// class (see bombardnearbyenemies_stale_ref_sigsegv memory) -
+		// m_all_armies isn't goal-scoped, so it can hold an army that
+		// died elsewhere this same event-processing pass. Crashed here
+		// once (SIGSEGV in Army::Num, "No such object" logged right
+		// before) with no validity check at all.
+		if (!all_armies->Access(i).IsValid())
+		{
+			DPRINTF(k_DBG_GAMESTATE, ("MilitaryReadiness::RecalcCost: stale army %x in player %d's m_all_armies - no longer exists in the pool\n",
+			        all_armies->Access(i).m_id, static_cast<sint32>(m_owner)));
+			Assert(all_armies->Access(i).IsValid());
+			continue;
+		}
+
 		const sint32 m =all_armies->Access(i).Num();
 		for(sint32 j = 0; j < m; j++)
 		{
@@ -324,6 +338,15 @@ sint32 MilitaryReadiness::TotalUnitGoldSupport()
 	const sint32 n = all_armies->Num();
 	for (sint32 i = 0; i < n; i++)
 	{
+		// Same stale-reference guard as RecalcCost() above.
+		if (!all_armies->Access(i).IsValid())
+		{
+			DPRINTF(k_DBG_GAMESTATE, ("MilitaryReadiness::TotalUnitGoldSupport: stale army %x in player %d's m_all_armies - no longer exists in the pool\n",
+			        all_armies->Access(i).m_id, static_cast<sint32>(m_owner)));
+			Assert(all_armies->Access(i).IsValid());
+			continue;
+		}
+
 		const sint32 m = all_armies->Access(i).Num();
 		for (sint32 j = 0; j < m; j++)
 		{
@@ -356,6 +379,17 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 	sint32 n_units = 0;
 	for (i=0; i<n; i++)
 	{
+		// Same stale-reference guard as RecalcCost()/TotalUnitGoldSupport()
+		// above - must be applied identically in both passes below, so
+		// n_units (and the allocation sized from it) stays consistent
+		// with what the second pass actually iterates.
+		if (!m_all_armies[i].IsValid())
+		{
+			DPRINTF(k_DBG_GAMESTATE, ("MilitaryReadiness::KillUnitsOverBudget: stale army %x in player %d's m_all_armies - no longer exists in the pool\n",
+			        m_all_armies[i].m_id, static_cast<sint32>(m_owner)));
+			Assert(m_all_armies[i].IsValid());
+			continue;
+		}
 		n_units += m_all_armies[i].Num();
 	}
 
@@ -367,6 +401,9 @@ void MilitaryReadiness::KillUnitsOverBudget(sint32 gov, DynamicArray<Army> &m_al
 	sint32 n_prof_units = 0;
 	for (i=0; i<n; i++)
 	{
+		if (!m_all_armies[i].IsValid())
+			continue;
+
 		m=m_all_armies[i].Num();
 		for (j=0; j<m; j++)
 		{

@@ -381,7 +381,27 @@ QuadTreeNode<T>::RemoveObject(T obj)
 		}
 	} else {
 		MapPoint pos = m_tree->GetPos(obj);
-		switch (FindQuadrant(pos))
+		QUADRANT quad = FindQuadrant(pos);
+		if( (quad == QUADRANT_NE && !m_ne)
+		||  (quad == QUADRANT_SE && !m_se)
+		||  (quad == QUADRANT_SW && !m_sw)
+		||  (quad == QUADRANT_NW && !m_nw)
+		){
+			// The object's own recorded position (via m_tree->GetPos(obj),
+			// not the pos a caller may have passed to Remove()) maps to a
+			// quadrant this node has no child for - a structurally corrupt
+			// tree, e.g. from a leaked/duplicated entry inserted without a
+			// matching prior removal (see quadtree_leaked_rebase_entry
+			// memory - 45c080251 fixed one such source, this instruments
+			// for others still open). Logging the node's own bounding box
+			// alongside pos/quad lets a playtest log show whether pos even
+			// falls in a sane place relative to this node, without needing
+			// to print the templated object itself.
+			DPRINTF(k_DBG_GAMESTATE,
+			    ("QuadTreeNode::RemoveObject: missing child for quadrant %d, obj pos (%d,%d), node box x=%d y=%d w=%d h=%d\n",
+			     (int) quad, pos.x, pos.y, (int) m_x, (int) m_y, (int) m_width, (int) m_height));
+		}
+		switch (quad)
 		{
 			case QUADRANT_NE:
 				Assert(m_ne);

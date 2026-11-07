@@ -24,9 +24,9 @@
 //
 // Modifications from the original Activision code:
 //
-// - The army text now appears in the debug log. (13-Aug-2008 Martin Gühmann)
+// - The army text now appears in the debug log. (13-Aug-2008 Martin Gï¿½hmann)
 // - Added a debug player for the debug cell text, so that we can select whose
-//   stuff is shown. (30-Dec-2018 Martin Gühmann)
+//   stuff is shown. (30-Dec-2018 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -88,6 +88,13 @@ void GraphicsOptions::Initialize(void)
 
 void GraphicsOptions::Cleanup(void)
 {
+	// g_graphicsOptions is still NULL here whenever the game was entered
+	// through a path that never called Initialize() above - e.g.
+	// CivApp::InitializeSpriteEditor (the in-game Sprite Test button's
+	// own startup path) never does, but CivApp::CleanupGame calls this
+	// unconditionally on any quit.
+	if (!g_graphicsOptions) return;
+
 	g_graphicsOptions->ResetAllCellTexts();
 	allocated::clear(g_graphicsOptions);
 }

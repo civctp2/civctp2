@@ -18,12 +18,12 @@
 #
 # Modifications from the original Activision code:
 #
-# - Added build lists for small cities and for cities at their maximum size. (20-Aug-2009 Martin Gühmann)
-# - Added a build list for the end game. (16-Feb-2019 Martin Gühmann)
+# - Added build lists for small cities and for cities at their maximum size. (20-Aug-2009 Martin Gï¿½hmann)
+# - Added a build list for the end game. (16-Feb-2019 Martin Gï¿½hmann)
 #
 #----------------------------------------------------------------------------
 
-# 11
+# 14
 
 ##  0 ##########################################################
 
@@ -165,6 +165,18 @@ BUILDING_BUILD_LIST_MISC {
 BUILDING_BUILD_LIST_ENDGAME {
   Building IMPROVE_GAIA_COMPUTER
   Building IMPROVE_POWER_SATELLITE
+}
+
+## 13 ##########################################################
+
+BUILDING_BUILD_LIST_OVERCROWDED_CITIES {
+  Building IMPROVE_AQUEDUCT
+  Building IMPROVE_AQUA_FILTER
+  Building IMPROVE_ARCOLOGIES
+  Building IMPROVE_DRUG_STORE
+  Building IMPROVE_HOSPITAL
+  Building IMPROVE_BODY_EXCHANGE
+  Building IMPROVE_INCUBATION_CENTER
 }
 
 ### ALL BUILDINGS DONE ###

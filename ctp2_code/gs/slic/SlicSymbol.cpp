@@ -498,7 +498,7 @@ BOOL SlicSymbolData::GetImprovement(TerrainImprovement &imp) const
 {
 	if(GetType() == SLIC_SYM_IMPROVEMENT) {
 		imp = TerrainImprovement(m_val.m_improvement_id);
-		if(g_theTerrainImprovementPool->IsValid(imp))
+		if(g_theUnfinishedImprovementPool->IsValid(imp))
 			return TRUE;
 	} else if(GetType() == SLIC_SYM_STRUCT) {
 		if(m_val.m_struct->GetDataSymbol()) {

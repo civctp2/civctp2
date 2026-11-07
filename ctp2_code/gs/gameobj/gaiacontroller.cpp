@@ -336,10 +336,10 @@ STDEHANDLER(GaiaController_CutImprovements)
 		owner_player->GetGaiaController() == NULL)
 		return GEV_HD_Continue;
 
-	sint32 num = cell->GetNumDBImprovements();
+	sint32 num = cell->GetNumBuiltImprovementTypes();
 	for (sint16 i = 0; i < num; i++)
 		{
-			type = cell->GetDBImprovement(i);
+			type = cell->GetBuiltImprovementType(i);
 
 			if (GaiaController::sm_endgameImprovements & ((uint64)0x1 << (uint64)type))
 				{
@@ -1044,10 +1044,10 @@ void GaiaController::GetTowerPositions(MapPoint_List & towers) const
 		for(pos.y = 0; pos.y < g_theWorld->GetHeight(); pos.y++)
 		{
 			Cell *cell = g_theWorld->GetCell(pos);
-			for(sint32 i = 0; i < cell->GetNumImprovements(); i++)
+			for(sint32 i = 0; i < cell->GetNumUnfinishedImprovements(); i++)
 			{
-				if(cell->AccessImprovement(i).GetOwner() == m_playerId
-				   && cell->AccessImprovement(i).GetType() == sm_towerTileImpIndex)
+				if(cell->AccessUnfinishedImprovement(i).GetOwner() == m_playerId
+				   && cell->AccessUnfinishedImprovement(i).GetType() == sm_towerTileImpIndex)
 				{
 					towers.push_back(pos);
 				}
@@ -1100,7 +1100,7 @@ void GaiaController::ComputeTowerPositions()
 
 			if(candidate_iter->first > 0)
 			{
-				candidate_iter->first =+ ScoreTowerPosition(candidate_iter->second, empire_pos, towers, radius);
+				candidate_iter->first += ScoreTowerPosition(candidate_iter->second, empire_pos, towers, radius);
 				candidate_iter++;
 			}
 			else

@@ -2151,6 +2151,7 @@ str_ldl_ScenMode " ﾓｰﾄﾞ:"
 #
 str_SprEd_Load					"  ロード"
 str_SprEd_Save					"  セーブ"
+str_SprEd_Type					"  タイプ"
 str_SprEd_Move "  移動"
 str_SprEd_Attack "  攻撃"
 str_SprEd_Idle "  未指定"

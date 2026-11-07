@@ -95,16 +95,16 @@ extern C3Window		*g_floatingWindow;
 extern DebugWindow	*g_debugWindow;
 extern WorkWindow	*g_workWindow;
 
-extern TerrainImprovementPool	*g_theTerrainImprovementPool;
-extern Player					**g_player;
-extern SelectedItem				*g_selected_item;
-extern TiledMap					*g_tiledMap;
-extern InstallationDatabase		*g_theInstallationDB;
+extern UnfinishedImprovementPool	*g_theUnfinishedImprovementPool;
+extern Player						**g_player;
+extern SelectedItem					*g_selected_item;
+extern TiledMap						*g_tiledMap;
+extern InstallationDatabase			*g_theInstallationDB;
 
 
-extern ProductionTabControl		*g_cp_productionTab;
-extern CityTabControl			*g_cp_cityTab;
-extern UnitsTabControl			*g_cp_unitsTab;
+extern ProductionTabControl			*g_cp_productionTab;
+extern CityTabControl				*g_cp_cityTab;
+extern UnitsTabControl				*g_cp_unitsTab;
 
 ControlPanelWindow	*g_controlPanel = NULL;
 

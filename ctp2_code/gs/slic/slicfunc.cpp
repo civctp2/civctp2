@@ -6251,9 +6251,9 @@ SFN_ERROR Slic_IsFortress::Call(SlicArgList *args)
 
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -6570,11 +6570,11 @@ SFN_ERROR Slic_FinishImprovements::Call(SlicArgList *args)
 
 	g_gevManager->Pause();
 
-	for (sint32 i = 0; i < cell->GetNumImprovements(); i++)
+	for (sint32 i = 0; i < cell->GetNumUnfinishedImprovements(); i++)
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,
 							   GEV_ImprovementComplete,
-							   GEA_Improvement, cell->AccessImprovement(i),
+							   GEA_Improvement, cell->AccessUnfinishedImprovement(i),
 							   GEA_End);
 	}
 	g_gevManager->Resume();
@@ -6701,9 +6701,9 @@ SFN_ERROR Slic_TileHasImprovement::Call(SlicArgList *args)
 
 	m_result.m_int = 0;
 	Cell *cell = g_theWorld->GetCell(pos);
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		if(imp == cell->GetDBImprovement(i)){
+		if(imp == cell->GetBuiltImprovementType(i)){
 			m_result.m_int = 1;
 			return SFN_ERROR_OK;
 		}
@@ -7651,14 +7651,10 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 	Cell *cell = g_theWorld->GetCell(city.RetPos());
 	sint32 i, n = cell->GetNumUnits();
 
-	bool 		foundCity	= false;
-	MapPoint 		cpos;
 	CellUnitList 	expelled;
 	for(i = 0; i < n; i++)
 	{
-		Unit u = cell->AccessUnit(i);
-		foundCity = u.NearestFriendlyCityWithRoom(cpos, n, u.GetArmy());
-		expelled.Insert(u);
+		expelled.Insert(cell->AccessUnit(i));
 	}
 
 	n = expelled.Num();
@@ -7666,13 +7662,53 @@ SFN_ERROR Slic_Liberate::Call(SlicArgList *args)
 	{
 		for(i = 0; i < n; i++)
 		{
+			// Computed per unit, not shared across the loop like the old
+			// single cpos/foundCity did - this tile has a single owner,
+			// but can still hold several distinct Army groupings of that
+			// owner (e.g. a naval stack and a land stack both garrisoned
+			// at the same city), and NearestFriendlyCityWithRoom()'s
+			// result depends on the specific army's own movement type as
+			// well as its owner. Reusing one army's result for every
+			// other army could send e.g. a naval stack to a landlocked
+			// city it can never actually reach. See
+			// foreign_tile_sharing_root_cause memory.
+			MapPoint cpos;
+			bool foundCity = expelled[i].NearestFriendlyCityWithRoom(cpos, n, expelled[i].GetArmy());
+
 			if(foundCity)
 			{
+				// Split this one unit off into its own army, mirroring
+				// ArmyData::Expel (this function's own source), rather
+				// than sending expelled[i]'s whole, possibly-still-
+				// multi-unit army - otherwise a single multi-unit army
+				// gets a GEV_GetExpelledOrder queued once per unit it
+				// contains, redundantly re-teleporting the same army,
+				// each time with whichever cpos that particular unit's
+				// own computation happened to return.
+				Army newArmy;
+				if(expelled[i].GetArmy().Num() > 1)
+				{
+					newArmy = g_player[expelled[i].GetOwner()]->GetNewArmy(CAUSE_NEW_ARMY_EXPELLED);
+				}
+				else
+				{
+					newArmy = expelled[i].GetArmy();
+				}
+
 				g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_GetExpelledOrder,
-					GEA_Army, expelled[i].GetArmy(),
+					GEA_Army, newArmy,
 					GEA_MapPoint, cpos,
 					GEA_Player, PLAYER_INDEX_VANDALS,
 					GEA_End);
+
+				if(expelled[i].GetArmy().Num() > 1)
+				{
+					g_gevManager->AddEvent(GEV_INSERT_AfterCurrent, GEV_AddUnitToArmy,
+						GEA_Unit, expelled[i],
+						GEA_Army, newArmy,
+						GEA_Int, CAUSE_NEW_ARMY_EXPELLED,
+						GEA_End);
+				}
 			}
 			else
 			{

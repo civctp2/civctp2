@@ -78,6 +78,7 @@ namespace
 }
 
 UnitAstar::UnitAstar()
+	: m_lastPretestZocBlocked(false)
 {
 	ClearMem();
 }
@@ -1028,7 +1029,21 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 
 		if ((start.x == neighbor.x) && (start.y == neighbor.y))
 		{
-			return true;
+			// This neighbor direction IS the actual start->dest move being
+			// evaluated, not just a candidate approach tile to vet - skip
+			// the occupancy/ownership checks below (they exist to judge
+			// OTHER tiles we'd have to stand on first, not our own current
+			// position) and go straight to the real question: is this one
+			// specific edge itself ZOC-blocked? Previously this returned
+			// true unconditionally, assuming "already adjacent" meant
+			// "ZOC can't be a problem" - which missed the classic ZOC
+			// corner-cut case (an enemy adjacent to both start and dest
+			// blocking the direct move between two otherwise-fine tiles).
+			if (!IsMoveZOC(neighbor, dest))
+			{
+				return true;
+			}
+			continue;
 		}
 
 		if (!PretestDest_Enterable(start, neighbor)) continue;
@@ -1099,6 +1114,8 @@ bool UnitAstar::PretestDest_ZocEnterable(const MapPoint &start, const MapPoint &
 
 bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 {
+	m_lastPretestZocBlocked = false;
+
 	if (!m_is_robot)
 	{
 		if (!g_player[m_owner]->IsExplored(dest))
@@ -1131,6 +1148,7 @@ bool UnitAstar::PretestDest(const MapPoint &start, const MapPoint &dest)
 	if (!PretestDest_ZocEnterable(start, dest))
 	{
 		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: PretestDest rejected dest (%d,%d): every approach is zone-of-control blocked\n", dest.x, dest.y));
+		m_lastPretestZocBlocked = true;
 		return false;
 	}
 
@@ -1200,11 +1218,14 @@ bool UnitAstar::FindPath(
 	if (searchSucceeded) {
 		result = true;
 	} else {
-		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: UnitAstar::FindPath failed from (%d,%d) to (%d,%d): %s, army 0x%lx move_union 0x%x move_intersection 0x%x\n",
+		DPRINTF(k_DBG_ASTAR, ("PATHFIND_DIAG: UnitAstar::FindPath failed from (%d,%d) to (%d,%d): %s, army 0x%lx move_union 0x%x move_intersection 0x%x, nodes_opened %d of cutoff %d (%s)\n",
 		                                 start.x, start.y, dest.x, dest.y,
 		                                 pretestPassed ? "PretestDest passed, full A* search failed"
 		                                               : "rejected by PretestDest before searching",
-		                                 m_army.m_id, move_union, move_intersection));
+		                                 m_army.m_id, move_union, move_intersection,
+		                                 nodes_opened, cutoff,
+		                                 nodes_opened >= cutoff ? "hit node budget, search may have been cut short"
+		                                                        : "search exhausted the reachable area on its own"));
 		if (no_bad_path) {
 			result = false;
 		} else {

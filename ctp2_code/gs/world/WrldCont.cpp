@@ -517,8 +517,16 @@ void World::InsertLandNextToWater(const sint32 landc, const sint32 waterc)
 
 }
 
-bool World::IsWaterNextTooLand(const sint32 waterc, const sint32 landc) const
+bool World::IsWaterNextToLand(const sint32 waterc, const sint32 landc) const
 {
+    // Mirrors the guard in InsertWaterNextToLand: waterc can be stale/out-of-range
+    // (e.g. after a continent renumbering) before m_water_next_too_land catches up.
+    if ((waterc < 0) || (m_water_next_too_land->Num() <= waterc)) {
+        sint32 water_cont_out_of_bounds=0;
+        Assert(water_cont_out_of_bounds);
+        return false;
+    }
+
     DynamicArray<sint32> * next = &(m_water_next_too_land->Access(waterc));
     sint32 num_water = next->Num();
 
@@ -532,8 +540,16 @@ bool World::IsWaterNextTooLand(const sint32 waterc, const sint32 landc) const
 }
 
 
-bool World::IsLandNextTooWater(const sint32 landc, const sint32 waterc) const
+bool World::IsLandNextToWater(const sint32 landc, const sint32 waterc) const
 {
+    // Mirrors the guard in InsertLandNextToWater: landc can be stale/out-of-range
+    // (e.g. after a continent renumbering) before m_land_next_too_water catches up.
+    if ((landc < 0) || (m_land_next_too_water->Num() <= landc)) {
+        sint32 land_cont_out_of_bounds=0;
+        Assert(land_cont_out_of_bounds);
+        return false;
+    }
+
     DynamicArray<sint32> * next = &(m_land_next_too_water->Access(landc));
     sint32 num_land = next->Num();
 
@@ -893,8 +909,8 @@ bool World::LandShareWater(const sint32 land1, const sint32 land2) const
         ++water_idx
     )
     {
-        if (IsLandNextTooWater(land1, water_idx) &&
-            IsLandNextTooWater(land2, water_idx)
+        if (IsLandNextToWater(land1, water_idx) &&
+            IsLandNextToWater(land2, water_idx)
            )
         {
             return true;

@@ -431,6 +431,16 @@ void CtpAi::GroupWithEscort(const Army & army)
 		if (tmp_army == army)
 			continue;
 
+		// A unit already wrapped in an Agent belongs to some goal's own
+		// plans, whatever those are - grabbing it here as "free escort
+		// material" just because it's standing on the same tile races
+		// that goal's own order for it (observed: the goal loaded this
+		// exact unit onto a ship the same turn GroupWithEscort tried to
+		// group it into a newly-arrived army instead, tripping
+		// ArmyData::GroupUnit's Assert(unit.GetArmy().IsValid())).
+		if (tmp_army->GetAgent() != NULL)
+			continue;
+
 		if (tmp_army.Num() > 1)
 			continue;
 
@@ -1107,17 +1117,6 @@ void CtpAi::RemovePlayer(const PLAYER_INDEX deadPlayerId)
 
 	AgreementMatrix::s_agreements.ClearAgreementsInvolving(deadPlayerId);
 
-	// The agreement-matrix clear above can change what ComputeDesireWarWith
-	// returns for deadPlayerId; refresh every survivor's cached entry so it
-	// isn't left stale for whoever reuses this player slot next.
-	for (PLAYER_INDEX player = 0; player < s_maxPlayers; ++player)
-	{
-		if (g_player[player] && (player != deadPlayerId))
-		{
-			Diplomat::GetDiplomat(player).UpdateDesireWarWith(deadPlayerId);
-		}
-	}
-
 	Diplomat::GetDiplomat(deadPlayerId).Cleanup();
 
 	if (deadPlayerId + 1 >= s_maxPlayers)
@@ -1157,21 +1156,8 @@ void CtpAi::AddPlayer(const PLAYER_INDEX newPlayerId)
 			// Also true for embassies
 			g_player[player]->ContactKilled(newPlayerId);
 			g_player[player]->CloseEmbassy(newPlayerId);
-
-			// A reused player slot can leave a stale desire-war-with cache
-			// entry behind (from whoever previously occupied it, or the
-			// default from Resize()); refresh it now that newPlayerId is
-			// a real, initialized player.
-			if (player != newPlayerId)
-			{
-				Diplomat::GetDiplomat(player).UpdateDesireWarWith(newPlayerId);
-			}
 		}
 	}
-
-	// newPlayerId's own cache, for every foreigner, is equally stale after
-	// Initialize()/Resize() above - refresh it the same way BeginTurn() does.
-	Diplomat::GetDiplomat(newPlayerId).ComputeAllDesireWarWith();
 }
 
 void CtpAi::BeginMapAnalysis(const PLAYER_INDEX player)
@@ -2040,7 +2026,8 @@ void CtpAi::ComputeCityGarrisons(const PLAYER_INDEX playerId )
 	sint32 offensive_garrison = strategy.GetOffensiveGarrisonCount();
 	sint32 defensive_garrison = strategy.GetDefensiveGarrisonCount();
 	sint32 ranged_garrison    = strategy.GetRangedGarrisonCount();
-	sint32 min_garrison = offensive_garrison + defensive_garrison + ranged_garrison;
+	sint32 flanker_garrison   = strategy.GetFlankerGarrisonCount();
+	sint32 min_garrison = offensive_garrison + defensive_garrison + ranged_garrison + flanker_garrison;
 
 	const StrategyRecord::ForceMatch *  force_match;
 	if(strategy.HasGarrison())
@@ -2130,7 +2117,11 @@ bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos,
 		if( !tmp_army.IsValid() )
 			continue;
 
-		if(!tmp_army->CanMoveIntoThisTransport(*tmp_army.GetData()))
+		// Was tmp_army->CanMoveIntoThisTransport(*tmp_army.GetData()) - a
+		// candidate asking itself "can I move into a transport matching my
+		// own composition", unrelated to whether the searching plane
+		// (army, this function's own parameter) could actually board it.
+		if(!army->CanMoveIntoThisTransport(*tmp_army.GetData()))
 			continue;
 
 		sint32 tmp_squared_distance = MapPoint::GetSquaredDistance(tmp_army->RetPos(), army->RetPos());
@@ -2141,10 +2132,19 @@ bool CtpAi::GetNearestAircraftCarrier(const Army & army, MapPoint & carrier_pos,
 		}
 	}
 
+	// Was never written at all - the caller (GetNearestRefuel) read
+	// whatever its own 'distance' local happened to still hold from the
+	// immediately preceding GetNearestCity() call, then reported that
+	// stale value alongside this function's own (separately correct)
+	// carrier_pos as if they were one coherent result. The caller does
+	// its own sqrt() on this, matching GetNearestAirfield's squared-
+	// distance convention.
+	distance = squared_distance;
+
 	return (squared_distance < max_squared_dist);
 }
 
-bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapPoint & refueling_pos, sint32 & refueling_distance)
+bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapPoint & refueling_pos, sint32 & refueling_distance, bool report_if_unreachable)
 {
 	Player *player = g_player[army->GetOwner()];
 	Assert(player);
@@ -2163,7 +2163,11 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 	{
 		refueling_distance = static_cast<sint32>(distance);
 		refueling_pos = city.RetPos();
-		found = (refueling_distance < num_tiles_to_empty);
+		// <= not <: a plane that reaches the refuel point on its very last
+		// tile of fuel still makes it - landing on a city/carrier/airfield
+		// refuels it. Strict < stranded planes sitting exactly one tile
+		// from a refuel point with exactly one tile of fuel left.
+		found = (refueling_distance <= num_tiles_to_empty);
 	}
 
 	MapPoint tmp_pos;
@@ -2175,7 +2179,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		{
 			refueling_distance = static_cast<sint32>(distance);
 			refueling_pos = tmp_pos;
-			found = (refueling_distance < num_tiles_to_empty);
+			found = (refueling_distance <= num_tiles_to_empty);  // <= : see GetNearestCity branch above
 		}
 	}
 
@@ -2187,7 +2191,7 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		{
 			refueling_distance = static_cast<sint32>(distance);
 			refueling_pos = tmp_pos;
-			found = (refueling_distance < num_tiles_to_empty);
+			found = (refueling_distance <= num_tiles_to_empty);  // <= : see GetNearestCity branch above
 		}
 	}
 
@@ -2197,14 +2201,23 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		// all - can be a legitimate dead end (e.g. a near-eliminated
 		// player with no cities/carriers/airfields left), not necessarily
 		// a bug. Log the player's actual counts to tell the two apart.
-		DPRINTF(k_DBG_AI,
-			("\tGetNearestRefuel: no refuel destination at all - player %d, army 0x%lx, start (%d,%d), num_tiles_to_half=%d, num_tiles_to_empty=%d, city count=%d\n",
-			 army->GetOwner(), army.m_id, start_pos.x, start_pos.y,
-			 num_tiles_to_half, num_tiles_to_empty,
-			 player->m_all_cities ? player->m_all_cities->Num() : -1));
+		//
+		// Skipped for Pretest_Bid's feasibility-check call (start_pos a
+		// hypothetical candidate target, not the army's real position):
+		// there, "unreachable" is the routine, expected way of rejecting
+		// an infeasible candidate, not a bug - logging/asserting on it
+		// just spams every rejected candidate the AI ever considers.
+		if (report_if_unreachable)
+		{
+			DPRINTF(k_DBG_AI,
+				("\tGetNearestRefuel: no refuel destination at all - player %d, army 0x%lx, start (%d,%d), num_tiles_to_half=%d, num_tiles_to_empty=%d, city count=%d\n",
+				 army->GetOwner(), army.m_id, start_pos.x, start_pos.y,
+				 num_tiles_to_half, num_tiles_to_empty,
+				 player->m_all_cities ? player->m_all_cities->Num() : -1));
 
-		bool NO_REFUEL_DESTINATION = false;
-		Assert(NO_REFUEL_DESTINATION);
+			bool NO_REFUEL_DESTINATION = false;
+			Assert(NO_REFUEL_DESTINATION);
+		}
 		return false;
 	}
 
@@ -2214,15 +2227,18 @@ bool CtpAi::GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapP
 		// than num_tiles_to_empty - the plane would run dry before
 		// reaching it. Report this as unreachable too, rather than
 		// letting the caller path toward a destination it can never
-		// actually get to.
-		DPRINTF(k_DBG_AI,
-			("\tGetNearestRefuel: nearest destination is out of fuel range - player %d, army 0x%lx, start (%d,%d), refueling_pos (%d,%d), refueling_distance=%d, num_tiles_to_half=%d, num_tiles_to_empty=%d\n",
-			 army->GetOwner(), army.m_id, start_pos.x, start_pos.y,
-			 refueling_pos.x, refueling_pos.y, refueling_distance,
-			 num_tiles_to_half, num_tiles_to_empty));
+		// actually get to. See report_if_unreachable comment above.
+		if (report_if_unreachable)
+		{
+			DPRINTF(k_DBG_AI,
+				("\tGetNearestRefuel: nearest destination is out of fuel range - player %d, army 0x%lx, start (%d,%d), refueling_pos (%d,%d), refueling_distance=%d, num_tiles_to_half=%d, num_tiles_to_empty=%d\n",
+				 army->GetOwner(), army.m_id, start_pos.x, start_pos.y,
+				 refueling_pos.x, refueling_pos.y, refueling_distance,
+				 num_tiles_to_half, num_tiles_to_empty));
 
-		bool NO_REFUEL_IN_RANGE = false;
-		Assert(NO_REFUEL_IN_RANGE);
+			bool NO_REFUEL_IN_RANGE = false;
+			Assert(NO_REFUEL_IN_RANGE);
+		}
 		return false;
 	}
 	return true;
@@ -2246,6 +2262,16 @@ void CtpAi::RefuelAirplane(const Army & army)
 	MapPoint refueling_pos;
 	sint32 refueling_distance;
 	if (!CtpAi::GetNearestRefuel(army, start_pos, refueling_pos, refueling_distance))
+		return;
+
+	// GetNearestRefuel also considers aircraft carriers, not just cities
+	// (already excluded above) - a plane already parked on a carrier gets
+	// refueling_pos == start_pos, at distance 0. Unlike Agent::FindPath's
+	// wrapper (used elsewhere), RobotAstar2::s_aiPathing.FindPath below has
+	// no "already there" shortcut and fails outright on a zero-distance
+	// request (NO_REFUEL_PATH, confirmed via this exact case in a
+	// playtest log). Nothing to path to when already at the destination.
+	if (refueling_pos == start_pos)
 		return;
 
 	float const trans_max_r = 0.8f;
@@ -2661,11 +2687,28 @@ void CtpAi::BombardNearbyEnemies(const Army & army, const sint32 & max_rge)
 			{
 				def_army = foreigner_ptr->m_all_armies->Access(i);
 
-				//visibility check
-				if(!def_army->IsVisible(playerId))
+				// def_army can be stale - Army::operator->()/AccessData()
+				// silently returns NULL for an id no longer in the
+				// ArmyPool (e.g. killed in combat elsewhere this turn but
+				// not yet pruned from m_all_armies) instead of asserting.
+				// Dereferencing it unconditionally segfaulted a live
+				// playtest in CellUnitList::IsVisible. Same stale-army
+				// pattern as Goal::Recompute_Matching_Value (86dc4a691).
+				ArmyData * const defArmyData = def_army.AccessData();
+				if(!defArmyData)
+				{
+					DPRINTF(k_DBG_AI, ("CtpAi::BombardNearbyEnemies: stale army %x in player %d's m_all_armies - no longer exists in the ArmyPool\n",
+					        def_army.m_id, foreigner));
+				}
+				Assert(defArmyData);
+				if(!defArmyData)
 					continue;
 
-				def_army->GetPos(def_pos);
+				//visibility check
+				if(!defArmyData->IsVisible(playerId))
+					continue;
+
+				defArmyData->GetPos(def_pos);
 
 				if(!army->CanBombard(def_pos))
 					continue;
@@ -2696,11 +2739,24 @@ void CtpAi::BombardNearbyEnemies(const Army & army, const sint32 & max_rge)
 			{
 				def_city = foreigner_ptr->m_all_cities->Access(i);
 
-				//should test if def_city is visible to player
-				if(!(def_city->GetVisibility() & (1 << playerId)))
+				// Same stale-reference risk as def_army above - a city
+				// destroyed elsewhere this turn but not yet pruned from
+				// m_all_cities would leave AccessData() NULL here.
+				UnitData * const defCityData = def_city.AccessData();
+				if(!defCityData)
+				{
+					DPRINTF(k_DBG_AI, ("CtpAi::BombardNearbyEnemies: stale city %x in player %d's m_all_cities - no longer exists in the pool\n",
+					        def_city.m_id, foreigner));
+				}
+				Assert(defCityData);
+				if(!defCityData)
 					continue;
 
-				def_city->GetPos(def_pos);
+				//should test if def_city is visible to player
+				if(!(defCityData->GetVisibility() & (1 << playerId)))
+					continue;
+
+				defCityData->GetPos(def_pos);
 				if(!army->CanBombard(def_pos))
 					continue;
 

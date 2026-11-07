@@ -9,6 +9,7 @@ Makefile.in
 *.exe
 *.ilk
 *.map
+*.gch
 *.user
 *.obj
 *.pdb

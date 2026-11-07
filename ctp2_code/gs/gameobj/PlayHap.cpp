@@ -105,6 +105,20 @@ void PlayerHappiness::CalcPeaceMovement(Player *p,
     m_dist_overseas = 0;
     for (i=0; i<n; i++) {
 
+        // Same stale-reference risk as MapAnalysis::BeginTurn's own army
+        // loop (see bombardnearbyenemies_stale_ref_sigsegv memory) - this
+        // array isn't goal-scoped so it can still hold an army that died
+        // elsewhere this same event-processing pass. Crashed here once
+        // (SIGSEGV in Army::GetPos, "No such object" logged right before)
+        // with no validity check at all.
+        if (!all_armies[i].IsValid())
+        {
+            DPRINTF(k_DBG_GAMESTATE, ("PlayerHappiness::CalcPeaceMovement: stale army %x in player %d's m_all_armies - no longer exists in the pool\n",
+                    all_armies[i].m_id, static_cast<sint32>(p->m_owner)));
+            Assert(all_armies[i].IsValid());
+            continue;
+        }
+
         all_armies[i].GetPos(apos);
 
 
@@ -135,6 +149,16 @@ void PlayerHappiness::CalcPeaceMovement(Player *p,
 	sint32 militaryUnitsOutOfCities = 0;
 	n = all_armies.Num();
 	for(i = 0; i < n; i++) {
+		// Same stale-reference guard as the loop above - this is a
+		// second, independent pass over the same all_armies array.
+		if (!all_armies[i].IsValid())
+		{
+			DPRINTF(k_DBG_GAMESTATE, ("PlayerHappiness::CalcPeaceMovement: stale army %x in player %d's m_all_armies - no longer exists in the pool\n",
+			        all_armies[i].m_id, static_cast<sint32>(p->m_owner)));
+			Assert(all_armies[i].IsValid());
+			continue;
+		}
+
 		MapPoint pos;
 		all_armies[i].GetPos(pos);
 		Cell *cell = g_theWorld->GetCell(pos);

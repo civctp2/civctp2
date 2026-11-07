@@ -39,6 +39,8 @@
 #include "c3.h"
 #include "mapanalysis.h"
 
+#include <algorithm>
+
 #include "Army.h"
 #include "ArmyData.h"
 #include "Unit.h"
@@ -110,8 +112,7 @@ void MapAnalysis::Resize
 
 	m_piracyIncomeMatrix     .resize(maxPlayerId * maxPlayerId, 0);
 
-	m_minCityThreat          .resize(maxPlayerId);
-	m_maxCityThreat          .resize(maxPlayerId);
+	m_cityThreatPercentile   .resize(maxPlayerId);
 	m_nuclearWeapons         .resize(maxPlayerId);
 	m_bioWeapons             .resize(maxPlayerId);
 	m_nanoWeapons            .resize(maxPlayerId);
@@ -159,15 +160,17 @@ void MapAnalysis::RecalcCityRanks(size_t player)
 	if(player_ptr == NULL)
 		return;
 
-	m_minCityProduction = std::numeric_limits<sint32>::max();
-	m_minCityGrowth     = std::numeric_limits<sint32>::max();
-	m_minCityGold       = std::numeric_limits<sint32>::max();
-
-	m_maxCityProduction = std::numeric_limits<sint32>::min();
-	m_maxCityGrowth     = std::numeric_limits<sint32>::min();
-	m_maxCityGold       = std::numeric_limits<sint32>::min();
-
 	sint32 num_cities = player_ptr->m_all_cities->Num();
+
+	std::vector<std::pair<uint32, sint32> > productionValues;
+	std::vector<std::pair<uint32, sint32> > growthValues;
+	std::vector<std::pair<uint32, sint32> > goldValues;
+	std::vector<std::pair<uint32, sint32> > happinessValues;
+	productionValues.reserve(num_cities);
+	growthValues.reserve(num_cities);
+	goldValues.reserve(num_cities);
+	happinessValues.reserve(num_cities);
+
 	for(sint32 i = 0; i < num_cities; i++)
 	{
 		Unit& city = player_ptr->m_all_cities->Access(i);
@@ -175,17 +178,79 @@ void MapAnalysis::RecalcCityRanks(size_t player)
 		sint32 prod =         city->GetCityData()->GetGrossCityProduction();
 		sint32 food =         city->GetCityData()->GetGrowthRate();
 		sint32 gold =         city->GetCityData()->GetGrossCityGold();
-		sint32 happ = (sint32)city->GetCityData()->GetHappiness();
+		// Without entertainers' contribution, same as Governor::
+		// GetMatchingSequenceElement's cityRawHappiness - rank cities by
+		// their underlying happiness pressure, not how well entertainers
+		// currently happen to be masking it.
+		sint32 happ = (sint32)city->GetCityData()->GetHappiness()
+		            - city->GetCityData()->GetHappinessFromPops();
 
-		m_minCityProduction = std::min(prod, m_minCityProduction);
-		m_minCityGrowth     = std::min(food, m_minCityGrowth);
-		m_minCityGold       = std::min(gold, m_minCityGold);
-		m_minCityHappiness  = std::min(happ, m_minCityHappiness);
+		productionValues.push_back(std::make_pair(city.m_id, prod));
+		growthValues.push_back(std::make_pair(city.m_id, food));
+		goldValues.push_back(std::make_pair(city.m_id, gold));
+		happinessValues.push_back(std::make_pair(city.m_id, happ));
+	}
 
-		m_maxCityProduction = std::max(prod, m_maxCityProduction);
-		m_maxCityGrowth     = std::max(food, m_maxCityGrowth);
-		m_maxCityGold       = std::max(gold, m_maxCityGold);
-		m_maxCityHappiness  = std::max(happ, m_maxCityHappiness);
+	ComputeCityPercentileRanks(productionValues, m_cityProductionPercentile);
+	ComputeCityPercentileRanks(growthValues,     m_cityGrowthPercentile);
+	ComputeCityPercentileRanks(goldValues,       m_cityGoldPercentile);
+	ComputeCityPercentileRanks(happinessValues,  m_cityHappinessPercentile);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : MapAnalysis::ComputeCityPercentileRanks
+//
+// Description: Turns a list of (city id, value) pairs into a genuine
+//              percentile rank per city - 1.0 for the single highest
+//              value, 0.0 for the single lowest, evenly spaced by city
+//              *count* rather than by where a value falls within the
+//              [min, max] *range*. Tied cities share the average of
+//              their positions, so ties don't get an arbitrary sort-
+//              order-dependent edge over each other.
+//
+//----------------------------------------------------------------------------
+void MapAnalysis::ComputeCityPercentileRanks(const std::vector<std::pair<uint32, sint32> > & values,
+                                              std::map<uint32, double> & out) const
+{
+	out.clear();
+
+	size_t const n = values.size();
+	if (n == 0)
+	{
+		return;
+	}
+	if (n == 1)
+	{
+		out[values[0].first] = 1.0;
+		return;
+	}
+
+	std::vector<std::pair<uint32, sint32> > sorted(values);
+	std::sort(sorted.begin(), sorted.end(),
+	          [](const std::pair<uint32, sint32> & a, const std::pair<uint32, sint32> & b)
+	          {
+	              return a.second > b.second;
+	          });
+
+	size_t i = 0;
+	while (i < n)
+	{
+		size_t j = i;
+		while ((j + 1 < n) && (sorted[j + 1].second == sorted[i].second))
+		{
+			++j;
+		}
+
+		double const avgPos = (static_cast<double>(i) + static_cast<double>(j)) / 2.0;
+		double const rank   = 1.0 - avgPos / static_cast<double>(n - 1);
+
+		for (size_t k = i; k <= j; ++k)
+		{
+			out[sorted[k].first] = rank;
+		}
+
+		i = j + 1;
 	}
 }
 
@@ -220,9 +285,6 @@ void MapAnalysis::BeginTurn()
 		m_valueGrid        [player].Clear();
 		m_tradeAtRiskGrid  [player].Clear();
 		m_piracyLossGrid   [player].Clear();
-
-		m_minCityThreat    [player] = std::numeric_limits<sint32>::max();
-		m_maxCityThreat    [player] = std::numeric_limits<sint32>::min();
 
 		m_movementTypeUnion[player] = 0x0;
 
@@ -270,7 +332,20 @@ void MapAnalysis::BeginTurn()
 		for (i = 0; i < num_armies; i++)
 		{
 			army = player_ptr->m_all_armies->Access(i);
-			Assert(army.IsValid());
+
+			// Same stale-reference risk as CtpAi::BombardNearbyEnemies
+			// (b9a2c00ee) - Assert(army.IsValid()) alone doesn't stop
+			// execution, and every use below dereferences army
+			// unconditionally via operator->(), which silently returns
+			// NULL for a dead ArmyPool id instead of asserting.
+			if(!army.IsValid())
+			{
+				DPRINTF(k_DBG_AI, ("MapAnalysis::BeginTurn: stale army %x in player %d's m_all_armies - no longer exists in the ArmyPool\n",
+				        army.m_id, static_cast<sint32>(player)));
+				Assert(army.IsValid());
+				continue;
+			}
+
 			army->GetPos(pos);
 
 			sint8 defense_count;
@@ -349,11 +424,36 @@ void MapAnalysis::BeginTurn()
 		for (i = 0; i < num_cities; i++)
 		{
 			city = player_ptr->m_all_cities->Access(i);
-			Assert(city.IsValid() && city->GetCityData());
+
+			// Same stale-reference risk as the army loop above - don't
+			// evaluate city->GetCityData() at all (unlike the old Assert
+			// expression, which dereferenced it unconditionally as part
+			// of the assert condition itself) unless city is confirmed
+			// live first.
+			if(!city.IsValid())
+			{
+				DPRINTF(k_DBG_AI, ("MapAnalysis::BeginTurn: stale city %x in player %d's m_all_cities - no longer exists in the pool\n",
+				        city.m_id, static_cast<sint32>(player)));
+				Assert(city.IsValid());
+				continue;
+			}
+			Assert(city->GetCityData());
+			if(!city->GetCityData())
+				continue;
+
 			city.GetPos(pos);
 			sint32 total_value = city->GetCityData()->GetValue();
 
-			m_totalTrade[player] += city->GetCityData()->GetGoldFromTradeRoutes();
+			sint32 cityTradeGold = city->GetCityData()->GetGoldFromTradeRoutes();
+			m_totalTrade[player] += cityTradeGold;
+
+			// Write-side counterpart to Strengths::Calculate's own
+			// diagnostic - logs each city's own contribution plus the
+			// running per-player total, to catch a future trade-power-
+			// graph spike at its source (which city, how large) instead
+			// of inferring it indirectly.
+			DPRINTF(k_DBG_AI, ("MapAnalysis::BeginTurn: player %d city %s trade gold %d -> running m_totalTrade=%d\n",
+			        static_cast<sint32>(player), city->GetCityData()->GetName(), cityTradeGold, m_totalTrade[player]));
 
 			m_cityValueGrid[player].AddValue(pos, total_value);
 
@@ -422,7 +522,6 @@ void MapAnalysis::BeginTurn()
 	{
 		if(Diplomat::HasDiplomat(player))
 		{
-			Diplomat::GetDiplomat(player).ComputeAllDesireWarWith();
 			Diplomat::GetDiplomat(player).ComputeIncursionPermission();
 		}
 	}
@@ -434,18 +533,17 @@ void MapAnalysis::BeginTurn()
 			continue;
 
 		sint32 num_cities = player_ptr->m_all_cities->Num();
+		std::vector<std::pair<uint32, sint32> > threatValues;
+		threatValues.reserve(num_cities);
 		for (i = 0; i < num_cities; i++)
 		{
 			city = player_ptr->m_all_cities->Access(i);
 			// Threat has to be calculated after relax
 			sint32 threat = GetThreat(player, city.RetPos());
 
-			if (threat < m_minCityThreat[player])
-				m_minCityThreat[player] = threat;
-
-			if (threat > m_maxCityThreat[player])
-				m_maxCityThreat[player] = threat;
+			threatValues.push_back(std::make_pair(city.m_id, threat));
 		}
+		ComputeCityPercentileRanks(threatValues, m_cityThreatPercentile[player]);
 	}
 
 	DPRINTF(k_DBG_MAPANALYSIS, ("RELAXED:\n"));
@@ -524,78 +622,42 @@ sint32 MapAnalysis::GetMaxEnemyGrid(const MapGridVector & gridVector, const size
 double MapAnalysis::GetProductionRank(const CityData * city) const
 {
 	Assert(city);
-	sint32 prod = city->GetGrossCityProduction();
-
-	if(m_maxCityProduction - m_minCityProduction <= 0)
-	{
-		// If we only have one city
-		return 0.0;
-	}
-	else
-	{
-		return ((double)(prod - m_minCityProduction) / (double) (m_maxCityProduction - m_minCityProduction));
-	}
+	std::map<uint32, double>::const_iterator it =
+	    m_cityProductionPercentile.find(city->GetHomeCity().m_id);
+	return (it != m_cityProductionPercentile.end()) ? it->second : 0.0;
 }
 
 double MapAnalysis::GetGrowthRank(const CityData * city) const
 {
 	Assert(city);
-	sint32 food = city->GetGrowthRate();
-
-	if(m_maxCityGrowth - m_minCityGrowth <= 0)
-	{
-		// If we have only one city
-		return 0.0;
-	}
-	else
-	{
-		return ((double)(food - m_minCityGrowth) / (double) (m_maxCityGrowth - m_minCityGrowth));
-	}
+	std::map<uint32, double>::const_iterator it =
+	    m_cityGrowthPercentile.find(city->GetHomeCity().m_id);
+	return (it != m_cityGrowthPercentile.end()) ? it->second : 0.0;
 }
 
 double MapAnalysis::GetCommerceRank(const CityData * city) const
 {
 	Assert(city);
-	sint32 commerce = city->GetGrossCityGold();
-
-	if(m_maxCityGold - m_minCityGold <= 0)
-	{
-		// If we only have one city
-		return 0.0;
-	}
-	else
-	{
-		return ((double)(commerce - m_minCityGold) / (double) (m_maxCityGold - m_minCityGold));
-	}
+	std::map<uint32, double>::const_iterator it =
+	    m_cityGoldPercentile.find(city->GetHomeCity().m_id);
+	return (it != m_cityGoldPercentile.end()) ? it->second : 0.0;
 }
 
 double MapAnalysis::GetHappinessRank(const CityData * city) const
 {
 	Assert(city);
-	double happiness = city->GetHappiness();
-
-	if(m_maxCityHappiness - m_minCityHappiness > 0)
-	{
-		return ((double)(happiness - m_minCityHappiness) / (double)(m_maxCityHappiness - m_minCityHappiness));
-	}
-	else
-	{
-		// If we only have one city
-		return 1.0;
-	}
+	std::map<uint32, double>::const_iterator it =
+	    m_cityHappinessPercentile.find(city->GetHomeCity().m_id);
+	return (it != m_cityHappinessPercentile.end()) ? it->second : 1.0;
 }
 
 double MapAnalysis::GetThreatRank(const CityData * city) const
 {
 	Assert(city);
 	PLAYER_INDEX owner = city->GetOwner();
-	sint32 threat = GetThreat(owner, city->GetHomeCity().RetPos());
-
-	if ((m_maxCityThreat[owner] - m_minCityThreat[owner]) > 0)
-		return ((double)(threat - m_minCityThreat[owner]) /
-		(double)(m_maxCityThreat[owner] - m_minCityThreat[owner]));
-
-	return 0.0;
+	std::map<uint32, double>::const_iterator it =
+	    m_cityThreatPercentile[owner].find(city->GetHomeCity().m_id);
+	return (it != m_cityThreatPercentile[owner].end()) ? it->second : 0.0;
 }
 
 double MapAnalysis::GetPowerRank(const CityData * city) const
@@ -621,6 +683,11 @@ void MapAnalysis::CalcEmpireCenter(const size_t playerId)
 
 const MapPoint & MapAnalysis::GetEmpireCenter(const PLAYER_INDEX player) const
 {
+	if (static_cast<size_t>(player) >= m_empireCenter.size())
+	{
+		static const MapPoint s_noEmpireCenter(0, 0);
+		return s_noEmpireCenter;
+	}
 	return m_empireCenter[player];
 }
 
@@ -798,75 +865,109 @@ const PLAYER_INDEX foreignerId) const
 	return false;
 }
 
+// All playerId-indexed accessors below bounds-check against their own
+// backing array before indexing/assigning - see the matching comment on
+// the inline getters in mapanalysis.h for why (a newly-created civ's
+// player index can briefly outrun these arrays until the next
+// MapAnalysis::Resize() call grows them). The two Set* calls are the
+// more serious half of this: writing out of bounds, not just reading
+// garbage back.
 bool MapAnalysis::PlayerCanEnter
 (
 	const PLAYER_INDEX  playerId,
 	const MapPoint &    pos
 ) const
 {
+	if (static_cast<size_t>(playerId) >= m_movementTypeUnion.size())
+		return false;
 	return g_theWorld->GetCell(pos)->CanEnter(m_movementTypeUnion[playerId]);
 }
 
 sint16 MapAnalysis::GetNuclearWeaponsCount(const PLAYER_INDEX playerId) const
 {
+	if (static_cast<size_t>(playerId) >= m_nuclearWeapons.size())
+		return 0;
 	return m_nuclearWeapons[playerId];
 }
 
 sint16 MapAnalysis::GetBioWeaponsCount(const PLAYER_INDEX playerId) const
 {
+	if (static_cast<size_t>(playerId) >= m_bioWeapons.size())
+		return 0;
 	return m_bioWeapons[playerId];
 }
 
 sint16 MapAnalysis::GetNanoWeaponsCount(const PLAYER_INDEX playerId) const
 {
+	if (static_cast<size_t>(playerId) >= m_nanoWeapons.size())
+		return 0;
 	return m_nanoWeapons[playerId];
 }
 
 void MapAnalysis::SetNuclearWeaponsCount(const PLAYER_INDEX playerId, const sint32 value)
 {
+	if (static_cast<size_t>(playerId) >= m_nuclearWeapons.size())
+		return;
 	m_nuclearWeapons[playerId] = static_cast<sint16>(value);
 }
 
 void MapAnalysis::SetBioWeaponsCount(const PLAYER_INDEX playerId, const sint32 value)
 {
+	if (static_cast<size_t>(playerId) >= m_bioWeapons.size())
+		return;
 	m_bioWeapons[playerId] = static_cast<sint16>(value);
 }
 
 void MapAnalysis::SetNanoWeaponsCount(const PLAYER_INDEX playerId, const sint32 value)
 {
+	if (static_cast<size_t>(playerId) >= m_nanoWeapons.size())
+		return;
 	m_nanoWeapons[playerId] = static_cast<sint16>(value);
 }
 
 sint16 MapAnalysis::GetSpecialAttackers(const PLAYER_INDEX playerId) const
 {
+	if (static_cast<size_t>(playerId) >= m_specialAttackers.size())
+		return 0;
 	return m_specialAttackers[playerId];
 }
 
 sint32 MapAnalysis::AverageSettledContinentSize(const PLAYER_INDEX playerId) const
 {
+	if (static_cast<size_t>(playerId) >= m_continentSize.size())
+		return 0;
 	return m_continentSize[playerId];
 }
 
 sint16 MapAnalysis::GetTotalPopulation(const PLAYER_INDEX playerId) const
 {
-	return (playerId == PLAYER_UNASSIGNED) ? m_worldPopulation
-	                                       : m_totalPopulation[playerId];
+	if (playerId == PLAYER_UNASSIGNED)
+		return m_worldPopulation;
+	if (static_cast<size_t>(playerId) >= m_totalPopulation.size())
+		return 0;
+	return m_totalPopulation[playerId];
 }
 
 sint16 MapAnalysis::GetLandArea(const PLAYER_INDEX playerId) const
 {
+	if (static_cast<size_t>(playerId) >= m_landArea.size())
+		return 0;
 	return m_landArea[playerId];
 }
 
 double MapAnalysis::GetPopulationPercent(const PLAYER_INDEX playerId) const
 {
 	Assert(m_worldPopulation);
+	if (static_cast<size_t>(playerId) >= m_totalPopulation.size())
+		return 0.0;
 	return (double)m_totalPopulation[playerId] / m_worldPopulation;
 }
 
 double MapAnalysis::GetLandPercent(const PLAYER_INDEX playerId) const
 {
 	Assert(g_theWorld);
+	if (static_cast<size_t>(playerId) >= m_landArea.size())
+		return 0.0;
 	return (double)m_landArea[playerId] /
 	            (g_theWorld->GetWidth() * g_theWorld->GetHeight());
 }
@@ -1029,6 +1130,11 @@ double MapAnalysis::GetProductionHandicapRatio(const PLAYER_INDEX playerId) cons
 {
 	Assert(playerId >= 0);
 	Assert(static_cast<size_t>(playerId) < m_productionHandicapRatio.size());
+	// The Asserts above are diagnostic only - they don't stop execution,
+	// so an out-of-range playerId would still fall through to the
+	// out-of-bounds read below without this check.
+	if (playerId < 0 || static_cast<size_t>(playerId) >= m_productionHandicapRatio.size())
+		return 1.0;
 	return m_productionHandicapRatio[playerId];
 }
 
@@ -1036,6 +1142,8 @@ double MapAnalysis::GetGoldHandicapRatio(const PLAYER_INDEX playerId) const
 {
 	Assert(playerId >= 0);
 	Assert(static_cast<size_t>(playerId) < m_goldHandicapRatio.size());
+	if (playerId < 0 || static_cast<size_t>(playerId) >= m_goldHandicapRatio.size())
+		return 1.0;
 	return m_goldHandicapRatio[playerId];
 }
 
@@ -1043,6 +1151,8 @@ double MapAnalysis::GetScienceHandicapRatio(const PLAYER_INDEX playerId) const
 {
 	Assert(playerId >= 0);
 	Assert(static_cast<size_t>(playerId) < m_scienceHandicapRatio.size());
+	if (playerId < 0 || static_cast<size_t>(playerId) >= m_scienceHandicapRatio.size())
+		return 1.0;
 	return m_scienceHandicapRatio[playerId];
 }
 
@@ -1139,8 +1249,7 @@ void MapAnalysis::Cleanup()
 	MapGridVector().swap(m_piracyLossGrid);
 	MapPointVector().swap(m_empireCenter);
 	Sint16Vector().swap(m_piracyIncomeMatrix);
-	Sint32Vector().swap(m_minCityThreat);
-	Sint32Vector().swap(m_maxCityThreat);
+	std::vector<std::map<uint32, double> >().swap(m_cityThreatPercentile);
 	Sint16Vector().swap(m_nuclearWeapons);
 	Sint16Vector().swap(m_bioWeapons);
 	Sint16Vector().swap(m_nanoWeapons);

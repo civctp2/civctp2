@@ -668,6 +668,110 @@ void DebugCallStack_Save  (size_t *call_stack, int number, size_t Ebp, DWORD fra
 #endif
 }
 
+#if defined(_MSC_VER) && !defined(_X86_)
+// Name       : DebugCallStack_SaveFromContext
+//
+// Description: Like DebugCallStack_Save, but for the one case it can't
+//              handle on any non-x86 target (x64, ARM, ARM64): reconstructing
+//              the call chain that led to an exception. CaptureStackBackTrace
+//              takes no context argument - it only ever walks the stack from
+//              wherever it is literally called, so from inside the exception
+//              filter it can only see the filter's own machinery
+//              (c3debug_ExceptionStackTrace <- main_CivExceptionHandler
+//              <- ... <- the OS's own SEH dispatch trampolines), never
+//              the application code that actually crashed. StackWalk64,
+//              seeded with the exception's own saved CONTEXT (Pc/Sp/Fp on
+//              ARM/ARM64, Rip/Rsp/Rbp on x64, as they were at the moment of
+//              the fault), walks the real faulting call chain instead - the
+//              standard, documented way to get a trace from a saved context
+//              rather than the live one, and what SymInitialize/
+//              SymFunctionTableAccess64/SymGetModuleBase64 below exist to
+//              support.
+//
+// Parameters : call_stack:   Array to receive the return addresses
+//              number:       Size of call_stack
+//              context:      The exception's own saved register context
+//              framesToSkip: Number of innermost frames to discard
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : ARM/ARM64 branches are unverified beyond compiling - this
+//              machine has no ARM hardware to run them on. R11 as ARM32's
+//              frame-pointer register matches Microsoft's own published
+//              StackWalk64 samples for Windows-on-ARM, but hasn't been
+//              confirmed against this specific toolchain/ABI.
+//
+//----------------------------------------------------------------------------
+static void DebugCallStack_SaveFromContext(size_t *call_stack, int number, CONTEXT *context, DWORD framesToSkip)
+{
+	for (int i = 0; i < number; i++)
+	{
+		call_stack[i] = 0;
+	}
+
+	static bool symInitialized = false;
+	HANDLE process = GetCurrentProcess();
+	if (!symInitialized)
+	{
+		symInitialized = (SymInitialize(process, NULL, TRUE) != FALSE);
+	}
+
+	CONTEXT contextCopy = *context;
+
+	STACKFRAME64 frame;
+	memset(&frame, 0, sizeof(frame));
+#if defined(_ARM64_)
+	DWORD const machineType  = IMAGE_FILE_MACHINE_ARM64;
+	frame.AddrPC.Offset    = contextCopy.Pc;
+	frame.AddrFrame.Offset = contextCopy.Fp;
+	frame.AddrStack.Offset = contextCopy.Sp;
+#elif defined(_ARM_)
+	DWORD const machineType  = IMAGE_FILE_MACHINE_ARMNT;
+	frame.AddrPC.Offset    = contextCopy.Pc;
+	frame.AddrFrame.Offset = contextCopy.R11;
+	frame.AddrStack.Offset = contextCopy.Sp;
+#else
+	DWORD const machineType  = IMAGE_FILE_MACHINE_AMD64;
+	frame.AddrPC.Offset    = contextCopy.Rip;
+	frame.AddrFrame.Offset = contextCopy.Rbp;
+	frame.AddrStack.Offset = contextCopy.Rsp;
+#endif
+	frame.AddrPC.Mode    = AddrModeFlat;
+	frame.AddrFrame.Mode = AddrModeFlat;
+	frame.AddrStack.Mode = AddrModeFlat;
+
+	HANDLE thread = GetCurrentThread();
+	int index = 0;
+	DWORD skipped = 0;
+
+	while (index < number)
+	{
+		if (!StackWalk64(machineType, process, thread,
+		                 &frame, &contextCopy, NULL,
+		                 SymFunctionTableAccess64, SymGetModuleBase64, NULL))
+		{
+			break;    // unwind info ran out - end of the real call chain
+		}
+
+		if (frame.AddrPC.Offset == 0)
+		{
+			break;
+		}
+
+		if (skipped < framesToSkip)
+		{
+			skipped++;
+			continue;
+		}
+
+		call_stack[index] = (size_t) frame.AddrPC.Offset;
+		index++;
+	}
+}
+#endif
+
 void DebugCallStack_Show  (LogClass log_class, size_t *call_stack, int number)
 {
 	size_t caller;
@@ -859,13 +963,28 @@ char * c3debug_ExceptionStackTrace(LPEXCEPTION_POINTERS exception)
 
 	DebugCallStack_Save(&callstack_function[1], k_CALL_STACK_SIZE - 1, exception->ContextRecord->Ebp, 0);
 #else
+	// CaptureStackBackTrace (DebugCallStack_Save's non-x86 path) takes no
+	// context argument - it only walks the stack from wherever it's
+	// literally called, so from inside the exception filter it could only
+	// ever show the filter's own machinery, never the application call
+	// chain that actually crashed (confirmed via crashFinalWin64.txt,
+	// 2026-10). DebugCallStack_SaveFromContext walks from the exception's
+	// own saved register context instead via StackWalk64, so it starts at
+	// the real immediate caller of the faulting frame above - no plumbing
+	// frames to skip here regardless of Debug/Final optimization level,
+	// unlike the old CaptureStackBackTrace-based approach this replaces.
+	// framesToSkip=1 below discards one further frame: the first
+	// successful StackWalk64 call from a freshly-seeded STACKFRAME64
+	// echoes the seed's own AddrPC (the crash's own Rip/Pc) instead of
+	// immediately advancing to its caller - confirmed via crash.txt
+	// showing GetAverageEventPollution twice in a row. That address is
+	// already recorded separately as callstack_function[0] above.
+#if defined(_ARM_) || defined(_ARM64_)
+	callstack_function[0] = exception->ContextRecord->Pc;
+#else
 	callstack_function[0] = exception->ContextRecord->Rip;
-
-	// Skip the first 9 frames as they refer to debug handling code including
-	// the top frame where the exception happened, which we already got from Rip.
-	// In the debug version we get the stack trace, but in the release version
-	// we get nothing more. Actually, it would just return the skipped frames if we did not skip them.
-	DebugCallStack_Save(&callstack_function[1], k_CALL_STACK_SIZE - 1, exception->ContextRecord->Rbp, 9);
+#endif
+	DebugCallStack_SaveFromContext(&callstack_function[1], k_CALL_STACK_SIZE - 1, exception->ContextRecord, 1);
 #endif
 
 	s_stackTraceString[0] = 0;

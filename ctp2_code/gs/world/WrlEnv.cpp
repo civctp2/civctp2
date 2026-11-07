@@ -705,6 +705,25 @@ BOOL World::IsContinentBiggerThan(uint32 size,
 	return FALSE;
 }
 
+// An Installation (Fort, Airfield, detector, ...) tracks its own owner
+// separately from the Cell it sits on (InstallationData::m_owner), so
+// anything that reassigns a cell's owner has to explicitly push that change
+// to whatever installations are on it, or they silently go stale. This used
+// to live inline in ChangeOwner() only; callers that set Cell::SetOwner()
+// directly (city capture, player elimination, ordinary border/territory
+// recalculation) need it too - see World::ChangeOwner and its other callers.
+void World::SyncInstallationOwners(const MapPoint &point, sint32 toOwner)
+{
+	DynamicArray<Installation> instArray;
+	if(g_theInstallationTree->GetAt(point, instArray))
+	{
+		for(sint32 i = 0; i < instArray.Num(); i++)
+		{
+			instArray[i].ChangeOwner(toOwner);
+		}
+	}
+}
+
 void World::ChangeOwner(const MapPoint &point, sint32 fromOwner, sint32 toOwner)
 {
 	Cell *thisCell = m_map[point.x][point.y];
@@ -726,14 +745,7 @@ void World::ChangeOwner(const MapPoint &point, sint32 fromOwner, sint32 toOwner)
 										  packpos, toOwner));
 		}
 
-		DynamicArray<Installation> instArray;
-		if(g_theInstallationTree->GetAt(point, instArray))
-		{
-			for(sint32 i = 0; i < instArray.Num(); i++)
-			{
-				instArray[i].ChangeOwner(toOwner);
-			}
-		}
+		SyncInstallationOwners(point, toOwner);
 		g_network.Enqueue(thisCell, point.x, point.y);
 
 		for(sint32 d = (sint32)NORTH; d < (sint32)NOWHERE; d++)
@@ -775,14 +787,14 @@ void World::CutImprovements(const MapPoint &point)
 
 	// A for-loop looks better, but does not work, because Kill may modify
 	// multiple indices.
-	while (thisCell->GetNumImprovements() > 0)
+	while (thisCell->GetNumUnfinishedImprovements() > 0)
 	{
-		thisCell->AccessImprovement(thisCell->GetNumImprovements()- 1).Kill();
+		thisCell->AccessUnfinishedImprovement(thisCell->GetNumUnfinishedImprovements()- 1).Kill();
 	}
 
-	while(thisCell->GetNumDBImprovements())
+	while(thisCell->GetNumBuiltImprovementTypes())
 	{
-		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(thisCell->GetDBImprovement(0));
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(thisCell->GetBuiltImprovementType(0));
 		sint32 intRad = 0;
 		sint32 sqRad = 0;
 		Assert(rec);
@@ -797,7 +809,7 @@ void World::CutImprovements(const MapPoint &point)
 				Assert(false);
 			}
 		}
-		thisCell->RemoveDBImprovement(thisCell->GetDBImprovement(0));
+		thisCell->RemoveBuiltImprovementType(thisCell->GetBuiltImprovementType(0));
 	}
 
 	thisCell->CalcMovementType();
@@ -976,8 +988,10 @@ void World::RegisterPlayerDead(sint32 owner)
 	sint32 x, y;
 	for(x = 0; x < m_size.x; x++) {
 		for(y = 0; y < m_size.y; y++) {
-			if(m_map[x][y]->GetOwner() == owner)
+			if(m_map[x][y]->GetOwner() == owner) {
 				m_map[x][y]->SetOwner(-1);
+				SyncInstallationOwners(MapPoint(x, y), -1);
+			}
 		}
 	}
 }

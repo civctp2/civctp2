@@ -110,31 +110,31 @@
 #include "World.h"
 #include "player.h"
 
-extern  RandomGenerator         *g_rand;
+extern  RandomGenerator          *g_rand;
 
 // The Databases
-extern  ProfileDB               *g_theProfileDB;
-extern  StringDB                *g_theStringDB ;
-extern  OzoneDatabase           *g_theUVDB ;
+extern  ProfileDB                 *g_theProfileDB;
+extern  StringDB                  *g_theStringDB ;
+extern  OzoneDatabase             *g_theUVDB ;
 
 // The Pools
-extern  AgreementPool           *g_theAgreementPool;
-extern  CivilisationPool        *g_theCivilisationPool;
-extern  DiplomaticRequestPool   *g_theDiplomaticRequestPool ;
-extern  MessagePool             *g_theMessagePool ;
-extern  TerrainImprovementPool  *g_theTerrainImprovementPool;
-extern  TradePool               *g_theTradePool;
-extern  TradeOfferPool          *g_theTradeOfferPool;
-extern  UnitPool                *g_theUnitPool;
+extern  AgreementPool             *g_theAgreementPool;
+extern  CivilisationPool          *g_theCivilisationPool;
+extern  DiplomaticRequestPool     *g_theDiplomaticRequestPool ;
+extern  MessagePool               *g_theMessagePool ;
+extern  UnfinishedImprovementPool *g_theUnfinishedImprovementPool;
+extern  TradePool                 *g_theTradePool;
+extern  TradeOfferPool            *g_theTradeOfferPool;
+extern  UnitPool                  *g_theUnitPool;
 
 // Others
-extern  Pollution               *g_thePollution;
-extern  SelectedItem            *g_selected_item;
-extern  World                   *g_theWorld;
-extern  Player                  **g_player;
-extern  TopTen                  *g_theTopTen;
+extern  Pollution                 *g_thePollution;
+extern  SelectedItem              *g_selected_item;
+extern  World                     *g_theWorld;
+extern  Player                   **g_player;
+extern  TopTen                    *g_theTopTen;
 
-        DataCheck               *g_dataCheck;
+        DataCheck                 *g_dataCheck;
 
 
 
@@ -381,7 +381,7 @@ void DataCheck::BeginTurn(void)
 	CHECK_DB(g_theCivilisationPool, CRC_TYPE_CIVILISATIONPOOL);
 	CHECK_DB(g_theDiplomaticRequestPool, CRC_TYPE_DIPLOMATICREQUESTPOOL);
 	CHECK_DB(g_theMessagePool, CRC_TYPE_MESSAGEPOOL);
-	CHECK_DB(g_theTerrainImprovementPool, CRC_TYPE_TERRAIN_IMPROVEMENT_POOL);
+	CHECK_DB(g_theUnfinishedImprovementPool, CRC_TYPE_TERRAIN_IMPROVEMENT_POOL);
 	CHECK_DB(g_theTradePool, CRC_TYPE_TRADEPOOL);
 	CHECK_DB(g_theTradeOfferPool, CRC_TYPE_TRADEOFFERPOOL);
 	CHECK_DB(g_theUnitPool, CRC_TYPE_UNITPOOL);

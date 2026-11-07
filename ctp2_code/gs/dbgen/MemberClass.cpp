@@ -1060,7 +1060,10 @@ void MemberClass::ExportResolver(FILE *outfile, const char *recordName)
 	{
 		Datum *dat = walk.GetObj();
 		if(dat->m_type == DATUM_RECORD ||
-		   dat->m_type == DATUM_STRUCT) {
+		   dat->m_type == DATUM_STRUCT ||
+		   (dat->m_type == DATUM_BIT_PAIR && dat->m_bitPairDatum &&
+		    (dat->m_bitPairDatum->m_type == DATUM_RECORD ||
+		     dat->m_bitPairDatum->m_type == DATUM_STRUCT))) {
 			dat->ExportResolver(outfile);
 		}
 	}

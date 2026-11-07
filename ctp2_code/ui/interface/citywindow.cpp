@@ -1697,6 +1697,27 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	if(!s_cityWindow->m_city.IsValid())
 		return AUI_ERRCODE_OK;
 
+	CityData *cd = s_cityWindow->m_city.GetCityData();
+
+	if(rect.left > rect.right || rect.top > rect.bottom)
+	{
+		// Caught before the very first ColorBlt() below (RGB(0,0,0),
+		// using 'rect' unmodified) - a Windows 64-bit playtest (2026-11-01,
+		// 11 hits) hit aui_Blitter::ColorBlt's own
+		// Assert(destRect->left <= destRect->right) right there, meaning
+		// the control's *incoming* rect was already inverted, before this
+		// function's own +=2/-=2 inset or the overcrowding-coefficient
+		// math (68780c060) ever runs. That fix only covered the
+		// post-shrink width<=0 case below; it never touches 'rect' itself.
+		DPRINTF(k_DBG_UI,
+		    ("CityWindow::DrawGrowthBar: incoming rect already inverted for city %s - rect (%d,%d)-(%d,%d)\n",
+		     cd ? cd->GetName() : "?",
+		     rect.left, rect.top, rect.right, rect.bottom));
+		bool degenerateGrowthBarRect = false;
+		Assert(degenerateGrowthBarRect);
+		return AUI_ERRCODE_OK;
+	}
+
 	RECT destRect = rect;
 	AUI_ERRCODE err;
 
@@ -1708,7 +1729,28 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	destRect.right -= 2;
 
 	sint32 width = destRect.right - destRect.left;
-	CityData *cd = s_cityWindow->m_city.GetCityData();
+
+	if(width <= 0)
+	{
+		// The incoming rect is already degenerate here, before any
+		// overcrowding/growth-rate math runs below - so even with the
+		// overcrowding coefficient properly clamped to [0,1] (see the
+		// 68780c060 fix), every width-dependent ColorBlt call in this
+		// function would still compute destRect.right < destRect.left
+		// and trip aui_Blitter::ColorBlt's own Assert. Logging both the
+		// pre-shrink (rect) and post-shrink (destRect) bounds to tell
+		// apart "control was laid out too small to begin with" from
+		// "shrinking it by 2px/side flipped an already-thin rect".
+		DPRINTF(k_DBG_UI,
+		    ("CityWindow::DrawGrowthBar: degenerate rect for city %s - rect (%d,%d)-(%d,%d), shrunk (%d,%d)-(%d,%d), width=%d\n",
+		     cd ? cd->GetName() : "?",
+		     rect.left, rect.top, rect.right, rect.bottom,
+		     destRect.left, destRect.top, destRect.right, destRect.bottom,
+		     width));
+		bool degenerateGrowthBarRect = false;
+		Assert(degenerateGrowthBarRect);
+		return AUI_ERRCODE_OK;
+	}
 
 	double overcrowding = cd->GetOvercrowdingCoefficient();
 	if(overcrowding < 0)
@@ -1717,7 +1759,7 @@ AUI_ERRCODE CityWindow::DrawGrowthBar(ctp2_Static *control,
 	if(overcrowding > 1)
 		overcrowding = 1;
 
-	destRect.right = destRect.left + sint32((1.0 - cd->GetOvercrowdingCoefficient()) * double(width));
+	destRect.right = destRect.left + sint32((1.0 - overcrowding) * double(width));
 	if(destRect.right > rect.right)
 		destRect.right = rect.right;
 

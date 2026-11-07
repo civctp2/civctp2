@@ -1321,6 +1321,19 @@ void ArmyData::GroupUnit(Unit unit)
 		}
 		else
 		{
+			// Diagnostic: a playtest log caught this failing right next to
+			// a transport unloading at the same tile, one order apart in
+			// the same processing cycle - same root cause as UnitData::
+			// ChangeArmy's own !Flag(k_UDF_IS_IN_TRANSPORT) assert just
+			// downstream of here. Confirm whether this unit is genuinely
+			// the transport's just-unloaded cargo (an unload/group
+			// ordering race, since Unload() clears the transport flag with
+			// no per-unit log line to check against) or a stale grouping
+			// order for a unit still boarded somewhere else entirely.
+			DPRINTF(k_DBG_GAMESTATE,
+			    ("ArmyData::GroupUnit: unit 0x%lx IsInTransport=%d transport 0x%lx\n",
+			     unit.m_id, unit.Flag(k_UDF_IS_IN_TRANSPORT),
+			     unit.GetTransport().m_id));
 			Assert(unit.GetArmy().IsValid());
 		}
 
@@ -2632,20 +2645,13 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 
 	//InformAI(UNIT_ORDER_EXPEL, point);//does nothing here but could be implemented
 
-	bool 			foundCity	= false;
-	MapPoint 		cpos;
 	CellUnitList 	expelled;
 	for(i = 0; i < n; i++)
 	{
 		if(cell->AccessUnit(i).CanBeExpelled() &&
 		   cell->AccessUnit(i).GetVisibility() & (1 << m_owner))
 		{
-			Unit u = cell->AccessUnit(i);
-
-			foundCity = u.NearestFriendlyCityWithRoom(cpos, numToExpel,
-			                                          u.GetArmy());
-
-			expelled.Insert(u);
+			expelled.Insert(cell->AccessUnit(i));
 		}
 	}
 
@@ -2654,6 +2660,21 @@ ORDER_RESULT ArmyData::Expel(const MapPoint &point)
 	{
 		for(i = 0; i < n; i++)
 		{
+			// Computed per unit, not shared across the loop via one cpos/
+			// foundCity - this tile has a single owner, but can still
+			// hold several distinct Army groupings of that owner (e.g. a
+			// naval stack and a land stack both garrisoned at the same
+			// city), and NearestFriendlyCityWithRoom()'s result depends
+			// on the specific army's own movement type (its testWaterMove
+			// check) as well as its owner. Reusing one army's result for
+			// every other army (the original bug here, copied into and
+			// later fixed in Slic_Liberate::Call - see foreign_tile_
+			// sharing_root_cause memory) could send e.g. a naval stack to
+			// a landlocked city it can never actually reach.
+			MapPoint cpos;
+			bool foundCity = expelled[i].NearestFriendlyCityWithRoom(cpos, numToExpel,
+			                                                         expelled[i].GetArmy());
+
 			if(foundCity)
 			{
 				Army newArmy;
@@ -3492,9 +3513,17 @@ ORDER_RESULT ArmyData::EnslaveSettler(const MapPoint &point, const sint32 uindex
 	Cell *cell = g_theWorld->GetCell(point);
 
 	sint32 n = cell->GetNumUnits();
-	Assert(n > 0);
 	if(n != 1)
 	{
+		// This is a queued order (UNIT_ORDER_ENSLAVE_SETTLER) - the
+		// settler seen here when the order was issued can have moved,
+		// died, or been captured by execution time, leaving the tile
+		// empty. Same "target vanished" outcome SlaveRaid (this
+		// function's own caller/sibling) already treats as legitimate,
+		// not a bug - see its own IsSlaveRaidPossible()/IsNextTo() early
+		// returns just above in this file.
+		DPRINTF(k_DBG_GAMESTATE, ("EnslaveSettler: target tile (%d,%d) has %d units, not 1 - order no longer valid\n",
+		        point.x, point.y, n));
 		return ORDER_RESULT_ILLEGAL;
 	}
 
@@ -5246,7 +5275,7 @@ bool ArmyData::CanPillage(uint32 & uindex) const
 	GetPos(pos);
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	sint32 num_improvements = cell->GetNumDBImprovements();
+	sint32 num_improvements = cell->GetNumBuiltImprovementTypes();
 	if (num_improvements <= 0) {
 		return false;
 	}
@@ -5277,7 +5306,7 @@ bool ArmyData::CanPillage() const
 	GetPos(pos);
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	sint32 num_improvements = cell->GetNumImprovements();
+	sint32 num_improvements = cell->GetNumUnfinishedImprovements();
 	if (num_improvements <= 0) {
 		uint32 env = cell->GetEnv();
 		if(!(env & (k_MASK_ENV_IRRIGATION |
@@ -5349,9 +5378,9 @@ ORDER_RESULT ArmyData::Pillage(bool test_ownership)
 
 //	bool CanPillageTileImp = true;
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++)
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++)
 	{
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 		if(trec->GetCantPillage())
 		{
@@ -5365,17 +5394,22 @@ ORDER_RESULT ArmyData::Pillage(bool test_ownership)
 	// sometimes it good to take a fortress use will probably go to lawyers
 	// or diplomats this us temporary until i can make it an order that costs gold
 	//			sint32 rushmod = g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetUnitRushModifier();
-	//			sint32 impgold = cell->AccessImprovement(i).GetMaterialCost();
+	//			sint32 impgold = cell->AccessUnfinishedImprovement(i).GetMaterialCost();
 	for(sint32 j = 0; j < m_nElements; j++)
 	{
 		sint32 rushmod = static_cast<sint32>(g_theGovernmentDB->Get(g_player[m_owner]->m_government_type)->GetWonderRushModifier());
-		sint32 goldcost = (cell->GetGoldProduced() * cell->GetNumDBImprovements()) * rushmod;
+		sint32 goldcost = (cell->GetGoldProduced() * cell->GetNumBuiltImprovementTypes()) * rushmod;
 		if((m_array[j].GetDBRec()->GetCanCaptureTile())
 		&& (g_player[m_owner]->m_gold->GetLevel() > goldcost))
 		{ // && (terrainutil_CanBeCaptured(m_pos))) {
 			if (cellOwner != m_owner)
 			{
-				cell->SetOwner(m_owner);
+				// ChangeOwner() checks cell->GetOwner() == fromOwner before
+				// doing anything, including syncing any installation on this
+				// tile to the new owner - a direct SetOwner() here first
+				// would make that check see the new owner already and skip
+				// the whole thing, including the installation sync. Let
+				// ChangeOwner() do the assignment itself.
 				g_theWorld->ChangeOwner(pos, cellOwner, m_owner);
 				g_player[cellOwner]->m_gold->AddGold(goldcost); //may crash because of barbs?
 				g_player[m_owner]->m_gold->SubGold(goldcost);
@@ -5686,10 +5720,10 @@ bool ArmyData::CanBombard(const MapPoint &point) const
 
 	if(m_owner != cell->GetOwner()) // Don't bombard your own terrain improvements
 	{
-		for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ++ti)
+		for(sint32 ti = 0; ti < cell->GetNumBuiltImprovementTypes(); ++ti)
 		{
 			TerrainImprovementRecord const * trec =
-			    g_theTerrainImprovementDB->Get(cell->GetDBImprovement(ti));
+			    g_theTerrainImprovementDB->Get(cell->GetBuiltImprovementType(ti));
 
 			if(!trec->GetCantPillage())
 			{
@@ -5975,9 +6009,9 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 				{
 					Cell *cell = g_theWorld->GetCell(point);
 					sint32 cellOwner = cell->GetOwner();
-					for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++)
+					for(sint32 ti = 0; ti < cell->GetNumBuiltImprovementTypes(); ti++)
 					{
-						sint32 imp = cell->GetDBImprovement(ti);
+						sint32 imp = cell->GetBuiltImprovementType(ti);
 						const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 						if(trec->GetCantPillage() == 0)
 						{
@@ -6192,9 +6226,9 @@ ORDER_RESULT ArmyData::Bombard(const MapPoint &orderPoint)
 		{
 			Cell *cell = g_theWorld->GetCell(point);
 //			sint32 cellOwner = cell->GetOwner();
-			for(sint32 ti = 0; ti < cell->GetNumDBImprovements(); ti++)
+			for(sint32 ti = 0; ti < cell->GetNumBuiltImprovementTypes(); ti++)
 			{
-				sint32 imp = cell->GetDBImprovement(ti);
+				sint32 imp = cell->GetBuiltImprovementType(ti);
 				const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 				if(!trec->GetCantPillage())
 				{
@@ -7203,6 +7237,14 @@ void ArmyData::CheckLoadSleepingCargoFromCity()
 				if(!u.IsAsleep())
 					continue;
 
+				// Same owner check as World::GetEmptyTransports - a sleeping
+				// foreign unit can be physically present on this tile (fog
+				// of war doesn't block sharing a tile with an unseen
+				// foreign unit, see PretestDest_HasRoom's IsVisible() gate)
+				// and CanCarry() below only checks unit-type compatibility.
+				if(u.GetOwner() != m_owner)
+					continue;
+
 				if(m_array[i].CanCarry(u))
 				{
 					bool out_of_fuel;
@@ -8119,7 +8161,7 @@ void ArmyData::MoveActors(const MapPoint &pos, bool teleport)
 // Remark(s)  : -
 //
 //----------------------------------------------------------------------------
-void ArmyData::MoveUnits(const MapPoint &pos)
+void ArmyData::MoveUnits(const MapPoint &pos, bool skipRemoval)
 {
 	if (m_flags & k_CULF_IN_SPACE)
 	{
@@ -8135,21 +8177,22 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 	for(sint32 i = 0; i < m_nElements; i++)
 	{
 		anyVisible = anyVisible || (m_array[i].GetVisibility() & (1 << g_selected_item->GetVisiblePlayer()));
-		// EMOD - Rebasing of units, especially aircraft - code removed trying to create a code that automatically moves a unit from a
-		//city to another city anywhere in the world and costing that unit 1 move.
-
-		if(m_array[i].GetDBRec()->GetCanRebase())
-		{
-			if (!IsOccupiedByForeigner(pos))
-			{
-				if(g_theWorld->HasCity(pos)
-				|| terrainutil_HasAirfield(pos)
-				){  //add unit later?
-					m_array[i].SetPosition(pos);
-				}
-			}
-		}
-		//end EMOD
+		// A rebase-capable unit (aircraft) moving onto a city/airfield
+		// tile used to be repositioned right here via a direct
+		// m_array[i].SetPosition(pos) call - which inserts into
+		// g_theUnitTree at pos without first removing the unit's
+		// existing entry there (unlike World::RemoveUnitReference()+
+		// MoveToPosition() below, which every unit - rebase-capable or
+		// not - already goes through right after this). The leaked old
+		// QuadTree entry was still reachable via g_theUnitTree->
+		// GetPos(obj), which reads the unit's own (already updated)
+		// position, not where it's actually still registered -
+		// corrupting the tree for whatever legitimate removal stumbled
+		// into that stale node later (confirmed via a playtest hitting
+		// QuadTree.h's Assert(m_se)-style quadrant checks in unrelated
+		// armies' ordinary moves). Removed: the code below already
+		// repositions every unit correctly and unconditionally, so this
+		// was purely redundant as well as the actual bug.
 
 		if(g_theWorld->GetCell(pos)->GetNumUnits() > k_MAX_ARMY_SIZE)
 		{
@@ -8178,7 +8221,19 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 				                       GEA_End);
 			}
 
-			g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
+			// skipRemoval: for a unit that was never actually registered in
+			// the QuadTree in the first place (e.g. a beach-assault passenger
+			// disembarking onto its transport's own tile - FinishUnloadOrder
+			// deliberately skips InsertUnit there, since it can't coexist
+			// with the transport's own entry at that position - see
+			// quadtree_leaked_rebase_entry memory). Removing a never-inserted
+			// unit finds no QuadTree node for wherever it claims to be,
+			// tripping QuadTreeNode::RemoveObject's child-node Assert.
+			// MoveToPosition() below still inserts it fresh regardless.
+			if(!skipRemoval)
+			{
+				g_theWorld->RemoveUnitReference(m_pos, m_array[i]);
+			}
 
 			UnitDynamicArray revealedUnits;
 			m_array[i].MoveToPosition(pos, &revealedUnits);
@@ -8235,6 +8290,17 @@ void ArmyData::MoveUnits(const MapPoint &pos)
 
 			if(m_array[i].HasLeftMap())
 			{
+				// HasLeftMap() only comes from wormhole entry
+				// (UnitData::SetPos, k_UDF_HAS_LEFT_MAP), a leftover
+				// mechanic from this game's predecessor - MoveUnits wasn't
+				// written expecting an ordinary move to land a unit on a
+				// wormhole tile. The transition itself is already fully
+				// handled by SetPos by this point; log which unit/army and
+				// where, to see whether this is routine wormhole traffic
+				// before deciding whether the assert still makes sense.
+				DPRINTF(k_DBG_GAMESTATE,
+				    ("ArmyData::MoveUnits: unit 0x%lx (army 0x%lx, owner %d) left the map via wormhole at (%d,%d), moving from (%d,%d)\n",
+				     m_array[i].m_id, m_id, m_owner, pos.x, pos.y, oldPos.x, oldPos.y));
 				Assert(false);
 			}
 		}
@@ -8328,7 +8394,7 @@ void ArmyData::CheckTerrainEvents()
 bool ArmyData::CanMoveIntoTransport(const MapPoint &pos,
                                     CellUnitList &transports) const
 {
-	if(!g_theWorld->GetEmptyTransports(pos, transports)) // Make a list of the transports with empty slots at pos
+	if(!g_theWorld->GetEmptyTransports(pos, transports, m_owner)) // Make a list of the transports with empty slots at pos
 		return false;
 
 	return CanMoveIntoThisTransport(transports); // true if this army can be loaded onto those transports
@@ -8353,7 +8419,7 @@ bool ArmyData::CanMoveIntoTransport(const MapPoint &pos,
 sint32 ArmyData::NumUnitsCanMoveIntoTransport(const MapPoint &pos,
                                               CellUnitList &transports) const
 {
-	if(!g_theWorld->GetEmptyTransports(pos, transports)) // Make a list of the transports with empty slots at pos
+	if(!g_theWorld->GetEmptyTransports(pos, transports, m_owner)) // Make a list of the transports with empty slots at pos
 		return 0;
 
 	return NumUnitsCanMoveIntoThisTransport(transports); // true if this army can be loaded onto those transports
@@ -8790,6 +8856,23 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 					i--;
 				}
 			}
+
+			// Whatever's left in debark is beach-assault/paratrooper-legal
+			// and is about to be InsertUnit()'d directly onto an occupied
+			// enemy tile below - unlike a normal attacking move, nothing
+			// routes through ArmyMoveEvent's IsOccupiedByForeigner ->
+			// FinishAttack -> MoveIntoForeigner combat resolution to get
+			// here, since this army's position was already committed
+			// directly (SetPosAndNothingElse), bypassing that path
+			// entirely. Resolve the fight now, before debark has any
+			// presence on the cell, so MoveIntoForeigner's own
+			// GetArmy(to_pt, defender) lookup sees only the real defenders,
+			// not debark's own not-yet-inserted units. See
+			// foreign_tile_sharing_root_cause memory.
+			if(debark.IsValid() && debark.Num() > 0)
+			{
+				debark.AccessData()->MoveIntoForeigner(to_pt);
+			}
 		}
 		else if(g_theWorld->GetCity(to_pt).m_id != 0 &&
 		        g_theWorld->GetCity(to_pt).GetOwner() != m_owner)
@@ -8851,6 +8934,45 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 
 			if(m_pos != to_pt)
 			{
+				// These units are landing on a genuinely separate,
+				// independently-occupiable tile (unlike the m_pos==to_pt
+				// beach-assault branch below, where a passenger can't
+				// occupy the transport's own tile - see UnloadCargo's own
+				// "Used to call InsertUnit here" comment) - register them
+				// in the world right away instead of relying solely on
+				// their own queued UNIT_ORDER_MOVE_TO below to do it via
+				// ArmyData::MoveUnits(). That order is only queued, not
+				// executed synchronously - a unit landing next to a
+				// TargetOwner:HotEnemy goal (e.g. GOAL_PARADROP) can be
+				// attacked and killed before its own move ever runs,
+				// leaving RemoveAllReferences() to remove-by-position a
+				// unit that was never actually inserted anywhere,
+				// corrupting the QuadTree exactly like the already-fixed
+				// leaked-rebase-entry bug (see quadtree_leaked_rebase_entry
+				// memory). The subsequent MoveUnits() call, when it does
+				// run, still works correctly on an already-inserted unit -
+				// it just removes and re-inserts at the same position.
+				for(sint32 i = 0; i < debark.Num(); i++)
+				{
+					// UnitData::UnloadCargo already committed this
+					// passenger's position to to_pt via
+					// SetPosAndNothingElse() before this runs - if
+					// InsertUnit() is rejected here (to_pt's cell already
+					// at k_MAX_ARMY_SIZE), the passenger is left believing
+					// it arrived while the cell's own CellUnitList doesn't
+					// include it. Same ghost-registration shape as
+					// Unit::SetPosition's own diagnostic (see
+					// citydata_setcurrentgarrison_overflow memory) - a
+					// separate path to the same symptom, since this call
+					// bypasses Unit::SetPosition entirely.
+					if(!g_theWorld->InsertUnit(to_pt, debark[i]))
+					{
+						DPRINTF(k_DBG_GAMESTATE,
+						    ("ArmyData::FinishUnloadOrder: InsertUnit rejected for debarking unit 0x%lx at (%d,%d) - cell already at k_MAX_ARMY_SIZE=%d, unit not in CellUnitList\n",
+						     debark[i].m_id, to_pt.x, to_pt.y, k_MAX_ARMY_SIZE));
+					}
+				}
+
 				for(sint32 i = 0; i < debark.Num(); i++)
 				{
 					if (debark[i].GetActor())
@@ -8868,7 +8990,13 @@ void ArmyData::FinishUnloadOrder(Army &debark, MapPoint &to_pt)
 				{
 					g_director->AddShow(debark[i]);
 				}
-				debark.AutoAddOrders(UNIT_ORDER_TELEPORT_TO, NULL, m_pos, 0);
+				// Argument 1: these units were never InsertUnit()'d - they
+				// can't coexist with the transport's own QuadTree entry at
+				// this same tile (see UnloadCargo's own comment on that),
+				// so their first real move must skip trying to remove a
+				// registration that was never created. See
+				// ExecuteTeleportOrder/MoveUnits' skipRemoval.
+				debark.AutoAddOrders(UNIT_ORDER_TELEPORT_TO, NULL, m_pos, 1);
 			}
 		}
 	}
@@ -8901,7 +9029,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 	Cell *cell = g_theWorld->GetCell(pos);
 	sint32 CellOwner = cell->GetOwner();
 	sint32 j = 0;
-	sint32 imp = cell->GetDBImprovement(j);
+	sint32 imp = cell->GetBuiltImprovementType(j);
 
 	// End EMOD
 	for(i = m_nElements - 1; i >= 0; i--)
@@ -8944,7 +9072,7 @@ void ArmyData::DeductMoveCost(const MapPoint &pos)
 		// movement like railroads 4-12-2006
 		else if(m_array[i].GetOwner() != CellOwner
 		     && CellOwner > 0
-		     && cell->GetDBImprovement(j) > 0
+		     && cell->GetBuiltImprovementType(j) > 0
 		){  //this denies all?
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(imp);
 			if(g_player[m_owner]->HasWarWith(CellOwner)
@@ -9261,9 +9389,32 @@ void ArmyData::UpdateZOCForRemoval()
 
 bool ArmyData::ExecuteTeleportOrder(Order *order)
 {
+	// Teleport (used by the expel mechanic and by a debarking army's own
+	// position announcement) bypasses ArmyMoveEvent's IsOccupiedByForeigner
+	// gate entirely - unlike a plain move, nothing here resolves combat or
+	// diplomacy before committing the position, so a foreign unit already
+	// standing on the target tile would otherwise silently end up sharing
+	// it with us (confirmed possible: a playtest log caught ArmyData::
+	// Insert's own owner-mismatch assert firing for real while unloading a
+	// transport's cargo - see foreign_tile_sharing_root_cause memory).
+	// Drop the order instead of teleporting onto an already-foreign tile.
+	if (IsOccupiedByForeigner(order->m_point))
+	{
+		DPRINTF(k_DBG_GAMESTATE,
+		    ("ArmyData::ExecuteTeleportOrder: army 0x%lx (player %d) teleport to (%d,%d) blocked - already occupied by foreign player %d\n",
+		     m_id, m_owner, order->m_point.x, order->m_point.y,
+		     g_theWorld->GetCell(order->m_point)->UnitArmy()->GetOwner()));
+		bool teleportTargetOccupiedByForeigner = false;
+		Assert(teleportTargetOccupiedByForeigner);
+		return true;
+	}
+
 	UpdateZOCForRemoval();
 
-	MoveUnits(order->m_point);
+	// m_argument != 0: this army was never inserted into the QuadTree to
+	// begin with (see MoveUnits' skipRemoval parameter) - skip trying to
+	// remove a registration that was never created.
+	MoveUnits(order->m_point, order->m_argument != 0);
 
 	for (sint32 i = 0; i < m_nElements; i++)
 	{
@@ -11098,7 +11249,7 @@ bool ArmyData::TargetValidForOrder(const OrderRecord * order_rec, const MapPoint
 			target_valid |= ( g_theWorld->GetCell(pos)->GetNumTradeRoutes() > 0);
 			break;
 		case k_Order_TargetPretest_TerrainImprovement_Bit:
-			target_valid |= ( g_theWorld->GetCell(pos)->GetNumDBImprovements() > 0);
+			target_valid |= ( g_theWorld->GetCell(pos)->GetNumBuiltImprovementTypes() > 0);
 			break;
 		case k_Order_TargetPretest_AdjacentPosition_Bit:
 		case k_Order_TargetPretest_MovePosition_Bit:
@@ -11160,14 +11311,17 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	Path *      tmp_path            = new Path(path);
 	MapPoint    target_pos;
 
-	if (tmp_path->GetMovesRemaining() > 0)
-	{
-		target_pos = tmp_path->GetEnd();
-	}
-	else
-	{
-		target_pos = m_pos;
-	}
+	// Path::GetEnd() walks the path's own steps and is correct regardless
+	// of how many moves are left - including the common case of a path
+	// that reaches a real, distant destination using up every move doing
+	// so. The previous m_pos fallback here conflated that case with a
+	// genuinely empty path (already at the goal), silently replacing a
+	// real, far-away target with the army's own tile - harmless for most
+	// orders, but actively wrong for BombardOrder below, whose own range
+	// check (dist = m_pos.NormalizedDistance(target_pos)) would then
+	// always see dist==0 and treat itself as already in range of its own
+	// tile.
+	target_pos = tmp_path->GetEnd();
 	if (s_orderDBToEventMap == NULL)
 		AssociateEventsWithOrdersDB();
 
@@ -11178,6 +11332,45 @@ void ArmyData::PerformOrderHere(const OrderRecord * order_rec, const Path * path
 	sint32 range = 0;
 	if (order_rec->GetRange(range))
 	{
+		// Unlike the already-fixed GotoGoalTaskSolution case (7b3871a72,
+		// found==false -> empty path -> moves==0), every known caller of
+		// FollowPathToTask already gates on found==true before reaching
+		// here - so a fresh recurrence of this assert (62 hits, 2026-09-28
+		// playtest) means the path genuinely reached the destination but
+		// used up all its moves doing so, leaving none for an order that
+		// needs range>0 and isn't adjacency-pretested. Log which order and
+		// how far short the army was to find the actual call path.
+		if (!(range <= moves || order_rec->GetTargetPretestAdjacentPosition()))
+		{
+			// g_orderInfo[] is indexed by the UNIT_ORDER_* enum (Order.cpp),
+			// while order_rec->GetIndex() is this order's position within the
+			// data-driven Orders.txt file - the two numbering schemes have
+			// drifted apart (e.g. file position 26 is ORDER_SLAVE_RAID, but
+			// g_orderInfo[26] is ORDER_CAUSE_UNHAPPINESS), so indexing
+			// g_orderInfo[] with GetIndex() can print the wrong order name.
+			// g_theOrderDB->GetNameStr() reads the order's own name directly
+			// out of the DB record instead.
+			DPRINTF(k_DBG_GAMESTATE,
+			    ("ArmyData::PerformOrderHere: army 0x%lx (owner %d) order %s needs range %d but only %d moves remain at (x=%d,y=%d), turn=%d\n",
+			     m_id, m_owner, g_theOrderDB->GetNameStr(order_rec->GetIndex()), range, moves,
+			     target_pos.x, target_pos.y, g_player[m_owner]->m_current_round));
+
+			// Is this a genuinely immobile siege unit (IsImmobile() is a
+			// fixed per-unit-type DB property - UnitRecord::GetCantMove()
+			// or MaxMovePoints < 1.0 - not transient state), or a normally
+			// mobile unit that's actually drained to 0 moves for some
+			// other reason? One line per unit in the army, since a stack
+			// can mix types.
+			for (sint32 unit_i = 0; unit_i < Num(); unit_i++)
+			{
+				Unit const & diag_unit = Access(unit_i);
+				DPRINTF(k_DBG_GAMESTATE,
+				    ("ArmyData::PerformOrderHere: unit %d/%d in army 0x%lx: %s, maxMovePoints %.2f, movementPoints %.2f, fuel %d, immobile %d, turn=%d\n",
+				     unit_i + 1, Num(), m_id, g_theUnitDB->GetNameStr(diag_unit.GetType()),
+				     diag_unit.GetMaxMovePoints(), diag_unit.GetMovementPoints(), diag_unit.GetFuel(),
+				     diag_unit.IsImmobile(), g_player[m_owner]->m_current_round));
+			}
+		}
 		Assert(range <= moves || order_rec->GetTargetPretestAdjacentPosition());
 	}
 
@@ -11854,12 +12047,12 @@ void ArmyData::CheckMineField()
 	//EMOD If tile has tileimp that is a minefield then deduct HP
 	if(terrainutil_HasMinefield(m_pos)
 	){
-		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement());
+		//TerrainRecord const * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetBuiltImprovementType());
 		double hpcost2;
 		/// @todo use standard identifiers for index variables like i and j
-		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumDBImprovements(); ++ti)
+		for(sint32 ti = 0; ti < g_theWorld->GetCell(m_pos)->GetNumBuiltImprovementTypes(); ++ti)
 		{ /// @todo use i instead of ti
-			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetDBImprovement(ti));
+			const TerrainImprovementRecord * tirec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(m_pos)->GetBuiltImprovementType(ti));
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(tirec, m_pos);
 			for(sint32 u = 0; u < m_nElements; u++)
 			{ /// @todo use j instead of u

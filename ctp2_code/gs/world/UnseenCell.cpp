@@ -141,12 +141,12 @@ UnseenCell::UnseenCell(const MapPoint & point)
 		// later as well.
 		// And in order not to break anythink use the existing
 		// list for unfinished tile improvements.
-		for(i = 0; i < cell->GetNumDBImprovements(); i++) {
-			sint32 imp = cell->GetDBImprovement(i);
+		for(i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
+			sint32 imp = cell->GetBuiltImprovementType(i);
 			m_improvements->AddTail(new UnseenImprovementInfo(imp, 100));
 		}
-		for(i = 0; i < cell->GetNumImprovements(); i++) {
-			TerrainImprovement imp = cell->AccessImprovement(i);
+		for(i = 0; i < cell->GetNumUnfinishedImprovements(); i++) {
+			TerrainImprovement imp = cell->AccessUnfinishedImprovement(i);
 			if (imp.IsValid())
 			{
 				m_improvements->AddTail(new UnseenImprovementInfo(imp.GetType(),
@@ -608,10 +608,9 @@ sint32 UnseenCell::GetFoodProduced() const
 		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
 
-		sint32 bonus = 0;
-		if (effect && effect->GetBonusFood(bonus))
+		if (effect)
 		{
-			food += bonus;
+			food += effect->GetBonusFood();
 		}
 	}
 
@@ -694,10 +693,9 @@ sint32 UnseenCell::GetShieldsProduced() const
 			g_theTerrainImprovementDB->Get(type);
 		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
-		sint32 bonus;
-		if(effect && effect->GetBonusProduction(bonus))
+		if(effect)
 		{
-			shield += bonus;
+			shield += effect->GetBonusProduction();
 		}
 	}
 
@@ -780,9 +778,8 @@ sint32 UnseenCell::GetGoldProduced() const
 		    g_theTerrainImprovementDB->Get(type);
 		const TerrainImprovementRecord::Effect * effect =
 		    terrainutil_GetTerrainEffect(impRec, m_terrain_type);
-		sint32 bonus;
-		if(effect && effect->GetBonusGold(bonus)) {
-			gold += bonus;
+		if(effect) {
+			gold += effect->GetBonusGold();
 		}
 	}
 

@@ -160,6 +160,7 @@
 #include "mapanalysis.h"
 #include "net_action.h"
 #include "network.h"
+#include "newturncount.h"
 #include "Path.h"
 #include "player.h"
 #include "PopRecord.h"
@@ -173,6 +174,7 @@
 #include "StrategyRecord.h"
 #include "TerrainRecord.h"
 #include "terrainutil.h"
+#include "TerrImprove.h"
 #include "TradeRouteData.h"
 #include "tradeutil.h"
 #include "Unit.h"
@@ -183,6 +185,7 @@
 #include "WonderBuildListRecord.h"
 #include "WonderRecord.h"
 #include "WonderTracker.h"
+#include "wonderutil.h"
 #include "World.h"
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
@@ -298,6 +301,7 @@ Governor::Governor(PLAYER_INDEX const & playerId)
 	m_currentUnitCount          (),
 	m_neededFreight             (0),
 	m_tileImprovementGoals      (),
+	m_cityTileImpGoals          (),
 	m_canBuildLandSettlers      (false),
 	m_canBuildSeaSettlers       (false)
 { ; }
@@ -325,6 +329,7 @@ Governor::Governor(Governor const & copyme)
 	m_currentUnitCount          (),
 	m_neededFreight             (copyme.m_neededFreight),
 	m_tileImprovementGoals      (),
+	m_cityTileImpGoals          (),
 	m_canBuildLandSettlers      (copyme.m_canBuildLandSettlers),
 	m_canBuildSeaSettlers       (copyme.m_canBuildSeaSettlers)
 {
@@ -336,6 +341,9 @@ Governor::Governor(Governor const & copyme)
 	          copyme.m_tileImprovementGoals.end(),
 	          std::back_inserter(m_tileImprovementGoals)
 	         );
+	// m_cityTileImpGoals deliberately left empty, unlike the above - it's
+	// pure scratch space local to one PlaceTileImprovements call, never
+	// holding meaningful state between calls.
 }
 
 //----------------------------------------------------------------------------
@@ -357,6 +365,7 @@ Governor::~Governor()
 {
 	UnitCountVector().swap(m_currentUnitCount);
 	TiGoalQueue().swap(m_tileImprovementGoals);
+	TiGoalQueue().swap(m_cityTileImpGoals);
 }
 
 void Governor::SetPlayerId(const PLAYER_INDEX &playerId)
@@ -595,11 +604,10 @@ void Governor::SliderTests::CalcTests(PLAYER_INDEX playerId)
 	const StrategyRecord & strategy =
 		Diplomat::GetDiplomat(playerId).GetCurrentStrategy();
 
-	double deficit_spending;
+	double deficit_spending = strategy.GetDeficitSpending();
 	sint32 min_happiness = g_theConstDB->Get(0)->GetRiotLevel(); // Have a default value if strategy.GetMinimumHappiness is not present
 	double max_wage_percent;
 
-	strategy.GetDeficitSpending(deficit_spending);
 	strategy.GetMinimumHappiness(min_happiness);
 	strategy.GetMaximumWagePercent(max_wage_percent);
 
@@ -876,10 +884,18 @@ void Governor::OptimizeSliders(SlidersSetting & sliders_setting) const
 	}
 }
 
-bool Governor::AddRoadPriority(Path & path, const double & priority_delta)
+bool Governor::AddRoadPriority(Path & path, const double & priority_delta, const CityData * city)
 {
-	double bonus;
-	Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetRoadUtilityBonus(bonus);
+	double bonus = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy().GetRoadUtilityBonus();
+
+	// The element governing the originating city's current build-list
+	// sequence carries its own road bonus on top of the strategy-wide one,
+	// same as FindBestTileImprovement's Improve*Bonus handling. A road
+	// connects two cities; this uses the one the search started from.
+	const StrategyRecord::BuildListSequenceElement *elem =
+	    GetMatchingSequenceElement(city);
+	if(elem)
+		bonus += elem->GetRoadUtilityBonus();
 
 	TiGoal ti_goal;
 	ti_goal.utility =  bonus * priority_delta;
@@ -983,7 +999,7 @@ void Governor::ComputeRoadPriorities()
 				total_cost ))
 			{
 				Assert(0 < found_path.Num());
-				if(AddRoadPriority(found_path, threat_rank))
+				if(AddRoadPriority(found_path, threat_rank, city_unit.CD()))
 					break;
 			}
 		}
@@ -992,6 +1008,265 @@ void Governor::ComputeRoadPriorities()
 	}
 
 	s_CityPairList.clear();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::IsBorderTile
+//
+// Description: Checks whether any neighbor of pos belongs to someone other
+//              than this player (a foreign or unclaimed tile) - i.e.
+//              whether pos itself faces outward at the empire's edge.
+//
+// Parameters : pos: Position to check.
+//
+// Globals    : g_theWorld
+//
+// Returns    : bool
+//
+//----------------------------------------------------------------------------
+bool Governor::IsBorderTile(const MapPoint & pos) const
+{
+	for(sint32 dd = 0; dd < (sint32)NOWHERE; dd++)
+	{
+		MapPoint npos;
+		if(pos.GetNeighborPosition((WORLD_DIRECTION)dd, npos)
+		&& g_theWorld->GetCell(npos)->GetOwner() != m_playerId)
+		{
+			return true;
+		}
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::WouldDestroyUnrelatedImprovement
+//
+// Description: Checks whether building newRec on this cell would silently
+//              destroy an existing improvement that isn't itself a prior
+//              tier of the same installation kind (e.g. a Farm, as opposed
+//              to a Listening Post being upgraded to a Radar Station).
+//
+// Parameters : cell:       The cell being considered.
+//              newRec:     The improvement type that would be built.
+//              pos:        Position of cell (to resolve terrain effects).
+//              isSameKind: terrainutil_IsAirfieldEffect/IsFortEffect/
+//                          IsDetectorEffect - matching whichever finder
+//                          produced newRec.
+//
+// Globals    : g_theTerrainImprovementDB
+//
+// Returns    : bool: true if something not of the same kind would be lost.
+//
+// Remark(s)  : Mirrors Cell::InsertBuiltImprovementType's own auto-remove-on-
+//              completion logic (existingRec->GetClass() & newRec->
+//              GetExcludes()) - an existing improvement whose class isn't
+//              excluded by newRec would simply coexist untouched (e.g. a
+//              Road), so it's never a reason to skip a tile.
+//
+//----------------------------------------------------------------------------
+bool Governor::WouldDestroyUnrelatedImprovement(const Cell * cell, const TerrainImprovementRecord * newRec, const MapPoint & pos, InstallationEffectQualifier isSameKind) const
+{
+	for(sint32 index = 0; index < cell->GetNumBuiltImprovementTypes(); index++)
+	{
+		sint32 const                      existingType = cell->GetBuiltImprovementType(index);
+		const TerrainImprovementRecord *  existingRec  = g_theTerrainImprovementDB->Get(existingType);
+
+		if((existingRec->GetClass() & newRec->GetExcludes()) == 0)
+			continue;
+
+		if(!isSameKind(terrainutil_GetTerrainEffect(existingRec, pos)))
+			return true;
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::AddInstallationPriority
+//
+// Description: Looks for a spot to build one Airfield/Fort/detector-class
+//              installation (whichever finder identifies) for this city, if
+//              it doesn't already have (or isn't already building) one
+//              anywhere in its territory.
+//
+// Parameters : city:       The city to place an installation for.
+//              finder:     terrainutil_GetBestAirfield/GetBestFort/
+//                          GetBestDetector - resolves the best buildable
+//                          type of this kind at a given position, or NULL
+//                          if none is buildable there.
+//              isSameKind: terrainutil_IsAirfieldEffect/IsFortEffect/
+//                          IsDetectorEffect - matching qualifier, used to
+//                          tell an upgrade (previous tier of the same kind)
+//                          apart from an unrelated improvement that would
+//                          be destroyed by building here.
+//              utility:    Priority value to give the resulting TiGoal.
+//              requireBorderTile: if true (detectors, forts), a candidate
+//                      tile must also face outward - see IsBorderTile. A
+//                      city with no such tile anywhere (not on the
+//                      empire's edge) simply never finds a candidate.
+//
+// Globals    : g_theWorld, g_theConstDB
+//
+// Returns    : bool: true if a goal was queued.
+//
+// Remark(s)  : Searches ring by ring outward-in, starting at the city's
+//              fixed border radius and working down toward its (smaller,
+//              size-dependent) collection area, so an installation lands on
+//              the outskirts and doesn't intervene with worked tiles unless
+//              nothing else is free. The whole territory is always scanned
+//              even after a candidate is found, so an existing instance
+//              anywhere (found on any ring) cancels placing a second one.
+//
+//----------------------------------------------------------------------------
+bool Governor::AddInstallationPriority(const Unit & city, BestInstallationFinder finder, InstallationEffectQualifier isSameKind, const double & utility, bool requireBorderTile)
+{
+	MapPoint const cityPos      = city.RetPos();
+	sint32   const owner        = city.GetOwner();
+	sint32   const borderRadius = g_theConstDB->Get(0)->GetBorderIntRadius();
+
+	bool    alreadyHasOne  = false;
+	bool    foundCandidate = false;
+	TiGoal  candidate;
+
+	for(sint32 ring = borderRadius; ring >= 1 && !alreadyHasOne; ring--)
+	{
+		CircleIterator it(cityPos, ring, ring - 1);
+
+		for(it.Start(); !it.End() && !alreadyHasOne; it.Next())
+		{
+			MapPoint const pos  = it.Pos();
+			Cell *         cell = g_theWorld->GetCell(pos);
+
+			if(cell->GetOwner() != owner)
+				continue;
+
+			if(cell->HasCity() && cell->GetCityOwner() != city)
+				continue;
+
+			const TerrainImprovementRecord * rec = finder(m_playerId, pos);
+			if(!rec)
+				continue;
+
+			if(cell->HasTerrainImprovementOfType(rec->GetIndex()))
+			{
+				// Counts regardless of requireBorderTile - an existing
+				// instance anywhere (even one not facing the border,
+				// e.g. built by a human, or from before this rule
+				// existed) still means this city already has one.
+				alreadyHasOne = true;
+				break;
+			}
+
+			if(requireBorderTile && !IsBorderTile(pos))
+				continue;
+
+			if(WouldDestroyUnrelatedImprovement(cell, rec, pos, isSameKind))
+				continue;
+
+			if(!foundCandidate)
+			{
+				candidate.type    = rec->GetIndex();
+				candidate.pos     = pos;
+				candidate.utility = utility;
+				foundCandidate    = true;
+			}
+		}
+	}
+
+	if(alreadyHasOne || !foundCandidate)
+		return false;
+
+	m_tileImprovementGoals.push_back(candidate);
+	return true;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ComputeInstallationPriorities
+//
+// Description: Queues up to one Airfield, one Fort, and one detector-class
+//              installation (Listening Post/Radar Station/Sonar Buoy) per
+//              city, for cities the AI hasn't given one to yet.
+//
+// Parameters : -
+//
+// Globals    : g_player
+//
+// Returns    : -
+//
+// Remark(s)  : Called from PlaceTileImprovements alongside
+//              ComputeRoadPriorities - feeds the same m_tileImprovementGoals
+//              queue, sorted and budget-capped there like every other tile
+//              improvement goal.
+//
+//----------------------------------------------------------------------------
+void Governor::ComputeInstallationPriorities()
+{
+	Player *            player_ptr  = g_player[m_playerId];
+	Assert(player_ptr);
+	UnitDynamicArray *  cityList    = player_ptr->GetAllCitiesList();
+	sint32 const        num_cities  = cityList ? cityList->Num() : 0;
+
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+
+	for (sint32 city_index = 0; city_index < num_cities; city_index++)
+	{
+		Unit const & city = cityList->Get(city_index);
+
+		if (!city.CD()->GetUseGovernor())
+			continue;
+
+		// The element governing this city's current build-list sequence
+		// carries its own installation bonuses on top of the strategy-wide
+		// ones, same as FindBestTileImprovement's Improve*Bonus handling.
+		const StrategyRecord::BuildListSequenceElement *elem =
+		    GetMatchingSequenceElement(city.CD());
+
+		double airfieldUtility = strategy.GetAirfieldUtilityBonus();
+		double fortUtility     = strategy.GetFortUtilityBonus();
+		double detectorUtility = strategy.GetDetectorUtilityBonus();
+		if(elem)
+		{
+			airfieldUtility += elem->GetAirfieldUtilityBonus();
+			fortUtility     += elem->GetFortUtilityBonus();
+			detectorUtility += elem->GetDetectorUtilityBonus();
+		}
+
+		// Unlike tile improvements/roads, these bonuses were previously
+		// used as a flat, unscaled utility - which lost every competition
+		// against terrain improvements whose scaled utility regularly runs
+		// well above their own raw bonus (confirmed empirically: an 800-
+		// turn playtest built zero Forts/Detectors/rarely an Airfield for
+		// one player, while roads/farms/etc. routinely built). Scale by
+		// this city's own ThreatRank instead - a factor of [1.0, 2.0], so
+		// a calm city's installation still competes at exactly its old
+		// baseline value (never worse than before), while a genuinely
+		// threatened city's bid can double, giving it a real chance
+		// against terrain improvements when the two compete for the same
+		// turn's budget. Airfields aren't restricted to border tiles (they
+		// support inland power projection too), but a threatened inland
+		// city benefits from one just as much as a threatened border city,
+		// so the same scaling applies to all three.
+		double const threat_rank = MapAnalysis::GetMapAnalysis().GetThreatRank(city.CD());
+		double const threat_scale = 1.0 + threat_rank;
+		airfieldUtility *= threat_scale;
+		fortUtility     *= threat_scale;
+		detectorUtility *= threat_scale;
+
+		AddInstallationPriority(city, terrainutil_GetBestAirfield, terrainutil_IsAirfieldEffect, airfieldUtility);
+		// Forts and detectors only make sense facing outward at the
+		// empire's edge - require a border tile, so purely interior
+		// cities never get one.
+		AddInstallationPriority(city, terrainutil_GetBestFort,     terrainutil_IsFortEffect,     fortUtility,     true);
+
+		// No need to build installations to increase the vision range if we already see everything
+		if(!wonderutil_GetGlobalRadar(player_ptr->m_builtWonders))
+			AddInstallationPriority(city, terrainutil_GetBestDetector, terrainutil_IsDetectorEffect, detectorUtility, true);
+	}
 }
 
 bool Governor::IsInCityPairList(sint32 city, sint32 neighborCity) const
@@ -1025,7 +1300,8 @@ void Governor::PlaceTileImprovements()
 	strategy.GetPublicWorksReserve(reserve_pw);
 
 	m_tileImprovementGoals.clear();
-	ComputeRoadPriorities();    // may add to m_tileImprovementGoals
+	ComputeRoadPriorities();          // may add to m_tileImprovementGoals
+	ComputeInstallationPriorities();  // may add to m_tileImprovementGoals
 
 	TiGoal ti_goal;
 	UnitDynamicArray *  cityList    = player_ptr->GetAllCitiesList();
@@ -1042,10 +1318,36 @@ void Governor::PlaceTileImprovements()
 
 		CityInfluenceIterator it(unit.RetPos(), city->GetSizeIndex());
 
-		sint32  bonusFood = 0;
-		sint32  bonusProduction = 0;
-		sint32  bonusCommerce = 0;
+		// GetRingImprovementPriority (CityData.cpp) scores a tile purely by
+		// which ring it's in - identical for every city that reaches that
+		// ring, every turn, with no regard for how much of that ring this
+		// specific city has already improved. A city with a large or
+		// terrain-rich ring 1 can keep winning every one of its own
+		// candidates there turn after turn while a sibling city's equally
+		// deserving but lower-terrain ring 1 never gets a look in, since
+		// nothing discounts a ring as it fills up. The loop below both
+		// tallies, for this city, how many of each ring's eligible tiles
+		// already count as improved and gathers this turn's candidates in
+		// one pass, since both share the same eligibility filter.
+		sint32 const maxRing = g_theCitySizeDB->NumRecords();
+		std::vector<sint32> ringTotal(maxRing, 0);
+		std::vector<sint32> ringImproved(maxRing, 0);
 
+		// m_cityTileImpGoals (a Governor member, not a local) is reused
+		// city after city, turn after turn - clear() keeps its already-
+		// grown heap buffer instead of freeing and reallocating it from
+		// empty on every single city, which otherwise fragments the heap
+		// over a long game (see tileimp_placement_priority memory).
+		m_cityTileImpGoals.clear();
+		// A tile counts toward ringImproved[] (but never becomes a
+		// candidate) if it already has a food/prod/gold improvement under
+		// construction, or carries a non-Fort/Airfield/detector-style
+		// installation, or FindBestTileImprovement has nothing better to
+		// offer it and it already carries a finished food/prod/gold
+		// improvement. Otherwise, if FindBestTileImprovement finds a
+		// candidate - whether the tile is bare or already improved, no
+		// distinction is made here - it goes into m_cityTileImpGoals for
+		// scoring below.
 		for (it.Start(); !it.End(); it.Next())
 		{
 			if(unit.RetPos() == it.Pos())
@@ -1056,17 +1358,60 @@ void Governor::PlaceTileImprovements()
 			if(cell->GetCityOwner() != unit)
 				continue;
 
-			if(cell->GetNumImprovements() > 0)
+			sint32 const ring = city->GetRing(it.Pos());
+			if(ring >= 0 && ring < maxRing)
+			{
+				ringTotal[ring]++;
+			}
+			else
+			{
+				Assert(false);
+			}
+
+			if(cell->GetNumUnfinishedImprovements() > 0)
+			{
+				if(HasUnfinishedFoodProdOrGoldImprovement(it.Pos()))
+					ringImproved[ring]++;
+
 				continue;
+			}
 
 			if(g_theInstallationTree->GetCount(it.Pos()) > 0
 			&& g_theWorld->GetCell(it.Pos())->GetTerrainType() != terrainutil_GetDead())
-				continue;
-
-			if(FindBestTileImprovement(it.Pos(), ti_goal, bonusFood, bonusProduction, bonusCommerce))
 			{
-				m_tileImprovementGoals.push_back(ti_goal);
+				ringImproved[ring]++;
+				continue;
 			}
+
+			if(FindBestTileImprovement(it.Pos(), ti_goal))
+			{
+				m_cityTileImpGoals.push_back(ti_goal);
+			}
+			else if(HasFoodProdOrGoldImprovement(it.Pos()))
+			{
+				ringImproved[ring]++;
+			}
+		}
+
+		for
+		(
+		    TiGoalQueue::const_iterator   iter  = m_cityTileImpGoals.begin();
+		                                  iter != m_cityTileImpGoals.end();
+		                                ++iter
+		)
+		{
+			ti_goal = *iter;
+			sint32 const ring         = city->GetRing(ti_goal.pos);
+			sint32 const terrain_type = g_theWorld->GetCell(ti_goal.pos)->GetTerrainType();
+
+			// Moved here from inside FindBestTileImprovement: the per-ring
+			// saturation discount ScaleUtilityForCitySize now also applies
+			// (on top of its own ring-distance scaling) needs this city's
+			// ring tallies finalized first - see its own comment.
+			ScaleUtilityForCitySize(ti_goal, city, ti_goal.pos, terrain_type, strategy,
+			                         ringImproved[ring], ringTotal[ring]);
+
+			m_tileImprovementGoals.push_back(ti_goal);
 		}
 	}
 
@@ -1087,9 +1432,9 @@ void Governor::PlaceTileImprovements()
 
 	for
 	(
-		TiGoalQueue::const_iterator iter = m_tileImprovementGoals.begin();
-		iter != max_iter;
-		++iter
+	    TiGoalQueue::const_iterator   iter  = m_tileImprovementGoals.begin();
+	                                  iter != max_iter;
+	                                ++iter
 	)
 	{
 		sint32 const needed_pw =
@@ -1097,6 +1442,49 @@ void Governor::PlaceTileImprovements()
 
 		if (needed_pw <= avail_pw)
 		{
+			// city/ring: which city this winner belongs to, and how far
+			// out - lets a playtest log be grouped by city (is the budget
+			// actually spreading across an empire's cities, or is one
+			// still winning almost everything - see
+			// [[tileimp_placement_priority]]) and by ring (is the
+			// ring-priority curve in GetRingImprovementPriority actually
+			// biting). Roads can span tiles between cities that no single
+			// city owns, so city/ring are only meaningful when the tile
+			// does belong to one - "-"/-1 marks a road tile that doesn't.
+			Unit const tile_owner = g_theWorld->GetCell(iter->pos)->GetCityOwner();
+			CityData * const tile_city =
+			    tile_owner.IsValid() ? tile_owner.GetCityData() : NULL;
+			MBCHAR const * const tile_city_name =
+			    tile_city ? tile_city->GetName() : "-";
+			sint32 const tile_ring =
+			    tile_city ? tile_city->GetRing(iter->pos) : -1;
+			MBCHAR const * cityList = (tile_city != NULL) ? g_theBuildListSequenceDB->Get(tile_city->GetBuildListSequenceIndex())->GetNameText() : "No City";
+
+			// Logs every tile-improvement/road/installation goal that
+			// actually wins its slot in the shared, sorted
+			// m_tileImprovementGoals queue - the improvement's own name
+			// already tells category (road, mine, Airfield, Fort, ...)
+			// apart, so a playtest log can be grouped by name to check
+			// whether one category is systematically outcompeting the
+			// others for the turn's public-works budget. Installation
+			// utility is ThreatRank-scaled now (AddInstallationPriority,
+			// 13a760c93), not flat, but still on its own formula from
+			// roads/tile improvements' rank/ratio scaling - worth
+			// rechecking here if a category-dominance pattern recurs.
+			DPRINTF(k_DBG_GOVERNOR, ("PlaceTileImprovements: turn %d player %d city %s ring %d builds %s on %s at (%d,%d), utility %f, cost %d, BuildList: %s\n",
+			        NewTurnCount::GetCurrentRound(),
+			        m_playerId,
+			        tile_city_name,
+			        tile_ring,
+			        g_theTerrainImprovementDB->Get(iter->type)->GetNameText(),
+			        g_theTerrainDB->Get(g_theWorld->GetCell(iter->pos)->GetTerrainType())->GetNameText(),
+			        iter->pos.x,
+			        iter->pos.y,
+			        iter->utility,
+			        needed_pw,
+			        cityList
+			        ));
+
 			g_gevManager->AddEvent(GEV_INSERT_Tail,
 			                       GEV_CreateImprovement,
 			                       GEA_Player,      m_playerId,
@@ -1115,260 +1503,495 @@ void Governor::PlaceTileImprovements()
 
 //----------------------------------------------------------------------------
 //
-// Name       : Governor::FindBestTileImprovement
+// Name       : Governor::ScoreGrowthImprovement
 //
-// Description: Determines the best tile improvement for a tile.
+// Description: Scores a growth-category tile-improvement candidate - the
+//              growth-branch body of FindBestTileImprovement, extracted
+//              verbatim. Picked purely by terrain capability (the caller's
+//              own condition), not by how much the city actually needs
+//              growth (see the session's tileimp_need_vs_terrain notes).
 //
-// Parameters : pos:             Position of the tile on the map
+// Parameters : goal:                    The candidate goal, type/utility set in place
+//              pos:                     Position of the candidate tile
+//              best_growth_improvement: The chosen growth improvement type
+//              terr_food_rank:          Tile's food yield relative to the map average
+//              growth_rank:             The city's growth percentile
+//              strategy:                The city owner's current strategy
+//              elem:                    The city's matching build-list-sequence element (may be NULL)
 //
-// Globals    : g_player:        List of players in the game
-//				g_theWorld:      Map information
+// Globals    : g_theTerrainImprovementDB, g_theWorld
 //
-// Returns    : bool:            The tile can be improved
-//              goal:            Type and priority value of the tile improvement
-//              bonusFood:       Added food by the selected tile improvement
-//              bonusProduction: Added production(shields) by the selected tile improvement
-//              bonusCommerce:   Added commerce(gold) by the selected tile improvement
-//
-// Remark(s)  : The information in goal is only valid when true is returned.
+// Returns    : sint32: the tile's added food from this improvement, 0 if
+//              best_growth_improvement was unavailable
 //
 //----------------------------------------------------------------------------
-bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const
+sint32 Governor::ScoreGrowthImprovement(TiGoal & goal, const MapPoint & pos, sint32 best_growth_improvement, double terr_food_rank, double growth_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const
 {
-	sint32 tmp_bonus;
-	sint32 terrain;
-	const TerrainImprovementRecord *rec;
-	const TerrainImprovementRecord::Effect *effect;
+	if (best_growth_improvement < 0)
+		return 0;
 
-	Assert(g_player[m_playerId]);
-	Player *player_ptr = g_player[m_playerId];
-	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
-	MapAnalysis & the_map =  MapAnalysis::GetMapAnalysis();
+	const TerrainImprovementRecord * rec = g_theTerrainImprovementDB->Get(best_growth_improvement);
+	const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
 
-	Unit city_owner = g_theWorld->GetCell(pos)->GetCityOwner();
-	CityData* city = city_owner.GetCityData();
-	Assert(city);
+	goal.type = best_growth_improvement;
 
-	double growth_rank     = the_map.GetGrowthRank    (city);
-	double production_rank = the_map.GetProductionRank(city);
-//	double gold_rank       = the_map.GetCommerceRank  (city);
-	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) /
-		(double) World::GetAvgFoodFromTerrain();
-	double terr_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain()) /
-		(double) World::GetAvgShieldsFromTerrain();
-	double terr_gold_rank = (g_theWorld->GetCell(pos)->GetGoldFromTerrain()) /
-		(double) World::GetAvgGoldFromTerrain();
-	double bonus;
-	sint32 terrain_type = g_theWorld->GetCell(pos)->GetTerrainType();
+	// 0.0 only silences -Wmaybe-uninitialized, see ScaleUtilityForCitySize.
+	double bonus = 0.0;
+	strategy.GetImproveGrowthBonus(bonus);
+	if(elem)
+		bonus += elem->GetImproveGrowthBonus();
+	goal.utility = bonus * terr_food_rank;
 
-	sint32 best_growth_improvement;
-	sint32 best_production_improvement;
-	sint32 best_gold_improvement;
-	GetBestFoodProdGoldImprovement(pos, best_growth_improvement, best_production_improvement, best_gold_improvement);
-
-	goal.pos = pos;
-
-	goal.type = -1;
-
-	sint32 food_ter = -1;
-	sint32 prod_ter = -1;
-	sint32 gold_ter = -1;
-
-	sint32 citySize;
-
-	if (!g_theWorld->IsGood(pos))
+	// Same top/bottom-growth-cities-element logic as
+	// ScoreProductionImprovement - see its comment for the reasoning.
+	// Top and bottom both apply the same SmallCityGrowthBonus formula, per
+	// the user's explicit call, even though "small city" doesn't quite
+	// describe a top-ranked one - simplicity/parity with production won
+	// out over the field's literal name.
+	double top_value    = -1.0;
+	double bottom_value = -1.0;
+	if(elem && elem->GetGrowthCities() && elem->GetTop(top_value))
 	{
-		bool shouldTerraform = true;
-		for
-		(
-			sint32 i = 0;
-			i < g_theWorld->GetCell(pos)->GetNumDBImprovements() && shouldTerraform;
-			++i
-		)
-		{
-			rec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(pos)->GetDBImprovement(i));
-
-			effect = terrainutil_GetTerrainEffect(rec, pos);
-			if (effect)
-			{
-				shouldTerraform =  !effect->HasBonusFood()
-				                && !effect->HasBonusProduction()
-				                && !effect->HasBonusGold()
-				                && !effect->GetEndgame();
-			}
-		}
-
-		if (shouldTerraform)
-		{
-			GetBestTerraformImprovement(pos, food_ter, prod_ter, gold_ter, true);
-		}
+		strategy.GetImproveSmallCityGrowthBonus(bonus);
+		goal.utility += bonus * growth_rank;
+	}
+	else if(elem && elem->GetGrowthCities() && elem->GetBottom(bottom_value))
+	{
+		strategy.GetImproveSmallCityGrowthBonus(bonus);
+		goal.utility += bonus * (1.0 - growth_rank);
+	}
+	else if(growth_rank < 0.2){
+		strategy.GetImproveSmallCityGrowthBonus(bonus);
+		goal.utility +=  bonus * (1.0 - growth_rank);
 	}
 
-	sint32 foodMissing = 0;
-	bool moreFoodNeeded = city->NeedMoreFood(bonusFood, foodMissing, true);
-//	bool moreProdNeeded = city->NeedMoreProdOr(bonusCommerce, goldMissing, true);
+	if(g_theWorld->IsGood(pos)){
+		strategy.GetImproveGoodBonus(bonus);
+		goal.utility += bonus;
+	}
 
-	if((moreFoodNeeded
-	|| (best_production_improvement < 0
-	&&  best_gold_improvement < 0))
-	&& (best_growth_improvement >= 0)
-	){
-		rec = g_theTerrainImprovementDB->Get(best_growth_improvement);
-		effect = terrainutil_GetTerrainEffect(rec, pos);
+	return effect->GetBonusFood();
+}
 
-		effect->GetBonusFood(tmp_bonus);
-		bonusFood += tmp_bonus;
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScoreProductionImprovement
+//
+// Description: Scores a production-category tile-improvement candidate -
+//              the production-branch body of FindBestTileImprovement,
+//              extracted verbatim. Picked purely by terrain capability
+//              (the caller's own condition, terr_prod_rank > 0.2 or no
+//              gold alternative), not by how much the city actually needs
+//              production (see the session's tileimp_need_vs_terrain notes;
+//              this branch used to be gated on a now-dead moreProdNeeded
+//              stub instead).
+//
+// Parameters : goal:                        The candidate goal, type/utility set in place
+//              pos:                         Position of the candidate tile
+//              best_production_improvement: The chosen production improvement type
+//              terr_prod_rank:              Tile's production yield relative to the map average
+//              production_rank:             The city's production percentile
+//              strategy:                    The city owner's current strategy
+//              elem:                        The city's matching build-list-sequence element (may be NULL)
+//
+// Globals    : g_theTerrainImprovementDB, g_theWorld
+//
+// Returns    : sint32: the tile's added production from this improvement,
+//              0 if best_production_improvement was unavailable
+//
+//----------------------------------------------------------------------------
+sint32 Governor::ScoreProductionImprovement(TiGoal & goal, const MapPoint & pos, sint32 best_production_improvement, double terr_prod_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const
+{
+	if (best_production_improvement < 0)
+		return 0;
 
-		effect->GetBonusProduction(tmp_bonus);
-		bonusProduction += tmp_bonus;
+	const TerrainImprovementRecord * rec = g_theTerrainImprovementDB->Get(best_production_improvement);
+	const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
 
-		effect->GetBonusGold(tmp_bonus);
-		bonusCommerce += tmp_bonus;
+	goal.type = best_production_improvement;
 
-		goal.type = best_growth_improvement;
+	// 0.0 only silences -Wmaybe-uninitialized, see ScaleUtilityForCitySize.
+	double bonus = 0.0;
+	strategy.GetImproveProductionBonus(bonus);
+	if(elem)
+		bonus += elem->GetImproveProductionBonus();
+	goal.utility =  bonus * terr_prod_rank;
 
+	// production_rank > 0.8 alone used to gate this unconditionally - now
+	// only a fallback for cities whose matched build-list element isn't a
+	// dedicated production-ranked category (e.g. Default/AllCities). When
+	// the city WAS specifically matched by a "top production cities" or
+	// "bottom production cities" element (GetMatchingSequenceElement's own
+	// GetTop()/GetBottom() checks, gated on GetProductionCities()), the
+	// element match itself is already the need signal - apply the bonus
+	// unconditionally rather than re-gating on a fixed rank threshold.
+	// Top and bottom currently do the same thing; kept as separate
+	// branches since they're conceptually distinct and may want to
+	// diverge later (e.g. scaling bottom-ranked cities differently).
+	double top_value    = -1.0;
+	double bottom_value = -1.0;
+	if(elem && elem->GetProductionCities() && elem->GetTop(top_value))
+	{
+		strategy.GetImproveLargeCityProductionBonus(bonus);
+		goal.utility += bonus * production_rank;
+	}
+	else if(elem && elem->GetProductionCities() && elem->GetBottom(bottom_value))
+	{
+		strategy.GetImproveLargeCityProductionBonus(bonus);
+		goal.utility += bonus * (1.0 - production_rank);
+	}
+	else if(production_rank > 0.8)
+	{
+		strategy.GetImproveLargeCityProductionBonus(bonus);
+		goal.utility += bonus *	production_rank;
+	}
+
+	if(g_theWorld->IsGood(pos))
+	{
+		strategy.GetImproveGoodBonus(bonus);
+		goal.utility += bonus;
+	}
+
+	return effect->GetBonusProduction();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScoreGoldImprovement
+//
+// Description: Scores a gold-category tile-improvement candidate - the
+//              gold-branch body of FindBestTileImprovement, extracted
+//              verbatim. Picked purely by availability (best_gold_improvement
+//              >= 0, the caller's own condition) - unlike growth/production,
+//              this branch has never had a need-check at all (the
+//              commented-out gold_rank/GetCommerceRank in the caller was
+//              never wired up either, see tileimp_need_vs_terrain). Its
+//              large-city bonus reuses ImproveLargeCityProductionBonus -
+//              there's no gold-specific equivalent field in strategy.cdb -
+//              but is driven by gold_rank (the call site passes its own
+//              GetCommerceRank() result); an earlier version of this
+//              comment mislabeled the parameter itself as production_rank,
+//              which it never actually was.
+//
+// Parameters : goal:                  The candidate goal, type/utility set in place
+//              pos:                   Position of the candidate tile
+//              best_gold_improvement: The chosen gold improvement type
+//              terr_gold_rank:        Tile's gold yield relative to the map average
+//              gold_rank:             The city's commerce/gold percentile
+//              strategy:              The city owner's current strategy
+//              elem:                  The city's matching build-list-sequence element (may be NULL)
+//
+// Globals    : g_theTerrainImprovementDB, g_theWorld
+//
+// Returns    : sint32: the tile's added gold from this improvement, 0 if
+//              best_gold_improvement was unavailable
+//
+//----------------------------------------------------------------------------
+sint32 Governor::ScoreGoldImprovement(TiGoal & goal, const MapPoint & pos, sint32 best_gold_improvement, double terr_gold_rank, double gold_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const
+{
+	if (best_gold_improvement < 0)
+		return 0;
+
+	const TerrainImprovementRecord * rec = g_theTerrainImprovementDB->Get(best_gold_improvement);
+	const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
+
+	goal.type = best_gold_improvement;
+
+	double bonus = strategy.GetImproveGoldBonus();
+	if(elem)
+		bonus += elem->GetImproveGoldBonus();
+	goal.utility = bonus * terr_gold_rank;
+
+	// Same top/bottom-element logic as ScoreProductionImprovement, gated on
+	// GetCommerceCities() (the gold-relevant category in
+	// GetMatchingSequenceElement) rather than GetProductionCities().
+	double top_value    = -1.0;
+	double bottom_value = -1.0;
+	if(elem && elem->GetCommerceCities() && elem->GetTop(top_value))
+	{
+		strategy.GetImproveLargeCityProductionBonus(bonus);
+		goal.utility += bonus * gold_rank;
+	}
+	else if(elem && elem->GetCommerceCities() && elem->GetBottom(bottom_value))
+	{
+		strategy.GetImproveLargeCityProductionBonus(bonus);
+		goal.utility += bonus * (1.0 - gold_rank);
+	}
+	else if(gold_rank > 0.8)
+	{
+		strategy.GetImproveLargeCityProductionBonus(bonus);
+		goal.utility += bonus * gold_rank;
+	}
+	if(g_theWorld->IsGood(pos))
+	{
+		strategy.GetImproveGoodBonus(bonus);
+		goal.utility += bonus;
+	}
+
+	return effect->GetBonusGold();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScoreFoodTerraform
+//
+// Description: Scores a food-terraform tile-improvement candidate (the
+//              tile's terrain itself changes, e.g. Desert -> Grassland) -
+//              the food-terraform-branch body of FindBestTileImprovement,
+//              extracted verbatim. Picked purely by whether the tile is
+//              already "Good" terrain and a food terraform exists
+//              (the caller's own condition, moreFoodNeeded + !IsGood +
+//              food_ter >= 0) - same terrain-capability-over-need pattern
+//              as the other branches (see tileimp_need_vs_terrain), though
+//              this one at least reuses NeedMoreFood's real need-check.
+//
+// Parameters : goal:           The candidate goal, type/utility set in place
+//              pos:            Position of the candidate tile
+//              food_ter:       The chosen food-terraform improvement type
+//              terrain_type:   The tile's current terrain type
+//              terr_food_rank: Tile's food yield relative to the map average
+//              growth_rank:    The city's growth percentile
+//              strategy:       The city owner's current strategy
+//              elem:           The city's matching build-list-sequence element (may be NULL)
+//
+// Globals    : g_theTerrainImprovementDB, g_theWorld
+//
+// Returns    : sint32: the tile's added food from terraforming, 0 if
+//              food_ter was unavailable/inapplicable
+//
+//----------------------------------------------------------------------------
+sint32 Governor::ScoreFoodTerraform(TiGoal & goal, const MapPoint & pos, sint32 food_ter, sint32 terrain_type, double terr_food_rank, double growth_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const
+{
+	if (food_ter < 0 || g_theWorld->IsGood(pos))
+		return 0;
+
+	sint32 terrain;
+	if (!g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrain))
+		return 0;
+
+	goal.type = food_ter;
+
+	if(terrain_type != terrainutil_GetDead())
+	{
+		// 0.0 only silences -Wmaybe-uninitialized, see ScaleUtilityForCitySize.
+		double bonus = 0.0;
 		strategy.GetImproveGrowthBonus(bonus);
+		if(elem)
+			bonus += elem->GetImproveGrowthBonus();
 		goal.utility = bonus * terr_food_rank;
 
-		if(growth_rank < 0.2){
-		    strategy.GetImproveSmallCityGrowthBonus(bonus);
+		// Same top/bottom-growth-cities-element logic as
+		// ScoreGrowthImprovement - see its comment for the reasoning.
+		double top_value    = -1.0;
+		double bottom_value = -1.0;
+		if(elem && elem->GetGrowthCities() && elem->GetTop(top_value))
+		{
+			strategy.GetImproveSmallCityGrowthBonus(bonus);
+			goal.utility += bonus * growth_rank;
+		}
+		else if(elem && elem->GetGrowthCities() && elem->GetBottom(bottom_value))
+		{
+			strategy.GetImproveSmallCityGrowthBonus(bonus);
+			goal.utility += bonus * (1.0 - growth_rank);
+		}
+		else if(growth_rank < 0.2)
+		{
+			strategy.GetImproveSmallCityGrowthBonus(bonus);
 			goal.utility +=  bonus * (1.0 - growth_rank);
 		}
-
-		if(g_theWorld->IsGood(pos)){
-		    strategy.GetImproveGoodBonus(bonus);
-			goal.utility += bonus;
-		}
 	}
-	else if(moreFoodNeeded
-	&&     !g_theWorld->IsGood(pos)
-	&&      food_ter >= 0
-	){
-		if(g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrain))
-		{
-			bonusFood += g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
-			bonusProduction += g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
-			bonusCommerce += g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
-
-			goal.type = food_ter;
-
-			if(terrain_type != terrainutil_GetDead())
-			{
-				strategy.GetImproveGrowthBonus(bonus);
-				goal.utility = bonus * terr_food_rank;
-
-				if(growth_rank < 0.2)
-				{
-					strategy.GetImproveSmallCityGrowthBonus(bonus);
-					goal.utility +=  bonus * (1.0 - growth_rank);
-				}
-			}
-			else
-			{
-				goal.utility = 9999.0;
-			}
-		}
+	else
+	{
+		goal.utility = 9999.0;
 	}
-//	else if(moreProdNeeded
-//	|| best_gold_improvement < 0
-	else if((terr_prod_rank > 0.2
-	&&       best_production_improvement >= 0)
-	||      (best_production_improvement >= 0
-	&&       best_gold_improvement       <  0)
-	){
-		rec = g_theTerrainImprovementDB->Get(best_production_improvement);
-		effect = terrainutil_GetTerrainEffect(rec, pos);
 
-		effect->GetBonusFood(tmp_bonus);
-		bonusFood += tmp_bonus;
+	return g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
+}
 
-		effect->GetBonusProduction(tmp_bonus);
-		bonusProduction += tmp_bonus;
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScoreGoldTerraform
+//
+// Description: Scores a gold-terraform tile-improvement candidate - the
+//              gold-terraform-branch body of FindBestTileImprovement,
+//              extracted verbatim. Picked by GetNetCityGold() <= 0 (the
+//              caller's own condition) - a real need-check, unlike the
+//              plain gold branch, though a coarse one (any gold deficit
+//              at all, not scaled by how much).
+//
+// Parameters : goal:            The candidate goal, type/utility set in place
+//              pos:             Position of the candidate tile
+//              gold_ter:        The chosen gold-terraform improvement type
+//              terrain_type:    The tile's current terrain type
+//              terr_gold_rank:  Tile's gold yield relative to the map average
+//              gold_rank:       The city's commerce/gold percentile
+//              strategy:        The city owner's current strategy
+//              elem:            The city's matching build-list-sequence element (may be NULL)
+//
+// Globals    : g_theTerrainImprovementDB, g_theWorld
+//
+// Returns    : sint32: the tile's added gold from terraforming, 0 if
+//              gold_ter was unavailable/inapplicable
+//
+//----------------------------------------------------------------------------
+sint32 Governor::ScoreGoldTerraform(TiGoal & goal, const MapPoint & pos, sint32 gold_ter, sint32 terrain_type, double terr_gold_rank, double gold_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const
+{
+	if (gold_ter < 0 || g_theWorld->IsGood(pos))
+		return 0;
 
-		effect->GetBonusGold(tmp_bonus);
-		bonusCommerce += tmp_bonus;
+	sint32 terrain;
+	if (!g_theTerrainImprovementDB->Get(gold_ter)->GetTerraformTerrainIndex(terrain))
+		return 0;
 
-		goal.type = best_production_improvement;
+	goal.type = gold_ter;
 
-		strategy.GetImproveProductionBonus(bonus);
-		goal.utility =  bonus * terr_prod_rank;
-
-		if(production_rank > 0.8)
-		{
-			strategy.GetImproveLargeCityProductionBonus(bonus);
-			goal.utility += bonus *	production_rank;
-		}
-
-		if(g_theWorld->IsGood(pos))
-		{
-			strategy.GetImproveGoodBonus(bonus);
-			goal.utility += bonus;
-		}
-	}
-	else if(//(gold_rank > 0.4)
-//	&&      (best_gold_improvement >= 0)
-	         best_gold_improvement >= 0
-	){
-		rec = g_theTerrainImprovementDB->Get(best_gold_improvement);
-		effect = terrainutil_GetTerrainEffect(rec, pos);
-
-		effect->GetBonusFood(tmp_bonus);
-		bonusFood += tmp_bonus;
-
-		effect->GetBonusProduction(tmp_bonus);
-		bonusProduction += tmp_bonus;
-
-		effect->GetBonusGold(tmp_bonus);
-		bonusCommerce += tmp_bonus;
-
-		goal.type = best_gold_improvement;
-
-		strategy.GetImproveProductionBonus(bonus);
+	if(terrain_type != terrainutil_GetDead())
+	{
+		double bonus = strategy.GetImproveGoldBonus();
+		if(elem)
+			bonus += elem->GetImproveGoldBonus();
 		goal.utility = bonus * terr_gold_rank;
 
-		if(production_rank > 0.8)
+		// Same top/bottom-element logic as ScoreGoldImprovement - see its
+		// comment for the reasoning.
+		double top_value    = -1.0;
+		double bottom_value = -1.0;
+		if(elem && elem->GetCommerceCities() && elem->GetTop(top_value))
+		{
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus * gold_rank;
+		}
+		else if(elem && elem->GetCommerceCities() && elem->GetBottom(bottom_value))
+		{
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus * (1.0 - gold_rank);
+		}
+		else if(gold_rank > 0.8)
+		{
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus * gold_rank;
+		}
+	}
+	else
+	{
+		goal.utility = 9999.0;
+	}
+
+	return g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScoreProductionTerraform
+//
+// Description: Scores a production-terraform tile-improvement candidate -
+//              the production counterpart to ScoreFoodTerraform/
+//              ScoreGoldTerraform, mirroring ScoreProductionImprovement's
+//              bonus formula. NOT WIRED IN YET: unlike food_ter/gold_ter,
+//              prod_ter (from GetBestTerraformImprovement) currently has
+//              no dedicated branch of its own in FindBestTileImprovement -
+//              it's only ever read in the Dead-tile reclamation fallback
+//              (flat 9999.0, no formula). Added ahead of wiring it in as
+//              part of the ongoing need-vs-terrain refactor.
+//
+// Parameters : goal:            The candidate goal, type/utility set in place
+//              pos:             Position of the candidate tile
+//              prod_ter:        The chosen production-terraform improvement type
+//              terrain_type:    The tile's current terrain type
+//              terr_prod_rank:  Tile's production yield relative to the map average
+//              production_rank: The city's production percentile
+//              strategy:        The city owner's current strategy
+//              elem:            The city's matching build-list-sequence element (may be NULL)
+//
+// Globals    : g_theTerrainImprovementDB, g_theWorld
+//
+// Returns    : sint32: the tile's added production from terraforming, 0 if
+//              prod_ter was unavailable/inapplicable
+//
+//----------------------------------------------------------------------------
+sint32 Governor::ScoreProductionTerraform(TiGoal & goal, const MapPoint & pos, sint32 prod_ter, sint32 terrain_type, double terr_prod_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const
+{
+	if (prod_ter < 0 || g_theWorld->IsGood(pos))
+		return 0;
+
+	sint32 terrain;
+	if (!g_theTerrainImprovementDB->Get(prod_ter)->GetTerraformTerrainIndex(terrain))
+		return 0;
+
+	goal.type = prod_ter;
+
+	if(terrain_type != terrainutil_GetDead())
+	{
+		// 0.0 only silences -Wmaybe-uninitialized, see ScaleUtilityForCitySize.
+		double bonus = 0.0;
+		strategy.GetImproveProductionBonus(bonus);
+		if(elem)
+			bonus += elem->GetImproveProductionBonus();
+		goal.utility = bonus * terr_prod_rank;
+
+		// Same top/bottom-production-cities-element logic as
+		// ScoreProductionImprovement - see its comment for the reasoning.
+		double top_value    = -1.0;
+		double bottom_value = -1.0;
+		if(elem && elem->GetProductionCities() && elem->GetTop(top_value))
 		{
 			strategy.GetImproveLargeCityProductionBonus(bonus);
 			goal.utility += bonus * production_rank;
 		}
-		if(g_theWorld->IsGood(pos))
+		else if(elem && elem->GetProductionCities() && elem->GetBottom(bottom_value))
 		{
-			strategy.GetImproveGoodBonus(bonus);
-			goal.utility += bonus;
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus * (1.0 - production_rank);
+		}
+		else if(production_rank > 0.8)
+		{
+			strategy.GetImproveLargeCityProductionBonus(bonus);
+			goal.utility += bonus * production_rank;
 		}
 	}
-	else if(city->GetNetCityGold() <= 0 // Improve even at zero
-	&&     !g_theWorld->IsGood(pos)
-	&&      gold_ter >= 0)
+	else
 	{
-		if(g_theTerrainImprovementDB->Get(gold_ter)->GetTerraformTerrainIndex(terrain))
-		{
-			bonusFood += g_theWorld->GetCell(pos)->GetFoodFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetFoodFromTerrain();
-			bonusProduction += g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
-			bonusCommerce += g_theWorld->GetCell(pos)->GetGoldFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetGoldFromTerrain();
-
-			goal.type = gold_ter;
-
-			if(terrain_type != terrainutil_GetDead())
-			{
-				strategy.GetImproveProductionBonus(bonus);
-				goal.utility = bonus * terr_gold_rank;
-
-				if(production_rank > 0.8)
-				{
-					strategy.GetImproveLargeCityProductionBonus(bonus);
-					goal.utility += bonus * production_rank;
-				}
-			}
-			else
-			{
-				goal.utility = 9999.0;
-			}
-		}
+		goal.utility = 9999.0;
 	}
-	// Moved almost to the end, so that if no terraform improvement is selected
-	// the dead tiles are removed.
-	else if(terrain_type == terrainutil_GetDead())
+
+	return g_theWorld->GetCell(pos)->GetShieldsFromTerrain((sint8)terrain) - g_theWorld->GetCell(pos)->GetShieldsFromTerrain();
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScoreFallbackTerraform
+//
+// Description: Last-resort tail of FindBestTileImprovement's terrain-driven
+//              chain, extracted verbatim - only reached (goal.type < 0 at
+//              the call site) when nothing else claimed the tile. Two
+//              unrelated sub-cases: reclaiming a Dead tile (always wins,
+//              flat 9999.0, cascading food/production/gold preference) and
+//              cleaning up otherwise-unimprovable bad terrain (Glacier/
+//              Swamp/Tundra -> Hills, Desert -> Grassland) that fell
+//              through every other branch.
+//
+// Parameters : goal:            The candidate goal, type/utility set in place
+//              pos:             Position of the candidate tile
+//              terrain_type:    The tile's current terrain type
+//              food_ter:        The chosen food-terraform improvement type (Dead-tile case)
+//              prod_ter:        The chosen production-terraform improvement type (Dead-tile case)
+//              gold_ter:        The chosen gold-terraform improvement type (Dead-tile case)
+//              growth_rank:     The city's growth percentile
+//              production_rank: The city's production percentile
+//              strategy:        The city owner's current strategy
+//              elem:            The city's matching build-list-sequence element (may be NULL)
+//              player_ptr:      The city's owning player
+//
+// Globals    : g_theWorld
+//
+// Returns    : -
+//
+//----------------------------------------------------------------------------
+void Governor::ScoreFallbackTerraform(TiGoal & goal, const MapPoint & pos, sint32 terrain_type, sint32 food_ter, sint32 prod_ter, sint32 gold_ter, double growth_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem, Player * player_ptr) const
+{
+	// Moved almost to the end, so that if no terraform improvement is
+	// selected the dead tiles are removed.
+	if(terrain_type == terrainutil_GetDead())
 	{
 		if(food_ter >= 0)
 		{
@@ -1389,6 +2012,7 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 	// Now at the end because otherwise it catches before the dead tiles
 	else if(!g_theWorld->IsGood(pos))
 	{ // Should be removed
+		double bonus = 0.0;
 		if(terrain_type == terrainutil_GetGlacier()
 		|| terrain_type == terrainutil_GetSwamp()
 		|| terrain_type == terrainutil_GetTundra()
@@ -1396,6 +2020,8 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformHillsImprovement(), pos, false))
 			{
 				strategy.GetImproveProductionBonus(bonus);
+				if(elem)
+					bonus += elem->GetImproveProductionBonus();
 				goal.utility =  bonus * (1.0-production_rank);
 				goal.type = terrainutil_GetTerraformHillsImprovement();
 			}
@@ -1404,41 +2030,277 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		{
 			if(player_ptr->CanCreateImprovement(terrainutil_GetTerraformGrasslandImprovement(), pos, false)){
 				strategy.GetImproveGrowthBonus(bonus);
+				if(elem)
+					bonus += elem->GetImproveGrowthBonus();
 				goal.utility =  bonus * (1.0-growth_rank);
 				goal.type = terrainutil_GetTerraformGrasslandImprovement();
 			}
 		}
 	}
+}
 
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::FindBestTileImprovement
+//
+// Description: Determines the best tile improvement for a tile.
+//
+// Parameters : pos:             Position of the tile on the map
+//
+// Globals    : g_player:        List of players in the game
+//              g_theWorld:      Map information
+//
+// Returns    : bool:            The tile can be improved
+//              goal:            Type and priority value of the tile improvement
+//
+// Remark(s)  : The information in goal is only valid when true is returned.
+//
+//----------------------------------------------------------------------------
+bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const
+{
+	const TerrainImprovementRecord *rec;
+	const TerrainImprovementRecord::Effect *effect;
+
+	Assert(g_player[m_playerId]);
+	Player *player_ptr = g_player[m_playerId];
+	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
+	MapAnalysis & the_map =  MapAnalysis::GetMapAnalysis();
+
+	Unit city_owner = g_theWorld->GetCell(pos)->GetCityOwner();
+	CityData* city = city_owner.GetCityData();
+	Assert(city);
+
+	// The element governing this city's current build-list sequence (NULL
+	// for a human-governed city) carries its own tile-improvement bonuses
+	// on top of the strategy-wide ones below - lets a single strategy
+	// fine-tune improvement choice per situation, not just per personality.
+	const StrategyRecord::BuildListSequenceElement *elem = GetMatchingSequenceElement(city);
+
+	double growth_rank     = the_map.GetGrowthRank    (city);
+	double production_rank = the_map.GetProductionRank(city);
+	double gold_rank       = the_map.GetCommerceRank  (city);
+	double terr_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain()) /
+		(double) World::GetAvgFoodFromTerrain();
+	double terr_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain()) /
+		(double) World::GetAvgShieldsFromTerrain();
+	double terr_gold_rank = (g_theWorld->GetCell(pos)->GetGoldFromTerrain()) /
+		(double) World::GetAvgGoldFromTerrain();
+	sint32 terrain_type = g_theWorld->GetCell(pos)->GetTerrainType();
+
+	double terraform_food_rank = 0.0;
+	double terraform_prod_rank = 0.0;
+	double terraform_gold_rank = 0.0;
+
+	sint32 best_growth_improvement;
+	sint32 best_production_improvement;
+	sint32 best_gold_improvement;
+	GetBestFoodProdGoldImprovement(pos, best_growth_improvement, best_production_improvement, best_gold_improvement);
+
+	goal.pos     = pos;
+	goal.type    = -1;
+	goal.utility = -1.0;
+
+	sint32 food_ter = -1;
+	sint32 prod_ter = -1;
+	sint32 gold_ter = -1;
+
+	if (!g_theWorld->IsGood(pos))
+	{
+		bool shouldTerraform = true;
+		for
+		(
+			sint32 i = 0;
+			i < g_theWorld->GetCell(pos)->GetNumBuiltImprovementTypes() && shouldTerraform;
+			++i
+		)
+		{
+			rec = g_theTerrainImprovementDB->Get(g_theWorld->GetCell(pos)->GetBuiltImprovementType(i));
+
+			effect = terrainutil_GetTerrainEffect(rec, pos);
+			if (effect)
+			{
+				shouldTerraform =  !effect->HasBonusFood()
+				                && !effect->HasBonusProduction()
+				                && !effect->HasBonusGold()
+				                && !effect->GetEndgame();
+			}
+		}
+
+		if (shouldTerraform)
+		{
+			GetBestTerraformImprovement(pos, food_ter, prod_ter, gold_ter, true);
+
+			sint32 terrFood = -1;
+			sint32 terrProd = -1;
+			sint32 terrGold = -1;
+
+			if(food_ter >= 0 && g_theTerrainImprovementDB->Get(food_ter)->GetTerraformTerrainIndex(terrFood))
+			{
+				terraform_food_rank = (g_theWorld->GetCell(pos)->GetFoodFromTerrain(terrFood)) /
+					(double) World::GetAvgFoodFromTerrain();
+			}
+			if(prod_ter >= 0 && g_theTerrainImprovementDB->Get(prod_ter)->GetTerraformTerrainIndex(terrProd))
+			{
+				terraform_prod_rank = (g_theWorld->GetCell(pos)->GetShieldsFromTerrain(terrProd)) /
+					(double) World::GetAvgShieldsFromTerrain();
+			}
+			if(gold_ter >= 0 && g_theTerrainImprovementDB->Get(gold_ter)->GetTerraformTerrainIndex(terrGold))
+			{
+				terraform_gold_rank = (g_theWorld->GetCell(pos)->GetGoldFromTerrain(terrGold)) /
+					(double) World::GetAvgGoldFromTerrain();
+			}
+		}
+	}
+
+	sint32 foodMissing = 0;
+	bool moreFoodNeeded = city->NeedMoreFood(0, foodMissing, true);
+//	bool moreProdNeeded = city->NeedMoreProdOr(bonusCommerce, goldMissing, true);
+	// No CityData equivalent of NeedMoreFood exists for gold - GetNetCityGold()
+	// is the same per-city figure ScoreGoldTerraform below already gated on
+	// ("<= 0 // Improve even at zero"), just named and reused here so the
+	// improvement path can use the identical threshold.
+	bool moreGoldNeeded = city->GetNetCityGold() <= 0;
+
+	// Each Score*() below now checks its own type's availability (e.g.
+	// best_growth_improvement >= 0) internally, and is a no-op - goal.type
+	// left at -1 - when unavailable. So these conditions are the need/
+	// priority side only, deciding which category to *try* rather than
+	// whether it's *possible*; the goal.type < 0 guards give the next
+	// category a turn if the previous one turned out to have nothing
+	// available, the same fallthrough the original if/else-if chain gave
+	// implicitly by including the availability check in each condition
+	// (see the session's tileimp_need_vs_terrain notes).
+	if(moreFoodNeeded
+	|| (best_production_improvement < 0
+	&&  best_gold_improvement < 0)
+	){
+		ScoreGrowthImprovement(goal, pos, best_growth_improvement, terr_food_rank, growth_rank, strategy, elem);
+	}
+
+	if(goal.type < 0
+	&& moreFoodNeeded
+	){
+		ScoreFoodTerraform(goal, pos, food_ter, terrain_type, terraform_food_rank, growth_rank, strategy, elem);
+	}
+
+	// Gold's own hard-priority need check, mirroring food's above -
+	// tried before production gets a chance to grab the tile purely
+	// on terrain rank, so a genuinely gold-starved city doesn't lose
+	// the tile to production just because the terrain looks decent
+	// for it. The unconditional gold attempt further below stays as
+	// a fallback for cities that aren't gold-starved.
+	if(goal.type < 0
+	&& moreGoldNeeded
+	){
+		ScoreGoldImprovement(goal, pos, best_gold_improvement, terr_gold_rank, gold_rank, strategy, elem);
+	}
+
+//	if(goal.type < 0 && (moreProdNeeded
+//	|| best_gold_improvement < 0))
+	if(goal.type < 0
+	&& (terr_prod_rank > 0.2
+	||  best_gold_improvement < 0)
+	){
+		ScoreProductionImprovement(goal, pos, best_production_improvement, terr_prod_rank, production_rank, strategy, elem);
+	}
+
+	if(goal.type < 0 //(gold_rank > 0.4)
+	){
+		ScoreGoldImprovement(goal, pos, best_gold_improvement, terr_gold_rank, gold_rank, strategy, elem);
+	}
+
+	if(goal.type < 0
+	&& moreGoldNeeded
+	){
+		ScoreGoldTerraform(goal, pos, gold_ter, terrain_type, terraform_gold_rank, gold_rank, strategy, elem);
+	}
+
+	if(goal.type < 0
+	){
+		ScoreProductionTerraform(goal, pos, prod_ter, terrain_type, terraform_prod_rank, production_rank, strategy, elem);
+	}
+
+	if(goal.type < 0)
+	{
+		ScoreFallbackTerraform(goal, pos, terrain_type, food_ter, prod_ter, gold_ter, growth_rank, production_rank, strategy, elem, player_ptr);
+	}
+
+	return (goal.type >= 0);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::ScaleUtilityForCitySize
+//
+// Description: Final adjustment step for a gathered tile-improvement
+//              candidate's utility, based on the owning city's size - not
+//              its actual resource needs (see [[tileimp_need_vs_terrain]]
+//              in the session's own notes). Two ring-related adjustments:
+//              the original ring-distance preference (inner rings over
+//              outer ones), and - moved in from PlaceTileImprovements, see
+//              [[tileimp_placement_priority]] - a per-ring-per-city
+//              saturation discount on top, of up to one ring-step's worth
+//              of utility, proportional to how much of its own ring this
+//              city has already improved, so one city's fully-saturated
+//              ring can't keep winning a shared turn's budget over a
+//              sibling city's still-empty same-numbered ring. The
+//              saturation discount needs the whole city's ring tallies
+//              finalized first, so - unlike before - this whole function
+//              can no longer be called from inside FindBestTileImprovement
+//              while that city's gathering loop is still running (the
+//              tallies for the current/later rings aren't final yet);
+//              PlaceTileImprovements now calls it once per gathered
+//              candidate, after its own gathering loop (and so the
+//              tallies) is complete.
+//
+// Parameters : goal:              The candidate goal, utility adjusted in place
+//              city:              The tile's owning city (NULL clears utility)
+//              pos:               Position of the candidate tile
+//              terrain_type:      The tile's current terrain type
+//              strategy:          The city owner's current strategy
+//              ringImprovedCount: How many of this candidate's ring's eligible tiles this city already counts as improved
+//              ringTotalCount:    How many of this candidate's ring's tiles are eligible at all
+//
+// Globals    : -
+//
+// Returns    : -
+//
+//----------------------------------------------------------------------------
+void Governor::ScaleUtilityForCitySize(TiGoal & goal, CityData * city, const MapPoint & pos, sint32 terrain_type, const StrategyRecord & strategy, sint32 ringImprovedCount, sint32 ringTotalCount) const
+{
 #if defined(CTP1_HAS_RISEN_FROM_THE_GRAVE)
 	// CTP1: utilisation depends on worker placement, and is either 0 or 1.
 #else
-	// CTP2: utilisation depends on the number of available workers and the
-	// (ring) distance from the city, and may be any fraction from 0.0 to 1.0.
 	if ((goal.type >= 0) && city)
 	{
-		city->GetPop(citySize);
-
-		// Only decrease utility if the city has grown beyond the first ring.
-		if(citySize > unitutil_GetSmallCityMaxSize())
+		// Also cleanup if the city does not use the tile
+		if(terrain_type != terrainutil_GetDead())
 		{
-			// Also cleanup if the city does not use the tile
-			if(terrain_type != terrainutil_GetDead())
-			{
 #if defined(NEW_RESOURCE_PROCESS)
-				sint32 ring = city->GetRing(pos);
-				goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
+			sint32 ring = city->GetRing(pos);
+			goal.utility *= static_cast<double>(city->GetWorkingPeopleInRing(ring)) / static_cast<double>(city->GetRingSize(ring));
 #else
-				sint32 const sqDist = MapPoint::GetSquaredDistance(city_owner.RetPos(), pos);
-				goal.utility *= city->GetUtilisationRatio(sqDist);
-#endif
+			double ringFactor = city->GetRingImprovementPriority(pos);
+
+			// Soft, proportional discount on top, not a hard gate: a
+			// ring that is e.g. half-improved only loses half of one
+			// ring-step's worth of utility (GetRingImprovementPriorityFraction()
+			// is the gap GetRingImprovementPriority() leaves between
+			// two adjacent rings), so a fully-improved inner ring can
+			// at most bring its own candidates down to parity with the
+			// next ring out - it can never outweigh a utility
+			// difference bigger than one ring-step, such as one of the
+			// strategy's own Improve*Bonus additions applied earlier.
+			if(ringTotalCount > 0)
+			{
+				double ringStillUnimproved =
+				          static_cast<double>(ringImprovedCount) /
+				          static_cast<double>(ringTotalCount);
+				ringFactor -= ringStillUnimproved * city->GetRingImprovementPriorityFraction();
 			}
-		}
-		else
-		{
-			strategy.GetImproveSmallCityGrowthBonus(bonus);
-			bonus        *= strategy.GetSmallCityImproveCoeff();
-			goal.utility += bonus;
+
+			goal.utility *= ringFactor;
+#endif
 		}
 	}
 	else
@@ -1446,8 +2308,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32
 		goal.utility = 0.0;
 	}
 #endif
-
-	return (goal.type >= 0);
 }
 
 //----------------------------------------------------------------------------
@@ -1495,6 +2355,97 @@ sint32 Governor::GetBestRoadImprovement(const MapPoint & pos) const
 
 //----------------------------------------------------------------------------
 //
+// Name       : Governor::HasFoodProdOrGoldImprovement
+//
+// Description: Checks Whether the tile has a food, production, or gold
+//              improvement finished or under construction.
+//
+// Parameters : pos: Position of the tile on the map
+//
+// Globals    : g_theWorld:                Map information
+//              g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : Whether pos has a food, production, or gold improvement
+//              finished or under construction.
+//
+//----------------------------------------------------------------------------
+bool Governor::HasUnfinishedFoodProdOrGoldImprovement(const MapPoint & pos) const
+{
+	Cell const *  cell = g_theWorld->GetCell(pos);
+	if (cell->HasCity()) // Do not find improvements for city tiles
+		return false;
+
+	for (sint32 index = 0; index < cell->GetNumUnfinishedImprovements(); index++)
+	{
+		sint32                                     type = cell->GetUnfinishedImprovement(index).GetType();
+		const TerrainImprovementRecord *            rec = g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		if (effect == NULL)
+			continue;
+
+		if(effect->HasBonusFood())
+			return true;
+
+		if(effect->HasBonusProduction())
+			return true;
+
+		if(effect->HasBonusGold())
+			return true;
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : Governor::HasFoodProdOrGoldImprovement
+//
+// Description: Checks Whether the tile has a food, production, or gold
+//              improvement finished or under construction.
+//
+// Parameters : pos: Position of the tile on the map
+//
+// Globals    : g_theWorld:                Map information
+//              g_theTerrainImprovementDB: The tile improvement database
+//
+// Returns    : Whether pos has a food, production, or gold improvement
+//              finished or under construction.
+//
+//----------------------------------------------------------------------------
+bool Governor::HasFoodProdOrGoldImprovement(const MapPoint & pos) const
+{
+	Cell const *  cell = g_theWorld->GetCell(pos);
+	if (cell->HasCity()) // Do not find improvements for city tiles
+		return false;
+
+	if(HasUnfinishedFoodProdOrGoldImprovement(pos))
+		return true;
+
+	for (sint32 index = 0; index < cell->GetNumBuiltImprovementTypes(); index++)
+	{
+		sint32                                     type = cell->GetBuiltImprovementType(index);
+		const TerrainImprovementRecord *            rec = g_theTerrainImprovementDB->Get(type);
+		const TerrainImprovementRecord::Effect * effect = terrainutil_GetTerrainEffect(rec, pos);
+
+		if (effect == NULL)
+			continue;
+
+		if(effect->HasBonusFood())
+			return true;
+
+		if(effect->HasBonusProduction())
+			return true;
+
+		if(effect->HasBonusGold())
+			return true;
+	}
+
+	return false;
+}
+
+//----------------------------------------------------------------------------
+//
 // Name       : Governor::GetBestFoodProdGoldImprovement
 //
 // Description: Determines the best food, production and gold improvement
@@ -1525,7 +2476,7 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 		return;
 
 	sint32 type;
-	sint32 tmp_bonus;
+	sint32 tmp_bonus = 0;
 	const TerrainImprovementRecord *rec;
 	const TerrainImprovementRecord::Effect *effect;
 
@@ -1533,9 +2484,9 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 	sint32 max_bonus_prod = 0;
 	sint32 max_bonus_gold = 0;
 	uint32 current_class = 0x0;
-	for (sint32 index = 0; index < cell->GetNumDBImprovements(); index++)
+	for (sint32 index = 0; index < cell->GetNumBuiltImprovementTypes(); index++)
 	{
-		type = cell->GetDBImprovement(index);
+		type = cell->GetBuiltImprovementType(index);
 		rec = g_theTerrainImprovementDB->Get(type);
 		effect = terrainutil_GetTerrainEffect(rec, pos);
 
@@ -1551,21 +2502,21 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 			current_class |= rec->GetClass();
 		}
 
-		if(effect->GetBonusFood(tmp_bonus)
-		&& tmp_bonus > max_bonus_food
-		){
+		tmp_bonus = effect->GetBonusFood();
+		if(tmp_bonus > max_bonus_food)
+		{
 			max_bonus_food = tmp_bonus;
 		}
 
-		if(effect->GetBonusProduction(tmp_bonus)
-		&& tmp_bonus > max_bonus_prod
-		){
+		tmp_bonus = effect->GetBonusProduction();
+		if(tmp_bonus > max_bonus_prod)
+		{
 			max_bonus_prod = tmp_bonus;
 		}
 
-		if(effect->GetBonusGold(tmp_bonus)
-		&& tmp_bonus > max_bonus_gold
-		){
+		tmp_bonus = effect->GetBonusGold();
+		if(tmp_bonus > max_bonus_gold)
+		{
 			max_bonus_gold = tmp_bonus;
 		}
 	}
@@ -1588,23 +2539,23 @@ void Governor::GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & foo
 		effect = terrainutil_GetTerrainEffect(rec, terrain_type);
 		if(effect)
 		{
-			if(effect->GetBonusFood(tmp_bonus)
-			&& tmp_bonus > max_bonus_food
-			){
+			tmp_bonus = effect->GetBonusFood();
+			if(tmp_bonus > max_bonus_food)
+			{
 				food_imp = type;
 				max_bonus_food = tmp_bonus;
 			}
 
-			if(effect->GetBonusProduction(tmp_bonus)
-			&& tmp_bonus > max_bonus_prod
-			){
+			tmp_bonus = effect->GetBonusProduction();
+			if(tmp_bonus > max_bonus_prod)
+			{
 				prod_imp = type;
 				max_bonus_prod = tmp_bonus;
 			}
 
-			if(effect->GetBonusGold(tmp_bonus)
-			&& tmp_bonus > max_bonus_gold
-			){
+			tmp_bonus = effect->GetBonusGold();
+			if(tmp_bonus > max_bonus_gold)
+			{
 				gold_imp = type;
 				max_bonus_gold = tmp_bonus;
 			}
@@ -1807,9 +2758,16 @@ const StrategyRecord::PopAssignmentElement *Governor::GetMatchingPopAssignment(c
 			continue;
 		}
 
-		// Test whether the element is applicable for the current rank
-		double bottom_value;
-		double top_value;
+		// Test whether the element is applicable for the current rank.
+		// The 1.0 / 0.0 seeds only silence -Wmaybe-uninitialized (GetBottom
+		// / GetTop write the out-param whenever they return true, so the
+		// seed is never read); they're picked so the guarded comparison
+		// comes out false, not true, if that ever stopped holding: rank is
+		// in [0.0, 1.0], so bottom_value < rank and rank < 1.0 - top_value
+		// are both unreachable. (GetMatchingSequenceElement uses -1.0 for
+		// both, because its comparisons run the other way round.)
+		double bottom_value = 1.0;
+		double top_value    = 0.0;
 		if (    elem->GetBottom(bottom_value) && (bottom_value < rank)
 			 && elem->GetTop(top_value)       && (rank < (1.0 - top_value))
 		   )
@@ -2985,6 +3943,12 @@ void Governor::ComputeDesiredUnits()
 	sint32 needed_transport = Scheduler::GetScheduler(m_playerId).
 	                            GetMostNeededStrength().Get_Transport();
 
+	// Per-category percent for the six percent-of-support categories below,
+	// kept around (rather than a single scalar re-used each iteration) so
+	// they can be combined after the loop when more than one category
+	// shares the same best unit type.
+	double list_percent[BUILD_UNIT_LIST_MAX] = { 0.0 };
+
 	for (int list_num = 0; list_num < BUILD_UNIT_LIST_MAX; list_num++)
 	{
 		m_buildUnitList[list_num].m_perCityGarrison =  0;
@@ -2994,7 +3958,6 @@ void Governor::ComputeDesiredUnits()
 
 		sint32 desired_count                        =  0;
 		sint32 garrison_count                       =  0;
-		double unit_support_percent_by_type         =  0.0;
 
 		build_list_rec = GetBuildListRecord(strategy, (BUILD_UNIT_LIST) list_num);
 
@@ -3007,7 +3970,7 @@ void Governor::ComputeDesiredUnits()
 			m_buildUnitList[list_num].m_maximumGarrisonCount =
 				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
 
-			strategy.GetOffensiveUnitsPercent(unit_support_percent_by_type);
+			strategy.GetOffensiveUnitsPercent(list_percent[list_num]);
 			break;
 
 		case BUILD_UNIT_LIST_DEFENSE:
@@ -3017,7 +3980,7 @@ void Governor::ComputeDesiredUnits()
 			m_buildUnitList[list_num].m_maximumGarrisonCount =
 				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
 
-			strategy.GetDefensiveUnitsPercent(unit_support_percent_by_type);
+			strategy.GetDefensiveUnitsPercent(list_percent[list_num]);
 			break;
 
 		case BUILD_UNIT_LIST_RANGED:
@@ -3027,15 +3990,25 @@ void Governor::ComputeDesiredUnits()
 			m_buildUnitList[list_num].m_maximumGarrisonCount =
 				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
 
-			strategy.GetRangedUnitsPercent(unit_support_percent_by_type);
+			strategy.GetRangedUnitsPercent(list_percent[list_num]);
+			break;
+
+		case BUILD_UNIT_LIST_FLANKERS:
+			garrison_count = strategy.GetFlankerGarrisonCount();
+			m_buildUnitList[list_num].m_perCityGarrison =
+				static_cast<sint16>(garrison_count);
+			m_buildUnitList[list_num].m_maximumGarrisonCount =
+				static_cast<sint16>(garrison_count * player_ptr->GetNumCities());
+
+			strategy.GetFlankerUnitsPercent(list_percent[list_num]);
 			break;
 
 		case BUILD_UNIT_LIST_SEA:
-			strategy.GetSeaUnitsPercent(unit_support_percent_by_type);
+			strategy.GetSeaUnitsPercent(list_percent[list_num]);
 			break;
 
 		case BUILD_UNIT_LIST_AIR:
-			strategy.GetAirUnitsPercent(unit_support_percent_by_type);
+			strategy.GetAirUnitsPercent(list_percent[list_num]);
 			break;
 
 		case BUILD_UNIT_LIST_SETTLER:
@@ -3114,51 +4087,15 @@ void Governor::ComputeDesiredUnits()
 		case BUILD_UNIT_LIST_OFFENSE:
 		case BUILD_UNIT_LIST_DEFENSE:
 		case BUILD_UNIT_LIST_RANGED:
+		case BUILD_UNIT_LIST_FLANKERS:
 		case BUILD_UNIT_LIST_SEA:
 		case BUILD_UNIT_LIST_AIR:
-
-			total_unit_support_by_type =
-				static_cast<sint32>(total_unit_support * unit_support_percent_by_type);
-
-			if (best_unit_type >= 0)
-			{
-				total_unit_support_by_type += total_unallocated_support;
-				sint32 const bestUnitSupport = GetDBUnitRec(best_unit_type)->GetShieldHunger();
-
-				if (bestUnitSupport > 0)
-				{
-					Assert(total_unit_support_by_type >= 0);
-					m_buildUnitList[list_num].m_maximumCount =
-						static_cast<sint16>
-							(floor(static_cast<double>(total_unit_support_by_type) /
-								   bestUnitSupport
-								  )
-							);
-
-					total_unallocated_support = total_unit_support_by_type -
-						m_buildUnitList[list_num].m_maximumCount * bestUnitSupport;
-				}
-				else
-				{
-					m_buildUnitList[list_num].m_maximumCount =
-						static_cast<sint16>(total_unit_support_by_type);
-
-					total_unallocated_support = total_unit_support_by_type;
-				}
-				m_buildUnitList[list_num].m_desiredCount =
-					m_buildUnitList[list_num].m_maximumCount -
-					m_currentUnitCount[best_unit_type];
-
-				m_maximumUnitShieldCost +=
-					m_buildUnitList[list_num].m_maximumCount * bestUnitSupport;
-
-				m_currentUnitShieldCost +=
-					m_currentUnitCount[best_unit_type] * bestUnitSupport;
-			}
-			else
-			{
-				total_unallocated_support += total_unit_support_by_type;
-			}
+			// Percent-to-count conversion for these six is deferred to the
+			// combined pass right after this loop, so that categories
+			// sharing the same best unit type (m_currentUnitCount is a
+			// single count per unit type, not scoped per category) get
+			// their percentages combined instead of each independently
+			// computing a competing desired count against the same unit.
 			break;
 		case BUILD_UNIT_LIST_SETTLER:
 		case BUILD_UNIT_LIST_SEA_SETTLER:
@@ -3238,13 +4175,111 @@ void Governor::ComputeDesiredUnits()
 		}
 	}
 
-	m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount = 0;
-	m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount = 0;
-	m_buildUnitList[BUILD_UNIT_LIST_RANGED ].m_garrisonCount = 0;
+	// Convert the six percent-of-support categories' budgets into unit
+	// counts, combining any that currently share the same best unit type
+	// (e.g. Warrior/Swordsman shared by OFFENSE and FLANKERS before
+	// Feudalism unlocks Knight, or Paratrooper/Hover Infantry shared by
+	// DEFENSE and OFFENSE) instead of letting each independently claim a
+	// desired count against the same m_currentUnitCount entry.
+	{
+		BUILD_UNIT_LIST const k_percentBasedLists[] =
+		{
+			BUILD_UNIT_LIST_RANGED,
+			BUILD_UNIT_LIST_OFFENSE,
+			BUILD_UNIT_LIST_DEFENSE,
+			BUILD_UNIT_LIST_FLANKERS,
+			BUILD_UNIT_LIST_SEA,
+			BUILD_UNIT_LIST_AIR
+		};
+		sint32 const numPercentBasedLists =
+			sizeof(k_percentBasedLists) / sizeof(k_percentBasedLists[0]);
 
-	sint32 desired_offense;
-	sint32 desired_defense;
-	sint32 desired_ranged;
+		bool grouped[numPercentBasedLists];
+		std::fill_n(grouped, numPercentBasedLists, false);
+
+		for (sint32 i = 0; i < numPercentBasedLists; i++)
+		{
+			if (grouped[i])
+				continue;
+
+			BUILD_UNIT_LIST const list_i = k_percentBasedLists[i];
+			sint32 const best_unit_type = m_buildUnitList[list_i].m_bestType;
+
+			grouped[i] = true;
+
+			if (best_unit_type < 0)
+			{
+				total_unallocated_support += static_cast<sint32>
+					(total_unit_support * list_percent[list_i]);
+				continue;
+			}
+
+			double combined_percent = list_percent[list_i];
+
+			for (sint32 j = i + 1; j < numPercentBasedLists; j++)
+			{
+				if (!grouped[j] &&
+				    m_buildUnitList[k_percentBasedLists[j]].m_bestType == best_unit_type)
+				{
+					combined_percent += list_percent[k_percentBasedLists[j]];
+					grouped[j] = true;
+				}
+			}
+
+			total_unit_support_by_type =
+				static_cast<sint32>(total_unit_support * combined_percent) +
+				total_unallocated_support;
+
+			sint32 const bestUnitSupport = GetDBUnitRec(best_unit_type)->GetShieldHunger();
+			sint16 maximumCount;
+
+			if (bestUnitSupport > 0)
+			{
+				Assert(total_unit_support_by_type >= 0);
+				maximumCount = static_cast<sint16>
+					(floor(static_cast<double>(total_unit_support_by_type) / bestUnitSupport));
+
+				total_unallocated_support = total_unit_support_by_type -
+					maximumCount * bestUnitSupport;
+			}
+			else
+			{
+				maximumCount = static_cast<sint16>(total_unit_support_by_type);
+				total_unallocated_support = total_unit_support_by_type;
+			}
+
+			sint16 const desiredCount = static_cast<sint16>
+				(maximumCount - m_currentUnitCount[best_unit_type]);
+
+			m_maximumUnitShieldCost += maximumCount * bestUnitSupport;
+			m_currentUnitShieldCost += m_currentUnitCount[best_unit_type] * bestUnitSupport;
+
+			for (sint32 j = i; j < numPercentBasedLists; j++)
+			{
+				if (m_buildUnitList[k_percentBasedLists[j]].m_bestType == best_unit_type)
+				{
+					m_buildUnitList[k_percentBasedLists[j]].m_maximumCount = maximumCount;
+					m_buildUnitList[k_percentBasedLists[j]].m_desiredCount = desiredCount;
+				}
+			}
+		}
+	}
+
+	BUILD_UNIT_LIST const k_garrisonLists[] =
+	{
+		BUILD_UNIT_LIST_OFFENSE,
+		BUILD_UNIT_LIST_DEFENSE,
+		BUILD_UNIT_LIST_RANGED,
+		BUILD_UNIT_LIST_FLANKERS
+	};
+	sint32 const numGarrisonLists =
+		sizeof(k_garrisonLists) / sizeof(k_garrisonLists[0]);
+
+	for (sint32 k = 0; k < numGarrisonLists; k++)
+	{
+		m_buildUnitList[k_garrisonLists[k]].m_garrisonCount = 0;
+	}
+
 	MapPoint pos;
 
 	for (city_index = 0; city_index < num_cities; city_index++)
@@ -3254,34 +4289,69 @@ void Governor::ComputeDesiredUnits()
 		if (!unit.IsValid())
 			continue;
 
-		desired_offense = strategy.GetOffensiveGarrisonCount();
-		desired_defense = strategy.GetDefensiveGarrisonCount();
-		desired_ranged  = strategy.GetRangedGarrisonCount();
+		sint32 desired[numGarrisonLists];
+		desired[0] = strategy.GetOffensiveGarrisonCount();
+		desired[1] = strategy.GetDefensiveGarrisonCount();
+		desired[2] = strategy.GetRangedGarrisonCount();
+		desired[3] = strategy.GetFlankerGarrisonCount();
 
 		unit->GetPos(pos);
 		CellUnitList *  units_ptr   = g_theWorld->GetArmyPtr(pos);
 		sint32          unitCount   = units_ptr ? units_ptr->Num() : 0;
-		for (sint32 unit_index = 0; unit_index < unitCount; unit_index++)
+
+		// As in ComputeDesiredUnits's combined pass above, a unit type can
+		// be the best pick for more than one garrison category at once -
+		// without grouping, the same physical unit would satisfy each
+		// category's minimum independently, letting a city report its
+		// garrison complete with fewer units than the sum of the
+		// configured minimums actually calls for.
+		bool grouped[numGarrisonLists];
+		std::fill_n(grouped, numGarrisonLists, false);
+
+		for (sint32 k = 0; k < numGarrisonLists; k++)
 		{
-			Unit    armyUnit    = units_ptr->Get(unit_index);
+			if (grouped[k])
+				continue;
 
-			if (armyUnit.IsValid())
+			grouped[k] = true;
+
+			sint32 const best_unit_type = m_buildUnitList[k_garrisonLists[k]].m_bestType;
+
+			if (best_unit_type < 0)
+				continue;
+
+			sint32 combined_desired = desired[k];
+
+			for (sint32 m = k + 1; m < numGarrisonLists; m++)
 			{
-				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_bestType)
-					desired_offense--;
+				if (!grouped[m] &&
+				    m_buildUnitList[k_garrisonLists[m]].m_bestType == best_unit_type)
+				{
+					combined_desired += desired[m];
+					grouped[m] = true;
+				}
+			}
 
-				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_bestType)
-					desired_defense--;
+			for (sint32 unit_index = 0; unit_index < unitCount; unit_index++)
+			{
+				Unit armyUnit = units_ptr->Get(unit_index);
 
-				if (armyUnit->GetType() == m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_bestType)
-					desired_ranged--;
+				if (armyUnit.IsValid() && armyUnit->GetType() == best_unit_type)
+					combined_desired--;
+			}
+
+			for (sint32 m = 0; m < numGarrisonLists; m++)
+			{
+				if (m_buildUnitList[k_garrisonLists[m]].m_bestType == best_unit_type)
+					desired[m] = combined_desired;
 			}
 		}
 
 		Assert(unit->GetCityData());
-		if ( (desired_offense <= 0) &&
-			 (desired_defense <= 0) &&
-			 (desired_ranged <= 0) )
+		if ( (desired[0] <= 0) &&
+			 (desired[1] <= 0) &&
+			 (desired[2] <= 0) &&
+			 (desired[3] <= 0) )
 		{
 			unit->GetCityData()->SetGarrisonComplete(TRUE);
 		}
@@ -3290,22 +4360,13 @@ void Governor::ComputeDesiredUnits()
 			unit->GetCityData()->SetGarrisonComplete(FALSE);
 		}
 
-		if ( desired_offense > 0)
+		for (sint32 k = 0; k < numGarrisonLists; k++)
 		{
-			m_buildUnitList[BUILD_UNIT_LIST_OFFENSE].m_garrisonCount +=
-				static_cast<sint16>(desired_offense);
-		}
-
-		if ( desired_defense > 0 )
-		{
-			m_buildUnitList[BUILD_UNIT_LIST_DEFENSE].m_garrisonCount +=
-				static_cast<sint16>(desired_defense);
-		}
-
-		if ( desired_ranged > 0 )
-		{
-			m_buildUnitList[BUILD_UNIT_LIST_RANGED].m_garrisonCount +=
-				static_cast<sint16>(desired_ranged);
+			if (desired[k] > 0)
+			{
+				m_buildUnitList[k_garrisonLists[k]].m_garrisonCount +=
+					static_cast<sint16>(desired[k]);
+			}
 		}
 	}
 
@@ -3371,6 +4432,16 @@ void Governor::FillEmptyBuildQueues(bool noWarChange)
 			else if(city->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_CAPITALIZATION
 			     && city->GetBuildQueue()->GetHead()->m_category != k_GAME_OBJ_TYPE_INFRASTRUCTURE)
 			{
+				if(g_player[m_playerId]->IsRobot())
+				{
+					StringId advice;
+					bool noUnits;
+					const BuildListSequenceRecord* sequence = GetMatchingSequence(city, !g_player[m_playerId]->IsRobot(), advice, noUnits);
+					sint32 suggested_sequence = sequence->GetIndex();
+					if (suggested_sequence >= 0)
+						city->SetBuildListSequenceIndex(suggested_sequence);
+				}
+
 				// Keep using the current build queue
 				continue;
 			}
@@ -3627,11 +4698,9 @@ bool Governor::HasStopBuildings(const StrategyRecord::BuildListSequenceElement* 
 	}
 }
 
-const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice, bool & noUnits) const
+const StrategyRecord::BuildListSequenceElement * Governor::GetMatchingSequenceElement(const CityData *city, bool isBuildDecision) const
 {
 	Assert(city);
-	if (city->GetUseGovernor() && human_city)
-		return g_theBuildListSequenceDB->Get(city->GetBuildListSequenceIndex());
 
 	Assert(g_player[m_playerId]);
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_playerId).GetCurrentStrategy();
@@ -3643,10 +4712,33 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 	sint32 pollution = city->GetPollution();
 	sint32 minPollution;
 
+	// How far this city's population is above its own overcrowding
+	// threshold (base-overcrowding-for-its-size-tier plus any building
+	// bonuses); zero or negative if the city isn't overcrowded at all.
+	sint32 overcrowding = city->PopCount() -
+		static_cast<sint32>(city->GetOvercrowding(g_theCitySizeDB->Get(city->GetSizeIndex())));
+	sint32 minOvercrowding;
+
 	sint32 minNumUnits;
 	sint32 maxRawHappiness;
 
 	sint32 cityRawHappiness = static_cast<sint32>(city->GetHappiness()) - city->GetHappinessFromPops();
+
+	// Diagnostic: city->GetHappiness() is a cache, last written by whichever of
+	// CityTurnPreProductionEvent's CalcHappiness(true) or AssignPopulation's
+	// CalcHappiness(false) ran most recently for this city - NOT necessarily this
+	// turn's own CalcPollution() result, since CtpAi::BeginTurn runs
+	// FillEmptyBuildQueues() (this function's caller, for a build decision) BEFORE
+	// AssignPopulations() (ctpai.cpp ~1718 vs ~1732) refreshes happiness for the
+	// turn. Reading the tracker's own recorded HAPPY_REASON_POLLUTION component
+	// alongside the live `pollution` value lets a playtest log show directly
+	// whether the cached happiness used above already reflects this turn's
+	// pollution, or is one step stale - suspected after seeing "happiness w/o
+	// entertainers 99" logged next to "pollution 769" for the same city/turn.
+	double cachedPollutionHappiness = 0.0;
+	StringId happyReasonName;
+	const_cast<CityData *>(city)->GetHappy()->GetHappyTracker()->
+		GetHappiness(HAPPY_REASON_POLLUTION, cachedPollutionHappiness, happyReasonName);
 
 	bool canBuildWonders = false;
 	sint32 i;
@@ -3671,6 +4763,9 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			continue;
 
 		if(elem->GetMinPollution(minPollution) && pollution < minPollution)
+			continue;
+
+		if(elem->GetMinOvercrowding(minOvercrowding) && overcrowding < minOvercrowding)
 			continue;
 
 		if(elem->GetCanBuildWonders() && !canBuildWonders)
@@ -3711,6 +4806,22 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 
 		else if(elem->GetCommerceCities())
 		{
+			// A city can rank fine against other cities by commerce
+			// percentile while still spending more gold than it earns in
+			// absolute terms (e.g. unusually high upkeep for its own
+			// size/buildings) - the normal Top/Bottom rank check below
+			// wouldn't catch that. When net gold is actually negative,
+			// match this element using GoldNegativePriority instead,
+			// bypassing the percentile check entirely - a direct "losing
+			// money right now" signal independent of how other cities compare.
+			sint32 goldNegativePriority;
+			if(elem->GetGoldNegativePriority(goldNegativePriority) && city->GetNetCityGold() < 0)
+			{
+				best_priority = goldNegativePriority;
+				best_elem     = elem;
+				continue;
+			}
+
 			rank = MapAnalysis::GetMapAnalysis().
 			       GetCommerceRank(city);
 		}
@@ -3733,6 +4844,24 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			       GetPowerRank(city);
 		}
 
+		else if(elem->GetHasDeficit())
+		{
+			// Replacement for the reverted GoldNegativePriority override -
+			// a standalone condition rather than a CommerceCities-specific
+			// override, so it needs its own branch instead of folding into
+			// the rank-based matching below. Matches outright whenever the
+			// city's net gold is actually negative, independent of how it
+			// ranks against other cities; otherwise this element simply
+			// doesn't apply - skip it the same as a failed gate earlier in
+			// this function would have.
+			if(city->GetNetCityGold() >= 0)
+				continue;
+
+			best_priority = elem->GetPriority();
+			best_elem     = elem;
+			continue;
+		}
+
 		else if(elem->HasSmallCitiesMaxSize())
 		{
 			// Do nothing
@@ -3743,12 +4872,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			// Do nothing
 		}
 
-		else if(elem->HasMinPollution())
-		{
-			// Do nothing
-		}
-
-		else if(elem->GetAllCities())
+		else if(elem->HasMinPollution() || elem->HasMinOvercrowding() || elem->GetAllCities())
 		{
 			best_priority = elem->GetPriority();
 			best_elem     = elem;
@@ -3769,7 +4893,16 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			continue;
 		}
 
-		double top_value;
+		// The -1.0 seeds only silence -Wmaybe-uninitialized; the Get*()
+		// bit-accessors write the out-param whenever they return true, so
+		// the seed is never actually read. It's picked to make the guarded
+		// comparison false rather than true if that ever stopped holding:
+		// rank is in [0.0, 1.0], so rank >= 1.0 - (-1.0) and rank <= -1.0
+		// are both unreachable. (Note the opposite convention in
+		// GetMatchingPopAssignment, where the test is bottom_value < rank
+		// / rank < 1.0 - top_value, so 1.0 / 0.0 are the false-forcing
+		// seeds there.)
+		double top_value = -1.0;
 		if (elem->GetTop(top_value) &&
 		    (rank >= 1.0 - top_value)
 		   )
@@ -3779,7 +4912,7 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 			continue;
 		}
 
-		double bottom_value;
+		double bottom_value = -1.0;
 		if (elem->GetBottom(bottom_value) &&
 		    (rank <= bottom_value)
 		   )
@@ -3817,15 +4950,133 @@ const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *ci
 		}
 	}
 
-	advice = -1;
-
 	if (best_elem == NULL)
 	{
 		best_elem = strategy.GetBuildListSequenceElement(i-1);
 		Assert(best_elem);
-		if (best_elem == NULL)
-			return g_theBuildListSequenceDB->Get(0);
 	}
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	// Diagnostic: which BuildListSequence category did this city match,
+	// and where does it currently rank on the relevant dimension? Lets a
+	// playtest log show whether cities actually rotate through categories
+	// over time, or whether the same cities stay locked into the same
+	// (e.g. WONDERS) category turn after turn.
+	//
+	// GetMatchingSequenceElement() is also called from FindBestTileImprovement/
+	// AddRoadPriority/ComputeInstallationPriorities (once per candidate
+	// tile/road/installation, not once per city per turn) purely to read
+	// the matched element's own bonus fields - logging unconditionally
+	// counted those lookups too, inflating a city's hit count ~27x above
+	// its actual once-per-turn build decision. isBuildDecision is true
+	// only for the real decision call, GetMatchingSequence() below.
+	if (isBuildDecision)
+	{
+		// All six MapAnalysis ranks, not just the one the matched element
+		// actually used - lets a playtest log check how close a city was
+		// to a DIFFERENT category's own threshold without a second pass
+		// (e.g. was this city's production rank already past Offensive's
+		// Top 0.2 while Dirty Cities' MinPollution just hadn't been
+		// crossed yet).
+		double const productionRank = MapAnalysis::GetMapAnalysis().GetProductionRank(city);
+		double const growthRank     = MapAnalysis::GetMapAnalysis().GetGrowthRank(city);
+		double const commerceRank   = MapAnalysis::GetMapAnalysis().GetCommerceRank(city);
+		double const happinessRank  = MapAnalysis::GetMapAnalysis().GetHappinessRank(city);
+		double const threatRank     = MapAnalysis::GetMapAnalysis().GetThreatRank(city);
+		double const powerRank      = MapAnalysis::GetMapAnalysis().GetPowerRank(city);
+
+		const char * rankKind = "none";
+		double       matchRank = 0.0;
+
+		if(best_elem->GetProductionCities())
+		{
+			rankKind  = "Production";
+			matchRank = productionRank;
+		}
+		else if(best_elem->GetGrowthCities())
+		{
+			rankKind  = "Growth";
+			matchRank = growthRank;
+		}
+		else if(best_elem->GetCommerceCities())
+		{
+			rankKind  = "Commerce";
+			matchRank = commerceRank;
+		}
+		else if(best_elem->GetHappyCities())
+		{
+			rankKind  = "Happiness";
+			matchRank = happinessRank;
+		}
+		else if(best_elem->GetThreatenedCities())
+		{
+			rankKind  = "Threat";
+			matchRank = threatRank;
+		}
+		else if(best_elem->GetPowerCities())
+		{
+			rankKind  = "Power";
+			matchRank = powerRank;
+		}
+
+		const BuildListSequenceRecord * matched_seq = best_elem->GetBuildListSequence();
+
+		// turn/player/city-count and this city's own production/food/gold/
+		// pollution/happiness were added so a playtest log analysis
+		// doesn't have to cross-reference this line against separate
+		// "Turn N"/"Player N" header lines and a per-turn distinct-city
+		// count just to answer "how many cities does this empire have
+		// right now, and how does this one's own output compare" - it's
+		// all here already. pollution and cityRawHappiness are the same
+		// local variables HasStopBuildings/the MinPollution/MaxRawHappiness
+		// gates above already computed for this city, not a second read.
+		//
+		// buildings is city->GetImprovements() (m_built_improvements), the
+		// city's own bitmask of every building it has ever built - one bit
+		// per BuildingRecord index, decodable offline against BuildingDB's
+		// own record order without needing a name printed per bit here.
+		// Printed as two hex halves (high 32 bits, then low 32 bits) since
+		// no DPRINTF in this codebase prints a raw uint64 directly and a
+		// %llx/%I64x format specifier isn't portable across this project's
+		// MSVC/GCC builds - concatenate the two halves to get the full value
+		// back, same convention as AchievementTracker::AddAchievement.
+		uint64 const buildings = city->GetImprovements();
+		DPRINTF(k_DBG_GOVERNOR, ("GetMatchingSequenceElement: turn %d player %d city %s (production %d, food %f, gold %d, pollution %d, happiness w/o entertainers %d, cached pollution happiness %f, buildings 0x%08x%08x) of %d cities -> sequence %s (priority %d, rank kind %s, rank %f) ranks: production %f growth %f commerce %f happiness %f threat %f power %f\n",
+		        NewTurnCount::GetCurrentRound(),
+		        m_playerId,
+		        const_cast<CityData *>(city)->GetName(),
+		        city->GetNetCityProduction(),
+		        city->GetNetCityFood(),
+		        city->GetNetCityGold(),
+		        pollution,
+		        cityRawHappiness,
+		        cachedPollutionHappiness,
+		        static_cast<uint32>(buildings >> 32),
+		        static_cast<uint32>(buildings & 0xffffffffu),
+		        g_player[m_playerId]->GetNumCities(),
+		        matched_seq ? matched_seq->GetNameText() : "NULL",
+		        best_elem->GetPriority(),
+		        rankKind,
+		        matchRank,
+		        productionRank, growthRank, commerceRank, happinessRank, threatRank, powerRank));
+	}
+#endif
+
+	return best_elem;
+}
+
+const BuildListSequenceRecord * Governor::GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice, bool & noUnits) const
+{
+	Assert(city);
+	if (city->GetUseGovernor() && human_city)
+		return g_theBuildListSequenceDB->Get(city->GetBuildListSequenceIndex());
+
+	const StrategyRecord::BuildListSequenceElement *best_elem = GetMatchingSequenceElement(city, true);
+
+	advice = -1;
+
+	if (best_elem == NULL)
+		return g_theBuildListSequenceDB->Get(0);
 
 	noUnits = best_elem->GetNoUnits();
 
@@ -4005,6 +5256,10 @@ const UnitBuildListRecord * Governor::GetBuildListRecord(const StrategyRecord & 
 	case BUILD_UNIT_LIST_RANGED:
 		Assert(strategy.HasRangedUnitList());
 		return strategy.HasRangedUnitList() ? strategy.GetRangedUnitListPtr() : NULL;
+
+	case BUILD_UNIT_LIST_FLANKERS:
+		Assert(strategy.HasFlankerUnitList());
+		return strategy.HasFlankerUnitList() ? strategy.GetFlankerUnitListPtr() : NULL;
 
 	case BUILD_UNIT_LIST_SEA:
 		Assert(strategy.HasSeaUnitList());
@@ -4664,7 +5919,13 @@ void Governor::ManageGoodsTradeRoutes()
 				if (!player_ptr->IsRobot()) // exlcude human players
 					continue;
 
-				if (((sellingVPC < maxValuePerCaravan) && (sellingVPC > 0) && !city.CD()->HasResource(g)) || // kill existing routes if lower in value but only if the good is NOT available multiple times within the city influence
+				// Cancelling a route always costs a caravan (see -1 below),
+				// so require the alternative to beat the existing route by
+				// more than a margin, not just any amount - otherwise
+				// routes churn every time some other city's offer nudges
+				// ahead by a hair, only to possibly flip back next turn.
+				if (((sellingVPC > 0) && !city.CD()->HasResource(g) && // kill existing routes if lower in value but only if the good is NOT available multiple times within the city influence
+					(maxValuePerCaravan > sellingVPC * (1.0 + g_theConstDB->Get(0)->GetTradeRouteBetterOfferMargin()))) ||
 					(curDestRoute.m_id != 0 && Diplomat::GetDiplomat(m_playerId). // or piracy risk is high, i.e. pirated too often
 					GetTradeRoutePiracyRisk(city, curDestRoute->GetDestination())))
 				{

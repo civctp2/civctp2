@@ -1791,9 +1791,9 @@ UNIT_FUSION_TANK {
    Firepower 5
    Armor 4
    MaxHP 10
-   ShieldCost 5250
+   ShieldCost 3700
    PowerPoints 7000
-   ShieldHunger 50
+   ShieldHunger 37
    GoldHunger 130
    FoodHunger 0
    MaxMovePoints 800
@@ -1848,7 +1848,7 @@ UNIT_HOPLITE {
    Firepower 1
    Armor 1
    MaxHP 10
-   ShieldCost 175
+   ShieldCost 150
    PowerPoints 100
    ShieldHunger 1
    GoldHunger 1
@@ -2382,9 +2382,9 @@ UNIT_LEVIATHON {
    Firepower 6
    Armor 6
    MaxHP 10
-   ShieldCost 9000
+   ShieldCost 5000
    PowerPoints 12000
-   ShieldHunger 100
+   ShieldHunger 50
    GoldHunger 250
    FoodHunger 0
    MaxMovePoints 10
@@ -4268,7 +4268,7 @@ UNIT_WARRIOR {
    DefaultIcon ICON_UNIT_WARRIOR
    DefaultSprite SPRITE_WARRIOR
    Category UNIT_CATEGORY_ATTACK
-   Attack 10
+   Attack 15
    Defense 10
    ZBRangeAttack 0
    Firepower 1

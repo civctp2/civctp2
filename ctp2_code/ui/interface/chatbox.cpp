@@ -897,17 +897,45 @@ BOOL ChatWindow::CheckForEasterEggs(const MBCHAR *s)
 		}
 	}
 
-	// Sets the debug logging army to whichever army is currently selected
+	// Sets the debug logging army - either directly to a given army ID
+	// (e.g. an invalid one like -1, the same sentinel SetDebugArmy/
+	// DebugLogCheck already treat as "no filter", to quiet the log back
+	// down without having to select anything) or, with no argument, to
+	// whichever army is currently selected
 	else if(!strncmp(s, "/debugarmy", 10) && !g_network.IsActive())
 	{
-		Army army;
-		if (g_selected_item != NULL && g_selected_item->GetSelectedArmy(army))
-		{
-			CtpAiDebug::SetDebugArmy(army.m_id);
+		const MBCHAR *arg = s + 10;
+		while(isspace(*arg))
+			arg++;
 
-			char buf[1024];
-			sprintf(buf, "Army 0x%x is filling the log for debugging", army.m_id);
-			g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+		bool hasArmyID = false;
+		sint32 armyID = -1;
+
+		if (isdigit(*arg) || (*arg == '-' && isdigit(*(arg + 1))))
+		{
+			armyID = atoi(arg);
+			hasArmyID = true;
+		}
+		else
+		{
+			Army army;
+			if (g_selected_item != NULL && g_selected_item->GetSelectedArmy(army))
+			{
+				armyID = army.m_id;
+				hasArmyID = true;
+			}
+		}
+
+		if (hasArmyID)
+		{
+			CtpAiDebug::SetDebugArmy(armyID);
+
+			if (g_selected_item != NULL)
+			{
+				char buf[1024];
+				sprintf(buf, "Army 0x%x is filling the log for debugging", armyID);
+				g_chatBox->AddLine(g_selected_item->GetCurPlayer(), buf);
+			}
 		}
 		else
 		{

@@ -872,7 +872,7 @@ void CauseAndEffectTab::UpdateCommerceValues()
 
 		// Savings from trade routes.
 		cityData->CalculateTradeRoutes(true); // Update trade routes
-		sint32 goldTradeRoutes = cityData->CalculateGoldFromResources();
+		sint32 goldTradeRoutes = cityData->CalculateGoldFromTradeRoutes();
 
 		// Government modifiers to science and savings.
 		sint32 totalScieWithoutGov = scienceFromCommerce + scienceBuildingsBonus +

@@ -143,7 +143,7 @@ If you need logging and still an optimized version for long playtesting to figur
 
 ```
 ./autogen.sh
-CFLAGS="$CFLAGS -O0 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -O0 -fuse-ld=gold" ./configure --enable-silent-rules --enable-logging
+CFLAGS="$CFLAGS -O3 -fuse-ld=gold" CXXFLAGS="$CXXFLAGS -O3 -fuse-ld=gold" ./configure --enable-silent-rules --enable-logging
 make -j$(nproc)
 ```
 

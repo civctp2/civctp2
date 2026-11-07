@@ -77,6 +77,29 @@ sint32 tradeutil_GetTradeValue(const sint32 owner, const Unit & destination, sin
 	}
 
 	totalValue = std::max<double>(totalValue, 1.0); // ensure that the trade value is >= 1
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if(totalValue > double(std::numeric_limits<int>::max()))
+	{
+		// The only way this quadratic-in-distToGood formula can overflow:
+		// a garbage distToGood - a real in-game distance, squared against
+		// this build's TradeCoef-derived baseValue2, can't get anywhere
+		// near sint32 range on any legitimately-sized map. Most likely
+		// cause: CityData::m_distanceToGood (destination's own array) read
+		// before FindGoodDistances() ever populated it for this city - see
+		// the zero-init comment on its allocation in CityData::Initialize()
+		// and the copy/load constructors. Was seen misattributing a huge,
+		// stale trade value to a brand-new civ right after a revolt.
+		DPRINTF(k_DBG_GAMESTATE,
+		    ("tradeutil_GetTradeValue: overflowed to %.0f before clamping - owner %d, destination %s (owner %d), resource %d, distToGood %d, baseValue %.3f, baseValue2 %.6f\n",
+		     totalValue, owner,
+		     destination.GetCityData() ? destination.GetCityData()->GetName() : "?",
+		     tradePartner, resource, distToGood, baseValue, baseValue2));
+		bool tradeValueOverflowed = false;
+		Assert(tradeValueOverflowed);
+	}
+#endif
+
 	return static_cast<sint32>(std::min<double>(totalValue, std::numeric_limits<int>::max())); // Limit totalValue to max value of sint32 before casting
 }
 

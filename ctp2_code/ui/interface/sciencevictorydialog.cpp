@@ -135,9 +135,14 @@ m_closeButton(static_cast<ctp2_Button*>(aui_Ldl::GetObject(
 
 	m_map->SetInteractive(false);
 
-	m_map->DisplayUnits(false);
-	m_map->DisplayCities(false);
-	m_map->DisplayBorders(false);
+	// false, false: this dialog's own embedded construction-coverage map
+	// shouldn't show units/cities/borders, but it must NOT persist that
+	// to the shared profile - g_theProfileDB is global, not per-RadarMap-
+	// instance, and doing so was silently overwriting the user's real
+	// saved minimap preference every time this dialog got constructed.
+	m_map->DisplayUnits(false, false);
+	m_map->DisplayCities(false, false);
+	m_map->DisplayBorders(false, false);
 
 	m_startButton->Enable(false);
 
@@ -376,7 +381,12 @@ void ScienceVictoryDialog::UpdateConstructionMap(
 	for(sint32 y = 0; y < g_theWorld->GetHeight(); y++) {
 		for(sint32 x = 0; x < g_theWorld->GetWidth(); x++) {
 			if(gaiaController->GetCoverage().Get(x, y))
-				m_map->SetMapOverlayCell(MapPoint(x, y), COLOR_YELLOW);
+				// COLOR_YELLOW is a saturated pure yellow reused all over
+				// the UI (health bars, danger flashes, chart lines).
+				// COLOR_SELECT_0 was too close to it to tell apart at a
+				// glance; COLOR_SELECT_2 (a darker, more olive gold) reads
+				// more distinctly on the radar map.
+				m_map->SetMapOverlayCell(MapPoint(x, y), COLOR_SELECT_2);
 		}
 	}
 

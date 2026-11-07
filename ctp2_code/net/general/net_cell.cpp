@@ -115,8 +115,8 @@ void NetCellData::Unpacketize(uint16 id, uint8* buf, uint16 size)
 	{
 		uint32 id;
 		PULLLONG(id);
-		if (    ((id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
-		     && g_theTerrainImprovementPool->IsValid(id)
+		if (    ((id & k_ID_TYPE_MASK) == k_BIT_GAME_OBJ_TYPE_UNFINISHED_IMPROVEMENT)
+		     && g_theUnfinishedImprovementPool->IsValid(id)
 		   )
 		{
 			m_cell->m_objects->Insert(id);

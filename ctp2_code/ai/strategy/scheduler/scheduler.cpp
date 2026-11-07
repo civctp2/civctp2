@@ -371,20 +371,31 @@ void Scheduler::Process_Agent_Changes()
 
 		if(theAgent->Get_Is_Dead())
 		{
-			Remove_Matches_For_Agent(theAgent);
-
-			// Remove_Matches_For_Agent only rolls back a goal that still has
-			// a match for the agent; one whose match is gone would keep the
-			// deleted agent in its list
-			if (theAgent->Get_Goal())
+			// Remove_Matches_For_Agent only walks each goal's m_matches
+			// (Goal::Remove_Match's own Rollback_Agent call only fires
+			// for a goal that still has this agent as a *candidate*
+			// match). An agent already fully committed to a goal - no
+			// longer in any m_matches, living purely in that goal's
+			// m_agents - was never detached here, so 'delete theAgent'
+			// below left that goal holding a dangling Agent* until its
+			// next Rollback_All_Agents walked it and read freed memory
+			// (observed: "army 0x21, owner -1" feeding Goal.cpp:422's
+			// Get_Unit_Count() >= Get_Agent_Count() assert). Detach from
+			// its own committed goal first, same idiom used at
+			// Goal.cpp:722.
+			if(theAgent->Get_Goal() != NULL)
 			{
 				theAgent->Get_Goal()->Rollback_Agent(theAgent);
 			}
+			Remove_Matches_For_Agent(theAgent);
 
-			// The generic goals (one per goal type, whose matches stand in for
-			// goals without their own) hold a plan for nearly every agent, and
-			// get new ones only in Raw_Prioritize_Goals: until then their
-			// plans would point at the deleted agent
+			// Remove_Matches_For_Agent only walks m_goals_of_type (the real,
+			// per-type goal lists) - the generic goals (one per goal type,
+			// standing in for goals without their own, see m_generic_goals)
+			// hold a plan for nearly every agent too, and only get fresh
+			// ones once a turn in Raw_Prioritize_Goals. Left alone, a
+			// deleted agent's plan would sit in those until the next
+			// rebuild, pointing at freed memory in the meantime (PR #466).
 			for (size_t i = 0; i < m_generic_goals.size(); ++i)
 			{
 				m_generic_goals[i]->Remove_Match(theAgent);
@@ -681,6 +692,52 @@ void Scheduler::Match_Resources(const bool move_armies)
 	{
 		if(committed_agents >= total_agents)
 		{
+#if defined(_DEBUG) || defined(USE_LOGGING)
+			if(committed_agents > total_agents)
+			{
+				// Diagnostic: every agent should appear on at most one
+				// goal's m_agents list at a time, so committed_agents
+				// (summed from Get_Agent_Count() as each goal is visited
+				// this pass) should never exceed total_agents, fixed at
+				// the top of this function. When it does, some agent got
+				// committed to two goals within this same call - cross-
+				// reference every goal's own agent list now to find
+				// exactly which one, instead of only ever seeing the
+				// already-overcounted total. See
+				// scheduler_committed_agents_overcount memory.
+				//
+				// The O(n^2) search below is only ever useful for reading
+				// its DPRINTF output, which the macro itself already
+				// compiles out entirely without _DEBUG/USE_LOGGING - guard
+				// the whole block, not just the DPRINTF, so a release
+				// build never pays for the search either.
+				for(Goal_List::iterator outer_iter = m_goals.begin(); outer_iter != m_goals.end(); ++outer_iter)
+				{
+					Goal_ptr outer_goal = static_cast<Goal_ptr>(*outer_iter);
+					const Agent_List & outer_agents = outer_goal->Get_Agents();
+
+					for(Agent_List::const_iterator agent_iter = outer_agents.begin(); agent_iter != outer_agents.end(); ++agent_iter)
+					{
+						sint32 goalsContaining = 0;
+						for(Goal_List::iterator inner_iter = m_goals.begin(); inner_iter != m_goals.end(); ++inner_iter)
+						{
+							const Agent_List & inner_agents = static_cast<Goal_ptr>(*inner_iter)->Get_Agents();
+							goalsContaining += static_cast<sint32>(
+								std::count(inner_agents.begin(), inner_agents.end(), *agent_iter));
+						}
+
+						if(goalsContaining > 1)
+						{
+							DPRINTF(k_DBG_SQUAD_STRENGTH,
+							    ("Scheduler::Match_Resources: OVERCOUNT - player %d army 0x%lx is committed on %d goals' agent lists simultaneously (seen on goal_type %d, goal %x)\n",
+							     m_playerId, (*agent_iter)->Get_Army().m_id, goalsContaining,
+							     outer_goal->Get_Goal_Type(), outer_goal));
+						}
+					}
+				}
+			}
+#endif
+
 			Assert(committed_agents == total_agents);
 
 			break;
@@ -690,7 +747,15 @@ void Scheduler::Match_Resources(const bool move_armies)
 		Utility     oldMatchValue   = goal_ptr->Get_Matching_Value();
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		MapPoint pos = (goal_ptr->Get_Target_Army().m_id == 0 || goal_ptr->Get_Target_Army().IsValid()) ? goal_ptr->Get_Target_Pos() : MapPoint(-1, -1);
+		// Guards against a dead *army* target, but a city-targeting goal
+		// (e.g. GOAL_BOMBARD/GOAL_PILLAGE) has m_target_army.m_id == 0 and
+		// so passed this check unconditionally even with its city already
+		// destroyed - Get_Target_Pos() then hit its own Assert(pos.IsValid())
+		// once the city died. Add the equivalent check for the city target.
+		bool const hasValidTarget =
+		        (goal_ptr->Get_Target_Army().m_id == 0 || goal_ptr->Get_Target_Army().IsValid()) &&
+		        (goal_ptr->Get_Target_City().m_id == 0 || goal_ptr->Get_Target_City().IsValid());
+		MapPoint pos = hasValidTarget ? goal_ptr->Get_Target_Pos() : MapPoint(-1, -1);
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,
@@ -1032,10 +1097,32 @@ void Scheduler::Associate_Goals_With_Sub_Goals()
 
 			Goal_ptr the_goal = tmp_goal_iter->second;
 
+			// A goal whose target city/army died this turn but hasn't been
+			// cleaned up yet would otherwise hit Get_Target_Pos()'s own
+			// Assert(pos.IsValid()) below - this function isn't only called
+			// once per turn in the normal goal-processing cycle, it also
+			// runs from Scheduler's copy constructor whenever the per-player
+			// Scheduler vector reallocates (e.g. CtpAi::AddPlayer resizing
+			// it for a newly-created civ, such as one born from a slave
+			// uprising), which can catch a goal in that dead-target window
+			// before its own regular per-turn invalidation pass would have
+			// removed it.
+			if(the_goal->IsInvalid())
+			{
+				tmp_goal_iter++;
+				continue;
+			}
+
 			// Goal and subgoal may not be in the same order
 			while(sub_goal_iter != m_goals_of_type[sub_goal].end())
 			{
 				Goal_ptr sub_goal = sub_goal_iter->second;
+
+				if(sub_goal->IsInvalid())
+				{
+					sub_goal_iter++;
+					continue;
+				}
 
 				MapPoint     tagetPos = the_goal->Get_Target_Pos();
 				MapPoint subTaregtPos = sub_goal->Get_Target_Pos();
@@ -1389,6 +1476,26 @@ void Scheduler::Raw_Prioritize_Goals()
 					else
 					{
 						AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("%x\t,%s,\tGoal::BAD_UTILITY,\tNo matches to remove\n", goal_ptr, g_theGoalDB->Get(goal_ptr->Get_Goal_Type())->GetNameText()));
+
+						// m_matches (candidate plans) and m_agents (already
+						// committed agents) are independent lists - a goal
+						// with nothing new to match this turn can still be
+						// holding agents committed from an earlier, better-
+						// priority turn. The Get_Matches_Num() > 0 branch
+						// above rolls those back as a side effect of
+						// Remove_Matches_For_Goal() clearing m_matches, but
+						// this branch previously left them (and whatever
+						// Add_Agent_Strength/Remove_Agent_Strength drift is
+						// sitting on the strength tracker) untouched -
+						// letting drift accumulate unboundedly on any goal
+						// that spends time at BAD_UTILITY with no pending
+						// matches. Confirmed: one persistent GOAL_DEFEND
+						// instance reached 125 committed agents and
+						// m_current_attacking_strength.m_unit_count of -125,
+						// a sint8 field near its -128 wraparound floor.
+						// Rollback_All_Agents() is safe to call even with an
+						// empty m_agents - it early-returns.
+						goal_ptr->Rollback_All_Agents();
 					}
 				}
 
@@ -2317,7 +2424,15 @@ void Scheduler::Assign_Garrison()
 		Goal* goal_ptr = sorted_goal_iter->second;
 
 #if defined(_DEBUG) || defined(USE_LOGGING)
-		MapPoint pos = (goal_ptr->Get_Target_Army().m_id == 0 || goal_ptr->Get_Target_Army().IsValid()) ? goal_ptr->Get_Target_Pos() : MapPoint(-1, -1);
+		// Guards against a dead *army* target, but a city-targeting goal
+		// (e.g. GOAL_BOMBARD/GOAL_PILLAGE) has m_target_army.m_id == 0 and
+		// so passed this check unconditionally even with its city already
+		// destroyed - Get_Target_Pos() then hit its own Assert(pos.IsValid())
+		// once the city died. Add the equivalent check for the city target.
+		bool const hasValidTarget =
+		        (goal_ptr->Get_Target_Army().m_id == 0 || goal_ptr->Get_Target_Army().IsValid()) &&
+		        (goal_ptr->Get_Target_City().m_id == 0 || goal_ptr->Get_Target_City().IsValid());
+		MapPoint pos = hasValidTarget ? goal_ptr->Get_Target_Pos() : MapPoint(-1, -1);
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1, ("\n"));
 		AI_DPRINTF(k_DBG_SCHEDULER, m_playerId, goal_ptr->Get_Goal_Type(), -1,

@@ -104,11 +104,11 @@ void World::CityRadiusFunc(const MapPoint &pos)
 					 (k_MASK_ENV_IRRIGATION | k_MASK_ENV_RIV_CUR)) != 0) ||
 				   IsWater(pos)) {
 					m_tempIrrigation = TRUE;
-				} else if(GetCell(pos)->GetNumImprovements()) {
+				} else if(GetCell(pos)->GetNumUnfinishedImprovements()) {
 #if 0   // useless code
 					sint32 i;
-					for(i = theCell->GetNumImprovements() - 1; i >= 0; i--) {
-						TERRAIN_IMPROVEMENT type = theCell->AccessImprovement(i).GetType();
+					for(i = theCell->GetNumUnfinishedImprovements() - 1; i >= 0; i--) {
+						TERRAIN_IMPROVEMENT type = theCell->AccessUnfinishedImprovement(i).GetType();
 
 
 

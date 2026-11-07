@@ -95,57 +95,74 @@ public:
 		ShouldDraw();
 	}
 
-	void DisplayUnits(bool status = true)
+	// saveToProfile defaults to true for the normal case (the main
+	// minimap's own toggle buttons, where the user's choice should
+	// persist). Pass false for a RadarMap instance that isn't the user's
+	// shared minimap - e.g. ScienceVictoryDialog embeds its own RadarMap
+	// for a construction-coverage view and configures its display flags
+	// in its constructor; since g_theProfileDB is a single global/shared
+	// profile object (not per-RadarMap-instance), calling these with the
+	// default would silently overwrite the user's real saved minimap
+	// preference every time that unrelated dialog is constructed.
+	void DisplayUnits(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayUnits = status;
 		Update();
-		g_theProfileDB->SetDisplayUnits(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayUnits(status);
 	}
-	void DisplayCities(bool status = true)
+	void DisplayCities(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayCities = status;
 		Update();
-		g_theProfileDB->SetDisplayCities(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayCities(status);
 	}
-	void DisplayBorders(bool status = true)
+	void DisplayBorders(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayBorders = status;
 		Update();
-		g_theProfileDB->SetDisplayBorders(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayBorders(status);
 	}
 	void DisplayOverlay(bool status = true)
 	{
 		m_radarProperties.m_displayOverlay = status;
 		Update();
 	}
-	void DisplayTrade(bool status = true)
+	void DisplayTrade(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayTrade = status;
 		Update();
-		g_theProfileDB->SetDisplayTrade(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayTrade(status);
 	}
-	void DisplayTerrain(bool status = true) {
+	void DisplayTerrain(bool status = true, bool saveToProfile = true) {
 		m_radarProperties.m_displayTerrain = status;
 		Update();
-		g_theProfileDB->SetDisplayTerrain(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayTerrain(status);
 	}
-	void DisplayPolitical(bool status = true)
+	void DisplayPolitical(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayPolitical = status;
 		Update();
-		g_theProfileDB->SetDisplayPolitical(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayPolitical(status);
 	}
-	void DisplayCapitols(bool status = true)
+	void DisplayCapitols(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayCapitols = status;
 		Update();
-		g_theProfileDB->SetDisplayCapitols(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayCapitols(status);
 	}
-	void DisplayRelations(bool status = true)
+	void DisplayRelations(bool status = true, bool saveToProfile = true)
 	{
 		m_radarProperties.m_displayRelations = status;
 		Update();
-		g_theProfileDB->SetDisplayRelations(status);
+		if (saveToProfile)
+			g_theProfileDB->SetDisplayRelations(status);
 	}
 
 	bool IsDisplayUnits() const { return m_radarProperties.m_displayUnits; }

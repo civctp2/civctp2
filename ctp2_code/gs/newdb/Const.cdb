@@ -18,8 +18,8 @@
 #
 #  Modifications from the original Activision code:
 #
-#  - Created file (29-Jul-2007 Martin Gühmann)
-#  - Fixed some problems, so that the old database can be parsed. (5-Aug-2007 Martin Gühmann)
+#  - Created file (29-Jul-2007 Martin Gï¿½hmann)
+#  - Fixed some problems, so that the old database can be parsed. (5-Aug-2007 Martin Gï¿½hmann)
 #  - Restored mod compatibility
 #
 #-----------------------------------------------------------------------------
@@ -334,6 +334,13 @@ Const : alsire {
 	Float  DomesticTradeReduction   =    0.5      aka DOMESTIC_TRADE_COEF
 	Float  TradeCoef            	=    1.002    aka TRADE_COEF
 	Float  TradePactCoef            =    1.5      aka PACT_TRADE_COEF
+	// Minimum fractional improvement a candidate destination's value-per-
+	// caravan must have over an existing route's before Governor::
+	// ManageGoodsTradeRoutes cancels the existing route for it - without
+	// this, any offer that's even marginally better triggers cancellation
+	// every turn it's re-evaluated, even though killing a route always
+	// costs a caravan (RemoveTradeRoute/KillATrader).
+	Float  TradeRouteBetterOfferMargin = 0.1      aka TRADE_ROUTE_BETTER_OFFER_MARGIN
 
 	Int    PollutionCausedByNuke                  aka POLLUTION_CAUSED_BY_NUKE
 

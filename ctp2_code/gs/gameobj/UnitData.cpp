@@ -1091,19 +1091,54 @@ bool UnitData::UnloadCargo(const MapPoint &unload_pos, Army &debark, sint32 &cou
 
 			passenger = (*m_cargo_list)[i];
 			m_cargo_list->DelIndex(i);
-			passenger .SetPosAndNothingElse(m_pos); // unload_pos?
+			// Was m_pos (this transport's own position) - wrong whenever
+			// unload_pos is a different, adjacent tile (the normal case:
+			// ArmyData::ExecuteSpecialOrder's UNIT_ORDER_UNLOAD handling
+			// explicitly allows to_pt to be next to, not just equal to,
+			// the transport's from_pt). A passenger's own m_pos ending up
+			// at the transport's stale position - rather than where it
+			// actually disembarks - means the brand-new debark army's
+			// first MoveUnits() call later removes-by-position from a
+			// tile this unit was never inserted at (cargo isn't tracked
+			// in the QuadTree while riding), which can corrupt the tree
+			// exactly like the already-fixed leaked-rebase-entry bug -
+			// see quadtree_leaked_rebase_entry memory.
+			passenger .SetPosAndNothingElse(unload_pos);
 			passenger .UnsetIsInTransport();
 
-			if(m_pos == unload_pos) {
-				g_theWorld->InsertUnit(m_pos, passenger);
-			}
-		//	else will be handled when the unit moves
+			// Used to call g_theWorld->InsertUnit(m_pos, passenger) here
+			// whenever the unload target was this transport's own tile
+			// (e.g. a beach assault, CanBeachAssault - see
+			// UNIT_MARINE - attacking directly from a Crawler without
+			// first stepping onto a separate land tile). A passenger
+			// can't actually, independently occupy the transport's own
+			// tile (a Marine has no water movement type), so registering
+			// it there mixed its entry into the same cell/QuadTree slot
+			// as the transport's own unit - confirmed via a playtest
+			// where a beach-assaulting Marine's own death repeatedly
+			// failed to find itself registered at that tile at all
+			// (Unit.cpp's RemoveUnitReference-failure diagnostic; the
+			// cell only ever reported the still-present Crawler). Now
+			// deferred uniformly to "will be handled when the unit
+			// moves" for every unload target, not just adjacent ones.
 
 			passenger.AddUnitVision();
 
 			if(debark.m_id == 0)
 			{
-				debark = g_player[m_owner]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
+				// Must be the PASSENGER's owner, not this transport's
+				// (m_owner) - a captured transport can still be carrying
+				// its previous owner's cargo. GetNewArmy() both sets the
+				// new army's owner and registers it in that owner's
+				// m_all_armies; using the wrong player here left the army
+				// registered under the transport's owner while
+				// ArmyData::Insert() below silently overwrote its owner
+				// field to the passenger's, desyncing the two - the army
+				// was never added to its real owner's m_all_armies, so
+				// Player::RemoveArmy() couldn't find it there when the
+				// army was later killed. See army_list_desync_boardtransport
+				// memory.
+				debark = g_player[passenger.GetOwner()]->GetNewArmy(CAUSE_NEW_ARMY_TRANSPORTED);
 			}
 
 			debark.Insert(passenger);
@@ -3142,9 +3177,18 @@ void UnitData::EndTurn()
 		if(rec->GetSpawnsBarbarians()
 		&& cellowner != m_owner
 		){
-			g_director->AddCenterMap(m_pos);
+			// Used to call g_director->AddCenterMap(m_pos) directly here,
+			// unconditionally - no owner/visibility check at all, unlike
+			// every other centering call site, so it could yank the camera
+			// even while a completely different player's turn was being
+			// processed, or reveal a position outside the viewer's actual
+			// vision. EyePoint(unit[0]) below routes this through the same
+			// SlicEyePoint mechanism every other notification-driven camera
+			// jump already uses, which correctly checks the unit's owner
+			// against the currently viewed player first.
 			Barbarians::AddBarbarians(m_pos, cellowner, FALSE);
 			SlicObject *so = new SlicObject("999GuerrillaSpawn");
+			so->AddUnit(Unit(m_id));
 			so->AddRecipient(m_owner);
 			so->AddUnitRecord(GetType());
 			g_slicEngine->Execute(so);
@@ -4612,7 +4656,7 @@ void UnitData::HearGossip(Unit c)
 				for(i = 0; i < n; i++) {
 					cost = g_player[oplayer]->m_all_armies->Access(i).GetCost();
 					if(cost > maxCost) {
-						cost = maxCost;
+						maxCost = cost;
 						maxCostUnits.Clear();
 						maxCostUnits.Insert(g_player[oplayer]->m_all_armies->
 											Access(i).Access(0));

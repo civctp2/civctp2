@@ -368,8 +368,8 @@ public:
     void InsertWaterNextToLand(const sint32 waterc, const sint32 landc);
     void InsertLandNextToWater(const sint32 landc, const sint32 waterc);
 
-    bool IsWaterNextTooLand(const sint32 waterc, const sint32 landc) const;
-    bool IsLandNextTooWater(const sint32 landc, const sint32 waterc) const;
+    bool IsWaterNextToLand(const sint32 waterc, const sint32 landc) const;
+    bool IsLandNextToWater(const sint32 landc, const sint32 waterc) const;
 
     bool LandShareWater(const sint32 land1, const sint32 land2) const;
 
@@ -514,7 +514,7 @@ public:
     double GetMoveCost(const MapPoint &pos) const;
     sint32 GetEnvFlags(const MapPoint &pos) const;
 
-    sint32 GetEmptyTransports(const MapPoint pos, CellUnitList &transports);
+    sint32 GetEmptyTransports(const MapPoint pos, CellUnitList &transports, const PLAYER_INDEX &owner);
 
     void GetArmy(const MapPoint &pos, CellUnitList &army);
     void GetNeighborUnits(const MapPoint &pos, UnitDynamicArray &n);
@@ -541,8 +541,8 @@ public:
     sint32 GetFoodProduced(const MapPoint &pos) const;
     sint32 GetShieldsProduced(const MapPoint &pos) const;
 
-    void InsertImprovement(const TerrainImprovement &imp, MapPoint const & point);
-    void RemoveImprovement(const TerrainImprovement &imp, const MapPoint &point);
+    void InsertUnfinishedImprovement(const TerrainImprovement &imp, MapPoint const & point);
+    void RemoveUnfinishedImprovement(const TerrainImprovement &imp, const MapPoint &point);
 
     void InsertInstallation(Installation &inst, MapPoint const & point);
     void RemoveInstallation(Installation &inst, MapPoint const & point);
@@ -550,6 +550,7 @@ public:
 
 	static sint32 GetMaxFoodFromTerrain();
 	static sint32 GetMaxShieldsFromTerrain();
+	static sint32 GetMaxGoldFromTerrain();
 	static sint32 GetAvgFoodFromTerrain();
 	static sint32 GetAvgShieldsFromTerrain();
 	static sint32 GetAvgGoldFromTerrain();
@@ -586,6 +587,7 @@ public:
     void InformPlayersOfFloodingCatastrophe(void) ;
 
     void ChangeOwner(const MapPoint &point, sint32 fromOwner, sint32 toOwner);
+    void SyncInstallationOwners(const MapPoint &point, sint32 toOwner);
     void CutImprovements(const MapPoint &point);
     double GetDefenseBonus(const MapPoint &point) const;
     bool IsAirfield(const MapPoint &point) const;

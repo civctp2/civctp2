@@ -434,14 +434,14 @@ bool MapFile::SaveImprovements(FILE *outfile)
 		for (int x = 0; x < g_theWorld->GetXWidth(); x++)
 		{
 			Cell *cell = g_theWorld->GetCell(x, y);
-			if (cell->GetNumDBImprovements() > 0)
+			if (cell->GetNumBuiltImprovementTypes() > 0)
 			{
 				archive << static_cast<uint16>(x);
 				archive << static_cast<uint16>(y);
-				archive.PutUINT8((uint8)cell->GetNumDBImprovements());
-				for (sint32 i = 0; i < cell->GetNumDBImprovements(); i++)
+				archive.PutUINT8((uint8)cell->GetNumBuiltImprovementTypes());
+				for (sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++)
 				{
-					archive << static_cast<sint32>(cell->GetDBImprovement(i));
+					archive << static_cast<sint32>(cell->GetBuiltImprovementType(i));
 				}
 				numCells++;
 			}
@@ -783,12 +783,12 @@ bool MapFile::LoadTerrain(uint8 *buf, sint32 size)
 				cell->GetCity().Kill(CAUSE_REMOVE_ARMY_UNKNOWN, -1);
 			}
 
-			while(cell->GetNumImprovements() > 0) {
-				cell->AccessImprovement(0).Kill();
+			while(cell->GetNumUnfinishedImprovements() > 0) {
+				cell->AccessUnfinishedImprovement(0).Kill();
 			}
 
-			while(cell->GetNumDBImprovements() > 0) {
-				cell->RemoveDBImprovement(cell->GetDBImprovement(0));
+			while(cell->GetNumBuiltImprovementTypes() > 0) {
+				cell->RemoveBuiltImprovementType(cell->GetBuiltImprovementType(0));
 			}
 		}
 	}
@@ -1055,7 +1055,7 @@ bool MapFile::LoadImprovements(uint8 *buf, sint32 size)
 			if(m_improvementTypeMap[type] < 0)
 				continue;
 
-			g_theWorld->GetCell(x, y)->InsertDBImprovement(m_improvementTypeMap[type]);
+			g_theWorld->GetCell(x, y)->InsertBuiltImprovementType(m_improvementTypeMap[type]);
 		}
 	}
 

@@ -341,11 +341,11 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 		{
 			env = cell->GetEnv();
 
-			sint32 numImprovements = cell->GetNumDBImprovements();
+			sint32 numImprovements = cell->GetNumBuiltImprovementTypes();
 
 			for (sint32 i = 0; i < numImprovements; i++)
 			{
-				sint32  impType = cell->GetDBImprovement(i);
+				sint32  impType = cell->GetBuiltImprovementType(i);
 				TerrainImprovementRecord const *
 				        rec     = g_theTerrainImprovementDB->Get(impType);
 
@@ -384,12 +384,12 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 
 	if (cell)
 	{
-		for (sint32 i=0; i<cell->GetNumImprovements(); i++)
+		for (sint32 i=0; i<cell->GetNumUnfinishedImprovements(); i++)
 		{
-			if (!cell->AccessImprovement(i).IsValid())
+			if (!cell->AccessUnfinishedImprovement(i).IsValid())
 				continue;
 
-			sint32 percent = cell->AccessImprovement(i).GetData()->PercentComplete();
+			sint32 percent = cell->AccessUnfinishedImprovement(i).GetData()->PercentComplete();
 			uint16 index;
 
 			if (percent < 5)
@@ -398,7 +398,7 @@ bool TiledMap::DrawImprovementsLayer(aui_Surface *surface, MapPoint &pos, sint32
 					index = 1;
 			else
 				break;
-			sint32 type = cell->AccessImprovement(i).GetData()->GetType();
+			sint32 type = cell->AccessUnfinishedImprovement(i).GetData()->GetType();
 			DrawPartiallyConstructedImprovement(surface, env, type, x, y, index, fog, percent);
 			drewSomething = true;
 		}

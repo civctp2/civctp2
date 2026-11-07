@@ -3133,8 +3133,8 @@ void TerrainImprovementCompleteCommand::Execute(sint32 argc, char **argv)
 
 	Cell *cell = g_theWorld->GetCell(point);
 
-	for (sint32 i = 0; i < cell->GetNumImprovements(); i++)
-		cell->AccessImprovement(i).Complete();
+	for (sint32 i = 0; i < cell->GetNumUnfinishedImprovements(); i++)
+		cell->AccessUnfinishedImprovement(i).Complete();
 }
 
 

@@ -87,6 +87,7 @@ bool ExpandBorders(const MapPoint &center, MapPoint curPos, sint32 player, sint3
 	if(UnitData::GetDistance(center, curPos, 0) > squaredRadius) return false;
 
 	cell->SetOwner(player);
+	g_theWorld->SyncInstallationOwners(curPos, player);
 
 	if(player >= 0)
 		g_network.Block(player);
@@ -140,6 +141,7 @@ bool ExpandInfluence(Unit &city, const MapPoint &centerPos, MapPoint curPos,
 		cell->SetOwner(city.GetOwner());
 		newOwner = city.GetOwner();
 	}
+	g_theWorld->SyncInstallationOwners(curPos, newOwner);
 	cell->SetScratch(1);
 
 	if(newOwner >= 0)
@@ -308,6 +310,7 @@ void GenerateBorders(const MapPoint &cpos, sint32 player, sint32 intRadius, sint
 
 	Cell *cell = g_theWorld->GetCell(cpos);
 	cell->SetOwner(player);
+	g_theWorld->SyncInstallationOwners(cpos, player);
 	cell->SetScratch(1);
 
 	g_network.Block(player);

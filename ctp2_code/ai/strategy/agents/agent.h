@@ -157,6 +157,18 @@ public:
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path );
 	static bool FindPath(const Army & army, const MapPoint & target_pos, const bool & check_dest, Path & found_path, float & total_cost);
 
+	// Valid only right after one of the FindPath() overloads above just
+	// returned false - tells a caller whether that specific failure was
+	// "every approach to the destination is ZOC-blocked right now" (a
+	// known, expected pathing outcome) rather than some other reason.
+	// Passes through to the single shared pathfinder instance both
+	// overloads above always go through (RobotAstar2::s_aiPathing), so
+	// there is nothing to pass in - but that also means it is only
+	// meaningful before anything else on this thread runs another path
+	// search (the AI is single-threaded, so in practice: read it
+	// immediately after FindPath() returns false, nothing in between).
+	static bool WasLastFindPathZocBlocked();
+
 	sint32 GetRounds(const MapPoint & pos, sint32 & cells) const;
 	double GetRoundsPrecise(const MapPoint & pos, sint32 & cells) const;
 

@@ -105,9 +105,12 @@ TerrainImprovement {
 
 	Struct Effect {
 		Record Terrain[] Terrain
-		Bit(Int) BonusFood
-		Bit(Int) BonusProduction
-		Bit(Int) BonusGold
+		// Given defaults so callers get safe direct-return getters instead
+		// of easily-discarded bools - see strategy.cdb's
+		// AirfieldUtilityBonus/RoadUtilityBonus for the same rationale.
+		Bit(Int) BonusFood = 0
+		Bit(Int) BonusProduction = 0
+		Bit(Int) BonusGold = 0
 		Bit(Int) MoveCost
 		Bit(Int) Freight                    // For trade routing (Martin Gühmann)
 		Bit Radar

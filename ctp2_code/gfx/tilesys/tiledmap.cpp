@@ -1822,8 +1822,8 @@ sint32 TiledMap::DrawImprovements(aui_Surface *surface,
 
 		env = cell->GetEnv();
 
-		numDBImprovements	= cell->GetNumDBImprovements();
-		numImprovements		= cell->GetNumImprovements();
+		numDBImprovements	= cell->GetNumBuiltImprovementTypes();
+		numImprovements		= cell->GetNumUnfinishedImprovements();
 
 		hasGoody = (g_theWorld->GetGoodyHut(pos) != NULL);
 	}
@@ -4405,14 +4405,14 @@ void TiledMap::HandleCheat(MapPoint &pos)
 		Player * p = g_player[g_selected_item->GetVisiblePlayer()];
 		if (!p) return;
 		TerrainImprovement theImprovement =
-            g_theTerrainImprovementPool->Create
+            g_theUnfinishedImprovementPool->Create
                 (p->m_owner,
 				 pos,
 				 ScenarioEditor::PaintTerrainImprovement(),
 				 0
                 );
 
-		if (g_theTerrainImprovementPool->IsValid(theImprovement.m_id))
+		if (g_theUnfinishedImprovementPool->IsValid(theImprovement.m_id))
         {
 			p->m_terrainImprovements->Insert(theImprovement);
 			theImprovement.Complete();

@@ -103,6 +103,7 @@ public:
 
     size_t Get_Agent_Count() const { return m_agents.size(); };
     size_t Get_Agent_Count_All() const { return m_agents.size() + GetSubGoalCount(); };
+    const Agent_List & Get_Agents() const { return m_agents; };
 
     bool Is_Single_Agent() const { return m_agents.size() == 1; };
 

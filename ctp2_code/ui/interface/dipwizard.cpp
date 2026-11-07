@@ -1763,6 +1763,17 @@ void DipWizard::AcceptCallback(aui_Control *control, uint32 action, uint32 data,
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
 
+	if(g_player[g_selected_item->GetVisiblePlayer()] &&
+	   g_player[g_selected_item->GetVisiblePlayer()]->IsRobot()) {
+		// The visible player is a robot, so its own AI has already
+		// (or will) decide this response autonomously in ResponseEvent
+		// (GitHub #245) - a click here must not fire a second,
+		// duplicate ExecuteResponse against state the AI may have
+		// already advanced. The window stays purely observational.
+		Hide();
+		return;
+	}
+
 	if( m_viewType == DIP_WIZ_VIEW_TYPE_FINAL_RESPONSE
 	|| (m_viewSender == g_selected_item->GetVisiblePlayer()
 	&&  m_viewResponseType != RESPONSE_COUNTER)
@@ -1812,6 +1823,13 @@ void DipWizard::RejectCallback(aui_Control *control, uint32 action, uint32 data,
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
 
+	if(g_player[g_selected_item->GetVisiblePlayer()] &&
+	   g_player[g_selected_item->GetVisiblePlayer()]->IsRobot()) {
+		// See AcceptCallback - the robot's own AI already handles this.
+		Hide();
+		return;
+	}
+
 	Response response;
 	response.senderId = m_viewSender;
 	response.receiverId = m_viewRecipient;
@@ -1833,6 +1851,14 @@ void DipWizard::CounterOrThreatenCallback(aui_Control *control, uint32 action, u
 	Assert(GetStage() == DIP_WIZ_STAGE_VIEW_PROPOSAL);
 	if(GetStage() != DIP_WIZ_STAGE_VIEW_PROPOSAL)
 		return;
+
+	if(g_player[g_selected_item->GetVisiblePlayer()] &&
+	   g_player[g_selected_item->GetVisiblePlayer()]->IsRobot()) {
+		// See AcceptCallback - the robot's own AI already handles this;
+		// don't let the player build a counter/threat on its behalf.
+		Hide();
+		return;
+	}
 
 	if(m_viewSender == g_selected_item->GetVisiblePlayer()) {
 		NewProposal prop = Diplomat::GetDiplomat(m_viewSender).GetMyLastNewProposal(m_viewRecipient);

@@ -1213,7 +1213,15 @@ void Player::RemoveArmy(const Army &army, bool fromNetwork)
 
 	sint32 dead = FindArmyIndex(army);
 
-	m_all_armies->DelIndex(dead);
+	// FindArmyIndex already Assert(false)s and returns -1 when the army
+	// isn't in m_all_armies at all (e.g. double removal). Calling
+	// DelIndex(-1) unconditionally used to corrupt the array - it reads/
+	// writes m_array[-1] (out of bounds, before the array's own start)
+	// and then runs its shift loop starting at that same negative index.
+	if (dead >= 0)
+	{
+		m_all_armies->DelIndex(dead);
+	}
 }
 
 sint32 Player::FindArmyIndex(const Unit &unit_in_the_army) const
@@ -1427,8 +1435,9 @@ Unit Player::CreateCity(
 	sint32 offensive_garrison = strategy.GetOffensiveGarrisonCount();
 	sint32 defensive_garrison = strategy.GetDefensiveGarrisonCount();
 	sint32 ranged_garrison    = strategy.GetRangedGarrisonCount();
+	sint32 flanker_garrison   = strategy.GetFlankerGarrisonCount();
 
-	cityData->SetNeededGarrison(offensive_garrison + defensive_garrison + ranged_garrison);
+	cityData->SetNeededGarrison(offensive_garrison + defensive_garrison + ranged_garrison + flanker_garrison);
 
 	const StrategyRecord::ForceMatch *  force_match;
 	if(strategy.HasGarrison())
@@ -4050,9 +4059,16 @@ void Player::GiveUnit(const PLAYER_INDEX other_player, const sint32 unit_idx)
 {
 	MapPoint	p ;
 	Unit	u = m_all_units->Get(unit_idx).m_id ;
+	MapPoint	oldPos ;
+	u.GetPos(oldPos) ;
 
 	GetCapitolPos(p) ;
 	u.ResetUnitOwner(other_player, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
+	// Unit::SetPosition() inserts into g_theUnitTree at the new position
+	// without removing the existing entry at oldPos first - same leaked-
+	// QuadTree-entry bug as ArmyData::MoveUnits's rebase branch (fixed
+	// 45c080251, see quadtree_leaked_rebase_entry memory). Remove first.
+	g_theWorld->RemoveUnitReference(oldPos, u) ;
 	u.SetPosition(p) ;
 }
 
@@ -5404,17 +5420,17 @@ bool Player::CanCreateImprovement(sint32 type,
 		return false;
 
 	sint32 i;
-	for(i = 0; i < cell->GetNumDBImprovements(); i++)
+	for(i = 0; i < cell->GetNumBuiltImprovementTypes(); i++)
 	{
-		if(cell->GetDBImprovement(i) == type)
+		if(cell->GetBuiltImprovementType(i) == type)
 		{
 			return false;
 		}
 	}
 
-	for(i = 0; i < cell->GetNumImprovements(); i++)
+	for(i = 0; i < cell->GetNumUnfinishedImprovements(); i++)
 	{
-		if(cell->AccessImprovement(i).GetType() == type)
+		if(cell->AccessUnfinishedImprovement(i).GetType() == type)
 		{
 			return false;
 		}
@@ -5451,12 +5467,12 @@ TerrainImprovement Player::CreateImprovement(sint32 dbIndex,
 	if(!CanCreateImprovement(dbIndex, point, true))
 		return theImprovement;
 
-	theImprovement = g_theTerrainImprovementPool->Create(m_owner,
+	theImprovement = g_theUnfinishedImprovementPool->Create(m_owner,
 														 point,
 														 dbIndex,
 														 extraData);
 
-	if(g_theTerrainImprovementPool->IsValid(theImprovement.m_id)) {
+	if(g_theUnfinishedImprovementPool->IsValid(theImprovement.m_id)) {
 		if(g_network.IsClient()) {
 			g_network.AddCreatedObject(theImprovement.AccessData());
 			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT,
@@ -5486,12 +5502,12 @@ TerrainImprovement Player::CreateSpecialImprovement(sint32 dbIndex,
 //	if(!CanCreateImprovement(dbIndex, point, extraData, true, err))
 //		return theImprovement;
 
-	theImprovement = g_theTerrainImprovementPool->Create(m_owner,
+	theImprovement = g_theUnfinishedImprovementPool->Create(m_owner,
 														 point,
 														 dbIndex,
 														 extraData);
 
-	if(g_theTerrainImprovementPool->IsValid(theImprovement.m_id)) {
+	if(g_theUnfinishedImprovementPool->IsValid(theImprovement.m_id)) {
 		if(g_network.IsClient()) {
 			g_network.AddCreatedObject(theImprovement.AccessData());
 			g_network.SendAction(new NetAction(NET_ACTION_TERRAIN_IMPROVEMENT,
@@ -7792,10 +7808,10 @@ void Player::TradeImprovementsForPoints(const MapPoint &pnt)
 		return;
 
 	Cell *cell = g_theWorld->GetCell(pnt);
-	if(!cell->GetNumImprovements())
+	if(!cell->GetNumUnfinishedImprovements())
 		return;
 
-	if(cell->AccessImprovement(0).GetOwner() != m_owner)
+	if(cell->AccessUnfinishedImprovement(0).GetOwner() != m_owner)
 		return;
 
 	if(g_network.IsClient()) {
@@ -7804,11 +7820,11 @@ void Player::TradeImprovementsForPoints(const MapPoint &pnt)
 		return;
 	}
 
-	for(sint32 i = cell->GetNumImprovements() - 1; i >= 0; i--) {
-		sint32 materialCost = cell->AccessImprovement(i).GetMaterialCost();
+	for(sint32 i = cell->GetNumUnfinishedImprovements() - 1; i >= 0; i--) {
+		sint32 materialCost = cell->AccessUnfinishedImprovement(i).GetMaterialCost();
 		sint32 pointsBack = sint32(double(materialCost) * g_theConstDB->Get(0)->GetPowerPointsToMaterials());
 		AddPoints(pointsBack);
-		cell->AccessImprovement(i).Kill();
+		cell->AccessUnfinishedImprovement(i).Kill();
 	}
 }
 
@@ -7866,8 +7882,6 @@ void Player::ContactMade(PLAYER_INDEX with)
 					Diplomat::GetDiplomat(m_owner).SendGreeting(with);
 					Diplomat::GetDiplomat(with).RecomputeRegard();
 					Diplomat::GetDiplomat(m_owner).RecomputeRegard();
-					Diplomat::GetDiplomat(with).UpdateDesireWarWith(m_owner);
-					Diplomat::GetDiplomat(m_owner).UpdateDesireWarWith(with);
 				}
 			}
 		}
@@ -9618,6 +9632,12 @@ void Player::MergeCivs(sint32 Merger, sint32 Mergee)  //Merger is the civ gainin
 		{
 			Unit u = cell->AccessUnit(j);
 			u.ResetUnitOwner(Merger, CAUSE_REMOVE_ARMY_DIPLOMACY) ;
+			// u is already registered in g_theUnitTree at oldPos - without
+			// removing that entry first, SetPosition() (even to the same
+			// position) inserts a second entry rather than replacing the
+			// first, same leaked-QuadTree-entry bug class as GiveUnit
+			// above and ArmyData::MoveUnits's rebase branch (45c080251).
+			g_theWorld->RemoveUnitReference(oldPos, u) ;
 			u.SetPosition(oldPos) ;
 			//cityData->TeleportUnits(newPos);
 		}

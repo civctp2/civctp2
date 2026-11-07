@@ -40,6 +40,7 @@
 #include "Unit.h"
 #include "World.h"
 #include "player.h"
+#include "gaiacontroller.h"
 #include "Cell.h"
 #include "TurnCnt.h"
 #include "SelItem.h"
@@ -49,6 +50,7 @@
 #include "UnitRecord.h"
 #include "unitutil.h"
 #include "terrainutil.h"
+#include "CityInfluenceIterator.h"      // GenerateBorders
 
 extern QuadTree<Unit> *g_theUnitTree;
 extern World *g_theWorld;
@@ -319,30 +321,118 @@ sint32 InstallationData::AirfieldLastUsed() const
 
 void InstallationData::ChangeOwner(sint32 toOwner)
 {
-	if(g_network.IsHost()) {
-		g_network.Enqueue(new NetInfo(NET_INFO_CODE_CHANGE_INSTALLATION_OWNER,
-									  m_id, m_owner, toOwner));
+	// CityInfluenceIterator.cpp's border/influence flood-fill (ExpandBorders/
+	// ExpandInfluence/GenerateBorders) calls World::SyncInstallationOwners()
+	// - and so this - on every tile in a city's radius unconditionally,
+	// including tiles already owned by that same player; unlike
+	// World::ChangeOwner()'s own recursion, it has no "did the owner
+	// actually change" guard. Skip the no-op case here instead: nothing
+	// below (network sync, old/new owner reference and vision churn,
+	// GaiaController bookkeeping) needs to run when the owner isn't
+	// actually changing.
+	if(toOwner == m_owner) {
+		return;
 	}
 
-	if(m_owner >= 0 && g_player[m_owner] != NULL)
+	sint32 const oldOwner = m_owner;
+
+	// Set m_owner before doing any of the border/vision work below, not
+	// after: GenerateBorders/terrainutil_RemoveBorders can themselves walk
+	// back through World::SyncInstallationOwners for this same installation's
+	// own tile (border/territory recalculation reaches back to where it
+	// started), and that reentrant call needs the toOwner == m_owner guard
+	// above to actually catch it. With m_owner only updated at the end (as
+	// this used to do), every such reentrant call still saw the pre-change
+	// owner, missed the guard, and re-ran this entire function - an
+	// unbounded GenerateBorders <-> ChangeOwner <-> SyncInstallationOwners
+	// recursion that hung a live playtest, flooding the log with the same
+	// Vision::DoFillCircleOp underflow assert. oldOwner captures what this
+	// function's own old-owner cleanup below still needs.
+	m_owner = toOwner;
+
+	if(g_network.IsHost()) {
+		g_network.Enqueue(new NetInfo(NET_INFO_CODE_CHANGE_INSTALLATION_OWNER,
+									  m_id, oldOwner, toOwner));
+	}
+
+	// Endgame-flagged installations (Processing Towers) are counted per
+	// owner by that owner's own GaiaController (m_numTowersBuilt /
+	// RecomputeCoverage). It only ever hears about that via the
+	// GEV_ImprovementComplete/GEV_CutImprovements event handlers (build/
+	// destroy) and, for buildings/wonders only, GEV_CaptureCity - an
+	// ordinary ownership change like this one (ArmyData::Pillage, city
+	// capture without destruction, border/territory shift, player death)
+	// was never told, so the old owner's count and coverage would go
+	// stale and the new owner's would never see this tower at all.
+	bool const isEndgameTower =
+		(GaiaController::sm_endgameImprovements & ((uint64)0x1 << (uint64)m_type)) != 0;
+
+	// A Fort grants its own border radius on completion (see
+	// TerrainImprovementData::Complete()'s matching GenerateBorders() call)
+	// - independently of whatever city, if any, happens to be nearby. That
+	// grant was never revisited on an ownership change, so a captured
+	// Fort kept its former owner's border claim in place and never gave
+	// the new owner the border it should now provide. Airfields and
+	// detector-class installations have no border radius of their own
+	// (GetIntBorderRadius/GetSquaredBorderRadius both fail for them), so
+	// this only actually fires for Forts in practice.
+	sint32 intRad, sqRad;
+	bool const hasOwnBorder =
+		g_theTerrainImprovementDB->Get(m_type)->GetIntBorderRadius(intRad) &&
+		g_theTerrainImprovementDB->Get(m_type)->GetSquaredBorderRadius(sqRad);
+
+	if(oldOwner >= 0 && g_player[oldOwner] != NULL)
 	{
-		g_player[m_owner]->RemoveInstallationReferences(Installation(m_id));
+		if(hasOwnBorder)
+		{
+			terrainutil_RemoveBorders(m_point, oldOwner, intRad, sqRad, Unit());
+		}
 
+		g_player[oldOwner]->RemoveInstallationReferences(Installation(m_id));
+
+		// Just RemoveUnitVision() below - it already does exactly what this
+		// used to duplicate. Before the vision objects were unified (see
+		// "On screen vision is now the vision of the visible player instead
+		// of a copy"), this called g_tiledMap->GetLocalVision()->RemoveVisible()
+		// directly, a *separate* screen-only copy, so it was harmless. Now
+		// g_tiledMap->GetLocalVision() (via RemoveUnitVision()'s director
+		// path) and g_player[oldOwner]->m_vision are the same reference-
+		// counted object, so calling both here double-decremented every
+		// tile in the installation's vision circle on every ownership
+		// change - and even single-decremented tiles for installations
+		// with no vision at all (visionRange <= 0), since this call wasn't
+		// guarded like AddInstallation()'s matching AddVisible() is. Over
+		// many territory/ownership changes this silently drained vision
+		// ref-counts empire-wide, including at tiles this installation
+		// never actually contributed to.
 		double visionRange = terrainutil_GetVisionRange(m_type, m_point);
-		g_player[m_owner]->m_vision->RemoveVisible(m_point, visionRange);
-
 		if(visionRange > 0)
 		{
-			g_player[m_owner]->RemoveUnitVision(m_point, visionRange);
+			g_player[oldOwner]->RemoveUnitVision(m_point, visionRange);
+		}
+
+		if(isEndgameTower && g_player[oldOwner]->GetGaiaController())
+		{
+			g_player[oldOwner]->GetGaiaController()->
+				HandleTerrImprovementChange(m_type, m_point, -1);
 		}
 	}
 
 	if(toOwner >= 0)
 	{
 		g_player[toOwner]->AddInstallation(Installation(m_id));
-	}
 
-	m_owner = toOwner;
+		if(hasOwnBorder)
+		{
+			GenerateBorders(m_point, toOwner, intRad, sqRad);
+		}
+
+		if(isEndgameTower && g_player[toOwner]->GetGaiaController())
+		{
+			g_player[toOwner]->GetGaiaController()->
+				HandleTerrImprovementChange(m_type, m_point, 1);
+		}
+	}
 
 	if(toOwner >= 0)
 	{

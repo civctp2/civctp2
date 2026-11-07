@@ -46,20 +46,20 @@
 #include "SelItem.h"
 #include "network.h"                    // g_network
 
-TerrainImprovementPool::TerrainImprovementPool()
-	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
+UnfinishedImprovementPool::UnfinishedImprovementPool()
+	: ObjPool(k_BIT_GAME_OBJ_TYPE_UNFINISHED_IMPROVEMENT)
 {
 }
 
-TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
-	: ObjPool(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT)
+UnfinishedImprovementPool::UnfinishedImprovementPool(CivArchive &archive)
+	: ObjPool(k_BIT_GAME_OBJ_TYPE_UNFINISHED_IMPROVEMENT)
 {
 	Serialize(archive);
 }
 
 //----------------------------------------------------------------------------
 //
-// Name       : TerrainImprovementPool::Create
+// Name       : UnfinishedImprovementPool::Create
 //
 // Description: Create a new terrain improvement.
 //
@@ -82,7 +82,7 @@ TerrainImprovementPool::TerrainImprovementPool(CivArchive &archive)
 //
 //----------------------------------------------------------------------------
 TerrainImprovement
-TerrainImprovementPool::Create
+UnfinishedImprovementPool::Create
 (
     sint32 owner,
     MapPoint const & point,
@@ -113,7 +113,7 @@ TerrainImprovementPool::Create
 	}
 
 	// Add the new improvement to the map
-	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_TERRAIN_IMPROVEMENT));
+	TerrainImprovement newImprovement(NewKey(k_BIT_GAME_OBJ_TYPE_UNFINISHED_IMPROVEMENT));
 	TerrainImprovementData *	newData =
 		new TerrainImprovementData(newImprovement, owner, point, type, extraData);
 
@@ -123,7 +123,7 @@ TerrainImprovementPool::Create
 	}
 
 	Insert(newData);
-	g_theWorld->InsertImprovement(newImprovement, point);
+	g_theWorld->InsertUnfinishedImprovement(newImprovement, point);
 	g_tiledMap->RedrawTile(&point);
 
 	// Plays a sound when a tile improvement is built
@@ -144,7 +144,7 @@ TerrainImprovementPool::Create
 }
 
 void
-TerrainImprovementPool::Serialize(CivArchive &archive)
+UnfinishedImprovementPool::Serialize(CivArchive &archive)
 {
 	TerrainImprovementData *data;
 	sint32 count = 0;
@@ -184,19 +184,19 @@ TerrainImprovementPool::Serialize(CivArchive &archive)
 }
 
 //not implemented??? E 4-7-2006
-BOOL TerrainImprovementPool::HasImprovement(const MapPoint &point,
+BOOL UnfinishedImprovementPool::HasImprovement(const MapPoint &point,
 											TERRAIN_IMPROVEMENT type,
 											sint32 extraData)
 {
 	return FALSE;
 }
 
-BOOL TerrainImprovementPool::HasAnyImprovement(const MapPoint &point)
+BOOL UnfinishedImprovementPool::HasAnyImprovement(const MapPoint &point)
 {
 	return (FALSE);
 }
 
-BOOL TerrainImprovementPool::CanHaveImprovement(const MapPoint &point,
+BOOL UnfinishedImprovementPool::CanHaveImprovement(const MapPoint &point,
 												TERRAIN_IMPROVEMENT type,
 												sint32 extraData)
 {

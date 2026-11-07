@@ -1978,6 +1978,7 @@ str_ldl_ScenMode				"Mode :"
 #
 str_SprEd_Load					"  Charger"
 str_SprEd_Save					"  Sauv."
+str_SprEd_Type					"  Type"
 str_SprEd_Move					"  Deplacer"
 str_SprEd_Attack				"  Atttaquer"
 str_SprEd_Idle					"  Repos"
