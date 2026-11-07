@@ -3679,10 +3679,10 @@ double UnitData::GetDefense(const Unit &attacker) const
 		bonuses += fort_bonus;
 
 		if(terrain_bonus > 0 &&
-			(myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
-			(myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
-			(myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
-			(myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos)))
+			((myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
+			 (myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
+			 (myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
+			 (myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos))))
 		{
 			bonuses += terrain_bonus;
 		}
@@ -3932,10 +3932,10 @@ double UnitData::GetDefCounterAttack(const Unit &attacker) const
 		bonuses += fort_bonus;
 
 		if(terrain_bonus > 0 &&
-			(myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
-			(myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
-			(myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
-			(myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos)))
+			((myRec->GetMovementTypeLand() && g_theWorld->IsLand(m_pos)) ||
+			 (myRec->GetMovementTypeMountain() && g_theWorld->IsMountain(m_pos)) ||
+			 (myRec->GetMovementTypeSea() && g_theWorld->IsWater(m_pos)) ||
+			 (myRec->GetMovementTypeSpace() && g_theWorld->IsSpace(m_pos))))
 		{
 
 			bonuses += terrain_bonus;

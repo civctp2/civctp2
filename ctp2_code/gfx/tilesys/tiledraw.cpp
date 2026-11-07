@@ -2722,6 +2722,10 @@ sint32 TiledMap::DrawColorizedOverlayIntoMix(Pixel16 *data, sint32 x, sint32 y, 
 	sint32 surfHeight = g_screenManager->GetSurfHeight();
 	sint32 surfPitch = g_screenManager->GetSurfPitch();
 
+	// Rows are only clipped against the height: an image past the right edge
+	// would run on into the rows below, and past the end of the mix buffer
+	if (x >= g_screenManager->GetSurfWidth() - k_TILE_GRID_WIDTH) return 0;
+
 	uint32    shadowRgbMask = pixelutils_GetShadow16RGBMask();
 	uint16    start = (uint16)*data++;
 	uint16    end = (uint16)*data++;
@@ -2800,6 +2804,7 @@ void TiledMap::DrawScaledOverlay(aui_Surface *surface, Pixel16 *data, sint32 x, 
 	if (!surface)
     {
         surface     = m_surface;
+		surfBase    = m_surfBase;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())
@@ -3209,6 +3214,7 @@ void TiledMap::DrawTransitionTileScaled(aui_Surface *surface, const MapPoint &po
 	if (!surface)
     {
         surface     = m_surface;
+		surfBase    = m_surfBase;
 		surfPitch   = m_surfPitch;
     }
     else if (lock.IsValid())

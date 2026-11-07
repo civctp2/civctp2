@@ -415,7 +415,7 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 	sint32 humanStart = drec->GetHumanStartLocation();
 	if(humanStart > nPlayers - 1)
 		humanStart = nPlayers - 1;
-	while(player_start_list[humanStart].x < 0 && humanStart >= 0)
+	while(humanStart >= 0 && player_start_list[humanStart].x < 0)
 		humanStart--;
 	Assert(humanStart >= 0);
 	if(humanStart < 0)
@@ -427,12 +427,14 @@ sint32 gameinit_PlaceInitalUnits(sint32 nPlayers, MapPoint player_start_list[k_M
 		if (g_player[i]==NULL)
 			continue;
 
+		// Player 1 (the human) takes start humanStart, and the player whose start
+		// that was takes player 1's start, 0
 		sint32 which = i - 1;
 		if(which == humanStart)
 		{
 			if(i != 1)
 			{
-				which = 1;
+				which = 0;
 			}
 		}
 		else
