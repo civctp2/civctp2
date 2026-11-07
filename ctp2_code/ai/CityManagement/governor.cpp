@@ -2075,9 +2075,6 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const
 	// on top of the strategy-wide ones below - lets a single strategy
 	// fine-tune improvement choice per situation, not just per personality.
 	const StrategyRecord::BuildListSequenceElement *elem = GetMatchingSequenceElement(city);
-	bool hasElemPriority  = elem->GetImproveGrowthBonus()     != 0
-	                     || elem->GetImproveProductionBonus() != 0
-	                     || elem->GetImproveGoldBonus()       != 0;
 
 	double growth_rank     = the_map.GetGrowthRank    (city);
 	double production_rank = the_map.GetProductionRank(city);
@@ -2164,117 +2161,68 @@ bool Governor::FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const
 	// improvement path can use the identical threshold.
 	bool moreGoldNeeded = city->GetNetCityGold() <= 0;
 
-	if(hasElemPriority)
-	{
-		// goal.utility was reset to -1.0 above alongside goal.type, so
-		// every copy below starts as a clean "no candidate" TiGoal - a
-		// category that turns out fully unavailable (both Score* calls
-		// early-return without touching type/utility) can't outscore a
-		// real one below with a stale value left over from a previous
-		// tile (PlaceTileImprovements reuses one TiGoal across every
-		// candidate tile in a city).
-		TiGoal goalFood = goal;
-		TiGoal goalProd = goal;
-		TiGoal goalGold = goal;
-
-		TiGoal goalFoodTerr = goal;
-		sint32 bonusFoodImp = ScoreGrowthImprovement(goalFood,     pos, best_growth_improvement,      terr_food_rank, growth_rank, strategy, elem);
-		sint32 bonusFoodTer = ScoreFoodTerraform    (goalFoodTerr, pos, food_ter,  terrain_type, terraform_food_rank, growth_rank, strategy, elem);
-		if(bonusFoodImp < bonusFoodTer)
-			goalFood = goalFoodTerr;
-
-		// NeedMoreFood is a real need-check (unlike production/gold's dead
-		// stubs, see tileimp_need_vs_terrain) - honour it as a hard
-		// priority here too, same as the terrain-driven chain below: a
-		// genuinely food-starved city takes the food candidate outright
-		// rather than letting it get outbid by production/gold utility.
-		if(moreFoodNeeded && goalFood.type >= 0)
-		{
-			goal = goalFood;
-		}
-		else
-		{
-			TiGoal goalProdTerr = goal;
-			sint32 bonusProdImp = ScoreProductionImprovement(goalProd,     pos, best_production_improvement,      terr_prod_rank, production_rank, strategy, elem);
-			sint32 bonusProdTer = ScoreProductionTerraform  (goalProdTerr, pos, prod_ter,      terrain_type, terraform_prod_rank, production_rank, strategy, elem);
-			if(bonusProdImp < bonusProdTer)
-				goalProd = goalProdTerr;
-
-			TiGoal goalGoldTerr = goal;
-			sint32 bonusGoldImp = ScoreGoldImprovement(goalGold,     pos, best_gold_improvement,                    terr_gold_rank, gold_rank, strategy, elem);
-			sint32 bonusGoldTer = ScoreGoldTerraform  (goalGoldTerr, pos,              gold_ter, terrain_type, terraform_gold_rank, gold_rank, strategy, elem);
-			if(bonusGoldImp < bonusGoldTer)
-				goalGold = goalGoldTerr;
-
-			goal = (goalFood.utility >= goalProd.utility) ? goalFood : goalProd;
-			goal = (    goal.utility >= goalGold.utility) ? goal     : goalGold;
-		}
+	// Each Score*() below now checks its own type's availability (e.g.
+	// best_growth_improvement >= 0) internally, and is a no-op - goal.type
+	// left at -1 - when unavailable. So these conditions are the need/
+	// priority side only, deciding which category to *try* rather than
+	// whether it's *possible*; the goal.type < 0 guards give the next
+	// category a turn if the previous one turned out to have nothing
+	// available, the same fallthrough the original if/else-if chain gave
+	// implicitly by including the availability check in each condition
+	// (see the session's tileimp_need_vs_terrain notes).
+	if(moreFoodNeeded
+	|| (best_production_improvement < 0
+	&&  best_gold_improvement < 0)
+	){
+		ScoreGrowthImprovement(goal, pos, best_growth_improvement, terr_food_rank, growth_rank, strategy, elem);
 	}
-	else
+
+	if(goal.type < 0
+	&& moreFoodNeeded
+	){
+		ScoreFoodTerraform(goal, pos, food_ter, terrain_type, terraform_food_rank, growth_rank, strategy, elem);
+	}
+
+	// Gold's own hard-priority need check, mirroring food's above -
+	// tried before production gets a chance to grab the tile purely
+	// on terrain rank, so a genuinely gold-starved city doesn't lose
+	// the tile to production just because the terrain looks decent
+	// for it. The unconditional gold attempt further below stays as
+	// a fallback for cities that aren't gold-starved.
+	if(goal.type < 0
+	&& moreGoldNeeded
+	){
+		ScoreGoldImprovement(goal, pos, best_gold_improvement, terr_gold_rank, gold_rank, strategy, elem);
+	}
+
+//	if(goal.type < 0 && (moreProdNeeded
+//	|| best_gold_improvement < 0))
+	if(goal.type < 0
+	&& (terr_prod_rank > 0.2
+	||  best_gold_improvement < 0)
+	){
+		ScoreProductionImprovement(goal, pos, best_production_improvement, terr_prod_rank, production_rank, strategy, elem);
+	}
+
+	if(goal.type < 0 //(gold_rank > 0.4)
+	){
+		ScoreGoldImprovement(goal, pos, best_gold_improvement, terr_gold_rank, gold_rank, strategy, elem);
+	}
+
+	if(goal.type < 0
+	&& moreGoldNeeded
+	){
+		ScoreGoldTerraform(goal, pos, gold_ter, terrain_type, terraform_gold_rank, gold_rank, strategy, elem);
+	}
+
+	if(goal.type < 0
+	){
+		ScoreProductionTerraform(goal, pos, prod_ter, terrain_type, terraform_prod_rank, production_rank, strategy, elem);
+	}
+
+	if(goal.type < 0)
 	{
-		// Each Score*() below now checks its own type's availability (e.g.
-		// best_growth_improvement >= 0) internally, and is a no-op - goal.type
-		// left at -1 - when unavailable. So these conditions are the need/
-		// priority side only, deciding which category to *try* rather than
-		// whether it's *possible*; the goal.type < 0 guards give the next
-		// category a turn if the previous one turned out to have nothing
-		// available, the same fallthrough the original if/else-if chain gave
-		// implicitly by including the availability check in each condition
-		// (see the session's tileimp_need_vs_terrain notes).
-		if(moreFoodNeeded
-		|| (best_production_improvement < 0
-		&&  best_gold_improvement < 0)
-		){
-			ScoreGrowthImprovement(goal, pos, best_growth_improvement, terr_food_rank, growth_rank, strategy, elem);
-		}
-
-		if(goal.type < 0
-		&& moreFoodNeeded
-		){
-			ScoreFoodTerraform(goal, pos, food_ter, terrain_type, terraform_food_rank, growth_rank, strategy, elem);
-		}
-
-		// Gold's own hard-priority need check, mirroring food's above -
-		// tried before production gets a chance to grab the tile purely
-		// on terrain rank, so a genuinely gold-starved city doesn't lose
-		// the tile to production just because the terrain looks decent
-		// for it. The unconditional gold attempt further below stays as
-		// a fallback for cities that aren't gold-starved.
-		if(goal.type < 0
-		&& moreGoldNeeded
-		){
-			ScoreGoldImprovement(goal, pos, best_gold_improvement, terr_gold_rank, gold_rank, strategy, elem);
-		}
-
-	//	if(goal.type < 0 && (moreProdNeeded
-	//	|| best_gold_improvement < 0))
-		if(goal.type < 0
-		&& (terr_prod_rank > 0.2
-		||  best_gold_improvement < 0)
-		){
-			ScoreProductionImprovement(goal, pos, best_production_improvement, terr_prod_rank, production_rank, strategy, elem);
-		}
-
-		if(goal.type < 0 //(gold_rank > 0.4)
-		){
-			ScoreGoldImprovement(goal, pos, best_gold_improvement, terr_gold_rank, gold_rank, strategy, elem);
-		}
-
-		if(goal.type < 0
-		&& moreGoldNeeded
-		){
-			ScoreGoldTerraform(goal, pos, gold_ter, terrain_type, terraform_gold_rank, gold_rank, strategy, elem);
-		}
-
-		if(goal.type < 0
-		){
-			ScoreProductionTerraform(goal, pos, prod_ter, terrain_type, terraform_prod_rank, production_rank, strategy, elem);
-		}
-
-		if(goal.type < 0)
-		{
-			ScoreFallbackTerraform(goal, pos, terrain_type, food_ter, prod_ter, gold_ter, growth_rank, production_rank, strategy, elem, player_ptr);
-		}
+		ScoreFallbackTerraform(goal, pos, terrain_type, food_ter, prod_ter, gold_ter, growth_rank, production_rank, strategy, elem, player_ptr);
 	}
 
 	return (goal.type >= 0);
