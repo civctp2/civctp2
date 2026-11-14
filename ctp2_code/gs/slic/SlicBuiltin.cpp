@@ -526,6 +526,7 @@ class CitySymbol_Valid : public SlicStructMemberData {
 SlicStruct_City::SlicStruct_City() :
 	SlicStructDescription("city", SLIC_BUILTIN_CITY)
 {
+	AddMember("valid", new CitySymbol_Valid);
 	AddMember("owner", new CitySymbol_Owner);
 	AddMember("location", new CitySymbol_Location);
 	AddMember("name", new CitySymbol_Name);
