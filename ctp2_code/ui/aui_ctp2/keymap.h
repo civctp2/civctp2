@@ -173,6 +173,7 @@ enum KEY_FUNCTION
     KEY_FUNCTION_CONTROL_BUILD,
     KEY_FUNCTION_CONTROL_NEXT,
     KEY_FUNCTION_CONTROL_PREV,
+    KEY_FUNCTION_AUTO_EXPLORE,
 
     // Placeholder for counting, keep this one at the end
     KEY_FUNCTION_LAST_NOOP

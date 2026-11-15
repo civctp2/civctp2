@@ -139,6 +139,7 @@
 #include "UnitPool.h"                   // g_theUnitPool
 #include "Unit.h"
 #include "UnitData.h"
+#include "UnitTypes.h"
 #include "UnitRecord.h"
 #include "StrDB.h"                      // g_theStringDB
 #include "screenutils.h"
@@ -216,6 +217,7 @@ extern ProgressWindow *g_theProgressWindow;
 #define k_UNIT_CONTEXT_GROUP_ALL 10002
 #define k_UNIT_CONTEXT_UNGROUP_ALL 10003
 #define k_UNIT_CONTEXT_TRANSPORT_VIEW 10004
+#define k_UNIT_CONTEXT_AUTO_EXPLORE 10005
 
 #define k_CONTEXT_CITY_VIEW 20000
 #define k_CONTEXT_CITY_BUILD 20001
@@ -562,6 +564,10 @@ void ContextMenuCallback(ctp2_Menu *menu, CTP2_MENU_ACTION action, sint32 itemIn
 				{
 					case k_UNIT_CONTEXT_ARMY_MANAGER:
 						ArmyManagerWindow::Display();
+						break;
+					case k_UNIT_CONTEXT_AUTO_EXPLORE:
+						if(a.IsValid() && a.Num() > 0)
+							a->AddOrders(UNIT_ORDER_AUTO_EXPLORE);
 						break;
 					case k_UNIT_CONTEXT_CLEAR_ORDERS:
 					{
@@ -2673,6 +2679,7 @@ void ControlPanelWindow::BuildUnitList()
 	if (army.Num())
 	{
 		m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_ARMY_MANAGEMENT"), NULL, (void *)k_UNIT_CONTEXT_ARMY_MANAGER);
+		m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_AUTO_EXPLORE"), NULL, (void *)k_UNIT_CONTEXT_AUTO_EXPLORE);
 		if(army->NumOrders() > 0) {
 			m_contextMenu->AddItem(g_theStringDB->GetNameStr("CONTEXT_CLEAR_ORDERS"), NULL, (void *)k_UNIT_CONTEXT_CLEAR_ORDERS);
 		}
