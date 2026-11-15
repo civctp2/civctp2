@@ -321,6 +321,9 @@ void UnitData::Create(const sint32 t,
 
 	m_owner = o;
 
+	// Must precede the totals below: they add the stat modifiers.
+	ClearStatModifiers();
+
 	m_hp              = CalculateTotalHP();
 	m_fuel            = CalculateTotalFuel();
 	m_movement_points = CalculateTotalMovePoints();
@@ -371,6 +374,10 @@ UnitData::UnitData(CivArchive &archive) : GameObj(0)
 	m_sprite_state = NULL;
 	m_lesser = NULL;
 	m_greater = NULL;
+
+	// Stat modifiers are runtime-only and are not serialized, so they
+	// must be zeroed here: Serialize() will not assign them on load.
+	ClearStatModifiers();
 
 	Serialize(archive);
 }
@@ -1263,6 +1270,9 @@ double UnitData::GetAttack(const UnitRecord *rec, const Unit defender) const
 
 	double				base	= rec->GetAttack();
 	double				bonuses	= 0.0;//cumulative % bonuses
+
+	// Stat modifier: flat additive before percentage bonuses
+	base += m_attackModifier;
 
 	sint32 intAttack = (sint32)base;
 	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
@@ -3294,6 +3304,9 @@ double UnitData::GetOffense(const Unit &defender) const
 	double		bonuses	= 0.0;//cumulative % bonuses
 	Cell *		cell	= g_theWorld->GetCell(m_pos);
 
+	// Stat modifier: flat additive before percentage bonuses
+	base += m_attackModifier;
+
 	sint32 intAttack = (sint32)base;
 	sint32 modAttack = g_slicEngine->CallMod(mod_UnitAttack, intAttack, m_id, defender.m_id, intAttack);
 	if(modAttack != intAttack) base = modAttack;
@@ -3487,6 +3500,9 @@ double UnitData::GetDefense(const Unit &attacker) const
 	double base			= myRec->GetDefense();
 	double bonuses		= 0.0;// cumulative bonuses
 	Cell *		   cell = g_theWorld->GetCell(m_pos);
+
+	// Stat modifier: flat additive before percentage bonuses
+	base += m_defenseModifier;
 
 	sint32 intDef = (sint32)base;
 	sint32 modDef = g_slicEngine->CallMod(mod_UnitDefense, intDef, m_id, attacker.m_id, intDef);
@@ -5532,6 +5548,72 @@ void UnitData::SetHP(const double hp)
 	m_hp = hp;
 }
 
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::AddStatModifier
+//
+// Description: Adds delta to one of the stat modifiers that the SLIC
+//              ModifyUnitStat builtin controls. The modifiers are flat
+//              additions: attack and defense before the percentage bonuses,
+//              hit points and movement to the unit's totals.
+//
+// Parameters : stat   : which modifier to change
+//              delta  : amount to add, may be negative
+//
+// Globals    : -
+//
+// Returns    : bool   : true when stat names a known modifier, otherwise
+//                       nothing is changed and false is returned
+//
+// Remark(s)  : The modifiers are runtime-only. They are not serialized, so
+//              the save format is unchanged and a loaded unit starts at 0.
+//
+//----------------------------------------------------------------------------
+bool UnitData::AddStatModifier(const UNIT_STAT_MODIFIER stat, const sint32 delta)
+{
+	switch (stat)
+	{
+	case UNIT_STAT_MODIFIER_ATTACK:
+		m_attackModifier += delta;
+		return true;
+	case UNIT_STAT_MODIFIER_DEFENSE:
+		m_defenseModifier += delta;
+		return true;
+	case UNIT_STAT_MODIFIER_HP_MAX:
+		m_hpMaxModifier += delta;
+		return true;
+	case UNIT_STAT_MODIFIER_MOVE:
+		m_moveModifier += delta;
+		return true;
+	default:
+		return false;
+	}
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : UnitData::ClearStatModifiers
+//
+// Description: Resets all stat modifiers to 0.
+//
+// Parameters : -
+//
+// Globals    : -
+//
+// Returns    : -
+//
+// Remark(s)  : Called when a unit is created or loaded, before anything that
+//              reads the modifiers (CalculateTotalHP, CalculateTotalMovePoints).
+//
+//----------------------------------------------------------------------------
+void UnitData::ClearStatModifiers()
+{
+	m_attackModifier  = 0;
+	m_defenseModifier = 0;
+	m_hpMaxModifier   = 0;
+	m_moveModifier    = 0;
+}
+
 void UnitData::SetMovementPoints(double mp)
 {
 	if(!Flag(k_UDF_PACMAN))
@@ -6308,7 +6390,7 @@ sint32 UnitData::CalculateTotalHP() const
 	sint32 wonderHPBonus  = wonderutil_GetIncreaseHP(g_player[m_owner]->m_builtWonders);
 	sint32 featHPBonus    = g_featTracker->GetAdditiveEffect(FEAT_EFFECT_INCREASE_HIT_POINTS, m_owner);
 
-	return GetDBRec()->GetMaxHP() + wonderHPBonus + civHPBonus + featHPBonus;
+	return GetDBRec()->GetMaxHP() + wonderHPBonus + civHPBonus + featHPBonus + m_hpMaxModifier;
 }
 
 sint32 UnitData::CalculateTotalFuel() const
@@ -6343,6 +6425,9 @@ double UnitData::CalculateTotalMovePoints() const
 			movePoints += amt;
 		}
 	}
+
+	// Stat modifier: flat additive to move points
+	movePoints += static_cast<double>(m_moveModifier);
 
 	return movePoints;
 }

@@ -26,6 +26,7 @@ libgsslic_la_SOURCES = \
 	y.tab.c \
 	y.tab.h \
 	QuickSlic.cpp \
+	ScriptTargetMode.cpp \
 	SlicArray.cpp \
 	SlicBuiltin.cpp \
 	SlicButton.cpp \

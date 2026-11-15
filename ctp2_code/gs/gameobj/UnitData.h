@@ -168,6 +168,17 @@ private:
 #define k_UDF_TELEPORT_DEATH                         0x20000000
 #define k_UDF_BEACH_ASSAULT_LEGAL                    0x40000000
 
+// Stat selectors of the SLIC ModifyUnitStat builtin. A script passes the
+// integer value, so the numbering is part of the scripting interface.
+enum UNIT_STAT_MODIFIER
+{
+	UNIT_STAT_MODIFIER_ATTACK,
+	UNIT_STAT_MODIFIER_DEFENSE,
+	UNIT_STAT_MODIFIER_HP_MAX,
+	UNIT_STAT_MODIFIER_MOVE,
+	UNIT_STAT_MODIFIER_MAX
+};
+
 class UnitData : public GameObj,
                  public CityRadiusCallback
 {
@@ -207,6 +218,15 @@ private:
 	uint32              m_temp_visibility;
 	uint32              m_radar_visibility;
 	uint32              m_flags;
+
+	// Stat modifiers set by the SLIC ModifyUnitStat builtin. Runtime-only: they are
+	// not serialized, so the save format is unchanged and a loaded unit starts at 0.
+	// m_hp is serialized, so a unit healed above its base maximum keeps the excess
+	// after a load until it takes damage.
+	sint32              m_attackModifier;
+	sint32              m_defenseModifier;
+	sint32              m_hpMaxModifier;
+	sint32              m_moveModifier;
 
 	MapPoint            m_pos;
 
@@ -310,6 +330,9 @@ public:
 	double GetHP() const;
 	void DeductHP(const double fp);
 	void SetHP(const double hp);
+
+	bool AddStatModifier(const UNIT_STAT_MODIFIER stat, const sint32 delta);
+	void ClearStatModifiers();
 
 	double GetMovementPoints() const { return m_movement_points; };
 	void   SetMovementPoints(double mp);

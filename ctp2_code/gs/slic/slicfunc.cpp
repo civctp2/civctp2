@@ -106,6 +106,7 @@
 #include "screenutils.h"
 #include "greatlibrary.h"
 #include "SelItem.h"
+#include "ScriptTargetMode.h"
 #include "BuildingRecord.h"
 #include "buildingutil.h"	//EMOD
 #include "GovernmentRecord.h" //EMOD
@@ -7851,5 +7852,156 @@ SFN_ERROR Slic_GetStoredProduction::Call(SlicArgList *args)
 
 	m_result.m_int = city.GetStoredCityProduction();
 
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+// Unit stat modifier builtins
+//----------------------------------------------------------------------------
+
+// ModifyUnitStat(unit, stat_id, delta)
+// Adds delta, which may be negative, to a stat modifier of the unit. The unit
+// of delta is the unit of the stat: strength points of the unit record for
+// attack and defense, hit points for maximum hit points, and move points
+// (the scale of UnitRecord MaxMovePoints) for movement.
+// stat_id is one of the UNIT_STAT_MODIFIER values (UnitData.h): 0 attack,
+// 1 defense, 2 maximum hit points, 3 movement. Attack is the melee attack
+// that UnitData::GetOffense reads; ranged attack is not modified.
+// Returns 1 on success, 0 when the unit is invalid or stat_id is unknown.
+SFN_ERROR Slic_ModifyUnitStat::Call(SlicArgList *args)
+{
+	if(args->Count() != 3)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 statId;
+	if(!args->GetInt(1, statId))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 delta;
+	if(!args->GetInt(2, delta))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	if(statId < 0 || statId >= UNIT_STAT_MODIFIER_MAX) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	unit.AccessData()->AddStatModifier(static_cast<UNIT_STAT_MODIFIER>(statId), delta);
+
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+// ClearUnitStatModifiers(unit)
+// Resets all stat modifiers of the unit to 0.
+// Returns 1 on success, 0 when the unit is invalid.
+SFN_ERROR Slic_ClearUnitStatModifiers::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	unit.AccessData()->ClearStatModifiers();
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+// HealUnit(unit, amount)
+// Adds amount hit points to the unit, up to its maximum hit points. Heal(unit)
+// restores all of them and DamageUnit(unit, hp) removes them through the
+// damage path, so a negative amount is rejected here.
+// Returns 1 on success, 0 when the unit is invalid or amount is negative.
+SFN_ERROR Slic_HealUnit::Call(SlicArgList *args)
+{
+	if(args->Count() != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit unit;
+	if(!args->GetUnit(0, unit))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 amount;
+	if(!args->GetInt(1, amount))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!unit.IsValid()) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	if(amount < 0) {
+		m_result.m_int = 0;
+		return SFN_ERROR_OK;
+	}
+
+	UnitData *ud = unit.AccessData();
+	const double hp    = ud->GetHP();
+	const double maxHP = static_cast<double>(ud->CalculateTotalHP());
+	if(hp < maxHP)
+	{
+		const double newHP = hp + static_cast<double>(amount);
+		ud->SetHP(newHP > maxHP ? maxHP : newHP);
+	}
+
+	m_result.m_int = 1;
+	return SFN_ERROR_OK;
+}
+
+//----------------------------------------------------------------------------
+// SLIC script targeting builtins
+//----------------------------------------------------------------------------
+
+// BeginTargetMode(callback_name)
+// Enters the crosshair cursor mode. When the player clicks a tile, the named
+// SLIC segment is fired with the player and the location as context. The
+// player is the one whose screen is shown: the click comes from the local mouse.
+SFN_ERROR Slic_BeginTargetMode::Call(SlicArgList *args)
+{
+	if(args->Count() != 1)
+		return SFN_ERROR_NUM_ARGS;
+
+	char *callbackName;
+	if(!args->GetString(0, callbackName))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(!callbackName || callbackName[0] == '\0')
+		return SFN_ERROR_TYPE_ARGS;
+
+	// Use the current visible player as the casting player
+	sint32 player = 0;
+	if(g_selected_item)
+		player = g_selected_item->GetVisiblePlayer();
+
+	if(g_scriptTargetMode)
+		g_scriptTargetMode->Begin(player, callbackName);
+
+	return SFN_ERROR_OK;
+}
+
+// IsTargetModeActive()
+// Returns 1 if script targeting mode is currently active, 0 otherwise.
+SFN_ERROR Slic_IsTargetModeActive::Call(SlicArgList *args)
+{
+	if(args->Count() != 0)
+		return SFN_ERROR_NUM_ARGS;
+
+	m_result.m_int = (g_scriptTargetMode && g_scriptTargetMode->IsActive()) ? 1 : 0;
 	return SFN_ERROR_OK;
 }

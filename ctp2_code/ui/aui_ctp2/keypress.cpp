@@ -101,6 +101,7 @@
 #include "workwin.h"
 
 #include "SlicEngine.h"
+#include "ScriptTargetMode.h"
 
 #include "segmentlist.h"
 
@@ -330,7 +331,12 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		else if (g_civApp->IsGameLoaded())
 		{
-			if(g_currentMessageWindow &&
+			// Cancel script targeting mode on ESC (before checking messages)
+			if(g_scriptTargetMode && g_scriptTargetMode->IsActive())
+			{
+				g_scriptTargetMode->Cancel();
+			}
+			else if(g_currentMessageWindow &&
 			   g_currentMessageWindow->GetMessage() &&
 			   (g_theMessagePool->IsValid(*g_currentMessageWindow->GetMessage())))
 			{

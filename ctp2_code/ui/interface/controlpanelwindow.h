@@ -86,6 +86,7 @@ enum CP_TARGETING_MODE
 	CP_TARGETING_MODE_ORDER_PENDING,
 	CP_TARGETING_MODE_TILEIMP_PENDING,
 	CP_TARGETING_MODE_TERRAFORM_PENDING,
+	CP_TARGETING_MODE_SCRIPT_PENDING,
 	CP_TARGETING_MODE_MAX,
 };
 
@@ -321,12 +322,14 @@ public:
 	bool    OrderDeliveryClick(const MapPoint &pos);
 	bool    TileImpClick(const MapPoint &pos);
 	bool    TerraFormClick(const MapPoint &pos);
+	bool    ScriptTargetClick(const MapPoint &pos);
 
 	uint32  GetTargetingMode() const {return m_targetingMode;}
 
 	const OrderRecord *GetCurrentOrder() const { return m_currentOrder; }
 
 	void    ClearTargetingMode();
+	void    SetScriptTargetingMode();
 
 	void    SetTab(CP_TAB tab);
 
