@@ -1,0 +1,21 @@
+@startuml CTP2 Auto-Explore Components
+left to right direction
+
+actor Player
+component "Input and Key Remapping" as Input
+component "Unit Order Controller" as Order
+component "Auto-Explore Planner" as Planner
+component "Known Map and Visibility" as Map
+component "Native Route and Movement Rules" as Movement
+component "Diplomacy and Entry Safety" as Safety
+component "Terrain Defense Data" as Defense
+
+Player --> Input
+Input --> Order
+Order --> Planner
+Planner --> Map
+Planner --> Movement
+Planner --> Safety
+Planner --> Defense
+Planner --> Order
+@enduml

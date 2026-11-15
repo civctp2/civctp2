@@ -145,6 +145,7 @@ namespace
             KEY_FUNCTION_END_UNIT_TURN,
             KEY_FUNCTION_EXECUTE_ORDERS,
             KEY_FUNCTION_PROCESS_UNIT_ORDERS,
+            KEY_FUNCTION_AUTO_EXPLORE,
 };
     TabDescriptor const TAB_UNIT
         ("Unit", sizeof(UNIT_FUNCTION) / sizeof(UNIT_FUNCTION[0]));

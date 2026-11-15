@@ -1,0 +1,24 @@
+@startuml CTP2 Auto-Explore Use Cases
+left to right direction
+
+actor "CTP2 Player" as Player
+actor "Game Turn Processor" as TurnProcessor
+
+rectangle "Call to Power II" {
+    usecase "UC-005\nDelegate a Unit to Auto-Explore" as UC005
+}
+
+rectangle "Auto-Explore Order" {
+    usecase "UC-006\nAdvance an Auto-Explore Order" as UC006
+}
+
+Player --> UC005
+TurnProcessor --> UC006
+
+note right of UC005
+Business goal
+end note
+note right of UC006
+System behavior
+end note
+@enduml

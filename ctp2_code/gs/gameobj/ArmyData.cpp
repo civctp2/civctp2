@@ -6817,6 +6817,7 @@ bool ArmyData::ExecuteOrders(bool propagate)
 		{
 			case UNIT_ORDER_MOVE:
 			case UNIT_ORDER_MOVE_TO:
+			case UNIT_ORDER_AUTO_EXPLORE:
 			case UNIT_ORDER_MOVE_THEN_UNLOAD:
 			case UNIT_ORDER_VICTORY_MOVE:
 				completedOrder = ExecuteMoveOrder(order);
@@ -7076,11 +7077,202 @@ void ArmyData::ForgetPatrol()
 //              If this returns false then completed_order = false in the above switch.
 //
 //----------------------------------------------------------------------------
+// Purpose: Select one safe owner-known route for the persistent Auto-Explore order.
+// Require: order belongs to this valid army and the native world/pathfinder are initialized.
+// Guarantee: true installs a route and destination; false means no safe useful route remains.
+// Maintain: hidden units are never consulted; native A* supplies movement and road costs.
+// Assert: invoked by ExecuteMoveOrder while the army owns an active Auto-Explore order.
+bool ArmyData::ChooseAutoExplorePath(Order *order)
+{
+	if(!order || m_nElements <= 0 || !g_theUnitAstar || !g_player[m_owner])
+		return false;
+
+	Army army(m_id);
+	MapPoint current = m_pos;
+	double maxMovement = m_array[0].GetMaxMovePoints();
+	double visionRange = m_array[0].GetVisionRange();
+	for(sint32 i = 1; i < m_nElements; ++i)
+	{
+		if(m_array[i].GetMaxMovePoints() < maxMovement)
+			maxMovement = m_array[i].GetMaxMovePoints();
+		if(m_array[i].GetVisionRange() > visionRange)
+			visionRange = m_array[i].GetVisionRange();
+	}
+
+	bool threatened = false;
+	sint32 threatRadius = static_cast<sint32>(maxMovement + 0.5);
+	CircleIterator threats(current, threatRadius, 0);
+	for(threats.Start(); !threats.End() && !threatened; threats.Next())
+	{
+		MapPoint threatPos = threats.Pos();
+		if(!g_player[m_owner]->IsVisible(threatPos))
+			continue;
+		Cell *cell = g_theWorld->GetCell(threatPos);
+		for(sint32 i = 0; i < cell->GetNumUnits(); ++i)
+		{
+			PLAYER_INDEX other = cell->AccessUnit(i).GetOwner();
+			if(other != m_owner && g_player[m_owner]->HasWarWith(other))
+			{
+				threatened = true;
+				break;
+			}
+		}
+	}
+
+	double bestScore = -1.0;
+	double bestDefense = -1.0;
+	float bestCost = 0.0f;
+	MapPoint bestPoint;
+	Path *bestPath = NULL;
+	sint32 searchRadius = static_cast<sint32>(visionRange + maxMovement + 1.0);
+	if(searchRadius < 3)
+		searchRadius = 3;
+	CircleIterator candidates(current, searchRadius, 0);
+	for(candidates.Start(); !candidates.End(); candidates.Next())
+	{
+		MapPoint candidate = candidates.Pos();
+		if((candidate == current && !threatened) || !g_player[m_owner]->IsExplored(candidate))
+			continue;
+
+		Cell *cell = g_theWorld->GetCell(candidate);
+		if(cell->GetOwner() >= 0 && cell->GetOwner() != m_owner)
+			continue;
+		if(cell->HasCity() && cell->GetCity().GetOwner() != m_owner)
+			continue;
+		bool occupiedByOther = false;
+		if(g_player[m_owner]->IsVisible(candidate))
+		{
+			for(sint32 i = 0; i < cell->GetNumUnits(); ++i)
+			{
+				if(cell->AccessUnit(i).GetOwner() != m_owner)
+				{
+					occupiedByOther = true;
+					break;
+				}
+			}
+		}
+		if(occupiedByOther)
+			continue;
+
+		Path *route = new Path;
+		Path blockedPath;
+		bool brokenPath = false;
+		float pathCost = 0.0f;
+		bool foundRoute = false;
+		if(candidate == current && threatened)
+		{
+			route->SetStart(current);
+			foundRoute = true;
+		}
+		else
+		{
+			foundRoute = g_theUnitAstar->FindPath(army, current, m_owner, candidate,
+			                                    *route, brokenPath, blockedPath, pathCost);
+		}
+		if(!foundRoute)
+		{
+			delete route;
+			continue;
+		}
+
+		bool safeRoute = true;
+		Path checkRoute(route);
+		MapPoint routePoint;
+		checkRoute.Start(routePoint);
+		while(checkRoute.Next(routePoint))
+		{
+			if(!g_player[m_owner]->IsExplored(routePoint) ||
+			   (g_theWorld->GetCell(routePoint)->GetOwner() >= 0 &&
+			    g_theWorld->GetCell(routePoint)->GetOwner() != m_owner))
+			{
+				safeRoute = false;
+				break;
+			}
+		}
+		if(!safeRoute || (threatened && pathCost > maxMovement))
+		{
+			delete route;
+			continue;
+		}
+
+		double defense = cell->GetTerrainDefenseBonus();
+		double score = 0.0;
+		if(threatened)
+		{
+			score = defense;
+		}
+		else
+		{
+			sint32 newlyRevealed = 0;
+			CircleIterator reveal(candidate, static_cast<sint32>(visionRange + 0.5), 0);
+			for(reveal.Start(); !reveal.End(); reveal.Next())
+			{
+				if(!g_player[m_owner]->IsExplored(reveal.Pos()))
+					++newlyRevealed;
+			}
+			if(newlyRevealed == 0)
+			{
+				delete route;
+				continue;
+			}
+			score = static_cast<double>(newlyRevealed) / (1.0 + pathCost);
+		}
+
+		bool better = !bestPath || score > bestScore ||
+			(score == bestScore && (pathCost < bestCost ||
+			 (pathCost == bestCost && (defense > bestDefense ||
+			  (defense == bestDefense && (candidate.x < bestPoint.x ||
+			   (candidate.x == bestPoint.x && candidate.y < bestPoint.y)))))));
+		if(better)
+		{
+			delete bestPath;
+			bestPath = route;
+			bestPoint = candidate;
+			bestScore = score;
+			bestDefense = defense;
+			bestCost = pathCost;
+		}
+		else
+		{
+			delete route;
+		}
+	}
+
+	if(!bestPath)
+		return false;
+	delete order->m_path;
+	order->m_path = bestPath;
+	order->m_point = bestPoint;
+	return true;
+}
+
 bool ArmyData::ExecuteMoveOrder(Order *order)
 {
 	WORLD_DIRECTION d = NOWHERE;
 
+	if(order->m_order == UNIT_ORDER_AUTO_EXPLORE)
+	{
+		double currentMovement = m_array[0].GetMovementPoints();
+		double maximumMovement = m_array[0].GetMaxMovePoints();
+		for(sint32 i = 1; i < m_nElements; ++i)
+		{
+			if(m_array[i].GetMovementPoints() < currentMovement)
+				currentMovement = m_array[i].GetMovementPoints();
+			if(m_array[i].GetMaxMovePoints() < maximumMovement)
+				maximumMovement = m_array[i].GetMaxMovePoints();
+		}
+		if(maximumMovement <= 0.0)
+			return true;
+		if(currentMovement <= 0.0)
+			return false;
+		if(!ChooseAutoExplorePath(order))
+			return true;
+		if(order->m_point == m_pos)
+			return false;
+	}
+
 	if ((order->m_order == UNIT_ORDER_MOVE) ||
+	    (order->m_order == UNIT_ORDER_AUTO_EXPLORE) ||
 	    (order->m_order == UNIT_ORDER_MOVE_THEN_UNLOAD)
 	   )
 	{
