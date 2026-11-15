@@ -992,6 +992,12 @@ void SlicEngine::AddBuiltinFunctions()
 	m_functionHash->Add(new Slic_UnitMovementLeft);
 	m_functionHash->Add(new Slic_GetStoredProduction);
 
+	// Unit stat modifier builtins
+	m_functionHash->Add(new Slic_ModifyUnitStat);
+	m_functionHash->Add(new Slic_ClearUnitStatModifiers);
+	m_functionHash->Add(new Slic_HealUnit);
+
+
 }
 
 void SlicEngine::Link()
