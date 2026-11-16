@@ -108,6 +108,7 @@ OrderInfo g_orderInfo[] = {
 	{UNIT_ORDER_PLAGUE,                     "ORDER_PLAGUE",                     0, 0, 0, 0, NULL}, // 60
 	{UNIT_ORDER_VICTORY_MOVE,               "ORDER_VICTORY_MOVE",               0, 0, 0, 0, NULL}, // 61
 	{UNIT_ORDER_SETTLE_IN_CITY,             "ORDER_SETTLE_IN_CITY",             0, 0, 0, 0, NULL}, // 62
+	{UNIT_ORDER_UPGRADE,                     "ORDER_UPGRADE",                     0, 0, 0, 0, NULL}, // 63
 	{UNIT_ORDER_AUTO_EXPLORE,               "ORDER_AUTO_EXPLORE",               0, 0, 0, 0, NULL}  // 64
 };
 

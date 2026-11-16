@@ -41,6 +41,8 @@ Foreign cities, foreign territory, hostile-occupied tiles, and any tile the unit
 
 The installed keymap uses case-sensitive bindings. Lowercase `i` is unassigned; uppercase `I` remains `INVESTIGATE_CITY`. The `KEY_FUNCTION`/`func2key` tables and `km_screen` Unit-tab list provide remapping; the Army Manager menu and keyboard action enqueue the same native unit order. Keymap initialization must run its legacy-binding migration after the saved file reaches EOF. `ArmyData::ExecuteOrders` advances the persistent order, `UnitAstar::FindPath` supplies owner-scoped native routes, and `GEV_CheckOrders` re-enters after each movement event. The planner examines known candidate tiles within `vision range + maximum movement + 1`, counts unknown tiles in the unit vision radius, and chooses one candidate path each time the order is advanced. Under threat it scans currently visible enemies within the stack movement allowance and considers only defensive destinations reachable within one maximum movement allowance. If the current tile is the strongest reachable defensive posture, the order stays active and holds position until the next order evaluation. A legacy keymap gets lowercase `i` only if that exact case-sensitive key is free; a conflicting saved binding is retained and the new action remains remappable.
 
+`g_orderInfo` is positional metadata used by engine diagnostics. Keep one row per enum slot through `UNIT_ORDER_AUTO_EXPLORE`; the pre-existing `UNIT_ORDER_UPGRADE` entry must remain at slot 63 so Auto-Explore occupies slot 64.
+
 ## Not in This Design
 
 - Scenario-specific SLIC scripts or data-driven triggers.
