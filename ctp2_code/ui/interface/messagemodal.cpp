@@ -329,7 +329,8 @@ AUI_ERRCODE MessageModal::CreateResponses( const MBCHAR *ldlBlock )
 		responseCount++;
 	}
 
-	messageresponse_AssignNumberKeys(m_messageModalResponseButton);
+	if (m_message.AccessData()->GetSlicSegment())
+		messageresponse_AssignNumberKeys(m_messageModalResponseButton);
 
 	return AUI_ERRCODE_OK;
 }
