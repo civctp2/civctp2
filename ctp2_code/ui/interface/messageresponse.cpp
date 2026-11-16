@@ -90,17 +90,24 @@ namespace
 		return (a->Y() != b->Y()) ? (a->Y() < b->Y()) : (a->X() < b->X());
 	}
 
-	// The digit 1-9 a button's label starts with ("3", "3. Fire Bolt"), else 0.
+	// The digit 0-9 a button's label starts with ("3", "3. Fire Bolt"), else -1.
 	// A leading number of two or more digits ("10 gold") is not a key label.
 	sint32 messageresponse_LabelDigit(ctp2_Button * button)
 	{
 		MBCHAR const * text = button->GetText();
-		if (text && text[0] >= '1' && text[0] <= '9'
+		if (text && text[0] >= '0' && text[0] <= '9'
 		    && !isdigit(static_cast<unsigned char>(text[1])))
 		{
 			return text[0] - '0';
 		}
-		return 0;
+		return -1;
+	}
+
+	bool messageresponse_IsCloseLabel(ctp2_Button * button)
+	{
+		MBCHAR const * text = button ? button->GetText() : NULL;
+		return text && text[0] && !text[1]
+		    && std::toupper(static_cast<unsigned char>(text[0])) == 'X';
 	}
 }
 
@@ -108,28 +115,40 @@ namespace
 //
 // Name       : messageresponse_AssignNumberKeys
 //
-// Description: Give SLIC response buttons the number keys 1-9.
+// Description: Give SLIC response buttons their visible digit keys, including 0.
 //
 // Parameters : buttons : the response buttons of one message, laid out
 //
 // Remark(s)  : A menu that labels its buttons with digits answers to those
-//              digits, and only those buttons get a key. A menu with no digit
-//              labels is numbered 1-9 in reading order. Buttons past the ninth
-//              get no key. Keys reach the buttons because ui_HandleKeypress
-//              offers every key to the top window before the key map.
+//              digits, and only unique labels get a key. A menu with no digit
+//              labels is numbered 1-9 in reading order. A unique X close button
+//              receives 0 only when no response is explicitly labelled 0.
+//              Buttons past the ninth get no key. Keys reach the buttons because
+//              ui_HandleKeypress offers every key to the top window before the key map.
 //
 //----------------------------------------------------------------------------
 void messageresponse_AssignNumberKeys(tech_WLList<ctp2_Button *> * buttons)
 {
 	std::vector<ctp2_Button *> ordered;
 	bool                       labelled = false;
+	sint32                     counts[10] = { 0 };
+	sint32                     closeCount = 0;
 
 	ListPos position = buttons->GetHeadPosition();
 	for (size_t i = buttons->L(); i; i--)
 	{
 		ctp2_Button * button = buttons->GetNext(position);
 		ordered.push_back(button);
-		labelled = labelled || (messageresponse_LabelDigit(button) > 0);
+		sint32 digit = messageresponse_LabelDigit(button);
+		if (digit >= 0)
+		{
+			++counts[digit];
+			labelled = true;
+		}
+		else if (messageresponse_IsCloseLabel(button))
+		{
+			++closeCount;
+		}
 	}
 
 	std::stable_sort(ordered.begin(), ordered.end(), messageresponse_ReadsBefore);
@@ -141,13 +160,19 @@ void messageresponse_AssignNumberKeys(tech_WLList<ctp2_Button *> * buttons)
 		sint32 digit = messageresponse_LabelDigit(ordered[i]);
 		if (!labelled)
 		{
-			digit = (next <= 9) ? next++ : 0;
+			digit = (next <= 9) ? next++ : -1;
 		}
 
-		if (digit > 0 && !used[digit])
+		if (digit >= 0 && (!labelled || counts[digit] == 1) && !used[digit])
 		{
-			ordered[i]->SetActionKey('0' + digit);
+			ordered[i]->SetActionKey(static_cast<uint32>('0' + digit));
 			used[digit] = true;
+		}
+		else if (digit < 0 && counts[0] == 0 && closeCount == 1
+		         && messageresponse_IsCloseLabel(ordered[i]))
+		{
+			ordered[i]->SetActionKey('0');
+			used[0] = true;
 		}
 	}
 }
@@ -251,7 +276,9 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( const MBCHAR *ldlBlock, Message
 		responseCount++;
 	}
 
-	messageresponse_AssignNumberKeys(m_messageResponseButton);
+	MessageData *responseData = window->GetMessage()->AccessData();
+	if (responseData && responseData->GetSlicSegment())
+		messageresponse_AssignNumberKeys(m_messageResponseButton);
 
 	m_dontShowButton=NULL;
 	m_identifier=NULL;
