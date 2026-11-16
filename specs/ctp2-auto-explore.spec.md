@@ -13,6 +13,7 @@ description: 'Executable-level auto-explore orders for CTP2 units'
 - SLIC scripts and scenario data must not implement or be required to enable this behavior.
 - The implementation must use only map and unit information available to the acting player; it must not inspect hidden enemies or unrevealed terrain.
 - The order must be registered as a first-class remappable keyboard action in the executable key-function table, with lowercase `i` as its initial default in `ctp2_data/default/uidata/keymap.txt`; uppercase `I` remains `INVESTIGATE_CITY`.
+- The `g_orderInfo` table must keep entries aligned with `UNIT_ORDER_TYPE` values; it must include the existing `UNIT_ORDER_UPGRADE` row before the new Auto-Explore row because engine diagnostics index this table by enum value.
 - The player must also be able to start Auto-Explore from the selected army's Army Manager context menu; both entry points must enqueue the same native unit order.
 - The default binding must not reuse `A` or `a`: the installed keymap assigns uppercase `A` to `ENDTURN` and lowercase `a` to `CENTER_MAP`; bindings are case-sensitive.
 - The order must be remappable through the existing keyboard remapping screen (`K`) and its binding must persist in `ctp2_program/ctp/userkeymap.txt`.
