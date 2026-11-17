@@ -37,6 +37,23 @@
 //
 //----------------------------------------------------------------------------
 
+/*
+ * Auto-Explore turn-resume contract
+ *
+ * | Stage | Mechanism | Tag | Requirement |
+ * |-------|-----------|-----|-------------|
+ * | REFRESH | BeginTurnArmyEvent follows unit movement refresh | mandatory | AE-REQ-007 |
+ * | CHECK | Inspect the existing head order for UNIT_ORDER_AUTO_EXPLORE | mandatory | AE-REQ-007 |
+ * | RESUME | Queue GEV_BeginTurnExecute to re-enter ArmyData::ExecuteOrders | mandatory | AE-REQ-007 |
+ *
+ * EARS: When an Auto-Explore army receives movement on its owner's new turn,
+ *       re-run its existing order so target selection uses current known state.
+ * CLOSED: Do not convert the order to GOTO or create a second persistent order;
+ *         native order-queue retention and the existing execute event suffice.
+ * Preconditions: BeginTurnUnit events restore movement before BeginTurnArmyEvent.
+ * Failure: A missing/invalid army or empty/replaced order queue schedules no work.
+ */
+
 #include "c3.h"
 #include "ArmyEvent.h"
 
@@ -1251,6 +1268,13 @@ STDEHANDLER(CheckOrdersEvent)
 	return GEV_HD_Continue;
 }
 
+/*
+ * Purpose: Resume a retained Auto-Explore order after movement refresh.
+ * Require: GEV_BeginTurnArmy is dispatched after the army's unit refresh events.
+ * Called by: GameEventManager for each army beginning its owner's turn.
+ * Depends on: GEV_BeginTurnExecute and ArmyData::ExecuteOrders.
+ * Failure modes: Missing army arguments leave the existing order queue untouched.
+ */
 STDEHANDLER(BeginTurnArmyEvent)
 {
 	Army a;
@@ -1258,6 +1282,16 @@ STDEHANDLER(BeginTurnArmyEvent)
 		return GEV_HD_Continue;
 
 	a.BeginTurn();
+	if(!g_player[a.GetOwner()]->IsRobot() && a.NumOrders() > 0)
+	{
+		const Order *order = a.GetOrder(0);
+		if(order && order->m_order == UNIT_ORDER_AUTO_EXPLORE)
+		{
+			g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_BeginTurnExecute,
+								   GEA_Army, a,
+								   GEA_End);
+		}
+	}
 	return GEV_HD_Continue;
 }
 

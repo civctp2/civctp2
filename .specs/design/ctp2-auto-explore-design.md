@@ -43,6 +43,8 @@ The installed keymap uses case-sensitive bindings. Lowercase `i` is unassigned; 
 
 `g_orderInfo` is positional metadata used by engine diagnostics. Keep one row per enum slot through `UNIT_ORDER_AUTO_EXPLORE`; the pre-existing `UNIT_ORDER_UPGRADE` entry must remain at slot 63 so Auto-Explore occupies slot 64.
 
+When an Auto-Explore path reaches its local endpoint, `ArmyData::IncrementOrderPath` must preserve the head `UNIT_ORDER_AUTO_EXPLORE`; the already queued `GEV_CheckOrders` then re-enters `ExecuteOrders`, which chooses the next target. Ordinary GOTO orders still complete and are removed at their path endpoint. If movement is exhausted first, the same Auto-Explore order remains queued. `Player::ResetAllMovement` refreshes movement before `Player::BeginTurnUnits` queues each `GEV_BeginTurnArmy`; after the army begin-turn events, `GEV_BeginTurnExecute` re-enters the retained human Auto-Explore order. Do not replace the order with `UNIT_ORDER_MOVE`, `UNIT_ORDER_MOVE_TO`, or a second persistence mechanism. A player-issued replacement order continues to clear/replace it through the existing order API.
+
 ## Not in This Design
 
 - Scenario-specific SLIC scripts or data-driven triggers.

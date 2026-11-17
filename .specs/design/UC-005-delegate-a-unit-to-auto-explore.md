@@ -24,8 +24,11 @@
 3. The game starts the unit's Auto-Explore order.
 4. On the unit owner's turn, the unit moves toward safe territory that reveals the most unknown map area for its movement cost.
 5. The game reevaluates the route after each movement segment and uses roads when they reduce the unit's native movement cost.
-6. The unit continues while useful, safe territory remains reachable.
-7. The game ends the order when no safe useful destination remains.
+6. When the unit reaches one selected local target, the game keeps the same Auto-Explore order active and chooses another safe useful target.
+7. When the unit runs out of movement, the game keeps that same Auto-Explore order active.
+8. At the start of each later owner turn, after movement is restored, the game automatically re-evaluates and resumes that order from the unit's actual location.
+9. The unit continues while useful, safe territory remains reachable.
+10. The game ends the order when the player replaces it or no safe useful destination remains.
 
 ## Alternative Flows
 
@@ -40,7 +43,7 @@
 
 ### A2: No safe useful destination remains
 
-**Trigger:** Every remaining destination is unreachable, unsafe, or no longer reveals useful unknown area (step 6)
+**Trigger:** Every remaining destination is unreachable, unsafe, or no longer reveals useful unknown area (step 9)
 **Flow:**
 
 1. The unit remains in place if no safe movement segment exists.
@@ -49,7 +52,7 @@
 
 ### A3: The player replaces the order
 
-**Trigger:** The player issues another order to the unit (step 4 or 5)
+**Trigger:** The player issues another order to the unit (step 4, 5, 8, or 9)
 **Flow:**
 
 1. The game stops Auto-Explore.
@@ -64,7 +67,15 @@
 1. The game replans from the unit's actual location using current owner-visible information.
 2. If a safe route exists, the use case continues at step 4; otherwise, the game ends Auto-Explore.
 
-### A5: The player starts Auto-Explore from the Army Manager
+### A5: The unit exhausts movement for this turn
+
+**Trigger:** The unit has no movement remaining at the end of its turn (step 7)
+**Flow:**
+
+1. The game retains the same native Auto-Explore order without issuing a movement command.
+2. After the unit receives movement on its next owner turn, the game automatically executes that order and continues at step 4.
+
+### A6: The player starts Auto-Explore from the Army Manager
 
 **Trigger:** The player selects Auto-Explore from the selected army's context menu (step 2)
 **Flow:**

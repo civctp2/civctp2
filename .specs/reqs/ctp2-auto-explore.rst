@@ -46,6 +46,13 @@ and :doc:`../../specs/ctp2-auto-explore.decision`.
 
    When a route becomes unsafe, blocked, or no longer useful, the system shall replan from the unit's actual location or stop the order without replacing a newer player order.
 
+.. req:: Continue Auto-Explore across turns
+   :id: AE-REQ-007
+   :status: open
+   :tags: functional, lifecycle, turn-processing
+
+   While safe useful destinations remain, when an Auto-Explore path ends or the unit exhausts its movement for the turn, the system shall retain that same native order and re-evaluate it at the path endpoint or automatically after movement is restored on the unit's next turn.
+
 .. req:: Start Auto-Explore from the Army Manager
    :id: AE-REQ-007
    :status: open
