@@ -235,6 +235,9 @@ public:
 };
 
 extern sint32 g_saveFileVersion;
+// First save version whose MapPoint records carry the plane coordinate.
+// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-005.
+#define k_SAVE_VERSION_MAP_PLANE 68
 extern sint32 g_startInfoType;
 extern sint32 g_isScenario;
 extern sint32 g_useScenarioCivs;
