@@ -227,7 +227,11 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 
 	if(archive.IsStoring()) {
 		GameObj::Serialize(archive);
-		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_isBuilding)+sizeof(m_isBuilding));
+		// m_point is a MapPoint; the chunk is split around it so the plane format
+		// does not change the layout of the rest.
+		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_type)+sizeof(m_type));
+		m_point.Serialize(archive);
+		archive.StoreChunk((uint8 *)&m_turnsToComplete, ((uint8 *)&m_isBuilding)+sizeof(m_isBuilding));
 
 		hasChild = m_lesser != NULL;
 		archive << hasChild;
@@ -241,7 +245,9 @@ void TerrainImprovementData::Serialize(CivArchive &archive)
 
 	} else {
 		GameObj::Serialize(archive);
-		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_isBuilding)+sizeof(m_isBuilding));
+		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_type)+sizeof(m_type));
+		m_point.Serialize(archive);
+		archive.LoadChunk((uint8 *)&m_turnsToComplete, ((uint8 *)&m_isBuilding)+sizeof(m_isBuilding));
 
 		archive >> hasChild;
 		if(hasChild) m_lesser = new TerrainImprovementData(archive);

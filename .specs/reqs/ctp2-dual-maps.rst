@@ -45,7 +45,14 @@ and :doc:`../../specs/ctp2-dual-maps.decision`. Governing basis: operator instru
    :status: open
    :tags: constraint, save
 
-   The system shall write save files with the magic value ``CTP0068`` so that an engine without this change refuses them.
+   The system shall write save files with the magic value ``CTP0068`` so that an engine without this change refuses them, and shall read every field of a ``CTP0068`` file with the same layout it wrote: no load gate may assume that a version above 66 carries the unused wide sprite-index format or omits the happiness array.
+
+.. req:: Keep raw-copied save structures readable
+   :id: DM-ENG-REQ-008
+   :status: open
+   :tags: constraint, save
+
+   When the system loads a save file of a version below 68, it shall read every structure that embeds a ``MapPoint`` with the layout that version wrote and shall consume exactly the number of bytes the file holds.
 
 .. req:: Leave single-plane play unchanged
    :id: DM-ENG-REQ-007

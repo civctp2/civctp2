@@ -323,6 +323,52 @@ SlicContext::~SlicContext()
 		} else\
 			list = NULL;
 
+// SimpleDynamicArray<T>::Serialize copies its elements as raw memory, which breaks
+// when the size of MapPoint changes (the plane format). The location list writes
+// each MapPoint with MapPoint::Serialize instead; the stream keeps the same header
+// (element count, allocated size) so files from before the plane format still load.
+// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-005.
+static void SerializeLocationList(SimpleDynamicArray<MapPoint> * & list, CivArchive & archive)
+{
+	sint32 hasList = (list != NULL);
+	if(archive.IsStoring())
+	{
+		archive << hasList;
+		if(hasList)
+		{
+			sint32 const count = list->Num();
+			archive << count;
+			archive << count;
+			for(sint32 i = 0; i < count; ++i)
+			{
+				list->Access(i).Serialize(archive);
+			}
+		}
+	}
+	else
+	{
+		archive >> hasList;
+		if(hasList)
+		{
+			list = new SimpleDynamicArray<MapPoint>;
+			sint32 count = 0;
+			sint32 allocated = 0;
+			archive >> count;
+			archive >> allocated;
+			for(sint32 i = 0; i < count; ++i)
+			{
+				MapPoint point;
+				point.Serialize(archive);
+				list->Insert(point);
+			}
+		}
+		else
+		{
+			list = NULL;
+		}
+	}
+}
+
 void SlicContext::Serialize(CivArchive &archive)
 {
 	sint32 hasList;
@@ -335,7 +381,7 @@ void SlicContext::Serialize(CivArchive &archive)
 		SER_ARRAY(m_playerList);
 		SER_ARRAY(m_intList);
 		SER_ARRAY(m_unitRecordList);
-		SER_ARRAY(m_locationList);
+		SerializeLocationList(m_locationList, archive);
 		SER_ARRAY(m_agreementList);
 		SER_ARRAY(m_tradeOffersList);
 		SER_ARRAY(m_goodList);
@@ -400,7 +446,7 @@ void SlicContext::Serialize(CivArchive &archive)
 		UNSER_ARRAY(m_playerList, sint32);
 		UNSER_ARRAY(m_intList, sint32);
 		UNSER_ARRAY(m_unitRecordList, sint32);
-		UNSER_ARRAY(m_locationList, MapPoint);
+		SerializeLocationList(m_locationList, archive);
 		UNSER_ARRAY(m_agreementList, ai::Agreement);
 		UNSER_ARRAY(m_tradeOffersList, TradeOffer);
 		UNSER_ARRAY(m_goodList, sint32);

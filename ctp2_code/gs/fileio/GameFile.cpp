@@ -844,6 +844,12 @@ uint32 GameFile::Restore(const MBCHAR *filepath)
 
 	g_civApp->InitializeGame(&archive);
 
+	// The game is now in memory in the current format. A stale file version would make
+	// later in-memory loads of a MapPoint, and later saves, follow the layout of the
+	// file that was just loaded.
+	// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-005.
+	g_saveFileVersion = gamefile_CurrentVersion();
+
 	g_theProgressWindow->StartCountingTo( 1090 );
 
 	DPRINTF(k_DBG_FILE,
@@ -1030,10 +1036,25 @@ bool GameFile::LoadExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return false;
 	}
 
-	n = c3files_fread(&info->positions, sizeof(StartingPosition), k_MAX_START_POINTS, saveFile); // Problem, but should be OK
-	if(n != k_MAX_START_POINTS)
+	if (g_saveFileVersion < k_SAVE_VERSION_MAP_PLANE)
 	{
-		return false;
+		StartingPositionDiskV66 legacy[k_MAX_START_POINTS];
+		n = c3files_fread(legacy, sizeof(StartingPositionDiskV66), k_MAX_START_POINTS, saveFile);
+		if(n != k_MAX_START_POINTS)
+		{
+			return false;
+		}
+		StartingPosition_FromDiskV66(info->positions, legacy, k_MAX_START_POINTS);
+	}
+	else
+	{
+		StartingPositionDisk disk[k_MAX_START_POINTS];
+		n = c3files_fread(disk, sizeof(StartingPositionDisk), k_MAX_START_POINTS, saveFile);
+		if(n != k_MAX_START_POINTS)
+		{
+			return false;
+		}
+		StartingPosition_FromDisk(info->positions, disk, k_MAX_START_POINTS);
 	}
 
 	MBCHAR name[k_SCENARIO_NAME_MAX];
@@ -1422,7 +1443,9 @@ void GameFile::SaveExtendedGameInfo(FILE *saveFile, SaveInfo *info)
 		return;
 	}
 
-	n = c3files_fwrite(&info->positions, sizeof(StartingPosition), k_MAX_START_POINTS, saveFile);
+	StartingPositionDisk positionsOnDisk[k_MAX_START_POINTS];
+	StartingPosition_ToDisk(positionsOnDisk, info->positions, k_MAX_START_POINTS);
+	n = c3files_fwrite(positionsOnDisk, sizeof(StartingPositionDisk), k_MAX_START_POINTS, saveFile);
 	if(n != k_MAX_START_POINTS)
 	{
 		c3errors_FatalDialog(functionName, errorString);
@@ -1991,7 +2014,11 @@ GameMapInfo::GameMapInfo()
 	path[0] = '\0';
 }
 
-#define k_GAMEMAP_MAGIC_VALUE		"CTPMAP__"
+// Map files written with the plane coordinate in MapPoint carry CTPMAP68; files from before
+// carry CTPMAP__ and hold positions without the plane.
+// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-005 and DM-ENG-REQ-006.
+#define k_GAMEMAP_MAGIC_VALUE		"CTPMAP68"
+#define k_GAMEMAP_MAGIC_VALUE_LEGACY	"CTPMAP__"
 
 void GameMapFile::RestoreGameMap(const MBCHAR *filename)
 {
@@ -2102,7 +2129,17 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 		return GAMEFILE_ERR_LOAD_FAILED;
 	}
 
-	if (strcmp(sHeader, k_GAMEMAP_MAGIC_VALUE))
+	if (0 == strcmp(sHeader, k_GAMEMAP_MAGIC_VALUE))
+	{
+		g_saveFileVersion = gamefile_CurrentVersion();
+	}
+	else if (0 == strcmp(sHeader, k_GAMEMAP_MAGIC_VALUE_LEGACY))
+	{
+		// Version 66 (CTP0066) is the last format before the plane coordinate:
+		// positions are x and y only. Version 67 is reserved for USE_FORMAT_67.
+		g_saveFileVersion = 66;
+	}
+	else
 	{
 		c3files_fclose(fpLoad);
 		c3errors_FatalDialogFromDB("LOAD_ERROR", "LOAD_NOT_A_SAVEGAME_FILE");
@@ -2154,6 +2191,9 @@ uint32 GameMapFile::Restore(const MBCHAR *filepath)
 
 	delete g_theWorld;
 	g_theWorld = new World(archive, true);
+
+	// The map is now in memory in the current format (see GameFile::Restore).
+	g_saveFileVersion = gamefile_CurrentVersion();
 
 	DPRINTF(k_DBG_FILE,
 	        ("Time to load gamemap data = %4.2f seconds\n", (double)(clock() - start) / CLOCKS_PER_SEC)
@@ -2276,7 +2316,7 @@ bool GameMapFile::ValidateGameMapFile(MBCHAR const * path, SaveMapInfo *info)
 		return false;
 	}
 
-	if (strcmp(header, k_GAMEMAP_MAGIC_VALUE)) {
+	if (strcmp(header, k_GAMEMAP_MAGIC_VALUE) && strcmp(header, k_GAMEMAP_MAGIC_VALUE_LEGACY)) {
 		c3files_fclose(saveFile);
 		return false;
 	}
