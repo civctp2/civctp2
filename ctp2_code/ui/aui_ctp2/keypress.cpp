@@ -550,6 +550,15 @@ sint32 ui_HandleKeypress(WPARAM wParam, LPARAM lParam)
 		}
 		break;
 
+	case KEY_FUNCTION_AUTO_EXPLORE:
+		if(isMyTurn)
+		{
+			Army army;
+			if(g_selected_item->GetSelectedArmy(army) && army.Num() > 0)
+				army->AddOrders(UNIT_ORDER_AUTO_EXPLORE);
+		}
+		break;
+
 	case KEY_FUNCTION_INVESTIGATE_CITY:
 		{
 			MapPoint    point;

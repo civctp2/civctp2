@@ -435,6 +435,7 @@ public:
     static bool GetInciteUprisingCost( const MapPoint &point, sint32 &attackCost );
 
     bool ExecuteMoveOrder(Order *order);
+    bool ChooseAutoExplorePath(Order *order);
 
     void CheckLoadSleepingCargoFromCity();
     bool FinishMove(WORLD_DIRECTION d, MapPoint &newPos, UNIT_ORDER_TYPE order);
