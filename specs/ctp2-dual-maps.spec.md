@@ -9,7 +9,7 @@ description: 'Plane coordinate for CTP2 map locations: first slice of two persis
 
 ***implementation reqs***
 
-- Source governing this slice: operator instruction 2026-11-16 ("start on the dual map feature") and the evidence map `.tmp/dual-maps/wave1-engine-seams.md` of the install repository (assumptions A4, A5, A10). No other governing spec exists.
+- Governing basis: the Dual Maps feature (two persistent map planes, such as the Arcanus and Myrror planes of the Masters of Magic scenario). This slice covers only the plane index and the save format; the engine assumptions it addresses are listed in ADR-003. No earlier requirement exists.
 - `MapPoint` and `MapPointData` must carry a plane coordinate `z`, default 0, in every build configuration.
 - `_SMALL_MAPPOINTS` must stay defined. It also removes `UP` and `DOWN` from `WORLD_DIRECTION`; `NOWHERE` is used by 83 direction loops that must keep visiting the eight map directions only.
 - Every two-coordinate construction (`MapPoint(x, y)`, `MapPointData(x, y)`) must still compile and must yield plane 0. `Set(x, y)` must still compile and must leave the plane of the point it is called on unchanged.
@@ -29,7 +29,7 @@ description: 'Plane coordinate for CTP2 map locations: first slice of two persis
 - Plane preservation: for centres on plane 0 and plane 1, `GetNeighborPosition` in all eight directions, a `RadiusIterator` of radius 2, and `OrthogonalPoint` round trips must return only positions on the centre's plane, on at least three centres including one that wraps the map edge.
 - Round trip: `MapPoint::Serialize` stores then loads x, y and z unchanged for three varied points (plane 0, plane 1, negative `MAP_POINT_UNKNOWN`).
 - Stream consumption: after a `CTP0066` load, the number of archive bytes read must equal the number stored (temporary probe at the end of `GameFile::Restore`; a mismatch means a raw-layout site was missed).
-- Legacy load: load a real `CTP0066` save (the operator's MoM autosave) from the main-menu Load Game screen in the new Release build; require no load error, and require the same army and city positions in the engine log before and after as the baseline build shows for the same save.
+- Legacy load: load a real `CTP0066` save (for example an autosave of a Masters of Magic game) from the main-menu Load Game screen in the new Release build; require no load error, and require the same army and city positions in the engine log before and after as the baseline build shows for the same save.
 - New-format round trip: save the loaded game (the header must read `CTP0068`), load it again, require that the archive position equals the archive length, and require the same per-player unit counts as the legacy load.
 - Rejection: an engine built before this change must refuse the new file with its "not a savegame file" error rather than load it. Record the exact message.
 - Neutrality: from the same `CTP0066` save, end three turns in the baseline pair and in the new pair at 800x600; compare the logged army orders and positions. Any difference must be explained before the slice is accepted.
