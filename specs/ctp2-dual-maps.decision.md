@@ -2,7 +2,7 @@
 
 **Status:** Proposed
 **Date:** 2026-11-17
-**Decision owner:** AI, from the operator's instruction of 2026-11-16 to start the Dual Maps feature
+**Decision owner:** AI, for the Dual Maps feature
 **Governs:** `ctp2-dual-maps.spec.md`, `.specs/reqs/ctp2-dual-maps.rst`
 
 ## Context

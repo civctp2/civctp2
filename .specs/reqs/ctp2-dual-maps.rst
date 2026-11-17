@@ -2,8 +2,8 @@ Dual Maps Requirements: plane coordinate
 =======================================
 
 The CTP2 executable requirements below derive from :doc:`../../specs/ctp2-dual-maps.spec`
-and :doc:`../../specs/ctp2-dual-maps.decision`. Governing basis: operator instruction
-2026-11-16 ("start on the dual map feature"); no earlier requirement exists.
+and :doc:`../../specs/ctp2-dual-maps.decision`. Governing basis: the Dual Maps feature (two persistent map planes);
+no earlier requirement exists.
 
 .. req:: Carry a plane in every map position
    :id: DM-ENG-REQ-001
