@@ -724,7 +724,11 @@ void Player::Serialize(CivArchive &archive)
 	if (archive.IsStoring())
 	{
 		archive.PerformMagic(PLAYER_MAGIC) ;
-		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
+		// m_setupCenter is a MapPoint, whose size changed with the plane format;
+		// it is written with MapPoint::Serialize and the chunk is split around it.
+		archive.StoreChunk((uint8 *)&m_owner, ((uint8 *)&m_lastActionCost) + sizeof(m_lastActionCost));
+		m_setupCenter.Serialize(archive);
+		archive.StoreChunk((uint8 *)&m_setupRadius, ((uint8 *)&m_broken_alliances_and_cease_fires)
 			+ sizeof(m_broken_alliances_and_cease_fires));
 
 		archive.Store((uint8*)m_goodSalePrices, g_theResourceDB->NumRecords() * sizeof(sint32));
@@ -741,7 +745,9 @@ void Player::Serialize(CivArchive &archive)
 	else
 	{
 		archive.TestMagic(PLAYER_MAGIC) ;
-		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_broken_alliances_and_cease_fires)
+		archive.LoadChunk((uint8 *)&m_owner, ((uint8 *)&m_lastActionCost) + sizeof(m_lastActionCost));
+		m_setupCenter.Serialize(archive);
+		archive.LoadChunk((uint8 *)&m_setupRadius, ((uint8 *)&m_broken_alliances_and_cease_fires)
 			+ sizeof(m_broken_alliances_and_cease_fires));
 
 		if(g_numGoods == g_theResourceDB->NumRecords()){

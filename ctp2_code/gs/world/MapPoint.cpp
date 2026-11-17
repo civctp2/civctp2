@@ -39,6 +39,7 @@
 
 #include "civarchive.h"
 #include "World.h"              // g_theWorld
+#include "gamefile.h"           // g_saveFileVersion, k_SAVE_VERSION_MAP_PLANE
 
 MapPoint g_mp_size;
 
@@ -123,28 +124,33 @@ void MapPoint::Serialize(CivArchive &archive)
 		{
 		archive<<x;
 		archive<<y;
-#if !defined(_SMALL_MAPPOINTS)
-		archive << z;
-#endif
+		archive<<z;
 		}
 	else
 		{
 		archive>>x;
 		archive>>y;
-#if !defined(_SMALL_MAPPOINTS)
-		archive >> z;
-#endif
+		// Files older than the plane format hold x and y only; a negative
+		// version means an in-memory archive, which always carries the plane.
+		if ((g_saveFileVersion < 0) || (g_saveFileVersion >= k_SAVE_VERSION_MAP_PLANE))
+			{
+			archive >> z;
+			}
+		else
+			{
+			z = 0;
+			}
 		}
 }
 
 bool MapPoint::operator == (const MapPoint &test_me) const
 {
-	return ((x == test_me.x) && (y == test_me.y));
+	return ((x == test_me.x) && (y == test_me.y) && (z == test_me.z));
 }
 
 bool MapPoint::operator!= (const MapPoint &test_me) const
 {
-	return ((x != test_me.x) || (y != test_me.y));
+	return ((x != test_me.x) || (y != test_me.y) || (z != test_me.z));
 }
 
 WORLD_DIRECTION MapPoint::GetOppsositeDirection(WORLD_DIRECTION const & direction)
@@ -470,6 +476,7 @@ void MapPoint::Iso2Norm(const MapPointData &pos)
 {
 	x = pos.x;
 	y = pos.y;
+	z = pos.z;
 
 	y += x;
 	while (y >= g_mp_size.y) {
@@ -481,6 +488,7 @@ void MapPoint::Norm2Iso(const MapPointData &pos)
 {
 	x = pos.x;
 	y = pos.y;
+	z = pos.z;
 
 	while(x < 0)
 		x += g_mp_size.x;
@@ -625,6 +633,7 @@ void verifyYwrap()
 void MapPoint::xy2rc(const MapPoint & xy_pos, const MapPoint & map_size)
 {
 	y = xy_pos.y;
+	z = xy_pos.z;
 	x = (xy_pos.x - xy_pos.y) >> 1;
 
 	sint16 const	w = map_size.x;
@@ -643,6 +652,7 @@ void MapPoint::xy2rc(const MapPoint & xy_pos, const MapPoint & map_size)
 void MapPoint::rc2xy(const MapPoint & rc_pos, const MapPoint & map_size )
 {
 	y = rc_pos.y;
+	z = rc_pos.z;
 	x = (2 * rc_pos.x) + rc_pos.y;
 
 	sint16 const	w	= map_size.x * 2;
@@ -677,7 +687,7 @@ OrthogonalPoint::OrthogonalPoint(MapPoint const & rc)
 :
 	x       (m_point.x),
 	y       (m_point.y),
-	m_point ((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y)
+	m_point ((2 * rc.x + rc.y) % (2 * g_mp_size.x), rc.y, rc.z)
 #else
 :
 	x       (m_point.x),

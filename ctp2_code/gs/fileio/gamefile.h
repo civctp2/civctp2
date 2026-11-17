@@ -235,6 +235,22 @@ public:
 };
 
 extern sint32 g_saveFileVersion;
+// First save version whose MapPoint records carry the plane coordinate.
+// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-005.
+#define k_SAVE_VERSION_MAP_PLANE 68
+
+// Files written with USE_FORMAT_67 store sprite and unit database indices as 32-bit
+// values. Version 67 files are always of that kind; later versions only when this
+// build writes that format.
+// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-006.
+inline bool gamefile_HasWideSpriteIndices()
+{
+#if USE_FORMAT_67
+	return g_saveFileVersion >= 67;
+#else
+	return g_saveFileVersion == 67;
+#endif
+}
 extern sint32 g_startInfoType;
 extern sint32 g_isScenario;
 extern sint32 g_useScenarioCivs;

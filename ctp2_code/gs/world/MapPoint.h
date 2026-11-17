@@ -79,28 +79,24 @@ uint32 MapPoint_MapPoint_GetVersion(void);
 
 struct MapPointData
 {
-#if defined(_SMALL_MAPPOINTS)
-	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0)
-	:	x(a_X),
-		y(a_Y)
-	{ };
-#else
 	MapPointData(sint16 const a_X = 0, sint16 const a_Y = 0, sint16 const a_Z = 0)
 	:	x(a_X),
 		y(a_Y),
 		z(a_Z)
 	{ };
 
-	sint16			z;
-#endif
-
 	// Coordinates
 	sint16			x;
 	sint16			y;
 
+	// Plane index (GROUND_Z = 0, SPACE_Z = 1). Names the map plane the point
+	// is on; it is not a spatial axis, so no direction changes it.
+	// Spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-001.
+	sint16			z;
+
 	bool operator == (MapPointData const & point) const
 	{
-		return ((x == point.x) && (y == point.y));
+		return ((x == point.x) && (y == point.y) && (z == point.z));
 	};
 
 	bool operator != (MapPointData const & point) const
@@ -130,15 +126,9 @@ public:
 	: MapPointData(a_Data)
 	{ };
 
-#ifdef _SMALL_MAPPOINTS
-	MapPoint(const sint32 ix, const sint32 iy) {
-		x = (sint16)ix; y = (sint16)iy;
+	MapPoint(const sint32 ix, const sint32 iy, const sint32 iz = 0) {
+		x = (sint16)ix; y = (sint16)iy; z = (sint16)iz;
 	}
-#else
-	MapPoint(const sint32 ix, const sint32 iy, const sint32 iz) {
-		x = ix; y = iy; z = iz;
-	}
-#endif
 
 
 
