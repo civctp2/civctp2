@@ -112,8 +112,10 @@ void HappyTracker::Serialize(CivArchive &archive)
 	        }
 		    m_happinessAmounts[HAPPY_REASON_FEATS] = 0.0;
         }
-        else if (g_saveFileVersion <= 66)
+        else
         {
+            // Every later version stores the same array as version 66, which is what
+            // the store branch above writes (spec: specs/ctp2-dual-maps.spec.md, DM-ENG-REQ-006).
             archive.Load((uint8*) m_happinessAmounts,
                          sizeof(double) * HAPPY_REASON_MAX_VERSION_66
                         );

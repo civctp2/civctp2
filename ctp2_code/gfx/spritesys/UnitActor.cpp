@@ -1383,7 +1383,7 @@ void UnitActor::Serialize(CivArchive &archive)
 		}
 		m_type = (GROUPTYPE)archive.GetUINT8();
 
-		if (g_saveFileVersion >= 67) {
+		if (gamefile_HasWideSpriteIndices()) {
 			archive >> m_spriteID;
 		} else {
 			m_spriteID = (sint32)archive.GetUINT8();
@@ -1392,7 +1392,7 @@ void UnitActor::Serialize(CivArchive &archive)
 		m_playerNum = (sint32)archive.GetUINT8();
 		m_unitID    = Unit(archive.GetUINT32());
 
-		if (g_saveFileVersion >= 67) {
+		if (gamefile_HasWideSpriteIndices()) {
 			archive >> m_unitDBIndex;
 		} else {
 			m_unitDBIndex = (sint32)archive.GetUINT8();
