@@ -123,11 +123,7 @@ extern sint32                       g_isGridOn;
 extern ProgressWindow *             g_theProgressWindow;
 extern PointerList<Player> *        g_deadPlayer;
 
-#if USE_FORMAT_67
-#define k_GAME_MAGIC_VALUE		"CTP0067"
-#else
-#define k_GAME_MAGIC_VALUE		"CTP0066"
-#endif
+#define k_GAME_MAGIC_VALUE		"CTP0068"
 
 struct MagicValue
 {
@@ -136,9 +132,9 @@ struct MagicValue
 };
 
 #if USE_FORMAT_67
-#define k_NUM_MAGIC_VALUES 19
+#define k_NUM_MAGIC_VALUES 20
 #else
-#define k_NUM_MAGIC_VALUES 18
+#define k_NUM_MAGIC_VALUES 19
 #endif
 MagicValue s_magicValue[k_NUM_MAGIC_VALUES] =
 {
@@ -163,8 +159,9 @@ MagicValue s_magicValue[k_NUM_MAGIC_VALUES] =
 	{ "CTP0066", 66},   // Activision CTP2 patched
 	{ "CTP0067", 67},   // Apolyton
 #else
-	{ "CTP0066", 66}
+	{ "CTP0066", 66},
 #endif
+	{ "CTP0068", 68}    // Map plane coordinate
 };
 
 sint32 gamefile_CurrentVersion()
