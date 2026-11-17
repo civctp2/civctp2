@@ -26,6 +26,8 @@ description: 'Executable-level auto-explore orders for CTP2 units'
 ***test reqs***
 
 - Exercise at least three varied maps per behavior: open low-cost terrain, road-connected routes, and terrain with a visible hostile contact; include a case where high ground is impassable.
+- Exercise at least two short target routes and a journey that takes more than one turn; confirm route endpoints do not delete Auto-Explore, the same order resumes after movement refresh without another keypress, and a player-issued replacement order cancels it.
+- Run the 800x600 UIWalk gameplay regression through two owner-turn transitions after issuing Auto-Explore; require each end-turn date change, the same army's Auto-Explore log entries on at least three owner-turn values, and movement to at least three distinct positions without another player command.
 - Exercise legacy keymaps with lowercase `i` unassigned and occupied; verify the default is installed only when free, existing bindings remain intact, and Auto-Explore remains remappable.
 - Record chosen destinations, traversed route, revealed tiles, and stop reason so target selection can be compared against the contract.
 
@@ -48,7 +50,9 @@ description: 'Executable-level auto-explore orders for CTP2 units'
 - While a hostile unit is visible within one normal movement allowance, the auto-explorer must pause exploration and choose a reachable safe :Threat-Posture: destination with the highest applicable terrain defense value.
   - Given a reachable defensible ridge or mountain and an unsafe low-ground alternative, When a hostile unit is visible, Then the unit must prefer the defensible tile and must not enter a tile occupied by that hostile unit.
   - If the highest-defense terrain is impassable, the unit must choose the best reachable defensive tile under its native movement rules.
-- When the player issues another order, the unit becomes unable to move, or no safe unexplored destination remains, the auto-explore order must stop without replacing the player's order or issuing an unsafe move.
+- When the player issues another order or no safe useful destination remains, the auto-explore order must stop without replacing the player's order or issuing an unsafe move.
+- When an auto-exploring unit exhausts its movement for the turn, the executable must retain the same native Auto-Explore order and re-execute it automatically after that unit receives movement on its next turn; the order must recompute its target from the unit's current location and current owner-visible map.
+- Temporary movement exhaustion at turn end must not be treated as order completion; an order with no permanent movement capability or no safe useful destination may complete normally.
 - The auto-explorer must recompute safety, target value, and route after each movement segment and after newly visible units or terrain change the known map.
 - If an unknown tile blocks a planned route or native movement rejects the next step, the auto-explorer must recompute from the unit's actual location and stop if no safe route remains.
 - Given unknown terrain beyond the unit's current visibility, When the auto-explorer ranks targets, Then it must base its decision only on information the owner currently knows.

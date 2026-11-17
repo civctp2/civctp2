@@ -141,6 +141,22 @@
 //
 //----------------------------------------------------------------------------
 
+/*
+ * Auto-Explore order lifecycle
+ *
+ * | Stage | Mechanism | Tag | Requirement |
+ * |-------|-----------|-----|-------------|
+ * | ADVANCE | Increment the current path direction | mandatory | AE-REQ-007 |
+ * | RETAIN | Keep Auto-Explore at an intermediate target endpoint | mandatory | AE-REQ-007 |
+ * | COMPLETE | Remove other move orders at their path endpoint | contract | Native GOTO behavior |
+ *
+ * EARS: While safe useful Auto-Explore destinations remain, when a local path
+ *       ends, retain the Auto-Explore order for the queued re-evaluation.
+ * CLOSED: Ordinary move/GOTO orders still leave the queue at path completion.
+ * Preconditions: FinishMoveEvent calls this for the moved army's head order.
+ * Failure: Missing order or path is a no-op.
+ */
+
 #include "c3.h"
 #include "ArmyData.h"
 
@@ -10772,14 +10788,23 @@ void ArmyData::CheckAddEventOrder()
 	}
 }
 
-// moves one direction (tile) down a path, or removes order if at end of path
+/*
+ * Purpose: Advance a path and complete ordinary move orders at their endpoint.
+ * Require: Called after a successful movement segment for the army's head order.
+ * Called by: FinishMoveEvent.
+ * Depends on: Order path cursor and native order queue.
+ * Guarantee: Auto-Explore remains queued at local endpoints; ordinary path orders complete.
+ * Maintain: A retained Auto-Explore order is re-evaluated by the queued CheckOrders event.
+ * Failure modes: Missing order/path leaves the queue unchanged.
+ */
 void ArmyData::IncrementOrderPath()
 {
 	Order *order = m_orders->GetHead();
 	if(order && order->m_path)
 	{
 		order->m_path->IncDir();
-		if(order->m_path->IsEndDir())
+		if(order->m_path->IsEndDir() &&
+		   order->m_order != UNIT_ORDER_AUTO_EXPLORE)
 		{
 			m_orders->RemoveHead();
 			delete order;
