@@ -1,4 +1,3 @@
 SUBDIRS = \
-	3rdparty \
 	linux \
 	test
