@@ -2390,7 +2390,11 @@ void World::Serialize(CivArchive &archive)
 		}
 
 		archive << m_num_civ_starts;
-		archive.Store((uint8*)m_civ_starts, sizeof(m_civ_starts));
+		{
+			StartingPositionDisk civStartsOnDisk[k_MAX_START_POINTS];
+			StartingPosition_ToDisk(civStartsOnDisk, m_civ_starts, k_MAX_START_POINTS);
+			archive.Store((uint8*)civStartsOnDisk, sizeof(civStartsOnDisk));
+		}
 
 		archive << g_theResourceDB->NumRecords();
 		archive.Store((uint8*)m_goodValue, sizeof(double) * g_theResourceDB->NumRecords());
@@ -2431,7 +2435,18 @@ void World::Serialize(CivArchive &archive)
 		}
 
 		archive >> m_num_civ_starts;
-		archive.Load((uint8*)m_civ_starts, sizeof(m_civ_starts));
+		if(g_saveFileVersion < k_SAVE_VERSION_MAP_PLANE)
+		{
+			StartingPositionDiskV66 civStartsLegacy[k_MAX_START_POINTS];
+			archive.Load((uint8*)civStartsLegacy, sizeof(civStartsLegacy));
+			StartingPosition_FromDiskV66(m_civ_starts, civStartsLegacy, k_MAX_START_POINTS);
+		}
+		else
+		{
+			StartingPositionDisk civStartsOnDisk[k_MAX_START_POINTS];
+			archive.Load((uint8*)civStartsOnDisk, sizeof(civStartsOnDisk));
+			StartingPosition_FromDisk(m_civ_starts, civStartsOnDisk, k_MAX_START_POINTS);
+		}
 
 		archive >> g_numGoods;
 		if(g_numGoods == g_theResourceDB->NumRecords()){
