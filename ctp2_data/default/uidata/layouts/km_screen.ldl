@@ -251,7 +251,7 @@ KeyListItem {
 
 KeylistStrings {
 
-	int	numStrings	93    # Number of strings
+	int	numStrings	95    # Number of strings
 
 	string	string0		"str_tbl_ldl_What_the_"
 
@@ -299,69 +299,70 @@ KeylistStrings {
 #### END UNIT FUNCTIONS ####
 
 #### BEGIN SCREEN FUNCTIONS ####
-	string	string37	"str_tbl_ldl_Open_Civ_Status"
-	string	string38	"str_tbl_ldl_Open_City_Status"
-	string	string39	"str_tbl_ldl_Open_City_Management"	#new
-	string	string40	"str_tbl_ldl_Open_Build_Queue"		#new
-	string	string41	"str_tbl_ldl_Clear_Queue"
-	string	string42	"str_tbl_ldl_Open_Science_Status"
-	string	string43	"str_tbl_ldl_Open_Unit_Status"
-	string	string44	"str_tbl_ldl_Open_Trade_Status"
-	string	string45	"str_tbl_ldl_Open_Trade_Summary"	#new
-	string	string46	"str_tbl_ldl_Open_Diplomacy"
-	string	string47	"str_tbl_ldl_Open_Dip_Wizard"		#new
-	string	string48	"str_tbl_ldl_Message"
-	string	string49	"str_tbl_ldl_Gaia"			#new
-	string	string50	"str_tbl_ldl_Open_Great_Library"
-	string	string51	"str_tbl_ldl_Open_Info_Screen"
-	string	string52	"str_tbl_ldl_Open_Wonders"		#new	
-	string	string53	"str_tbl_ldl_Open_Ranking"		#new
-	string	string54	"str_tbl_ldl_Civ_Tab"
-	string	string55	"str_tbl_ldl_City_Tab"
-	string	string56	"str_tbl_ldl_Unit_Tab"
-	string	string57	"str_tbl_ldl_Msg_Tab"			#new
-	string	string58	"str_tbl_ldl_TileImp_Tab"		#new
-	string	string59	"str_tbl_ldl_Open_Chat"
-	string	string60	"str_tbl_ldl_Open_Network_Screen"
-	string	string61	"str_tbl_ldl_Open_Scenario_Editor"	#new
-	string	string62	"str_tbl_ldl_Execute_Eyepoint"		#02 new
-	string	string63	"str_tbl_ldl_Yes"			#02 new
-	string	string64	"str_tbl_ldl_No"			#02 new
+	string	string37	"str_tbl_ldl_Auto_Explore"
+	string	string38	"str_tbl_ldl_Open_Civ_Status"
+	string	string39	"str_tbl_ldl_Open_City_Status"
+	string	string40	"str_tbl_ldl_Open_City_Management"	#new
+	string	string41	"str_tbl_ldl_Open_Build_Queue"		#new
+	string	string42	"str_tbl_ldl_Clear_Queue"
+	string	string43	"str_tbl_ldl_Open_Science_Status"
+	string	string44	"str_tbl_ldl_Open_Unit_Status"
+	string	string45	"str_tbl_ldl_Open_Trade_Status"
+	string	string46	"str_tbl_ldl_Open_Trade_Summary"	#new
+	string	string47	"str_tbl_ldl_Open_Diplomacy"
+	string	string48	"str_tbl_ldl_Open_Dip_Wizard"		#new
+	string	string49	"str_tbl_ldl_Message"
+	string	string50	"str_tbl_ldl_Gaia"			#new
+	string	string51	"str_tbl_ldl_Open_Great_Library"
+	string	string52	"str_tbl_ldl_Open_Info_Screen"
+	string	string53	"str_tbl_ldl_Open_Wonders"		#new
+	string	string54	"str_tbl_ldl_Open_Ranking"		#new
+	string	string55	"str_tbl_ldl_Civ_Tab"
+	string	string56	"str_tbl_ldl_City_Tab"
+	string	string57	"str_tbl_ldl_Unit_Tab"
+	string	string58	"str_tbl_ldl_Msg_Tab"			#new
+	string	string59	"str_tbl_ldl_TileImp_Tab"		#new
+	string	string60	"str_tbl_ldl_Open_Chat"
+	string	string61	"str_tbl_ldl_Open_Network_Screen"
+	string	string62	"str_tbl_ldl_Open_Scenario_Editor"	#new
+	string	string63	"str_tbl_ldl_Execute_Eyepoint"		#02 new
+	string	string64	"str_tbl_ldl_Yes"			#02 new
+	string	string65	"str_tbl_ldl_No"			#02 new
 #### END SCREEN FUNCTIONS ####
 
 #### BEGIN GAME OPTIONS ####
-	string	string65	"str_tbl_ldl_ReMap_Keyboard"		
-	string	string66	"str_tbl_ldl_Open_Options_Screen"
-	string	string67	"str_tbl_ldl_Sound_Options"		#new
-	string	string68	"str_tbl_ldl_Music_Options"		#02 new
-	string	string69	"str_tbl_ldl_Language_Options"		#02 new
-	string	string70	"str_tbl_ldl_Graphics_Options"		#new
-	string	string71	"str_tbl_ldl_Gameplay_Options"		#new
-	string	string72	"str_tbl_ldl_Advanced_Options"		#new (really new)
-	string	string73	"str_tbl_ldl_Restart_Game"		#new
-	string	string74	"str_tbl_ldl_New_Game"			#new
-	string	string75	"str_tbl_ldl_Save_Game"
-	string	string76	"str_tbl_ldl_Load_Game"
-	string	string77	"str_tbl_ldl_Save_World"
-	string	string78	"str_tbl_ldl_Load_World"
-	string	string79	"str_tbl_ldl_Quit"
+	string	string66	"str_tbl_ldl_ReMap_Keyboard"
+	string	string67	"str_tbl_ldl_Open_Options_Screen"
+	string	string68	"str_tbl_ldl_Sound_Options"		#new
+	string	string69	"str_tbl_ldl_Music_Options"		#02 new
+	string	string70	"str_tbl_ldl_Language_Options"		#02 new
+	string	string71	"str_tbl_ldl_Graphics_Options"		#new
+	string	string72	"str_tbl_ldl_Gameplay_Options"		#new
+	string	string73	"str_tbl_ldl_Advanced_Options"		#new (really new)
+	string	string74	"str_tbl_ldl_Restart_Game"		#new
+	string	string75	"str_tbl_ldl_New_Game"			#new
+	string	string76	"str_tbl_ldl_Save_Game"
+	string	string77	"str_tbl_ldl_Load_Game"
+	string	string78	"str_tbl_ldl_Save_World"
+	string	string79	"str_tbl_ldl_Load_World"
+	string	string80	"str_tbl_ldl_Quit"
 #### END GAME OPTIONS ####	
 
 #### BEGIN MAP CONTROLS ####
-	string	string80	"str_tbl_ldl_Toggle_City_Names"
-	string	string81	"str_tbl_ldl_Toggle_Trade_Routes"
-	string	string82	"str_tbl_ldl_Center_Map_on_UnitCity"
-	string	string83	"str_tbl_ldl_Close_Message"
-	string	string84	"str_tbl_ldl_Toggle_Radar"		#new
-	string	string85	"str_tbl_ldl_Toggle_Ctl_Panel"		#new
-	string	string86	"str_tbl_ldl_Toggle_All"		#new
-	string	string87	"str_ldl_ZoomIn"
-	string	string88	"str_ldl_ZoomOut"
-	string	string89	"str_tbl_ldl_Gamestate_Debug"		#02 new (Only _PLAYTEST)
-	string	string90	"str_tbl_ldl_Rand_Test"			#02 new (Only _PLAYTEST)
-	string	string91	"str_tbl_ldl_Command_Enter"		#02 new (Only _PLAYTEST)
-	string	string92	"str_tbl_ldl_Command_Enter_Alternate"	#02 new (Only _PLAYTEST)
-	string	string93	"str_tbl_ldl_Toggle_Space"		#02 new
+	string	string81	"str_tbl_ldl_Toggle_City_Names"
+	string	string82	"str_tbl_ldl_Toggle_Trade_Routes"
+	string	string83	"str_tbl_ldl_Center_Map_on_UnitCity"
+	string	string84	"str_tbl_ldl_Close_Message"
+	string	string85	"str_tbl_ldl_Toggle_Radar"		#new
+	string	string86	"str_tbl_ldl_Toggle_Ctl_Panel"		#new
+	string	string87	"str_tbl_ldl_Toggle_All"		#new
+	string	string88	"str_ldl_ZoomIn"
+	string	string89	"str_ldl_ZoomOut"
+	string	string90	"str_tbl_ldl_Gamestate_Debug"		#02 new (Only _PLAYTEST)
+	string	string91	"str_tbl_ldl_Rand_Test"			#02 new (Only _PLAYTEST)
+	string	string92	"str_tbl_ldl_Command_Enter"		#02 new (Only _PLAYTEST)
+	string	string93	"str_tbl_ldl_Command_Enter_Alternate"	#02 new (Only _PLAYTEST)
+	string	string94	"str_tbl_ldl_Toggle_Space"		#02 new
 #### END MAP CONTROLS ####	
 
 }
