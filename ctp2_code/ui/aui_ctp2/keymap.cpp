@@ -159,7 +159,8 @@ static FUNC_TABLE func2key[] = {
 	{ 0, KEY_FUNCTION_OPEN_CITY_VIEW, "OPEN_CITY_VIEW"},
 	{ 0, KEY_FUNCTION_CONTROL_BUILD, "CONTROL_BUILD"},
 	{ 0, KEY_FUNCTION_CONTROL_NEXT, "CONTROL_NEXT"},
-	{ 0, KEY_FUNCTION_CONTROL_PREV, "CONTROL_PREV"}
+	{ 0, KEY_FUNCTION_CONTROL_PREV, "CONTROL_PREV"},
+	{ 0, KEY_FUNCTION_AUTO_EXPLORE, "AUTO_EXPLORE"}
 };
 
 KEYMAP::KEYMAP(BOOL useDefault)
@@ -197,10 +198,7 @@ KEYMAP::KEYMAP(BOOL useDefault)
 	do
 	{
 		if(!fgets(line, 1023, fin))
-		{
-			fclose(fin);
-			return;
-		}
+			break;
 
 		char *space = strchr(line, ' ');
 		if(!space)
@@ -301,6 +299,28 @@ KEYMAP::KEYMAP(BOOL useDefault)
 	}
 	while (!feof(fin));
 	fclose(fin);
+
+	// Older saved keymaps do not contain newly registered actions. Restore
+	// Auto-Explore's case-sensitive default only when lowercase i is free.
+	if(func2key[KEY_FUNCTION_AUTO_EXPLORE].keycode == 0)
+	{
+		unsigned long value = 'i';
+		uint32 slot = hash_32to16(value) & MASK_MAX_KEYPRESS_MAP;
+		uint32 first = slot;
+		while(key2func[slot].function != KEY_FUNCTION_NOOP &&
+		      key2func[slot].keycode != value)
+		{
+			slot = (slot + 1) % MAX_KEYPRESS_MAP;
+			if(slot == first)
+				return;
+		}
+		if(key2func[slot].function == KEY_FUNCTION_NOOP)
+		{
+			key2func[slot].keycode = value;
+			key2func[slot].function = KEY_FUNCTION_AUTO_EXPLORE;
+			func2key[KEY_FUNCTION_AUTO_EXPLORE].keycode = value;
+		}
+	}
 }
 
 uint32 KEYMAP::hash_32to16(unsigned long val)

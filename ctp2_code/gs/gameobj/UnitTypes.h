@@ -190,10 +190,11 @@ enum UNIT_ORDER_TYPE
 	UNIT_ORDER_VICTORY_MOVE,                 // 61
 	UNIT_ORDER_SETTLE_IN_CITY,               // 62
 	UNIT_ORDER_UPGRADE,                      // 63
+	UNIT_ORDER_AUTO_EXPLORE,                  // 64
 
 	// Add new orders above this line
 
-	UNIT_ORDER_MAX                           // 64
+	UNIT_ORDER_MAX                           // 65
 };
 
 enum SPECATTACK
