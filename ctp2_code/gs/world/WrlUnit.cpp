@@ -91,7 +91,7 @@ sint32 World::RemoveUnitReference (const MapPoint &pos, const Unit &id)
 	return result;
 }
 
-sint32 World::GetEmptyTransports(const MapPoint pos, CellUnitList &transports)
+sint32 World::GetEmptyTransports(const MapPoint pos, CellUnitList &transports, const PLAYER_INDEX &owner)
 {
 	Cell *ptr = GetCell(pos);
 
@@ -100,7 +100,15 @@ sint32 World::GetEmptyTransports(const MapPoint pos, CellUnitList &transports)
 	sint32 n = ptr->GetNumUnits();
 	for (sint32 i=0; i<n; i++)
 	{
-		if (0 < ptr->AccessUnit(i).GetCargoCapacity())
+		// Owner check added: a tile can momentarily hold a foreign unit
+		// invisible to us (fog of war doesn't block a zero-attack mover
+		// from sharing a tile with an unseen foreign unit - see
+		// UnitAstar::PretestDest_HasRoom's IsVisible() gate). Without this
+		// check a foreign unit sharing the tile could get silently
+		// auto-boarded onto our transport by CanCarry()'s pure type check -
+		// see army_list_desync_boardtransport memory.
+		if (ptr->AccessUnit(i).GetOwner() == owner &&
+		    0 < ptr->AccessUnit(i).GetCargoCapacity())
 		{
 			transports.Insert(ptr->AccessUnit(i));
 		}

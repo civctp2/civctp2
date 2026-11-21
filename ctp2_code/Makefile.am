@@ -3,6 +3,7 @@
 #
 
 SUBDIRS = \
+	pch \
 	os \
 	mapgen \
 	gs \

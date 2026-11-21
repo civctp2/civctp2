@@ -91,6 +91,7 @@ typedef void (* CivExceptionFunction) (void);
 #define k_DBG_ASTAR             0x00008000
 #define k_DBG_GOVERNOR          0x00010000
 #define k_DBG_GOVERNOR_DETAIL   0x00020000
+#define k_DBG_SQUAD_STRENGTH    0x00040000 // Add/Remove_Agent_Strength tracing for the Squad_Strength desync investigation - unconditional (every call, not just failures), but its own bit so it doesn't require pulling in all of k_DBG_SCHEDULER_DETAIL's other, much heavier output too.
 
 #define k_DEBUG_OWNER_NONE          0
 #define k_DEBUG_OWNER_CRC           1

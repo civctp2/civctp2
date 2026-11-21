@@ -226,6 +226,21 @@ void Player::BeginTurn()
 		DPRINTF(k_DBG_GAMESTATE, ("Player[%d]::BeginTurn: not running\n", m_owner));
 	}
 
+	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient()))
+	{
+		// Queued here, right before GEV_FinishBeginTurn, so MapAnalysis::BeginTurn()
+		// (run via this event) refreshes trade totals before Strengths::Calculate()
+		// (run via GEV_FinishBeginTurn -> ... -> FinishBeginTurnEvent) reads them for
+		// this turn's history point - otherwise it reads whatever was left over from
+		// the last time any player's map analysis ran. Was previously queued from
+		// TurnCntEvent.cpp's BeginTurnEvent, after this function returned, which put
+		// it behind GEV_FinishBeginTurn in the FIFO instead of ahead of it.
+		g_gevManager->AddEvent(GEV_INSERT_Tail,
+		                       GEV_AiBeginMapAnalysis,
+		                       GEA_Player, m_owner,
+		                       GEA_End);
+	}
+
 	if(!g_network.IsClient())
 	{
 		g_gevManager->AddEvent(GEV_INSERT_Tail,

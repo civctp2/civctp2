@@ -124,9 +124,34 @@ GOAL_GARRISON {
 
 GOAL_SEIGE {
   RallyFirst
-  NoRollback
+
+  # NeverSatisfied re-enabled (2026-10-29): it used to let this goal
+  # absorb every available agent in one matching pass, since
+  # Is_Satisfied() never returns true and Commit_Agent had no natural
+  # stopping point (one instance reached 255 agents, wrapping
+  # Squad_Strength's sint8 counters). That's now guarded by a hard
+  # unit ceiling in Goal::Commit_Agent itself, independent of any
+  # goal's own satisfaction logic - so deliberately overshooting the
+  # computed minimum here gives slack against losing a unit to
+  # bombardment while massing, instead of aborting the siege over a
+  # single casualty.
   NeverSatisfied
-  IsGlobalGoal
+
+  # NoRollback locked this goal's committed agents in for good once
+  # matched, even when a much better opportunity for those same units
+  # showed up elsewhere (e.g. 11 units already massed for a siege, while
+  # another unit stayed committed to marching across the map to besiege
+  # a different city alone). Its supposed stability benefit doesn't even
+  # survive a save/reload, so disabled.
+  #NoRollback
+
+  # Normally the AI determines the prioity of a goal
+  # by evaluating the units that could be used for the
+  # goal, too. For instance how far they are away.
+  # IsGlobalGoal makes the AI ignoring the unit positions.
+  # However, this is not necessary, so disabled. But it is
+  # still in the code.
+  #IsGlobalGoal
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -176,7 +201,6 @@ GOAL_SEIGE {
 
 GOAL_ATTACK {
   RallyFirst
-  NoRollback
 
   SquadClass:CanAttack
 
@@ -215,7 +239,6 @@ GOAL_ATTACK {
 
 GOAL_HARASS {
   RallyFirst
-  NoRollback
 
   SquadClass:CanAttack
 
@@ -519,7 +542,6 @@ GOAL_SLAVE_RAID {
 
 GOAL_CHOKEPOINT {
   RallyFirst
-  NoRollback
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -707,7 +729,6 @@ GOAL_NANOATTACK_CITY {
 
 GOAL_HARASS_CITY {
   RallyFirst
-  NoRollback
 
   SquadClass:CanAttack
   SquadClass:CanDefend
@@ -2046,7 +2067,6 @@ GOAL_PARADROP {
 
 GOAL_RANGED_ATTACK {
   RallyFirst
-  NoRollback
 
   SquadClass:CanAttack
 

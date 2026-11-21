@@ -10,12 +10,12 @@
 
 class CivArchive;
 
-class TerrainImprovementPool : public ObjPool
+class UnfinishedImprovementPool : public ObjPool
 {
 private:
 public:
-	TerrainImprovementPool();
-	TerrainImprovementPool(CivArchive &archive);
+	UnfinishedImprovementPool();
+	UnfinishedImprovementPool(CivArchive &archive);
 
 	TerrainImprovementData *AccessTerrainImprovement(const TerrainImprovement id)
 	{
@@ -43,5 +43,5 @@ public:
 	void Serialize(CivArchive &archive);
 };
 
-extern TerrainImprovementPool *g_theTerrainImprovementPool;
+extern UnfinishedImprovementPool *g_theUnfinishedImprovementPool;
 #endif

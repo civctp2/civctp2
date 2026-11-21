@@ -120,10 +120,10 @@ void NetTerrainImprovement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 
 	g_network.CheckReceivedObject((uint32)imp);
 
-	if(!g_theTerrainImprovementPool->IsValid(imp)) {
+	if(!g_theUnfinishedImprovementPool->IsValid(imp)) {
 		m_data = new TerrainImprovementData(imp);
 	} else {
-		m_data = g_theTerrainImprovementPool->AccessTerrainImprovement(imp);
+		m_data = g_theUnfinishedImprovementPool->AccessTerrainImprovement(imp);
 		oldpoint = m_data->m_point;
 		oldOwner = m_data->m_owner;
 	}
@@ -137,17 +137,17 @@ void NetTerrainImprovement::Unpacketize(uint16 id, uint8 *buf, uint16 size)
 	PULLBYTETYPE(m_data->m_transformType,TERRAIN_TYPES);
 	PULLLONG(m_data->m_materialCost);
 
-	if(!g_theTerrainImprovementPool->IsValid(imp)) {
-		g_theTerrainImprovementPool->HackSetKey(((uint32)imp & k_ID_KEY_MASK) + 1);
-		g_theTerrainImprovementPool->Insert(m_data);
-		g_theWorld->InsertImprovement(imp, m_data->m_point);
+	if(!g_theUnfinishedImprovementPool->IsValid(imp)) {
+		g_theUnfinishedImprovementPool->HackSetKey(((uint32)imp & k_ID_KEY_MASK) + 1);
+		g_theUnfinishedImprovementPool->Insert(m_data);
+		g_theWorld->InsertUnfinishedImprovement(imp, m_data->m_point);
 		g_tiledMap->RedrawTile(&m_data->m_point);
 		g_player[m_data->m_owner]->AddImprovement(imp);
 	} else {
 		if(oldpoint != m_data->m_point) {
 
-			g_theWorld->RemoveImprovement(imp, oldpoint);
-			g_theWorld->InsertImprovement(imp, m_data->m_point);
+			g_theWorld->RemoveUnfinishedImprovement(imp, oldpoint);
+			g_theWorld->InsertUnfinishedImprovement(imp, m_data->m_point);
 
 			g_tiledMap->RedrawTile(&oldpoint);
 			g_tiledMap->RedrawTile(&m_data->m_point);

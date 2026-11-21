@@ -70,13 +70,10 @@ STDEHANDLER(BeginTurnEvent)
 
 	g_player[player]->BeginTurn();
 
-	if(g_theProfileDB->IsAIOn() && (!g_network.IsClient()))
-	{
-		g_gevManager->AddEvent(GEV_INSERT_Tail, GEV_AiBeginMapAnalysis,
-		                       GEA_Player,      player,
-		                       GEA_End
-		                      );
-	}
+	// GEV_AiBeginMapAnalysis is now queued from inside Player::BeginTurn()
+	// (PlayerTurn.cpp), right before it queues GEV_FinishBeginTurn, so that
+	// MapAnalysis::BeginTurn() refreshes trade totals before Strengths::Calculate()
+	// reads them for this turn's history point.
 
 	CtpAi::BeginDiplomacy(player, round);
 

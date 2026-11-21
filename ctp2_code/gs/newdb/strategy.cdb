@@ -108,7 +108,11 @@ Strategy {
 	bit(Int) MinimumHappiness
 
 	// set maximum deficit spending percent (ie. spend up to 10% of our savings each turn)
-	bit(Float) DeficitSpending
+	// - given a default (matching the value every strategy currently sets)
+	// so callers get a safe direct-return getter instead of an
+	// easily-discarded bool; confirmed via governor.cpp's own
+	// -Wmaybe-uninitialized warning on SliderTests::CalcTests
+	bit(Float) DeficitSpending = 0.1
 
 	// set maximum percent of gold that should ever be spent on wages to not choke science
 	bit(Float) MaximumWagePercent
@@ -160,14 +164,30 @@ Strategy {
 	// stored PW must exceed cost to fix + threshold
 	Bit(Int) FixPollutionThreshold
 
-	// bonus for building road improvements
-	Bit(Float) RoadUtilityBonus
+	// bonus for building road improvements - given a default (matching the
+	// lowest real value in strategies.txt, 300/350) so callers get a safe
+	// direct-return getter; confirmed via governor.cpp's own
+	// -Wmaybe-uninitialized warning on AddRoadPriority's "bonus" pointing
+	// straight at this field's bool-discarding getter once a second read
+	// was added nearby
+	Bit(Float) RoadUtilityBonus = 300.0
+
+	// bonus for building an Airfield/Fort/detector-class (Listening Post/
+	// Radar Station/Sonar Buoy) installation - given a default so callers
+	// get a safe direct-return getter instead of an easily-discarded bool
+	Bit(Float) AirfieldUtilityBonus = 100.0
+	Bit(Float) FortUtilityBonus = 100.0
+	Bit(Float) DetectorUtilityBonus = 100.0
 
 	// bonus for building production improvements
 	Bit(Float) ImproveProductionBonus
 
 	// bonus for building growth improvements
 	Bit(Float) ImproveGrowthBonus
+
+	// bonus for building gold improvements - given a default so callers get
+	// a safe direct-return getter (see AirfieldUtilityBonus above)
+	Bit(Float) ImproveGoldBonus = 0.0
 
 	// bonus to apply to cells with goods
 	Bit(Float) ImproveGoodBonus
@@ -243,6 +263,7 @@ Strategy {
 	Bit (Float) OffensiveUnitsPercent
 	Bit (Float) DefensiveUnitsPercent
 	Bit (Float) RangedUnitsPercent
+	Bit (Float) FlankerUnitsPercent
 	Bit (Float) SeaUnitsPercent
 	Bit (Float) AirUnitsPercent
 
@@ -260,6 +281,7 @@ Strategy {
 	Bit (Record UnitBuildList) OffensiveUnitList
 	Bit (Record UnitBuildList) DefensiveUnitList
 	Bit (Record UnitBuildList) RangedUnitList
+	Bit (Record UnitBuildList) FlankerUnitList
 	Bit (Record UnitBuildList) SeaUnitList
 	Bit (Record UnitBuildList) AirUnitList
 
@@ -279,6 +301,7 @@ Strategy {
 	Bit (Int) OffensiveGarrisonCount = 0
 	Bit (Int) DefensiveGarrisonCount = 0
 	Bit (Int) RangedGarrisonCount = 0
+	Bit (Int) FlankerGarrisonCount = 0
 
 	// Additional units to reserve for garrison if the force match requires that
 	Int AdditionalGarrisonUnitsIfNeeded = 0
@@ -298,9 +321,11 @@ Strategy {
 		Bit ProductionCities         // Based on production
 		Bit GrowthCities             // Based growth
 		Bit CommerceCities           // Based on commerce income
+		Bit (Int) GoldNegativePriority // For a CommerceCities element: when the city's net gold is negative, match using this priority instead of the normal Top/Bottom commerce-rank check - a direct "losing money right now" override, independent of how the city ranks against others.
 		Bit HappyCities              // Based on happiness
 		Bit ThreatenedCities         // Based on enemy threat
 		Bit PowerCities              // Based on domestic attack strength
+		Bit HasDeficit               // Matches whenever the city's net gold is negative, independent of any rank-based criteria above
 		Bit Default                  // If neither top or bottom, then use default
 		Bit (StringId) Advice        // Advice to give player if selected
 		Bit (Int) SmallCitiesMaxSize // For cities up to this size
@@ -310,9 +335,26 @@ Strategy {
 		Bit (Int) BeforeMaxCitySize  // For cities that reached the maximum city size minus the value
 		Bit (Record BuildingBuildList) HasBuildingsThenStop // Don't use this entry if the city has all the buildings on this list.
 		Bit (Int) MinPollution       // Minimum Pollution needed to use this list
+		Bit (Int) MinOvercrowding    // Minimum population above the city's overcrowding threshold needed to use this list
 		Bit (Int) MaxRawHappiness    // Maximum Happiness allowed without entertainers and sliders to use this list
 		Bit CanBuildWonders          // Only applied if there are wonders buildable
 		Bit NoUnits                  // Ignores GarrisonUnitBuildList and AllUnitBuildList from the build list sequence
+
+		// Additional tile-improvement bonuses on top of the strategy-wide
+		// ImproveProductionBonus/ImproveGrowthBonus/ImproveGoldBonus, applied
+		// only to cities currently matching this element - lets a single
+		// strategy fine-tune tile-improvement choice per situation instead
+		// of just per personality.
+		Bit (Float) ImproveProductionBonus = 0.0
+		Bit (Float) ImproveGrowthBonus = 0.0
+		Bit (Float) ImproveGoldBonus = 0.0
+
+		// Same idea as the Improve*Bonus fields above, for the other
+		// strategy-wide tile-improvement bonuses.
+		Bit (Float) RoadUtilityBonus = 0.0
+		Bit (Float) AirfieldUtilityBonus = 0.0
+		Bit (Float) FortUtilityBonus = 0.0
+		Bit (Float) DetectorUtilityBonus = 0.0
 	}
 
 	// for each city with an empty build queue, build from first sequence that applies

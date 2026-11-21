@@ -62,7 +62,12 @@ extern DebugWindow *g_debugWindow;
 #define k_FILENAME            "logs" FILE_SEP "civ3log%.3d.txt"
 #define k_MAX_LOG_FILE_LINES  40000
 
-MBCHAR	s_logFileName[20];
+// "logs" FILE_SEP "civ3logNNN.txt" fits exactly in 20 bytes for a 3-digit
+// s_logFileNumber (0-999) - %.3d doesn't truncate, so once a long enough
+// run rotates past civ3log999.txt, the 4+ digit result overflows this
+// buffer. Sized generously so it can't happen again short of an
+// implausibly long run.
+MBCHAR	s_logFileName[64];
 sint32	s_logFileNumber=0;
 sint32	s_logLinesThisFile=0;
 
@@ -133,7 +138,7 @@ void c3debug_InitDebugLog()
 	s_logFileNumber = 0;
 	s_logLinesThisFile = 0;
 
-	sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
+	snprintf(s_logFileName, sizeof(s_logFileName), k_FILENAME, s_logFileNumber);
 
 	g_theLogFile = fopen(s_logFileName, "w");
 	Assert(g_theLogFile);
@@ -161,7 +166,7 @@ void c3debug_dprintfPrefix
 			{
 				s_logFileNumber++;
 				s_logLinesThisFile = 0;
-				sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
+				snprintf(s_logFileName, sizeof(s_logFileName), k_FILENAME, s_logFileNumber);
 				fclose(g_theLogFile);
 				g_theLogFile = fopen(s_logFileName, "a");
 				fprintf(g_theLogFile, "[Continued from Part %.3d]\n\n", s_logFileNumber-1);
@@ -197,7 +202,7 @@ void c3debug_dprintf(char const * format, ...)
 			{
 				s_logFileNumber++;
 				s_logLinesThisFile = 0;
-				sprintf(s_logFileName, k_FILENAME, s_logFileNumber);
+				snprintf(s_logFileName, sizeof(s_logFileName), k_FILENAME, s_logFileNumber);
 				fclose(g_theLogFile);
 				g_theLogFile = fopen(s_logFileName, "a");
 				fprintf(g_theLogFile, "[Continued from Part %.3d]\n\n", s_logFileNumber-1);

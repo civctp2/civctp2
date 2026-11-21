@@ -25,8 +25,8 @@
 // Modifications from the original Activision code:
 //
 // - Added AI attack, defense, ranged, land bombard, sea bombard, and air bombard
-//   player power grids to the mapanalysis. (30-Apr-2008 Martin Gühmann)
-// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gühmann)
+//   player power grids to the mapanalysis. (30-Apr-2008 Martin Gï¿½hmann)
+// - Fixed AI city rank calculation. (9-Nov-2009 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -37,6 +37,8 @@
 #define __MAP_ANALYSIS_H__
 
 #include <vector>
+#include <map>
+#include <utility>
 
 class MapAnalysis;
 
@@ -130,60 +132,91 @@ public:
 
 	const MapPoint & GetNearestForeigner(const PLAYER_INDEX player, const MapPoint & pos) const;
 
+	// All playerId-indexed getters below bounds-check against their own
+	// backing array before indexing. A newly-created civ (e.g. via a
+	// revolt spinning off a new player) can have a player index that
+	// briefly outruns these arrays' current size, until the next
+	// MapAnalysis::Resize() call grows them - querying one of these in
+	// that window used to read out-of-bounds, returning garbage instead
+	// of a safe 0 (confirmed via GetTotalTrade: the write side, bounded
+	// correctly by m_threatGrid.size() in BeginTurn's own loop, logged a
+	// clean 0 for a new high-index player the same turn this getter
+	// returned a multi-hundred-million garbage value feeding the
+	// trade-power graph).
 	sint32 TotalThreat(const PLAYER_INDEX & playerId) const
 	{
+		if (static_cast<size_t>(playerId) >= m_threatGrid.size())
+			return 0;
 		return static_cast<sint32>(m_threatGrid[playerId].GetTotalValue());
 	}
 
 	sint32 TotalValue(const PLAYER_INDEX & playerId) const
 	{
+		if (static_cast<size_t>(playerId) >= m_valueGrid.size())
+			return 0;
 		return static_cast<sint32>(m_valueGrid[playerId].GetTotalValue());
 	}
 
 	sint32 TotalCityValue(const PLAYER_INDEX & playerId) const
 	{
+		if (static_cast<size_t>(playerId) >= m_cityValueGrid.size())
+			return 0;
 		return static_cast<sint32>(m_cityValueGrid[playerId].GetTotalValue());
 	}
 
 	sint32 GetTotalTrade(const PLAYER_INDEX & playerId) const
 	{
-		if (m_totalTrade.size() <= 0)
+		if (static_cast<size_t>(playerId) >= m_totalTrade.size())
 			return 0;
 		return m_totalTrade[playerId];
 	}
 
 	sint32 GetProjectedScience(const PLAYER_INDEX & playerId) const
 	{
+		if (static_cast<size_t>(playerId) >= m_projectedScience.size())
+			return 0;
 		return m_projectedScience[playerId];
 	}
 
 	sint32 GetTradeAtRisk(const PLAYER_INDEX & playerId, const MapPoint & pos ) const
 	{
+		if (static_cast<size_t>(playerId) >= m_tradeAtRiskGrid.size())
+			return 0;
 		return static_cast<sint32>(m_tradeAtRiskGrid[playerId].GetGridValue(pos) / 1000);
 	}
 
 	sint32 TotalTradeAtRisk(const PLAYER_INDEX & playerId) const
 	{
+		if (static_cast<size_t>(playerId) >= m_tradeAtRiskGrid.size())
+			return 0;
 		return static_cast<sint32>(m_tradeAtRiskGrid[playerId].GetTotalValue() / 1000);
 	}
 
 	sint32 GetMaxTradeAtRisk(const PLAYER_INDEX & player) const
 	{
+		if (static_cast<size_t>(player) >= m_tradeAtRiskGrid.size())
+			return 0;
 		return static_cast<sint32>(m_tradeAtRiskGrid[player].GetMaxGridValue() / 1000);
 	}
 
 	sint32 GetPiracyLoss(const PLAYER_INDEX & playerId, const MapPoint & pos ) const
 	{
+		if (static_cast<size_t>(playerId) >= m_piracyLossGrid.size())
+			return 0;
 		return static_cast<sint32>(m_piracyLossGrid[playerId].GetGridValue(pos));
 	}
 
 	sint32 TotalPiracyLoss(const PLAYER_INDEX & playerId) const
 	{
+		if (static_cast<size_t>(playerId) >= m_piracyLossGrid.size())
+			return 0;
 		return static_cast<sint32>(m_piracyLossGrid[playerId].GetTotalValue());
 	}
 
 	sint32 GetMaxPiracyLoss(const PLAYER_INDEX & player) const
 	{
+		if (static_cast<size_t>(player) >= m_piracyLossGrid.size())
+			return 0;
 		return static_cast<sint32>(m_piracyLossGrid[player].GetMaxGridValue());
 	}
 
@@ -268,19 +301,29 @@ private:
 
 	Sint16Vector m_piracyIncomeMatrix;
 
-	sint32 m_minCityProduction;
-	sint32 m_minCityGrowth;
-	sint32 m_minCityGold;
-	sint32 m_minCityHappiness;
+	// Percentile rank (1.0 = highest, 0.0 = lowest, evenly spaced by city
+	// *count*) of the current working player's (see RecalcCityRanks)
+	// cities on each metric, keyed by CityData::GetHomeCity().m_id. Used
+	// by Get*Rank(). Replaced a plain [min, max] *range* normalization
+	// (a value's position between the range's endpoints) - not the same
+	// thing whenever cities cluster (e.g. most cities converging to
+	// similar high production with only a few weak stragglers keeping the
+	// range's min low makes "top 10% of the range" capture far more than
+	// 10% of cities). See ComputeCityPercentileRanks().
+	std::map<uint32, double> m_cityProductionPercentile;
+	std::map<uint32, double> m_cityGrowthPercentile;
+	std::map<uint32, double> m_cityGoldPercentile;
+	std::map<uint32, double> m_cityHappinessPercentile;
 
-	sint32 m_maxCityProduction;
-	sint32 m_maxCityGrowth;
-	sint32 m_maxCityGold;
-	sint32 m_maxCityHappiness;
+	void ComputeCityPercentileRanks(const std::vector<std::pair<uint32, sint32> > & values,
+	                                 std::map<uint32, double> & out) const;
 
-	// Should be replaced by simple integers, too
-	Sint32Vector m_minCityThreat;
-	Sint32Vector m_maxCityThreat;
+	// Per-player, same percentile-by-count scheme as m_cityProductionPercentile
+	// et al above (GetThreatRank() used the same min/max-range mismatch
+	// this replaced) - indexed by player id, computed once per turn in
+	// BeginTurn() for every player at once (unlike the others, which are
+	// recomputed per player per governor cycle in RecalcCityRanks()).
+	std::vector<std::map<uint32, double> > m_cityThreatPercentile;
 
 	MapPointVector m_empireCenter;
 

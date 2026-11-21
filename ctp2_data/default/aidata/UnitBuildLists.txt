@@ -28,7 +28,7 @@
 #
 #----------------------------------------------------------------------------
 
-# 27
+# 28
 
 ## 0 ##########################################################
 
@@ -179,48 +179,72 @@ UNIT_BUILD_LIST_ALL_SETTLER {
 
 ## 18 #########################################################
 
+# Category UNIT_CATEGORY_DEFENSE units, plus Paratrooper/Hover Infantry
+# (Category UNIT_CATEGORY_ATTACK) to cover the gap between Infantryman
+# and Leviathon
 UNIT_BUILD_LIST_DEFENSE {
   Unit UNIT_WARRIOR
   Unit UNIT_HOPLITE
   Unit UNIT_PIKEMEN
   Unit UNIT_INFANTRYMAN
-  Unit UNIT_MACHINE_GUNNER
-  Unit UNIT_FASCIST
   Unit UNIT_PARATROOPER
-  Unit UNIT_MARINE
   Unit UNIT_HOVER_INFANTRY
+  Unit UNIT_LEVIATHON
 }
 
 ## 19 #########################################################
 
+# Category UNIT_CATEGORY_ATTACK units
 UNIT_BUILD_LIST_OFFENSE {
-  Unit UNIT_WARRIOR
   Unit UNIT_HOPLITE
+  Unit UNIT_WARRIOR
 //  Unit UNIT_CHARIOT
   Unit UNIT_SWORDSMAN
-  Unit UNIT_KNIGHT
   Unit UNIT_INFANTRYMAN
-  Unit UNIT_TANK
-  Unit UNIT_FUSION_TANK
-  Unit UNIT_ARTILLERY
-  Unit UNIT_MOBILE_SAM
-  Unit UNIT_CAVALRY
+  Unit UNIT_FASCIST
+  Unit UNIT_MACHINE_GUNNER
+  Unit UNIT_MARINE
+  Unit UNIT_HOVER_INFANTRY
 }
 
 ## 20 #########################################################
 
+# Category UNIT_CATEGORY_RANGED units
 UNIT_BUILD_LIST_RANGED {
   Unit UNIT_ARCHER
+  Unit UNIT_MOUNTED_ARCHER
+  # Cut content: EnableAdvance ADVANCE_SUBNEURAL_ADS requires itself, so
+  # this can never actually be researched/built. Ranged 25 puts it here,
+  # between Mounted Archer (20) and Catapult (30).
+  Unit UNIT_LONGBOWMAN
   Unit UNIT_CATAPULT
   Unit UNIT_CANNON
   Unit UNIT_ARTILLERY
   Unit UNIT_MOBILE_SAM
-  Unit UNIT_TANK
-  Unit UNIT_FUSION_TANK
   Unit UNIT_WAR_WALKER
 }
 
 ## 21 #########################################################
+
+# All Category UNIT_CATEGORY_FLANKER/IsFlanker units, ordered by Attack,
+# plus Warrior/Swordsman (Category UNIT_CATEGORY_ATTACK) as early-game
+# fallbacks - Knight needs Feudalism, so without them this list has no
+# turn-1 unit and its whole FlankerUnitsPercent share goes unused every
+# turn until then (see the discussion this caused)
+UNIT_BUILD_LIST_FLANKERS {
+  Unit UNIT_WARRIOR
+  Unit UNIT_SWORDSMAN
+  Unit UNIT_KNIGHT
+  # Cut content: EnableAdvance ADVANCE_SUBNEURAL_ADS requires itself, so
+  # this can never actually be researched/built. Attack 30 puts it here,
+  # between Knight (25) and Cavalry (35).
+  Unit UNIT_ELEPHANT_WARRIOR
+  Unit UNIT_CAVALRY
+  Unit UNIT_TANK
+  Unit UNIT_FUSION_TANK
+}
+
+## 22 #########################################################
 
 UNIT_BUILD_LIST_SEA {
   Unit UNIT_WARRIOR
@@ -241,7 +265,7 @@ UNIT_BUILD_LIST_SEA {
   Unit UNIT_DREADNAUGHT
 }
 
-## 22 #########################################################
+## 23 #########################################################
 
 UNIT_BUILD_LIST_AIR {
   Unit UNIT_ARCHER
@@ -253,14 +277,14 @@ UNIT_BUILD_LIST_AIR {
   Unit UNIT_STEALTH_BOMBER
 }
 
-## 23 #########################################################
+## 24 #########################################################
 
 UNIT_BUILD_LIST_FREIGHT {
   Unit UNIT_CARAVAN
   Unit UNIT_Z_FREIGHT_TRANSPORT
 }
 
-## 24 #########################################################
+## 25 #########################################################
 
 UNIT_BUILD_LIST_NAVAL_SPECIAL {
   Unit UNIT_FIGHTER
@@ -276,7 +300,7 @@ UNIT_BUILD_LIST_NAVAL_SPECIAL {
   Unit UNIT_PLASMA_DESTROYER
 }
 
-## 25 #########################################################
+## 26 #########################################################
 
 UNIT_BUILD_LIST_AIR_SPECIAL {
   Unit UNIT_FIGHTER
@@ -284,7 +308,7 @@ UNIT_BUILD_LIST_AIR_SPECIAL {
   Unit UNIT_STEALTH_FIGHTER
 }
 
-## 26 #########################################################
+## 27 #########################################################
 
 UNIT_BUILD_LIST_MISSILE_SPECIAL {
   Unit UNIT_CRUISE_MISSILE

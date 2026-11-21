@@ -235,6 +235,53 @@ void Unit::RemoveAllReferences(const CAUSE_REMOVE_ARMY cause, PLAYER_INDEX kille
 			     m_id, owner, cause, killedBy, pos.x, pos.y,
 			     cell ? cell->GetNumUnits() : -1,
 			     cell ? cell->GetCity().m_id : 0));
+
+			// Was this unit's own bookkeeping already out of sync with
+			// the world before this removal was even attempted? Compare
+			// this unit's recorded pos against its army's, and list what
+			// the cell actually has instead - to tell a position/army
+			// desync apart from a genuine double-kill (see the still-
+			// unidentified double-kill path noted in Unit::KillUnit).
+			Army army = GetArmy();
+			DPRINTF(k_DBG_GAMESTATE,
+			    ("Unit::RemoveAllReferences: unit's army 0x%lx pos (%d,%d) %s unit's own pos\n",
+			     army.m_id,
+			     army.IsValid() ? army->RetPos().x : -1,
+			     army.IsValid() ? army->RetPos().y : -1,
+			     (army.IsValid() && army->RetPos() == pos) ? "matches" : "DIFFERS FROM"));
+			// A playtest log ruled out the position/army desync theory
+			// above (always "matches"), but showed the cell instead
+			// holding a single, unrelated unit - consistent with this
+			// unit's whole army already having been consolidated off the
+			// cell (e.g. as a side effect of an earlier sibling kill in
+			// the same CTP2Combat::KillUnits batch) before this unit's own
+			// deferred GEV_KillUnit got to run. Log the army's own
+			// remaining member count to confirm or rule that out.
+			DPRINTF(k_DBG_GAMESTATE,
+			    ("Unit::RemoveAllReferences: unit's army 0x%lx IsValid=%d Num=%d\n",
+			     army.m_id, army.IsValid(),
+			     army.IsValid() ? army->Num() : -1));
+			if (cell)
+			{
+				for (sint32 ci = 0; ci < cell->GetNumUnits(); ci++)
+				{
+					// A playtest hit showed the army valid with exactly 1
+					// member (this unit) - ruling out the sibling-kill
+					// theory above too - while the cell already held one
+					// unrelated survivor instead. Log that survivor's own
+					// owner/army to check whether it's the winning side's
+					// combatant having already consolidated onto this tile
+					// (e.g. via GEV_BattleAftermath, which combatevent.cpp
+					// deliberately runs before this unit's own deferred
+					// GEV_KillUnit) ahead of this removal.
+					Unit    other      = cell->AccessUnit(ci);
+					Army    otherArmy  = other.IsValid() ? other.GetArmy() : Army();
+					DPRINTF(k_DBG_GAMESTATE,
+					    ("Unit::RemoveAllReferences: cell actually contains unit 0x%lx owner %d army 0x%lx\n",
+					     other.m_id, other.IsValid() ? other.GetOwner() : -1,
+					     otherArmy.m_id));
+				}
+			}
 		}
 		Assert(r);
 	}
@@ -608,7 +655,27 @@ bool Unit::SetPosition(const MapPoint &p, UnitDynamicArray *revealed)
 	bool left_map = false;
 	AccessData()->SetPos(p, left_map);
 
-	return left_map || g_theWorld->InsertUnit(p, *this, revealed);
+	bool inserted = left_map || g_theWorld->InsertUnit(p, *this, revealed);
+
+	if(!inserted)
+	{
+		// SetPos() above already committed this unit's own position to (p)
+		// unconditionally, but CellUnitList::Insert just refused to
+		// register it there (tile already at k_MAX_ARMY_SIZE) - a "ghost"
+		// registration: the unit believes it arrived, the cell's own
+		// tracked list still doesn't include it. Suspected source of
+		// CityData::SetCurrentGarrison's and CellUnitList::Insert's own
+		// k_MAX_ARMY_SIZE Asserts, since anything that trusts a unit's own
+		// RetPos() instead of the cell's list (e.g.
+		// CtpAi::ComputeCityGarrisons, which sums defense_count across
+		// every army whose own position matches a city) can overcount
+		// relative to what the cell actually holds.
+		DPRINTF(k_DBG_GAMESTATE,
+		    ("Unit::SetPosition: id 0x%lx -> (%d,%d) rejected by cell (already at k_MAX_ARMY_SIZE=%d) - position committed anyway, unit not in CellUnitList\n",
+		     m_id, p.x, p.y, k_MAX_ARMY_SIZE));
+	}
+
+	return inserted;
 }
 
 void Unit::SetPosAndNothingElse(const MapPoint &p)

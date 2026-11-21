@@ -108,8 +108,18 @@ void Strengths::Calculate()
 				m_strengthRecords[i].Insert(g_player[m_owner]->GetCurrentPollution()) ;
 				break;
 			case STRENGTH_CAT_TRADE:
-				m_strengthRecords[i].Insert(g_player[m_owner]->GetTradeStrength());
+			{
+				sint32 tradeStrength = g_player[m_owner]->GetTradeStrength();
+				// Read-side counterpart to MapAnalysis::BeginTurn's own
+				// per-city diagnostic - logs the exact value/turn/player
+				// actually recorded into the trade-power-graph history, to
+				// catch a future spike at its source instead of inferring
+				// it indirectly from per-city gold values.
+				DPRINTF(k_DBG_AI, ("Strengths::Calculate: player %d turn %d STRENGTH_CAT_TRADE = %d\n",
+				        m_owner, NewTurnCount::GetCurrentRound(), tradeStrength));
+				m_strengthRecords[i].Insert(tradeStrength);
 				break;
+			}
 			case STRENGTH_CAT_GOLD:
 				m_strengthRecords[i].Insert(g_player[m_owner]->m_gold->GetIncome());
 				break;

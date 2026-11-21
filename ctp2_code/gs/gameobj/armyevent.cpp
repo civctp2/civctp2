@@ -263,6 +263,11 @@ STDEHANDLER(ArmyGroupUnitOrderEvent)
 	if(!args->GetArmy(0, a)) return GEV_HD_Continue;
 	if(!args->GetUnit(0, u)) return GEV_HD_Continue;
 
+	// Transported units belong to no army - another goal/agent may have
+	// boarded this unit onto a transport in the same scheduling pass that
+	// decided to group it here. Same guard as AddUnitToArmyEvent.
+	if(u.Flag(k_UDF_IS_IN_TRANSPORT)) return GEV_HD_Continue;
+
 	MapPoint pos;
 
 	a->AddOrders(UNIT_ORDER_GROUP_UNIT, NULL, pos, u.m_id);

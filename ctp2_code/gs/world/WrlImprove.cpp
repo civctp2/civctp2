@@ -66,15 +66,15 @@ sint32 Terrain::GetGold() const
 }
 
 void
-World::InsertImprovement(const TerrainImprovement &imp, MapPoint const & pnt)
+World::InsertUnfinishedImprovement(const TerrainImprovement &imp, MapPoint const & pnt)
 {
-	GetCell(pnt)->InsertImprovement(imp);
+	GetCell(pnt)->InsertUnfinishedImprovement(imp);
 }
 
 void
-World::RemoveImprovement(const TerrainImprovement &imp, const MapPoint &pnt)
+World::RemoveUnfinishedImprovement(const TerrainImprovement &imp, const MapPoint &pnt)
 {
-	GetCell(pnt)->RemoveImprovement(imp);
+	GetCell(pnt)->RemoveUnfinishedImprovement(imp);
 }
 
 void
@@ -95,19 +95,19 @@ World::RemoveInstallation(Installation &inst, MapPoint const & pnt)
 
 sint32 World::CountImprovements(const MapPoint & pos)
 {
-  sint32 count = 0;
-  Cell* cell = GetCell(pos);
-  if(cell->m_env & k_MASK_ENV_ROAD)
-	count++;
-  if(cell->m_env & k_MASK_ENV_IRRIGATION)
-	count++;
-  if(cell->m_env & k_MASK_ENV_MINE)
-	count++;
+	sint32 count = 0;
+	Cell* cell = GetCell(pos);
+	if(cell->m_env & k_MASK_ENV_ROAD)
+		count++;
+	if(cell->m_env & k_MASK_ENV_IRRIGATION)
+		count++;
+	if(cell->m_env & k_MASK_ENV_MINE)
+		count++;
 
-  DynamicArray<Installation> l_array;
-  g_theInstallationTree->GetAt(pos, l_array);
+	DynamicArray<Installation> l_array;
+	g_theInstallationTree->GetAt(pos, l_array);
 
-  return count + l_array.Num();
+	return count + l_array.Num();
 }
 
 sint32 World::GetMaxFoodFromTerrain()
@@ -118,8 +118,8 @@ sint32 World::GetMaxFoodFromTerrain()
 		return max_food;
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
-    {
-        max_food = std::max(max_food, Terrain(g_theTerrainDB->Get(i)).GetFood());
+	{
+		max_food = std::max(max_food, Terrain(g_theTerrainDB->Get(i)).GetFood());
 	}
 
 	return max_food;
@@ -133,11 +133,26 @@ sint32 World::GetMaxShieldsFromTerrain()
 		return max_prod;
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
-    {
-        max_prod = std::max(max_prod, Terrain(g_theTerrainDB->Get(i)).GetShield());
+	{
+		max_prod = std::max(max_prod, Terrain(g_theTerrainDB->Get(i)).GetShield());
 	}
 
 	return max_prod;
+}
+
+sint32 World::GetMaxGoldFromTerrain()
+{
+	static sint32 max_gold = 0;
+
+	if (max_gold != 0)
+		return max_gold;
+
+	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
+	{
+		max_gold = std::max(max_gold, Terrain(g_theTerrainDB->Get(i)).GetGold());
+	}
+
+	return max_gold;
 }
 
 sint32 World::GetAvgFoodFromTerrain()
@@ -148,7 +163,7 @@ sint32 World::GetAvgFoodFromTerrain()
 		return avg_food;
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
-    {
+	{
 		avg_food += Terrain(g_theTerrainDB->Get(i)).GetFood();
 	}
 	avg_food /= g_theTerrainDB->NumRecords();
@@ -164,7 +179,7 @@ sint32 World::GetAvgShieldsFromTerrain()
 		return avg_prod;
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
-    {
+	{
 		avg_prod += Terrain(g_theTerrainDB->Get(i)).GetShield();
 	}
 	avg_prod /= g_theTerrainDB->NumRecords();
@@ -180,7 +195,7 @@ sint32 World::GetAvgGoldFromTerrain()
 		return avg_gold;
 
 	for (sint32 i = 0; i < g_theTerrainDB->NumRecords(); i++)
-    {
+	{
 		avg_gold += Terrain(g_theTerrainDB->Get(i)).GetGold();
 	}
 	avg_gold /= g_theTerrainDB->NumRecords();

@@ -570,7 +570,12 @@ CityData::CityData(PLAYER_INDEX owner, Unit hc, const MapPoint &center_point)
 
 	ResetStarvationTurns();
 
-	m_distanceToGood    = new sint32[g_theResourceDB->NumRecords()];
+	// Zero-initialized (not just allocated): FindGoodDistances() always
+	// runs right after this during a normal Initialize()/load, but a
+	// genuinely uninitialized array here is a live landmine for any code
+	// that reads GetDistanceToGood() during a window this analysis hasn't
+	// fully ruled out - see tradeutil_GetTradeValue's own diagnostic.
+	m_distanceToGood    = new sint32[g_theResourceDB->NumRecords()]();
 
 	m_ringFood          = new sint32[g_theCitySizeDB->NumRecords()];
 	m_ringProd          = new sint32[g_theCitySizeDB->NumRecords()];
@@ -973,16 +978,16 @@ void CityData::Serialize(CivArchive &archive)
 
 		if(ressourceNum == g_theResourceDB->NumRecords())
 		{
-			m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
+			m_distanceToGood = new sint32[g_theResourceDB->NumRecords()](); // zero-init, see Initialize()'s allocation comment
 			archive.Load((uint8*)m_distanceToGood, sizeof(sint32) * g_theResourceDB->NumRecords());
 		}
 		else
 		{ // Fix trade if the good database was increased in size.
 
-			sint32 *tmpDistanceToGood = new sint32[ressourceNum];
+			sint32 *tmpDistanceToGood = new sint32[ressourceNum]();
 			archive.Load((uint8*)tmpDistanceToGood, sizeof(sint32) * ressourceNum);
 
-			m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
+			m_distanceToGood = new sint32[g_theResourceDB->NumRecords()](); // zero-init, see Initialize()'s allocation comment - FindGoodDistances() right below resets every slot anyway, but matches the other sites for consistency
 
 			// To check later: next 3 lines are invalid when CTP1_TRADE has been defined. See CityData.h.
 			m_collectingResources.Resize(g_theResourceDB->NumRecords());
@@ -1336,7 +1341,7 @@ CityData::CityData(CivArchive &archive)
 CityData::CityData(CityData *copy)
 : m_name(NULL)
 {
-	m_distanceToGood = new sint32[g_theResourceDB->NumRecords()];
+	m_distanceToGood = new sint32[g_theResourceDB->NumRecords()](); // zero-init, see Initialize()'s allocation comment - memcpy() below overwrites it fully anyway
 	m_happy = new Happy;
 
 	m_ringFood  = new sint32[g_theCitySizeDB->NumRecords()];
@@ -2477,6 +2482,75 @@ double CityData::GetUtilisationRatio(uint32 const squaredDistance) const
 	       : static_cast<double>(partialRingWorkers) /
 	         static_cast<double>(maxRingWorkers - fullRingWorkers);
 }
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetRingImprovementPriority
+//
+// Description: Ring-based priority for tile-improvement targeting: inner
+//              rings are preferred over outer ones. Deliberately separate
+//              from GetUtilisationRatio (current worker headcount - correct
+//              for CollectResources' real income accounting, but wrong
+//              here: an outer ring has no workers precisely because nothing
+//              is built there yet, so scoring candidates by it punishes
+//              exactly the tiles a growing city needs built to ever grow
+//              into that ring).
+//
+// Parameters : pos: Position of the candidate tile
+//
+// Globals    : g_theCitySizeDB: The city size database
+//
+// Returns    : double: 0.0 outside the city's current reach, otherwise
+//              1.0 for the innermost real ring (ring 1 - ring 0 is the
+//              city tile itself, never a candidate), dropping by
+//              1/maxPossibleRing per ring out. Normalised against the
+//              largest ring any city could ever reach (g_theCitySizeDB's
+//              last record), not the city's own current edge, so a given
+//              ring is always worth the same regardless of city size, and
+//              the scale doesn't drift as a city grows. The +1 keeps the
+//              spread deliberately shallow (outermost reachable ring still
+//              ~0.33, not near zero) so ring distance only nudges the
+//              choice rather than dominating it, and a good-terrain outer
+//              tile can still occasionally out-bid a road or fort. A small
+//              city's only-reachable tiles are inherently low-numbered
+//              rings on the global scale, so they score well without any
+//              special-case floor.
+//
+//----------------------------------------------------------------------------
+double CityData::GetRingImprovementPriority(MapPoint pos) const
+{
+	sint32 const ring = GetRing(pos);
+
+	if (ring < 0 || ring > m_workerPartialUtilizationIndex)
+		return 0.0;    // no ring found, or outside the city's current reach
+
+	sint32 const maxPossibleRing = g_theCitySizeDB->NumRecords() - 1;
+	sint32 const stepsIn         = maxPossibleRing - ring + 1;
+
+	return static_cast<double>(stepsIn) / static_cast<double>(maxPossibleRing);
+}
+
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::GetRingImprovementPriorityFraction
+//
+// Description: Gets the diference between the tile improvement priorities
+//              between two adjacent rings.
+//
+// Parameters : -
+//
+// Globals    : g_theCitySizeDB: The city size database
+//
+// Returns    : The diference between the tile improvement priorities
+//              between two adjacent rings.
+//
+//----------------------------------------------------------------------------
+double CityData::GetRingImprovementPriorityFraction()
+{
+	sint32 const maxPossibleRing = g_theCitySizeDB->NumRecords() - 1;
+
+	return 1.0 / static_cast<double>(maxPossibleRing);
+}
 #endif
 
 //----------------------------------------------------------------------------
@@ -2585,9 +2659,9 @@ void CityData::CollectResources()
 			}
 		}
 		// Added by E (10-29-2005) - If a tileimp has enablegood then give to city
-		for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++)
+		for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++)
 		{
-			sint32 imp = cell->GetDBImprovement(i);
+			sint32 imp = cell->GetBuiltImprovementType(i);
 			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 			if (rec->GetNumEnablesGood() > 0)
 			{
@@ -2598,9 +2672,9 @@ void CityData::CollectResources()
 			}
 		}
 		//EMOD enablesgood applied to terrain::effect
-		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++)
+		for(sint32 t = 0; t < cell->GetNumBuiltImprovementTypes(); t++)
 		{
-			sint32 timp = cell->GetDBImprovement(t);
+			sint32 timp = cell->GetBuiltImprovementType(t);
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
 			if (effect)
@@ -3701,8 +3775,13 @@ void CityData::CalculateBonusGold()
 	t1.start();
 #endif
 
-	m_bonusGold  = static_cast<double>(CalculateGoldFromResources());
-	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  CalculateGoldFromResources    = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
+	// The one real per-turn commit point - CalculateGoldFromTradeRoutes()
+	// itself no longer writes these members, so this is the only place
+	// that does (see its own doc comment). Everyone else gets a fresh,
+	// non-persisted computation.
+	m_goldFromTradeRoutes = CalculateGoldFromTradeRoutes(&m_goldLostToPiracy);
+	m_bonusGold  = static_cast<double>(m_goldFromTradeRoutes);
+	DPRINTF(k_DBG_GOVERNOR_DETAIL, ("//  CalculateGoldFromTradeRoutes    = %f ms (%s)\n", t1.getElapsedTimeInMilliSec(), GetName()));
 
 	Player* player_ptr = g_player[m_owner];
 	sint32 gov = player_ptr->m_government_type;
@@ -3920,9 +3999,9 @@ void CityData::CalculateBonusScie()
 	for(it.Start(); !it.End(); it.Next())
 	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		for(sint32 t = 0; t < cell->GetNumDBImprovements(); t++)
+		for(sint32 t = 0; t < cell->GetNumBuiltImprovementTypes(); t++)
 		{
-			sint32 imp = cell->GetDBImprovement(t);
+			sint32 imp = cell->GetBuiltImprovementType(t);
 			const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, it.Pos());
 			if(effect)
@@ -4224,6 +4303,21 @@ double CityData::CalculateGrossGrowthRate(double &overcrowdingCoeff, double &bas
 		baseRate = maxGrowthRate;
 		overcrowdingCoeff = 1;
 	}
+	else if(maxPop <= overcrowding)
+	{
+		// Building bonuses (GetBuildingOvercrowdingBonus/
+		// GetBuildingMaxPopIncrease) are added independently on top of the
+		// size record's base values, so they can tie maxPop and
+		// overcrowding exactly - PopCount() is then also pinned to that
+		// same value by the population cap, making the division below
+		// 0.0/0.0. The resulting NaN overcrowdingCoeff slips past
+		// CityWindow::DrawGrowthBar's [0,1] clamp (every NaN comparison
+		// is false) and casting it to sint32 there is undefined behavior,
+		// which is what was tripping aui_Blitter::ColorBlt's rect assert.
+		// No room is left before the cap here, so it's fully overcrowded.
+		baseRate = 0.0;
+		overcrowdingCoeff = 0;
+	}
 	else
 	{
 		double popRatio = static_cast<double>(PopCount() - overcrowding) / static_cast<double>(maxPop - overcrowding);
@@ -4422,7 +4516,7 @@ void CityData::AddTradeResource(ROUTE_TYPE type, sint32 resource)
 //
 // Globals    :
 //
-// Returns    : sint32 m_goldFromTradeRoutes (via CalculateGoldFromResources() )
+// Returns    : sint32 m_goldFromTradeRoutes (via CalculateGoldFromTradeRoutes() )
 //
 // Remark(s)  :
 //
@@ -4555,20 +4649,49 @@ void CityData::CalculateTradeRoutes(bool projectedOnly)
 	}
 }
 
-sint32 CityData::CalculateGoldFromResources()
+//----------------------------------------------------------------------------
+//
+// Name       : CityData::CalculateGoldFromTradeRoutes
+//
+// Description: Computes this city's current gold income from trade routes
+//              (and, via the out-param, gold lost to piracy) fresh from
+//              m_tradeSourceList - does NOT write m_goldFromTradeRoutes/
+//              m_goldLostToPiracy itself. The real per-turn commit
+//              (CityData.cpp, called from ProcessProduction) is the only
+//              place that assigns the returned values to those members;
+//              everyone else (UI screens wanting a live number, logging)
+//              gets a fresh computation without disturbing the canonical
+//              per-turn value MapAnalysis/the historical strength graph
+//              read via GetGoldFromTradeRoutes(). Previously this function
+//              mutated those members on every call, including from two UI
+//              call sites that could fire at any arbitrary moment mid-turn
+//              (CauseAndEffectTab, trademanager) - which could make the
+//              graph record a value that never corresponded to any real
+//              turn boundary. See traderoute_calculate_vs_getter session
+//              notes.
+//
+// Parameters : outGoldLostToPiracy: if non-NULL, receives the gold lost to
+//                                    piracy this call computed
+//
+// Globals    : -
+//
+// Returns    : sint32: gold from trade routes not currently being pirated
+//
+//----------------------------------------------------------------------------
+sint32 CityData::CalculateGoldFromTradeRoutes(sint32 * outGoldLostToPiracy)
 {
-	m_goldFromTradeRoutes = 0;
-	m_goldLostToPiracy    = 0;
+	sint32 goldFromTradeRoutes = 0;
+	sint32 goldLostToPiracy    = 0;
 
 	for(sint32 i = 0; i < m_tradeSourceList.Num(); i++)
 	{
 		if(!m_tradeSourceList[i]->IsBeingPirated())
 		{
-			m_goldFromTradeRoutes += m_tradeSourceList[i]->GetValue();
+			goldFromTradeRoutes += m_tradeSourceList[i]->GetValue();
 		}
 		else
 		{
-			m_goldLostToPiracy += m_tradeSourceList[i]->GetValue();
+			goldLostToPiracy += m_tradeSourceList[i]->GetValue();
 		}
 	}
 
@@ -4576,13 +4699,16 @@ sint32 CityData::CalculateGoldFromResources()
 
 	if(wonderTradeBonus > 0)
 	{
-		m_goldFromTradeRoutes += sint32(double(m_goldFromTradeRoutes) *
-		                                (double(wonderTradeBonus) * 0.01));
-		m_goldLostToPiracy += sint32(double(m_goldLostToPiracy) *
-		                             (double(wonderTradeBonus) * 0.01));
+		goldFromTradeRoutes += sint32(double(goldFromTradeRoutes) *
+		                              (double(wonderTradeBonus) * 0.01));
+		goldLostToPiracy += sint32(double(goldLostToPiracy) *
+		                           (double(wonderTradeBonus) * 0.01));
 	}
 
-	return m_goldFromTradeRoutes;
+	if(outGoldLostToPiracy)
+		*outGoldLostToPiracy = goldLostToPiracy;
+
+	return goldFromTradeRoutes;
 }
 
 //----------------------------------------------------------------------------
@@ -5207,7 +5333,7 @@ bool CityData::BeginTurn()
 
 		if(!m_terrainImprovementWasBuilt
 		&& it.Pos() != pos
-		&& cell->GetNumDBImprovements() > 0
+		&& cell->GetNumBuiltImprovementTypes() > 0
 		&& cell->GetCityOwner() == GetHomeCity()
 		){
 			m_terrainImprovementWasBuilt = true;
@@ -5534,7 +5660,7 @@ void CityData::AddWonder(sint32 type)
 				Cell *ocell = g_theWorld->GetCell(SpotFound);
 
 				if ((!SpotFound.IsValid())
-				|| ((ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements())
+				|| ((ncell->GetNumBuiltImprovementTypes() < ocell->GetNumBuiltImprovementTypes())
 				|| (ncell->GetGoldFromTerrain() > ocell->GetGoldFromTerrain()))
 				){
 					SpotFound = it.Pos();
@@ -5930,9 +6056,18 @@ void CityData::CityRadiusFunc(const MapPoint &pos)
 				Cell *cell = g_theWorld->GetCell(pos);
 				if(cell->GetCanDie())
 				{
-					cell->Kill();
-
+					// CutImprovements() kills installations synchronously
+					// (Installation::Kill() -> RemoveAllReferences()), which
+					// looks up its own vision range via the terrain it's
+					// still standing on to know how much vision to retract.
+					// Do this before Kill() flips the terrain to
+					// TERRAIN_DEAD, or that lookup finds no TerrainEffect
+					// for Dead terrain (neither Airfields nor Fortifications
+					// define one), fails, and silently skips retracting the
+					// installation's vision entirely.
 					g_theWorld->CutImprovements(pos);
+
+					cell->Kill();
 
 					cell->CalcTerrainMoveCost();
 					MapPoint nonConstPos = pos;
@@ -6394,18 +6529,38 @@ void CityData::CleanupUprising(Army &sa)
 		DPRINTF(k_DBG_GAMESTATE, ("The uprising succeeded in city: %s\n", m_home_city.CD()->GetName()));
 
 		// city army was already removed by sa.Fight(defenders); in CityData::FinishUprising
-
+		// (that only holds when the fight actually killed every defender -
+		// sa.Fight only auto-kills the whole defending stack when every
+		// single defender has 0 attack and 0 defense; otherwise it falls
+		// through to normal stack combat, which does not guarantee every
+		// defender dies). A unit can also simply have had no reason to
+		// fight at all: a barbarian city is normally undefended (barbarians
+		// are purely offensive, they keep no garrison), so any unit sitting
+		// here is typically not a defeated defender but something like a
+		// unit the city itself finished building this same turn, with
+		// nothing to fight over. Either way, a leftover unit of the old
+		// owner is still standing on what is about to become the new
+		// civilisation's tile - transfer it along with the city instead of
+		// leaving it orphaned under an owner who no longer holds the
+		// ground it's on.
 		PLAYER_INDEX si = civilisation_NewCivilisationOrVandals(m_owner);
 		sint32 nsa = sa.Num();
+
+		CellUnitList leftover;
+		g_theWorld->GetArmy(m_home_city.RetPos(), leftover);
+		for(sint32 i = leftover.Num() - 1; i >= 0; i--)
+		{
+			if(leftover[i].IsValid() && leftover[i].GetOwner() == m_owner)
+			{
+				leftover[i].ResetUnitOwner(si, CAUSE_REMOVE_ARMY_SLAVE_UPRISING);
+			}
+		}
 
 		if (si != PLAYER_INDEX_VANDALS)
 		{ // number of possible players not exausted
 			g_player[si]->ContactMade(m_owner); // create diplomatic contact, needed for fighting back with adjacent units to city if uprise succeeds
 			g_player[m_owner]->ContactMade(si); // in both directions
 
-			Diplomat::GetDiplomat(si).ComputeAllDesireWarWith(); // avoid assertion with Diplomat::SetDiplomaticState with new civ
-			Diplomat::GetDiplomat(m_owner).ComputeAllDesireWarWith(); // avoid assertion with Diplomat::SetDiplomaticState with new civ
-			Diplomat::GetDiplomat(PLAYER_INDEX_VANDALS).ComputeAllDesireWarWith(); // avoid assertion with Diplomat::SetDiplomaticState with new civ
 		}
 
 		for(sint32 i = nsa - 1; i >= 0; i--) // build (new) army with normal units
@@ -6644,9 +6799,9 @@ bool CityData::HasTileImpInRadius(sint32 tileimp) const
 	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
 
-		for(sint32 i = 0; i < cell->GetNumDBImprovements(); ++i)
+		for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); ++i)
 		{
-			if(cell->GetDBImprovement(i) == tileimp)
+			if(cell->GetBuiltImprovementType(i) == tileimp)
 			{
 				return true;
 			}
@@ -6666,7 +6821,7 @@ bool CityData::HasAnyTileImpInRadiusAndIsExploredBy(const sint32 player) const
 
 		if
 		  (
-		       cell->GetNumDBImprovements() > 0
+		       cell->GetNumBuiltImprovementTypes() > 0
 		    && g_player[player]->IsExplored(it.Pos())
 		  )
 		{
@@ -6816,6 +6971,7 @@ void CityData::ResetCityOwner(sint32 owner)
 	{
 		g_theWorld->GetCell(it.Pos())->SetCityOwner(m_home_city);
 		g_theWorld->GetCell(it.Pos())->SetOwner(owner);
+		g_theWorld->SyncInstallationOwners(it.Pos(), owner);
 		g_network.Block(owner);
 		g_network.Enqueue(g_theWorld->GetCell(it.Pos()), it.Pos().x, it.Pos().y);
 		g_network.Unblock(owner);
@@ -6836,6 +6992,17 @@ void CityData::ResetCityOwner(sint32 owner)
 	n = m_tradeSourceList.Num();
 	for(i = n-1; i >= 0; i--)
 		m_tradeSourceList[i].Kill(CAUSE_KILL_TRADE_ROUTE_CITY_CHANGED_OWNER);
+
+	// The routes themselves are now dead, but m_goldFromTradeRoutes/
+	// m_goldLostToPiracy are cached scalars only written by
+	// CalculateBonusGold() - nothing above touches them, so without this
+	// a city that changes hands keeps reporting its *previous* owner's
+	// last-computed trade income until its own next CalculateBonusGold()
+	// call naturally overwrites it. Misattributing an established trade
+	// network's income to a brand-new owner (e.g. a revolt spinning off a
+	// new civ) produced a one-turn trade-power-graph spike.
+	m_goldFromTradeRoutes = 0;
+	m_goldLostToPiracy    = 0;
 
 	m_build_queue.ResetOwner(owner);
 
@@ -7160,7 +7327,7 @@ void CityData::SetRoad() const
 	            rec     = terrainutil_GetBestRoad(m_owner, pos);
 	if (rec)
 	{
-		cell->InsertDBImprovement(rec->GetIndex());
+		cell->InsertBuiltImprovementType(rec->GetIndex());
 
 		if (rec->GetClassOceanRoad())
 		{
@@ -8941,10 +9108,10 @@ void CityData::AdjustSizeIndices()
 
 	sint32 oldSizeIndex = m_sizeIndex;
 #if defined(NEW_RESOURCE_PROCESS)
-	ComputeSizeIndexes(WorkerCount(),
+	ComputeSizeIndexes(WorkerCount() + SlaveCount(),
 	                   m_sizeIndex);
 #else
-	ComputeSizeIndexes(WorkerCount(),
+	ComputeSizeIndexes(WorkerCount() + SlaveCount(),
 	                   m_sizeIndex,
 	                   m_workerFullUtilizationIndex,
 	                   m_workerPartialUtilizationIndex);
@@ -9219,7 +9386,20 @@ void CityData::SetCurrentGarrison(const sint8 & value)
 {
 	Assert(value >= 0);
 	Assert(value <= k_MAX_ARMY_SIZE);
-	m_currentGarrison = value;
+
+	// Clamp rather than store an invariant-violating value regardless of root
+	// cause. ComputeCityGarrisons (ctpai.cpp) sums defense_count across every
+	// army whose own RetPos() matches this city - that overcounts if a unit's
+	// position was set to a city tile that CellUnitList::Insert actually
+	// refused for being at the k_MAX_ARMY_SIZE cap (see Unit::SetPosition's
+	// diagnostic for that). A garrison count above the max stack size is
+	// logically impossible and shouldn't propagate into stored city state.
+	sint8 clamped = value;
+	if(clamped < 0)
+		clamped = 0;
+	if(clamped > k_MAX_ARMY_SIZE)
+		clamped = k_MAX_ARMY_SIZE;
+	m_currentGarrison = clamped;
 }
 
 sint8 CityData::GetNeededGarrison() const
@@ -10151,30 +10331,6 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 	}
 	/////////////////////////////////////
 
-	const CitySizeRecord *nextRec = NULL;
-	if(m_sizeIndex >= 0
-		&& m_sizeIndex < g_theCitySizeDB->NumRecords())
-	{
-		nextRec = g_theCitySizeDB->Get(m_sizeIndex);
-	}
-	else
-	{
-		nextRec = g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords()-1);
-	}
-
-	double foodForNextRing;
-	if(nextRec)
-	{
-//		foodForNextRing = GetFoodRequired(nextRec->GetPopulation() + 1 - SlaveCount());
-		foodForNextRing = GetFoodRequired(nextRec->GetPopulation() - SlaveCount());
-	}
-	else
-	{
-		foodForNextRing = GetFoodRequired(PopCount() - SlaveCount());
-	}
-
-	double foodForNextPop = GetFoodRequired(PopCount() + 1 - SlaveCount());
-
 	const StrategyRecord & strategy = Diplomat::GetDiplomat(m_owner).GetCurrentStrategy();
 
 	sint32 timePerPop = strategy.GetTurnsAcceptedForOnePop();
@@ -10186,25 +10342,59 @@ sint32 CityData::HowMuchMoreFoodNeeded(sint32 bonusFood, bool onlyGrwoth, bool c
 //	DPRINTF(k_DBG_GAMESTATE, ("m_food_delta: %f\n", m_food_delta));
 	food -= foodDelta;
 //	DPRINTF(k_DBG_GAMESTATE, ("Food: %i\n", static_cast<sint32>(food)));
-//	DPRINTF(k_DBG_GAMESTATE, ("foodForNextRing: %i\n", static_cast<sint32>(foodForNextRing)));
-//	DPRINTF(k_DBG_GAMESTATE, ("maxFoodFromTerrain: %i\n", static_cast<sint32>(maxFoodFromTerrain)));
 
-	if(food < foodForNextRing - maxFoodFromTerrain)
+	// onlyGrwoth was previously ignored here (only the #if
+	// NEW_RESOURCE_PROCESS branch, which never compiles since that macro
+	// is permanently undefined, respected it) - the next-ring/next-pop
+	// floor below always applied regardless of the caller's request.
+	// governor.cpp's two callers pass onlyGrwoth=false wanting the raw
+	// growth-rate figure without this floor; only CityData::NeedMoreFood
+	// wants it (onlyGrwoth=true).
+	if(onlyGrwoth)
 	{
-		food = foodForNextRing - maxFoodFromTerrain;
-	}
-//	DPRINTF(k_DBG_GAMESTATE, ("FoodNextRing: %i\n", static_cast<sint32>(food)));
+		const CitySizeRecord *nextRec = NULL;
+		if(m_sizeIndex >= 0
+			&& m_sizeIndex < g_theCitySizeDB->NumRecords())
+		{
+			nextRec = g_theCitySizeDB->Get(m_sizeIndex);
+		}
+		else
+		{
+			nextRec = g_theCitySizeDB->Get(g_theCitySizeDB->NumRecords()-1);
+		}
 
-//	DPRINTF(k_DBG_GAMESTATE, ("Food: %i\n", static_cast<sint32>(food)));
-//	DPRINTF(k_DBG_GAMESTATE, ("foodForNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
-//	DPRINTF(k_DBG_GAMESTATE, ("currentFood: %i\n", static_cast<sint32>(currentFood)));
+		double foodForNextRing;
+		if(nextRec)
+		{
+//			foodForNextRing = GetFoodRequired(nextRec->GetPopulation() + 1 - SlaveCount());
+			foodForNextRing = GetFoodRequired(nextRec->GetPopulation() - SlaveCount());
+		}
+		else
+		{
+			foodForNextRing = GetFoodRequired(PopCount() - SlaveCount());
+		}
 
-	if(food < foodForNextPop - currentFood)
-	{
-		food = foodForNextPop - currentFood;
+		double foodForNextPop = GetFoodRequired(PopCount() + 1 - SlaveCount());
+
+//		DPRINTF(k_DBG_GAMESTATE, ("foodForNextRing: %i\n", static_cast<sint32>(foodForNextRing)));
+//		DPRINTF(k_DBG_GAMESTATE, ("maxFoodFromTerrain: %i\n", static_cast<sint32>(maxFoodFromTerrain)));
+
+		if(food < foodForNextRing - maxFoodFromTerrain)
+		{
+			food = foodForNextRing - maxFoodFromTerrain;
+		}
+//		DPRINTF(k_DBG_GAMESTATE, ("FoodNextRing: %i\n", static_cast<sint32>(food)));
+
+//		DPRINTF(k_DBG_GAMESTATE, ("foodForNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
+//		DPRINTF(k_DBG_GAMESTATE, ("currentFood: %i\n", static_cast<sint32>(currentFood)));
+
+		if(food < foodForNextPop - currentFood)
+		{
+			food = foodForNextPop - currentFood;
+		}
+//		DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
+//		DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(food)));
 	}
-//	DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(foodForNextPop)));
-//	DPRINTF(k_DBG_GAMESTATE, ("FoodNextPop: %i\n", static_cast<sint32>(food)));
 
 	return static_cast<sint32>(ceil(food));
 
@@ -11388,9 +11578,9 @@ sint32 CityData::TileImpHappinessIncr() const
 	for (it.Start(); !it.End(); it.Next())
 	{
 		Cell *cell = g_theWorld->GetCell(it.Pos());
-		for (sint32 t = 0; t < cell->GetNumDBImprovements(); t++)
+		for (sint32 t = 0; t < cell->GetNumBuiltImprovementTypes(); t++)
 		{
-			sint32 timp = cell->GetDBImprovement(t);
+			sint32 timp = cell->GetBuiltImprovementType(t);
 			const TerrainImprovementRecord *trec = g_theTerrainImprovementDB->Get(timp);
 			const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(trec, it.Pos());
 
@@ -11876,7 +12066,7 @@ void CityData::AddCityExpansion()
 
 			if(terrainutil_CanPlayerSpecialBuildAt(UrbanImp, m_owner, it.Pos())
 			){
-				if(ncell->GetNumDBImprovements() < ocell->GetNumDBImprovements()
+				if(ncell->GetNumBuiltImprovementTypes() < ocell->GetNumBuiltImprovementTypes()
 				|| ncell->GetGoldFromTerrain()   > ocell->GetGoldFromTerrain()
 				  )
 				{

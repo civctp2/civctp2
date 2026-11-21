@@ -99,7 +99,7 @@ BOOL TerrainImprovementData::Complete(void)
 	const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(m_type);
 	if(!rec->GetClassTerraform() && !rec->GetClassOceanform())
 	{
-		theCell->InsertDBImprovement(m_type);
+		theCell->InsertBuiltImprovementType(m_type);
 
 		if(rec->GetClassOceanRoad())
 		{
@@ -119,7 +119,7 @@ BOOL TerrainImprovementData::Complete(void)
 			g_theWorld->SmartSetTerrain(m_point, terr, 0);
 		}
 	}
-	theCell->RemoveImprovement(imp);
+	theCell->RemoveUnfinishedImprovement(imp);
 
 	if(rec->GetClassTerraform() || rec->GetClassOceanform())
 	{

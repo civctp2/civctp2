@@ -301,8 +301,9 @@ public:
 	bool IsLandContinent () const { return m_continentIDs.IsLandContinent(); }
 	void InvalidateContinent() { m_continentIDs.InvalidateContinent(); }
 
-	sint32 GetNumImprovements() const;
-	TerrainImprovement AccessImprovement(sint32 index);
+	sint32 GetNumUnfinishedImprovements() const;
+	TerrainImprovement GetUnfinishedImprovement(sint32 index) const;
+	TerrainImprovement AccessUnfinishedImprovement(sint32 index);
 
 	void Serialize(CivArchive &archive) ;
 
@@ -331,14 +332,15 @@ public:
 #endif
 	bool GetGoodsIndex (sint32 &val) const;
 
-	void InsertImprovement(const TerrainImprovement &imp);
-	void RemoveImprovement(const TerrainImprovement &imp);
+	void InsertUnfinishedImprovement(const TerrainImprovement &imp);
+	void RemoveUnfinishedImprovement(const TerrainImprovement &imp);
 
-	void InsertDBImprovement(sint32 dbType);
-	void RemoveDBImprovement(sint32 dbType);
-	sint32 GetNumDBImprovements() const;
+	void InsertBuiltImprovementType(sint32 dbType);
+	void RemoveBuiltImprovementType(sint32 dbType);
+	sint32 GetNumBuiltImprovementTypes() const;
 	sint32 GetNumPillagableTerrainImprovements() const;
-	sint32 GetDBImprovement(sint32 index) const;
+	sint32 GetBuiltImprovementType(sint32 index) const;
+	bool HasTerrainImprovementOfType(sint32 type) const;
 	bool HasTerrainImprovementOrInFuture(sint32 type) const;
 
 #ifdef BATTLE_FLAGS

@@ -342,8 +342,12 @@ void Advances::GrantAdvance()
 
 void Advances::GiveAdvance(AdvanceType adv, CAUSE_SCI cause, BOOL fromClient)
 {
-	DPRINTF(k_DBG_GAMESTATE, ("Advance: Player %d was given %s\n", m_owner,
-			g_theAdvanceDB->GetNameStr(adv)));
+	// Every advance-acquisition path (genuine research completion via GEV_GrantAdvance/
+	// CAUSE_SCI_RESEARCH, diplomacy, goody huts, combat capture, cheats, ...) funnels through
+	// here - Advances::GrantAdvance() and its "discovered" wording are dead code, never called
+	// anywhere. Log `cause` too so a playtest log can actually tell these apart.
+	DPRINTF(k_DBG_GAMESTATE, ("Advance: Player %d was given %s, cause: %d\n", m_owner,
+			g_theAdvanceDB->GetNameStr(adv), (sint32) cause));
 
 	if (    m_hasAdvance[adv]           // already known
 	     || !g_slicEngine->CallMod      // forbidden by game settings

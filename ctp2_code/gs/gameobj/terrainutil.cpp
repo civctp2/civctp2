@@ -264,6 +264,116 @@ const TerrainImprovementRecord *terrainutil_GetBestRoad(sint32 player, const Map
 	}
 }
 
+bool terrainutil_IsAirfieldEffect(const TerrainImprovementRecord::Effect *effect)
+{
+	return effect && effect->GetAirport();
+}
+
+bool terrainutil_IsDetectorEffect(const TerrainImprovementRecord::Effect *effect)
+{
+	return effect && (effect->GetRadar() || effect->GetListeningPost());
+}
+
+bool terrainutil_IsFortEffect(const TerrainImprovementRecord::Effect *effect)
+{
+	double bonus;
+	return effect && effect->GetDefenseBonus(bonus) && bonus > 0.0;
+}
+
+const TerrainImprovementRecord *terrainutil_GetBestAirfield(sint32 player, const MapPoint &pos)
+{
+	sint32 bestIndex = -1;
+	sint32 bestRange = -1;
+
+	for(sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
+
+		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+		if(!terrainutil_IsAirfieldEffect(effect)) continue;
+
+		if(!g_player[player]->HasAdvance(effect->GetEnableAdvanceIndex())) continue;
+
+		sint32 visionRange = 0;
+		effect->GetVisionRange(visionRange);
+		sint32 radarRange = 0;
+		effect->GetRadarRange(radarRange);
+
+		sint32 range = visionRange + radarRange;
+		if(range <= bestRange)
+			continue;
+
+		bestRange = range;
+		bestIndex = i;
+	}
+
+	if(bestIndex >= 0) {
+		return g_theTerrainImprovementDB->Get(bestIndex);
+	} else {
+		return NULL;
+	}
+}
+
+const TerrainImprovementRecord *terrainutil_GetBestDetector(sint32 player, const MapPoint &pos)
+{
+	sint32 bestIndex = -1;
+	sint32 bestRange = -1;
+
+	for(sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
+
+		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+		if(!terrainutil_IsDetectorEffect(effect)) continue;
+
+		if(!g_player[player]->HasAdvance(effect->GetEnableAdvanceIndex())) continue;
+
+		sint32 visionRange = 0;
+		effect->GetVisionRange(visionRange);
+		sint32 radarRange = 0;
+		effect->GetRadarRange(radarRange);
+
+		sint32 range = visionRange + radarRange;
+		if(range <= bestRange)
+			continue;
+
+		bestRange = range;
+		bestIndex = i;
+	}
+
+	if(bestIndex >= 0) {
+		return g_theTerrainImprovementDB->Get(bestIndex);
+	} else {
+		return NULL;
+	}
+}
+
+const TerrainImprovementRecord *terrainutil_GetBestFort(sint32 player, const MapPoint &pos)
+{
+	sint32 bestIndex = -1;
+	double bestBonus = 0.0;
+
+	for(sint32 i = 0; i < g_theTerrainImprovementDB->NumRecords(); i++) {
+		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(i);
+
+		const TerrainImprovementRecord::Effect *effect = terrainutil_GetTerrainEffect(rec, pos);
+		if(!terrainutil_IsFortEffect(effect)) continue;
+
+		if(!g_player[player]->HasAdvance(effect->GetEnableAdvanceIndex())) continue;
+
+		double bonus = 0.0;
+		if(effect->GetDefenseBonus(bonus) && bonus <= bestBonus)
+			continue;
+
+		bestBonus = bonus;
+		bestIndex = i;
+	}
+
+	if(bestIndex >= 0) {
+		return g_theTerrainImprovementDB->Get(bestIndex);
+	} else {
+		return NULL;
+	}
+}
+
 sint32 terrainutil_GetTimeToBuild(const MapPoint &pos, sint32 fromType, sint32 toType)
 {
 	return 10;
@@ -392,9 +502,9 @@ void terrainutil_DoVision(const MapPoint &point)
 	sint32  maxVisionRange  = 0;
 	sint32  type            = -1;
 
-	for (sint32 impr = 0; impr < cell->GetNumDBImprovements(); ++impr)
+	for (sint32 impr = 0; impr < cell->GetNumBuiltImprovementTypes(); ++impr)
 	{
-		sint32      t       = cell->GetDBImprovement(impr);
+		sint32      t       = cell->GetBuiltImprovementType(impr);
 		TerrainImprovementRecord::Effect const *
 		            effect  = terrainutil_GetTerrainEffect
 		                        (g_theTerrainImprovementDB->Get(t),
@@ -877,7 +987,7 @@ bool terrainutil_CanPlayerBuildAt(const TerrainImprovementRecord *rec, sint32 pl
 		if(rec->GetNumPrerequisiteTileImp() > 0) {
 			bool hasCorrectImp = false;
 			for(i = 0; i < rec->GetNumPrerequisiteTileImp(); i++) {
-				if(rec->GetPrerequisiteTileImpIndex(i) == cell->GetDBImprovement(i)) {
+				if(rec->GetPrerequisiteTileImpIndex(i) == cell->GetBuiltImprovementType(i)) {
 						hasCorrectImp = true;
 						break;
 				}
@@ -991,11 +1101,11 @@ void terrainutil_GetDefenseBonus(const MapPoint & pos, double & terrain_bonus, d
 	terrain_bonus = cell->GetTerrainDefenseBonus();
 	double bonus;
 
-	sint32 numDBImps = cell->GetNumDBImprovements();
+	sint32 numDBImps = cell->GetNumBuiltImprovementTypes();
 
 	for(sint32 i = 0; i < numDBImps; i++)
 	{
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1017,9 +1127,9 @@ bool terrainutil_HasUpgrader(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1038,9 +1148,9 @@ bool terrainutil_CanBeCaptured(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1059,9 +1169,9 @@ bool terrainutil_HasColony(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1080,9 +1190,9 @@ bool terrainutil_HasMinefield(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1101,9 +1211,9 @@ bool terrainutil_HasAirfield(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1122,9 +1232,9 @@ bool terrainutil_HasListeningPost(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1143,9 +1253,9 @@ bool terrainutil_HasFort(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1164,9 +1274,9 @@ bool terrainutil_HasRadar(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1185,9 +1295,9 @@ bool terrainutil_HasEndgame(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1375,6 +1485,16 @@ void terrainutil_RemoveBorders(const MapPoint &center, sint32 owner, sint32 intR
 		if(!stillOwned) // Has to check influence from other cities
 		{
 			cell->SetOwner(PLAYER_UNASSIGNED);
+
+			// Unlike every other tile-ownership change (e.g.
+			// CityData::ResetCityOwner just above in the caller chain),
+			// this one never told any installation sitting on the tile -
+			// a Fort/Airfield/detector here kept reporting its vision to
+			// the former owner indefinitely once its covering territory
+			// receded to unassigned (city capture's wider border-radius
+			// release, or CutImprovements destroying a border-radius-
+			// granting improvement).
+			g_theWorld->SyncInstallationOwners(it.Pos(), PLAYER_UNASSIGNED);
 		}
 
 		g_network.Block(owner);
@@ -1543,9 +1663,9 @@ bool terrainutil_HasIrrigation(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1564,9 +1684,9 @@ bool terrainutil_HasUrban(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1585,9 +1705,9 @@ bool terrainutil_HasWonder(const MapPoint & pos)
 {
 	Cell *cell = g_theWorld->GetCell(pos);
 
-	for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+	for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 
-		sint32 imp = cell->GetDBImprovement(i);
+		sint32 imp = cell->GetBuiltImprovementType(i);
 		const TerrainImprovementRecord *rec = g_theTerrainImprovementDB->Get(imp);
 
 		Assert(rec);
@@ -1708,7 +1828,7 @@ double terrainutil_GetHealRate( const MapPoint & pos )
 	sint32 imp;
 	bool can_heal = false;
 	Cell *cell = g_theWorld->GetCell(pos);
-	sint32 imp_num = cell->GetNumDBImprovements();
+	sint32 imp_num = cell->GetNumBuiltImprovementTypes();
 	const TerrainImprovementRecord *rec;
 	const TerrainImprovementRecord::Effect *eff;
 
@@ -1718,7 +1838,7 @@ double terrainutil_GetHealRate( const MapPoint & pos )
 	//TileImp Heal rates are added together
 	if( imp_num > 0 ) {
 		for(sint32 i = 0; i < imp_num; i++) {
-			imp = cell->GetDBImprovement(i);
+			imp = cell->GetBuiltImprovementType(i);
 			rec = g_theTerrainImprovementDB->Get(imp);
 
 			for(sint32 j = 0; j < rec->GetNumTerrainEffect(); j++) {

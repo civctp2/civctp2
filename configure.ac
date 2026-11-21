@@ -199,6 +199,7 @@ AM_CONDITIONAL([HAVE_FFMPEG4MOVIES], [test "x$have_ffmpeg4movies" = "xyes"])
 AC_CONFIG_FILES([
    GNUmakefile
    ctp2_code/Makefile
+   ctp2_code/pch/Makefile
    ctp2_code/gfx/Makefile
    ctp2_code/gfx/gfx_utils/Makefile
    ctp2_code/gfx/layers/Makefile

@@ -380,8 +380,7 @@ Diplomat::Diplomat()
     m_nuclearAttackTarget           (PLAYER_UNASSIGNED),
     m_lastParty                     (-1),
     m_launchedNukes                 (false),
-    m_launchedNanoAttack            (false),
-    m_desireWarWith                 ()
+    m_launchedNanoAttack            (false)
 {
 }
 
@@ -409,8 +408,7 @@ Diplomat::Diplomat(Diplomat const & a_Original)
     m_nuclearAttackTarget           (a_Original.m_nuclearAttackTarget),
     m_lastParty                     (a_Original.m_lastParty),
     m_launchedNukes                 (a_Original.m_launchedNukes),
-    m_launchedNanoAttack            (a_Original.m_launchedNanoAttack),
-    m_desireWarWith                 (a_Original.m_desireWarWith)
+    m_launchedNanoAttack            (a_Original.m_launchedNanoAttack)
 {
 	// Update the iterators in m_lastMotivation to point to the new list
 	for
@@ -457,7 +455,6 @@ Diplomat const & Diplomat::operator = (Diplomat const & a_Original)
 		m_lastParty                     = a_Original.m_lastParty;
 		m_launchedNukes                 = a_Original.m_launchedNukes;
 		m_launchedNanoAttack            = a_Original.m_launchedNanoAttack;
-		m_desireWarWith                 = a_Original.m_desireWarWith;
 
 		// Update the iterators in m_lastMotivation to point to the new list
 		m_lastMotivation.clear();
@@ -492,7 +489,6 @@ Diplomat::~Diplomat()
 	DiplomacyRecordVector().swap(m_diplomacy);
 	ForeignerVector().swap(m_foreigners);
 	ThreatList().swap(m_threats);
-	BoolVector().swap(m_desireWarWith);
 	std::string().swap(m_personalityName);
 }
 
@@ -502,7 +498,6 @@ void Diplomat::Resize(const size_t & newMaxPlayerId)
 	m_diplomaticStates.resize(newMaxPlayerId);
 	m_diplomacy.resize(newMaxPlayerId);
 	m_foreigners.resize(newMaxPlayerId);
-	m_desireWarWith.resize(newMaxPlayerId);
 }
 
 void Diplomat::Load(CivArchive & archive)
@@ -589,14 +584,11 @@ void Diplomat::Load(CivArchive & archive)
 		m_launchedNanoAttack = (val?true:false) ;
 	}
 
-	m_desireWarWith.resize(m_foreigners.size());
-
 	// Diplomats even exist for dead players.
 	// Nothing to do if we are already dead.
 	if(g_player[m_playerId] == NULL)
 		return;
 
-	ComputeAllDesireWarWith();
 	ComputeIncursionPermission();
 }
 
@@ -646,7 +638,6 @@ void Diplomat::Cleanup()
 	m_foreigners.resize(0);
 	m_diplomaticStates.resize(0);
 	m_diplomacy.resize(0);
-	m_desireWarWith.resize(0);
 	m_threats.clear();
 
 	m_bestDiplomaticState = s_badAiState;
@@ -944,10 +935,6 @@ void Diplomat::BeginTurn()
 		NextDiplomaticState(foreignerId);
 	}
 
-	// Already done in UpdateAttributes, but RecomputeRegard changes the result
-	// Unclear whether there are some other things that change the result
-	// So just recompute this before we need it in ComputeIncursionPermission
-	ComputeAllDesireWarWith();
 	ComputeIncursionPermission();
 
 	ExecutePersistantAgreements();
@@ -1073,6 +1060,16 @@ void Diplomat::LogViolationEvent(const PLAYER_INDEX foreignerId, const PROPOSAL_
 		LogViolationEvent(foreignerId, PROPOSAL_TREATY_POLLUTION_PACT);
 
 		SetHotwarAttack(foreignerId, (sint16) NewTurnCount::GetCurrentRound());
+
+		// This used to need an UpdateDesireWarWith(foreignerId) call here -
+		// SetHotwarAttack() just above flips GetLastHotwarAttack(foreignerId)
+		// from "a long time/never" to "0, just now", which can flip
+		// ComputeDesireWarWith()'s Discovery-Diplomatic/Discovery-Economic
+		// "forgive and drop war desire" branch, and DesireWarWith() used to
+		// read a cache that wouldn't see that until explicitly refreshed.
+		// DesireWarWith() now always computes fresh (m_desireWarWith cache
+		// removed - see desirewarwith_cache_staleness memory), so nothing
+		// to do here anymore.
 
 		trust_message = "TrustLossViolatedCeaseFire";
 		act_of_war = true;
@@ -1722,13 +1719,15 @@ void Diplomat::Execute_Proposal(const PLAYER_INDEX & sender,
 		{
 			AgreementMatrix::s_agreements.
 				CancelAgreement(sender, receiver, PROPOSAL_TREATY_DECLARE_WAR);
-	
-			// A war ending can change who's the "weakest enemy" among
-			// each side's remaining wars (IsBestHotwarEnemy compares
-			// across all of them), so a single-entry refresh isn't
-			// enough - recompute the whole cache for both sides.
-			Diplomat::GetDiplomat(sender).ComputeAllDesireWarWith();
-			Diplomat::GetDiplomat(receiver).ComputeAllDesireWarWith();
+
+			// Diagnostic: pairs with DeclareWar()'s own log line, so a
+			// playtest log can directly bracket war periods (start and
+			// end) instead of only seeing combat-resolution lines, which
+			// say nothing about a declared-but-not-yet-fought war or an
+			// already-ended one with no more fighting.
+			DPRINTF(k_DBG_DIPLOMACY,
+			    ("Diplomat::Execute_Proposal: player %d and player %d end their war, turn %d\n",
+			     sender, receiver, NewTurnCount::GetCurrentRound()));
 
 			// Maybe add to CancelAgreement as message from DB
 			SlicObject *so = new SlicObject("401WarOver");
@@ -1780,6 +1779,28 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 
 	if (AgreementMatrix::s_agreements.HasAgreement(m_playerId, foreignerId, PROPOSAL_TREATY_DECLARE_WAR))
 		return;
+
+	// Removed: "Should not declare war without desiring war" - this
+	// assumed the only caller was the AI's own SetDiplomaticState desire
+	// calculation, but DeclareWar() has several other legitimate callers
+	// where DesireWarWith has no reason to hold - LogViolationEvent's
+	// forced declaration when a player attacks someone they have a
+	// ceasefire/peace with (confirmed via a playtest hitting this exact
+	// path: ArmyData::Bombard -> LogViolationEvent -> DeclareWar), human
+	// UI actions (diplomacywindow.cpp/intelligencewindow.cpp), network
+	// sync (net_action.cpp), SLIC scripts (slicfuncai.cpp), and a
+	// defensive-ally trigger (Player.cpp:8706) among them.
+
+	// Diagnostic: log every genuine new war declaration (the check just
+	// above already filtered out the "already at war" repeat case) so a
+	// playtest log can directly show when a civ actually went to war,
+	// rather than inferring it indirectly from combat-resolution lines -
+	// those only appear once fighting actually starts, not from the
+	// point of declaration, so a war declared but not yet fought was
+	// previously invisible in the log.
+	DPRINTF(k_DBG_DIPLOMACY,
+	    ("Diplomat::DeclareWar: player %d declares war on player %d, turn %d\n",
+	     m_playerId, foreignerId, NewTurnCount::GetCurrentRound()));
 
 	if (m_playerId != 0 && foreignerId != 0)
 	{
@@ -1849,13 +1870,6 @@ void Diplomat::DeclareWar(const PLAYER_INDEX foreignerId)
 
 	player_ptr->CloseEmbassy(foreignerId);
 	foreigner_ptr->CloseEmbassy(m_playerId);
-
-	// Starting a new war can change who's the "weakest enemy" among
-	// each side's existing wars too (IsBestHotwarEnemy compares across
-	// all of them), so a single-entry refresh isn't enough - recompute
-	// the whole cache for both sides.
-	Diplomat::GetDiplomat(foreignerId).ComputeAllDesireWarWith();
-	ComputeAllDesireWarWith();
 }
 
 void Diplomat::SetEmbargo(const PLAYER_INDEX foreignerId, const bool state)
@@ -2715,6 +2729,23 @@ void Diplomat::ExecuteResponse(const Response & response, bool runAI)
 	else if (response.receiverId == m_playerId)
 	{
 		SetMyLastResponse(response.senderId, response);
+
+		// Seen tripping together right after a DipWizard AcceptButton/
+		// RejectButton click while observing a robot player's turn -
+		// matches GitHub #245: DipWizard::Display() only skips
+		// re-showing/resetting an already-open window when
+		// g_network.IsActive() (multiplayer only), so in single-player
+		// "watch the AI" mode a second proposal's window can reuse the
+		// first one's button positions before the click on the first
+		// lands, applying the click's response to a stale proposal the
+		// sender never actually made "with initiative". Log the actual
+		// values to confirm (or rule out) that this is really a stale
+		// Response rather than a genuine sender/receiver desync.
+		DPRINTF(k_DBG_DIPLOMACY,
+		    ("ExecuteResponse: sender %d receiver %d senderHasInitiative=%d senderLastProposalIsBad=%d\n",
+		     response.senderId, response.receiverId,
+		     Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId),
+		     Diplomat::GetDiplomat(response.senderId).GetMyLastNewProposal(response.receiverId) == s_badNewProposal));
 
 		Assert(Diplomat::GetDiplomat(response.senderId).GetReceiverHasInitiative(response.receiverId) == true);
 		Assert(Diplomat::GetDiplomat(response.senderId).GetMyLastNewProposal(response.receiverId) != s_badNewProposal);
@@ -3710,7 +3741,7 @@ void Diplomat::SetDiplomaticState(const PLAYER_INDEX & foreignerId, const AiStat
 
 			declare_war &= (turns_since_last_war > 5 || turns_since_last_war < 0);
 
-			declare_war &= (AtWarCount() == 0); // On your continet 
+			declare_war &= (AtWarCount() == 0); // On your continet
 
 			declare_war &= DesireWarWith(foreignerId);
 
@@ -4475,8 +4506,6 @@ void Diplomat::UpdateAttributes()
 			m_foreigners[foreigner].AddTradeValue(route->GetValue());
 		}
 	}
-
-	ComputeAllDesireWarWith();
 }
 
 bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & dest_city) const
@@ -4498,7 +4527,19 @@ bool Diplomat::GetTradeRoutePiracyRisk(const Unit & source_city, const Unit & de
 		{
 			TradeRoute route = city.CD()->GetTradeSourceList()->Access(r);
 
+			// route->GetPirate() is a "recently pirated by" memory, not a
+			// live-piracy check - unlike GetTradeRoutePiracyRisk(PLAYER_INDEX)
+			// below, this overload intentionally still counts a route that
+			// was pirated within the last GetPiracyMemoryTurns() turns, even
+			// after the pirating army (and thus IsBeingPirated()) is gone.
+			// ComputeTradeRoutePiracyRisk() only clears it back to
+			// PLAYER_UNASSIGNED once that memory window itself expires, so a
+			// pirating player eliminated mid-window leaves a genuinely dead
+			// player index here for the rest of it - check liveness before
+			// trusting it, same as any other player index read back from
+			// stored state. A dead player can't pose an ongoing piracy risk.
 			if (route->GetPirate() >= 0 &&
+			    g_player[route->GetPirate()] != NULL &&
 			    route->GetSource() == source_city &&
 			    route->GetDestination() == dest_city &&
 			    !AgreementMatrix::s_agreements.HasAgreement(route->GetPirate(),
@@ -5193,13 +5234,21 @@ bool Diplomat::HasWarOrDesiresPreemptivelyWith(const PLAYER_INDEX foreignerId) c
 bool Diplomat::DesireWarWith(const PLAYER_INDEX foreignerId) const
 {
 	Assert(foreignerId >= 0);
-	Assert(static_cast<size_t>(foreignerId) < m_desireWarWith.size());
-	Assert(m_desireWarWith[foreignerId] == ComputeDesireWarWith(foreignerId))
 
-	if (foreignerId >= 0 && static_cast<size_t>(foreignerId) < m_desireWarWith.size())
-		return m_desireWarWith[foreignerId];
+	// No cache: this used to read a cached m_desireWarWith[foreignerId],
+	// refreshed by ComputeAllDesireWarWith()/UpdateDesireWarWith() at
+	// whichever call sites the whole DesireWarWith-cache-staleness saga
+	// (bc09b6a4d, b695be055, a4d09b22f, c9cf41168, and more) kept finding
+	// weren't refreshing it in time. Rather than keep chasing new callers
+	// (some of them, like pathfinding's per-tile checks, too hot to afford
+	// a refresh call anyway), always compute directly - ComputeDesireWarWith
+	// is O(num_players) (IsBestHotwarEnemy's own war-enemy scan), not a map
+	// or army scan, so this is cheap enough to not need caching at all.
+	Assert(static_cast<size_t>(foreignerId) < m_foreigners.size());
 
-	return false;
+	return (foreignerId >= 0) &&
+	       (static_cast<size_t>(foreignerId) < m_foreigners.size()) &&
+	       ComputeDesireWarWith(foreignerId);
 }
 
 bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const
@@ -5275,22 +5324,6 @@ bool Diplomat::ComputeDesireWarWith(const PLAYER_INDEX foreignerId) const
 	return (turns_at_war < ideal_war_length);
 }
 
-void Diplomat::ComputeAllDesireWarWith()
-{
-	PLAYER_INDEX const	foreignerCount	= static_cast<PLAYER_INDEX>(m_desireWarWith.size());
-	for (PLAYER_INDEX foreignerId = 0; foreignerId < foreignerCount; ++foreignerId)
-	{
-		m_desireWarWith[foreignerId] =
-			(foreignerId != m_playerId) && ComputeDesireWarWith(foreignerId);
-	}
-}
-
-void Diplomat::UpdateDesireWarWith(const PLAYER_INDEX foreignerId)
-{
-	m_desireWarWith[foreignerId] =
-		(foreignerId != m_playerId) && ComputeDesireWarWith(foreignerId);
-}
-
 sint32 Diplomat::GetWeakestEnemy() const
 {
 	sint32 weakestEnemy    = -1;
@@ -5320,6 +5353,15 @@ sint32 Diplomat::GetWeakestEnemy() const
 
 bool Diplomat::IsBestHotwarEnemy(const PLAYER_INDEX foreignerId) const
 {
+	// You can't be your own hotwar enemy. Without this, foreignerId ==
+	// m_playerId seeds the scan below with your own relative-strength-vs-
+	// yourself as the baseline and weakest_enemy == m_playerId - if you
+	// have no active wars at all (the common case), nothing in the loop
+	// ever has a chance to replace that placeholder, and the function
+	// returns true: "yes, I am my own best hotwar enemy."
+	if (foreignerId == m_playerId)
+		return false;
+
 	Player *    foreigner_ptr = g_player[foreignerId];
 	if (foreigner_ptr == NULL)
 		return false;

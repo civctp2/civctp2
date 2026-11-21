@@ -559,8 +559,14 @@ void TradeManager::UpdateAdviceWindow()
 	for(i = 0; i < g_player[pl]->m_all_cities->Num(); i++) {
 		Unit city = g_player[pl]->m_all_cities->Access(i);
 		totalRoutes += city.CD()->GetTradeSourceList()->Num();
-		totalProfit += city.CD()->CalculateGoldFromResources(); // takes piracy and wonder bonus into account
-		totalPiracy += city.CD()->GetGoldLostToPiracy(); // takes wonder bonus into account
+		// Fresh numbers, not the per-turn-committed getters - this screen
+		// is live and the player may have just changed routes in it.
+		// GetGoldLostToPiracy() would read last turn's committed value
+		// now that CalculateGoldFromTradeRoutes() no longer mutates it -
+		// take it from the same fresh call instead.
+		sint32 goldLostToPiracyNow = 0;
+		totalProfit += city.CD()->CalculateGoldFromTradeRoutes(&goldLostToPiracyNow); // takes piracy and wonder bonus into account
+		totalPiracy += goldLostToPiracyNow; // takes wonder bonus into account
 		totalTransi += city.CD()->GetGoldFromTransitRoutes(); // takes piracy into account
 	}
 

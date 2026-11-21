@@ -48,6 +48,12 @@ class Unit;
 void terrainutil_Initialize();
 
 const TerrainImprovementRecord *terrainutil_GetBestRoad(sint32 player, const MapPoint &pos);
+const TerrainImprovementRecord *terrainutil_GetBestAirfield(sint32 player, const MapPoint &pos);
+const TerrainImprovementRecord *terrainutil_GetBestDetector(sint32 player, const MapPoint &pos);
+const TerrainImprovementRecord *terrainutil_GetBestFort(sint32 player, const MapPoint &pos);
+bool terrainutil_IsAirfieldEffect(const TerrainImprovementRecord::Effect *effect);
+bool terrainutil_IsDetectorEffect(const TerrainImprovementRecord::Effect *effect);
+bool terrainutil_IsFortEffect(const TerrainImprovementRecord::Effect *effect);
 
 sint32 terrainutil_GetTimeToBuild(const MapPoint &pos, sint32 fromType, sint32 toType);
 

@@ -3054,6 +3054,7 @@ messagebox  '999InsurgentSpawn' {
 messagebox  '999GuerrillaSpawn' {
 	Show();
 	Text(ID_GUERRILLA_SPAWN) ;
+	EyePoint(unit[0]);
 	MessageType("MILITARY");
 }
 messagebox '999UnitGainedEliteStatus' {

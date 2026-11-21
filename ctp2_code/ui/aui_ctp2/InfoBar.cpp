@@ -364,10 +364,10 @@ void InfoBar::SetTextFromMap(const MapPoint &point)
 				delete walker;
 			}
 			else{
-				for(sint32 i = 0; i < cell->GetNumDBImprovements(); i++) {
+				for(sint32 i = 0; i < cell->GetNumBuiltImprovementTypes(); i++) {
 					Concat(" ");
-					Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(cell->GetDBImprovement(i))->GetName()));
-					if(i < cell->GetNumDBImprovements() - 1 || cell->HasRiver()) {
+					Concat(g_theStringDB->GetNameStr(g_theTerrainImprovementDB->Get(cell->GetBuiltImprovementType(i))->GetName()));
+					if(i < cell->GetNumBuiltImprovementTypes() - 1 || cell->HasRiver()) {
 						Concat(",");
 					}
 				}

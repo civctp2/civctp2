@@ -70,12 +70,12 @@
 extern sint32 g_fog_toggle;
 extern sint32 g_god;
 
-extern C3UI                   * g_c3ui;
-extern World                  * g_theWorld;
-extern StringDB               * g_theStringDB;
-extern TerrainImprovementPool * g_theTerrainImprovementPool;
+extern C3UI                      * g_c3ui;
+extern World                     * g_theWorld;
+extern StringDB                  * g_theStringDB;
+extern UnfinishedImprovementPool * g_theUnfinishedImprovementPool;
 
-c3_PopupWindow * g_helpTileWindow = NULL;
+c3_PopupWindow * g_helpTileWindow  = NULL;
 
 static c3_Static * s_tileRout      = NULL;
 static c3_Static * s_tileRoutValue = NULL;

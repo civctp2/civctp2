@@ -500,6 +500,25 @@ bool Astar::FindPath
 				   )
 				{
 					searching = (entry != ASTAR_CAN_ENTER);
+
+					// The destination can be popped off the queue (already
+					// counted in nodes_opened) and still be rejected here:
+					// EntryCost is a per-edge check (this specific parent-
+					// to-dest step, including ZOC) stricter than the
+					// PretestDest sweep done before the search even starts
+					// (which only checks the destination tile in isolation,
+					// and ZOC from every neighbor direction, not this one
+					// specific edge). PATHFIND_DIAG's failure line only
+					// reports nodes_opened/cutoff, not why the search kept
+					// going past a dest it did reach - log that here.
+					if (searching)
+					{
+						AI_DPRINTF(k_DBG_ASTAR, GetOwner(), -1, GetArmyId(),
+						    ("PATHFIND_DIAG: dest (%d,%d) reached via parent (%d,%d) but rejected: entry=%s, is_zoc=%d, cost=%.3f\n",
+						     dest.x, dest.y, best->m_parent->m_pos.x, best->m_parent->m_pos.y,
+						     (entry == ASTAR_BLOCKED) ? "ASTAR_BLOCKED" : "ASTAR_RETRY_DIRECTION",
+						     is_zoc, cost));
+					}
 				}
 			}
 			// keep searching

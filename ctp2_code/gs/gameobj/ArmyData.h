@@ -451,7 +451,7 @@ public:
                       UNIT_ORDER_TYPE order, WORLD_DIRECTION d);
 
     void MoveActors(const MapPoint &pos, bool teleport = false);
-    void MoveUnits(const MapPoint &pos);
+    void MoveUnits(const MapPoint &pos, bool skipRemoval = false);
     void DeductMoveCost(const MapPoint &pos);
 
     void CheckTerrainEvents();

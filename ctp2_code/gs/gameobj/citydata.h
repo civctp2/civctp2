@@ -458,7 +458,7 @@ public:
 	void DelTradeRoute(TradeRoute route);
 	sint32 IsUsedInTradeRoute(const MapPoint &qpos);
 	void CalculateTradeRoutes(bool projectedOnly);
-	sint32 CalculateGoldFromResources();
+	sint32 CalculateGoldFromTradeRoutes(sint32 * outGoldLostToPiracy = NULL);
 	void AddTradeResource(ROUTE_TYPE type, sint32 resource);
 #ifdef CTP1_TRADE
 	sint32 GetResourceCount(sint32 resource);
@@ -778,8 +778,10 @@ public:
 	                 sint32 origOwner);
 
 #if !defined(NEW_RESOURCE_PROCESS)
-	void	GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
-	double	GetUtilisationRatio(uint32 const squaredDistance) const;
+	       void   GetFullAndPartialRadii(sint32 &fullRadius, sint32 &partRadius) const;
+	       double GetUtilisationRatio(uint32 const squaredDistance) const;
+	       double GetRingImprovementPriority(MapPoint pos) const;
+	static double GetRingImprovementPriorityFraction();
 #endif
 
 	sint32 PopCount() const;

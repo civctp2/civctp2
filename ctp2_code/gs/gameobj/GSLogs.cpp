@@ -189,7 +189,7 @@ void gslog_LogPlayerStats(sint32 player)
 		totalCommerceBuildingUpkeep += commerceBuildingUpkeep;
 		totalCommerceScience        += cityData->GetScience();
 		totalNetGold                += cityData->GetNetCityGold();
-		totalTrade                  += cityData->CalculateGoldFromResources();
+		totalTrade                  += cityData->CalculateGoldFromTradeRoutes();
 	}
 
 	sint32 percentCommerceCrime = totalCommerce ?

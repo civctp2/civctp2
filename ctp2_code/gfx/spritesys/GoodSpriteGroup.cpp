@@ -55,8 +55,18 @@ void GoodSpriteGroup::Draw(GOODACTION action, sint32 frame, sint32 drawX, sint32
 {
 	Assert(action > GOODACTION_NONE &&
 			action < GOODACTION_MAX);
+	if (action <= GOODACTION_NONE || action >= GOODACTION_MAX)
+		return;
 
-	if (m_sprites[action] == NULL) return;
+	if (m_sprites[action] == NULL)
+	{
+		// Diagnostic for the sprite editor's black-preview investigation -
+		// tells us whether the loaded sprite simply has no data for this
+		// action, as opposed to the data being there but never making it
+		// onto screen (a compositing/blit issue further down the pipeline).
+		fprintf(stderr, "%s L%d: GoodSpriteGroup::Draw - m_sprites[%d] is NULL, nothing to draw\n", __FILE__, __LINE__, (int)action);
+		return;
+	}
 
 	if ((frame < 0) ||
 	    (static_cast<size_t>(frame) >= m_sprites[action]->GetNumFrames())
@@ -74,8 +84,20 @@ void GoodSpriteGroup::DrawDirect(aui_Surface *surf, GOODACTION action, sint32 fr
 {
 	Assert(action > GOODACTION_NONE &&
 			action < GOODACTION_MAX);
+	if (action <= GOODACTION_NONE || action >= GOODACTION_MAX)
+		return;
 
-	if (m_sprites[action] == NULL) return;
+	if (m_sprites[action] == NULL)
+	{
+		// Same diagnostic as Draw() above - this is the overload the
+		// sprite editor's large preview panel (ReDrawLargeSprite) actually
+		// calls.
+		fprintf(stderr, "%s L%d: GoodSpriteGroup::DrawDirect - m_sprites[%d] is NULL, nothing to draw (surf=%p)\n", __FILE__, __LINE__, (int)action, (void*)surf);
+		return;
+	}
+
+	fprintf(stderr, "%s L%d: GoodSpriteGroup::DrawDirect - drawing action=%d frame=%d numFrames=%d to surf=%p at (%d,%d) facing=%d\n",
+	        __FILE__, __LINE__, (int)action, frame, (int)m_sprites[action]->GetNumFrames(), (void*)surf, drawX, drawY, facing);
 
 	m_sprites[action]->SetCurrentFrame((uint16)frame);
 	m_sprites[action]->DrawDirect(surf, drawX, drawY, facing, scale, transparency, outlineColor, flags);

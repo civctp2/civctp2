@@ -91,7 +91,14 @@ public:
 
 	static void AddAgentForArmy(const Army & army);
 
-	static bool GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapPoint & refueling_pos, sint32 & refueling_distance);
+	// report_if_unreachable controls whether a "no refuel destination"
+	// result is logged/asserted as a diagnostic. It defaults to true for
+	// the normal "where can this army actually go to refuel" callers, but
+	// Goal::Pretest_Bid passes false: there, start_pos is a hypothetical
+	// candidate target (not the army's real position), and "unreachable"
+	// is the routine, expected way of rejecting an infeasible candidate -
+	// not a bug worth asserting on.
+	static bool GetNearestRefuel(const Army & army, const MapPoint & start_pos, MapPoint & refueling_pos, sint32 & refueling_distance, bool report_if_unreachable = true);
 
 	static void ExecuteOpportunityActions(const PLAYER_INDEX player);
 

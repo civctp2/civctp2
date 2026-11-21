@@ -81,10 +81,12 @@ class Governor;
 #include "player.h"         // PLAYER_INDEX, PLAYER_UNASSIGNED
 #include "StrategyRecord.h" // StrategyRecord
 #include "settlemap.h"
+#include "TerrainImprovementRecord.h" // TerrainImprovementRecord::Effect
 
 class Path;
 class CivArchive;
 class CityData;
+class Cell;
 class BuildingBuildListRecord;
 class BuildListSequenceRecord;
 class WonderBuildListRecord;
@@ -126,6 +128,7 @@ public:
 		BUILD_UNIT_LIST_RANGED,
 		BUILD_UNIT_LIST_OFFENSE,
 		BUILD_UNIT_LIST_DEFENSE,
+		BUILD_UNIT_LIST_FLANKERS,
 		BUILD_UNIT_LIST_MAX
 	};
 
@@ -241,9 +244,16 @@ public:
 	bool FoodSliderReachedMin(SlidersSetting & sliders_setting) const;
 	// End of sliders
 
-	bool AddRoadPriority(Path & path, const double & priority_delta);
+	bool AddRoadPriority(Path & path, const double & priority_delta, const CityData * city);
 
 	void ComputeRoadPriorities();
+
+	typedef const TerrainImprovementRecord *(*BestInstallationFinder)(sint32 player, const MapPoint & pos);
+	typedef bool (*InstallationEffectQualifier)(const TerrainImprovementRecord::Effect * effect);
+	bool IsBorderTile(const MapPoint & pos) const;
+	bool WouldDestroyUnrelatedImprovement(const Cell * cell, const TerrainImprovementRecord * newRec, const MapPoint & pos, InstallationEffectQualifier isSameKind) const;
+	bool AddInstallationPriority(const Unit & city, BestInstallationFinder finder, InstallationEffectQualifier isSameKind, const double & utility, bool requireBorderTile = false);
+	void ComputeInstallationPriorities();
 
 	void PlaceTileImprovements();
 
@@ -335,6 +345,14 @@ private:
 
 	const BuildListSequenceRecord * GetMatchingSequence(const CityData *city, const bool human_city, StringId & advice, bool & noUnits) const;
 
+	// The BuildListSequenceElement GetMatchingSequence would resolve into a
+	// BuildListSequenceRecord for this city - exposed on its own so callers
+	// that need the element itself (e.g. its per-element tile-improvement
+	// bonuses) don't have to re-run the same matching loop. NULL for a
+	// human-governed city (GetMatchingSequence's own early-return path,
+	// which never goes through element matching at all).
+	const StrategyRecord::BuildListSequenceElement * GetMatchingSequenceElement(const CityData *city, bool isBuildDecision = false) const;
+
 	bool HasStopBuildings(const StrategyRecord::BuildListSequenceElement* elem, const CityData* cd) const;
 
 	sint32 GetNeededUnitType(const CityData *city, sint32 & list_num) const;
@@ -388,10 +406,36 @@ private:
 	static CityPairList s_CityPairList;
 	bool IsInCityPairList(sint32 city, sint32 neighborCity) const;
 
-	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal, sint32 &bonusFood, sint32 &bonusProduction, sint32 &bonusCommerce) const;
+	bool FindBestTileImprovement(const MapPoint &pos, TiGoal &goal) const;
+
+	// Each returns the tile's added food/production/gold from that
+	// candidate (0 if unavailable/inapplicable) - the goal itself is set
+	// in place via goal.type/goal.utility.
+	sint32 ScoreGrowthImprovement(TiGoal & goal, const MapPoint & pos, sint32 best_growth_improvement, double terr_food_rank, double growth_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const;
+
+	sint32 ScoreProductionImprovement(TiGoal & goal, const MapPoint & pos, sint32 best_production_improvement, double terr_prod_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const;
+
+	sint32 ScoreGoldImprovement(TiGoal & goal, const MapPoint & pos, sint32 best_gold_improvement, double terr_gold_rank, double gold_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const;
+
+	sint32 ScoreFoodTerraform(TiGoal & goal, const MapPoint & pos, sint32 food_ter, sint32 terrain_type, double terr_food_rank, double growth_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const;
+
+	sint32 ScoreGoldTerraform(TiGoal & goal, const MapPoint & pos, sint32 gold_ter, sint32 terrain_type, double terr_gold_rank, double gold_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const;
+
+	// Not wired into FindBestTileImprovement yet - prod_ter currently has
+	// no dedicated branch there. See the definition's comment.
+	sint32 ScoreProductionTerraform(TiGoal & goal, const MapPoint & pos, sint32 prod_ter, sint32 terrain_type, double terr_prod_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem) const;
+
+	// Last resort, only reached when nothing else claimed the tile: Dead-
+	// tile reclamation, then bad-terrain (Glacier/Swamp/Tundra/Desert)
+	// cleanup terraform.
+	void ScoreFallbackTerraform(TiGoal & goal, const MapPoint & pos, sint32 terrain_type, sint32 food_ter, sint32 prod_ter, sint32 gold_ter, double growth_rank, double production_rank, const StrategyRecord & strategy, const StrategyRecord::BuildListSequenceElement * elem, Player * player_ptr) const;
+
+	void ScaleUtilityForCitySize(TiGoal & goal, CityData * city, const MapPoint & pos, sint32 terrain_type, const StrategyRecord & strategy, sint32 ringImprovedCount, sint32 ringTotalCount) const;
 
 	sint32 GetBestRoadImprovement(const MapPoint & pos) const;
 
+	bool HasUnfinishedFoodProdOrGoldImprovement(const MapPoint & pos) const;
+	bool HasFoodProdOrGoldImprovement(const MapPoint & pos) const;
 	void GetBestFoodProdGoldImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp) const;
 
 	void GetBestTerraformImprovement(const MapPoint & pos, sint32 & food_imp, sint32 & prod_imp, sint32 & gold_imp, bool pwPerBonus) const;
@@ -411,6 +455,12 @@ private:
 	sint32              m_neededFreight;
 	/// Currently considered tile improvements
 	TiGoalQueue         m_tileImprovementGoals;
+	/// Scratch buffer for one city's gathered tile-improvement candidates
+	/// within PlaceTileImprovements - a Governor member (like
+	/// m_tileImprovementGoals) rather than a per-city local so its heap
+	/// buffer is grown once and reused turn after turn, city after city,
+	/// instead of being allocated and freed from empty every single time.
+	TiGoalQueue         m_cityTileImpGoals;
 	bool                m_canBuildLandSettlers;
 	bool                m_canBuildSeaSettlers;
 };

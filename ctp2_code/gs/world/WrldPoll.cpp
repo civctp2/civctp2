@@ -24,10 +24,10 @@
 //
 // Modifications from the original Activision code:
 //
-// - Initialized local variables. (Sep 9th 2005 Martin Gühmann)
-// - Replaced old GlobalWarming database by new one. (July 9th 2005 Martin Gühmann)
-// - Replaced old const database by new one. (5-Aug-2007 Martin Gühmann)
-// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gühmann)
+// - Initialized local variables. (Sep 9th 2005 Martin Gï¿½hmann)
+// - Replaced old GlobalWarming database by new one. (July 9th 2005 Martin Gï¿½hmann)
+// - Replaced old const database by new one. (5-Aug-2007 Martin Gï¿½hmann)
+// - GobalWarming and OzoneDepletion are now event handled. (29-Oct-2007 Martin Gï¿½hmann)
 //
 //----------------------------------------------------------------------------
 
@@ -341,8 +341,17 @@ void World::GWPhase(const sint32 phase)
 			{
 				if(g_theTerrainDB->Get(terrain)->GetInternalTypeSwamp())
 				{
-					ConvertToShallowWater(x, y, c);
+					// FloodEverythingInCell (-> CutImprovements ->
+					// Installation::KillInstallation ->
+					// terrainutil_GetVisionRange) must run while the cell
+					// still has its original terrain - ConvertToShallowWater
+					// changes it, and a land-only installation type
+					// (Airfield/Fortification) has no TerrainEffect defined
+					// for water, tripping Assert(eff) in terrainutil.cpp.
+					// Same ordering bug as the CityData.cpp RADIUS_OP_KILL_
+					// TILE fix, independently present here too.
 					FloodEverythingInCell(x, y, c);
+					ConvertToShallowWater(x, y, c);
 				}
 			}
 			else
@@ -369,17 +378,20 @@ void World::GWPhase(const sint32 phase)
 							newtype = GetTerrainChangeType(&TerrainRecord::GetMovementTypeShallowWater);
 						}
 
-						c->m_terrain_type = (sint8)newtype;
-						if(terrain != newtype)
+						// Same ordering fix as the phase==0 swamp case above -
+						// decide whether to flood from the pre-change
+						// terrain/newtype, but actually run it (and the
+						// CutImprovements/installation cleanup it triggers)
+						// before mutating c->m_terrain_type, not after.
+						bool const shouldFlood =
+						       terrain != newtype
+						    && g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater()
+						    && wasLand;
+						if(shouldFlood)
 						{
-							if(g_theTerrainDB->Get(newtype)->GetMovementTypeShallowWater())
-							{
-								if(wasLand)
-								{
-									FloodEverythingInCell(x, y, c);
-								}
-							}
+							FloodEverythingInCell(x, y, c);
 						}
+						c->m_terrain_type = (sint8)newtype;
 					}
 				}
 			}

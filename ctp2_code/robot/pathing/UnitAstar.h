@@ -73,6 +73,10 @@ protected:
 	bool m_isTransporter;
 	bool m_is_robot;
 
+	// Deliberately not reset by ClearMem() - see WasLastPretestZocBlocked()
+	// below for why. Reset at the top of PretestDest() itself instead.
+	bool m_lastPretestZocBlocked;
+
 	MapPoint m_start;
 	MapPoint m_dest;
 
@@ -107,6 +111,16 @@ public:
 				bool & is_broken_path, Path & bad_path, float & total_cost);
 
 	bool StraightLine(const MapPoint & start, const MapPoint & dest, Path & new_path) const;
+
+	// Set by PretestDest() on its most recent call, left untouched by
+	// ClearMem() so it survives past the end of the FindPath() call that
+	// produced it - callers (e.g. Agent::WasLastFindPathZocBlocked()) read
+	// it right after a failed FindPath() to tell "every approach to dest
+	// is ZOC-blocked right now" apart from every other failure reason,
+	// since this one is a known, expected pathing outcome rather than a
+	// bug. Only meaningful immediately after a FindPath() call on this
+	// same (single, shared) instance - see RobotAstar2::s_aiPathing.
+	bool WasLastPretestZocBlocked() const { return m_lastPretestZocBlocked; }
 
 private:
 	void ClearMem();

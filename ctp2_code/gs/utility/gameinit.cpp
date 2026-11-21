@@ -186,20 +186,20 @@ DiplomaticRequestPool       *g_theDiplomaticRequestPool=NULL;
 MessagePool                 *g_theMessagePool=NULL;
 CivilisationPool            *g_theCivilisationPool=NULL;
 AgreementPool               *g_theAgreementPool=NULL;
-TerrainImprovementPool      *g_theTerrainImprovementPool = NULL;
+UnfinishedImprovementPool   *g_theUnfinishedImprovementPool = NULL;
 InstallationPool            *g_theInstallationPool = NULL;
 InstallationQuadTree        *g_theInstallationTree = NULL;
 TopTen                      *g_theTopTen = NULL;
 TurnCount                   *g_turn = NULL;
 ProfileDB                   *g_theProfileDB = NULL;
-extern MovieDB                     *g_theWonderMovieDB; //SEB = NULL;
+extern MovieDB              *g_theWonderMovieDB; //SEB = NULL;
 MovieDB                     *g_theVictoryMovieDB = NULL;
 FilenameDB                  *g_theMessageIconFileDB = NULL;
 Pool<Order>                 *g_theOrderPond = NULL;
 Pool<UnseenCell>            *g_theUnseenPond = NULL;
 Diplomacy_Log               *g_theDiplomacyLog=NULL;
 EventTracker                *g_eventTracker;
-CriticalMessagesPrefs * g_theCriticalMessagesPrefs=NULL;
+CriticalMessagesPrefs       *g_theCriticalMessagesPrefs=NULL;
 
 MapPoint g_player_start_list[k_MAX_PLAYERS];
 sint32 g_player_start_score[k_MAX_PLAYERS];
@@ -1201,8 +1201,8 @@ sint32 spriteEditor_Initialize(sint32 mWidth, sint32 mHeight)
 
 	SPLASH_STRING("Initializing Object Pools...");
 
-	g_theTerrainImprovementPool = new TerrainImprovementPool();
-	Assert(g_theTerrainImprovementPool) ;
+	g_theUnfinishedImprovementPool = new UnfinishedImprovementPool();
+	Assert(g_theUnfinishedImprovementPool) ;
 
 	g_theDiplomaticRequestPool = new DiplomaticRequestPool() ;
 	Assert(g_theDiplomaticRequestPool) ;
@@ -1676,10 +1676,10 @@ sint32 gameinit_Initialize(sint32 mWidth, sint32 mHeight, CivArchive *archive)
 	SPLASH_STRING("Initializing Object Pools...");
 
 	if(archive && loadEverything)
-		g_theTerrainImprovementPool = new TerrainImprovementPool(*archive);
+		g_theUnfinishedImprovementPool = new UnfinishedImprovementPool(*archive);
 	else
-		g_theTerrainImprovementPool = new TerrainImprovementPool();
-	Assert(g_theTerrainImprovementPool) ;
+		g_theUnfinishedImprovementPool = new UnfinishedImprovementPool();
+	Assert(g_theUnfinishedImprovementPool) ;
 
 	if (archive && loadEverything && (g_saveFileVersion < 55))
     {
@@ -2487,7 +2487,7 @@ void gameinit_Cleanup(void)
 	allocated::clear(g_theAgreementPool);
 	allocated::clear(g_theCivilisationPool);
 	allocated::clear(g_theDiplomaticRequestPool);
-	allocated::clear(g_theTerrainImprovementPool);
+	allocated::clear(g_theUnfinishedImprovementPool);
 	allocated::clear(g_slicEngine);
 	allocated::clear(g_theTopTen);
 	allocated::clear(g_thePollution);
@@ -2541,8 +2541,8 @@ sint32 gameinit_ResetForNetwork()
 	delete g_theDiplomaticRequestPool;
 	g_theDiplomaticRequestPool = new DiplomaticRequestPool;
 
-	delete g_theTerrainImprovementPool;
-	g_theTerrainImprovementPool = new TerrainImprovementPool;
+	delete g_theUnfinishedImprovementPool;
+	g_theUnfinishedImprovementPool = new UnfinishedImprovementPool;
 
 	delete g_theTradePool;
 	g_theTradePool = new TradePool;
@@ -2624,8 +2624,8 @@ void gameinit_ResetMapSize()
     delete g_theDiplomaticRequestPool;
     g_theDiplomaticRequestPool = new DiplomaticRequestPool;
 
-    delete g_theTerrainImprovementPool;
-    g_theTerrainImprovementPool = new TerrainImprovementPool;
+    delete g_theUnfinishedImprovementPool;
+    g_theUnfinishedImprovementPool = new UnfinishedImprovementPool;
 
     delete g_theTradePool;
     g_theTradePool = new TradePool;

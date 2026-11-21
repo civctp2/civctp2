@@ -62,6 +62,7 @@
 #include "victorywin.h"
 #include "spnewgamewindow.h"
 #include "GoodSpriteGroup.h"
+#include "UnitSpriteGroup.h"
 #include "FacedSprite.h"
 #include "Sprite.h"
 #include "screenmanager.h"
@@ -125,12 +126,33 @@ void AnimCallback( aui_Control *control, uint32 action, uint32 data, Cookie cook
 {
 	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
 
+	// m_MOVEAnim/m_ATTACKAnim/m_VICTORYAnim/m_WORKAnim are wired to
+	// GOODACTION_MAX while editing a Good sprite (see RewireAnimButtons) -
+	// GoodSpriteGroup only ever has GOODACTION_IDLE, so there is no valid
+	// action for those buttons to select in that mode. Without this guard,
+	// SetAnimation() stores the invalid value and every repaint calls
+	// GoodSpriteGroup::Draw()/DrawDirect() with it, indexing m_sprites[]
+	// out of bounds and eventually crashing in ReDrawLargeSprite. While
+	// editing a Unit sprite all five actions are valid (UNITACTION_MAX).
+	if (cookie.m_sin32Type <= (sint32)GOODACTION_NONE ||
+	    cookie.m_sin32Type >= g_spriteEditWindow->GetActionMax())
+	{
+		return;
+	}
+
 	g_spriteEditWindow->SetAnimation(cookie.m_sin32Type);
 	g_spriteEditWindow->m_frame             = 0;
 	g_spriteEditWindow->m_facing            = k_DEFAULTSPRITEFACING;
 	g_spriteEditWindow->m_loopInProgress    = false;;
 	g_spriteEditWindow->m_stopAfterLoop     = true;
 	g_spriteEditWindow->BeginAnimation();
+}
+
+void TypeCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
+{
+	if ( action != (uint32)AUI_BUTTON_ACTION_EXECUTE ) return;
+
+	g_spriteEditWindow->ToggleGroupType();
 }
 
 void StepCallback( aui_Control *control, uint32 action, uint32 data, Cookie cookie )
@@ -228,6 +250,10 @@ SpriteEditWindow::SpriteEditWindow(
 
 	m_largeSurface = NULL;
 
+	// Must be set before InitializeControls(), which wires the animation
+	// buttons via RewireAnimButtons() according to this type.
+	m_groupType      = GROUPTYPE_GOOD;
+
 	InitializeControls(retval,ldlBlock);
 
 	m_loopInProgress = false;
@@ -290,6 +316,7 @@ SpriteEditWindow::~SpriteEditWindow()
 	delete m_Load;
 	delete m_Save;
 	delete m_fileName;
+	delete m_TypeToggle;
 	delete m_MOVEAnim;
 	delete m_ATTACKAnim;
 	delete m_IDLEAnim;
@@ -366,6 +393,7 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 {
 	m_Load          = spNew_ctp2_Button(errcode, windowBlock, "STLoadButton", "No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_Save          = spNew_ctp2_Button(errcode, windowBlock, "STSaveButton", "No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
+	m_TypeToggle    = spNew_ctp2_Button(errcode, windowBlock, "STTypeToggle", "No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 
 	m_fileName      = spNewTextEntry   (errcode, windowBlock, "Name");
 
@@ -375,11 +403,8 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 	m_VICTORYAnim   = spNew_ctp2_Button(errcode, windowBlock, "STVICTORYAnim","No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_WORKAnim      = spNew_ctp2_Button(errcode, windowBlock, "STWORKAnim"   ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 
-	m_MOVEAnim      ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
-	m_ATTACKAnim    ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
-	m_IDLEAnim      ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_IDLE);
-	m_VICTORYAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
-	m_WORKAnim      ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+	m_TypeToggle    ->SetActionFuncAndCookie(TypeCallback, (sint32) 0);
+	RewireAnimButtons();
 
 	m_stepPlus      = spNew_ctp2_Button(errcode, windowBlock, "STPlayStepPlus"  ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
 	m_stepMinus     = spNew_ctp2_Button(errcode, windowBlock, "STPlayStepMinus" ,"No Data", NULL, "CTP2_BUTTON_TITLE_BAR");
@@ -407,6 +432,7 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 
 	m_Load       ->SetParent(g_spriteEditWindow);
 	m_Save       ->SetParent(g_spriteEditWindow);
+	m_TypeToggle ->SetParent(g_spriteEditWindow);
 
 	m_fileName   ->SetParent(g_spriteEditWindow);
 
@@ -431,6 +457,7 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 
 	m_Load      ->Show();
 	m_Save      ->Show();
+	m_TypeToggle->Show();
 
 	m_fileName  ->Show();
 
@@ -456,6 +483,52 @@ SpriteEditWindow::InitializeControls(AUI_ERRCODE *errcode, const MBCHAR *windowB
 	m_largeSurface=m_largeImage->TheSurface();
 }
 
+sint32 SpriteEditWindow::GetIdleAction() const
+{
+	return (m_groupType == GROUPTYPE_UNIT) ? (sint32)UNITACTION_IDLE : (sint32)GOODACTION_IDLE;
+}
+
+sint32 SpriteEditWindow::GetActionMax() const
+{
+	return (m_groupType == GROUPTYPE_UNIT) ? (sint32)UNITACTION_MAX : (sint32)GOODACTION_MAX;
+}
+
+void SpriteEditWindow::RewireAnimButtons()
+{
+	// GoodSpriteGroup only ever has GOODACTION_IDLE, so Move/Attack/
+	// Victory/Work stay wired to the invalid GOODACTION_MAX sentinel
+	// (AnimCallback's guard turns that into a harmless no-op) while
+	// editing a Good sprite. UnitSpriteGroup has a real action for each
+	// of the five buttons.
+	if (m_groupType == GROUPTYPE_UNIT)
+	{
+		m_MOVEAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)UNITACTION_MOVE   );
+		m_ATTACKAnim ->SetActionFuncAndCookie(AnimCallback, (sint32)UNITACTION_ATTACK );
+		m_IDLEAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)UNITACTION_IDLE   );
+		m_VICTORYAnim->SetActionFuncAndCookie(AnimCallback, (sint32)UNITACTION_VICTORY);
+		m_WORKAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)UNITACTION_WORK   );
+	}
+	else
+	{
+		m_MOVEAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+		m_ATTACKAnim ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+		m_IDLEAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_IDLE);
+		m_VICTORYAnim->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+		m_WORKAnim   ->SetActionFuncAndCookie(AnimCallback, (sint32)GOODACTION_MAX );
+	}
+}
+
+void SpriteEditWindow::ToggleGroupType()
+{
+	m_groupType = (m_groupType == GROUPTYPE_UNIT) ? GROUPTYPE_GOOD : GROUPTYPE_UNIT;
+	RewireAnimButtons();
+	m_loopInProgress = false;
+
+	// Reload whatever is in the filename field, now interpreted as the
+	// newly selected sprite type.
+	LoadSprite(NULL);
+}
+
 AUI_ERRCODE SpriteEditWindow::InitCommon(void)
 {
 	m_scroll  = FALSE;
@@ -476,7 +549,12 @@ AUI_ERRCODE SpriteEditWindow::DrawThis( aui_Surface *surface, sint32 x, sint32 y
 	if ( IsHidden() )
 		return AUI_ERRCODE_OK;
 
-	return AUI_ERRCODE_OK;
+	// Unlike this window, sibling windows (BattleViewWindow,
+	// SpecialAttackWindow, TileImpTracker) all call the base class here -
+	// C3Window::DrawThis is what actually draws m_pattern (the LDL
+	// "pattern" property) onto this window's own surface. Without it, the
+	// panel behind the buttons never gets its background drawn at all.
+	return C3Window::DrawThis(surface, x, y);
 }
 
 bool SpriteEditWindow::FileExists(const char *name)
@@ -518,8 +596,20 @@ void SpriteEditWindow::LoadSprite(const char *name)
 
 	delete m_currentSprite;
 	delete m_spriteSurface;
+	// If the name below doesn't match .SPR/.TXT, or the file doesn't
+	// exist, every branch below just returns without ever reassigning
+	// m_spriteSurface - leaving it a dangling pointer to the memory just
+	// freed above. ReDrawLargeSprite() only checks m_currentSprite (which
+	// IS reassigned next line, so it looks valid) before blitting into
+	// m_spriteSurface on the very next frame, corrupting the heap.
+	m_spriteSurface = NULL;
 
-	m_currentSprite = new GoodSpriteGroup(GROUPTYPE_UNIT);
+	if (m_groupType == GROUPTYPE_UNIT)
+		m_currentSprite = new UnitSpriteGroup(GROUPTYPE_UNIT);
+	else
+		m_currentSprite = new GoodSpriteGroup(GROUPTYPE_GOOD);
+
+	m_animation = GetIdleAction();
 
 #if defined(LINUX)
 	if(strcasestr(tbuffer, ".SPR")) // Does not exist on windows, @ToDo port it, without using something that requires us stating that we used it
@@ -563,14 +653,21 @@ void SpriteEditWindow::LoadSprite(const char *name)
 	m_spriteRect.top    = 0;
 	m_spriteRect.bottom = 100;
 
-	for (i = 0; i < GOODACTION_MAX; i++)
+	for (i = 0; i < (uint32)GetActionMax(); i++)
 	{
 		m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)i);
+
+		fprintf(stderr, "%s L%d: LoadSprite - GetGroupSprite(%d) returned %p%s\n", __FILE__, __LINE__, i,
+		        (void*)m_spriteData,
+		        m_spriteData ? "" : " (NULL - no sprite data for this action)");
 
 		if (m_spriteData != NULL)
 		{
 			w =  m_spriteData->GetWidth();
 			h =  m_spriteData->GetHeight();
+
+			fprintf(stderr, "%s L%d: LoadSprite - action %d: w=%u h=%u numFrames=%u\n", __FILE__, __LINE__, i,
+			        w, h, (unsigned)m_spriteData->GetNumFrames());
 
 			if (m_spriteRect.right < w)
 				m_spriteRect.right = w;
@@ -580,9 +677,15 @@ void SpriteEditWindow::LoadSprite(const char *name)
 		}
 	}
 
+	fprintf(stderr, "%s L%d: LoadSprite - final m_spriteRect=(%d,%d)-(%d,%d)\n", __FILE__, __LINE__,
+	        m_spriteRect.left, m_spriteRect.top, m_spriteRect.right, m_spriteRect.bottom);
+
 	AUI_ERRCODE errcode = AUI_ERRCODE_OK;
 
 	m_spriteSurface=new aui_Surface(&errcode,m_spriteRect.right,m_spriteRect.bottom,16);
+
+	fprintf(stderr, "%s L%d: LoadSprite - m_spriteSurface=%p errcode=%d\n", __FILE__, __LINE__,
+	        (void*)m_spriteSurface, (int)errcode);
 
 	m_spriteData = m_currentSprite->GetGroupSprite((GAME_ACTION)m_animation);
 
@@ -639,7 +742,11 @@ void SpriteEditWindow::SaveSprite(const char *name)
 #endif
 	{
 		fprintf(stderr, "%s L%d: name= %s!\n", __FILE__, __LINE__, tbuffer); // Actually debug printing, should be go through the system
-		m_currentSprite->ExportScript(name);
+		// ExportScript isn't declared on the common SpriteGroup base.
+		if (m_groupType == GROUPTYPE_UNIT)
+			static_cast<UnitSpriteGroup *>(m_currentSprite)->ExportScript(name);
+		else
+			static_cast<GoodSpriteGroup *>(m_currentSprite)->ExportScript(name);
 	}
 }
 
@@ -698,7 +805,15 @@ void SpriteEditWindow::DrawSprite()
 		rect.bottom = m_drawY + m_spriteRect.bottom;
 
 		if (m_drawFlag)
-			m_currentSprite->Draw((GOODACTION)m_animation, m_frame, m_drawX, m_drawY, m_facing, 1.0, 15, 0, k_DRAWFLAGS_NORMAL);
+		{
+			// Draw isn't declared on the common SpriteGroup base - each
+			// subclass's own overload takes a different action enum
+			// (and UnitSpriteGroup takes an extra directionalAttack flag).
+			if (m_groupType == GROUPTYPE_UNIT)
+				static_cast<UnitSpriteGroup *>(m_currentSprite)->Draw((UNITACTION)m_animation, m_frame, m_drawX, m_drawY, m_facing, 1.0, 15, 0, k_DRAWFLAGS_NORMAL, false);
+			else
+				static_cast<GoodSpriteGroup *>(m_currentSprite)->Draw((GOODACTION)m_animation, m_frame, m_drawX, m_drawY, m_facing, 1.0, 15, 0, k_DRAWFLAGS_NORMAL);
+		}
 
 		POINT flag;
 		maputils_MapXY2PixelXY(m_drawPoint.x, m_drawPoint.y, flag);
@@ -715,7 +830,26 @@ void SpriteEditWindow::DrawSprite()
 
 void SpriteEditWindow::ReDrawLargeSprite()
 {
+	// Diagnostic for the black-preview investigation - logged only a
+	// handful of times so a short interactive test doesn't flood stderr,
+	// since this runs every Idle() tick.
+	static int s_logCount = 0;
+	bool const doLog = (s_logCount < 10);
+	if (doLog)
+	{
+		s_logCount++;
+		fprintf(stderr, "%s L%d: ReDrawLargeSprite - m_largeSurface=%p m_currentSprite=%p g_tiledMap=%p m_animation=%d m_frame=%d m_spriteSurface=%p\n",
+		        __FILE__, __LINE__, (void*)m_largeSurface, (void*)m_currentSprite, (void*)g_tiledMap, m_animation, m_frame, (void*)m_spriteSurface);
+	}
+
 	if (m_largeSurface==NULL)
+		return;
+
+	// m_spriteSurface is only valid once LoadSprite() has actually
+	// loaded a real .SPR/.TXT file - a failed/invalid load leaves it
+	// NULL (see LoadSprite's own comment). Guard here too, since this
+	// runs every Idle() tick regardless of whether a load ever succeeded.
+	if (m_spriteSurface==NULL)
 		return;
 
 	if ((m_currentSprite!=NULL)&&(g_tiledMap!=NULL))
@@ -732,10 +866,33 @@ void SpriteEditWindow::ReDrawLargeSprite()
 		if (m_facing >= k_NUM_FACINGS)
 			pt.x = m_spriteData->GetWidth();
 
-		sav = m_currentSprite->GetHotPoint((GOODACTION)m_animation);
-		m_currentSprite->SetHotPoint((GOODACTION)m_animation, pt); // set only for large view
-		m_currentSprite->DrawDirect(m_spriteSurface, (GOODACTION)m_animation, m_frame, 0, 0, m_facing, 1.0, 15, 0, k_DRAWFLAGS_NORMAL);
-		m_currentSprite->SetHotPoint((GOODACTION)m_animation, sav); // reset for drawing on map
+		// GetHotPoint/SetHotPoint/DrawDirect aren't declared on the common
+		// SpriteGroup base - UnitSpriteGroup's versions also take an
+		// extra facing parameter.
+		if (m_groupType == GROUPTYPE_UNIT)
+		{
+			UnitSpriteGroup * unitSprite = static_cast<UnitSpriteGroup *>(m_currentSprite);
+			sav = unitSprite->GetHotPoint((UNITACTION)m_animation, m_facing);
+			unitSprite->SetHotPoint((UNITACTION)m_animation, m_facing, pt); // set only for large view
+			unitSprite->DrawDirect(m_spriteSurface, (UNITACTION)m_animation, m_frame, 0, 0, m_facing, 1.0, 15, 0, k_DRAWFLAGS_NORMAL);
+			unitSprite->SetHotPoint((UNITACTION)m_animation, m_facing, sav); // reset for drawing on map
+		}
+		else
+		{
+			GoodSpriteGroup * goodSprite = static_cast<GoodSpriteGroup *>(m_currentSprite);
+			sav = goodSprite->GetHotPoint((GOODACTION)m_animation);
+			goodSprite->SetHotPoint((GOODACTION)m_animation, pt); // set only for large view
+			goodSprite->DrawDirect(m_spriteSurface, (GOODACTION)m_animation, m_frame, 0, 0, m_facing, 1.0, 15, 0, k_DRAWFLAGS_NORMAL);
+			goodSprite->SetHotPoint((GOODACTION)m_animation, sav); // reset for drawing on map
+		}
+
+		if (doLog)
+		{
+			fprintf(stderr, "%s L%d: ReDrawLargeSprite - about to StretchBlt: m_largeRect=(%d,%d)-(%d,%d) m_spriteRect=(%d,%d)-(%d,%d)\n",
+			        __FILE__, __LINE__,
+			        m_largeRect.left, m_largeRect.top, m_largeRect.right, m_largeRect.bottom,
+			        m_spriteRect.left, m_spriteRect.top, m_spriteRect.right, m_spriteRect.bottom);
+		}
 
 		g_c3ui->TheBlitter()->StretchBlt(m_largeSurface, &m_largeRect, m_spriteSurface, &m_spriteRect, k_AUI_BLITTER_FLAG_COPY);
 
@@ -819,7 +976,10 @@ AUI_ERRCODE SpriteEditWindow::Idle( void )
 			new_hot.x = (int)((float)new_hot.x * m_widthRatio);
 			new_hot.y = (int)((float)new_hot.y * m_heightRatio);
 
-			m_currentSprite->SetHotPoint((GOODACTION)m_animation, new_hot);
+			if (m_groupType == GROUPTYPE_UNIT)
+				static_cast<UnitSpriteGroup *>(m_currentSprite)->SetHotPoint((UNITACTION)m_animation, m_facing, new_hot);
+			else
+				static_cast<GoodSpriteGroup *>(m_currentSprite)->SetHotPoint((GOODACTION)m_animation, new_hot);
 		}
 	}
 

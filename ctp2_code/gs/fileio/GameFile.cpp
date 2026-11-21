@@ -92,7 +92,7 @@
 #include "StrDB.h"                  // g_theStringDB
 #include "TaxRate.h"
 #include "TerrainRecord.h"
-#include "TerrImprovePool.h"        // g_theTerrainImprovementPool
+#include "TerrImprovePool.h"        // g_theUnfinishedImprovementPool
 #include "thronedb.h"               // g_theThroneDB
 #include "TopTen.h"
 #include "TradeBids.h"
@@ -325,7 +325,7 @@ uint32 GameFile::Save(const MBCHAR *filepath, SaveInfo *info)
 	PROGRESS( 230 );
 
 	if(saveEverything)
-		g_theTerrainImprovementPool->Serialize(archive);
+		g_theUnfinishedImprovementPool->Serialize(archive);
 
 	PROGRESS( 240 );
 

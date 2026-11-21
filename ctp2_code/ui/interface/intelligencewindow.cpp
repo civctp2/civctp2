@@ -540,7 +540,7 @@ AUI_ERRCODE IntelligenceWindow::DrawEmbassy(ctp2_Static *control,
 
 	const MBCHAR *imageName = NULL;
 
-#if defined(_DEBUG)
+#if defined(_DEBUG) || defined(USE_LOGGING)
 	if(sm_embassyImages->GetNumStrings() > 1 && Diplomat::GetDiplomat(g_selected_item->GetVisiblePlayer()).DesireWarWith(p))
 	{
 		imageName = sm_embassyImages->GetString(1);

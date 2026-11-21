@@ -36,6 +36,14 @@ Installation::RemoveAllReferences()
 	if(GetOwner() >= 0 && g_player[GetOwner()]) {
 
 		double myVisionRange = terrainutil_GetVisionRange(GetType(), RetPos());
+		// Diagnostic: every VisionRange in tileimp.txt tops out at 8, but a
+		// playtest log caught Vision::DoFillCircleOp underflowing ~82 tiles
+		// away from an installation killed here (TerrainImprovementData::
+		// Complete -> KillInstallation -> RemoveAllReferences), which no
+		// sane radius should reach. Confirm myVisionRange itself is the
+		// culprit (vs. some earlier, unrelated ref-count imbalance this
+		// FillCircle just happens to expose) before chasing this further.
+		Assert(myVisionRange <= 20.0);
 		if(myVisionRange > 0) {
 			g_player[GetOwner()]->RemoveUnitVision(pos, myVisionRange);
 			if(GetOwner() == g_selected_item->GetVisiblePlayer()) {

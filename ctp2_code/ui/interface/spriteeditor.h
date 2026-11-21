@@ -9,6 +9,7 @@ class SpriteEditWindow;
 #include "c3window.h"       // C3Window
 #include "ctp2_inttypes.h"  // sintNN, uintNN
 #include "MapPoint.h"       // MapPoint
+#include "SpriteGroup.h"    // SpriteGroup, GROUPTYPE
 // AUI_ERRCODE, AUI_WINDOW_TYPE
 // BOOL, MBCHAR, RECT
 
@@ -19,7 +20,6 @@ class c3_Static;
 class C3TextField;
 class ctp2_Button;
 class Sprite;
-class GoodSpriteGroup;
 
 class SpriteEditWindow : public C3Window
 {
@@ -91,8 +91,12 @@ public:
 	void	SetAnimation(sint32 anim);
 	void	Animate();
 	void	BeginAnimation();
+	void	ToggleGroupType();
 
 	bool	FileExists(const char *name);
+
+	sint32	GetIdleAction() const;
+	sint32	GetActionMax() const;
 
 	bool			m_loopInProgress;
 	bool			m_stopAfterLoop;
@@ -101,9 +105,12 @@ public:
 	sint32			m_facing;
 	sint32			m_frame;
 	sint32			m_animation;
+	GROUPTYPE		m_groupType;
 
 	sint32			m_lastTime;
 private:
+
+	void	RewireAnimButtons();
 
 	sint32	m_dest;
 	sint32	m_current;
@@ -114,7 +121,7 @@ private:
 
 
 
-	GoodSpriteGroup		*m_currentSprite;
+	SpriteGroup			*m_currentSprite;
 	Anim				*m_currentAnim;
 	Sprite				*m_spriteData;
 	aui_Surface			*m_spriteSurface;
@@ -124,6 +131,8 @@ private:
 	ctp2_Button		*m_Save;
 
 	C3TextField		*m_fileName;
+
+	ctp2_Button		*m_TypeToggle;
 
 	ctp2_Button		*m_MOVEAnim;
 	ctp2_Button		*m_ATTACKAnim;

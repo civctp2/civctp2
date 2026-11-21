@@ -212,7 +212,7 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 
 	sint32 extraData = 0;
 
-	BOOL alreadyHasIt = g_theTerrainImprovementPool->HasImprovement(p,
+	BOOL alreadyHasIt = g_theUnfinishedImprovementPool->HasImprovement(p,
 																	TERRAIN_IMPROVEMENT(s_tileImprovementNum),
 																	extraData);
 
@@ -272,12 +272,9 @@ void tileimptracker_DisplayData(MapPoint const & p, sint32 type)
 		{
 			const TerrainImprovementRecord::Effect *eff = terrainutil_GetTerrainEffect(g_theTerrainImprovementDB->Get(s_tileImprovementNum), p);
 
-			sint32 dFood = 0;
-			if(eff) eff->GetBonusFood(dFood);
-			sint32 dProd = 0;
-			if(eff) eff->GetBonusProduction(dProd);
-			sint32 dGold = 0;
-			if(eff) eff->GetBonusGold(dGold);
+			sint32 dFood = eff ? eff->GetBonusFood() : 0;
+			sint32 dProd = eff ? eff->GetBonusProduction() : 0;
+			sint32 dGold = eff ? eff->GetBonusGold() : 0;
 
 			food = dFood + cell->GetFoodFromTerrain();
 			production = dProd + cell->GetShieldsFromTerrain();

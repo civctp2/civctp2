@@ -282,6 +282,28 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 		return;
 	}
 
+	// Hard ceiling on the total units one goal can commit, expressed as a
+	// multiple of k_MAX_ARMY_SIZE (worth of several full stacks, since a
+	// siege force is meant to be organized into multiple stacks, not
+	// squeezed into one) rather than a raw agent count - an agent isn't
+	// necessarily a full stack (most committed agents in the playtest log
+	// below were lone single-unit armies), so capping by agent count
+	// alone could cap a siege at just a handful of units if they happen
+	// to arrive unstacked. 8 stacks' worth (up to 96 units) is already an
+	// enormous commitment, but it keeps Squad_Strength's sint8 fields
+	// (m_unit_count and friends) nowhere near their +-127 range regardless
+	// of how a goal's own satisfaction logic behaves. Without this, a
+	// NeverSatisfied goal (or any goal whose satisfaction check has a
+	// bug) can greedily absorb every available agent in one matching
+	// pass - confirmed in a playtest log where one GOAL_SEIGE instance
+	// reached 255 committed agents, wrapping m_unit_count repeatedly.
+	// See squad_strength_stack_ceiling memory.
+	static const sint32 k_MaxGoalUnitCount = 8 * k_MAX_ARMY_SIZE;
+	if(m_current_attacking_strength.Get_Unit_Count() >= k_MaxGoalUnitCount)
+	{
+		return;
+	}
+
 	// Only refresh the cache when the agent is actually unowned - nobody
 	// else has counted its strength yet, so it's safe to update. An agent
 	// already owned by m_sub_goal can be re-evaluated as a candidate here
@@ -317,6 +339,33 @@ void Goal::Commit_Agent(const Agent_ptr & agent)
 			// Rollback_All_Agents's Assert(NothingNeeded()).
 			m_current_attacking_strength.Add_Agent_Strength(agent);
 			m_agents.push_back(agent);
+
+			// Unconditional (unlike Rollback_Agent's own "already gone
+			// wrong" diagnostic below) - pairs with the matching
+			// Remove_Agent_Strength trace so a full-game log can be
+			// grepped for one goal_type+army pair and the exact point
+			// m_unit_count first goes negative can be bisected, instead
+			// of only ever seeing the already-corrupted end state. Its
+			// own debug channel (not k_DBG_SCHEDULER_DETAIL) so enabling
+			// it doesn't also pull in that channel's much heavier,
+			// unrelated scheduler-detail output. Plain DPRINTF, not
+			// AI_DPRINTF - every recorded occurrence of this bug (players
+			// 9, 10, 10, 4 across sessions) has hit a different player,
+			// never the hardcoded debug player, so AI_DPRINTF's own
+			// DebugLogCheck player filter would silently drop every line
+			// that actually matters here. Player/goal_type now spelled
+			// out in the message itself since AI_DPRINTF isn't doing it.
+			// 'this' (the goal pointer) is included because goal_type is
+			// only a type index shared by every city's own instance of a
+			// goal (e.g. every city's own GOAL_DEFEND) - without it, an
+			// add to one city's goal and a later remove from a different
+			// city's goal of the same type look like a single mismatched
+			// round-trip on one goal, which they are not.
+			DPRINTF(k_DBG_SQUAD_STRENGTH,
+			    ("\tAdd_Agent_Strength: player %d goal_type %d goal %x army 0x%lx -> unit_count=%d (Get_Agent_Count()=%zu)\n",
+			     m_playerId, m_goal_type, this, agent->Get_Army().m_id,
+			     m_current_attacking_strength.Get_Unit_Count(),
+			     Get_Agent_Count()));
 
 			agent->Set_Goal(this);
 		}
@@ -372,7 +421,46 @@ void Goal::Rollback_Agent(Agent_List::iterator & agent_iter)
 		agent_ptr->ClearOrders();
 	}
 
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	Squad_Strength before_removal = m_current_attacking_strength;
+#endif
+
 	m_current_attacking_strength.Remove_Agent_Strength(agent_ptr);
+
+	// Unconditional counterpart to Commit_Agent's Add_Agent_Strength
+	// trace above - see its comment, including why this is plain
+	// DPRINTF (not AI_DPRINTF) and spells out player/goal_type/goal
+	// itself. The goal pointer ('this') disambiguates between different
+	// cities' own instances of the same goal_type - see the Add side.
+	DPRINTF(k_DBG_SQUAD_STRENGTH,
+	    ("\tRemove_Agent_Strength: player %d goal_type %d goal %x army 0x%lx -> unit_count=%d (Get_Agent_Count()=%zu)\n",
+	     m_playerId, m_goal_type, this, agent_ptr->Get_Army().m_id,
+	     m_current_attacking_strength.Get_Unit_Count(),
+	     Get_Agent_Count()));
+
+#if defined(_DEBUG) || defined(USE_LOGGING)
+	if (!m_current_attacking_strength.NothingNeeded())
+	{
+		// Pinpoints the exact Rollback_Agent call that first drives a
+		// field negative (vs. Rollback_All_Agents's Assert, which only
+		// sees the already-summed end state) - distinguishes two possible
+		// causes: agent_ptr's own cached Get_Squad_Strength() already
+		// carrying a negative field (a ComputeStrength issue), vs. this
+		// goal's own running total not having had enough of that field
+		// to remove (an Add/Remove_Agent_Strength cache-mismatch, the
+		// same bug class as the two fixes referenced in Commit_Agent
+		// above, whose Assert(NothingNeeded()) this feeds into
+		// (Goal.cpp:1097)).
+		DPRINTF(k_DBG_SCHEDULER,
+		    ("\tRollback_Agent: removal drove a field negative - player %d, goal_type %d, army 0x%lx, owner %d\n",
+		     m_playerId, m_goal_type,
+		     agent_ptr->Get_Army().m_id,
+		     agent_ptr->Get_Army().IsValid() ? agent_ptr->Get_Army()->GetOwner() : -1));
+		before_removal.Log_Debug_Info_Unconditional(k_DBG_SCHEDULER, "current_attacking_strength before this removal");
+		agent_ptr->Get_Squad_Strength().Log_Debug_Info_Unconditional(k_DBG_SCHEDULER, "agent_ptr strength being removed");
+		m_current_attacking_strength.Log_Debug_Info_Unconditional(k_DBG_SCHEDULER, "current_attacking_strength after this removal");
+	}
+#endif
 
 	agent_iter = m_agents.erase(agent_iter);
 
@@ -829,25 +917,52 @@ Utility Goal::Recompute_Matching_Value(Plan_List & matches, const bool update)
 				projected_strength += match_iter->Get_Agent()->Get_Squad_Strength();
 
 				combinedUtility += matchUtility;
-				AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
-				            ("\t\t[%3d] match = %d combined = %d %s Army: %9x Agent: %9x (%3d, %3d)\t%20s\t Name: \t%16s (units %2d, cargo %2d) \t (is_used=%d) \t (by_this=%d) \t (by_sub=%d) \t (garrison=%d)\n",
-				             count,
-				             matchUtility,
-				             combinedUtility / (count + 1),
-				             g_theGoalDB->Get(m_goal_type)->GetNameText(),
-				             match_iter->Get_Agent()->Get_Army(),
-				             match_iter->Get_Agent(),
-				             match_iter->Get_Agent()->Get_Pos().x,
-				             match_iter->Get_Agent()->Get_Pos().y,
-				             g_theUnitDB->GetNameStr(match_iter->Get_Agent()->Get_Army()->Get(0).GetType()),
-				             match_iter->Get_Agent()->Get_Army()->GetName(),
-				             match_iter->Get_Agent()->Get_Army()->Num(),
-				             match_iter->Get_Agent()->Get_Army()->GetCargoNum(),
-				             (match_iter->Get_Agent()->Get_Goal() ? 1 : 0),
-				             ((match_iter->Get_Agent()->Get_Goal() == this) ? 1 : 0),
-				             ((match_iter->Get_Agent()->Get_Goal() == m_sub_goal && m_sub_goal != nullptr) ? 1 : 0),
-				             (match_iter->Get_Agent()->IsNeededForGarrison() ? 1 : 0)
-				            ));
+
+				// Diagnostic: Get_Army() can be a dead army - GameObj_Access
+				// (via Army::AccessData/ArmyPool/ObjPool) silently returns
+				// NULL for an id no longer in the pool instead of asserting,
+				// e.g. an army wiped out in combat whose Agent/Plan wasn't
+				// cleaned up here in the Scheduler. This block used to
+				// dereference it unconditionally (->Get(0)/->GetName()/
+				// ->Num()/->GetCargoNum()), which segfaulted mid-playtest
+				// (turn 204, player 4, army 0xd0000673 - killed as a
+				// defender in combat, deleted from the ArmyPool, then still
+				// matched here two turns later). Assert to catch the actual
+				// stale-Agent root cause instead of crashing on it.
+				ArmyData * const agentArmyData =
+				        match_iter->Get_Agent()->Get_Army().AccessData();
+				if(!agentArmyData)
+				{
+					DPRINTF(k_DBG_GAMESTATE, ("Goal::Recompute_Matching_Value: stale Agent %x matched for player %d goal %s (%s) - its Army %x no longer exists in the ArmyPool\n",
+					        match_iter->Get_Agent(),
+					        m_playerId,
+					        g_theGoalDB->Get(m_goal_type)->GetNameText(),
+					        (m_sub_goal != nullptr) ? "has sub_goal" : "no sub_goal",
+					        match_iter->Get_Agent()->Get_Army().m_id));
+				}
+				Assert(agentArmyData);
+				if(agentArmyData)
+				{
+					AI_DPRINTF(k_DBG_SCHEDULER_DETAIL, m_playerId, m_goal_type, -1,
+					            ("\t\t[%3d] match = %d combined = %d %s Army: %9x Agent: %9x (%3d, %3d)\t%20s\t Name: \t%16s (units %2d, cargo %2d) \t (is_used=%d) \t (by_this=%d) \t (by_sub=%d) \t (garrison=%d)\n",
+					             count,
+					             matchUtility,
+					             combinedUtility / (count + 1),
+					             g_theGoalDB->Get(m_goal_type)->GetNameText(),
+					             match_iter->Get_Agent()->Get_Army(),
+					             match_iter->Get_Agent(),
+					             match_iter->Get_Agent()->Get_Pos().x,
+					             match_iter->Get_Agent()->Get_Pos().y,
+					             g_theUnitDB->GetNameStr(agentArmyData->Get(0).GetType()),
+					             agentArmyData->GetName(),
+					             agentArmyData->Num(),
+					             agentArmyData->GetCargoNum(),
+					             (match_iter->Get_Agent()->Get_Goal() ? 1 : 0),
+					             ((match_iter->Get_Agent()->Get_Goal() == this) ? 1 : 0),
+					             ((match_iter->Get_Agent()->Get_Goal() == m_sub_goal && m_sub_goal != nullptr) ? 1 : 0),
+					             (match_iter->Get_Agent()->IsNeededForGarrison() ? 1 : 0)
+					            ));
+				}
 				++count;
 			}
 			else
@@ -1082,6 +1197,22 @@ void Goal::Rollback_All_Agents()
 	if(m_agents.size() == 0)
 		return;
 
+	// A goal that missed a recent Prune_Goals cutoff (m_goals only holds
+	// this cycle's max_eval/max_exec survivors, m_goals_of_type holds
+	// every goal) stops getting resynced by Scheduler::Recompute_Goal_
+	// Strength(), which only walks m_goals - while Compute_Agent_Strength()
+	// keeps refreshing its still-committed agents' caches regardless
+	// (e.g. to cargo strength once one boards a transport, a different
+	// quantity than what was added at commit time, see Agent::Compute_
+	// Squad_Strength). This isn't only reached via Remove_Matches() -
+	// Scheduler::Raw_Prioritize_Goals() and others call this directly too
+	// - so resync here, at the one place every caller goes through,
+	// rather than at each call site individually (a goal re-prioritized
+	// there without ever passing through Remove_Matches() hit the exact
+	// same staleness: m_current_attacking_strength.m_unit_count already
+	// negative before this loop even started).
+	Recompute_Current_Attacking_Strength();
+
 	Agent_List::iterator agent_iter;
 	for
 	(
@@ -1198,6 +1329,8 @@ void Goal::Commit_Transport_Agents()
 
 void Goal::Remove_Matches()
 {
+	// Rollback_All_Agents() resyncs the strength tracker itself now
+	// (see its own comment) - no need to do it again here.
 	Rollback_All_Agents();
 
 	m_matches.clear();
@@ -1463,7 +1596,7 @@ const MapPoint Goal::Get_Target_Pos(const Army & army) const
 				if (!(cell->GetCityOwner() == m_target_city))
 					continue;
 
-				if (cell->GetNumDBImprovements() <= 0)
+				if (cell->GetNumBuiltImprovementTypes() <= 0)
 					continue;
 
 				if (cell->GetNumPillagableTerrainImprovements() <= 0)
@@ -1721,6 +1854,7 @@ void Goal::Compute_Needed_Troop_Flow()
 			                          ? strategy.GetOffensiveGarrisonCount() : 1;
 			sint32 defensive_garrison = strategy.GetDefensiveGarrisonCount();
 			sint32 ranged_garrison    = strategy.GetRangedGarrisonCount();
+			sint32 flanker_garrison   = strategy.GetFlankerGarrisonCount();
 
 			// Why only defensive units?
 			// Added ranged units - Calvitix
@@ -1737,7 +1871,7 @@ void Goal::Compute_Needed_Troop_Flow()
 			//(see army_strength > operator) - Calvitix
 			if(!goal_record->GetForceMatchSpecial())
 			{
-				m_current_needed_strength.Set_Defenders(static_cast<sint8>(defensive_garrison + offensive_garrison));
+				m_current_needed_strength.Set_Defenders(static_cast<sint8>(defensive_garrison + offensive_garrison + flanker_garrison));
 				m_current_needed_strength.Set_Ranged_Units(static_cast<sint8>(ranged_garrison));
 			}
 
@@ -3260,7 +3394,7 @@ bool Goal::IsTargetImmune() const
 			}
 			else
 			{
-				if(g_theWorld->GetCell(target_pos)->GetNumDBImprovements() <= 0)
+				if(g_theWorld->GetCell(target_pos)->GetNumBuiltImprovementTypes() <= 0)
 					return true;
 			}
 			break;
@@ -3625,7 +3759,12 @@ bool Goal::Pretest_Bid(const Agent_ptr agent_ptr, const MapPoint & target_pos) c
 		sint32 distance_to_refuel;
 		sint32 distance_to_target;
 		MapPoint refuel_pos(-1, -1);
-		CtpAi::GetNearestRefuel(army, target_pos, refuel_pos, distance_to_refuel);
+		// target_pos is a candidate bid target being fuel-feasibility
+		// tested here, not the army's real position - an "unreachable"
+		// result below is the routine, expected way this loop rejects an
+		// infeasible candidate, not a bug, so don't let GetNearestRefuel
+		// log/assert on it.
+		CtpAi::GetNearestRefuel(army, target_pos, refuel_pos, distance_to_refuel, false);
 
 		distance_to_target =
 		    static_cast<sint32>(sqrt(static_cast<double>
@@ -4439,8 +4578,16 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 	else
 		check_dest = true;
 
+	// A stack that has already filled up to k_MAX_ARMY_SIZE on its own
+	// never needs to wait on the rest of the goal's stragglers - let it
+	// go, regardless of the goal's shared m_sub_task. Deliberately just
+	// this army's own size, not IsArmyPosFilled()/IsOneArmyAtPos() (that
+	// pair also demands nothing else share the tile - the wrong ask
+	// here, that's RallyComplete()'s "has grouping fully converged"
+	// question, not "is this stack big enough to go").
 	bool     waiting_for_buddies = !Ok_To_Rally()
 	                            && m_sub_task == SUB_TASK_RALLY
+	                            && the_army->Get_Army()->Num() < k_MAX_ARMY_SIZE
 	                            && g_theWorld->IsOnSameContinent(goal_pos, the_army->Get_Pos())
 	                            && g_theWorld->IsLand(goal_pos)
 	                            && g_theWorld->IsLand(the_army->Get_Pos());
@@ -4461,15 +4608,18 @@ bool Goal::GotoGoalTaskSolution(Agent_ptr the_army, MapPoint & goal_pos)
 		if (city_found)
 		{
 			found = Agent::FindPath(the_army->Get_Army(), nearest_city.RetPos(), true, found_path);
-			if (found) Set_Sub_Task(SUB_TASK_AIRLIFT);
+			if (found)
+			{
+				Set_Sub_Task(SUB_TASK_AIRLIFT);
 
-			if (the_army->Get_Pos() == nearest_city.RetPos())
-			{
-				the_army->PerformOrderHere(CtpAi::GetUnloadOrder(), (Path *) &found_path);
-			}
-			else if(!the_army->Get_Army()->HasLeftMap())
-			{
-				the_army->PerformOrderHere(CtpAi::GetSpaceLaunchOrder(), (Path *) &found_path);
+				if (the_army->Get_Pos() == nearest_city.RetPos())
+				{
+					the_army->PerformOrderHere(CtpAi::GetUnloadOrder(), (Path *) &found_path);
+				}
+				else if(!the_army->Get_Army()->HasLeftMap())
+				{
+					the_army->PerformOrderHere(CtpAi::GetSpaceLaunchOrder(), (Path *) &found_path);
+				}
 			}
 
 			return true;
@@ -4770,10 +4920,16 @@ void Goal::GroupTroops()
 	{
 		Agent_ptr agent1_ptr = (Agent_ptr) *agent1_iter;
 
+		// No cheap "nothing to group here" pre-check anymore -
+		// GetUnitsAtPos() (the tile's total unit count) was never scoped
+		// to this goal's own agents or to movement-type compatibility, so
+		// it could read as "still more to group" forever once separate
+		// movement-type stacks stop merging with each other. The inner
+		// loop below is already bounded by this goal's own agent count
+		// and correctly no-ops when nothing eligible is left.
 		if
 		  (
-		        agent1_ptr->GetUnitsAtPos() == agent1_ptr->Get_Army()->Num() // Nothing to group here
-		    ||  agent1_ptr->Get_Is_Dead()
+		        agent1_ptr->Get_Is_Dead()
 		    || !agent1_ptr->Get_Can_Be_Executed()
 		  )
 		{
@@ -4806,9 +4962,24 @@ void Goal::GroupTroops()
 				{
 					agent2_ptr->UnloadCargo();
 				}
-				else
+				else if
+				  (
+				       (agent1_ptr->Get_Army()->GetMovementType() &
+				        agent2_ptr->Get_Army()->GetMovementType()) != 0
+				  )
 				{
 					agent1_ptr->Group_With(agent2_ptr);
+				}
+				else
+				{
+					// No shared movement type - ArmyData::GetMovementType()
+					// intersects every member's bits, so grouping these two
+					// would zero out the combined army's movement mask and
+					// leave it unable to enter any tile at all
+					// (Cell::CanEnter is movement_mask & army_mask != 0,
+					// always false when army_mask is 0). Keep looking for a
+					// compatible partner instead of merging blindly.
+					continue;
 				}
 
 				// agent1_ptr has now been given an action this cycle (all
@@ -4837,7 +5008,29 @@ MapPoint Goal::MoveToTarget(Agent_ptr rallyAgent)
 		check_dest = true;
 
 	Path found_path;
-	bool found = Agent::FindPath(rallyAgent->Get_Army(), Get_Target_Pos(rallyAgent->Get_Army()), check_dest, found_path);
+	MapPoint const target_pos = Get_Target_Pos(rallyAgent->Get_Army());
+	bool found = Agent::FindPath(rallyAgent->Get_Army(), target_pos, check_dest, found_path);
+
+	if (!found)
+	{
+		// No rich diagnostic previously existed for this specific call
+		// site (unlike the sibling GotoGoalTaskSolution's cargo-transport
+		// branch) - mirroring that style since this is a real, recurring
+		// failure (17 hits across 8 different turns in one 800-turn
+		// playtest, not a one-off).
+		const Unit & first_unit = rallyAgent->Get_Army()->Get(0);
+		DPRINTF(k_DBG_SCHEDULER,
+		        ("GOAL %x (%s): MoveToTarget: FindPath failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d), check_dest %d, HasCargo %d\n",
+		         this,
+		         g_theGoalDB->Get(m_goal_type)->GetNameText(),
+		         rallyAgent->Get_Army().m_id,
+		         first_unit.GetType(),
+		         g_theUnitDB->GetNameStr(first_unit.GetType()),
+		         rallyAgent->Get_Pos().x, rallyAgent->Get_Pos().y,
+		         target_pos.x, target_pos.y,
+		         check_dest,
+		         rallyAgent->Get_Army()->HasCargo()));
+	}
 
 	Assert(found);
 
@@ -4886,6 +5079,15 @@ MapPoint Goal::MoveAwayFromTargetCity(Agent_ptr rallyAgent)
 		{
 			if(rallyPos.GetNeighborPosition(WORLD_DIRECTION(i), tempPos))
 			{
+				// IsNextTo excludes tiles adjacent to the target, but not the
+				// target's own tile - if the target city currently has no
+				// army on it, it would otherwise pass every check below and
+				// get picked as a "move away from target" destination, which
+				// is backwards, and GotoGoalTaskSolution then (correctly)
+				// fails to path a plain move order onto an enemy-owned city.
+				if(tempPos == targetPos)
+					continue;
+
 				if(targetPos.IsNextTo(tempPos))
 					continue;
 
@@ -4903,7 +5105,28 @@ MapPoint Goal::MoveAwayFromTargetCity(Agent_ptr rallyAgent)
 					// Search for a cell without an army
 					rallyPos = tempPos;
 					if(!GotoGoalTaskSolution(rallyAgent, rallyPos))
+					{
+						// tempPos already passed every check this function
+						// itself makes (empty, same continent, enterable) -
+						// so a GotoGoalTaskSolution failure here means the
+						// pathfind itself couldn't reach it. Log what we
+						// know to see why on the next playtest, rather than
+						// assume blind - this is a rare (1 hit/800 turns),
+						// not-yet-explained failure.
+						const Unit & first_unit = rallyAgent->Get_Army()->Get(0);
+						DPRINTF(k_DBG_SCHEDULER,
+						    ("GOAL %x (%s): MoveAwayFromTargetCity: GotoGoalTaskSolution failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d), target (x=%d,y=%d), HasCargo %d\n",
+						     this,
+						     g_theGoalDB->Get(m_goal_type)->GetNameText(),
+						     rallyAgent->Get_Army().m_id,
+						     first_unit.GetType(),
+						     g_theUnitDB->GetNameStr(first_unit.GetType()),
+						     rallyAgent->Get_Pos().x, rallyAgent->Get_Pos().y,
+						     tempPos.x, tempPos.y,
+						     targetPos.x, targetPos.y,
+						     rallyAgent->Get_Army()->HasCargo()));
 						Assert(false);
+					}
 
 					break;
 				}
@@ -4919,6 +5142,7 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 	MapPoint rallyPos = rallyAgent->Get_Pos();
 	if(g_theWorld->GetCity(rallyPos).IsValid())
 	{
+		MapPoint const startPos = rallyPos;
 		MapPoint tempPos;
 		for(sint32 i = 0 ; i < NOWHERE; i++)
 		{
@@ -4934,8 +5158,38 @@ MapPoint Goal::MoveOutOfCity(Agent_ptr rallyAgent)
 			}
 		}
 
-		if(!GotoGoalTaskSolution(rallyAgent, rallyPos))
+		if(!GotoGoalTaskSolution(rallyAgent, rallyPos)
+		&& !Agent::WasLastFindPathZocBlocked())
+		{
+			// Same pathfind-failure class as the sibling MoveAwayFromTargetCity/
+			// MoveToTarget call sites - log what we know to see why on the
+			// next playtest, rather than assume blind. rallyPos == startPos
+			// means the neighbor search above never found an empty,
+			// enterable cell at all (every neighbor blocked/occupied), as
+			// opposed to finding one but still failing to path there.
+			//
+			// Skipped above when the failure was specifically "every
+			// approach to this neighbor is ZOC-blocked right now" (hit
+			// 2026-10-31, turn 465, GOAL_ATTACK) - that's the same
+			// already-understood, deferred pathfind-failure class as
+			// GotoGoalTaskSolution's own Assert(found) bucket (see
+			// gototaskgoal_findpath_transport_assert), not a
+			// MoveOutOfCity-specific bug, so it doesn't need its own
+			// assert or log entry every time it recurs.
+			const Unit & first_unit = rallyAgent->Get_Army()->Get(0);
+			DPRINTF(k_DBG_SCHEDULER,
+			    ("GOAL %x (%s): MoveOutOfCity: GotoGoalTaskSolution failed for army 0x%lx, unit type %d (%s), from (x=%d,y=%d) to (x=%d,y=%d), foundEmptyNeighbor %d, HasCargo %d\n",
+			     this,
+			     g_theGoalDB->Get(m_goal_type)->GetNameText(),
+			     rallyAgent->Get_Army().m_id,
+			     first_unit.GetType(),
+			     g_theUnitDB->GetNameStr(first_unit.GetType()),
+			     startPos.x, startPos.y,
+			     rallyPos.x, rallyPos.y,
+			     (rallyPos != startPos),
+			     rallyAgent->Get_Army()->HasCargo()));
 			Assert(false);
+		}
 	}
 
 	return rallyPos;
@@ -4991,6 +5245,53 @@ Agent_ptr Goal::GetRallyAgent() const
 	{
 		Agent_ptr agent_ptr = (Agent_ptr) *agent_iter;
 
+		// A garrison-needed agent must stay put, not get walked outside its
+		// city as a rally anchor - RallyTroops()'s MoveOutOfCity() would try
+		// exactly that, which Goal::FollowPathToTask already refuses
+		// (Assert(false), hit once in a 2026-10-31 playtest) since the
+		// agent is needed for garrison. Never offer it as a candidate here
+		// in the first place, instead of relying on that later refusal.
+		//
+		// This is a symptom fix, not the root cause: Commit_Agent
+		// (Goal.cpp:280) is only supposed to let an agent this goal commits
+		// be garrison-needed when the goal's own target is exactly where
+		// the agent already sits (dest_pos == curr_pos - "defend in
+		// place", no move required). Mark_For_Garrison is also supposed to
+		// skip ever flagging an agent already owned by a different,
+		// unrelated goal (Goal.cpp:730-734). Both guards together should
+		// make it impossible for this goal to hold a committed agent that
+		// is garrison-needed AND whose current position differs from this
+		// goal's target - yet the 2026-10-31 hit had exactly that (agent
+		// owned by this GOAL_CHOKEPOINT instance, target a fixed field
+		// position nowhere near the agent's city). Assert on that specific
+		// combination so a recurrence is caught at its actual mechanism
+		// instead of silently absorbed here.
+		if(agent_ptr->IsNeededForGarrison())
+		{
+			if(agent_ptr->Get_Pos() != targetPos)
+			{
+				// Unconditional (not AI_DPRINTF's player/goal/army-gated
+				// channel) - the 2026-10-31 hit's own explanatory DPRINTF
+				// never printed because the gate didn't happen to match
+				// that player/goal, leaving no record of the goal type,
+				// owning goal, or army involved to actually diagnose the
+				// mechanism. This is rare enough (one hit so far) that an
+				// always-on trace here costs nothing and guarantees the
+				// next occurrence is actually readable.
+				Goal_ptr owningGoal = agent_ptr->Get_Goal();
+				DPRINTF(k_DBG_SCHEDULER,
+				    ("GOAL %x (%s): GetRallyAgent: skipping garrison-needed army 0x%lx at (x=%d,y=%d) - owned by goal %x (%s), this goal's target (x=%d,y=%d)\n",
+				     this, g_theGoalDB->Get(m_goal_type)->GetNameText(),
+				     agent_ptr->Get_Army().m_id,
+				     agent_ptr->Get_Pos().x, agent_ptr->Get_Pos().y,
+				     owningGoal,
+				     owningGoal ? g_theGoalDB->Get(owningGoal->Get_Goal_Type())->GetNameText() : "none",
+				     targetPos.x, targetPos.y));
+			}
+			Assert(agent_ptr->Get_Pos() == targetPos);
+			continue;
+		}
+
 		if(agent_ptr->GetUnitsAtPos() >= k_MAX_ARMY_SIZE)
 		{
 			if(rallyAgent == NULL)
@@ -5019,7 +5320,9 @@ Agent_ptr Goal::GetRallyAgent() const
 		}
 	}
 
-	Assert(rallyAgent != NULL);
+	// rallyAgent can legitimately be NULL here now: every committed agent
+	// may be garrison-needed (skipped above). RallyTroops() already treats
+	// a NULL rally agent as "nothing to rally" and returns.
 
 	return rallyAgent;
 }
@@ -5075,7 +5378,18 @@ bool Goal::RallyTroops()
 		rallyAgent->UnloadCargo();
 	}
 
-	rallyAgent->WaitHere(Get_Target_Pos(rallyAgent->Get_Army()));
+	// GetRallyAgent() only falls back to an already-full stack as the
+	// anchor when every candidate is in a full city - let it go straight
+	// to the goal instead of sitting here as an anchor for nobody.
+	if(rallyAgent->Get_Army()->Num() >= k_MAX_ARMY_SIZE)
+	{
+		MapPoint rallyAgentGoalPos = Get_Target_Pos(rallyAgent->Get_Army());
+		GotoGoalTaskSolution(rallyAgent, rallyAgentGoalPos);
+	}
+	else
+	{
+		rallyAgent->WaitHere(Get_Target_Pos(rallyAgent->Get_Army()));
+	}
 
 	Squad_Strength strength = m_current_attacking_strength;
 
@@ -5107,13 +5421,14 @@ bool Goal::RallyTroops()
 			continue;
 		}
 
-		if
-		  (
-		       agent_ptr->Get_Army()->Num() >= k_MAX_ARMY_SIZE
-		    && rallyPos.IsNextTo(agent_ptr->Get_Pos())
-		  )
+		if(agent_ptr->Get_Army()->Num() >= k_MAX_ARMY_SIZE)
 		{
-			agent_ptr->WaitHere(Get_Target_Pos(agent_ptr->Get_Army()));
+			// This stack is already complete on its own - send it
+			// straight to the goal instead of detouring via the rally
+			// point. Just this army's own size, not IsArmyPosFilled()/
+			// IsOneArmyAtPos() - see GotoGoalTaskSolution's comment.
+			MapPoint agentGoalPos = Get_Target_Pos(agent_ptr->Get_Army());
+			GotoGoalTaskSolution(agent_ptr, agentGoalPos);
 			continue;
 		}
 

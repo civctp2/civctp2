@@ -5,7 +5,7 @@
 #include "network.h"              // g_network
 #include "player.h"               // g_player
 #include "SelItem.h"              // g_selected_item
-#include "TerrImprovePool.h"      // g_theTerrainImprovementPool
+#include "TerrImprovePool.h"      // g_theUnfinishedImprovementPool
 #include "World.h"                // g_theWorld
 
 void TerrainImprovement::KillImprovement()
@@ -17,7 +17,7 @@ void TerrainImprovement::KillImprovement()
 void TerrainImprovement::RemoveAllReferences()
 {
 	g_player[GetOwner()]->RemoveImprovementReferences(*this);
-	g_theWorld->RemoveImprovement(*this, GetLocation());
+	g_theWorld->RemoveUnfinishedImprovement(*this, GetLocation());
 	if(g_network.IsHost()) {
 		if(g_selected_item->GetCurPlayer() == GetOwner())
 			g_network.Block(GetOwner());
@@ -27,17 +27,17 @@ void TerrainImprovement::RemoveAllReferences()
 			g_network.Unblock(GetOwner());
 	}
 
-	g_theTerrainImprovementPool->Del(*this);
+	g_theUnfinishedImprovementPool->Del(*this);
 }
 
 const TerrainImprovementData *TerrainImprovement::GetData() const
 {
-	return g_theTerrainImprovementPool->GetTerrainImprovement(*this);
+	return g_theUnfinishedImprovementPool->GetTerrainImprovement(*this);
 }
 
 TerrainImprovementData *TerrainImprovement::AccessData() const
 {
-	return g_theTerrainImprovementPool->AccessTerrainImprovement(*this);
+	return g_theUnfinishedImprovementPool->AccessTerrainImprovement(*this);
 }
 
 void TerrainImprovement::AddTurn()
@@ -47,5 +47,5 @@ void TerrainImprovement::AddTurn()
 
 bool TerrainImprovement::IsValid()
 {
-	return g_theTerrainImprovementPool->IsValid(*this);
+	return g_theUnfinishedImprovementPool->IsValid(*this);
 }

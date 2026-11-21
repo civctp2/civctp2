@@ -92,6 +92,7 @@
 #include "GameSettings.h"
 #include "AgeRecord.h"
 #include "GovernmentRecord.h"
+#include "newturncount.h"           // NewTurnCount::GetCurrentRound
 
 #include "UnitRecord.h"
 #include "GameEventManager.h"
@@ -687,6 +688,14 @@ void BuildQueue::FinishBuildFront(Unit &u)
 					}
 					break;
 				case k_GAME_OBJ_TYPE_IMPROVEMENT:
+					// Diagnostic: log every completed building by name/city/owner/turn, so
+					// AI building-choice investigations (e.g. which BuildListSequence path
+					// actually got a building constructed) don't have to rely on category-match
+					// counts alone, which can't tell whether a building was ever reached via a
+					// *different* matched category's own building list.
+					DPRINTF(k_DBG_GAMESTATE, ("Building complete: %s, city: 0x%lx, owner: %d, turn: %d\n",
+							g_theBuildingDB->Get(m_list->GetHead()->m_type)->GetIDText(),
+							m_city.m_id, m_owner, NewTurnCount::GetCurrentRound()));
 					if(isEmpty) {
 						so = new SlicObject("38BuildingBuiltQueueEmpty");
 					} else {
