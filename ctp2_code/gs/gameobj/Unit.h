@@ -569,6 +569,9 @@ public:
 	bool Flag(uint32 flag) const;
 	void SetFlag(uint32 flag);
 	void ClearFlag(uint32 flag);
+	bool UserFlag(sint32 n) const;
+	void SetUserFlag(sint32 n);
+	void ClearUserFlag(sint32 n);
 
 	const Unit &GetTransport() const;
 	void RemoveTransportedUnit(const Unit &u);

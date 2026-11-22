@@ -5809,7 +5809,53 @@ SFN_ERROR Slic_UnitHasUserFlag::Call(SlicArgList *args)
 	if(flag < 1 || flag > 32)
 		return SFN_ERROR_OUT_OF_RANGE;
 
-	m_result.m_int = 0;
+	m_result.m_int = u.IsValid() && u.UserFlag(flag) ? 1 : 0;
+
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_SetUnitUserFlag::Call(SlicArgList *args)
+{
+	if(args->Count() != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 flag;
+	if(!args->GetInt(1, flag))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(flag < 1 || flag > 32)
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	if(u.IsValid())
+		u.SetUserFlag(flag);
+
+	return SFN_ERROR_OK;
+}
+
+SFN_ERROR Slic_ClearUnitUserFlag::Call(SlicArgList *args)
+{
+	if(args->Count() != 2)
+		return SFN_ERROR_NUM_ARGS;
+
+	Unit u;
+
+	if(!args->GetUnit(0, u))
+		return SFN_ERROR_TYPE_ARGS;
+
+	sint32 flag;
+	if(!args->GetInt(1, flag))
+		return SFN_ERROR_TYPE_ARGS;
+
+	if(flag < 1 || flag > 32)
+		return SFN_ERROR_OUT_OF_RANGE;
+
+	if(u.IsValid())
+		u.ClearUserFlag(flag);
 
 	return SFN_ERROR_OK;
 }
