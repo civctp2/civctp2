@@ -31,6 +31,7 @@ extern uint8 g_messageRespTextPadding;
 extern uint8 g_messageRespButtonWidth;
 extern uint8 g_messageRespDropPadding;
 
+#define k_MESSAGE_RESPONSE_BOTTOM_MARGIN	20
 
 MessageResponseListItem::MessageResponseListItem(AUI_ERRCODE *retval, const MBCHAR * name, sint32 index, const MBCHAR *ldlBlock)
 	:
@@ -149,9 +150,10 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( const MBCHAR *ldlBlock, Message
 
 
 		if ( lastbutton ) {
-			button->Move( lastbutton->X() -
-						  button->Width() -
-						  g_messageRespButtonSpacing, button->Y() );
+			// Vertical stacking: each button below the previous one
+			button->Move( lastbutton->X(),
+						  lastbutton->Y() + lastbutton->Height() +
+						  g_messageRespButtonSpacing );
 		} else {
 
 			button->Move( button->X() -
@@ -175,6 +177,15 @@ AUI_ERRCODE MessageResponseStandard::InitCommon( const MBCHAR *ldlBlock, Message
 		lastbutton = button;
 
 		responseCount++;
+	}
+
+	// Grow the window so that the last stacked button fits. One button keeps the stock height.
+	if (responseCount > 1) {
+		sint32 neededHeight = lastbutton->Y() + lastbutton->Height() +
+		                      g_messageRespButtonSpacing + k_MESSAGE_RESPONSE_BOTTOM_MARGIN;
+		if (neededHeight > window->Height()) {
+			window->Resize(window->Width(), neededHeight);
+		}
 	}
 
 	m_dontShowButton=NULL;
